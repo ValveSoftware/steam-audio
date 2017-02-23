@@ -1,0 +1,162 @@
+/* navbar */
+.app-navbar {
+  font-weight: 500;
+  letter-spacing: .05em;
+  position: absolute;
+}
+
+
+/* header block */
+.app-graph {
+  width: 150%;
+  position: absolute;
+  right: 0;
+  bottom: -40px;
+}
+@media (min-width: 768px) {
+  .app-graph {
+    width: 100%;
+    bottom: 0;
+  }
+}
+
+
+/* iphone block */
+.app-iphone-block {
+  padding-bottom: 60px;
+}
+@media (min-width: 768px) {
+  .app-iphone-block {
+    padding-bottom: 0;
+  }
+}
+
+
+/* code block */
+.app-code-block {
+  background-color: #262F36;
+  overflow: hidden;
+}
+.app-code {
+  color: #6EA4CF;
+  border: #495158 1px solid;
+  background: transparent;
+  font-size: 12px;
+  padding: 20px;
+  line-height: 1.55;
+  margin-bottom: 30px;
+  border-radius: .3rem;
+}
+.app-code span {
+  color: #8496A5;
+}
+@media (min-width: 768px) {
+  .app-code {
+    width: 600px;
+    margin-bottom: 0;
+  }
+}
+@media (min-width: 992px) {
+  .app-code {
+    padding: 50px;
+    font-size: 15px;
+  }
+}
+
+
+/* pull quote block */
+.app-high-praise img {
+  width: 100%;
+}
+
+
+/* brand ribbon block */
+.app-ribbon {
+  background: #2595FF;
+}
+.app-ribbon .container {
+  padding-left: 0;
+  padding-right: 0;
+  margin-bottom: -30px;
+}
+.app-ribbon img {
+  margin: 0 10px 30px;
+}
+
+
+/* marketing grid block */
+.app-block-marketing-grid .container {
+  margin-bottom: -60px;
+}
+.app-marketing-grid .m-b {
+  margin-bottom: 10px !important;
+}
+@media (max-width: 768px) {
+  .app-marketing-grid .m-b-lg {
+    margin-bottom: 40px !important;
+  }
+}
+
+
+/* price plan block */
+.app-price-plans {
+  background-color: #F4F5F6;
+}
+.app-price-plans .container {
+  margin-bottom: -60px;
+}
+
+
+/* footer block */
+.app-footer {
+  background-color: #262F36;
+}
+.app-footer a {
+  color: #fff;
+}
+
+
+/* general block overrrides */
+@media (max-width: 768px) {
+  .block .lead {
+    line-height: 1.3;
+  }
+  .block h3 {
+    line-height: 1.15;
+  }
+}
+
+
+/* general inverse overrides */
+.block-inverse .text-muted {
+  color: rgba(255, 255, 255, .7) !important;
+}
+.block-inverse .block-bg-img {
+  background-color: transparent;
+}
+
+
+/* general btn overrides */
+.btn-lg {
+  font-size: 18px;
+}
+.block-secondary .btn-lg {
+  width: 100%;
+}
+.btn-lg:not(.btn-block) {
+  padding: 12px 50px;
+}
+@media (min-width: 768px) {
+  .btn-lg:not(.btn-block) {
+    width: auto;
+  }
+}
+
+
+/* ie10+ */
+@media (min-width: 768px) {
+  .app-align-center {
+    display: flex;
+    align-items: center;
+  }
+}

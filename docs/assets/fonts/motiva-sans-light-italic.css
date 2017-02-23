@@ -1,0 +1,26 @@
+/*
+Font: 		Motiva Sans
+Style: 		Light Italic
+URL: 		http://www.youworkforthem.com/product.php?sku=T2982
+Foundry: 	Plau
+Foundry: 	http://www.youworkforthem.com/designer/293/plau
+Copyright:	Copyright  2012 by Rodrigo Saiani. All rights reserved.
+Version: 	1.4
+Created:	November 15, 2013
+License: 	http://www.youworkforthem.com/font-license 
+License: 	The WebFont(s) listed in this document must follow the YouWorkForThem
+			WebFont license rules. All other parties are strictly restricted 
+			from using the WebFonts(s) listed without a purchased license. 
+			All details above must always remain unaltered and visible in your CSS.
+*/
+
+@font-face {
+	font-family: 'MotivaSans-LightItalic';
+	src: url('motiva-sans-light-italic.eot');
+	src: url('motiva-sans-light-italic.eot?#iefix') format('embedded-opentype'),
+	     url('motiva-sans-light-italic.woff') format('woff'),
+	     url('motiva-sans-light-italic.ttf') format('truetype'),
+	     url('motiva-sans-light-italic.svg#ywftsvg') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}

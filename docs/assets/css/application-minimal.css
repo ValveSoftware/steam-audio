@@ -1,0 +1,108 @@
+/*
+ * Minimal Application level overrides
+ * (things that dont make sense in a toolkit :)
+ * copyright @colossal 2015
+ */
+
+.block {
+ overflow: hidden;
+}
+
+
+/* navbar */
+.app-navbar {
+  font-size: 13px;
+  letter-spacing: .15em;
+}
+.app-navbar .navbar-brand {
+  font-size: 13px;
+}
+
+.app-navbar .nav-item + .nav-item {
+  margin-left: 15px;
+}
+
+.app-navbar .collapsing .nav-item + .nav-item,
+.app-navbar .collapse.show .nav-item + .nav-item {
+  margin-left: 0;
+}
+
+/* intro block */
+.app-block-intro {
+  padding-top: 20px;
+}
+.app-block-intro img {
+  width: 80%;
+  margin-bottom: -45%;
+}
+
+/* block img */
+.app-block-game img,
+.app-block-stats img {
+  width: 100%;
+}
+@media (max-width: 480px) {
+  .app-block-game-img {
+    transform: scale(1.5) !important;
+  }
+}
+
+/* stats hr */
+.app-block-stats hr {
+  width: calc(80% + 60px);
+}
+
+/* design block */
+.app-block-design > .container > .row {
+  z-index: 2;
+}
+.app-pos-r {
+  position: relative;
+}
+
+.app-block-design-img {
+  margin-top: -60px;
+  margin-left: -450px;
+  float: left;
+  width: 100%;
+}
+
+@media (min-width: 768px) {
+  .app-block-design-img {
+    margin-top: -220px;
+    margin-left: 0;
+  }
+}
+
+/* footer block */
+.app-block-footer {
+  background-color: rgb(27, 28, 29);
+  color: #444;
+  color: rgba(116, 119, 123, .5);
+}
+
+
+/* transforms */
+.app-translate-15 {
+  -webkit-transform: translateY(15px);
+      -ms-transform: translateY(15px);
+          transform: translateY(15px);
+}
+.app-translate-50 {
+  -webkit-transform: translateY(50px);
+      -ms-transform: translateY(50px);
+          transform: translateY(50px);
+}
+.app-translate-5 {
+  -webkit-transform: translateY(5%);
+      -ms-transform: translateY(5%);
+          transform: translateY(5%);
+}
+.app-translate-10 {
+  -webkit-transform: translateY(10%);
+      -ms-transform: translateY(10%);
+          transform: translateY(10%);
+}
+
+
+/* brand */
