@@ -35,7 +35,7 @@ This STEAM&reg; AUDIO SDK License (the "Agreement") is made by and between you (
 
 &nbsp; “\[Product name\] uses the Steam&reg; Audio SDK. Steam&reg; is a trademark or registered trademark of Valve Corporation in the United States of America and elsewhere”
 
-&nbsp; “Steam&reg; Audio, Copyright 2016 – xxxx, Valve Corp. All rights reserved.”
+&nbsp; “Steam&reg; Audio, Copyright 2017 – xxxx, Valve Corp. All rights reserved.”
 
 &nbsp; Logo artwork for credits and marketing use is available upon request to <SteamBranding@valvesoftware.com>. Licensee acknowledges and agrees that this Agreement does not otherwise grant Licensee any right to use any trademarks or trade names of Valve or its suppliers. All such marks shall remain the property of the respective owner.
 
