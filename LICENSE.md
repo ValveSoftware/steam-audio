@@ -3,7 +3,7 @@
 
 This STEAM&reg; AUDIO SDK License (the "Agreement") is made by and between you (the "Licensee" or “You”) and VALVE CORPORATION, a corporation organized under the laws of the state of Washington, U.S.A. ("Valve"), with offices located in Bellevue, Washington, U.S.A.
 
-**BY USING OR DOWNLOADING THE STEAM AUDIO SOFTWARE DEVELOPMENT KIT OR ANY UPDATE THERETO (THE “SDK”), YOU AGREE TO BE BOUND BY THIS AGREEMENT.**
+**BY USING OR DOWNLOADING THE STEAM AUDIO SOFTWARE DEVELOPMENT KIT IN SOURCE CODE OR OBJECT CODE FORM OR ANY UPDATE THERETO (THE “SDK”), YOU AGREE TO BE BOUND BY THIS AGREEMENT.**
 
 &nbsp; Whereas, Valve is the developer of the SDK;
 
@@ -35,9 +35,12 @@ This STEAM&reg; AUDIO SDK License (the "Agreement") is made by and between you (
 
 &nbsp; “\[Product name\] uses the Steam&reg; Audio SDK. Steam&reg; is a trademark or registered trademark of Valve Corporation in the United States of America and elsewhere”
 
-&nbsp; “Steam&reg; Audio, Copyright 2016 – xxxx, Valve Corp. All rights reserved.”
+&nbsp; “Steam&reg; Audio, Copyright 2017 – xxxx, Valve Corp. All rights reserved.”
 
 &nbsp; Logo artwork for credits and marketing use is available upon request to <SteamBranding@valvesoftware.com>. Licensee acknowledges and agrees that this Agreement does not otherwise grant Licensee any right to use any trademarks or trade names of Valve or its suppliers. All such marks shall remain the property of the respective owner.
+
+&nbsp; 1.7 *Your Contributions*. By submitting code or other modifications for inclusion into the Steam Audio main branch (each such submission a “Contribution”) you grant Valve a non-exclusive, fully-paid, irrevocable, transferable, sublicensable license to reproduce, distribute, publicly perform, publicly display, make, use, have made, sell, offer to sell, import, modify and make derivative works based on, and otherwise exploit that Contribution for all current and future methods and forms of exploitation in any country.  If any of those rights may not be assigned or licensed under applicable law (such as moral and other personal rights), you hereby waive and agree not to assert all of those rights.  For the avoidance of doubt, you may continue to use, in any manner consistent with this Agreement, any Contribution that you make available to Valve. You agree that if Valve makes use of your Contribution, Valve is not required to credit or compensate you for your Contribution. You represent and warrant that you have have no knowledge of any third party rights in your Contribution that would affect the validity of your license to Valve or Valve’s ability to use the Contribution.
+
 
 **2. Term.**
 
