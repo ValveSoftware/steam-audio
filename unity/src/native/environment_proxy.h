@@ -23,6 +23,10 @@ public:
     /** Returns the Simulation Settings object used for the current scene.
      */
     IPLSimulationSettings simulationSettings() const;
+    
+    /** Returns the Environment specified by the game engine.
+     */
+    IPLhandle environment() const;
 
     /** Returns an Environmental Renderer object that uses the Environment specified by the game engine.
      */

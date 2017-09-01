@@ -6,6 +6,8 @@
 #ifndef IPL_PHONON_H
 #define IPL_PHONON_H
 
+#include <stddef.h>
+
 #if (defined(_WIN32) || defined(_WIN64))
 #define IPLAPI __declspec(dllexport)
 #else
@@ -299,11 +301,8 @@ extern "C" {
                                                          Phonon encodes the simulation results using Ambisonics.
                                                          Increasing this number increases the amount of directional
                                                          detail in the simulated acoustics, but at the cost of
-                                                         increased CPU usage and memory consumption. Any non-negative
-                                                         integer may be specified, but typical values are between 0
-                                                         and 3. A value of 0 results in no directional variation in
-                                                         the simulation results. Values of 4 or higher incur a
-                                                         significant performance penalty. */
+                                                         increased CPU usage and memory consumption. Supported values 
+                                                         are between 0 and 3. */
         IPLint32            maxConvolutionSources;  /**< The maximum number of sound sources that can be simulated
                                                          and rendered using a Convolution Effect object at any point
                                                          in time. If you attempt to create more than this many
@@ -803,8 +802,8 @@ extern "C" {
                                                                      is \c ::IPL_CHANNELLAYOUTTYPE_SPEAKERS and
                                                                      \c channelLayout is
                                                                      \c ::IPL_CHANNELLAYOUT_CUSTOM. */
-        IPLint32                    ambisonicsOrder;            /**< The order of Ambisonics to use. Must be 0 or
-                                                                     greater. Ignored if \c channelLayoutType is
+        IPLint32                    ambisonicsOrder;            /**< The order of Ambisonics to use. Must be between 0
+                                                                     and 3. Ignored if \c channelLayoutType is
                                                                      \c ::IPL_CHANNELLAYOUTTYPE_SPEAKERS. */
         IPLAmbisonicsOrdering       ambisonicsOrdering;         /**< The ordering of Ambisonics channels within the
                                                                      data. Ignored if \c channelLayoutType is
@@ -1559,7 +1558,7 @@ extern "C" {
     /** Calculates direct sound path parameters for a single source. It is up to the audio engine to perform audio
      *  processing that uses the information returned by this function.
      *
-     *  \param  renderer            Handle to an Environmental Renderer object.
+     *  \param  environment         Handle to an Environment object.
      *  \param  listenerPosition    World-space position of the listener.
      *  \param  listenerAhead       Unit vector pointing in the direction in which the listener is looking.
      *  \param  listenerUp          Unit vector pointing upwards from the listener.
@@ -1571,7 +1570,7 @@ extern "C" {
      *
      *  \return Parameters of the direct path from the source to the listener.
      */
-    IPLAPI IPLDirectSoundPath iplGetDirectSoundPath(IPLhandle renderer, IPLVector3 listenerPosition,
+    IPLAPI IPLDirectSoundPath iplGetDirectSoundPath(IPLhandle environment, IPLVector3 listenerPosition,
         IPLVector3 listenerAhead, IPLVector3 listenerUp, IPLVector3 sourcePosition, IPLfloat32 sourceRadius,
         IPLDirectOcclusionMode occlusionMode, IPLDirectOcclusionMethod occlusionMethod);
 

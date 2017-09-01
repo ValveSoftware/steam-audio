@@ -130,8 +130,8 @@ namespace SteamAudio
             }
 
             GUI.enabled = true;
-            EditorGUILayout.HelpBox("Do not manually add Phonon Manager component. Click Window > Phonon.", 
-                MessageType.Info);
+            EditorGUILayout.HelpBox("Do not manually add Steam Audio Manager component. " +
+                "Click Window > Steam Audio.", MessageType.Info);
 
             EditorGUILayout.Space();
             serializedObject.ApplyModifiedProperties();

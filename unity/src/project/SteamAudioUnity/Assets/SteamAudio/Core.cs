@@ -221,7 +221,7 @@ namespace SteamAudio
         //
 
         [DllImport("phonon")]
-        public static extern DirectSoundPath iplGetDirectSoundPath(IntPtr renderer, Vector3 listenerPosition, Vector3 listenerAhead, Vector3 listenerUp, Vector3 sourcePosition, float sourceRadius, OcclusionMode occlusionMode, OcclusionMethod occlusionMethod);
+        public static extern DirectSoundPath iplGetDirectSoundPath(IntPtr environment, Vector3 listenerPosition, Vector3 listenerAhead, Vector3 listenerUp, Vector3 sourcePosition, float sourceRadius, OcclusionMode occlusionMode, OcclusionMethod occlusionMethod);
 
         //
         // Direct Sound Effect.

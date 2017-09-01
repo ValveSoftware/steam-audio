@@ -31,6 +31,11 @@ IPLSimulationSettings EnvironmentProxy::simulationSettings() const
     return mSimulationSettings;
 }
 
+IPLhandle EnvironmentProxy::environment() const
+{
+    return mEnvironment;
+}
+
 IPLhandle EnvironmentProxy::environmentalRenderer() const
 {
     if (!mEnvironment)

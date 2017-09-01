@@ -382,7 +382,7 @@ public:
         }
 
         // Make sure the Ambisonics panning effect has been created.
-        if (mBinauralRenderer && !mAmbisonicsPanningEffect)
+        if (mBinauralRenderer && mEnvironmentalRenderer && !mAmbisonicsPanningEffect)
         {
             if (gApi.iplCreateAmbisonicsPanningEffect(mBinauralRenderer, mIndirectEffectOutputBuffer.format, mOutputFormat,
                 &mAmbisonicsPanningEffect) != IPL_STATUS_SUCCESS)
@@ -392,7 +392,7 @@ public:
         }
 
         // Make sure the Ambisonics binaural effect has been created.
-        if (mBinauralRenderer && !mAmbisonicsBinauralEffect)
+        if (mBinauralRenderer && mEnvironmentalRenderer && !mAmbisonicsBinauralEffect)
         {
             if (gApi.iplCreateAmbisonicsBinauralEffect(mBinauralRenderer, mIndirectEffectOutputBuffer.format, mOutputFormat,
                 &mAmbisonicsBinauralEffect) != IPL_STATUS_SUCCESS)
@@ -484,12 +484,20 @@ public:
         auto directionZ = L[2] * S[12] + L[6] * S[13] + L[10] * S[14] + L[14];
         auto direction = convertVector(directionX, directionY, directionZ);
 
+        auto Lx = -(L[0] * L[12] + L[1] * L[13] + L[2] * L[14]);
+        auto Ly = -(L[4] * L[12] + L[5] * L[13] + L[6] * L[14]);
+        auto Lz = -(L[8] * L[12] + L[9] * L[13] + L[10] * L[14]);
+
+        auto listenerPosition = convertVector(Lx, Ly, Lz);
+        auto listenerUp = convertVector(L[1], L[5], L[9]);
+        auto listenerAhead = convertVector(L[2], L[6], L[10]);
+
         if (mEnvironmentalRenderer != nullptr && mEnvironmentalRenderer->environmentalRenderer() != nullptr)
         {
             // Calculate the direct path parameters.
-            auto directPath = gApi.iplGetDirectSoundPath(mEnvironmentalRenderer->environmentalRenderer(),
-                mEnvironmentalRenderer->listenerPosition(), mEnvironmentalRenderer->listenerAhead(),
-                mEnvironmentalRenderer->listenerUp(), sourcePosition, sourceRadius, occlusionMode, occlusionMethod);
+            auto directPath = gApi.iplGetDirectSoundPath(mEnvironmentalRenderer->environment(),
+                listenerPosition, listenerAhead, listenerUp, sourcePosition, sourceRadius, occlusionMode, 
+                occlusionMethod);
 
             // Apply direct sound modeling to the input audio, resulting in a mono buffer of audio.
             auto directOptions = IPLDirectSoundEffectOptions
@@ -498,7 +506,8 @@ public:
                 airAbsorption ? IPL_TRUE : IPL_FALSE,
                 occlusionMode
             };
-            gApi.iplApplyDirectSoundEffect(mDirectEffect, inputAudio, directPath, directOptions, mDirectEffectOutputBuffer);
+            gApi.iplApplyDirectSoundEffect(mDirectEffect, inputAudio, directPath, directOptions, 
+                mDirectEffectOutputBuffer);
         }
         else
         {
@@ -549,14 +558,11 @@ public:
             return;
         }
 
-        // If we're not using Steam Audio's distance attenuation, then we need to cancel out any distance attenuation
-        // applied by Unity.
+        // We need to cancel out any distance attenuation applied by Unity before applying indirect effects to the
+        // input audio.
         auto adjustedIndirectLevel = indirectLevel;
-        if (!distanceAttenuation)
-        {
-            adjustedIndirectLevel /= ((1.0f - spatializerData->spatialblend) + 
-                spatializerData->spatialblend * mUnityDistanceAttenuation);
-        }
+        adjustedIndirectLevel /= ((1.0f - spatializerData->spatialblend) + 
+            spatializerData->spatialblend * mUnityDistanceAttenuation);
 
         // Adjust the level of indirect sound according to the user-specified parameter.
         for (auto i = 0; i < inChannels * numSamples; ++i)
@@ -579,8 +585,7 @@ public:
             return;
 
         // Retrieve the indirect sound for this source.
-        gApi.iplGetWetAudioForConvolutionEffect(mIndirectEffect, mEnvironmentalRenderer->listenerPosition(),
-            mEnvironmentalRenderer->listenerAhead(), mEnvironmentalRenderer->listenerUp(),
+        gApi.iplGetWetAudioForConvolutionEffect(mIndirectEffect, listenerPosition, listenerAhead, listenerUp,
             mIndirectEffectOutputBuffer);
 
         // Spatialize the indirect sound.

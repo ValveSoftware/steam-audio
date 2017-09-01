@@ -97,7 +97,7 @@ namespace SteamAudio
         public float Duration;
 
         // Ambisonics order.
-        [Range(0, 4)]
+        [Range(0, 3)]
         public int AmbisonicsOrder;
 
         // Maximum number of supported sources.

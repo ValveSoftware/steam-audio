@@ -94,6 +94,15 @@ Before using Steam Audio to spatialize Audio Sources in Unity, you must select S
 > **NOTE** <br/>
   This step is not required if you are only using Steam Audio for listener-centric reverb.
 
+If you're using a version of Unity older than 5.6.0, and Steam Audio Spatializer does not show up in the Spatializer
+Plugin dropdown, follow these steps:
+
+  1. In the Project tab, select:
+    - `Assets/Plugins/x86_64/audioplugin_phonon.dll` (if using the 64-bit Windows editor),
+    - `Assets/Plugins/x86/audioplugin_phonon.dll` (if using the 32-bit Windows editor), or
+    - `Assets/Plugins/audioplugin_phonon.bundle` (if using the macOS editor).
+  2. In the Inspector tab, make sure **Any Platform** is unchecked, and **Editor** and **Standalone** are checked.
+
 #### Steam Audio Settings
 For each scene where you plan to use Steam Audio, you must set up Steam Audio to work with your audio engine (in this 
 case, Unity’s built-in audio engine):
