@@ -116,6 +116,22 @@ public:
         if (!mBinauralRenderer)
             return false;
 
+        // If the environment has recently been reset, release all everything that relates
+        // to the environmental renderer.
+        if (EnvironmentProxy::hasEnvironmentReset())
+        {
+            gApi.iplDestroyAmbisonicsBinauralEffect(&mAmbisonicsBinauralEffect);
+            gApi.iplDestroyAmbisonicsPanningEffect(&mAmbisonicsPanningEffect);
+
+            mIndirectSpatializedOutputBufferData.clear();
+            mIndirectEffectOutputBufferChannels.clear();
+            mIndirectEffectOutputBufferData.clear();
+
+            mEnvironmentalRenderer = nullptr;
+
+            EnvironmentProxy::acknowledgeEnvironmentReset();
+        }
+
         // Check to see if an environmental renderer has just been created.
         if (!mEnvironmentalRenderer)
             mEnvironmentalRenderer = EnvironmentProxy::get();

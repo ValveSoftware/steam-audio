@@ -8,6 +8,7 @@
 
 std::mutex                          EnvironmentProxy::sMutex{};
 std::shared_ptr<EnvironmentProxy>   EnvironmentProxy::sEnvironmentProxy{ nullptr };
+bool                                EnvironmentProxy::sEnvironmentHasReset{ false };
 
 EnvironmentProxy::EnvironmentProxy(const IPLSimulationSettings& simulationSettings, const IPLhandle environment) :
     mSimulationSettings(simulationSettings),
@@ -106,6 +107,19 @@ void EnvironmentProxy::resetEnvironment()
 {
     std::lock_guard<std::mutex> lock(sMutex);
     sEnvironmentProxy = nullptr;
+    sEnvironmentHasReset = true;
+}
+
+bool EnvironmentProxy::hasEnvironmentReset()
+{
+    std::lock_guard<std::mutex> lock(sMutex);
+    return sEnvironmentHasReset;
+}
+
+void EnvironmentProxy::acknowledgeEnvironmentReset()
+{
+    std::lock_guard<std::mutex> lock(sMutex);
+    sEnvironmentHasReset = false;
 }
 
 void EnvironmentProxy::setListenerGlobal(const IPLVector3& position, const IPLVector3& ahead, const IPLVector3& up)

@@ -76,6 +76,14 @@ public:
     
     static void setListenerGlobal(const IPLVector3& position, const IPLVector3& ahead, const IPLVector3& up);
 
+    /** Queries whether the environment has recently been reset.
+     */
+    static bool hasEnvironmentReset();
+
+    /** Notifies that the recent environment reset has been processed.
+     */
+    static void acknowledgeEnvironmentReset();
+
     /** Returns the Environment Proxy object for the current scene.
      */
     static std::shared_ptr<EnvironmentProxy> get();
@@ -103,6 +111,9 @@ private:
 
     /** Pointer to the Environment Proxy for the current scene. */
     static std::shared_ptr<EnvironmentProxy> sEnvironmentProxy;
+
+    /** Indicates whether the environment has recently been reset. */
+    static bool sEnvironmentHasReset;
 };
 
 extern "C"
