@@ -76,8 +76,13 @@ namespace SteamAudio
                 }
             }
 
-            var identifierInt = Common.HashForIdentifier(identifier);
-            var identifierFloat = BitConverter.ToSingle(BitConverter.GetBytes(identifierInt), 0);
+            var identifierFloat = 0.0f;
+            if (simulationType == SourceSimulationType.BakedStaticSource ||
+                simulationType == SourceSimulationType.BakedStaticListener)
+            {
+                var identifierInt = Common.HashForIdentifier(identifier);
+                identifierFloat = BitConverter.ToSingle(BitConverter.GetBytes(identifierInt), 0);
+            }
 
             var directBinauralValue = (directBinaural) ? 1.0f : 0.0f;
             var hrtfInterpolationValue = (float)interpolation;
@@ -93,6 +98,7 @@ namespace SteamAudio
             var simulationTypeValue = (simulationType == SourceSimulationType.Realtime) ? 0.0f : 1.0f;
             var nameValue = identifierFloat;
             var usesStaticListenerValue = (simulationType == SourceSimulationType.BakedStaticListener) ? 1.0f : 0.0f;
+            var bypassDuringInitValue = (avoidSilenceDuringInit) ? 1.0f : 0.0f;
 
             audioSource.SetSpatializerFloat(0, directBinauralValue);
             audioSource.SetSpatializerFloat(1, hrtfInterpolationValue);
@@ -108,6 +114,7 @@ namespace SteamAudio
             audioSource.SetSpatializerFloat(11, simulationTypeValue);
             audioSource.SetSpatializerFloat(12, usesStaticListenerValue);
             audioSource.SetSpatializerFloat(13, nameValue);
+            audioSource.SetSpatializerFloat(14, bypassDuringInitValue);
         }
 
         public void BeginBake()
@@ -227,6 +234,9 @@ namespace SteamAudio
         public SourceSimulationType simulationType      = SourceSimulationType.Realtime;
 
         public string               uniqueIdentifier    = "";
+
+        public bool                 avoidSilenceDuringInit  = false;
+
         [Range(1f, 1024f)]
         public float                bakingRadius        = 16f;
         public bool                 useAllProbeBoxes    = false;

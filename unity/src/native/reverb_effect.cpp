@@ -13,6 +13,7 @@ enum ReverbEffectParams
 {
     SA_REVERB_PARAM_BINAURAL,
     SA_REVERB_PARAM_SIMTYPE,
+    SA_REVERB_PARAM_BYPASSDURINGINIT,
     SA_REVERB_NUM_PARAMS
 };
 
@@ -32,11 +33,15 @@ public:
     /** Whether to use real-time simulation or baked data for reverb. */
     IPLSimulationType type;
 
+    /** Whether the effect should emit silence or dry audio while initialization is underway. */
+    bool bypassDuringInitialization;
+
     /** The default constructor initializes parameters to default values.
      */
     ReverbEffectState() :
         binaural{ false },
         type{ IPL_SIMTYPE_REALTIME },
+        bypassDuringInitialization{ false },
         mInputFormat{},
         mOutputFormat{},
         mBinauralRenderer{ nullptr },
@@ -48,7 +53,8 @@ public:
         mIndirectEffectOutputBuffer{},
         mIndirectSpatializedOutputBuffer{},
         mUsedAmbisonicsPanningEffect{ false },
-        mUsedAmbisonicsBinauralEffect{ false }
+        mUsedAmbisonicsBinauralEffect{ false },
+        mBypassedInPreviousFrame{ false }
     {}
 
     /** The destructor ensures that audio processing state is destroyed.
@@ -70,6 +76,9 @@ public:
         case SA_REVERB_PARAM_SIMTYPE:
             value = static_cast<float>(static_cast<int>(type));
             return true;
+        case SA_REVERB_PARAM_BYPASSDURINGINIT:
+            value = (bypassDuringInitialization) ? 1.0f : 0.0f;
+            return true;
         default:
             return false;
         }
@@ -86,6 +95,9 @@ public:
             return true;
         case SA_REVERB_PARAM_SIMTYPE:
             type = static_cast<IPLSimulationType>(static_cast<int>(value));
+            return true;
+        case SA_REVERB_PARAM_BYPASSDURINGINIT:
+            bypassDuringInitialization = (value == 1.0f);
             return true;
         default:
             return false;
@@ -241,11 +253,24 @@ public:
         auto inputAudio = IPLAudioBuffer{ inputFormat, static_cast<IPLint32>(numSamples), inBuffer, nullptr };
         auto outputAudio = IPLAudioBuffer{ outputFormat, static_cast<IPLint32>(numSamples), outBuffer, nullptr };
 
+        auto nothingToOutput = false;
+        
         // Make sure that audio processing state has been initialized. If initialization fails, stop and emit silence.
         if (!initialize(samplingRate, frameSize, inputFormat, outputFormat) ||
             !mEnvironmentalRenderer || !mEnvironmentalRenderer->environmentalRenderer() ||
             !mConvolutionEffect || !mAmbisonicsPanningEffect || !mAmbisonicsBinauralEffect)
         {
+            nothingToOutput = true;
+        }
+
+        if (nothingToOutput)
+        {
+            if (bypassDuringInitialization)
+            {
+                memcpy(outBuffer, inBuffer, outChannels * numSamples * sizeof(float));
+                mBypassedInPreviousFrame = true;
+            }
+
             return;
         }
 
@@ -284,10 +309,16 @@ public:
         }
 
         // Add the spatialized reverb to the input audio, and place the result in the output buffer.
-        for (auto i = 0; i < outChannels * numSamples; ++i)
+        for (auto i = 0u; i < outChannels * numSamples; ++i)
         {
             outputAudio.interleavedBuffer[i] = inputAudio.interleavedBuffer[i] +
                 mIndirectSpatializedOutputBuffer.interleavedBuffer[i];
+        }
+
+        if (mBypassedInPreviousFrame)
+        {
+            crossfadeInputAndOutput(inBuffer, outChannels, numSamples, outBuffer);
+            mBypassedInPreviousFrame = false;
         }
     }
 
@@ -340,6 +371,9 @@ private:
 
     /** Have we used the Ambisonics binaural effect in the previous frame? */
     bool mUsedAmbisonicsBinauralEffect;
+
+    /** Did we emit dry audio in the previous frame? */
+    bool mBypassedInPreviousFrame;
 };
 
 /** Callback that is called by Unity when the Reverb effect is created. This may be called in the editor when
@@ -401,7 +435,8 @@ UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK getReverbEffectParam(UnityAudioEff
 UnityAudioParameterDefinition gReverbEffectParams[] =
 {
     { "Binaural", "", "Spatialize reverb using HRTF.", 0.0f, 1.0f, 0.0f, 1.0f, 1.0f },
-    { "Type", "", "Real-time or baked.", 0.0f, 1.0f, 0.0f, 1.0f, 1.0f }
+    { "Type", "", "Real-time or baked.", 0.0f, 1.0f, 0.0f, 1.0f, 1.0f },
+    { "BypassAtInit", "", "Bypass the effect during initialization.", 0.0f, 1.0f, 0.0f, 1.0f, 1.0f }
 };
 
 /** Descriptor for the Reverb effect. */

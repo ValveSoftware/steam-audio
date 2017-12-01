@@ -18,7 +18,7 @@ namespace SteamAudio
         }
 
         public Error Export(ComputeDevice computeDevice, SimulationSettings simulationSettings, 
-            MaterialValue defaultMaterial, GlobalContext globalContext, bool exportOBJ = false)
+            MaterialValue defaultMaterial, IntPtr globalContext, bool exportOBJ = false)
         {
             var error = Error.None;
 
@@ -114,7 +114,7 @@ namespace SteamAudio
             return error;
         }
 
-        public Error Create(ComputeDevice computeDevice, SimulationSettings simulationSettings, GlobalContext globalContext)
+        public Error Create(ComputeDevice computeDevice, SimulationSettings simulationSettings, IntPtr globalContext)
         {
             string fileName = SceneFileName();
             if (!File.Exists(fileName))

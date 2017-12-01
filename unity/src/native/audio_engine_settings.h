@@ -7,6 +7,7 @@
 
 #include <string.h>
 #include <exception>
+#include <future>
 #include <memory>
 #include <mutex>
 #include <phonon.h>
@@ -27,6 +28,8 @@ public:
     /** Destroys the binaural renderer.
      */
     ~AudioEngineSettings();
+    
+    IPLhandle context() const;
 
     /** Returns the Rendering Settings object that describes the settings used by the audio engine.
      */
@@ -54,6 +57,8 @@ public:
     static void destroy();
 
 private:
+    IPLhandle mContext;
+    
     /** Rendering Settings that describe the settings used by the audio engine. */
     IPLRenderingSettings mRenderingSettings;
 
@@ -68,6 +73,8 @@ private:
 
     /** Pointer to the shared Audio Engine Settings object used by all effects. */
     static std::shared_ptr<AudioEngineSettings> sAudioEngineSettings;
+
+    static std::future<std::shared_ptr<AudioEngineSettings>> sAudioEngineSettingsFuture;
 };
 
 extern "C"

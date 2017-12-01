@@ -27,6 +27,7 @@ enum SpatializeEffectParams
     SA_SPATIALIZE_PARAM_SIMTYPE,
     SA_SPATIALIZE_PARAM_STATICLISTENER,
     SA_SPATIALIZE_PARAM_NAME,
+    SA_SPATIALIZE_PARAM_BYPASSDURINGINIT,
     SA_SPATIALIZE_NUM_PARAMS
 };
 
@@ -89,6 +90,9 @@ public:
         simulation. */
     bool usesStaticListener;
 
+    /** Whether the effect should emit silence or dry audio while initialization is underway. */
+    bool bypassDuringInitialization;
+
     /** The default constructor initializes parameters to default values.
      */
     SpatializeEffectState() :
@@ -106,6 +110,7 @@ public:
         indirectType{ IPL_SIMTYPE_REALTIME },
         name{},
         usesStaticListener{ false },
+        bypassDuringInitialization{ false },
         mInputFormat{},
         mOutputFormat{},
         mBinauralRenderer{ nullptr },
@@ -122,7 +127,8 @@ public:
         mUsedAmbisonicsPanningEffect{ false },
         mUsedAmbisonicsBinauralEffect{ false },
         mPreviousDirectMixLevel{ 0.0f },
-        mPreviousIndirectMixLevel{ 0.0f }
+        mPreviousIndirectMixLevel{ 0.0f },
+        mBypassedInPreviousFrame{ false }
     {}
 
     /** The destructor ensures that audio processing state is destroyed.
@@ -180,6 +186,9 @@ public:
         case SA_SPATIALIZE_PARAM_NAME:
             // Querying the name parameter is not supported.
             return false;
+        case SA_SPATIALIZE_PARAM_BYPASSDURINGINIT:
+            value = (bypassDuringInitialization) ? 1.0f : 0.0f;
+            return true;
         default:
             return false;
         }
@@ -234,6 +243,9 @@ public:
             name = std::to_string(*reinterpret_cast<int*>(&value));
             if (usesStaticListener)
                 name = "__staticlistener__" + name;
+            return true;
+        case SA_SPATIALIZE_PARAM_BYPASSDURINGINIT:
+            bypassDuringInitialization = (value == 1.0f);
             return true;
         default:
             return false;
@@ -361,7 +373,7 @@ public:
         }
 
         // Make sure the direct sound effect has been created.
-        if (mEnvironmentalRenderer && !mDirectEffect)
+        if (mEnvironmentalRenderer && mEnvironmentalRenderer->environmentalRenderer() && !mDirectEffect)
         {
             if (gApi.iplCreateDirectSoundEffect(mEnvironmentalRenderer->environmentalRenderer(), mInputFormat,
                 mDirectEffectOutputBuffer.format, &mDirectEffect) != IPL_STATUS_SUCCESS)
@@ -371,7 +383,7 @@ public:
         }
 
         // Make sure the convolution effect has been created.
-        if (mEnvironmentalRenderer && indirect && !mIndirectEffect)
+        if (mEnvironmentalRenderer && mEnvironmentalRenderer->environmentalRenderer() && indirect && !mIndirectEffect)
         {
             if (gApi.iplCreateConvolutionEffect(mEnvironmentalRenderer->environmentalRenderer(),
                 const_cast<char*>(name.c_str()), indirectType, mInputFormat, mIndirectEffectOutputBuffer.format,
@@ -382,7 +394,7 @@ public:
         }
 
         // Make sure the Ambisonics panning effect has been created.
-        if (mBinauralRenderer && mEnvironmentalRenderer && !mAmbisonicsPanningEffect)
+        if (mBinauralRenderer && mEnvironmentalRenderer && mEnvironmentalRenderer->environmentalRenderer() && !mAmbisonicsPanningEffect)
         {
             if (gApi.iplCreateAmbisonicsPanningEffect(mBinauralRenderer, mIndirectEffectOutputBuffer.format, mOutputFormat,
                 &mAmbisonicsPanningEffect) != IPL_STATUS_SUCCESS)
@@ -392,7 +404,7 @@ public:
         }
 
         // Make sure the Ambisonics binaural effect has been created.
-        if (mBinauralRenderer && mEnvironmentalRenderer && !mAmbisonicsBinauralEffect)
+        if (mBinauralRenderer && mEnvironmentalRenderer && mEnvironmentalRenderer->environmentalRenderer() && !mAmbisonicsBinauralEffect)
         {
             if (gApi.iplCreateAmbisonicsBinauralEffect(mBinauralRenderer, mIndirectEffectOutputBuffer.format, mOutputFormat,
                 &mAmbisonicsBinauralEffect) != IPL_STATUS_SUCCESS)
@@ -453,17 +465,19 @@ public:
         auto inputAudio = IPLAudioBuffer{ inputFormat, static_cast<IPLint32>(numSamples), inBuffer, nullptr };
         auto outputAudio = IPLAudioBuffer{ outputFormat, static_cast<IPLint32>(numSamples), outBuffer, nullptr };
 
+        auto nothingToOutput = false;
+
         // Make sure that audio processing state has been initialized. If initialization fails, stop and emit silence.
         if (!initialize(samplingRate, frameSize, inputFormat, outputFormat))
-            return;
+            nothingToOutput = true;
 
         if (!mPanningEffect || !mBinauralEffect)
-            return;
+            nothingToOutput = true;
 
         if (occlusionMode != IPL_DIRECTOCCLUSION_NONE)
         {
             if (!mEnvironmentalRenderer || !mEnvironmentalRenderer->environmentalRenderer() || !mDirectEffect)
-                return;
+                nothingToOutput = true;
         }
 
         if (indirect)
@@ -471,8 +485,19 @@ public:
             if (!mEnvironmentalRenderer || !mEnvironmentalRenderer->environmentalRenderer() || !mIndirectEffect ||
                 !mAmbisonicsPanningEffect || !mAmbisonicsBinauralEffect)
             {
-                return;
+                nothingToOutput = true;
             }
+        }
+
+        if (nothingToOutput)
+        {
+            if (bypassDuringInitialization)
+            {
+                memcpy(outBuffer, inBuffer, outChannels * numSamples * sizeof(float));
+                mBypassedInPreviousFrame = true;
+            }
+
+            return;
         }
 
         // Unity provides the world-space position of the source and the listener's transform matrix.
@@ -536,7 +561,7 @@ public:
         }
 
         // Adjust the level of direct sound according to the user-specified parameter.
-        for (auto i = 0; i < outChannels * numSamples; ++i)
+        for (auto i = 0u; i < outChannels * numSamples; ++i)
         {
             auto sample = i / outChannels;
             auto fraction = sample / (numSamples - 1.0f);
@@ -555,17 +580,25 @@ public:
                 mUsedConvolutionEffect = false;
             }
 
+            if (mBypassedInPreviousFrame)
+            {
+                crossfadeInputAndOutput(inBuffer, outChannels, numSamples, outBuffer);
+                mBypassedInPreviousFrame = false;
+            }
+
             return;
         }
 
         // We need to cancel out any distance attenuation applied by Unity before applying indirect effects to the
         // input audio.
         auto adjustedIndirectLevel = indirectLevel;
-        adjustedIndirectLevel /= ((1.0f - spatializerData->spatialblend) + 
-            spatializerData->spatialblend * mUnityDistanceAttenuation);
+        auto cancellationFactor = (1.0f - spatializerData->spatialblend) + 
+            spatializerData->spatialblend * mUnityDistanceAttenuation;
+        if (cancellationFactor > 1e-4f)
+            adjustedIndirectLevel /= cancellationFactor;
 
         // Adjust the level of indirect sound according to the user-specified parameter.
-        for (auto i = 0; i < inChannels * numSamples; ++i)
+        for (auto i = 0u; i < inChannels * numSamples; ++i)
         {
             auto sample = i / inChannels;
             auto fraction = i / (numSamples - 1.0f);
@@ -617,8 +650,14 @@ public:
         }
 
         // Add the indirect sound to the output buffer (which already contains the direct sound).
-        for (auto i = 0; i < outChannels * numSamples; ++i)
+        for (auto i = 0u; i < outChannels * numSamples; ++i)
             outputAudio.interleavedBuffer[i] += mIndirectSpatializedOutputBuffer.interleavedBuffer[i];
+
+        if (mBypassedInPreviousFrame)
+        {
+            crossfadeInputAndOutput(inBuffer, outChannels, numSamples, outBuffer);
+            mBypassedInPreviousFrame = false;
+        }
     }
 
 private:
@@ -704,6 +743,9 @@ private:
     /** Value of indirect mix level used in the previous frame. */
     float mPreviousIndirectMixLevel;
 
+    /** Did we emit dry audio in the previous frame? */
+    bool mBypassedInPreviousFrame;
+
 public:
     /** Distance attenuation applied by Unity. */
     float mUnityDistanceAttenuation;
@@ -787,7 +829,8 @@ UnityAudioParameterDefinition gSpatializeEffectParams[] =
     { "IndirLevel", "", "Relative level of indirect sound.", 0.0f, 10.0f, 1.0f, 1.0f, 1.0f },
     { "IndirType", "", "Real-time or baked.", 0.0f, 1.0f, 1.0f, 1.0f, 1.0f },
     { "StaticListener", "", "Uses static listener.", 0.0f, 1.0f, 0.0f, 1.0f, 1.0f },
-    { "Name", "", "Unique identifier for the source.", -std::numeric_limits<float>::max(), std::numeric_limits<float>::max(), 1.0f, 1.0f, 1.0f }
+    { "Name", "", "Unique identifier for the source.", -std::numeric_limits<float>::max(), std::numeric_limits<float>::max(), 1.0f, 1.0f, 1.0f },
+    { "BypassAtInit", "", "Bypass the effect during initialization.", 0.0f, 1.0f, 0.0f, 1.0f, 1.0f }
 };
 
 /** Descriptor for the Spatializer effect. */

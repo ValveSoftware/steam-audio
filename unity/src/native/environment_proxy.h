@@ -5,6 +5,7 @@
 
 #pragma once
 
+#include <future>
 #include <memory>
 #include "audio_engine_settings.h"
 
@@ -15,7 +16,8 @@ class EnvironmentProxy
 {
 public:
     /** Default constructor. */
-    EnvironmentProxy(const IPLSimulationSettings& simulationSettings, const IPLhandle environment);
+    EnvironmentProxy(const IPLSimulationSettings& simulationSettings, const IPLhandle environment,
+        const IPLConvolutionType convolutionType);
 
     /** Destroys the Environmental Renderer if created. */
     ~EnvironmentProxy();
@@ -30,7 +32,11 @@ public:
 
     /** Returns an Environmental Renderer object that uses the Environment specified by the game engine.
      */
-    IPLhandle environmentalRenderer() const;
+    IPLhandle environmentalRenderer();
+
+    /** Returns the convolution engine used for the current scene.
+     */
+    IPLConvolutionType convolutionType() const;
 
     /** Returns whether accelerated mixing is being used.
      */
@@ -62,7 +68,8 @@ public:
      *  Environment object has already been specified, the old Environment will no longer be used when creating new
      *  Effect objects, but existing Effect objects will continue to use the old Environment.
      */
-    static void setEnvironment(const IPLSimulationSettings& simulationSettings, const IPLhandle environment);
+    static void setEnvironment(const IPLSimulationSettings& simulationSettings, const IPLhandle environment,
+        const IPLConvolutionType convolutionType);
 
     /** Resets the Environment object to NULL. This essentially says that any subsequently created Effect objects will
      *  work with an empty environment, in which occlusion/transmission, reflection, etc. simulations cannot be
@@ -95,8 +102,13 @@ private:
     /** The Environment object used for the current scene. */
     IPLhandle mEnvironment;
 
+    /** The convolution engine to use for the current scene. */
+    IPLConvolutionType mConvolutionType;
+
     /** The Environmental Renderer object created using the Environment object for the current scene. */
     IPLhandle mEnvironmentalRenderer;
+
+    std::future<IPLhandle> mEnvironmentalRendererFuture;
 
     /** Whether we're using accelerated mixing for the current scene. */
     bool mUsingAcceleratedMixing;
@@ -121,7 +133,7 @@ extern "C"
     /** Mini-API wrapper around EnvironmentProxy::setEnvironment().
      */
     UNITY_AUDIODSP_EXPORT_API void UNITY_AUDIODSP_CALLBACK iplUnitySetEnvironment(
-        IPLSimulationSettings simulationSettings, IPLhandle environment);
+        IPLSimulationSettings simulationSettings, IPLhandle environment, IPLConvolutionType convolutionType);
 
     /** Mini-API wrapper around EnvironmentProxy::resetEnvironment().
      */

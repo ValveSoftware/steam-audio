@@ -16,8 +16,10 @@ namespace SteamAudio
             switch (audioEngine)
             {
                 case AudioEngine.UnityNative:
+                    Debug.Log("Initializing Unity native audio engine with convolution type " +
+                        gameEngineState.ConvolutionType().ToString());
                     PhononUnityNative.iplUnitySetEnvironment(gameEngineState.SimulationSettings(),
-                        gameEngineState.Environment().GetEnvironment());
+                        gameEngineState.Environment().GetEnvironment(), gameEngineState.ConvolutionType());
                     break;
                 default:
                     Debug.LogError("Unsupported audio engine: " + audioEngine.ToString());

@@ -9,7 +9,14 @@
 
 /** Function pointer types for all the Steam Audio API functions used by the Unity plugin.
  */
-typedef IPLerror(*IPLCreateBinauralRenderer)(IPLContext context, IPLRenderingSettings renderingSettings,
+typedef IPLerror (*IPLCreateContext)(IPLLogFunction logCallback,
+                                     IPLAllocateFunction allocateCallback,
+                                     IPLFreeFunction freeCallback,
+                                     IPLhandle* context);
+
+typedef IPLvoid (*IPLDestroyContext)(IPLhandle* context);
+
+typedef IPLerror(*IPLCreateBinauralRenderer)(IPLhandle context, IPLRenderingSettings renderingSettings,
     IPLHrtfParams params, IPLhandle* renderer);
 typedef IPLvoid(*IPLDestroyBinauralRenderer)(IPLhandle* renderer);
 typedef IPLerror(*IPLCreatePanningEffect)(IPLhandle renderer, IPLAudioFormat inputFormat, IPLAudioFormat outputFormat,
@@ -34,7 +41,7 @@ typedef IPLvoid(*IPLDestroyAmbisonicsBinauralEffect)(IPLhandle* effect);
 typedef IPLvoid(*IPLApplyAmbisonicsBinauralEffect)(IPLhandle effect, IPLAudioBuffer inputAudio,
     IPLAudioBuffer outputAudio);
 typedef IPLvoid(*IPLFlushAmbisonicsBinauralEffect)(IPLhandle effect);
-typedef IPLerror(*IPLCreateEnvironmentalRenderer)(IPLContext context, IPLhandle environment,
+typedef IPLerror(*IPLCreateEnvironmentalRenderer)(IPLhandle context, IPLhandle environment,
     IPLRenderingSettings renderingSettings, IPLAudioFormat outputFormat,
     IPLSimulationThreadCreateCallback threadCreateCallback,
     IPLSimulationThreadDestroyCallback threadDestroyCallback, IPLhandle* renderer);
@@ -63,6 +70,8 @@ typedef IPLvoid(*IPLFlushConvolutionEffect)(IPLhandle effect);
  */
 struct SteamAudioApi
 {
+    IPLCreateContext                        iplCreateContext;
+    IPLDestroyContext                       iplDestroyContext;
     IPLCreateBinauralRenderer               iplCreateBinauralRenderer;
     IPLDestroyBinauralRenderer              iplDestroyBinauralRenderer;
     IPLCreatePanningEffect                  iplCreatePanningEffect;

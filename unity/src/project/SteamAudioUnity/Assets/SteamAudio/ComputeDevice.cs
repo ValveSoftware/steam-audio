@@ -14,7 +14,7 @@ namespace SteamAudio
             return device;
         }
 
-        public Error Create(GlobalContext globalContext, bool useOpenCL, ComputeDeviceType deviceType, int numComputeUnits)
+        public Error Create(IntPtr globalContext, bool useOpenCL, ComputeDeviceType deviceType, int numComputeUnits)
         {
             var error = Error.None;
 

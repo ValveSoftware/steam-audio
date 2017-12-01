@@ -13,12 +13,21 @@ namespace SteamAudio
     //
     public static class PhononCore
     {
+        [DllImport("phonon")]
+        public static extern Error iplCreateContext(LogCallback logCallback, IntPtr allocateCallback, IntPtr freeCallback, [In, Out] ref IntPtr context);
+
+        [DllImport("phonon")]
+        public static extern void iplDestroyContext([In, Out] ref IntPtr context);
+
+        [DllImport("phonon")]
+        public static extern void iplCleanup();
+
         //
         // Functions for OpenCL compute devices.
         //
 
         [DllImport("phonon")]
-        public static extern Error iplCreateComputeDevice(GlobalContext globalContext, ComputeDeviceType deviceType, int numComputeUnits, [In, Out] ref IntPtr device);
+        public static extern Error iplCreateComputeDevice(IntPtr globalContext, ComputeDeviceType deviceType, int numComputeUnits, [In, Out] ref IntPtr device);
 
         [DllImport("phonon")]
         public static extern void iplDestroyComputeDevice([In, Out] ref IntPtr device);
@@ -38,7 +47,7 @@ namespace SteamAudio
         //
 
         [DllImport("phonon")]
-        public static extern Error iplCreateScene(GlobalContext globalContext, IntPtr computeDevice, SimulationSettings simulationSettings, int numMaterials, [In, Out] ref IntPtr scene);
+        public static extern Error iplCreateScene(IntPtr globalContext, IntPtr computeDevice, SimulationSettings simulationSettings, int numMaterials, [In, Out] ref IntPtr scene);
 
         [DllImport("phonon")]
         public static extern void iplDestroyScene([In, Out] ref IntPtr scene);
@@ -68,7 +77,7 @@ namespace SteamAudio
         public static extern int iplSaveFinalizedScene(IntPtr scene, [In, Out] byte[] data);
 
         [DllImport("phonon", CallingConvention = CallingConvention.Cdecl)]
-        public static extern Error iplLoadFinalizedScene(GlobalContext globalContext, SimulationSettings simulationSettings, byte[] data, int size, IntPtr computeDevice, LoadSceneProgressCallback progressCallback, [In, Out] ref IntPtr scene);
+        public static extern Error iplLoadFinalizedScene(IntPtr globalContext, SimulationSettings simulationSettings, byte[] data, int size, IntPtr computeDevice, LoadSceneProgressCallback progressCallback, [In, Out] ref IntPtr scene);
 
         [DllImport("phonon")]
         public static extern void iplDumpSceneToObjFile(IntPtr scene, byte[] fileName);
@@ -95,7 +104,7 @@ namespace SteamAudio
         //
 
         [DllImport("phonon")]
-        public static extern Error iplCreateEnvironment(GlobalContext globalContext, IntPtr computeDevice, SimulationSettings simulationSettings, IntPtr scene, IntPtr probeManager, [In, Out] ref IntPtr environment);
+        public static extern Error iplCreateEnvironment(IntPtr globalContext, IntPtr computeDevice, SimulationSettings simulationSettings, IntPtr scene, IntPtr probeManager, [In, Out] ref IntPtr environment);
 
         [DllImport("phonon")]
         public static extern void iplDestroyEnvironment([In, Out] ref IntPtr environment);
@@ -139,7 +148,7 @@ namespace SteamAudio
         //
 
         [DllImport("phonon")]
-        public static extern Error iplCreateBinauralRenderer(GlobalContext globalContext, RenderingSettings renderingSettings, HRTFParams hrtfParams, [In, Out] ref IntPtr renderer);
+        public static extern Error iplCreateBinauralRenderer(IntPtr globalContext, RenderingSettings renderingSettings, HRTFParams hrtfParams, [In, Out] ref IntPtr renderer);
 
         [DllImport("phonon")]
         public static extern void iplDestroyBinauralRenderer([In, Out] ref IntPtr renderer);
@@ -209,7 +218,7 @@ namespace SteamAudio
         //
 
         [DllImport("phonon")]
-        public static extern Error iplCreateEnvironmentalRenderer(GlobalContext globalContext, IntPtr environment,
+        public static extern Error iplCreateEnvironmentalRenderer(IntPtr globalContext, IntPtr environment,
             RenderingSettings renderingSettings, AudioFormat outputFormat, IntPtr threadCreateCallback,
             IntPtr threadDestroyCallback, [In, Out] ref IntPtr renderer);
 
@@ -276,7 +285,7 @@ namespace SteamAudio
         //
 
         [DllImport("phonon")]
-        public static extern Error iplCreateProbeBox(IntPtr scene, float[] boxLocalToWorldTransform, ProbePlacementParameters placementParams, ProbePlacementProgressCallback progressCallback, [In, Out] ref IntPtr probeBox);
+        public static extern Error iplCreateProbeBox(IntPtr context, IntPtr scene, float[] boxLocalToWorldTransform, ProbePlacementParameters placementParams, ProbePlacementProgressCallback progressCallback, [In, Out] ref IntPtr probeBox);
 
         [DllImport("phonon")]
         public static extern void iplDestroyProbeBox([In, Out] ref IntPtr probeBox);
@@ -288,10 +297,10 @@ namespace SteamAudio
         public static extern int iplSaveProbeBox(IntPtr probeBox, [In, Out] Byte[] data);
 
         [DllImport("phonon")]
-        public static extern Error iplLoadProbeBox(Byte[] data, int size, [In, Out] ref IntPtr probeBox);
+        public static extern Error iplLoadProbeBox(IntPtr context, Byte[] data, int size, [In, Out] ref IntPtr probeBox);
 
         [DllImport("phonon")]
-        public static extern Error iplCreateProbeBatch([In, Out] ref IntPtr probeBatch);
+        public static extern Error iplCreateProbeBatch(IntPtr context, [In, Out] ref IntPtr probeBatch);
 
         [DllImport("phonon")]
         public static extern void iplDestroyProbeBatch([In, Out] ref IntPtr probeBatch);
@@ -306,10 +315,10 @@ namespace SteamAudio
         public static extern int iplSaveProbeBatch(IntPtr probeBatch, [In, Out] Byte[] data);
 
         [DllImport("phonon")]
-        public static extern Error iplLoadProbeBatch(Byte[] data, int size, [In, Out] ref IntPtr probeBatch);
+        public static extern Error iplLoadProbeBatch(IntPtr context, Byte[] data, int size, [In, Out] ref IntPtr probeBatch);
 
         [DllImport("phonon")]
-        public static extern Error iplCreateProbeManager([In, Out] ref IntPtr probeManager);
+        public static extern Error iplCreateProbeManager(IntPtr context, [In, Out] ref IntPtr probeManager);
 
         [DllImport("phonon")]
         public static extern void iplDestroyProbeManager([In, Out] ref IntPtr probeManager);
@@ -377,7 +386,8 @@ namespace SteamAudio
         public static extern void iplUnityResetAudioEngine();
 
         [DllImport("audioplugin_phonon")]
-        public static extern void iplUnitySetEnvironment(SimulationSettings simulationSettings, IntPtr environment);
+        public static extern void iplUnitySetEnvironment(SimulationSettings simulationSettings, IntPtr environment,
+            ConvolutionOption convolutionType);
 
         [DllImport("audioplugin_phonon")]
         public static extern void iplUnityResetEnvironment();

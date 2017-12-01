@@ -37,6 +37,16 @@ IPLVector3 convertVector(float x, float y, float z)
     return IPLVector3{ x, y, -z };
 }
 
+void crossfadeInputAndOutput(const float* inBuffer, const int numChannels, const int numSamples, float* outBuffer)
+{
+    auto step = 1.0f / (numSamples - 1);
+    auto weight = 0.0f;
+
+    for (auto i = 0, index = 0; i < numSamples; ++i, weight += step)
+        for (auto j = 0; j < numChannels; ++j, ++index)
+            outBuffer[index] = weight * outBuffer[index] + (1.0f - weight) * inBuffer[index];
+}
+
 // This function is called by Unity when it loads native audio plugins. It returns metadata that describes all of the
 // effects implemented in this DLL.
 extern "C" UNITY_AUDIODSP_EXPORT_API int UnityGetAudioEffectDefinitions(UnityAudioEffectDefinition*** definitions)

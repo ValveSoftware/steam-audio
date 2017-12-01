@@ -32,15 +32,6 @@ namespace SteamAudio
 
     public delegate void LogCallback(string message);
 
-    // Global context.
-    [StructLayout(LayoutKind.Sequential)]
-    public struct GlobalContext
-    {
-        public LogCallback logCallback;
-        public IntPtr allocateCallback;
-        public IntPtr freeCallback;
-    };
-
 
     //
     // Geometric types.

@@ -73,7 +73,7 @@ namespace SteamAudio
 
             // Create bounding box for the probe.
             IntPtr probeBox = IntPtr.Zero;
-            PhononCore.iplCreateProbeBox(steamAudioManager.GameEngineState().Scene().GetScene(),
+            PhononCore.iplCreateProbeBox(steamAudioManager.GameEngineState().Context(), steamAudioManager.GameEngineState().Scene().GetScene(),
             Common.ConvertMatrix(gameObject.transform.localToWorldMatrix), placementParameters, null, ref probeBox);
 
             int numProbes = PhononCore.iplGetProbeSpheres(probeBox, null);
@@ -111,10 +111,17 @@ namespace SteamAudio
 
         public void DeleteBakedDataByName(string name, string prefix)
         {
+            SteamAudioManager steamAudioManager = null;
             IntPtr probeBox = IntPtr.Zero;
             try
             {
-                PhononCore.iplLoadProbeBox(probeBoxData, probeBoxData.Length, ref probeBox);
+                steamAudioManager = FindObjectOfType<SteamAudioManager>();
+                if (steamAudioManager == null)
+                    throw new Exception("Phonon Manager Settings object not found in the scene! Click Window > Phonon");
+
+                var context = steamAudioManager.GameEngineState().Context();
+
+                PhononCore.iplLoadProbeBox(context, probeBoxData, probeBoxData.Length, ref probeBox);
                 PhononCore.iplDeleteBakedDataByName(probeBox, Common.HashStringForIdentifierWithPrefix(name, prefix));
                 UpdateProbeDataMapping(name, prefix, -1);
 

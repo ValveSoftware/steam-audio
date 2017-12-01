@@ -45,17 +45,30 @@ namespace SteamAudio
             }
 
             var binauralValue = 0.0f;
+            var bypassDuringInitValue = 0.0f;
             plugin.GetFloatParameter("Binaural", out binauralValue);
+            plugin.GetFloatParameter("BypassAtInit", out bypassDuringInitValue);
 
             var binaural = (binauralValue == 1.0f);
-            binaural = EditorGUILayout.Toggle("Binaural", binaural);
-            binauralValue = (binaural) ? 1.0f : 0.0f;
+            var bypassDuringInit = (bypassDuringInitValue == 1.0f);
 
+            binaural = EditorGUILayout.Toggle("Binaural", binaural);
+
+            EditorGUILayout.Space();
+            if (showAdvancedOptions = EditorGUILayout.Foldout(showAdvancedOptions, "Advanced Options"))
+            {
+                bypassDuringInit = EditorGUILayout.Toggle("Avoid Silence During Init", bypassDuringInit);
+            }
+
+            binauralValue = (binaural) ? 1.0f : 0.0f;
+            bypassDuringInitValue = (bypassDuringInit) ? 1.0f : 0.0f;
             plugin.SetFloatParameter("Binaural", binauralValue);
+            plugin.SetFloatParameter("BypassAtInit", bypassDuringInitValue);
             
             return false;
         }
 
         SteamAudioManager   steamAudioManager   = null;
+        bool                showAdvancedOptions = false;
     }
 }

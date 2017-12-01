@@ -15,15 +15,15 @@ namespace SteamAudio
             return probeManager;
         }
 
-        public Error Create()
+        public Error Create(IntPtr context)
         {
-            var error = PhononCore.iplCreateProbeBatch(ref probeBatch);
+            var error = PhononCore.iplCreateProbeBatch(context, ref probeBatch);
             if (error != Error.None)
             {
                 throw new Exception("Unable to create probe batch.");
             }
 
-            error = PhononCore.iplCreateProbeManager(ref probeManager);
+            error = PhononCore.iplCreateProbeManager(context, ref probeManager);
             if (error != Error.None)
             {
                 throw new Exception("Unable to create probe batch.");
@@ -39,7 +39,7 @@ namespace SteamAudio
                 IntPtr probeBoxPtr = IntPtr.Zero;
                 try
                 {
-                    PhononCore.iplLoadProbeBox(probeBox.probeBoxData, probeBox.probeBoxData.Length, ref probeBoxPtr);
+                    PhononCore.iplLoadProbeBox(context, probeBox.probeBoxData, probeBox.probeBoxData.Length, ref probeBoxPtr);
                 }
                 catch (Exception e)
                 {

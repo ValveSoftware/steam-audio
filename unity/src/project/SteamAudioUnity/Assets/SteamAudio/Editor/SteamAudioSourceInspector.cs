@@ -103,6 +103,12 @@ namespace SteamAudio
                     BakedSourceStatsGUI();
             }
 
+            EditorGUILayout.Space();
+            if (showAdvancedOptions = EditorGUILayout.Foldout(showAdvancedOptions, "Advanced Options"))
+            {
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("avoidSilenceDuringInit"));
+            }
+
             // Save changes.
             serializedObject.ApplyModifiedProperties();
         }
@@ -162,5 +168,7 @@ namespace SteamAudio
         }
 
         string[] optionsOcclusion = new string[] { "Off", "On, No Transmission", "On, Frequency Independent Transmission", "On, Frequency Dependent Transmission" };
+
+        bool showAdvancedOptions = false;
     }
 }

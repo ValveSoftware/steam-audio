@@ -21,12 +21,7 @@ namespace SteamAudio
         public void Initialize(SimulationSettingsValue settings, ComponentCache componentCache,
             GameEngineStateInitReason reason)
         {
-            context = new GlobalContext
-            {
-                logCallback         = LogMessage,
-                allocateCallback    = IntPtr.Zero,
-                freeCallback        = IntPtr.Zero
-            };
+            PhononCore.iplCreateContext(LogMessage, IntPtr.Zero, IntPtr.Zero, ref context);
 
             var customSettings = componentCache.SteamAudioCustomSettings();
 
@@ -36,6 +31,8 @@ namespace SteamAudio
 
             if (customSettings)
             {
+                convolutionType = customSettings.convolutionOption;
+
                 if (customSettings.convolutionOption == ConvolutionOption.TrueAudioNext)
                 {
                     useOpenCL = true;
@@ -74,7 +71,7 @@ namespace SteamAudio
                 scene.Create(computeDevice, simulationSettings, context);
 
             if (reason == GameEngineStateInitReason.Playing)
-                probeManager.Create();
+                probeManager.Create(context);
 
             if (reason != GameEngineStateInitReason.ExportingScene &&
                 reason != GameEngineStateInitReason.GeneratingProbes)
@@ -96,9 +93,11 @@ namespace SteamAudio
             probeManager.Destroy();
             scene.Destroy();
             computeDevice.Destroy();
+
+            PhononCore.iplDestroyContext(ref context);
         }
 
-        public GlobalContext Context()
+        public IntPtr Context()
         {
             return context;
         }
@@ -128,6 +127,11 @@ namespace SteamAudio
             return environment;
         }
 
+        public ConvolutionOption ConvolutionType()
+        {
+            return convolutionType;
+        }
+
         public void ExportScene(MaterialValue defaultMaterial, bool exportOBJ)
         {
             try
@@ -145,11 +149,12 @@ namespace SteamAudio
             Debug.Log(message);
         }
 
-        GlobalContext       context;
+        IntPtr              context;
         ComputeDevice       computeDevice       = new ComputeDevice();
         SimulationSettings  simulationSettings;
         Scene               scene               = new Scene();
         ProbeManager        probeManager        = new ProbeManager();
         Environment         environment         = new Environment();
+        ConvolutionOption   convolutionType     = ConvolutionOption.Phonon;
     }
 }

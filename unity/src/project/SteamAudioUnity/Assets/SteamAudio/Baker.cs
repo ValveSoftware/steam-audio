@@ -99,10 +99,12 @@ namespace SteamAudio
 
                     atLeastOneProbeBoxHasProbes = true;
 
+                    var context = steamAudioManager.GameEngineState().Context();
+
                     IntPtr probeBoxPtr = IntPtr.Zero;
                     try
                     {
-                        PhononCore.iplLoadProbeBox(probeBox.probeBoxData, probeBox.probeBoxData.Length,
+                        PhononCore.iplLoadProbeBox(context, probeBox.probeBoxData, probeBox.probeBoxData.Length,
                             ref probeBoxPtr);
                         probeBoxBakingCurrently++;
                     }

@@ -15,7 +15,7 @@ namespace SteamAudio
         }
 
         public Error Create(ComputeDevice computeDevice, SimulationSettings simulationSettings, Scene scene, 
-            ProbeManager probeManager, GlobalContext globalContext)
+            ProbeManager probeManager, IntPtr globalContext)
         {
             var error = PhononCore.iplCreateEnvironment(globalContext, computeDevice.GetDevice(),
                 simulationSettings, scene.GetScene(), probeManager.GetProbeManager(), ref environment);

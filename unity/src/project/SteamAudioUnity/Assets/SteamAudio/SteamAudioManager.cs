@@ -26,6 +26,11 @@ namespace SteamAudio
             Destroy();
         }
 
+        void OnApplicationQuit()
+        {
+            PhononCore.iplCleanup();
+        }
+
         IEnumerator EndOfFrameUpdate()
         {
             while (true)

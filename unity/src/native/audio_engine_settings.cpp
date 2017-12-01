@@ -6,8 +6,9 @@
 #include "audio_engine_settings.h"
 #include "auto_load_library.h"
 
-std::mutex                              AudioEngineSettings::sMutex{};
-std::shared_ptr<AudioEngineSettings>    AudioEngineSettings::sAudioEngineSettings{ nullptr };
+std::mutex                                          AudioEngineSettings::sMutex{};
+std::shared_ptr<AudioEngineSettings>                AudioEngineSettings::sAudioEngineSettings{ nullptr };
+std::future<std::shared_ptr<AudioEngineSettings>>   AudioEngineSettings::sAudioEngineSettingsFuture{};
 
 AudioEngineSettings::AudioEngineSettings(const IPLRenderingSettings& renderingSettings, 
     const IPLAudioFormat& outputFormat)
@@ -15,10 +16,11 @@ AudioEngineSettings::AudioEngineSettings(const IPLRenderingSettings& renderingSe
     mRenderingSettings = renderingSettings;
     mOutputFormat = outputFormat;
 
-    IPLContext context{ nullptr, nullptr, nullptr };
+    gApi.iplCreateContext(nullptr, nullptr, nullptr, &mContext);
+    
     IPLHrtfParams hrtfParams{ IPL_HRTFDATABASETYPE_DEFAULT, nullptr, 0, nullptr, nullptr, nullptr };
 
-    if (gApi.iplCreateBinauralRenderer(context, renderingSettings, hrtfParams, &mBinauralRenderer) != IPL_STATUS_SUCCESS)
+    if (gApi.iplCreateBinauralRenderer(mContext, renderingSettings, hrtfParams, &mBinauralRenderer) != IPL_STATUS_SUCCESS)
         throw std::exception();
 }
 
@@ -26,6 +28,14 @@ AudioEngineSettings::~AudioEngineSettings()
 {
     if (mBinauralRenderer)
         gApi.iplDestroyBinauralRenderer(&mBinauralRenderer);
+    
+    if (mContext)
+        gApi.iplDestroyContext(&mContext);
+}
+
+IPLhandle AudioEngineSettings::context() const
+{
+    return mContext;
 }
 
 IPLRenderingSettings AudioEngineSettings::renderingSettings() const
@@ -49,13 +59,30 @@ IPLhandle AudioEngineSettings::binauralRenderer() const
 std::shared_ptr<AudioEngineSettings> AudioEngineSettings::get()
 {
     std::lock_guard<std::mutex> lock(sMutex);
+
+    if (sAudioEngineSettingsFuture.valid() &&
+        sAudioEngineSettingsFuture.wait_for(std::chrono::seconds(0)) == std::future_status::ready)
+    {
+        sAudioEngineSettings = sAudioEngineSettingsFuture.get();
+    }
+
     return sAudioEngineSettings;
 }
 
 void AudioEngineSettings::create(const IPLRenderingSettings& renderingSettings, const IPLAudioFormat& outputFormat)
 {
     std::lock_guard<std::mutex> lock(sMutex);
-    sAudioEngineSettings = std::make_shared<AudioEngineSettings>(renderingSettings, outputFormat);
+    
+    if (!sAudioEngineSettingsFuture.valid())
+    {
+        auto constructAudioEngineSettings = [](IPLRenderingSettings renderingSettings, IPLAudioFormat outputFormat)
+        {
+            return std::make_shared<AudioEngineSettings>(renderingSettings, outputFormat);
+        };
+
+        sAudioEngineSettingsFuture = std::async(std::launch::async, constructAudioEngineSettings, renderingSettings,
+            outputFormat);
+    }
 }
 
 void AudioEngineSettings::destroy()

@@ -122,6 +122,8 @@ void loadLibrary()
     if (!library)
         return;
 
+    gApi.iplCreateContext                   = (IPLCreateContext)                    GetProcAddress(library, "iplCreateContext");
+    gApi.iplDestroyContext                  = (IPLDestroyContext)                   GetProcAddress(library, "iplDestroyContext");
     gApi.iplCreateBinauralRenderer          = (IPLCreateBinauralRenderer)           GetProcAddress(library, "iplCreateBinauralRenderer");
     gApi.iplDestroyBinauralRenderer         = (IPLDestroyBinauralRenderer)          GetProcAddress(library, "iplDestroyBinauralRenderer");
     gApi.iplCreatePanningEffect             = (IPLCreatePanningEffect)              GetProcAddress(library, "iplCreatePanningEffect");
@@ -160,6 +162,8 @@ void loadLibrary()
     if (!library)
         return;
 
+    gApi.iplCreateContext                   = (IPLCreateContext)                    dlsym(library, "iplCreateContext");
+    gApi.iplDestroyContext                  = (IPLDestroyContext)                   dlsym(library, "iplDestroyContext");
     gApi.iplCreateBinauralRenderer          = (IPLCreateBinauralRenderer)           dlsym(library, "iplCreateBinauralRenderer");
     gApi.iplDestroyBinauralRenderer         = (IPLDestroyBinauralRenderer)          dlsym(library, "iplDestroyBinauralRenderer");
     gApi.iplCreatePanningEffect             = (IPLCreatePanningEffect)              dlsym(library, "iplCreatePanningEffect");

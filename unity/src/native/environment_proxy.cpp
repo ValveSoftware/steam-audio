@@ -10,9 +10,11 @@ std::mutex                          EnvironmentProxy::sMutex{};
 std::shared_ptr<EnvironmentProxy>   EnvironmentProxy::sEnvironmentProxy{ nullptr };
 bool                                EnvironmentProxy::sEnvironmentHasReset{ false };
 
-EnvironmentProxy::EnvironmentProxy(const IPLSimulationSettings& simulationSettings, const IPLhandle environment) :
+EnvironmentProxy::EnvironmentProxy(const IPLSimulationSettings& simulationSettings, const IPLhandle environment,
+    const IPLConvolutionType convolutionType) :
     mSimulationSettings(simulationSettings),
     mEnvironment(environment),
+    mConvolutionType(convolutionType),
     mEnvironmentalRenderer(nullptr),
     mUsingAcceleratedMixing(false)
 {
@@ -37,7 +39,7 @@ IPLhandle EnvironmentProxy::environment() const
     return mEnvironment;
 }
 
-IPLhandle EnvironmentProxy::environmentalRenderer() const
+IPLhandle EnvironmentProxy::environmentalRenderer()
 {
     if (!mEnvironment)
         return nullptr;
@@ -49,20 +51,49 @@ IPLhandle EnvironmentProxy::environmentalRenderer() const
 
     if (!mEnvironmentalRenderer)
     {
-        IPLContext context{ nullptr, nullptr, nullptr };
+        if (!mEnvironmentalRendererFuture.valid())
+        {
+            auto ambisonicsOrder = mSimulationSettings.ambisonicsOrder;
+            auto numChannels = (ambisonicsOrder + 1) * (ambisonicsOrder + 1);
 
-        auto ambisonicsOrder = mSimulationSettings.ambisonicsOrder;
-        auto numChannels = (ambisonicsOrder + 1) * (ambisonicsOrder + 1);
+            IPLAudioFormat outputFormat{ IPL_CHANNELLAYOUTTYPE_AMBISONICS, IPL_CHANNELLAYOUT_CUSTOM, numChannels, 
+                nullptr, ambisonicsOrder, IPL_AMBISONICSORDERING_ACN, IPL_AMBISONICSNORMALIZATION_N3D,
+                IPL_CHANNELORDER_DEINTERLEAVED };
 
-        IPLAudioFormat outputFormat{ IPL_CHANNELLAYOUTTYPE_AMBISONICS, IPL_CHANNELLAYOUT_CUSTOM, numChannels, nullptr,
-            ambisonicsOrder, IPL_AMBISONICSORDERING_ACN, IPL_AMBISONICSNORMALIZATION_N3D,
-            IPL_CHANNELORDER_DEINTERLEAVED };
+            auto renderingSettings = audioEngineSettings->renderingSettings();
+            renderingSettings.convolutionType = mConvolutionType;
 
-        gApi.iplCreateEnvironmentalRenderer(context, mEnvironment, audioEngineSettings->renderingSettings(), outputFormat,
-            nullptr, nullptr, const_cast<IPLhandle*>(&mEnvironmentalRenderer));
+            auto iplCreateEnvironmentalRenderer = [](IPLhandle context, IPLhandle environment,
+                                                     IPLRenderingSettings renderingSettings, 
+                                                     IPLAudioFormat outputFormat)
+            {
+                IPLhandle renderer = nullptr;
+                gApi.iplCreateEnvironmentalRenderer(context, environment, renderingSettings, outputFormat, nullptr,
+                                                    nullptr, &renderer);
+                return renderer;
+            };
+
+            mEnvironmentalRendererFuture = std::async(std::launch::async, iplCreateEnvironmentalRenderer, 
+                                                      audioEngineSettings->context(), mEnvironment, renderingSettings, 
+                                                      outputFormat);
+        }
+
+        if (mEnvironmentalRendererFuture.wait_for(std::chrono::seconds(0)) == std::future_status::ready)
+        {
+            mEnvironmentalRenderer = mEnvironmentalRendererFuture.get();
+        }
+        else
+        {
+            return nullptr;
+        }
     }
 
     return mEnvironmentalRenderer;
+}
+
+IPLConvolutionType EnvironmentProxy::convolutionType() const
+{
+    return mConvolutionType;
 }
 
 bool EnvironmentProxy::isUsingAcceleratedMixing() const
@@ -97,10 +128,11 @@ void EnvironmentProxy::setListener(const IPLVector3& position, const IPLVector3&
     mListenerUp = up;
 }
 
-void EnvironmentProxy::setEnvironment(const IPLSimulationSettings& simulationSettings, const IPLhandle environment)
+void EnvironmentProxy::setEnvironment(const IPLSimulationSettings& simulationSettings, const IPLhandle environment,
+    const IPLConvolutionType convolutionType)
 {
     std::lock_guard<std::mutex> lock(sMutex);
-    sEnvironmentProxy = std::make_shared<EnvironmentProxy>(simulationSettings, environment);
+    sEnvironmentProxy = std::make_shared<EnvironmentProxy>(simulationSettings, environment, convolutionType);
 }
 
 void EnvironmentProxy::resetEnvironment()
@@ -135,9 +167,10 @@ std::shared_ptr<EnvironmentProxy> EnvironmentProxy::get()
     return sEnvironmentProxy;
 }
 
-void UNITY_AUDIODSP_CALLBACK iplUnitySetEnvironment(IPLSimulationSettings simulationSettings, IPLhandle environment)
+void UNITY_AUDIODSP_CALLBACK iplUnitySetEnvironment(IPLSimulationSettings simulationSettings, IPLhandle environment,
+    IPLConvolutionType convolutionType)
 {
-    EnvironmentProxy::setEnvironment(simulationSettings, environment);
+    EnvironmentProxy::setEnvironment(simulationSettings, environment, convolutionType);
 }
 
 void UNITY_AUDIODSP_CALLBACK iplUnityResetEnvironment()

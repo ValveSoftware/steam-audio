@@ -225,6 +225,18 @@ This slider is only displayed when Occlusion Method is set to Partial. It config
 source. The larger the source radius, the larger an object must be in order to fully occlude sound emitted by the
 source.
 
+#### Advanced Options
+The following advanced options can be configured for a Steam Audio Source.
+
+##### Avoid Silence During Init
+Under some circumstances, Steam Audio Sources may take a few audio frames' worth of time to initialize. If this happens,
+the default behavior is for a Steam Audio Source to emit silence while initialization is ongoing. Checking this box
+modifies this behavior: the Steam Audio Source will pass its input audio unmodified while initialization is ongoing.
+
+The default behavior is desirable for the common case where an occluded sound should not be audible for a few frames
+while initialization occurs. On the other hand, for some kinds of sounds, like dialog, the default behavior may result
+in the first few syllables becoming inaudible; checking this box will allow all the dialog to be heard.
+
 ### Scene Setup
 To use Steam Audio for occlusion and environmental effects in your video game or VR experience, the scene needs to be 
 set up by tagging geometry and specifying acoustic materials for the objects in your scene.
@@ -334,6 +346,9 @@ let you specify how much sound the material transmits at different frequencies. 
 Transmission to 0 means that no high frequency sound passes through the material. This adds a low-pass filtering effect
 to any sound passing through the object.
 
+> **NOTE** <br/>
+  The transmission coefficients are used only for direct sound occlusion calculations.
+
 #### Scene Pre-Export
 You must "pre-export" the scene before hitting Play in the Unity editor or building a player, to ensure scene setup 
 changes are available to Steam Audio. To pre-export:
@@ -417,6 +432,19 @@ If checked, applies HRTF-based 3D audio rendering to indirect sound.
   When a Steam Audio Mixer Return effect is attached to an Audio Mixer, the Binaural setting of the Steam Audio 
   Mixer Return effect overrides the Indirect Binaural settings on Steam Audio Source components in the scene.
 
+##### Advanced Options
+The following advanced options can be configured for a Steam Audio Mixer Return effect.
+
+###### Avoid Silence During Init
+Under some circumstances, Steam Audio Mixer Return effects may take a few audio frames' worth of time to initialize. If 
+this happens, the default behavior is for a Steam Audio Mixer Return effect to emit silence while initialization is 
+ongoing. Checking this box modifies this behavior: the Steam Audio Mixer Return effect will pass its input audio 
+unmodified while initialization is ongoing.
+
+The default behavior is desirable for the common case where an occluded sound should not be audible for a few frames
+while initialization occurs. On the other hand, for some kinds of sounds, like dialog, the default behavior may result
+in the first few syllables becoming inaudible; checking this box will allow all the dialog to be heard.
+
 #### Simulation Settings
 Steam Audio allows you to balance its compute requirements and simulation output quality. To adjust these settings:
 
@@ -494,6 +522,19 @@ If checked, applies HRTF-based 3D audio rendering to reverb.
 > **NOTE** <br/>
   Listener-centric reverb (using the Steam Audio Reverb effect) and accelerated mixing (using the Steam Audio Mixer
   Return effect) are mutually-exclusive features. You cannot use both kinds of effects at the same time.
+
+#### Advanced Options
+The following advanced options can be configured for a Steam Audio Reverb effect.
+
+##### Avoid Silence During Init
+Under some circumstances, Steam Audio Reverb effects may take a few audio frames' worth of time to initialize. If this 
+happens, the default behavior is for a Steam Audio Reverb effect to emit silence while initialization is ongoing. 
+Checking this box modifies this behavior: the Steam Audio Reverb effect will pass its input audio unmodified while 
+initialization is ongoing.
+
+The default behavior is desirable for the common case where an occluded sound should not be audible for a few frames
+while initialization occurs. On the other hand, for some kinds of sounds, like dialog, the default behavior may result
+in the first few syllables becoming inaudible; checking this box will allow all the dialog to be heard.
 
 ### 3D Audio For Indirect Sound
 Steam Audio provides the following ways of applying HRTF-based 3D audio rendering to indirect sound:

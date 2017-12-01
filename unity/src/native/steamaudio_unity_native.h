@@ -18,3 +18,7 @@ IPLAudioFormat audioFormatForNumChannels(int numChannels);
 /** Converts a 3D vector from Unity's coordinate system to Steam Audio's coordinate system.
  */
 IPLVector3 convertVector(float x, float y, float z);
+
+/** Crossfades between dry and wet audio.
+ */
+void crossfadeInputAndOutput(const float* inBuffer, const int numChannels, const int numSamples, float* outBuffer);
