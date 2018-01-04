@@ -56,10 +56,9 @@ namespace SteamAudio
         public void BeginBake()
         {
             GameObject[] bakeObjects = { gameObject };
-            BakingMode[] bakingModes = { BakingMode.Reverb };
 
-            var identifier = "__reverb__";
-            string[] bakeStrings = { identifier };
+            BakedDataIdentifier[] bakeIdentifiers = { Identifier };
+            string[] bakeNames = { "reverb" };
             Sphere[] bakeSpheres = { new Sphere() };
 
             SteamAudioProbeBox[][] bakeProbeBoxes;
@@ -70,7 +69,7 @@ namespace SteamAudio
             else
                 bakeProbeBoxes[0] = probeBoxes;
 
-            phononBaker.BeginBake(bakeObjects, bakingModes, bakeStrings, bakeSpheres, bakeProbeBoxes);
+            phononBaker.BeginBake(bakeObjects, bakeIdentifiers, bakeNames, bakeSpheres, bakeProbeBoxes);
         }
 
         public void EndBake()
@@ -98,9 +97,9 @@ namespace SteamAudio
                 int probeDataSize = 0;
                 probeNames.Add(probeBox.name);
 
-                for (int i = 0; i < probeBox.probeDataName.Count; ++i)
+                for (int i = 0; i < probeBox.probeDataIdentifiers.Count; ++i)
                 {
-                    if ("__reverb__" == probeBox.probeDataName[i])
+                    if (Identifier.type == probeBox.probeDataTypes[i])
                     {
                         probeDataSize = probeBox.probeDataNameSizes[i];
                         dataSize += probeDataSize;
@@ -113,6 +112,18 @@ namespace SteamAudio
             bakedDataSize = dataSize;
             bakedProbeNames = probeNames;
             bakedProbeDataSizes = probeDataSizes;
+        }
+
+        public BakedDataIdentifier Identifier
+        {
+            get
+            {
+                return new BakedDataIdentifier
+                {
+                    identifier = 0,
+                    type = BakedDataType.Reverb
+                };
+            }
         }
 
         // Public members.

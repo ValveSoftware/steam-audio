@@ -4,6 +4,7 @@
 //
 
 using UnityEditor;
+using UnityEngine;
 
 namespace SteamAudio
 {
@@ -24,23 +25,47 @@ namespace SteamAudio
         {
             serializedObject.Update();
 
-            EditorGUILayout.LabelField("Simulation Settings", EditorStyles.boldLabel);
-            serializedObject.FindProperty("rayTracerOption").enumValueIndex = EditorGUILayout.Popup("Raytracer Options", serializedObject.FindProperty("rayTracerOption").enumValueIndex, optionsRayTracer);
+            //var rayTracerProperty = serializedObject.FindProperty("rayTracerOption");
+            var convolutionProperty = serializedObject.FindProperty("convolutionOption");
+            var minCuProperty = serializedObject.FindProperty("minComputeUnitsToReserve");
+            var maxCuProperty = serializedObject.FindProperty("maxComputeUnitsToReserve");
+            var durationProperty = serializedObject.FindProperty("Duration");
+            var ambisonicsOrderProperty = serializedObject.FindProperty("AmbisonicsOrder");
+            var maxSourcesProperty = serializedObject.FindProperty("MaxSources");
 
-            EditorGUILayout.LabelField("Renderer Settings", EditorStyles.boldLabel);
-            serializedObject.FindProperty("convolutionOption").enumValueIndex = EditorGUILayout.Popup("Convolution Options", serializedObject.FindProperty("convolutionOption").enumValueIndex, optionsConvolution);
+            //EditorGUILayout.PropertyField(rayTracerProperty);
 
-            SteamAudioCustomSettings customSettings = serializedObject.targetObject as SteamAudioCustomSettings;
-            if (customSettings.convolutionOption == ConvolutionOption.TrueAudioNext)
+            EditorGUILayout.Space();
+            EditorGUILayout.Space();
+            EditorGUILayout.LabelField("Rendering Settings", EditorStyles.boldLabel);
+            convolutionProperty.enumValueIndex = EditorGUILayout.Popup("Convolution Option", 
+                convolutionProperty.enumValueIndex, optionsConvolution);
+
+            if ((ConvolutionOption) convolutionProperty.enumValueIndex == ConvolutionOption.TrueAudioNext)
             {
-                EditorGUILayout.PropertyField(serializedObject.FindProperty("numComputeUnits"));
+                EditorGUILayout.PropertyField(minCuProperty);
+                EditorGUILayout.PropertyField(maxCuProperty);
+
+                maxCuProperty.intValue = Mathf.Max(minCuProperty.intValue, maxCuProperty.intValue);
+
+                if (minCuProperty.intValue == 0 && maxCuProperty.intValue == 0)
+                {
+                    EditorGUILayout.HelpBox("Setting both the minimum and maximum number of requested CUs to zero " +
+                        "disables CU reservation; the entire GPU will be used for audio processing. To enable CU " +
+                        "reservation, increase the value of one of the above sliders.", MessageType.Warning);
+                }
+
+                EditorGUILayout.PropertyField(durationProperty);
+                EditorGUILayout.PropertyField(ambisonicsOrderProperty);
+                EditorGUILayout.PropertyField(maxSourcesProperty);
             }
 
-            EditorGUILayout.HelpBox("This is an experimental feature. Please contact the developers to get relevant documentation to use Custom Phonon Settings feature.", MessageType.Info);
+            EditorGUILayout.Space();
+
             serializedObject.ApplyModifiedProperties();
         }
 
-        string[] optionsRayTracer = new string[] { "Phonon", "Embree", "Radeon Rays", "Custom" };
+        //string[] optionsRayTracer = new string[] { "Phonon", "Embree", "Radeon Rays", "Custom" };
         string[] optionsConvolution = new string[] { "Phonon", "TrueAudio Next" };
     }
 }

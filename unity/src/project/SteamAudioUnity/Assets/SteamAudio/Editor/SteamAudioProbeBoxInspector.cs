@@ -59,16 +59,22 @@ namespace SteamAudio
                 EditorGUILayout.LabelField("Probe Data Size", (probeBox.probeBoxData.Length / 1000.0f).ToString("0.0") + " KB");
             }
 
-            for (int i = 0; i < probeBox.probeDataName.Count; ++i)
+            for (int i = 0; i < probeBox.probeDataIdentifiers.Count; ++i)
             {
                 if (i == 0)
                     EditorGUILayout.LabelField("Detailed Statistics", EditorStyles.boldLabel);
 
                 EditorGUILayout.BeginHorizontal();
-                EditorGUILayout.LabelField(probeBox.probeDataName[i], (probeBox.probeDataNameSizes[i] / 1000.0f).ToString("0.0") + " KB");
+                EditorGUILayout.LabelField(probeBox.probeDataNames[i], (probeBox.probeDataNameSizes[i] / 1000.0f).ToString("0.0") + " KB");
                 if (GUILayout.Button("Clear"))
                 {
-                    probeBox.DeleteBakedDataByName(probeBox.probeDataName[i], probeBox.probeDataNamePrefixes[i]);
+                    var identifier = new BakedDataIdentifier
+                    {
+                        identifier = probeBox.probeDataIdentifiers[i],
+                        type = probeBox.probeDataTypes[i]
+                    };
+
+                    probeBox.DeleteBakedDataByIdentifier(identifier);
                     EditorSceneManager.MarkSceneDirty(SceneManager.GetActiveScene());
                 }
                 EditorGUILayout.EndHorizontal();

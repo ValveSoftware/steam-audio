@@ -4,6 +4,9 @@
 //
 
 using System;
+using System.Collections.Generic;
+using System.IO;
+using UnityEngine;
 using UnityEditor;
 
 namespace SteamAudio
@@ -20,10 +23,7 @@ namespace SteamAudio
         // Steam Audio scripts
         //
 
-        static string[] Scripts =
-        {
-            "Assets/SteamAudio",
-        };
+        static string Scripts = "Assets/SteamAudio";
 
         //
         // Steam Audio plugins
@@ -44,7 +44,57 @@ namespace SteamAudio
             "Assets/Plugins/android/libphonon.so",
             "Assets/Plugins/android/libaudioplugin_phonon.so"
         };
-        
+
+        static string[] FMODStudioPlugins =
+        {
+            // "Assets/Plugins/x86/phonon_fmod.dll",
+            "Assets/Plugins/x86_64/phonon_fmod.dll" //,
+            // "Assets/Plugins/x86/libphonon_fmod.so",
+            // "Assets/Plugins/x86_64/libphonon_fmod.so",
+            // "Assets/Plugins/phonon_fmod.bundle",
+            // "Assets/Plugins/android/libphonon_fmod.so"
+        };
+
+        static string FMODStudioAudioEngineSuffix = "_FMODStudio";
+
+        public static string[] FilteredAssets(string directory, string[] excludeSuffixes, string includeOnlySuffix)
+        {
+            var files = Directory.GetFiles(Directory.GetCurrentDirectory() + "/" + directory, "*", 
+                SearchOption.AllDirectories);
+
+            var assets = new List<string>();
+            foreach (var file in files)
+            {
+                if (file.Contains(".meta"))
+                    continue;
+
+                if (excludeSuffixes != null)
+                {
+                    var fileExcluded = false;
+                    foreach (var suffix in excludeSuffixes)
+                    {
+                        if (file.Contains(suffix))
+                        {
+                            fileExcluded = true;
+                            break;
+                        }
+                    }
+                    if (fileExcluded)
+                        continue;
+                }
+
+                if (includeOnlySuffix != null && !file.Contains(includeOnlySuffix))
+                    continue;
+
+                var relativeName = file.Replace(Directory.GetCurrentDirectory() + "/", "");
+                relativeName = relativeName.Replace('\\', '/');
+
+                assets.Add(relativeName);
+            }
+
+            return assets.ToArray();
+        }
+
         //
         // BuildAssetList
         // Builds an asset list given an array of asset groups.
@@ -73,10 +123,22 @@ namespace SteamAudio
         //
         public static void BuildSteamAudio()
         {
-            string[][] assetGroups = { Scripts, Plugins };
+            var unityScripts = FilteredAssets(Scripts, new string[] { FMODStudioAudioEngineSuffix }, null);
+
+            string[][] assetGroups = { unityScripts, Plugins };
             string[] assets = BuildAssetList(assetGroups);
 
             AssetDatabase.ExportPackage(assets, "SteamAudio.unitypackage", ExportPackageOptions.Recurse);
+        }
+
+        public static void BuildSteamAudioFMODStudio()
+        {
+            var fmodScripts = FilteredAssets(Scripts, null, FMODStudioAudioEngineSuffix);
+
+            var assetGroups = new string[][] { fmodScripts, FMODStudioPlugins };
+            var assets = BuildAssetList(assetGroups);
+
+            AssetDatabase.ExportPackage(assets, "SteamAudio_FMODStudio.unitypackage", ExportPackageOptions.Recurse);
         }
     }
 }

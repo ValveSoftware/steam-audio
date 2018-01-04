@@ -51,23 +51,14 @@ namespace SteamAudio
             for (int i = 0; i < duringBakeObjects.Length; ++i)
             {
                 bakingGameObjectName = "reverb";
-                var bakeDataString = Common.ConvertString("__reverb__");
-                var bakeDataStringWithPrefix = bakeDataString;
-                var bakeDataPrefix = "";
 
-                if (duringBakeModes[i] == BakingMode.StaticListener)
+                if (duringBakeIdentifiers[i].type == BakedDataType.StaticListener)
                 {
-                    bakeDataString = Common.HashStringForIdentifier(duringBakeIdentifiers[i]);
-                    bakeDataStringWithPrefix = Common.HashStringForIdentifierWithPrefix(duringBakeIdentifiers[i],
-                        bakedListenerPrefix);
-                    bakeDataPrefix = bakedListenerPrefix;
-                    bakingGameObjectName = duringBakeIdentifiers[i];
+                    bakingGameObjectName = duringBakeObjectNames[i];
                 }
-                else if (duringBakeModes[i] == BakingMode.StaticSource)
+                else if (duringBakeIdentifiers[i].type == BakedDataType.StaticSource)
                 {
-                    bakeDataString = Common.HashStringForIdentifier(duringBakeIdentifiers[i]);
-                    bakeDataStringWithPrefix = bakeDataString;
-                    bakingGameObjectName = duringBakeIdentifiers[i];
+                    bakingGameObjectName = duringBakeObjectNames[i];
                 }
 
                 Debug.Log("START: Baking effect for " + bakingGameObjectName + ".");
@@ -115,19 +106,19 @@ namespace SteamAudio
 
                     var environment = steamAudioManager.GameEngineState().Environment().GetEnvironment();
 
-                    if (duringBakeModes[i] == BakingMode.Reverb)
+                    if (duringBakeIdentifiers[i].type == BakedDataType.Reverb)
                     {
                         PhononCore.iplBakeReverb(environment, probeBoxPtr, bakeSettings, bakeCallback);
                     }
-                    else if (duringBakeModes[i] == BakingMode.StaticListener)
+                    else if (duringBakeIdentifiers[i].type == BakedDataType.StaticListener)
                     {
                         PhononCore.iplBakeStaticListener(environment, probeBoxPtr, duringBakeSpheres[i],
-                            bakeDataString, bakeSettings, bakeCallback);
+                            duringBakeIdentifiers[i], bakeSettings, bakeCallback);
                     }
-                    else if (duringBakeModes[i] == BakingMode.StaticSource)
+                    else if (duringBakeIdentifiers[i].type == BakedDataType.StaticSource)
                     {
                         PhononCore.iplBakePropagation(environment, probeBoxPtr, duringBakeSpheres[i],
-                            bakeDataString, bakeSettings, bakeCallback);
+                            duringBakeIdentifiers[i], bakeSettings, bakeCallback);
                     }
 
                     if (cancelBake)
@@ -141,8 +132,8 @@ namespace SteamAudio
                     probeBox.probeBoxData = new byte[probeBoxSize];
                     PhononCore.iplSaveProbeBox(probeBoxPtr, probeBox.probeBoxData);
 
-                    int probeBoxEffectSize = PhononCore.iplGetBakedDataSizeByName(probeBoxPtr, bakeDataStringWithPrefix);
-                    probeBox.UpdateProbeDataMapping(duringBakeIdentifiers[i], bakeDataPrefix, probeBoxEffectSize);
+                    int probeBoxEffectSize = PhononCore.iplGetBakedDataSizeByIdentifier(probeBoxPtr, duringBakeIdentifiers[i]);
+                    probeBox.UpdateProbeDataMapping(duringBakeIdentifiers[i], duringBakeNames[i], probeBoxEffectSize);
 
                     PhononCore.iplDestroyProbeBox(ref probeBoxPtr);
                 }
@@ -161,18 +152,22 @@ namespace SteamAudio
             bakeStatus = BakeStatus.Complete;
         }
 
-        public void BeginBake(GameObject[] gameObjects, BakingMode[] bakingModes, string[] stringIdentifiers,
-            Sphere[] influenceSpheres, SteamAudioProbeBox[][] probeBoxes)
+        public void BeginBake(GameObject[] gameObjects, BakedDataIdentifier[] identifiers, string[] names, Sphere[] influenceSpheres, 
+            SteamAudioProbeBox[][] probeBoxes)
         {
             duringBakeObjects = gameObjects;
             duringBakeProbeBoxes = probeBoxes;
-            duringBakeModes = bakingModes;
-            duringBakeIdentifiers = stringIdentifiers;
+            duringBakeIdentifiers = identifiers;
+            duringBakeNames = names;
             duringBakeSpheres = influenceSpheres;
+
+            duringBakeObjectNames = new string[duringBakeObjects.Length];
+            for (var i = 0; i < duringBakeObjects.Length; ++i)
+                duringBakeObjectNames[i] = names[i];
 
             for (int i=0; i<gameObjects.Length; ++i)
             {
-                if (stringIdentifiers[i].Length == 0 && bakingModes[i] != BakingMode.Reverb)
+                if (identifiers[i].identifier == 0 && identifiers[i].type != BakedDataType.Reverb)
                     Debug.LogError("Unique identifier not specified for GameObject " + gameObjects[i].name);
             }
 
@@ -334,11 +329,10 @@ namespace SteamAudio
 
         SteamAudioProbeBox[][] duringBakeProbeBoxes = null;
         Sphere[] duringBakeSpheres;
-        BakingMode[] duringBakeModes;
         GameObject[] duringBakeObjects;
-        string[] duringBakeIdentifiers;
-
-        string bakedListenerPrefix = "__staticlistener__";
+        string[] duringBakeObjectNames;
+        BakedDataIdentifier[] duringBakeIdentifiers;
+        string[] duringBakeNames;
 
         Thread bakeThread;
         PhononCore.BakeProgressCallback bakeCallback;

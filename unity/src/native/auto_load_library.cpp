@@ -148,7 +148,7 @@ void loadLibrary()
     gApi.iplApplyDirectSoundEffect          = (IPLApplyDirectSoundEffect)           GetProcAddress(library, "iplApplyDirectSoundEffect");
     gApi.iplCreateConvolutionEffect         = (IPLCreateConvolutionEffect)          GetProcAddress(library, "iplCreateConvolutionEffect");
     gApi.iplDestroyConvolutionEffect        = (IPLDestroyConvolutionEffect)         GetProcAddress(library, "iplDestroyConvolutionEffect");
-    gApi.iplSetConvolutionEffectName        = (IPLSetConvolutionEffectName)         GetProcAddress(library, "iplSetConvolutionEffectName");
+    gApi.iplSetConvolutionEffectIdentifier  = (IPLSetConvolutionEffectIdentifier)   GetProcAddress(library, "iplSetConvolutionEffectIdentifier");
     gApi.iplSetDryAudioForConvolutionEffect = (IPLSetDryAudioForConvolutionEffect)  GetProcAddress(library, "iplSetDryAudioForConvolutionEffect");
     gApi.iplGetWetAudioForConvolutionEffect = (IPLGetWetAudioForConvolutionEffect)  GetProcAddress(library, "iplGetWetAudioForConvolutionEffect");
     gApi.iplGetMixedEnvironmentalAudio      = (IPLGetMixedEnvironmentalAudio)       GetProcAddress(library, "iplGetMixedEnvironmentalAudio");
@@ -188,7 +188,7 @@ void loadLibrary()
     gApi.iplApplyDirectSoundEffect          = (IPLApplyDirectSoundEffect)           dlsym(library, "iplApplyDirectSoundEffect");
     gApi.iplCreateConvolutionEffect         = (IPLCreateConvolutionEffect)          dlsym(library, "iplCreateConvolutionEffect");
     gApi.iplDestroyConvolutionEffect        = (IPLDestroyConvolutionEffect)         dlsym(library, "iplDestroyConvolutionEffect");
-    gApi.iplSetConvolutionEffectName        = (IPLSetConvolutionEffectName)         dlsym(library, "iplSetConvolutionEffectName");
+    gApi.iplSetConvolutionEffectIdentifier  = (IPLSetConvolutionEffectIdentifier)   dlsym(library, "iplSetConvolutionEffectIdentifier");
     gApi.iplSetDryAudioForConvolutionEffect = (IPLSetDryAudioForConvolutionEffect)  dlsym(library, "iplSetDryAudioForConvolutionEffect");
     gApi.iplGetWetAudioForConvolutionEffect = (IPLGetWetAudioForConvolutionEffect)  dlsym(library, "iplGetWetAudioForConvolutionEffect");
     gApi.iplGetMixedEnvironmentalAudio      = (IPLGetMixedEnvironmentalAudio)       dlsym(library, "iplGetMixedEnvironmentalAudio");

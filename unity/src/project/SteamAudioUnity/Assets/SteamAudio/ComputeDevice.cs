@@ -14,17 +14,18 @@ namespace SteamAudio
             return device;
         }
 
-        public Error Create(IntPtr globalContext, bool useOpenCL, ComputeDeviceType deviceType, int numComputeUnits)
+        public Error Create(IntPtr globalContext, bool useOpenCL, ComputeDeviceFilter deviceFilter)
         {
             var error = Error.None;
 
             if (useOpenCL)
             {
-                error = PhononCore.iplCreateComputeDevice(globalContext, deviceType, numComputeUnits, ref device);
+                error = PhononCore.iplCreateComputeDevice(globalContext, deviceFilter, ref device);
                 if (error != Error.None)
                 {
-                    throw new Exception("Unable to create OpenCL compute device (" + deviceType.ToString() + ", " +
-                        numComputeUnits.ToString() + " CUs): [" + error.ToString() + "]");
+                    throw new Exception("Unable to create OpenCL compute device (" + deviceFilter.type.ToString() + 
+                        ", " + deviceFilter.minReservableCUs.ToString() + " to " + 
+                        deviceFilter.maxCUsToReserve.ToString() + " CUs): [" + error.ToString() + "]");
                 }
             }
 

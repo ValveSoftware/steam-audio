@@ -84,7 +84,7 @@ public:
     
     /** Unique identifier of the static source or static listener node whose baked data is to be used for rendering
         indirect sound. Ignored if using real-time simulation. */
-    std::string name;
+    IPLBakedDataIdentifier identifier;
     
     /** Whether or not the baked data we're using corresponds to a static listener node. Ignored if using real-time
         simulation. */
@@ -108,7 +108,7 @@ public:
         indirectBinaural{ false },
         indirectLevel{ 1.0f },
         indirectType{ IPL_SIMTYPE_REALTIME },
-        name{},
+        identifier{},
         usesStaticListener{ false },
         bypassDuringInitialization{ false },
         mInputFormat{},
@@ -184,8 +184,8 @@ public:
             value = (usesStaticListener) ? 1.0f : 0.0f;
             return true;
         case SA_SPATIALIZE_PARAM_NAME:
-            // Querying the name parameter is not supported.
-            return false;
+            value = *reinterpret_cast<float*>(&identifier.identifier);
+            return true;
         case SA_SPATIALIZE_PARAM_BYPASSDURINGINIT:
             value = (bypassDuringInitialization) ? 1.0f : 0.0f;
             return true;
@@ -238,11 +238,10 @@ public:
             return true;
         case SA_SPATIALIZE_PARAM_STATICLISTENER:
             usesStaticListener = (value == 1.0f);
+            identifier.type = (usesStaticListener) ? IPL_BAKEDDATATYPE_STATICLISTENER : IPL_BAKEDDATATYPE_STATICSOURCE;
             return true;
         case SA_SPATIALIZE_PARAM_NAME:
-            name = std::to_string(*reinterpret_cast<int*>(&value));
-            if (usesStaticListener)
-                name = "__staticlistener__" + name;
+            identifier.identifier = *reinterpret_cast<int*>(&value);
             return true;
         case SA_SPATIALIZE_PARAM_BYPASSDURINGINIT:
             bypassDuringInitialization = (value == 1.0f);
@@ -386,7 +385,7 @@ public:
         if (mEnvironmentalRenderer && mEnvironmentalRenderer->environmentalRenderer() && indirect && !mIndirectEffect)
         {
             if (gApi.iplCreateConvolutionEffect(mEnvironmentalRenderer->environmentalRenderer(),
-                const_cast<char*>(name.c_str()), indirectType, mInputFormat, mIndirectEffectOutputBuffer.format,
+                identifier, indirectType, mInputFormat, mIndirectEffectOutputBuffer.format,
                 &mIndirectEffect) != IPL_STATUS_SUCCESS)
             {
                 return false;
@@ -609,7 +608,7 @@ public:
         mPreviousIndirectMixLevel = adjustedIndirectLevel;
 
         // Send audio to the convolution effect.
-        gApi.iplSetConvolutionEffectName(mIndirectEffect, const_cast<IPLstring>(name.c_str()));
+        gApi.iplSetConvolutionEffectIdentifier(mIndirectEffect, identifier);
         gApi.iplSetDryAudioForConvolutionEffect(mIndirectEffect, sourcePosition, inputAudio);
         mUsedConvolutionEffect = true;
 

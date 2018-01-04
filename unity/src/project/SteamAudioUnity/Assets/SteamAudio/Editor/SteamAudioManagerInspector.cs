@@ -33,7 +33,7 @@ namespace SteamAudio
             GUI.enabled = !EditorApplication.isPlayingOrWillChangePlaymode;
             EditorGUILayout.Space();
             EditorGUILayout.LabelField("Audio Engine Integration", EditorStyles.boldLabel);
-            string[] engines = { "Unity" };
+            string[] engines = { "Unity", "FMOD Studio" };
             var audioEngineProperty = serializedObject.FindProperty("audioEngine");
             audioEngineProperty.enumValueIndex = EditorGUILayout.Popup("Audio Engine", 
                 audioEngineProperty.enumValueIndex, engines);
@@ -207,8 +207,8 @@ namespace SteamAudio
         public void BakeSelected()
         {
             List<GameObject> gameObjects = new List<GameObject>();
-            List<BakingMode> bakingModes = new List<BakingMode>();
-            List<string> identifers = new List<string>();
+            List<BakedDataIdentifier> identifers = new List<BakedDataIdentifier>();
+            List<string> names = new List<string>();
             List<Sphere> influenceSpheres = new List<Sphere>();
             List<SteamAudioProbeBox[]> probeBoxes = new List<SteamAudioProbeBox[]>();
 
@@ -219,8 +219,8 @@ namespace SteamAudio
                     bakedSource.simulationType == SourceSimulationType.BakedStaticSource && bakedSource.bakeToggle)
                 {
                     gameObjects.Add(bakedSource.gameObject);
-                    bakingModes.Add(BakingMode.StaticSource);
-                    identifers.Add(bakedSource.uniqueIdentifier);
+                    identifers.Add(bakedSource.bakedDataIdentifier);
+                    names.Add(bakedSource.uniqueIdentifier);
 
                     Sphere bakeSphere;
                     Vector3 sphereCenter = Common.ConvertVector(bakedSource.transform.position);
@@ -243,8 +243,8 @@ namespace SteamAudio
                 if (bakedStaticNode.uniqueIdentifier.Length != 0 && bakedStaticNode.bakeToggle)
                 {
                     gameObjects.Add(bakedStaticNode.gameObject);
-                    bakingModes.Add(BakingMode.StaticListener);
-                    identifers.Add(bakedStaticNode.uniqueIdentifier);
+                    identifers.Add(bakedStaticNode.bakedDataIdentifier);
+                    names.Add(bakedStaticNode.name);
 
                     Sphere bakeSphere;
                     Vector3 sphereCenter = Common.ConvertVector(bakedStaticNode.transform.position);
@@ -265,9 +265,8 @@ namespace SteamAudio
             if (!(bakedReverb == null) && bakedReverb.bakeToggle)
             {
                 gameObjects.Add(bakedReverb.gameObject);
-                bakingModes.Add(BakingMode.Reverb);
-                var identifier = "__reverb__";
-                identifers.Add(identifier);
+                identifers.Add(bakedReverb.Identifier);
+                names.Add("reverb");
                 influenceSpheres.Add(new Sphere());
 
                 if (bakedReverb.useAllProbeBoxes)
@@ -279,8 +278,8 @@ namespace SteamAudio
             if (gameObjects.Count > 0)
             {
                 SteamAudioManager phononManager = serializedObject.targetObject as SteamAudioManager;
-                phononManager.phononBaker.BeginBake(gameObjects.ToArray(), bakingModes.ToArray(), 
-                    identifers.ToArray(), influenceSpheres.ToArray(), probeBoxes.ToArray());
+                phononManager.phononBaker.BeginBake(gameObjects.ToArray(), identifers.ToArray(), names.ToArray(),
+                    influenceSpheres.ToArray(), probeBoxes.ToArray());
             }
             else
             {

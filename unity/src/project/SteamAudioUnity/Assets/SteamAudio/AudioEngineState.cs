@@ -3,55 +3,17 @@
 // https://valvesoftware.github.io/steam-audio/license.html
 //
 
-using UnityEngine;
-
 namespace SteamAudio
 {
-    public class AudioEngineState
+    public abstract class AudioEngineState
     {
-        public void Initialize(AudioEngine engine, ComponentCache componentCache, GameEngineState gameEngineState)
-        {
-            audioEngine = engine;
+        public virtual void Initialize(ComponentCache componentCache, GameEngineState gameEngineState)
+        {}
 
-            switch (audioEngine)
-            {
-                case AudioEngine.UnityNative:
-                    Debug.Log("Initializing Unity native audio engine with convolution type " +
-                        gameEngineState.ConvolutionType().ToString());
-                    PhononUnityNative.iplUnitySetEnvironment(gameEngineState.SimulationSettings(),
-                        gameEngineState.Environment().GetEnvironment(), gameEngineState.ConvolutionType());
-                    break;
-                default:
-                    Debug.LogError("Unsupported audio engine: " + audioEngine.ToString());
-                    break;
-            }
-        }
+        public virtual void Destroy()
+        {}
 
-        public void Destroy()
-        {
-            switch (audioEngine)
-            {
-                case AudioEngine.UnityNative:
-                    PhononUnityNative.iplUnityResetEnvironment();
-                    PhononUnityNative.iplUnityResetAudioEngine();
-                    break;
-                default:
-                    break;
-            }
-        }
-
-        public void UpdateListener(Vector3 position, Vector3 ahead, Vector3 up)
-        {
-            switch (audioEngine)
-            {
-                case AudioEngine.UnityNative:
-                    PhononUnityNative.iplUnitySetListener(position, ahead, up);
-                    break;
-                default:
-                    break;
-            }
-        }
-
-        AudioEngine             audioEngine;
+        public virtual void UpdateListener(Vector3 position, Vector3 ahead, Vector3 up)
+        {}
     }
 }

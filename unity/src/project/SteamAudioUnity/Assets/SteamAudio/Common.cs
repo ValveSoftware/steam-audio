@@ -284,6 +284,15 @@ namespace SteamAudio
         Any
     }
 
+    [StructLayout(LayoutKind.Sequential)]
+    public struct ComputeDeviceFilter
+    {
+        public ComputeDeviceType    type;
+        public Bool                 requiresTrueAudioNext;
+        public int                  minReservableCUs;
+        public int                  maxCUsToReserve;
+    }
+
     // Choose probe batch type.
     public enum ProbeBatchType
     {
@@ -316,6 +325,21 @@ namespace SteamAudio
     {
         public Bool bakeParametric;
         public Bool bakeConvolution;
+    }
+
+    public enum BakedDataType
+    {
+        StaticSource,
+        StaticListener,
+        Reverb
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    [Serializable]
+    public struct BakedDataIdentifier
+    {
+        public int              identifier;
+        public BakedDataType    type;
     }
 
     // Settings for propagation rendering.

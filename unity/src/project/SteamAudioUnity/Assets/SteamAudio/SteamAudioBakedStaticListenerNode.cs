@@ -55,8 +55,11 @@ namespace SteamAudio
             bakeSphere.radius = bakingRadius;
 
             GameObject[] bakeObjects = { gameObject };
-            BakingMode[] bakingModes = { BakingMode.StaticListener };
-            string[] bakeStrings = { uniqueIdentifier };
+
+            CacheIdentifier();
+            BakedDataIdentifier[] bakeIdentifiers = { bakedDataIdentifier };
+
+            string[] bakeNames = { uniqueIdentifier };
             Sphere[] bakeSpheres = { bakeSphere };
 
             SteamAudioProbeBox[][] bakeProbeBoxes;
@@ -67,17 +70,12 @@ namespace SteamAudio
             else
                 bakeProbeBoxes[0] = probeBoxes;
 
-            phononBaker.BeginBake(bakeObjects, bakingModes, bakeStrings, bakeSpheres, bakeProbeBoxes);
+            phononBaker.BeginBake(bakeObjects, bakeIdentifiers, bakeNames, bakeSpheres, bakeProbeBoxes);
         }
 
         public void EndBake()
         {
             phononBaker.EndBake();
-        }
-
-        public string GetUniqueIdentifier()
-        {
-            return bakedListenerPrefix + uniqueIdentifier;
         }
 
         public void UpdateBakedDataStatistics()
@@ -100,10 +98,10 @@ namespace SteamAudio
                 int probeDataSize = 0;
                 probeNames.Add(probeBox.name);
 
-                for (int i = 0; i < probeBox.probeDataName.Count; ++i)
+                for (int i = 0; i < probeBox.probeDataIdentifiers.Count; ++i)
                 {
-                    if (uniqueIdentifier == probeBox.probeDataName[i] && 
-                        bakedListenerPrefix == probeBox.probeDataNamePrefixes[i])
+                    if (bakedDataIdentifier.identifier == probeBox.probeDataIdentifiers[i] && 
+                        bakedDataIdentifier.type == probeBox.probeDataTypes[i])
                     {
                         probeDataSize = probeBox.probeDataNameSizes[i];
                         dataSize += probeDataSize;
@@ -116,6 +114,15 @@ namespace SteamAudio
             bakedDataSize = dataSize;
             bakedProbeNames = probeNames;
             bakedProbeDataSizes = probeDataSizes;
+        }
+
+        void CacheIdentifier()
+        {
+            bakedDataIdentifier = new BakedDataIdentifier
+            {
+                identifier = Common.HashForIdentifier(uniqueIdentifier),
+                type = BakedDataType.StaticListener
+            };
         }
 
         // Public members.
@@ -133,7 +140,6 @@ namespace SteamAudio
         public bool bakeToggle = false;
         public bool bakedStatsFoldout = false;
 
-        // Private members.
-        string bakedListenerPrefix = "__staticlistener__";
+        public BakedDataIdentifier bakedDataIdentifier;
     }
 }

@@ -6,6 +6,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Threading;
 using UnityEngine;
 
@@ -27,8 +28,6 @@ namespace SteamAudio
     {
         void Awake()
         {
-            audioSource = GetComponent<AudioSource>();
-
             var steamAudioManager = FindObjectOfType<SteamAudioManager>();
             if (steamAudioManager == null)
             {
@@ -37,25 +36,26 @@ namespace SteamAudio
             }
 
             steamAudioManager.Initialize(GameEngineStateInitReason.Playing);
+            managerData = steamAudioManager.ManagerData();
 
             audioEngine = steamAudioManager.audioEngine;
-            managerData = steamAudioManager.ManagerData();
+            audioEngineSource = AudioEngineSourceFactory.Create(audioEngine);
+            audioEngineSource.Initialize(gameObject);
+
+            audioEngineSource.UpdateParameters(this);
         }
 
         void OnDestroy()
         {
             if (managerData != null)
                 managerData.Destroy();
+
+            if (audioEngineSource != null)
+                audioEngineSource.Destroy();
         }
 
         void Update()
         {
-            if (!audioSource || !audioSource.isPlaying)
-                return;
-
-            if (audioEngine != AudioEngine.UnityNative)
-                return;
-
             var requiresScene = (occlusionMode != OcclusionMode.NoOcclusion || reflections);
             var sceneExported = (managerData.gameEngineState.Scene().GetScene() != IntPtr.Zero);
             if (requiresScene && !sceneExported)
@@ -64,57 +64,12 @@ namespace SteamAudio
                 return;
             }
 
-            var identifier = uniqueIdentifier;
-            if (simulationType == SourceSimulationType.BakedStaticListener)
+            audioEngineSource.UpdateParameters(this);
+
+            if (audioEngineSource.ShouldSendIdentifier(this))
             {
-                var steamAudioListener = managerData.componentCache.SteamAudioListener();
-                if (steamAudioListener != null)
-                {
-                    var staticListenerNode = steamAudioListener.currentStaticListenerNode;
-                    if (staticListenerNode != null)
-                        identifier = staticListenerNode.uniqueIdentifier;
-                }
+                audioEngineSource.SendIdentifier(this, GetIdentifierToSend());
             }
-
-            var identifierFloat = 0.0f;
-            if (simulationType == SourceSimulationType.BakedStaticSource ||
-                simulationType == SourceSimulationType.BakedStaticListener)
-            {
-                var identifierInt = Common.HashForIdentifier(identifier);
-                identifierFloat = BitConverter.ToSingle(BitConverter.GetBytes(identifierInt), 0);
-            }
-
-            var directBinauralValue = (directBinaural) ? 1.0f : 0.0f;
-            var hrtfInterpolationValue = (float)interpolation;
-            var distanceAttenuationValue = (physicsBasedAttenuation) ? 1.0f : 0.0f;
-            var airAbsorptionValue = (airAbsorption) ? 1.0f : 0.0f;
-            var occlusionModeValue = (float)occlusionMode;
-            var occlusionMethodValue = (float)occlusionMethod;
-            var sourceRadiusValue = sourceRadius;
-            var directMixLevelValue = directMixLevel;
-            var reflectionsValue = (reflections) ? 1.0f : 0.0f;
-            var indirectBinauralValue = (indirectBinaural) ? 1.0f : 0.0f;
-            var indirectMixLevelValue = indirectMixLevel;
-            var simulationTypeValue = (simulationType == SourceSimulationType.Realtime) ? 0.0f : 1.0f;
-            var nameValue = identifierFloat;
-            var usesStaticListenerValue = (simulationType == SourceSimulationType.BakedStaticListener) ? 1.0f : 0.0f;
-            var bypassDuringInitValue = (avoidSilenceDuringInit) ? 1.0f : 0.0f;
-
-            audioSource.SetSpatializerFloat(0, directBinauralValue);
-            audioSource.SetSpatializerFloat(1, hrtfInterpolationValue);
-            audioSource.SetSpatializerFloat(2, distanceAttenuationValue);
-            audioSource.SetSpatializerFloat(3, airAbsorptionValue);
-            audioSource.SetSpatializerFloat(4, occlusionModeValue);
-            audioSource.SetSpatializerFloat(5, occlusionMethodValue);
-            audioSource.SetSpatializerFloat(6, sourceRadiusValue);
-            audioSource.SetSpatializerFloat(7, directMixLevelValue);
-            audioSource.SetSpatializerFloat(8, reflectionsValue);
-            audioSource.SetSpatializerFloat(9, indirectBinauralValue);
-            audioSource.SetSpatializerFloat(10, indirectMixLevelValue);
-            audioSource.SetSpatializerFloat(11, simulationTypeValue);
-            audioSource.SetSpatializerFloat(12, usesStaticListenerValue);
-            audioSource.SetSpatializerFloat(13, nameValue);
-            audioSource.SetSpatializerFloat(14, bypassDuringInitValue);
         }
 
         public void BeginBake()
@@ -127,8 +82,11 @@ namespace SteamAudio
             bakeSphere.radius = bakingRadius;
 
             GameObject[] bakeObjects = { gameObject };
-            BakingMode[] bakingModes = { BakingMode.StaticSource };
-            string[] bakeStrings = { uniqueIdentifier };
+
+            CacheIdentifier();
+            BakedDataIdentifier[] bakeIdentifiers = { bakedDataIdentifier };
+
+            string[] bakeNames = { uniqueIdentifier };
             Sphere[] bakeSpheres = { bakeSphere };
 
             SteamAudioProbeBox[][] bakeProbeBoxes;
@@ -139,7 +97,7 @@ namespace SteamAudio
             else
                 bakeProbeBoxes[0] = probeBoxes;
 
-            baker.BeginBake(bakeObjects, bakingModes, bakeStrings, bakeSpheres, bakeProbeBoxes);
+            baker.BeginBake(bakeObjects, bakeIdentifiers, bakeNames, bakeSpheres, bakeProbeBoxes);
         }
 
         public void EndBake()
@@ -149,7 +107,10 @@ namespace SteamAudio
 
         void OnDrawGizmosSelected()
         {
-            if (simulationType == SourceSimulationType.BakedStaticSource)
+            var steamAudioManager = FindObjectOfType<SteamAudioManager>();
+            var audioEngine = (steamAudioManager) ? steamAudioManager.audioEngine : AudioEngine.UnityNative;
+
+            if (simulationType == SourceSimulationType.BakedStaticSource || audioEngine != AudioEngine.UnityNative)
             {
                 Color oldColor = Gizmos.color;
                 Matrix4x4 oldMatrix = Gizmos.matrix;
@@ -199,9 +160,10 @@ namespace SteamAudio
                 int probeDataSize = 0;
                 probeNames.Add(probeBox.name);
 
-                for (int i = 0; i < probeBox.probeDataName.Count; ++i)
+                for (int i = 0; i < probeBox.probeDataIdentifiers.Count; ++i)
                 {
-                    if (uniqueIdentifier == probeBox.probeDataName[i])
+                    if (bakedDataIdentifier.identifier == probeBox.probeDataIdentifiers[i] &&
+                        bakedDataIdentifier.type == probeBox.probeDataTypes[i])
                     {
                         probeDataSize = probeBox.probeDataNameSizes[i];
                         dataSize += probeDataSize;
@@ -214,6 +176,33 @@ namespace SteamAudio
             bakedDataSize = dataSize;
             bakedProbeNames = probeNames;
             bakedProbeDataSizes = probeDataSizes;
+        }
+
+        void CacheIdentifier()
+        {
+            bakedDataIdentifier = new BakedDataIdentifier
+            {
+                identifier = Common.HashForIdentifier(uniqueIdentifier),
+                type = BakedDataType.StaticSource
+            };
+        }
+
+        int GetIdentifierToSend()
+        {
+            var identifier = bakedDataIdentifier;
+
+            if (audioEngineSource.UsesBakedStaticListener(this))
+            {
+                var steamAudioListener = managerData.componentCache.SteamAudioListener();
+                if (steamAudioListener != null)
+                {
+                    var staticListenerNode = steamAudioListener.currentStaticListenerNode;
+                    if (staticListenerNode != null)
+                        identifier = staticListenerNode.bakedDataIdentifier;
+                }
+            }
+
+            return identifier.identifier;
         }
 
         public bool                 directBinaural      = true;
@@ -249,8 +238,11 @@ namespace SteamAudio
         public bool                 bakedStatsFoldout   = false;
         public bool                 bakeToggle          = false;
 
-        AudioSource                 audioSource         = null;
+        public BakedDataIdentifier  bakedDataIdentifier;
+
         ManagerData                 managerData         = null;
         AudioEngine                 audioEngine         = AudioEngine.UnityNative;
+
+        AudioEngineSource           audioEngineSource   = null;
     }
 }

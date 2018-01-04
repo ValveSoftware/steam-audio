@@ -16,54 +16,124 @@ typedef IPLerror (*IPLCreateContext)(IPLLogFunction logCallback,
 
 typedef IPLvoid (*IPLDestroyContext)(IPLhandle* context);
 
-typedef IPLerror(*IPLCreateBinauralRenderer)(IPLhandle context, IPLRenderingSettings renderingSettings,
-    IPLHrtfParams params, IPLhandle* renderer);
+typedef IPLerror(*IPLCreateBinauralRenderer)(IPLhandle context, 
+                                             IPLRenderingSettings renderingSettings,    
+                                             IPLHrtfParams params, 
+                                             IPLhandle* renderer);
+
 typedef IPLvoid(*IPLDestroyBinauralRenderer)(IPLhandle* renderer);
-typedef IPLerror(*IPLCreatePanningEffect)(IPLhandle renderer, IPLAudioFormat inputFormat, IPLAudioFormat outputFormat,
-    IPLhandle* effect);
+
+typedef IPLerror(*IPLCreatePanningEffect)(IPLhandle renderer, 
+                                          IPLAudioFormat inputFormat, 
+                                          IPLAudioFormat outputFormat,    
+                                          IPLhandle* effect);
+
 typedef IPLvoid(*IPLDestroyPanningEffect)(IPLhandle* effect);
-typedef IPLvoid(*IPLApplyPanningEffect)(IPLhandle effect, IPLAudioBuffer inputAudio, IPLVector3 direction,
-    IPLAudioBuffer outputAudio);
-typedef IPLerror(*IPLCreateBinauralEffect)(IPLhandle renderer, IPLAudioFormat inputFormat,
-    IPLAudioFormat outputFormat, IPLhandle* effect);
+
+typedef IPLvoid(*IPLApplyPanningEffect)(IPLhandle effect, 
+                                        IPLAudioBuffer inputAudio, 
+                                        IPLVector3 direction,    
+                                        IPLAudioBuffer outputAudio);
+
+typedef IPLerror(*IPLCreateBinauralEffect)(IPLhandle renderer, 
+                                           IPLAudioFormat inputFormat,    
+                                           IPLAudioFormat outputFormat, 
+                                           IPLhandle* effect);
+
 typedef IPLvoid(*IPLDestroyBinauralEffect)(IPLhandle* effect);
-typedef IPLvoid(*IPLApplyBinauralEffect)(IPLhandle effect, IPLAudioBuffer inputAudio, IPLVector3 direction,
-    IPLHrtfInterpolation interpolation, IPLAudioBuffer outputAudio);
-typedef IPLerror(*IPLCreateAmbisonicsPanningEffect)(IPLhandle renderer, IPLAudioFormat inputFormat,
-    IPLAudioFormat outputFormat, IPLhandle* effect);
+
+typedef IPLvoid(*IPLApplyBinauralEffect)(IPLhandle effect, 
+                                         IPLAudioBuffer inputAudio, 
+                                         IPLVector3 direction,    
+                                         IPLHrtfInterpolation interpolation, 
+                                         IPLAudioBuffer outputAudio);
+
+typedef IPLerror(*IPLCreateAmbisonicsPanningEffect)(IPLhandle renderer, 
+                                                    IPLAudioFormat inputFormat,    
+                                                    IPLAudioFormat outputFormat, 
+                                                    IPLhandle* effect);
+
 typedef IPLvoid(*IPLDestroyAmbisonicsPanningEffect)(IPLhandle* effect);
-typedef IPLvoid(*IPLApplyAmbisonicsPanningEffect)(IPLhandle effect, IPLAudioBuffer inputAudio,
-    IPLAudioBuffer outputAudio);
+
+typedef IPLvoid(*IPLApplyAmbisonicsPanningEffect)(IPLhandle effect, 
+                                                  IPLAudioBuffer inputAudio,    
+                                                  IPLAudioBuffer outputAudio);
+
 typedef IPLvoid(*IPLFlushAmbisonicsPanningEffect)(IPLhandle effect);
-typedef IPLerror(*IPLCreateAmbisonicsBinauralEffect)(IPLhandle renderer, IPLAudioFormat inputFormat,
-    IPLAudioFormat outputFormat, IPLhandle* effect);
+
+typedef IPLerror(*IPLCreateAmbisonicsBinauralEffect)(IPLhandle renderer, 
+                                                     IPLAudioFormat inputFormat,    
+                                                     IPLAudioFormat outputFormat, 
+                                                     IPLhandle* effect);
+
 typedef IPLvoid(*IPLDestroyAmbisonicsBinauralEffect)(IPLhandle* effect);
-typedef IPLvoid(*IPLApplyAmbisonicsBinauralEffect)(IPLhandle effect, IPLAudioBuffer inputAudio,
-    IPLAudioBuffer outputAudio);
+
+typedef IPLvoid(*IPLApplyAmbisonicsBinauralEffect)(IPLhandle effect, 
+                                                   IPLAudioBuffer inputAudio,    
+                                                   IPLAudioBuffer outputAudio);
+
 typedef IPLvoid(*IPLFlushAmbisonicsBinauralEffect)(IPLhandle effect);
-typedef IPLerror(*IPLCreateEnvironmentalRenderer)(IPLhandle context, IPLhandle environment,
-    IPLRenderingSettings renderingSettings, IPLAudioFormat outputFormat,
-    IPLSimulationThreadCreateCallback threadCreateCallback,
-    IPLSimulationThreadDestroyCallback threadDestroyCallback, IPLhandle* renderer);
+
+typedef IPLerror(*IPLCreateEnvironmentalRenderer)(IPLhandle context, 
+                                                  IPLhandle environment,    
+                                                  IPLRenderingSettings renderingSettings, 
+                                                  IPLAudioFormat outputFormat,    
+                                                  IPLSimulationThreadCreateCallback threadCreateCallback,    
+                                                  IPLSimulationThreadDestroyCallback threadDestroyCallback, 
+                                                  IPLhandle* renderer);
+
 typedef IPLvoid(*IPLDestroyEnvironmentalRenderer)(IPLhandle* renderer);
-typedef IPLDirectSoundPath(*IPLGetDirectSoundPath)(IPLhandle renderer, IPLVector3 listenerPosition,
-    IPLVector3 listenerAhead, IPLVector3 listenerUp, IPLVector3 sourcePosition, IPLfloat32 sourceRadius,
-    IPLDirectOcclusionMode occlusionMode, IPLDirectOcclusionMethod occlusionMethod);
-typedef IPLerror(*IPLCreateDirectSoundEffect)(IPLhandle renderer, IPLAudioFormat inputFormat,
-    IPLAudioFormat outputFormat, IPLhandle* effect);
+
+typedef IPLDirectSoundPath(*IPLGetDirectSoundPath)(IPLhandle renderer, 
+                                                   IPLVector3 listenerPosition,    
+                                                   IPLVector3 listenerAhead, 
+                                                   IPLVector3 listenerUp, 
+                                                   IPLVector3 sourcePosition, 
+                                                   IPLfloat32 sourceRadius,    
+                                                   IPLDirectOcclusionMode occlusionMode, 
+                                                   IPLDirectOcclusionMethod occlusionMethod);
+
+typedef IPLerror(*IPLCreateDirectSoundEffect)(IPLhandle renderer, 
+                                              IPLAudioFormat inputFormat,    
+                                              IPLAudioFormat outputFormat, 
+                                              IPLhandle* effect);
+
 typedef IPLvoid(*IPLDestroyDirectSoundEffect)(IPLhandle* effect);
-typedef IPLvoid(*IPLApplyDirectSoundEffect)(IPLhandle effect, IPLAudioBuffer inputAudio,
-    IPLDirectSoundPath directSoundPath, IPLDirectSoundEffectOptions options, IPLAudioBuffer outputAudio);
-typedef IPLerror(*IPLCreateConvolutionEffect)(IPLhandle renderer, IPLstring name, IPLSimulationType simulationType,
-    IPLAudioFormat inputFormat, IPLAudioFormat outputFormat, IPLhandle* effect);
+
+typedef IPLvoid(*IPLApplyDirectSoundEffect)(IPLhandle effect, 
+                                            IPLAudioBuffer inputAudio,    
+                                            IPLDirectSoundPath directSoundPath, 
+                                            IPLDirectSoundEffectOptions options, 
+                                            IPLAudioBuffer outputAudio);
+
+typedef IPLerror(*IPLCreateConvolutionEffect)(IPLhandle renderer, 
+                                              IPLBakedDataIdentifier identifier, 
+                                              IPLSimulationType simulationType,    
+                                              IPLAudioFormat inputFormat, 
+                                              IPLAudioFormat outputFormat, 
+                                              IPLhandle* effect);
+
 typedef IPLvoid(*IPLDestroyConvolutionEffect)(IPLhandle* effect);
-typedef IPLvoid(*IPLSetConvolutionEffectName)(IPLhandle effect, IPLstring name);
-typedef IPLvoid(*IPLSetDryAudioForConvolutionEffect)(IPLhandle effect, IPLVector3 sourcePosition,
-    IPLAudioBuffer dryAudio);
-typedef IPLvoid(*IPLGetWetAudioForConvolutionEffect)(IPLhandle effect, IPLVector3 listenerPosition,
-    IPLVector3 listenerAhead, IPLVector3 listenerUp, IPLAudioBuffer wetAudio);
-typedef IPLvoid(*IPLGetMixedEnvironmentalAudio)(IPLhandle renderer, IPLVector3 listenerPosition,
-    IPLVector3 listenerAhead, IPLVector3 listenerUp, IPLAudioBuffer mixedWetAudio);
+
+typedef IPLvoid(*IPLSetConvolutionEffectIdentifier)(IPLhandle effect, 
+                                                    IPLBakedDataIdentifier identifier);
+
+typedef IPLvoid(*IPLSetDryAudioForConvolutionEffect)(IPLhandle effect, 
+                                                     IPLVector3 sourcePosition,    
+                                                     IPLAudioBuffer dryAudio);
+
+typedef IPLvoid(*IPLGetWetAudioForConvolutionEffect)(IPLhandle effect, 
+                                                     IPLVector3 listenerPosition,    
+                                                     IPLVector3 listenerAhead, 
+                                                     IPLVector3 listenerUp, 
+                                                     IPLAudioBuffer wetAudio);
+
+typedef IPLvoid(*IPLGetMixedEnvironmentalAudio)(IPLhandle renderer, 
+                                                IPLVector3 listenerPosition,    
+                                                IPLVector3 listenerAhead, 
+                                                IPLVector3 listenerUp, 
+                                                IPLAudioBuffer mixedWetAudio);
+
 typedef IPLvoid(*IPLFlushConvolutionEffect)(IPLhandle effect);
 
 /** An interface object that contains function pointers to the Steam Audio API.
@@ -96,7 +166,7 @@ struct SteamAudioApi
     IPLApplyDirectSoundEffect               iplApplyDirectSoundEffect;
     IPLCreateConvolutionEffect              iplCreateConvolutionEffect;
     IPLDestroyConvolutionEffect             iplDestroyConvolutionEffect;
-    IPLSetConvolutionEffectName             iplSetConvolutionEffectName;
+    IPLSetConvolutionEffectIdentifier       iplSetConvolutionEffectIdentifier;
     IPLSetDryAudioForConvolutionEffect      iplSetDryAudioForConvolutionEffect;
     IPLGetWetAudioForConvolutionEffect      iplGetWetAudioForConvolutionEffect;
     IPLGetMixedEnvironmentalAudio           iplGetMixedEnvironmentalAudio;

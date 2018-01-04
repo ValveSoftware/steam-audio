@@ -91,8 +91,8 @@ namespace SteamAudio
             }
 
             SteamAudioSource phononEffect = serializedObject.targetObject as SteamAudioSource;
-            if (steamAudioManager.audioEngine != AudioEngine.UnityNative || 
-                phononEffect.simulationType == SourceSimulationType.BakedStaticSource)
+            if (phononEffect.simulationType == SourceSimulationType.BakedStaticSource ||
+                steamAudioManager.audioEngine != AudioEngine.UnityNative)
             {
                 BakedSourceGUI();
                 serializedObject.FindProperty("bakedStatsFoldout").boolValue =

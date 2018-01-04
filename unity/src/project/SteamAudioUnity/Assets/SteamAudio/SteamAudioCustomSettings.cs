@@ -15,14 +15,35 @@ namespace SteamAudio
     [AddComponentMenu("Steam Audio/Steam Audio Custom Settings")]
     public class SteamAudioCustomSettings : MonoBehaviour
     {
-        // Simulation settings.
+        [Space]
+        [Header("Simulation Settings")]
+
         public SceneType rayTracerOption = SceneType.Phonon;
 
-        //Renderer settings.
-        public ConvolutionOption convolutionOption;
+        [Space]
+        [Header("Rendering Settings")]
 
-        //OpenCL settings.
-        [Range(0, 8)]
-        public int numComputeUnits = 4;
+        public ConvolutionOption convolutionOption = ConvolutionOption.Phonon;
+
+        [Space]
+        [Header("CU Reservation")]
+
+        [Range(0, 16)]
+        public int minComputeUnitsToReserve = 4;
+
+        [Range(0, 64)]
+        public int maxComputeUnitsToReserve = 8;
+
+        [Space]
+        [Header("Override Simulation Settings")]
+
+        [Range(0.1f, 5.0f)]
+        public float Duration = 1.0f;
+
+        [Range(0, 3)]
+        public int AmbisonicsOrder = 1;
+
+        [Range(1, 128)]
+        public int MaxSources = 32;
     }
 }

@@ -12,7 +12,6 @@ namespace SteamAudio
     public enum AudioEngine
     {
         UnityNative,
-        Wwise,
         FMODStudio
     }
 }

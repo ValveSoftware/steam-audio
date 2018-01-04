@@ -184,11 +184,16 @@ def build_unity(args):
         shutil.copyfile(android_native_bin, android_audioplugin)
 
     # Run build commands
-    print "Building Unity."
+    print "Building Unity plugin..."
     p = subprocess.Popen(unity + " -batchmode -quit -projectPath " + unity_project_dir + " -executeMethod SteamAudio.Build.BuildSteamAudio " + args.configuration, cwd=os.getcwd())
     stdout, stderr = p.communicate()
 
+    print "Building Unity + FMOD Studio plugin..."
+    p = subprocess.Popen(unity + " -batchmode -quit -projectPath " + unity_project_dir + " -executeMethod SteamAudio.Build.BuildSteamAudioFMODStudio " + args.configuration, cwd=os.getcwd())
+    stdout, stderr = p.communicate()
+
     shutil.copyfile(os.path.join(unity_project_dir, "SteamAudio.unitypackage"), os.path.join(bin_dir, "SteamAudio.unitypackage"))
+    shutil.copyfile(os.path.join(unity_project_dir, "SteamAudio_FMODStudio.unitypackage"), os.path.join(bin_dir, "SteamAudio_FMODStudio.unitypackage"))
 
 
 #

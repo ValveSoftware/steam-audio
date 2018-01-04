@@ -1,3 +1,5 @@
+% Steam Audio Unity Plugin
+
 # Steam Audio Unity Plugin
 
 Copyright 2017 Valve Corporation. All rights reserved. Subject to the following license: 

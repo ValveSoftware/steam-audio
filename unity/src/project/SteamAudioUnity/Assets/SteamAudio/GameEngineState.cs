@@ -12,6 +12,7 @@ namespace SteamAudio
     {
         ExportingScene,
         GeneratingProbes,
+        EditingProbes,
         Baking,
         Playing
     }
@@ -23,66 +24,84 @@ namespace SteamAudio
         {
             PhononCore.iplCreateContext(LogMessage, IntPtr.Zero, IntPtr.Zero, ref context);
 
-            var customSettings = componentCache.SteamAudioCustomSettings();
-
-            var useOpenCL = false;
-            var computeDeviceType = ComputeDeviceType.Any;
-            var numComputeUnits = 0;
-
-            if (customSettings)
+            if (reason != GameEngineStateInitReason.EditingProbes)
             {
-                convolutionType = customSettings.convolutionOption;
+                var customSettings = componentCache.SteamAudioCustomSettings();
 
-                if (customSettings.convolutionOption == ConvolutionOption.TrueAudioNext)
+                var useOpenCL = false;
+                var computeDeviceType = ComputeDeviceType.Any;
+                var requiresTan = false;
+                var minReservableCUs = 0;
+                var maxCUsToReserve = 0;
+
+                if (customSettings)
                 {
-                    useOpenCL = true;
-                    computeDeviceType = ComputeDeviceType.GPU;
-                    numComputeUnits = customSettings.numComputeUnits;
+                    convolutionType = customSettings.convolutionOption;
+
+                    if (customSettings.convolutionOption == ConvolutionOption.TrueAudioNext)
+                    {
+                        useOpenCL = true;
+                        requiresTan = true;
+                        computeDeviceType = ComputeDeviceType.GPU;
+                        minReservableCUs = customSettings.minComputeUnitsToReserve;
+                        maxCUsToReserve = customSettings.maxComputeUnitsToReserve;
+                    }
+                    else if (customSettings.rayTracerOption == SceneType.RadeonRays)
+                    {
+                        useOpenCL = true;
+                    }
                 }
-                else if (customSettings.rayTracerOption == SceneType.RadeonRays)
-                {
-                    useOpenCL = true;
-                }
-            }
 
-            try
-            {
-                computeDevice.Create(context, useOpenCL, computeDeviceType, numComputeUnits);
-            }
-            catch (Exception e)
-            {
-                throw e;
-            }
-
-            var inEditor = !SteamAudioManager.IsAudioEngineInitializing();
-
-            simulationSettings = new SimulationSettings
-            {
-                sceneType               = (customSettings) ? customSettings.rayTracerOption : SceneType.Phonon,
-                rays                    = (inEditor) ? settings.BakeRays : settings.RealtimeRays,
-                secondaryRays           = (inEditor) ? settings.BakeSecondaryRays : settings.RealtimeSecondaryRays,
-                bounces                 = (inEditor) ? settings.BakeBounces : settings.RealtimeBounces,
-                irDuration              = settings.Duration,
-                ambisonicsOrder         = settings.AmbisonicsOrder,
-                maxConvolutionSources   = settings.MaxSources
-            };
-
-            if (reason != GameEngineStateInitReason.ExportingScene)
-                scene.Create(computeDevice, simulationSettings, context);
-
-            if (reason == GameEngineStateInitReason.Playing)
-                probeManager.Create(context);
-
-            if (reason != GameEngineStateInitReason.ExportingScene &&
-                reason != GameEngineStateInitReason.GeneratingProbes)
-            {
                 try
-                {
-                    environment.Create(computeDevice, simulationSettings, scene, probeManager, context);
-                }
+				{
+                    var deviceFilter = new ComputeDeviceFilter
+                    {
+                        type = computeDeviceType,
+                        requiresTrueAudioNext = (requiresTan) ? Bool.True : Bool.False,
+                        minReservableCUs = minReservableCUs,
+                        maxCUsToReserve = maxCUsToReserve
+                    };
+
+                    computeDevice.Create(context, useOpenCL, deviceFilter);
+				}
                 catch (Exception e)
                 {
-                    throw e;
+                    Debug.LogWarning(String.Format("Unable to initialize TrueAudio Next: {0}. Using Phonon convolution.",
+                        e.Message));
+
+                    customSettings.convolutionOption = ConvolutionOption.Phonon;
+                }
+
+                var inEditor = !SteamAudioManager.IsAudioEngineInitializing();
+
+                simulationSettings = new SimulationSettings
+                {
+                    sceneType               = (customSettings) ? customSettings.rayTracerOption : SceneType.Phonon,
+                    rays                    = (inEditor) ? settings.BakeRays : settings.RealtimeRays,
+                    secondaryRays           = (inEditor) ? settings.BakeSecondaryRays : settings.RealtimeSecondaryRays,
+                    bounces                 = (inEditor) ? settings.BakeBounces : settings.RealtimeBounces,
+                    irDuration              = (customSettings && customSettings.convolutionOption == ConvolutionOption.TrueAudioNext) ? customSettings.Duration : settings.Duration,
+                    ambisonicsOrder         = (customSettings && customSettings.convolutionOption == ConvolutionOption.TrueAudioNext) ? customSettings.AmbisonicsOrder : settings.AmbisonicsOrder,
+                    maxConvolutionSources   = (customSettings && customSettings.convolutionOption == ConvolutionOption.TrueAudioNext) ? customSettings.MaxSources : settings.MaxSources
+                };
+
+                if (reason != GameEngineStateInitReason.ExportingScene)
+                    scene.Create(computeDevice, simulationSettings, context);
+
+                if (reason == GameEngineStateInitReason.Playing)
+                    probeManager.Create(context);
+
+                if (reason != GameEngineStateInitReason.ExportingScene &&
+                    reason != GameEngineStateInitReason.GeneratingProbes)
+                {
+                    try
+                    {
+                        environment.Create(computeDevice, simulationSettings, scene, probeManager, context);
+                    }
+                    catch (Exception e)
+                    {
+                        throw e;
+                    }
                 }
             }
         }

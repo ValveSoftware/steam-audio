@@ -27,7 +27,8 @@ namespace SteamAudio
         //
 
         [DllImport("phonon")]
-        public static extern Error iplCreateComputeDevice(IntPtr globalContext, ComputeDeviceType deviceType, int numComputeUnits, [In, Out] ref IntPtr device);
+        public static extern Error iplCreateComputeDevice(IntPtr globalContext, ComputeDeviceFilter deviceFilter, 
+            [In, Out] ref IntPtr device);
 
         [DllImport("phonon")]
         public static extern void iplDestroyComputeDevice([In, Out] ref IntPtr device);
@@ -253,13 +254,13 @@ namespace SteamAudio
         //
 
         [DllImport("phonon")]
-        public static extern Error iplCreateConvolutionEffect(IntPtr renderer, byte[] name, SimulationType simulationType, AudioFormat inputFormat, AudioFormat outputFormat, [In, Out] ref IntPtr effect);
+        public static extern Error iplCreateConvolutionEffect(IntPtr renderer, BakedDataIdentifier identifier, SimulationType simulationType, AudioFormat inputFormat, AudioFormat outputFormat, [In, Out] ref IntPtr effect);
 
         [DllImport("phonon")]
         public static extern void iplDestroyConvolutionEffect([In, Out] ref IntPtr effect);
 
         [DllImport("phonon")]
-        public static extern void iplSetConvolutionEffectName(IntPtr effect, byte[] name);
+        public static extern void iplSetConvolutionEffectIdentifier(IntPtr effect, BakedDataIdentifier identifier);
 
         [DllImport("phonon")]
         public static extern void iplSetDryAudioForConvolutionEffect(IntPtr effect, Vector3 sourcePosition, AudioBuffer dryAudio);
@@ -344,19 +345,19 @@ namespace SteamAudio
         public static extern void iplBakeReverb(IntPtr environment, IntPtr probeBox, BakingSettings bakingSettings, BakeProgressCallback progressCallback);
 
         [DllImport("phonon")]
-        public static extern void iplBakePropagation(IntPtr environment, IntPtr probeBox, Sphere sourceInfluence, byte[] sourceName, BakingSettings bakingSettings, BakeProgressCallback progressCallback);
+        public static extern void iplBakePropagation(IntPtr environment, IntPtr probeBox, Sphere sourceInfluence, BakedDataIdentifier sourceIdentifier, BakingSettings bakingSettings, BakeProgressCallback progressCallback);
 
         [DllImport("phonon")]
-        public static extern void iplBakeStaticListener(IntPtr environment, IntPtr probeBox, Sphere listenerInfluence, byte[] listenerName, BakingSettings bakingSettings, BakeProgressCallback progressCallback);
+        public static extern void iplBakeStaticListener(IntPtr environment, IntPtr probeBox, Sphere listenerInfluence, BakedDataIdentifier listenerIdentifier, BakingSettings bakingSettings, BakeProgressCallback progressCallback);
 
         [DllImport("phonon")]
         public static extern void iplCancelBake();
 
         [DllImport("phonon")]
-        public static extern void iplDeleteBakedDataByName(IntPtr probeBox, byte[] sourceName);
+        public static extern void iplDeleteBakedDataByIdentifier(IntPtr probeBox, BakedDataIdentifier identifier);
 
         [DllImport("phonon")]
-        public static extern int iplGetBakedDataSizeByName(IntPtr probeBox, byte[] sourceName);
+        public static extern int iplGetBakedDataSizeByIdentifier(IntPtr probeBox, BakedDataIdentifier identifier);
 
         //
         // Functions for generating IRs for analysis and visualization.
@@ -378,21 +379,5 @@ namespace SteamAudio
 
         [DllImport("phonon")]
         public static extern void iplGetSimulationResult(IntPtr simulationData, int sourceIndex, int channel, float[] buffer);
-    }
-
-    public static class PhononUnityNative
-    {
-        [DllImport("audioplugin_phonon")]
-        public static extern void iplUnityResetAudioEngine();
-
-        [DllImport("audioplugin_phonon")]
-        public static extern void iplUnitySetEnvironment(SimulationSettings simulationSettings, IntPtr environment,
-            ConvolutionOption convolutionType);
-
-        [DllImport("audioplugin_phonon")]
-        public static extern void iplUnityResetEnvironment();
-
-        [DllImport("audioplugin_phonon")]
-        public static extern void iplUnitySetListener(Vector3 position, Vector3 ahead, Vector3 up);
     }
 }

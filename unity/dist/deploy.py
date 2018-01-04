@@ -38,7 +38,7 @@ def deploy_integration_unity(configuration):
 
     copy(os.path.join(deploy_path, "..\\..\\bin\\SteamAudio.unitypackage"),
          deploy_path + "\\steamaudio_unity\\bin\\unity")
-    copy(os.path.join(deploy_path, "..\\..\\doc\\phonon_manual.pdf"),
+    copy(os.path.join(deploy_path, "..\\..\\doc\\phonon_unity.html"),
          deploy_path + "\\steamaudio_unity\\doc")
 
     zip_output = os.path.abspath(os.path.join(deploy_path, "steamaudio_unity.zip"))

@@ -109,7 +109,7 @@ namespace SteamAudio
 #endif
         }
 
-        public void DeleteBakedDataByName(string name, string prefix)
+        public void DeleteBakedDataByIdentifier(BakedDataIdentifier identifier)
         {
             SteamAudioManager steamAudioManager = null;
             IntPtr probeBox = IntPtr.Zero;
@@ -119,15 +119,18 @@ namespace SteamAudio
                 if (steamAudioManager == null)
                     throw new Exception("Phonon Manager Settings object not found in the scene! Click Window > Phonon");
 
+                steamAudioManager.Initialize(GameEngineStateInitReason.EditingProbes);
                 var context = steamAudioManager.GameEngineState().Context();
 
                 PhononCore.iplLoadProbeBox(context, probeBoxData, probeBoxData.Length, ref probeBox);
-                PhononCore.iplDeleteBakedDataByName(probeBox, Common.HashStringForIdentifierWithPrefix(name, prefix));
-                UpdateProbeDataMapping(name, prefix, -1);
+                PhononCore.iplDeleteBakedDataByIdentifier(probeBox, identifier);
+                UpdateProbeDataMapping(identifier, "", -1);
 
                 int probeBoxSize = PhononCore.iplSaveProbeBox(probeBox, null);
                 probeBoxData = new byte[probeBoxSize];
                 PhononCore.iplSaveProbeBox(probeBox, probeBoxData);
+
+                steamAudioManager.Destroy();
             }
             catch (Exception e)
             {
@@ -136,20 +139,22 @@ namespace SteamAudio
 
         }
 
-        public void UpdateProbeDataMapping(string name, string prefix, int size)
+        public void UpdateProbeDataMapping(BakedDataIdentifier identifier, string dataName, int size)
         {
-            int index = probeDataName.IndexOf(name);
+            int index = probeDataIdentifiers.IndexOf(identifier.identifier);
 
             if (size == -1 && index >= 0)
             {
-                probeDataName.RemoveAt(index);
-                probeDataNamePrefixes.RemoveAt(index);
+                probeDataIdentifiers.RemoveAt(index);
+                probeDataNames.RemoveAt(index);
+                probeDataTypes.RemoveAt(index);
                 probeDataNameSizes.RemoveAt(index);
             }
             else if (index == -1)
             {
-                probeDataName.Add(name);
-                probeDataNamePrefixes.Add(prefix);
+                probeDataIdentifiers.Add(identifier.identifier);
+                probeDataNames.Add(dataName);
+                probeDataTypes.Add(identifier.type);
                 probeDataNameSizes.Add(size);
             }
             else
@@ -160,7 +165,7 @@ namespace SteamAudio
 
         void ClearProbeDataMapping()
         {
-            probeDataName.Clear();
+            probeDataIdentifiers.Clear();
             probeDataNameSizes.Clear();
         }
 
@@ -183,8 +188,9 @@ namespace SteamAudio
         public float[] probeSpherePoints = null;
         public float[] probeSphereRadii = null;
 
-        public List<string> probeDataName = new List<string>();
-        public List<string> probeDataNamePrefixes = new List<string>();
+        public List<int> probeDataIdentifiers = new List<int>();
+        public List<string> probeDataNames = new List<string>();
+        public List<BakedDataType> probeDataTypes = new List<BakedDataType>();
         public List<int> probeDataNameSizes = new List<int>();
     }
 }

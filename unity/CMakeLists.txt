@@ -187,3 +187,4 @@ endif ()
 ###############################################################################
 
 add_subdirectory (src/native)
+add_subdirectory (doc)

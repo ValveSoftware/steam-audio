@@ -12,7 +12,7 @@ namespace SteamAudio
 	{
         public ComponentCache      componentCache      = new ComponentCache();
         public GameEngineState     gameEngineState     = new GameEngineState();
-        public AudioEngineState    audioEngineState    = new AudioEngineState();
+        public AudioEngineState    audioEngineState    = null;
         public int                 referenceCount      = 0;
 
         public void Initialize(GameEngineStateInitReason reason, AudioEngine audioEngine, SimulationSettingsValue simulationValue)
@@ -23,7 +23,10 @@ namespace SteamAudio
                 gameEngineState.Initialize(simulationValue, componentCache, reason);
 
                 if (reason == GameEngineStateInitReason.Playing)
-                    audioEngineState.Initialize(audioEngine, componentCache, gameEngineState);
+                {
+                    audioEngineState = AudioEngineStateFactory.Create(audioEngine);
+                    audioEngineState.Initialize(componentCache, gameEngineState);
+                }
             }
 
             ++referenceCount;
@@ -36,7 +39,12 @@ namespace SteamAudio
 
             if (referenceCount == 0)
             {
-                audioEngineState.Destroy();
+                if (audioEngineState != null)
+                {
+                    audioEngineState.Destroy();
+                    audioEngineState = null;
+                }
+
                 gameEngineState.Destroy();
                 componentCache.Destroy();
             }

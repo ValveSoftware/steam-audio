@@ -180,7 +180,8 @@ public:
         // Make sure the convolution effect has been created.
         if (mEnvironmentalRenderer && !mConvolutionEffect)
         {
-            if (gApi.iplCreateConvolutionEffect(mEnvironmentalRenderer->environmentalRenderer(), "__reverb__", type,
+            auto identifier = IPLBakedDataIdentifier{ 0, IPL_BAKEDDATATYPE_REVERB };
+            if (gApi.iplCreateConvolutionEffect(mEnvironmentalRenderer->environmentalRenderer(), identifier, type,
                 mInputFormat, mIndirectEffectOutputBuffer.format, &mConvolutionEffect) != IPL_STATUS_SUCCESS)
             {
                 return false;
