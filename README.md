@@ -1,4 +1,4 @@
-% Steam Audio 2.0-beta.11
+% Steam Audio 2.0-beta.12
 % Valve Corporation
 
 Supported Platforms
@@ -9,7 +9,7 @@ Steam Audio supports Windows (32 bit and 64 bit), Linux (32 bit and 64 bit), mac
 Supported Integrations
 ----------------------
 
-Steam Audio supports Unity 5.3+ and Unreal Engine 4.16+.
+Steam Audio supports Unity 5.3+, Unreal Engine 4.16+, and FMOD Studio 1.10.01+.
 
 Additional Links
 ----------------
