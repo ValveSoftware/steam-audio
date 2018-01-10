@@ -222,19 +222,29 @@ extern "C" {
         IPL_COMPUTEDEVICE_ANY   /**< Use either a CPU or GPU device, whichever is listed first by the driver. */
     } IPLComputeDeviceType;
 
+    /** Specifies constraints on the type of OpenCL device to create. This information is intended to be passed to
+     *	\c iplCreateComputeDevice.
+     */
+    typedef struct {
+        IPLComputeDeviceType    type;                   /**< The type of device to use. */
+        IPLbool                 requiresTrueAudioNext;  /**< Whether the device must support AMD TrueAudio Next. */
+        IPLint32                minReservableCUs;       /**< The minimum number of CUs that should be possible to
+                                                             reserve on the device, for TrueAudio Next. */
+        IPLint32                maxCUsToReserve;        /**< The maximum number of CUs that the application needs to
+                                                             reserve on the device, for TrueAudio Next. */
+    } IPLComputeDeviceFilter;
+
     /** Creates a Compute Device object. The same Compute Device must be used by the game engine and audio engine
      *  parts of the Phonon integration. Depending on the OpenCL driver and device, this function may take some
      *  time to execute, so do not call it from performance-sensitive code.
      *
      *  \param  context         The Context object used by the game engine.
-     *  \param  deviceType      The type of device to use.
-     *  \param  numComputeUnits Reserved for future use.
+     *	\param	deviceFilter    Constraints on the type of device to create.
      *  \param  device          [out] Handle to the created Compute Device object.
      *
      *  \return Status code indicating whether or not the operation succeeded.
      */
-    IPLAPI IPLerror iplCreateComputeDevice(IPLhandle context, IPLComputeDeviceType deviceType,
-        IPLint32 numComputeUnits, IPLhandle* device);
+    IPLAPI IPLerror iplCreateComputeDevice(IPLhandle context, IPLComputeDeviceFilter deviceFilter, IPLhandle* device);
 
     /** Destroys a Compute Device object. If any other API objects are still referencing the Compute Device object,
      *  it will not be destroyed; destruction occurs when the object's reference count reaches zero.
@@ -927,12 +937,13 @@ extern "C" {
      *    world. This is achieved by using the Ambisonics Rotator object to apply the inverse of the user's rotation
      *    to the final mix.
      *
+     *  \param  context             The Context object used by the audio engine.
      *  \param  order               The order of the Ambisonics data to rotate.
      *  \param  rotator             [out] Handle to the created Ambisonics Rotator object.
      *
      *  \return Status code indicating whether or not the operation succeeded.
      */
-    IPLAPI IPLerror iplCreateAmbisonicsRotator(IPLint32 order, IPLhandle* rotator);
+    IPLAPI IPLerror iplCreateAmbisonicsRotator(IPLhandle context, IPLint32 order, IPLhandle* rotator);
 
     /** Destroys an Ambisonics Rotator object.
      *
@@ -1694,28 +1705,32 @@ extern "C" {
      *  \{
      */
 
+    /** Defines how a set of baked data should be interpreted.
+     */
     typedef enum {
-        IPL_BAKEDDATATYPE_STATICSOURCE,
-        IPL_BAKEDDATATYPE_STATICLISTENER,
-        IPL_BAKEDDATATYPE_REVERB
+        IPL_BAKEDDATATYPE_STATICSOURCE,     /**< Baked sound propagation from a static source to a moving listener. */
+        IPL_BAKEDDATATYPE_STATICLISTENER,   /**< Baked sound propagation from a moving source to a static listener. */
+        IPL_BAKEDDATATYPE_REVERB            /**< Baked listener-centric reverb. */
     } IPLBakedDataType;
 
+    /** Identifies a set of baked data. It is the application's responsibility to ensure that this data is unique
+     *  across the lifetime of an Environment object.
+     */
     typedef struct {
-        IPLint32            identifier;
-        IPLBakedDataType    type;
+        IPLint32            identifier; /**< 32-bit signed integer that uniquely identifies this set of baked data. */
+        IPLBakedDataType    type;       /**< How this set of baked data should be interpreted. */
     } IPLBakedDataIdentifier;
 
     /** Creates a Convolution Effect object.
      *
      *  \param  renderer            Handle to an Environmental Renderer object.
-     *  \param  name                Name of the corresponding source, as defined in the baked data exported by the
-     *                              game engine. Each Convolution Effect object may have a name, which is used only if
-     *                              the Environment object provided by the game engine uses baked data for sound
-     *                              propagation. If so, the name of the Convolution Effect is used to look up the
-     *                              appropriate information from the baked data. Multiple Convolution Effect objects
-     *                              may be created with the same name; in that case they will use the same baked data.
-     *                              If you want this Convolution Effect to be used to render baked reverb, pass
-     *                              \c "__reverb__" as the name.
+     *  \param  identifier          Unique identifier of the corresponding source, as defined in the baked data 
+     *                              exported by the game engine. Each Convolution Effect object may have an identifier,
+     *                              which is used only if the Environment object provided by the game engine uses baked
+     *                              data for sound propagation. If so, the identifier of the Convolution Effect is used
+     *                              to look up the appropriate information from the baked data. Multiple Convolution
+     *                              Effect objects may be created with the same identifier; in that case they will use
+     *                              the same baked data.
      *  \param  simulationType      Whether this Convolution Effect object should use baked data or real-time simulation.
      *  \param  inputFormat         Format of all audio buffers passed as input to
      *                              \c ::iplSetDryAudioForConvolutionEffect.
@@ -1733,12 +1748,12 @@ extern "C" {
      */
     IPLAPI IPLvoid iplDestroyConvolutionEffect(IPLhandle* effect);
 
-    /** Changes the name associated with a Convolution Effect object. This is useful when using a static listener
+    /** Changes the identifier associated with a Convolution Effect object. This is useful when using a static listener
      *  bake, where you may want to teleport the listener between two or more locations for which baked data has
      *  been generated.
      *
      *  \param  effect              Handle to a Convolution Effect object.
-     *  \param  name                The new name of the Convolution Effect object.
+     *  \param  identifier          The new identifier of the Convolution Effect object.
      */
     IPLAPI IPLvoid iplSetConvolutionEffectIdentifier(IPLhandle effect, IPLBakedDataIdentifier identifier);
 
@@ -2079,8 +2094,8 @@ extern "C" {
      *  \param  probeBox            Handle to the Probe Box containing the probes for which to bake reverb.
      *  \param  sourceInfluence     Sphere defined by the source position (at its center) and its radius of
      *                              influence.
-     *  \param  sourceName          Name of the source. At run-time, a Convolution Effect object can use this name
-     *                              to look up the correct impulse response information.
+     *  \param  sourceIdentifier    Identifier of the source. At run-time, a Convolution Effect object can use this
+     *                              identifier to look up the correct impulse response information.
      *  \param  bakingSettings      The kind of acoustic responses to bake.
      *  \param  progressCallback    Pointer to a function that reports the percentage of this function's work that
      *                              has been completed. May be \c NULL.
@@ -2095,9 +2110,8 @@ extern "C" {
      *  \param  environment         Handle to an Environment object.
      *  \param  probeBox            Handle to the Probe Box containing the probes for which to bake reverb.
      *  \param  listenerInfluence   Position and influence radius of the listener.
-     *  \param  listenerName        Name of the listener. At run-time, a Convolution Effect object can use this
-     *                              name prefixed with \c __staticlistener__ to look up the correct impulse
-     *                              response information.
+     *  \param  listenerIdentifier  Identifier of the listener. At run-time, a Convolution Effect object can use this
+     *                              identifier to look up the correct impulse response information.
      *  \param  bakingSettings      The kind of acoustic responses to bake.
      *  \param  progressCallback    Pointer to a function that reports the percentage of this function's work that
      *                              has been completed. May be \c NULL.
@@ -2116,7 +2130,7 @@ extern "C" {
      *  exists, this function does nothing.
      *
      *  \param  probeBox            Handle to a Probe Box object.
-     *  \param  sourceName          Name of the source whose baked data is to be deleted.
+     *  \param  identifier          Identifier of the source whose baked data is to be deleted.
      */
     IPLAPI IPLvoid iplDeleteBakedDataByIdentifier(IPLhandle probeBox, IPLBakedDataIdentifier identifier);
 
@@ -2124,9 +2138,9 @@ extern "C" {
      *  This is useful for displaying statistics in the editor's GUI.
      *
      *  \param  probeBox            Handle to a Probe Box object.
-     *  \param  sourceName          Name of the source whose baked data size is to be returned.
+     *  \param  identifier          Identifier of the source whose baked data size is to be returned.
      *
-     *  \return Size (in bytes) of the baked data stored in the Probe Box corresponding to the named source.
+     *  \return Size (in bytes) of the baked data stored in the Probe Box corresponding to the source.
      */
     IPLAPI IPLint32 iplGetBakedDataSizeByIdentifier(IPLhandle probeBox, IPLBakedDataIdentifier identifier);
 
