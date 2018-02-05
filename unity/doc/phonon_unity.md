@@ -1,6 +1,6 @@
-% Steam Audio Unity Plugin
+% Steam Audio Unity Plugin 2.0-beta.13
 
-# Steam Audio Unity Plugin
+# Steam Audio Unity Plugin <small><small>2.0-beta.13</small></small>
 
 Copyright 2017 Valve Corporation. All rights reserved. Subject to the following license: 
 [https://valvesoftware.github.io/steam-audio/license.html](https://valvesoftware.github.io/steam-audio/license.html)
@@ -672,6 +672,76 @@ Baked Static Listener Node.
 
 ### Advanced Options
 The following advanced options are available on the Steam Audio tab.
+
+#### AMD TrueAudio Next
+Steam Audio provides optional support for AMD TrueAudio Next, which allows you to reserve a portion of the GPU for
+accelerating convolution operations. TrueAudio Next requires a supported AMD Radeon GPU. 
+
+If you choose to enable TrueAudio Next support in your Unity project, then Steam Audio will try to use the GPU to 
+accelerate the rendering of indirect sound, including real-time source-centric propagation, baked static source 
+propagation, baked static listener propagation, real-time listener-centric reverb, and baked listener-centric reverb.
+
+> **NOTE** <br/>
+  TrueAudio Next only supports Windows 64-bit platform. Steam Audio falls back to using CPU based convolution for
+  platforms not supported by TrueAudio Next.
+
+##### Enabling TrueAudio Next
+Before enabling TrueAudio Next, you must download the Steam Audio TrueAudio Next support package for Unity
+(`SteamAudio_TrueAudioNext.unitypackage`) from GitHub. Then:
+
+1.  From the Unity menu, choose **Assets** > **Import Package** > **Custom Package**.
+2.  Navigate to the directory where you downloaded the Steam Audio TrueAudio Next support package. Within this
+    folder, navigate to the <code>bin/unity/</code> subdirectory.
+3.  Double-click the <code>SteamAudio_TrueAudioNext.unitypackage</code> file.
+4.  In the Import dialog box that appears, make sure everything is selected, and click the **Import** button.
+
+Next, for each Unity scene in which you want to enable TrueAudio Next, follow these steps:
+
+1.  In the Hierarchy tab, click the **Steam Audio Manager Settings** object.
+2.  In the Inspector tab, click **Add Component**.
+3.  In the Add Component menu, select **Steam Audio** > **Steam Audio Custom Settings**.
+4.  In the Steam Audio Custom Settings component, set **Convolution Option** to **TrueAudio Next**.
+
+![Enabling TrueAudio Next via Steam Audio Custom Settings.](media/tan-enabled.png)
+
+Now whenever the scene is loaded, either in the Unity editor or in a standalone player, Steam Audio will attempt
+to use TrueAudio Next for convolution. If the user's PC does not contain a supported GPU (or the configured
+resource reservation settings are not supported by the user's GPU; see below for details), Steam Audio will
+seamlessly fall back to using the CPU for convolution, as usual.
+
+> **NOTE** <br/>
+  When using TrueAudio Next, we strongly recommend that you use the Steam Audio Mixer Return effect if possible,
+  for the best performance.
+
+##### Settings Overrides
+When TrueAudio Next is enabled in the Steam Audio Custom Settings component, you can also override some of the
+simulation settings that are normally configured on the Steam Audio Manager Settings component. These include
+**Duration**, **Ambisonics Order**, and **Max Sources**.
+
+![Overriding simulation settings for TrueAudio Next.](media/tan-settings-override.png)
+
+These overrides allow you to switch to a higher level of acoustic detail when the user's PC has a supported
+GPU, while seamlessly falling back to using the CPU with the settings configured on the Steam Audio Manager
+Settings component if a supported GPU is not found.
+
+##### Resource Reservation
+When TrueAudio Next is enabled in the Steam Audio Custom Settings component, you can configure the following
+Resource Reservation settings, which allow you to control how much of the GPU is set aside for audio processing
+tasks:
+
+- **Min Compute Units To Reserve**. This is the smallest number of GPU Compute Units (CUs) that should be possible
+  to reserve for audio processing. If the user's GPU does not support this many reserved CUs, then TrueAudio Next
+  initialization will fail and Steam Audio will fall back to CPU convolution. For example, if this value is set to 4,
+  but the user's GPU only supports reserving up to 2 CUs, TrueAudio Next initialization will fail.
+
+- **Max Compute Units To Reserve**. This is the largest number of CUs that Steam Audio will try to reserve for audio
+  processing. Steam Audio will try to reserve as many CUs as it can, up to this limit. If the user's GPU does not
+  support reserving any number of CUs between **Min Compute Units To Reserve** and **Max Compute Units To Reserve**,
+  then TrueAudio Next initialization will fail and Steam Audio will fall back to CPU convolution. For example, if
+  **Min Compute Units To Reserve** is set to 2 and **Max Compute Units To Reserve** is set to 4, but the user's GPU
+  only supports reserving 8 or more CUs, TrueAudio Next initialization will fail.
+
+![Configuring Resource Reservation settings for TrueAudio Next.](media/tan-reservation-settings.png)
 
 #### Per Frame Query Optimization
 Steam Audio searches the Unity scene graph for an Audio Listener and a Steam Audio Listener every frame. This requires 

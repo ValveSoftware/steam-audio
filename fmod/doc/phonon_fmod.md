@@ -1,6 +1,6 @@
-% Steam Audio FMOD Studio Plugin
+% Steam Audio FMOD Studio Plugin 2.0-beta.13
 
-# Steam Audio FMOD Studio Plugin
+# Steam Audio FMOD Studio Plugin <small><small>2.0-beta.13</small></small>
 
 Copyright 2017 Valve Corporation. All rights reserved. Subject to the following license: 
 [https://valvesoftware.github.io/steam-audio/license.html](https://valvesoftware.github.io/steam-audio/license.html)
@@ -255,6 +255,12 @@ this:
 3.	In the text box that appears, enter `phonon_fmod`.
 
 ![Enabling the Steam Audio plugin for FMOD Studio in Unity.](media/steamaudio_fmodstudio_unity.png)
+
+#### Configuring Steam Audio to use FMOD Studio
+Finally, you must tell Steam Audio that you are using FMOD Studio as your audio engine. To do this:
+
+1.  From the Unity menu, choose **Window** > **Steam Audio**.
+2.  In the Steam Audio tab, under **Audio Engine**, choose **FMOD Studio**.
 
 ### Auditioning Steam Audio Effects
 Events that are configured to use physics-based sound propagation, including occlusion, source-centric propagation,

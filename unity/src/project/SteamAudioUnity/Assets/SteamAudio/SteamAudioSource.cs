@@ -28,7 +28,7 @@ namespace SteamAudio
     {
         void Awake()
         {
-            var steamAudioManager = FindObjectOfType<SteamAudioManager>();
+            var steamAudioManager = SteamAudioManager.GetSingleton();
             if (steamAudioManager == null)
             {
                 Debug.LogError("Phonon Manager Settings object not found in the scene! Click Window > Phonon");
@@ -42,6 +42,11 @@ namespace SteamAudio
             audioEngineSource = AudioEngineSourceFactory.Create(audioEngine);
             audioEngineSource.Initialize(gameObject);
 
+            audioEngineSource.UpdateParameters(this);
+        }
+
+        void Start()
+        {
             audioEngineSource.UpdateParameters(this);
         }
 
@@ -160,12 +165,12 @@ namespace SteamAudio
                 int probeDataSize = 0;
                 probeNames.Add(probeBox.name);
 
-                for (int i = 0; i < probeBox.probeDataIdentifiers.Count; ++i)
+                for (int i = 0; i < probeBox.dataLayerInfo.Count; ++i)
                 {
-                    if (bakedDataIdentifier.identifier == probeBox.probeDataIdentifiers[i] &&
-                        bakedDataIdentifier.type == probeBox.probeDataTypes[i])
+                    if (bakedDataIdentifier.identifier == probeBox.dataLayerInfo[i].identifier.identifier &&
+                        bakedDataIdentifier.type == probeBox.dataLayerInfo[i].identifier.type)
                     {
-                        probeDataSize = probeBox.probeDataNameSizes[i];
+                        probeDataSize = probeBox.dataLayerInfo[i].size;
                         dataSize += probeDataSize;
                     }
                 }

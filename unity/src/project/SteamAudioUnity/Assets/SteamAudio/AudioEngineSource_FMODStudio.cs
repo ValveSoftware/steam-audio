@@ -103,7 +103,11 @@ namespace SteamAudio
                 return false;
 
             var usesBakedStaticListener = false;
-            FMOD_DSP_getParameterBool.Invoke(dsp, new object[] { 12, usesBakedStaticListener });
+
+            var getParameterBoolArgs = new object[] { 12, usesBakedStaticListener };
+            FMOD_DSP_getParameterBool.Invoke(dsp, getParameterBoolArgs);
+            usesBakedStaticListener = (bool) getParameterBoolArgs[1];
+
             return usesBakedStaticListener;
         }
 

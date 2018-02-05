@@ -3,9 +3,11 @@
 // https://valvesoftware.github.io/steam-audio/license.html
 //
 
-using UnityEngine;
 using System;
 using System.Collections.Generic;
+using System.IO;
+using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace SteamAudio
 {
@@ -92,8 +94,9 @@ namespace SteamAudio
 
             // Save probe box into searlized data;
             int probeBoxSize = PhononCore.iplSaveProbeBox(probeBox, null);
-            probeBoxData = new byte[probeBoxSize];
+            var probeBoxData = new byte[probeBoxSize];
             PhononCore.iplSaveProbeBox(probeBox, probeBoxData);
+            SaveData(probeBoxData);
 
             if (steamAudioManager.GameEngineState().Scene().GetScene() != IntPtr.Zero)
                 Debug.Log("Generated " + probeSpheres.Length + " probes for game object " + gameObject.name + ".");
@@ -101,7 +104,7 @@ namespace SteamAudio
             // Cleanup.
             PhononCore.iplDestroyProbeBox(ref probeBox);
             steamAudioManager.Destroy();
-            ClearProbeDataMapping();
+            ResetLayers();
 
             // Redraw scene view for probes to show up instantly.
 #if UNITY_EDITOR
@@ -122,13 +125,15 @@ namespace SteamAudio
                 steamAudioManager.Initialize(GameEngineStateInitReason.EditingProbes);
                 var context = steamAudioManager.GameEngineState().Context();
 
+                byte[] probeBoxData = LoadData();
                 PhononCore.iplLoadProbeBox(context, probeBoxData, probeBoxData.Length, ref probeBox);
                 PhononCore.iplDeleteBakedDataByIdentifier(probeBox, identifier);
-                UpdateProbeDataMapping(identifier, "", -1);
+                RemoveLayer(identifier);
 
                 int probeBoxSize = PhononCore.iplSaveProbeBox(probeBox, null);
                 probeBoxData = new byte[probeBoxSize];
                 PhononCore.iplSaveProbeBox(probeBox, probeBoxData);
+                SaveData(probeBoxData);
 
                 steamAudioManager.Destroy();
             }
@@ -137,36 +142,6 @@ namespace SteamAudio
                 Debug.LogError(e.Message);
             }
 
-        }
-
-        public void UpdateProbeDataMapping(BakedDataIdentifier identifier, string dataName, int size)
-        {
-            int index = probeDataIdentifiers.IndexOf(identifier.identifier);
-
-            if (size == -1 && index >= 0)
-            {
-                probeDataIdentifiers.RemoveAt(index);
-                probeDataNames.RemoveAt(index);
-                probeDataTypes.RemoveAt(index);
-                probeDataNameSizes.RemoveAt(index);
-            }
-            else if (index == -1)
-            {
-                probeDataIdentifiers.Add(identifier.identifier);
-                probeDataNames.Add(dataName);
-                probeDataTypes.Add(identifier.type);
-                probeDataNameSizes.Add(size);
-            }
-            else
-            {
-                probeDataNameSizes[index] = size;
-            }
-        }
-
-        void ClearProbeDataMapping()
-        {
-            probeDataIdentifiers.Clear();
-            probeDataNameSizes.Clear();
         }
 
         // Public members.
@@ -184,13 +159,112 @@ namespace SteamAudio
         [Range(1, 10)]
         public int maxOctreeDepth = 2;
 
-        public byte[] probeBoxData = null;
+        public int dataSize = 0;
         public float[] probeSpherePoints = null;
         public float[] probeSphereRadii = null;
 
-        public List<int> probeDataIdentifiers = new List<int>();
-        public List<string> probeDataNames = new List<string>();
-        public List<BakedDataType> probeDataTypes = new List<BakedDataType>();
-        public List<int> probeDataNameSizes = new List<int>();
+        string cachedDataFileName = "";
+
+        string DataFileName()
+        {
+            if (cachedDataFileName == "")
+            {
+                var sceneName = Path.GetFileNameWithoutExtension(SceneManager.GetActiveScene().name);
+                var objectName = gameObject.name;
+                var fileName = string.Format("{0}_{1}.probes", sceneName, objectName);
+                var filePath = Path.Combine(Application.streamingAssetsPath, fileName);
+                cachedDataFileName = filePath;
+            }
+
+            return cachedDataFileName;
+
+            // TODO: Android loading?
+        }
+
+        public void CacheFileName()
+        {
+            DataFileName();
+        }
+
+        public byte[] LoadData()
+        {
+            var fileName = DataFileName();
+            if (!File.Exists(fileName))
+                return null;
+
+            var data = File.ReadAllBytes(fileName);
+            return data;
+        }
+
+        public void SaveData(byte[] data)
+        {
+#if UNITY_EDITOR
+            if (cachedDataFileName == "" && !Directory.Exists(Application.streamingAssetsPath))
+                UnityEditor.AssetDatabase.CreateFolder("Assets", "StreamingAssets");
+#endif
+
+            var fileName = DataFileName();
+            File.WriteAllBytes(fileName, data);
+
+            dataSize = data.Length;
+        }
+
+        public List<ProbeDataLayerInfo> dataLayerInfo = new List<ProbeDataLayerInfo>();
+
+        public void ResetLayers()
+        {
+            dataLayerInfo.Clear();
+        }
+
+        public void AddOrUpdateLayer(BakedDataIdentifier identifier, string name, int size)
+        {
+            if (FindLayer(identifier) == null)
+                AddLayer(identifier, name, size);
+            else
+                UpdateLayerSize(identifier, size);
+        }
+
+        public void AddLayer(BakedDataIdentifier identifier, string name, int size)
+        {
+            var layerInfo = new ProbeDataLayerInfo();
+            layerInfo.identifier = identifier;
+            layerInfo.name = name;
+            layerInfo.size = size;
+
+            dataLayerInfo.Add(layerInfo);
+        }
+
+        public void RemoveLayer(BakedDataIdentifier identifier)
+        {
+            dataLayerInfo.Remove(FindLayer(identifier));
+        }
+
+        public void UpdateLayerSize(BakedDataIdentifier identifier, int newSize)
+        {
+            var layerInfo = FindLayer(identifier);
+            if (layerInfo != null)
+                layerInfo.size = newSize;
+        }
+
+        ProbeDataLayerInfo FindLayer(BakedDataIdentifier identifier)
+        {
+            foreach (var layerInfo in dataLayerInfo)
+            {
+                if (layerInfo.identifier.identifier == identifier.identifier &&
+                    layerInfo.identifier.type == identifier.type)
+                {
+                    return layerInfo;
+                }
+            }
+            return null;
+        }
+    }
+
+    [Serializable]
+    public class ProbeDataLayerInfo
+    {
+        public string               name;
+        public BakedDataIdentifier  identifier;
+        public int                  size;
     }
 }

@@ -192,8 +192,13 @@ def build_unity(args):
     p = subprocess.Popen(unity + " -batchmode -quit -projectPath " + unity_project_dir + " -executeMethod SteamAudio.Build.BuildSteamAudioFMODStudio " + args.configuration, cwd=os.getcwd())
     stdout, stderr = p.communicate()
 
+    print "Building Unity + TrueAudio Next support..."
+    p = subprocess.Popen(unity + " -batchmode -quit -projectPath " + unity_project_dir + " -executeMethod SteamAudio.Build.BuildSteamAudioTrueAudioNext " + args.configuration, cwd=os.getcwd())
+    stdout, stderr = p.communicate()
+
     shutil.copyfile(os.path.join(unity_project_dir, "SteamAudio.unitypackage"), os.path.join(bin_dir, "SteamAudio.unitypackage"))
     shutil.copyfile(os.path.join(unity_project_dir, "SteamAudio_FMODStudio.unitypackage"), os.path.join(bin_dir, "SteamAudio_FMODStudio.unitypackage"))
+    shutil.copyfile(os.path.join(unity_project_dir, "SteamAudio_TrueAudioNext.unitypackage"), os.path.join(bin_dir, "SteamAudio_TrueAudioNext.unitypackage"))
 
 
 #

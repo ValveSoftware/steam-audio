@@ -187,7 +187,7 @@ public:
         }
 
         // Make sure the Ambisonics panning effect has been created.
-        if (mBinauralRenderer && !mAmbisonicsPanningEffect)
+        if (mBinauralRenderer && mEnvironmentalRenderer && !mAmbisonicsPanningEffect)
         {
             if (gApi.iplCreateAmbisonicsPanningEffect(mBinauralRenderer, mIndirectEffectOutputBuffer.format, mOutputFormat,
                 &mAmbisonicsPanningEffect) != IPL_STATUS_SUCCESS)
@@ -197,7 +197,7 @@ public:
         }
 
         // Make sure the Ambisonics binaural effect has been created.
-        if (mBinauralRenderer && !mAmbisonicsBinauralEffect)
+        if (mBinauralRenderer && mEnvironmentalRenderer && !mAmbisonicsBinauralEffect)
         {
             if (gApi.iplCreateAmbisonicsBinauralEffect(mBinauralRenderer, mIndirectEffectOutputBuffer.format, mOutputFormat,
                 &mAmbisonicsBinauralEffect) != IPL_STATUS_SUCCESS)

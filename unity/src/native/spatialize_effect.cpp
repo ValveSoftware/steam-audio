@@ -516,13 +516,42 @@ public:
         auto listenerUp = convertVector(L[1], L[5], L[9]);
         auto listenerAhead = convertVector(L[2], L[6], L[10]);
 
-        if (mEnvironmentalRenderer != nullptr && mEnvironmentalRenderer->environmentalRenderer() != nullptr)
+        auto environment = IPLhandle{ nullptr };
+        auto environmentalRenderer = IPLhandle{ nullptr };
+        if (mEnvironmentalRenderer)
+        {
+            environment = mEnvironmentalRenderer->environment();
+            environmentalRenderer = mEnvironmentalRenderer->environmentalRenderer();
+        }
+        
+        if (!environment || !environmentalRenderer)
+        {
+            if (occlusionMode != IPL_DIRECTOCCLUSION_NONE || distanceAttenuation || airAbsorption)
+            {
+                memset(mDirectEffectOutputBuffer.deinterleavedBuffer[0], 0,
+                       mDirectEffectOutputBuffer.numSamples * sizeof(float));
+            }
+            else
+            {
+                // If we're using default settings (i.e., no components were created in Unity), we will have to downmix
+                // the input audio manually. This would normally be done by the direct sound effect.
+                memset(mDirectEffectOutputBuffer.deinterleavedBuffer[0], 0, frameSize * sizeof(float));
+                for (auto i = 0, index = 0; i < frameSize; ++i)
+                {
+                    for (auto j = 0; j < inChannels; ++j, ++index)
+                        mDirectEffectOutputBuffer.deinterleavedBuffer[0][i] += inputAudio.interleavedBuffer[index];
+                    
+                    mDirectEffectOutputBuffer.deinterleavedBuffer[0][i] /= static_cast<float>(inChannels);
+                }
+            }
+        }
+        else
         {
             // Calculate the direct path parameters.
-            auto directPath = gApi.iplGetDirectSoundPath(mEnvironmentalRenderer->environment(),
-                listenerPosition, listenerAhead, listenerUp, sourcePosition, sourceRadius, occlusionMode, 
-                occlusionMethod);
-
+            auto directPath = gApi.iplGetDirectSoundPath(environment, listenerPosition, listenerAhead, listenerUp,
+                                                         sourcePosition, sourceRadius, occlusionMode,
+                                                         occlusionMethod);
+            
             // Apply direct sound modeling to the input audio, resulting in a mono buffer of audio.
             auto directOptions = IPLDirectSoundEffectOptions
             {
@@ -530,21 +559,8 @@ public:
                 airAbsorption ? IPL_TRUE : IPL_FALSE,
                 occlusionMode
             };
-            gApi.iplApplyDirectSoundEffect(mDirectEffect, inputAudio, directPath, directOptions, 
-                mDirectEffectOutputBuffer);
-        }
-        else
-        {
-            // If we're using default settings (i.e., no components were created in Unity), we will have to downmix
-            // the input audio manually. This would normally be done by the direct sound effect.
-            memset(mDirectEffectOutputBuffer.deinterleavedBuffer[0], 0, frameSize * sizeof(float));
-            for (auto i = 0, index = 0; i < frameSize; ++i)
-            {
-                for (auto j = 0; j < inChannels; ++j, ++index)
-                    mDirectEffectOutputBuffer.deinterleavedBuffer[0][i] += inputAudio.interleavedBuffer[index];
-
-                mDirectEffectOutputBuffer.deinterleavedBuffer[0][i] /= static_cast<float>(inChannels);
-            }
+            gApi.iplApplyDirectSoundEffect(mDirectEffect, inputAudio, directPath, directOptions,
+                                           mDirectEffectOutputBuffer);
         }
 
         // Spatialize the direct sound.
@@ -599,7 +615,6 @@ public:
         // Adjust the level of indirect sound according to the user-specified parameter.
         for (auto i = 0u; i < inChannels * numSamples; ++i)
         {
-            auto sample = i / inChannels;
             auto fraction = i / (numSamples - 1.0f);
             auto level = fraction * adjustedIndirectLevel + (1.0f - fraction) * mPreviousIndirectMixLevel;
 

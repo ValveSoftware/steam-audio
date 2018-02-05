@@ -466,6 +466,65 @@ extern "C" {
     typedef void (*IPLAnyHitCallback)(const IPLfloat32* origin, const IPLfloat32* direction,
         const IPLfloat32 minDistance, const IPLfloat32 maxDistance, IPLint32* hitExists, IPLvoid* userData);
 
+    /** A callback that is called to calculate the closest hits along a batch of rays. Strictly speaking, intersections
+     *  are calculated with ray _intervals_ (equivalent to line segments). Any ray interval may have multiple points
+     *  of intersection with scene geometry; this function must return, for each ray interval, information about the
+     *  point of intersection that is closest to the ray's origin.
+     *
+     *  \param  numRays             Number of rays in the batch.
+     *  \param  origins             Array containing the origins of each ray. Successive ray origins are located
+     *                              \c rayStride bytes apart in this array.
+     *  \param  directions          Array containing the unit-length direction vectors of each ray. Successive ray
+     *                              directions are located \c rayStride bytes apart in this array.
+     *  \param  rayStride           Number of bytes between successive origins in the \c origins array, and between
+     *                              successive directions in the \c directions array.
+     *  \param  minDistances        Array containing, for each ray, the minimum distance from the origin at which an
+     *                              intersection may occur for it to be considered.
+     *  \param  maxDistances        Array containing, for each ray, the maximum distance from the origin at which an
+     *                              intersection may occur for it to be considered.
+     *  \param  hitDistances        [out] Array containing, for each ray, the distance between the ray's origin and
+     *                              the closest intersection point on the ray. Successive distance values are located
+     *                              \c hitStride bytes apart in this array.
+     *  \param  hitNormals          [out] Array containing, for each ray, the unit-length surface normal at the ray's
+     *                              closest intersection point. Successive normals are located \c hitStride bytes
+     *                              apart in this array.
+     *  \param  hitMaterial         [out] Array containing, for each ray, a pointer to the material properties of the
+     *                              surface at the closest intersection point. Successive material pointers are
+     *                              located \c hitStride bytes apart in this array.
+     *  \param  hitStride           Number of bytes between successive distance values in the \c hitDistances array,
+     *                              between successive normals in the \c hitNormals array, and successive material
+     *                              pointers in the \c hitMaterials array.
+     *  \param  userData            Pointer a block of memory containing arbitrary data, specified during the call to
+     *                              \c ::iplSetRayTracerCallbacks.
+     */
+    typedef void (*IPLBatchedClosestHitCallback)(IPLint32 numRays, IPLVector3* origins, IPLVector3* directions,
+        IPLint32 rayStride, IPLfloat32* minDistances, IPLfloat32* maxDistances, IPLfloat32* hitDistances,
+        IPLVector3* hitNormals, IPLMaterial** hitMaterials, IPLint32 hitStride, IPLvoid* userData);
+
+    /** A callback that is called to calculate, for each ray in a batch of rays, whether the ray hits any geometry.
+     *  Strictly speaking, the function looks for intersections with ray _intervals_ (equivalent to line segments).
+     *
+     *  \param  numRays             Number of rays in the batch.
+     *  \param  origins             Array containing the origins of each ray. Successive ray origins are located
+     *                              \c rayStride bytes apart in this array.
+     *  \param  directions          Array containing the unit-length direction vectors of each ray. Successive ray
+     *                              directions are located \c rayStride bytes apart in this array.
+     *  \param  rayStride           Number of bytes between successive origins in the \c origins array, and between
+     *                              successive directions in the \c directions array.
+     *  \param  minDistances        Array containing, for each ray, the minimum distance from the origin at which an
+     *                              intersection may occur for it to be considered.
+     *  \param  maxDistances        Array containing, for each ray, the maximum distance from the origin at which an
+     *                              intersection may occur for it to be considered.
+     *  \param  hitExists           [out] An array of integers indicating, for each ray, whether the ray intersects
+     *                              any geometry. A value of 0 indicates no intersection, 1 indicates that an
+     *                              intersection exists.
+     *  \param  userData            Pointer a block of memory containing arbitrary data, specified during the call to
+     *                              \c ::iplSetRayTracerCallbacks.
+     */
+    typedef void (*IPLBatchedAnyHitCallback)(IPLint32 numRays, IPLVector3* origins, IPLVector3* directions,
+        IPLint32 rayStride, IPLfloat32* minDistances, IPLfloat32* maxDistances, IPLuint8* hitExists,
+        IPLvoid* userData);
+
     /** Creates a Scene object. A Scene object does not store any geometry information on its own; for that you
      *  need to create one or more Static Mesh objects and add them to the Scene object. The Scene object
      *  does contain an array of materials; all triangles in all Static Mesh objects refer to this array in order
@@ -507,14 +566,21 @@ extern "C" {
      *  ray tracer, this function must be called before any simulation occurs, otherwise undefined behavior will
      *  occur.
      *
-     *  \param  scene               Handle to the Scene object.
-     *  \param  closestHitCallback  Pointer to a function that returns the closest hit along a ray.
-     *  \param  anyHitCallback      Pointer to a function that returns whether a ray hits anything.
-     *  \param  userData            Pointer to a block of memory containing arbitrary data for use
-     *                              by the closest hit and any hit callbacks.
+     *  \param  scene                       Handle to the Scene object.
+     *  \param  closestHitCallback          Pointer to a function that returns the closest hit along a ray.
+     *  \param  anyHitCallback              Pointer to a function that returns whether a ray hits anything.
+     *  \param  batchedClosestHitCallback   Pointer to a function that returns the closests hits along each ray in a
+     *                                      batch of rays. Can be \c NULL. If not \c NULL, then this function is used
+     *                                      instead of \c closestHitCallback.
+     *  \param  batchedAnyHitCallback       Pointer to a function that returns, for each ray in a batch of rays,
+     *                                      whether the ray hits anything. Can be \c NULL. If not \c NULL, then this
+     *                                      function is used instead of \c anyHitCallback.
+     *  \param  userData                    Pointer to a block of memory containing arbitrary data for use
+     *                                      by the closest hit and any hit callbacks.
      */
     IPLAPI IPLvoid iplSetRayTracerCallbacks(IPLhandle scene, IPLClosestHitCallback closestHitCallback,
-        IPLAnyHitCallback anyHitCallback, IPLvoid* userData);
+        IPLAnyHitCallback anyHitCallback, IPLBatchedClosestHitCallback batchedClosestHitCallback,
+        IPLBatchedAnyHitCallback batchedAnyHitCallback, IPLvoid* userData);
 
     /** Creates a Static Mesh object. A Static Mesh object represents a triangle mesh that does not change after it
      *  is created. A Static Mesh object also contains a mapping between each of its triangles and their acoustic

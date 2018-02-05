@@ -81,7 +81,8 @@ namespace SteamAudio
                         continue;
                     }
 
-                    if (probeBox.probeBoxData == null || probeBox.probeBoxData.Length == 0)
+                    var probeBoxData = probeBox.LoadData();
+                    if (probeBoxData == null || probeBoxData.Length == 0)
                     {
                         Debug.LogError("Skipping probe box, because probes have not been generated for it.");
                         probeBoxBakingCurrently++;
@@ -95,8 +96,7 @@ namespace SteamAudio
                     IntPtr probeBoxPtr = IntPtr.Zero;
                     try
                     {
-                        PhononCore.iplLoadProbeBox(context, probeBox.probeBoxData, probeBox.probeBoxData.Length,
-                            ref probeBoxPtr);
+                        PhononCore.iplLoadProbeBox(context, probeBoxData, probeBoxData.Length, ref probeBoxPtr);
                         probeBoxBakingCurrently++;
                     }
                     catch (Exception e)
@@ -129,11 +129,12 @@ namespace SteamAudio
                     }
 
                     int probeBoxSize = PhononCore.iplSaveProbeBox(probeBoxPtr, null);
-                    probeBox.probeBoxData = new byte[probeBoxSize];
-                    PhononCore.iplSaveProbeBox(probeBoxPtr, probeBox.probeBoxData);
+                    probeBoxData = new byte[probeBoxSize];
+                    PhononCore.iplSaveProbeBox(probeBoxPtr, probeBoxData);
+                    probeBox.SaveData(probeBoxData);
 
                     int probeBoxEffectSize = PhononCore.iplGetBakedDataSizeByIdentifier(probeBoxPtr, duringBakeIdentifiers[i]);
-                    probeBox.UpdateProbeDataMapping(duringBakeIdentifiers[i], duringBakeNames[i], probeBoxEffectSize);
+                    probeBox.AddOrUpdateLayer(duringBakeIdentifiers[i], duringBakeNames[i], probeBoxEffectSize);
 
                     PhononCore.iplDestroyProbeBox(ref probeBoxPtr);
                 }
@@ -192,6 +193,14 @@ namespace SteamAudio
 
             oneBakeActive = true;
             bakeStatus = BakeStatus.InProgress;
+
+            foreach (var probeBoxArray in duringBakeProbeBoxes)
+            {
+                foreach (var probeBox in probeBoxArray)
+                {
+                    probeBox.CacheFileName();
+                }
+            }
 
             bakeCallback = new PhononCore.BakeProgressCallback(AdvanceProgress);
 

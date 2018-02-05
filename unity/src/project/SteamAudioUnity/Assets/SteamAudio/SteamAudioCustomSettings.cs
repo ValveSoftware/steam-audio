@@ -26,7 +26,7 @@ namespace SteamAudio
         public ConvolutionOption convolutionOption = ConvolutionOption.Phonon;
 
         [Space]
-        [Header("CU Reservation")]
+        [Header("Resource Reservation")]
 
         [Range(0, 16)]
         public int minComputeUnitsToReserve = 4;

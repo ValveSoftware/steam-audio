@@ -33,13 +33,15 @@ namespace SteamAudio
             SteamAudioProbeBox[] allProbeBoxes = GameObject.FindObjectsOfType<SteamAudioProbeBox>() as SteamAudioProbeBox[];
             foreach (SteamAudioProbeBox probeBox in allProbeBoxes)
             {
-                if (probeBox.probeBoxData == null || probeBox.probeBoxData.Length == 0)
+                var probeBoxData = probeBox.LoadData();
+
+                if (probeBoxData == null || probeBoxData.Length == 0)
                     continue;
 
                 IntPtr probeBoxPtr = IntPtr.Zero;
                 try
                 {
-                    PhononCore.iplLoadProbeBox(context, probeBox.probeBoxData, probeBox.probeBoxData.Length, ref probeBoxPtr);
+                    PhononCore.iplLoadProbeBox(context, probeBoxData, probeBoxData.Length, ref probeBoxPtr);
                 }
                 catch (Exception e)
                 {

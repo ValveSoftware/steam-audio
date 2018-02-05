@@ -1,7 +1,7 @@
 % Steam Audio Unreal Engine 4 Plugin
 
 # Steam Audio Unreal Engine 4 Plugin
-**Steam&reg; Audio, Copyright 2016 - 2017, Valve Corp. All rights reserved.**
+**Steam&reg; Audio, Copyright 2016 - 2018, Valve Corp. All rights reserved.**
 
 ## Introduction
 
@@ -56,7 +56,7 @@ between multiple threads. Steam Audio interacts with three main threads:
 
 ### Integration and Platforms
 
-Steam Audio supports **Unreal Engine 4.19 or higher**. If you are using Unity, refer to the _Steam Audio Unity Plugin
+Steam Audio supports **Unreal Engine 4.20 or higher**. If you are using Unity, refer to the _Steam Audio Unity Plugin
 Manual_. If you are using a different game engine or audio middleware, you will need to use the Steam Audio C API.
 Refer to the *Steam Audio API Reference* for further information.
 
@@ -67,7 +67,7 @@ The Steam Audio Unreal Engine 4 plugin currently supports Windows 7 or later, an
 This chapter explains how to use Steam Audio with Unreal Engine. It assumes that you are using Unreal's built-in audio engine.
 
 ### Enabling Audio Mixer Functionality
-Steam Audio requires the latest Audio Mixer functionality available in Unreal Engine 4.19 onwards. In Unreal 4.19, this functionality is disabled by default. To enable it, you must first create a shortcut to the Unreal Engine editor:
+Steam Audio requires the latest Audio Mixer functionality available in Unreal Engine 4.20 onwards. In Unreal 4.20, this functionality is disabled by default. To enable it, you must first create a shortcut to the Unreal Engine editor:
 
 1. In the Epic Games Launcher, click **Library**.
 2. Click the down arrow next to the Unreal Engine version you want to use, and click **Create
@@ -112,9 +112,8 @@ You can apply Steam Audio spatialization to any Actor in your scene that contain
 
 1. In the **World Outliner** tab, select the Actor that contains the Audio Component you want to spatialize.
 2. In the **Details** tab, select the Audio Component you want to spatialize.
-3. Under **Attenuation**, check **Override Attenuation**.
-4. Under **Attenuation Overrides**, check **Spatialize**.
-5. In the **Spatialization Algorithm** drop-down, select **SPATIALIZATION HRTF**.
+3. Under **Attenuation Spatialization**, check **Override Attenuation**.
+4. In the **Spatialization Method** drop-down, select **Binaural**.
 
 ![Enabling spatialization for an Audio component.](media/02-enable-spatialization.png)
 
@@ -125,10 +124,11 @@ spatialization is performed, you can configure advanced spatialization settings 
 If you want to configure how Steam Audio spatializes a sound, follow these steps:
 
 1. Select the Audio Component whose spatialization settings you want to modify.
-2. Under **Attenuation**, click the **Spatialization Plugin Settings** drop-down.
-3. If you have already created a Spatialization Settings asset, you can select it from the list. Otherwise, click
+2. Under **Attenuation Plugin Settings**, expand the **Plugin Settings** section.
+3. Add an element to the **Spatialization Plugin Settings** array.
+4. If you have already created a Spatialization Settings asset, you can select it from the list. Otherwise, click
    **Phonon Spatialization Source Settings** under **Create New Asset**.
-4. Give the newly-created asset any name you prefer, then double-click it in the **Content Browser** tab.
+5. Give the newly-created asset any name you prefer, then double-click it in the **Content Browser** tab.
 
 ![Adding custom spatialization settings for a source.](media/03-spatialization-settings-dropdown.png)
 
@@ -158,11 +158,11 @@ described in the next section.
 To enable occlusion for a sound source:
 
 1. Select the Audio Component to which you want to apply occlusion effects.
-2. Under **Attenuation**, expand **Attenuation Overrides**.
-3. Check **Enable Occlusion**.
-4. In the **Occlusion Plugin Settings** drop-down, select an Occlusion Settings asset if you've already created one.
-   Otherwise, select **Phonon Occlusion Source Settings** under **Create New Asset**.
-5. Give the newly-created asset any name you prefer.
+2. Under **Attenuation Plugin Settings**, expand the **Plugin Settings** section.
+3. Add an element to the **Occlusion Plugin Settings** array.
+4. If you have already created an Occlusion Settings asset, you can select it from the list. Otherwise, click
+   **Phonon Occlusion Source Settings** under **Create New Asset**.
+5. Give the newly-created asset any name you prefer, then double-click it in the **Content Browser** tab.
 
 ![Enabling occlusion for a sound source.](media/05-enable-occlusion.png)
 
@@ -363,10 +363,11 @@ Steam Audio can simulate how the environment affects a sound as it flows from th
 this:
 
 1. In the **Details** tab, select the Audio Component for which you want to enable sound propagation.
-2. Under **Attenuation**, expand **Attenuation Overrides**.
-3. In the **Reverb Plugin Settings** drop-down, select a Reverb Settings asset if you've already created one.
-   Otherwise, select **Phonon Reverb Source Settings** under **Create New Asset**.
-4. Give the newly-created asset any name you prefer.
+2. Under **Attenuation Plugin Settings**, expand the **Plugin Settings** section.
+3. Add an element to the **Reverb Plugin Settings** array.
+4. If you have already created an Reverb Settings asset, you can select it from the list. Otherwise, click
+   **Phonon Reverb Source Settings** under **Create New Asset**.
+5. Give the newly-created asset any name you prefer, then double-click it in the **Content Browser** tab.
 
 ![Enabling per-source sound propagation.](media/13-enable-propagation.png)
 
@@ -541,6 +542,48 @@ To configure Steam Audio to use baked data for listener-centric reverb:
 3. In the **Reverb Simulation Type** drop-down, select **Baked**.
 
 ![Enabling baked listener-centric reverb.](media/22-enable-baked-reverb.png)
+
+### AMD TrueAudio Next
+
+Steam Audio provides optional support for AMD TrueAudio Next, which allows you to reserve a portion of the GPU for
+accelerating convolution operations. TrueAudio Next requires a supported AMD Radeon GPU. 
+If you choose to enable TrueAudio Next support in your UE4 project, then Steam Audio will try to use the GPU to 
+accelerate the rendering of indirect sound, including real-time source-centric propagation, baked static listener propagation, real-time listener-centric reverb, and baked listener-centric reverb.
+
+##### Enabling TrueAudio Next
+
+To enable TrueAudio Next for Steam Audio:
+
+1. In the main menu, click **Edit** > **Project Settings**.
+2. In the left pane, under **Plugins**, select **Steam Audio**.
+3. In the **Convolution Type** dropdown, select **AMD TrueAudio Next**.
+
+When TrueAudio Next is enabled, you can also override some of the simulation settings
+that are normally configured on the Steam Audio Manager Settings component. These include 
+**Impulse Response Duration**, **Ambisonics Order**, and **Max Sources**.
+
+![Overriding simulation settings for TrueAudio Next.](media/tan-settings-override.png)
+
+These overrides allow you to switch to a higher level of acoustic detail when the user's PC has a supported
+GPU, while seamlessly falling back to using the CPU with the settings configured on the Steam Audio Manager
+Settings component if a supported GPU is not found.
+
+##### Resource Reservation
+
+When TrueAudio Next is enabled, you can configure the following Resource 
+Reservation settings, which allow you to control how much of the GPU is set 
+aside for audio processing tasks:
+
+- **Min Compute Units To Reserve**. This is the smallest number of GPU Compute Units (CUs) that should be possible
+ to reserve for audio processing. If the user's GPU does not support this many reserved CUs, then TrueAudio Next
+ initialization will fail and Steam Audio will fall back to CPU convolution. For example, if this value is set to 4,
+ but the user's GPU only supports reserving up to 2 CUs, TrueAudio Next initialization will fail.
+- **Max Compute Units To Reserve**. This is the largest number of CUs that Steam Audio will try to reserve for audio
+ processing. Steam Audio will try to reserve as many CUs as it can, up to this limit. If the user's GPU does not
+ support reserving any number of CUs between **Min Compute Units To Reserve** and **Max Compute Units To Reserve**,
+ then TrueAudio Next initialization will fail and Steam Audio will fall back to CPU convolution. For example, if
+ **Min Compute Units To Reserve** is set to 2 and **Max Compute Units To Reserve** is set to 4, but the user's GPU
+ only supports reserving 8 or more CUs, TrueAudio Next initialization will fail.
 
 ### Packaging Your Game
 

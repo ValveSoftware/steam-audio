@@ -7,7 +7,7 @@ import shutil
 import urllib2
 import zipfile
 
-version = "2.0-beta.12"
+version = "2.0-beta.13"
 
 def download_file(url):
     remote_file = urllib2.urlopen(url)
@@ -18,7 +18,7 @@ def download_file(url):
                 break
             local_file.write(data)
 
-print "Downloading Steam Audio SDK v" + version + "..."
+print "Downloading steamaudio_api_" + version + ".zip..."
 url = "https://github.com/ValveSoftware/steam-audio/releases/download/v" + version + "/steamaudio_api_" + version + ".zip"
 download_file(url)
 
@@ -38,5 +38,18 @@ except:
 shutil.copytree("steamaudio_api/bin/OSX/phonon.bundle",  "src/project/SteamAudioUnity/Assets/Plugins/phonon.bundle")
 shutil.copy("steamaudio_api/lib/Android/libphonon.so",   "src/project/SteamAudioUnity/Assets/Plugins/android")
 
+print "Downloading steamaudio_tan_" + version + ".zip..."
+url = "https://github.com/ValveSoftware/steam-audio/releases/download/v" + version + "/steamaudio_tan_" + version + ".zip"
+download_file(url)
+
+print "Extracting steamaudio_tan_" + version + ".zip..."
+with zipfile.ZipFile(os.path.basename(url), "r") as zip:
+    zip.extractall()
+
+print "Copying files..."
+shutil.copy("steamaudio_tan/bin/windows/x64/tanrt64.dll",      "src/project/SteamAudioUnity/Assets/Plugins/x86_64")
+shutil.copy("steamaudio_tan/bin/windows/x64/GPUUtilities.dll", "src/project/SteamAudioUnity/Assets/Plugins/x86_64")
+
 print "Cleaning up..."
 shutil.rmtree("steamaudio_api")
+shutil.rmtree("steamaudio_tan")

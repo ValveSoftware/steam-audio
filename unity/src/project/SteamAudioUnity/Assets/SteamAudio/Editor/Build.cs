@@ -55,6 +55,12 @@ namespace SteamAudio
             // "Assets/Plugins/android/libphonon_fmod.so"
         };
 
+        static string[] TrueAudioNextPlugins =
+        {
+            "Assets/Plugins/x86_64/tanrt64.dll",
+            "Assets/Plugins/x86_64/GPUUtilities.dll"
+        };
+
         static string FMODStudioAudioEngineSuffix = "_FMODStudio";
 
         public static string[] FilteredAssets(string directory, string[] excludeSuffixes, string includeOnlySuffix)
@@ -139,6 +145,14 @@ namespace SteamAudio
             var assets = BuildAssetList(assetGroups);
 
             AssetDatabase.ExportPackage(assets, "SteamAudio_FMODStudio.unitypackage", ExportPackageOptions.Recurse);
+        }
+
+        public static void BuildSteamAudioTrueAudioNext()
+        {
+            var assetGroups = new string[][] { TrueAudioNextPlugins };
+            var assets = BuildAssetList(assetGroups);
+
+            AssetDatabase.ExportPackage(assets, "SteamAudio_TrueAudioNext.unitypackage", ExportPackageOptions.Recurse);
         }
     }
 }

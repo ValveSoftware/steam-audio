@@ -55,13 +55,17 @@ namespace SteamAudio
                         "reservation, increase the value of one of the above sliders.", MessageType.Warning);
                 }
 
+                EditorGUILayout.HelpBox("All scenes in the application that use TrueAudio Next should use the same " +
+                    "settings for Min Compute Units To Reserve and Max Compute Units To Reserve.", MessageType.Info);
+
                 EditorGUILayout.PropertyField(durationProperty);
                 EditorGUILayout.PropertyField(ambisonicsOrderProperty);
                 EditorGUILayout.PropertyField(maxSourcesProperty);
             }
 
             EditorGUILayout.Space();
-
+            EditorGUILayout.HelpBox("The Steam Audio Custom Settings component should be placed beneath " +
+            "the Steam Audio Manager component in the Inspector Window.", MessageType.Info);
             serializedObject.ApplyModifiedProperties();
         }
 

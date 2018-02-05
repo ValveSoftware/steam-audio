@@ -36,6 +36,7 @@ namespace SteamAudio
 
                 if (customSettings)
                 {
+#if ((UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN) && UNITY_64)
                     convolutionType = customSettings.convolutionOption;
 
                     if (customSettings.convolutionOption == ConvolutionOption.TrueAudioNext)
@@ -50,10 +51,14 @@ namespace SteamAudio
                     {
                         useOpenCL = true;
                     }
+#else
+                    convolutionType = ConvolutionOption.Phonon;
+                    customSettings.convolutionOption = ConvolutionOption.Phonon;
+#endif
                 }
 
                 try
-				{
+                {
                     var deviceFilter = new ComputeDeviceFilter
                     {
                         type = computeDeviceType,
@@ -63,12 +68,13 @@ namespace SteamAudio
                     };
 
                     computeDevice.Create(context, useOpenCL, deviceFilter);
-				}
+                }
                 catch (Exception e)
                 {
                     Debug.LogWarning(String.Format("Unable to initialize TrueAudio Next: {0}. Using Phonon convolution.",
                         e.Message));
 
+                    convolutionType = ConvolutionOption.Phonon;
                     customSettings.convolutionOption = ConvolutionOption.Phonon;
                 }
 

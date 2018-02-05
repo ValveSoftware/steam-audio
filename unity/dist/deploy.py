@@ -56,6 +56,42 @@ def deploy_integration_unity(configuration):
 
 
 #
+# Package the TrueAudio Next libraries for use in all Steam Audio binaries.
+#
+def deploy_tan():
+    print "Deploying: Steam Audio TrueAudio Next Support"
+
+    deploy_path = os.path.abspath(os.path.join(os.getcwd(), "products"))
+    deploy_path_tan = os.path.join(deploy_path, "steamaudio_tan")
+
+    os.makedirs(deploy_path_tan)
+    os.makedirs(os.path.join(deploy_path_tan, "bin"))
+    os.makedirs(os.path.join(deploy_path_tan, "bin\\windows"))
+    os.makedirs(os.path.join(deploy_path_tan, "bin\\windows\\x64"))
+    os.makedirs(os.path.join(deploy_path_tan, "unity"))
+
+    copy(os.path.join(os.getcwd(), "../../core/lib/windows-x64/tanrt64.dll"),
+         os.path.join(deploy_path_tan, "bin/windows/x64"))
+    copy(os.path.join(os.getcwd(), "../../core/lib/windows-x64/GPUUtilities.dll"),
+         os.path.join(deploy_path_tan, "bin/windows/x64"))
+    copy(os.path.join(os.getcwd(), "../bin/SteamAudio_TrueAudioNext.unitypackage"),
+         os.path.join(deploy_path_tan, "unity"))
+
+    zip_output = os.path.abspath(os.path.join(deploy_path, "steamaudio_tan.zip"))
+
+    deploy_directory = os.getcwd()
+    products_directory = deploy_directory + "\\products"
+    os.chdir(products_directory)
+    with zipfile.ZipFile(zip_output, "w", zipfile.ZIP_DEFLATED) as tan_zip:
+        for directory, subdirectories, files in os.walk("steamaudio_tan"):
+            for file in files:
+                file_name = os.path.join(directory, file)
+                print "Adding " + file_name + "..."
+                tan_zip.write(file_name)
+    os.chdir(deploy_directory)
+
+
+#
 # Main deployment routine: deploys all products.
 #
 def deploy(configuration):
@@ -70,6 +106,7 @@ def deploy(configuration):
 
     try:
         deploy_integration_unity(configuration)
+        deploy_tan()
     except Exception as e:
         print "Exception encountered during deployment."
         print e

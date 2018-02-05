@@ -56,25 +56,19 @@ namespace SteamAudio
             {
                 EditorGUILayout.LabelField("Probe Box Statistics", EditorStyles.boldLabel);
                 EditorGUILayout.LabelField("Probe Points", (probeBox.probeSpherePoints.Length / 3).ToString());
-                EditorGUILayout.LabelField("Probe Data Size", (probeBox.probeBoxData.Length / 1000.0f).ToString("0.0") + " KB");
+                EditorGUILayout.LabelField("Probe Data Size", (probeBox.dataSize / 1000.0f).ToString("0.0") + " KB");
             }
 
-            for (int i = 0; i < probeBox.probeDataIdentifiers.Count; ++i)
+            for (int i = 0; i < probeBox.dataLayerInfo.Count; ++i)
             {
                 if (i == 0)
                     EditorGUILayout.LabelField("Detailed Statistics", EditorStyles.boldLabel);
 
                 EditorGUILayout.BeginHorizontal();
-                EditorGUILayout.LabelField(probeBox.probeDataNames[i], (probeBox.probeDataNameSizes[i] / 1000.0f).ToString("0.0") + " KB");
+                EditorGUILayout.LabelField(probeBox.dataLayerInfo[i].name, (probeBox.dataLayerInfo[i].size / 1000.0f).ToString("0.0") + " KB");
                 if (GUILayout.Button("Clear"))
                 {
-                    var identifier = new BakedDataIdentifier
-                    {
-                        identifier = probeBox.probeDataIdentifiers[i],
-                        type = probeBox.probeDataTypes[i]
-                    };
-
-                    probeBox.DeleteBakedDataByIdentifier(identifier);
+                    probeBox.DeleteBakedDataByIdentifier(probeBox.dataLayerInfo[i].identifier);
                     EditorSceneManager.MarkSceneDirty(SceneManager.GetActiveScene());
                 }
                 EditorGUILayout.EndHorizontal();

@@ -13,6 +13,9 @@ namespace SteamAudio
     {
         private void Awake()
         {
+            if (managerSingleton == null)
+                managerSingleton = this;
+
             Initialize(GameEngineStateInitReason.Playing);
         }
 
@@ -24,6 +27,7 @@ namespace SteamAudio
         private void OnDestroy()
         {
             Destroy();
+            ClearSingleton();
         }
 
         void OnApplicationQuit()
@@ -106,6 +110,21 @@ namespace SteamAudio
         {
             return managerData;
         }
+
+        public static SteamAudioManager GetSingleton()
+        {
+            if (managerSingleton == null)
+                managerSingleton = FindObjectOfType<SteamAudioManager>();
+
+            return managerSingleton;
+        }
+
+        static void ClearSingleton()
+        {
+            managerSingleton = null;
+        }
+
+        static SteamAudioManager managerSingleton = null;
 
         ManagerData         managerData         = new ManagerData();
         WaitForEndOfFrame   waitForEndOfFrame   = new WaitForEndOfFrame();

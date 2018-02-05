@@ -97,11 +97,11 @@ namespace SteamAudio
                 int probeDataSize = 0;
                 probeNames.Add(probeBox.name);
 
-                for (int i = 0; i < probeBox.probeDataIdentifiers.Count; ++i)
+                for (int i = 0; i < probeBox.dataLayerInfo.Count; ++i)
                 {
-                    if (Identifier.type == probeBox.probeDataTypes[i])
+                    if (Identifier.type == probeBox.dataLayerInfo[i].identifier.type)
                     {
-                        probeDataSize = probeBox.probeDataNameSizes[i];
+                        probeDataSize = probeBox.dataLayerInfo[i].size;
                         dataSize += probeDataSize;
                     }
                 }
