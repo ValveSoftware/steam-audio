@@ -1,0 +1,410 @@
+using SteamAudio;
+using UnityEngine;
+using System;
+using System.IO;
+using System.Runtime.InteropServices;
+
+public class SteamAudioHrtfManager : MonoBehaviour
+{
+    private HRTFParams hrtfParams;
+        // hrtfParams is a struct sent to plugin to tell it to use custom hrtf
+        // the Init function below will fill the struct, don't adjust it manually
+    private new IntPtr renderer;
+    private IntPtr effect;
+    private RenderingSettings settings;
+    IntPtr context;
+    AudioFormat inputFormat, outputFormat;
+        // none of the above variables are used directly for binaural rendering,
+        // but are pointers to memory sent to or taken from the plugin. adjust at your peril
+
+    private StreamReader reader;
+        // used to read CSV into memory
+
+    public bool useCustom;
+    public enum InitOn
+    {
+        Awake,
+        Start,
+        Enable,
+        Call
+    }
+    [Serializable] public struct CustomHRTFsettings
+    {
+        public int numHrirs, hrirLength, azimuth_step, elevation_step, min_elevation, max_elevation;
+        public bool interpolate;
+        public InitOn initOn;
+        public string filename;
+    }
+    public CustomHRTFsettings customHrtfSettings;
+
+    private int n, nc;
+    private float[,] leftEarHrirsIP, rightEarHrirsIP;
+    private float[] leftEarHrirs, rightEarHrirs;
+    IntPtr lhrir, rhrir;
+    IntPtr[] lhrtf, rhrtf;
+
+    private void OnEnable()
+    {
+        if (customHrtfSettings.initOn == InitOn.Enable) Init();
+    }
+    private void Awake()
+    {
+        if (customHrtfSettings.initOn == InitOn.Awake) Init();
+    }
+    private void Start()
+    {
+        if (customHrtfSettings.initOn == InitOn.Start) Init();
+    }
+
+    public void Init()
+    {
+        if (!useCustom)
+        {
+            Debug.Log("Custom HRTF manager not initialized - check useCustom in component");
+            return;
+        }
+        
+        reader = new StreamReader(Application.dataPath + "/HRTFs/" + customHrtfSettings.filename);
+
+        hrtfParams.type = HRTFDatabaseType.Custom;
+        hrtfParams.numHrirSamples = customHrtfSettings.hrirLength;
+        if (customHrtfSettings.interpolate)
+        {
+            hrtfParams.loadCallback = onLoadHrtfIP;
+            hrtfParams.unloadCallback = onUnloadHrtfIP;
+            hrtfParams.lookupCallback = onLookupHrtfIP;
+        }
+        else
+        {
+            hrtfParams.loadCallback = onLoadHrtf;
+            hrtfParams.unloadCallback = onUnloadHrtf;
+            hrtfParams.lookupCallback = onLookupHrtf;
+        }
+
+        settings.convolutionOption = ConvolutionOption.Phonon;
+        int z;
+        AudioSettings.GetDSPBufferSize(out settings.frameSize, out z);
+        settings.samplingRate = AudioSettings.GetConfiguration().sampleRate;
+
+        inputFormat.channelLayout = ChannelLayout.Stereo;
+        inputFormat.channelLayoutType = ChannelLayoutType.Speakers;
+        inputFormat.channelOrder = ChannelOrder.Interleaved;
+        outputFormat.channelLayout = ChannelLayout.Stereo;
+        outputFormat.channelLayoutType = ChannelLayoutType.Speakers;
+        outputFormat.channelOrder = ChannelOrder.Interleaved;
+
+        context = transform.GetComponent<SteamAudioManager>().ManagerData().gameEngineState.Context();
+
+        Error e = PhononCore.iplCreateBinauralRenderer(context, settings, hrtfParams, ref renderer);
+        if (e != Error.None)
+        {
+            Debug.LogError("Binaural renderer error: " + e);
+            return;
+        }
+
+        e = PhononCore.iplCreateBinauralEffect(renderer, inputFormat, outputFormat, ref effect);
+        if (e != Error.None)
+        {
+            Debug.LogError("Binaural effect error: " + e);
+            return;
+        }
+    }
+
+    private void OnDisable()
+    {
+        DeInit();
+    }
+    public void DeInit()
+    {
+        PhononCore.iplDestroyBinauralEffect(ref effect);
+        PhononCore.iplDestroyBinauralRenderer(ref renderer);
+    }
+
+    void onLoadHrtfIP(int numSamples, int numSpectrumSamples, FFTHelper fftHelper, IntPtr fftHelperData)
+    {
+        n = numSamples;
+        nc = numSpectrumSamples * 2;
+
+        leftEarHrirsIP = new float[customHrtfSettings.numHrirs, n];
+        rightEarHrirsIP = new float[customHrtfSettings.numHrirs, n];
+
+        for (int i = 0; i < customHrtfSettings.numHrirs; i++)
+        {
+            var lineL = reader.ReadLine();
+            var lineR = reader.ReadLine();
+            var valsL = lineL.Split(',');
+            var valsR = lineR.Split(',');
+
+            for (int j = 0; j < hrtfParams.numHrirSamples; j++)
+            {
+                float.TryParse(valsL[j], out leftEarHrirsIP[i,j]);
+                float.TryParse(valsR[j], out rightEarHrirsIP[i,j]);
+            }
+        }        
+
+        reader.Close();
+    }
+
+    void onUnloadHrtfIP()
+    {
+        ;
+    }
+
+    void onLookupHrtfIP(IntPtr direction, IntPtr leftHrtf, IntPtr rightHrtf)
+    {
+        float[] curL, curR, fftL, fftR;
+        curL = new float[nc];
+        curR = new float[nc];
+        fftL = new float[n];
+        fftR = new float[n];
+        
+        float[] dir = new float[3];
+        Marshal.Copy(direction, dir, 0, 3);
+        
+        UnityEngine.Vector3 diffVec = new UnityEngine.Vector3(dir[0], dir[1], dir[2] * -1).normalized;
+        float azi, ele;
+        azi = Mathf.Atan2(diffVec.x * -1, diffVec.z) * -1 * Mathf.Rad2Deg;
+        ele = Mathf.Asin(diffVec.y) * Mathf.Rad2Deg;
+        if (azi < 0) azi += 360;
+
+        int hi1, hi2, hi3, hi4;
+        float m1, m2, m3, m4;
+
+        int elecount = (customHrtfSettings.max_elevation - customHrtfSettings.min_elevation) / customHrtfSettings.elevation_step + 1;
+        int azicount = 360 / customHrtfSettings.azimuth_step;
+
+        azi = azi / customHrtfSettings.azimuth_step;
+        ele = Mathf.Lerp(0, (elecount - 0.0001f),
+            (ele - customHrtfSettings.min_elevation) / (customHrtfSettings.max_elevation - customHrtfSettings.min_elevation));
+
+        hi1 = (Mathf.FloorToInt(azi) * elecount) + Mathf.FloorToInt(ele);
+        hi2 = (Mathf.FloorToInt(azi) * elecount) + (Mathf.CeilToInt(ele) % elecount);
+        hi3 = ((Mathf.CeilToInt(azi) % azicount) * elecount) + Mathf.FloorToInt(ele);
+        hi4 = ((Mathf.CeilToInt(azi) % azicount) * elecount) + (Mathf.CeilToInt(ele) % elecount);
+
+        m1 = Mathf.Sqrt(1 - (azi - Mathf.FloorToInt(azi))) * Mathf.Sqrt(1 - (ele - Mathf.FloorToInt(ele)));
+        m2 = Mathf.Sqrt(1 - (azi - Mathf.FloorToInt(azi))) * Mathf.Sqrt(ele - Mathf.FloorToInt(ele));
+        m3 = Mathf.Sqrt(azi - Mathf.FloorToInt(azi)) * Mathf.Sqrt(1 - (ele - Mathf.FloorToInt(ele)));
+        m4 = Mathf.Sqrt(azi - Mathf.FloorToInt(azi)) * Mathf.Sqrt(ele - Mathf.FloorToInt(ele));
+
+        for (int i = 0; i < n; i++)
+        {
+            fftL[i] = (leftEarHrirsIP[hi1, i] * m1 + leftEarHrirsIP[hi2, i] * m2 +
+                leftEarHrirsIP[hi3, i] * m3 + leftEarHrirsIP[hi4, i] * m4);
+            fftR[i] = (rightEarHrirsIP[hi1, i] * m1 + rightEarHrirsIP[hi2, i] * m2 +
+                rightEarHrirsIP[hi3, i] * m3 + rightEarHrirsIP[hi4, i] * m4);
+        }
+
+        fftL = FFT(fftL, true);
+        fftR = FFT(fftR, true);
+
+        for (int j = 0; j < n; j++)
+        {
+            curL[j] = fftL[j];
+            curR[j] = fftR[j];
+        }
+
+        Marshal.Copy(curL, 0, leftHrtf, nc);
+        Marshal.Copy(curR, 0, rightHrtf, nc);
+    }
+
+    void onLoadHrtf(int numSamples, int numSpectrumSamples, FFTHelper fftHelper, IntPtr fftHelperData)
+    {
+        nc = numSpectrumSamples * 2;
+
+        leftEarHrirs = new float[numSamples];
+        rightEarHrirs = new float[numSamples];
+
+        lhrir = new IntPtr();
+        rhrir = new IntPtr();
+        lhrtf = new IntPtr[customHrtfSettings.numHrirs];
+        rhrtf = new IntPtr[customHrtfSettings.numHrirs];
+
+        for (int i = 0; i < customHrtfSettings.numHrirs; i++)
+        {
+            var lineL = reader.ReadLine();
+            var lineR = reader.ReadLine();
+            var valsL = lineL.Split(',');
+            var valsR = lineR.Split(',');
+
+            for (int j = 0; j < hrtfParams.numHrirSamples; j++)
+            {
+                float.TryParse(valsL[j], out leftEarHrirs[j]);
+                float.TryParse(valsR[j], out rightEarHrirs[j]);
+            }
+
+            lhrir = Marshal.AllocHGlobal(Marshal.SizeOf(new float()) * numSamples);
+            rhrir = Marshal.AllocHGlobal(Marshal.SizeOf(new float()) * numSamples);
+
+            lhrtf[i] = Marshal.AllocHGlobal(Marshal.SizeOf(new Complex()) * numSpectrumSamples);
+            rhrtf[i] = Marshal.AllocHGlobal(Marshal.SizeOf(new Complex()) * numSpectrumSamples);
+
+            Marshal.Copy(leftEarHrirs, 0, lhrir, numSamples);
+            Marshal.Copy(rightEarHrirs, 0, rhrir, numSamples);
+
+            fftHelper(fftHelperData, lhrir, lhrtf[i]);
+            fftHelper(fftHelperData, rhrir, rhrtf[i]);
+
+            Marshal.FreeHGlobal(lhrir);
+            Marshal.FreeHGlobal(rhrir);
+        }
+
+        reader.Close();
+    }
+
+    void onUnloadHrtf()
+    {
+        for (int i = 0; i < customHrtfSettings.numHrirs; i++)
+        {
+            Marshal.FreeHGlobal(lhrtf[i]);
+            Marshal.FreeHGlobal(rhrtf[i]);
+        }
+    }
+
+    void onLookupHrtf(IntPtr direction, IntPtr leftHrtf, IntPtr rightHrtf)
+    {
+        float[] dir = new float[3];
+        Marshal.Copy(direction, dir, 0, 3);
+        UnityEngine.Vector3 diffVec = new UnityEngine.Vector3(dir[0], dir[1], dir[2] * -1).normalized;
+
+        int elecount = (customHrtfSettings.max_elevation - customHrtfSettings.min_elevation) / customHrtfSettings.elevation_step + 1;
+
+        float azi, ele;
+        azi = Mathf.Atan2(diffVec.x * -1, diffVec.z) * -1 * Mathf.Rad2Deg;
+        ele = Mathf.Atan2(diffVec.y, Mathf.Sqrt(Mathf.Pow(diffVec.z, 2f) + Mathf.Pow(diffVec.x, 2f))) * Mathf.Rad2Deg;
+        if (azi < 0) azi += 360;
+        
+        int hrtfIndex = Mathf.FloorToInt(azi / customHrtfSettings.azimuth_step) * elecount +
+            Mathf.FloorToInt(Mathf.Lerp(0, elecount - 0.0001f,
+            (ele + customHrtfSettings.min_elevation) / customHrtfSettings.max_elevation));
+        
+        float[] l = new float[nc];
+        Marshal.Copy(lhrtf[hrtfIndex], l, 0, nc);
+        float[] r = new float[nc];
+        Marshal.Copy(rhrtf[hrtfIndex], r, 0, nc);
+
+        Marshal.Copy(l, 0, leftHrtf, nc);
+        Marshal.Copy(r, 0, rightHrtf, nc);
+    }
+
+    // A modified excerpt of Chris Lomont's FFT implementation follows.
+    // Normally, the FFT function is modify-in-place, here it returns a float array.
+    // Further, the original uses double, here we use float.
+    // Finally, the error checking at the top of the FFT function is modified,
+    // and we skip the normalization step.
+
+    // Code to implement decently performing FFT for complex and real valued                                         
+    // signals. See www.lomont.org for a derivation of the relevant algorithms                                       
+    // from first principles. Copyright Chris Lomont 2010-2012.                                                      
+    // This code and any ports are free for all to use for any reason as long                                        
+    // as this header is left in place.                                                                              
+    // Version 1.1, Sept 2011  
+
+    float[] FFT(float[] data, bool forward)
+    {
+        var n = data.Length;
+        // checks n is a power of 2 in 2's complement format                                                 
+        if ((n & (n - 1)) != 0)
+        {
+            Debug.Log("data length " + n + " in FFT is not a power of 2");
+            return data;
+        }
+        n /= 2;    // n is the number of samples                                                   
+
+        Reverse(data, n); // bit index data reversal                                                         
+
+        // do transform: so single point transforms, then doubles, etc.                                      
+        float sign = forward ? B : -B;
+        var mmax = 1;
+        while (n > mmax)
+        {
+            var istep = 2 * mmax;
+            var theta = sign * Math.PI / mmax;
+            float wr = 1, wi = 0;
+            var wpr = (float)Math.Cos(theta);
+            var wpi = (float)Math.Sin(theta);
+            for (var m = 0; m < istep; m += 2)
+            {
+                for (var k = m; k < 2 * n; k += 2 * istep)
+                {
+                    var j = k + istep;
+                    var tempr = wr * data[j] - wi * data[j + 1];
+                    var tempi = wi * data[j] + wr * data[j + 1];
+                    data[j] = data[k] - tempr;
+                    data[j + 1] = data[k + 1] - tempi;
+                    data[k] = data[k] + tempr;
+                    data[k + 1] = data[k + 1] + tempi;
+                }
+                var t = wr; // trig recurrence                                                               
+                wr = wr * wpr - wi * wpi;
+                wi = wi * wpr + t * wpi;
+            }
+            mmax = istep;
+        }
+
+        return data;
+    }
+
+    /// <summary>                                                                                            
+    /// Determine how phase works on the forward and inverse transforms.                                     
+    /// For size N=2^n transforms, the forward transform uses an                                             
+    /// exp(B*2*pi/N) term and the inverse uses an exp(-B*2*pi/N) term.                                      
+    /// Common values for (A,B) are                                                                          
+    ///     ( 0, 1)  - default                                                                               
+    ///     (-1, 1)  - data processing                                                                       
+    ///     ( 1,-1)  - signal processing                                                                     
+    /// Abs(B) should be relatively prime to N.                                                              
+    /// Setting B=-1 effectively corresponds to conjugating both input and                                   
+    /// output data.                                                                                         
+    /// Usual values for B are 1 or -1.                                                                      
+    /// </summary>                                                                                           
+    public static int B { get; set; }
+
+    void Reverse(float[] data, int n)
+    {
+        // bit reverse the indices. This is exercise 5 in section                                            
+        // 7.2.1.1 of Knuth's TAOCP the idea is a binary counter                                             
+        // in k and one with bits reversed in j                                                              
+        int j = 0, k = 0; // Knuth R1: initialize                                                            
+        var top = n / 2;  // this is Knuth's 2^(n-1)                                                         
+        while (true)
+        {
+            // Knuth R2: swap - swap j+1 and k+2^(n-1), 2 entries each                                       
+            var t = data[j + 2];
+            data[j + 2] = data[k + n];
+            data[k + n] = t;
+            t = data[j + 3];
+            data[j + 3] = data[k + n + 1];
+            data[k + n + 1] = t;
+            if (j > k)
+            { // swap two more                                                                               
+              // j and k                                                                                   
+                t = data[j];
+                data[j] = data[k];
+                data[k] = t;
+                t = data[j + 1];
+                data[j + 1] = data[k + 1];
+                data[k + 1] = t;
+                // j + top + 1 and k+top + 1                                                                 
+                t = data[j + n + 2];
+                data[j + n + 2] = data[k + n + 2];
+                data[k + n + 2] = t;
+                t = data[j + n + 3];
+                data[j + n + 3] = data[k + n + 3];
+                data[k + n + 3] = t;
+            }
+            // Knuth R3: advance k                                                                           
+            k += 4;
+            if (k >= n)
+                break;
+            // Knuth R4: advance j                                                                           
+            var h = top;
+            while (j >= h)
+            {
+                j -= h;
+                h /= 2;
+            }
+            j += h;
+        } // bit reverse loop                                                                                
+    }
+}
