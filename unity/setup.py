@@ -7,7 +7,7 @@ import shutil
 import urllib2
 import zipfile
 
-version = "2.0-beta.13"
+version = "2.0-beta.14"
 
 def download_file(url):
     remote_file = urllib2.urlopen(url)
@@ -50,6 +50,26 @@ print "Copying files..."
 shutil.copy("steamaudio_tan/bin/windows/x64/tanrt64.dll",      "src/project/SteamAudioUnity/Assets/Plugins/x86_64")
 shutil.copy("steamaudio_tan/bin/windows/x64/GPUUtilities.dll", "src/project/SteamAudioUnity/Assets/Plugins/x86_64")
 
+print "Downloading steamaudio_embree_" + version + ".zip..."
+url = "https://github.com/ValveSoftware/steam-audio/releases/download/v" + version + "/steamaudio_embree_" + version + ".zip"
+download_file(url)
+
+print "Extracting steamaudio_embree_" + version + ".zip..."
+with zipfile.ZipFile(os.path.basename(url), "r") as zip:
+    zip.extractall()
+
+print "Copying files..."
+shutil.copy("steamaudio_embree/bin/windows/x64/embree.dll",         "src/project/SteamAudioUnity/Assets/Plugins/x86_64")
+shutil.copy("steamaudio_embree/bin/windows/x64/tbb.dll",            "src/project/SteamAudioUnity/Assets/Plugins/x86_64")
+shutil.copy("steamaudio_embree/bin/windows/x64/tbbmalloc.dll",      "src/project/SteamAudioUnity/Assets/Plugins/x86_64")
+shutil.copy("steamaudio_embree/bin/linux/x64/libembree.so",         "src/project/SteamAudioUnity/Assets/Plugins/x86_64")
+shutil.copy("steamaudio_embree/bin/linux/x64/libtbb.so.2",          "src/project/SteamAudioUnity/Assets/Plugins/x86_64")
+shutil.copy("steamaudio_embree/bin/linux/x64/libtbbmalloc.so.2",    "src/project/SteamAudioUnity/Assets/Plugins/x86_64")
+shutil.copy("steamaudio_embree/bin/osx/libembree.dylib",            "src/project/SteamAudioUnity/Assets/Plugins")
+shutil.copy("steamaudio_embree/bin/osx/libtbb.dylib",               "src/project/SteamAudioUnity/Assets/Plugins")
+shutil.copy("steamaudio_embree/bin/osx/libtbbmalloc.dylib",         "src/project/SteamAudioUnity/Assets/Plugins")
+
 print "Cleaning up..."
 shutil.rmtree("steamaudio_api")
 shutil.rmtree("steamaudio_tan")
+shutil.rmtree("steamaudio_embree")

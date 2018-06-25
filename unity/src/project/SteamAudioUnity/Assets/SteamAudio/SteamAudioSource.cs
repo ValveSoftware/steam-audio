@@ -143,6 +143,21 @@ namespace SteamAudio
                 Gizmos.matrix = oldMatrix;
                 Gizmos.color = oldColor;
             }
+
+            if (dipoleWeight > 0.0f)
+            {
+                if (deformedSphereMesh == null)
+                {
+                    InitializeDeformedSphereMesh(32, 32);
+                }
+
+                DeformSphereMesh();
+
+                var oldColor = Gizmos.color;
+                Gizmos.color = Color.red;
+                Gizmos.DrawWireMesh(deformedSphereMesh, transform.position, transform.rotation);
+                Gizmos.color = oldColor;
+            }
         }
 
         public void UpdateBakedDataStatistics()
@@ -210,10 +225,86 @@ namespace SteamAudio
             return identifier.identifier;
         }
 
+        UnityEngine.Vector3 DeformedVertex(UnityEngine.Vector3 vertex)
+        {
+            var cosine = vertex.z;
+            var r = Mathf.Pow(Mathf.Abs((1.0f - dipoleWeight) + dipoleWeight * cosine), dipolePower);
+            var deformedVertex = vertex;
+            deformedVertex.Scale(new UnityEngine.Vector3(r, r, r));
+            return deformedVertex;
+        }
+
+        void InitializeDeformedSphereMesh(int nPhi, int nTheta)
+        {
+            var dPhi = (2.0f * Mathf.PI) / nPhi;
+            var dTheta = Mathf.PI / nTheta;
+
+            sphereVertices = new UnityEngine.Vector3[nPhi * nTheta];
+            var index = 0;
+            for (var i = 0; i < nPhi; ++i)
+            {
+                var phi = i * dPhi;
+                for (var j = 0; j < nTheta; ++j)
+                {
+                    var theta = (j * dTheta) - (0.5f * Mathf.PI);
+
+                    var x = Mathf.Cos(theta) * Mathf.Sin(phi);
+                    var y = Mathf.Sin(theta);
+                    var z = Mathf.Cos(theta) * -Mathf.Cos(phi);
+
+                    var vertex = new UnityEngine.Vector3(x, y, z);
+
+                    sphereVertices[index++] = vertex;
+                }
+            }
+
+            deformedSphereVertices = new UnityEngine.Vector3[nPhi * nTheta];
+            Array.Copy(sphereVertices, deformedSphereVertices, sphereVertices.Length);
+
+            var indices = new int[6 * nPhi * (nTheta - 1)];
+            index = 0;
+            for (var i = 0; i < nPhi; ++i)
+            {
+                for (var j = 0; j < nTheta - 1; ++j)
+                {
+                    var i0 = i * nTheta + j;
+                    var i1 = i * nTheta + (j + 1);
+                    var i2 = ((i + 1) % nPhi) * nTheta + (j + 1);
+                    var i3 = ((i + 1) % nPhi) * nTheta + j;
+
+                    indices[index++] = i0;
+                    indices[index++] = i1;
+                    indices[index++] = i2;
+                    indices[index++] = i0;
+                    indices[index++] = i2;
+                    indices[index++] = i3;
+                }
+            }
+
+            deformedSphereMesh = new Mesh();
+            deformedSphereMesh.vertices = deformedSphereVertices;
+            deformedSphereMesh.triangles = indices;
+            deformedSphereMesh.RecalculateNormals();
+        }
+
+        void DeformSphereMesh()
+        {
+            for (var i = 0; i < sphereVertices.Length; ++i)
+            {
+                deformedSphereVertices[i] = DeformedVertex(sphereVertices[i]);
+            }
+
+            deformedSphereMesh.vertices = deformedSphereVertices;
+        }
+
         public bool                 directBinaural      = true;
         public HRTFInterpolation    interpolation       = HRTFInterpolation.Nearest;
         public bool                 physicsBasedAttenuation = false;
         public bool                 airAbsorption       = false;
+        [Range(0.0f, 1.0f)]
+        public float                dipoleWeight        = 0.0f;
+        [Range(0.0f, 4.0f)]
+        public float                dipolePower         = 0.0f;
         public OcclusionMode        occlusionMode       = OcclusionMode.NoOcclusion;
         public OcclusionMethod      occlusionMethod     = OcclusionMethod.Raycast;
         [Range(0.1f, 10.0f)]
@@ -249,5 +340,9 @@ namespace SteamAudio
         AudioEngine                 audioEngine         = AudioEngine.UnityNative;
 
         AudioEngineSource           audioEngineSource   = null;
+
+        UnityEngine.Vector3[]       sphereVertices          = null;
+        UnityEngine.Vector3[]       deformedSphereVertices  = null;
+        Mesh                        deformedSphereMesh      = null;
     }
 }

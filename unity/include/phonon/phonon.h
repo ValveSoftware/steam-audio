@@ -406,8 +406,8 @@ extern "C" {
                                                 <b>Used only for direct sound occlusion calculations</b>.*/
     } IPLMaterial;
 
-    /** A callback that is called to update the application on the progress of the iplLoadScene function. You can
-     *  use this to provide the user with visual feedback, like a progress bar.
+    /** A callback that is called to update the application on the progress of the iplLoadFinalizedScene function. You 
+     *  can use this to provide the user with visual feedback, like a progress bar.
      *
      *  \param  progress    Fraction of the loading process that has been completed, between 0.0 and 1.0.
      */
@@ -442,7 +442,7 @@ extern "C" {
      *                              absorption coefficients, the scattering coefficient, and the low-, mid-, and
      *                              high-frequency transmission coefficients, in that order.
      *  \param  userData            Pointer a block of memory containing arbitrary data, specified during the call to
-     *                              \c ::iplSetRayTracerCallbacks.
+     *                              \c ::iplCreateScene.
      */
     typedef void (*IPLClosestHitCallback)(const IPLfloat32* origin, const IPLfloat32* direction,
         const IPLfloat32 minDistance, const IPLfloat32 maxDistance, IPLfloat32* hitDistance, IPLfloat32* hitNormal,
@@ -461,7 +461,7 @@ extern "C" {
      *  \param  hitExists           [out] An integer indicating whether the ray intersects any geometry. A value of 0
      *                              indicates no intersection, 1 indicates that an intersection exists.
      *  \param  userData            Pointer a block of memory containing arbitrary data, specified during the call to
-     *                              \c ::iplSetRayTracerCallbacks.
+     *                              \c ::iplCreateScene.
      */
     typedef void (*IPLAnyHitCallback)(const IPLfloat32* origin, const IPLfloat32* direction,
         const IPLfloat32 minDistance, const IPLfloat32 maxDistance, IPLint32* hitExists, IPLvoid* userData);
@@ -495,7 +495,7 @@ extern "C" {
      *                              between successive normals in the \c hitNormals array, and successive material
      *                              pointers in the \c hitMaterials array.
      *  \param  userData            Pointer a block of memory containing arbitrary data, specified during the call to
-     *                              \c ::iplSetRayTracerCallbacks.
+     *                              \c ::iplCreateScene.
      */
     typedef void (*IPLBatchedClosestHitCallback)(IPLint32 numRays, IPLVector3* origins, IPLVector3* directions,
         IPLint32 rayStride, IPLfloat32* minDistances, IPLfloat32* maxDistances, IPLfloat32* hitDistances,
@@ -519,7 +519,7 @@ extern "C" {
      *                              any geometry. A value of 0 indicates no intersection, 1 indicates that an
      *                              intersection exists.
      *  \param  userData            Pointer a block of memory containing arbitrary data, specified during the call to
-     *                              \c ::iplSetRayTracerCallbacks.
+     *                              \c ::iplCreateScene.
      */
     typedef void (*IPLBatchedAnyHitCallback)(IPLint32 numRays, IPLVector3* origins, IPLVector3* directions,
         IPLint32 rayStride, IPLfloat32* minDistances, IPLfloat32* maxDistances, IPLuint8* hitExists,
@@ -537,36 +537,9 @@ extern "C" {
      *  \param  numMaterials        The number of materials that are used to describe the various surfaces in
      *                              the scene. Materials may not be added or removed once the Scene object is
      *                              created.
-     *  \param  scene               [out] Handle to the created Scene object.
-     *
-     *  \return Status code indicating whether or not the operation succeeded.
-     */
-    IPLAPI IPLerror iplCreateScene(IPLhandle context, IPLhandle computeDevice,
-        IPLSimulationSettings simulationSettings, IPLint32 numMaterials, IPLhandle* scene);
-
-    /** Destroys a Scene object. If any other API objects are still referencing the Scene object, it will not be
-     *  destroyed; destruction occurs when the object's reference count reaches zero.
-     *
-     *  \param  scene               [in, out] Address of a handle to the Scene object to destroy.
-     */
-    IPLAPI IPLvoid iplDestroyScene(IPLhandle* scene);
-
-    /** Specifies a single material used by a Scene object. All materials must be completely specified before
-     *  simulation occurs, otherwise simulation results will be incorrect.
-     *
-     *  \param  scene               Handle to the Scene object.
-     *  \param  materialIndex       Index of the material to set. Between 0 and N-1, where N is the value of
-     *                              \c numMaterials passed to \c ::iplCreateScene.
-     *  \param  material            The material properties to use.
-     */
-    IPLAPI IPLvoid iplSetSceneMaterial(IPLhandle scene, IPLint32 materialIndex, IPLMaterial material);
-
-    /** Specifies callbacks that allow a Scene object to call into a user-specified custom ray tracer. This function
-     *  should only be called if using a custom ray tracer, or else undefined behavior will occur. When using a custom
-     *  ray tracer, this function must be called before any simulation occurs, otherwise undefined behavior will
-     *  occur.
-     *
-     *  \param  scene                       Handle to the Scene object.
+     *  \param  materials           Array containing all the materials in the Scene object. The number of
+     *                              \c IPLMaterial objects in the array must be equal to the value of \c numMaterials
+     *                              passed to \c ::iplCreateScene.
      *  \param  closestHitCallback          Pointer to a function that returns the closest hit along a ray.
      *  \param  anyHitCallback              Pointer to a function that returns whether a ray hits anything.
      *  \param  batchedClosestHitCallback   Pointer to a function that returns the closests hits along each ray in a
@@ -577,10 +550,24 @@ extern "C" {
      *                                      function is used instead of \c anyHitCallback.
      *  \param  userData                    Pointer to a block of memory containing arbitrary data for use
      *                                      by the closest hit and any hit callbacks.
+     *  \param  scene               [out] Handle to the created Scene object.
+     *
+     *  \return Status code indicating whether or not the operation succeeded.
      */
-    IPLAPI IPLvoid iplSetRayTracerCallbacks(IPLhandle scene, IPLClosestHitCallback closestHitCallback,
-        IPLAnyHitCallback anyHitCallback, IPLBatchedClosestHitCallback batchedClosestHitCallback,
-        IPLBatchedAnyHitCallback batchedAnyHitCallback, IPLvoid* userData);
+    IPLAPI IPLerror iplCreateScene(IPLhandle context, IPLhandle computeDevice, 
+                                   IPLSimulationSettings simulationSettings, IPLint32 numMaterials, 
+                                   IPLMaterial* materials, IPLClosestHitCallback closestHitCallback, 
+                                   IPLAnyHitCallback anyHitCallback, 
+                                   IPLBatchedClosestHitCallback batchedClosestHitCallback,
+                                   IPLBatchedAnyHitCallback batchedAnyHitCallback, IPLvoid* userData, 
+                                   IPLhandle* scene);
+
+    /** Destroys a Scene object. If any other API objects are still referencing the Scene object, it will not be
+     *  destroyed; destruction occurs when the object's reference count reaches zero.
+     *
+     *  \param  scene               [in, out] Address of a handle to the Scene object to destroy.
+     */
+    IPLAPI IPLvoid iplDestroyScene(IPLhandle* scene);
 
     /** Creates a Static Mesh object. A Static Mesh object represents a triangle mesh that does not change after it
      *  is created. A Static Mesh object also contains a mapping between each of its triangles and their acoustic
@@ -591,69 +578,33 @@ extern "C" {
      *  \param  scene               Handle to the Scene object to which to add the Static Mesh object.
      *  \param  numVertices         Number of vertices in the triangle mesh.
      *  \param  numTriangles        Number of triangles in the triangle mesh.
+     *  \param  vertices            Array containing the coordinates of all vertices in the Static Mesh object.
+     *                              The number of \c IPLVector3 objects in the array must be equal to the value of
+     *                              \c numVertices passed to \c ::iplCreateStaticMesh.
+     *  \param  triangles           Array containing all triangles in the Static Mesh object. The number of
+     *                              \c IPLTriangle objects in the array must be equal to the value of
+     *                              \c numTriangles passed to \c ::iplCreateStaticMesh.
+     *  \param  materialIndices     Array containing material indices for all triangles in the Static Mesh object.
+     *                              The number of material indices in the array must be equal to the value of
+     *                              \c numTriangles passed to \c ::iplCreateStaticMesh.
      *  \param  staticMesh          [out] Handle to the created Static Mesh object.
      *
      *  \return Status code indicating whether or not the operation succeeded.
      */
     IPLAPI IPLerror iplCreateStaticMesh(IPLhandle scene, IPLint32 numVertices, IPLint32 numTriangles,
-        IPLhandle* staticMesh);
+                                        IPLVector3* vertices, IPLTriangle* triangles, IPLint32* materialIndices,
+                                        IPLhandle* staticMesh);
 
     /** Destroys a Static Mesh object. If any other API objects are still referencing the Static Mesh object, it will
      *  not be destroyed; destruction occurs when the object's reference count reaches zero. Since the Scene object
      *  maintains an internal reference to the Static Mesh object, you may call this function at any point after
-     *  fully specifying the Static Mesh object using \c ::iplSetStaticMeshVertices, \c ::iplSetStaticMeshTriangles,
-     *  and \c ::iplSetStaticMeshMaterials.
+     *  fully specifying the Static Mesh object using \c ::iplCreateStaticMesh.
      *
      *  \param  staticMesh          [in, out] Address of a handle to the Static Mesh object to destroy.
      */
     IPLAPI IPLvoid iplDestroyStaticMesh(IPLhandle* staticMesh);
 
-    /** Specifies the vertices of a Static Mesh object. All vertices must be converted from the game engine's
-     *  coordinate system to Phonon's coordinate system before being passed to this function.
-     *
-     *  \param  scene               Handle to the Scene object containing the Static Mesh object.
-     *  \param  staticMesh          Handle to the Static Mesh object.
-     *  \param  vertices            Array containing the coordinates of all vertices in the Static Mesh object.
-     *                              The number of \c IPLVector3 objects in the array must be equal to the value of
-     *                              \c numVertices passed to \c ::iplCreateStaticMesh.
-     */
-    IPLAPI IPLvoid iplSetStaticMeshVertices(IPLhandle scene, IPLhandle staticMesh, IPLVector3* vertices);
-
-    /** Specifies the triangles of a Static Mesh object. Triangle indices passed using this function refer to
-     *  the vertex array passed using \c ::iplSetStaticMeshVertices.
-     *
-     *  \param  scene               Handle to the Scene object containing the Static Mesh object.
-     *  \param  staticMesh          Handle to the Static Mesh object.
-     *  \param  triangles           Array containing all triangles in the Static Mesh object. The number of
-     *                              \c IPLTriangle objects in the array must be equal to the value of
-     *                              \c numTriangles passed to \c ::iplCreateStaticMesh.
-     */
-    IPLAPI IPLvoid iplSetStaticMeshTriangles(IPLhandle scene, IPLhandle staticMesh, IPLTriangle* triangles);
-
-    /** Specifies the materials associated with each triangle in a Static Mesh object. Material indices passed
-     *  using this function refer to the array containing material data passed to \c ::iplSetSceneMaterial.
-     *
-     *  \param  scene               Handle to the Scene object containing the Static Mesh object.
-     *  \param  staticMesh          Handle to the Static Mesh object.
-     *  \param  materialIndices     Array containing material indices for all triangles in the Static Mesh object.
-     *                              The number of material indices in the array must be equal to the value of
-     *                              \c numTriangles passed to \c ::iplCreateStaticMesh.
-     */
-    IPLAPI IPLvoid iplSetStaticMeshMaterials(IPLhandle scene, IPLhandle staticMesh, IPLint32* materialIndices);
-
-    /** Finalizes a scene and builds internal data structures. Once this function is called, you may not modify
-     *  the Scene object or any Static Mesh objects it contains in any way. This function results in various
-     *  internal data structures being generated; if using Radeon Rays, it results in scene data being uploaded
-     *  to the GPU. This is a time-consuming, blocking call, so do not call it from performance-sensitive code.
-     *
-     *  \param  scene               Handle to the Scene object.
-     *  \param  progressCallback    Pointer to a function that reports the percentage of this function's work
-     *                              that has been completed. May be \c NULL.
-     */
-    IPLAPI IPLvoid iplFinalizeScene(IPLhandle scene, IPLFinalizeSceneProgressCallback progressCallback);
-
-    /** Serializes a Scene object to a byte array. The \c ::iplFinalizeScene function must have been called on
-     *  the Scene object before calling this function. This function can only be called on a Scene object that
+    /** Serializes a Scene object to a byte array. This function can only be called on a Scene object that
      *  has been created using the Phonon built-in ray tracer.
      *
      *  \param  scene               Handle to the Scene object.
@@ -665,8 +616,7 @@ extern "C" {
      */
     IPLAPI IPLint32 iplSaveFinalizedScene(IPLhandle scene, IPLbyte* data);
 
-    /** Creates a Scene object based on data stored in a byte array. After this function is called, it is not
-     *  necessary to call \c ::iplFinalizeScene on the resulting Scene object.
+    /** Creates a Scene object based on data stored in a byte array.
      *
      *  \param  context             The Context object used by the game engine.
      *  \param  simulationSettings  The settings to use for the simulation. This must exactly match the settings
@@ -690,8 +640,7 @@ extern "C" {
 
     /** Saves a Scene object to an OBJ file. An OBJ file is a widely-supported 3D model file format, that can be
      *  displayed using a variety of software on most PC platforms. The OBJ file generated by this function can be
-     *  useful for detecting problems that occur when exporting scene data from the game engine to Phonon. The
-     *  \c ::iplFinalizeScene function must have been called on the Scene object before calling this function.
+     *  useful for detecting problems that occur when exporting scene data from the game engine to Phonon. 
      *  This function can only be called on a Scene object that has been created using the Phonon built-in ray tracer.
      *
      *  \param  scene               Handle to the Scene object.
@@ -727,10 +676,8 @@ extern "C" {
      *  \param  simulationSettings  The settings to use for simulation. This must be the same settings passed to
      *                              \c ::iplCreateScene or \c ::iplLoadFinalizedScene, whichever was used to create
      *                              the Scene object passed in the \c scene parameter to this function.
-     *  \param  scene               The Scene object. If created using \c ::iplCreateScene, then \c ::iplFinalizeScene
-     *                              must have been called on the Scene object before passing it to this function.
-     *                              May be \c NULL, in which case only direct sound will be simulated, without
-     *                              occlusion or any other indirect sound propagation.
+     *  \param  scene               The Scene object. May be \c NULL, in which case only direct sound will be 
+     *                              simulated, without occlusion or any other indirect sound propagation.
      *  \param  probeManager        The Probe Manager object. May be \c NULL if not using baked data.
      *  \param  environment         [out] Handle to the created Environment object.
      *
@@ -1582,6 +1529,8 @@ extern "C" {
      */
     IPLAPI IPLvoid iplDestroyEnvironmentalRenderer(IPLhandle* renderer);
 
+    IPLAPI IPLhandle iplGetEnvironmentForRenderer(IPLhandle renderer);
+
     /** \} */
 
     IPLAPI IPLerror iplCreateSimulationData(IPLSimulationSettings simulationSettings,
@@ -1669,7 +1618,48 @@ extern "C" {
         IPLfloat32  transmissionFactor[3];  /**< Scaling factors to apply to direct sound, for low, middle, and high
                                                  frequencies, that arise due to the transmission of sound waves through
                                                  scene geometry. Linear scale from 0.0 to 1.0. */
+        IPLfloat32  directivityFactor;      /**< Scaling factor to apply to direct sound, that arises due to the
+                                                 directivity pattern of the source. Linear scale from 0.0 to 1.0. */
     } IPLDirectSoundPath;
+
+    /** Callback function that is called when the directivity pattern needs to be queried at a given direction. This
+     *  function may be called many times when simulating indirect sound, and should not perform any long, blocking
+     *  operations.
+     *
+     *  \param  direction           Unit vector point from the source in the direction in which the directivity
+     *                              pattern should be evaluated, relative to the source's orientation.
+     *  \param  userData            User-specified data that was specified via IPLDirectivity.
+     *
+     *  \return Directivity pattern evaluated at the given direction. Typically between 0.0 and 1.0.
+     */
+    typedef float (*IPLDirectivityCallback)(IPLVector3 direction, void* userData);
+
+    /** Specifies a directivity pattern. A simple weighted dipole pattern may be specified. Alternatively, a callback
+     *  may be specified to allow user-provided code to be called whenever the directivity pattern needs to be
+     *  evaluated.
+     */
+    typedef struct {
+        IPLfloat32              dipoleWeight;   /**< Controls the blend between a monopole (omnidirectional) and dipole
+                                                     directivity pattern. 0.0 means pure monopole, 1.0 means pure
+                                                     dipole. 0.5 results in a cardioid pattern. */
+        IPLfloat32              dipolePower;    /**< Controls the width of the dipole directivity pattern. Higher
+                                                     values mean sharper, more focused dipoles. */
+        IPLDirectivityCallback  callback;       /**< Pointer to a function to call when the directivity pattern needs
+                                                     to be evaluated. */
+        void*                   userData;       /**< User-specified data that should be passed to the callback function
+                                                     when it is called. Use this to pass in any source-specific
+                                                     data that must be known to the directivity callback function. */
+    } IPLDirectivity;
+
+    /** Specifies information associated with a sound source.
+     */
+    typedef struct {
+        IPLVector3      position;       /**< World-space position of the source. */
+        IPLVector3      ahead;          /**< Unit vector pointing forwards from the source. */
+        IPLVector3      up;             /**< Unit vector pointing upwards from the source. */
+        IPLVector3      right;          /**< Unit vector pointing to the right of the source. */
+        IPLDirectivity  directivity;    /**< The source's directivity pattern. */
+    } IPLSource;
 
     /** Calculates direct sound path parameters for a single source. It is up to the audio engine to perform audio
      *  processing that uses the information returned by this function.
@@ -1678,7 +1668,7 @@ extern "C" {
      *  \param  listenerPosition    World-space position of the listener.
      *  \param  listenerAhead       Unit vector pointing in the direction in which the listener is looking.
      *  \param  listenerUp          Unit vector pointing upwards from the listener.
-     *  \param  sourcePosition      World-space position of the source.
+     *  \param  source              Position, orientation, and directivity of the source.
      *  \param  sourceRadius        Radius of the sphere defined around the source, for use with
      *                              \c ::IPL_DIRECTOCCLUSION_VOLUMETRIC only.
      *  \param  occlusionMode       Confuguring the occlusion mode for direct path.
@@ -1687,7 +1677,7 @@ extern "C" {
      *  \return Parameters of the direct path from the source to the listener.
      */
     IPLAPI IPLDirectSoundPath iplGetDirectSoundPath(IPLhandle environment, IPLVector3 listenerPosition,
-        IPLVector3 listenerAhead, IPLVector3 listenerUp, IPLVector3 sourcePosition, IPLfloat32 sourceRadius,
+        IPLVector3 listenerAhead, IPLVector3 listenerUp, IPLSource source, IPLfloat32 sourceRadius,
         IPLDirectOcclusionMode occlusionMode, IPLDirectOcclusionMethod occlusionMethod);
 
     /** \} */
@@ -1708,6 +1698,7 @@ extern "C" {
     typedef struct {
         IPLbool                 applyDistanceAttenuation;   /**< Whether to apply distance attenuation. */
         IPLbool                 applyAirAbsorption;         /**< Whether to apply frequency-dependent air absorption. */
+        IPLbool                 applyDirectivity;           /**< Whether to apply source directivity. */
         IPLDirectOcclusionMode  directOcclusionMode;        /**< Whether to apply occlusion and transmission. Also
                                                                  lets you specify whether to apply frequency-dependent
                                                                  or frequency-independent transmission. */
@@ -1827,10 +1818,10 @@ extern "C" {
      *  propagation effects should be applied.
      *
      *  \param  effect              Handle to a Convolution Effect object.
-     *  \param  sourcePosition      World-space position of the sound source emitting the dry audio.
+     *  \param  source              Position, orientation, and directivity of the sound source emitting the dry audio.
      *  \param  dryAudio            Audio buffer containing the dry audio data.
      */
-    IPLAPI IPLvoid iplSetDryAudioForConvolutionEffect(IPLhandle effect, IPLVector3 sourcePosition,
+    IPLAPI IPLvoid iplSetDryAudioForConvolutionEffect(IPLhandle effect, IPLSource source,
         IPLAudioBuffer dryAudio);
 
     /** Retrieves a frame of wet audio from a Convolution Effect object. This is the result of applying sound

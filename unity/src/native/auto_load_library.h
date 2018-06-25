@@ -82,13 +82,17 @@ typedef IPLerror(*IPLCreateEnvironmentalRenderer)(IPLhandle context,
                                                   IPLSimulationThreadDestroyCallback threadDestroyCallback, 
                                                   IPLhandle* renderer);
 
+typedef IPLvoid(*IPLDestroyEnvironment)(IPLhandle* environment);
+
 typedef IPLvoid(*IPLDestroyEnvironmentalRenderer)(IPLhandle* renderer);
+
+typedef IPLhandle(*IPLGetEnvironmentForRenderer)(IPLhandle renderer);
 
 typedef IPLDirectSoundPath(*IPLGetDirectSoundPath)(IPLhandle renderer, 
                                                    IPLVector3 listenerPosition,    
                                                    IPLVector3 listenerAhead, 
                                                    IPLVector3 listenerUp, 
-                                                   IPLVector3 sourcePosition, 
+                                                   IPLSource sourcePosition, 
                                                    IPLfloat32 sourceRadius,    
                                                    IPLDirectOcclusionMode occlusionMode, 
                                                    IPLDirectOcclusionMethod occlusionMethod);
@@ -119,7 +123,7 @@ typedef IPLvoid(*IPLSetConvolutionEffectIdentifier)(IPLhandle effect,
                                                     IPLBakedDataIdentifier identifier);
 
 typedef IPLvoid(*IPLSetDryAudioForConvolutionEffect)(IPLhandle effect, 
-                                                     IPLVector3 sourcePosition,    
+                                                     IPLSource sourcePosition,    
                                                      IPLAudioBuffer dryAudio);
 
 typedef IPLvoid(*IPLGetWetAudioForConvolutionEffect)(IPLhandle effect, 
@@ -158,8 +162,10 @@ struct SteamAudioApi
     IPLDestroyAmbisonicsBinauralEffect      iplDestroyAmbisonicsBinauralEffect;
     IPLApplyAmbisonicsBinauralEffect        iplApplyAmbisonicsBinauralEffect;
     IPLFlushAmbisonicsBinauralEffect        iplFlushAmbisonicsBinauralEffect;
+    IPLDestroyEnvironment                   iplDestroyEnvironment;
     IPLCreateEnvironmentalRenderer          iplCreateEnvironmentalRenderer;
     IPLDestroyEnvironmentalRenderer         iplDestroyEnvironmentalRenderer;
+    IPLGetEnvironmentForRenderer            iplGetEnvironmentForRenderer;
     IPLGetDirectSoundPath                   iplGetDirectSoundPath;
     IPLCreateDirectSoundEffect              iplCreateDirectSoundEffect;
     IPLDestroyDirectSoundEffect             iplDestroyDirectSoundEffect;

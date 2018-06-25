@@ -19,6 +19,10 @@ IPLAudioFormat audioFormatForNumChannels(int numChannels);
  */
 IPLVector3 convertVector(float x, float y, float z);
 
+/** Normalizes a 3D vector.
+ */
+IPLVector3 unitVector(IPLVector3 v);
+
 /** Crossfades between dry and wet audio.
  */
 void crossfadeInputAndOutput(const float* inBuffer, const int numChannels, const int numSamples, float* outBuffer);

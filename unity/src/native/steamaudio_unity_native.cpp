@@ -4,6 +4,7 @@
 //
 
 #include "steamaudio_unity_native.h"
+#include <math.h>
 
 extern UnityAudioEffectDefinition gMixEffect;
 extern UnityAudioEffectDefinition gReverbEffect;
@@ -35,6 +36,15 @@ IPLAudioFormat audioFormatForNumChannels(int numChannels)
 IPLVector3 convertVector(float x, float y, float z)
 {
     return IPLVector3{ x, y, -z };
+}
+
+IPLVector3 unitVector(IPLVector3 v)
+{
+    auto length = sqrtf(v.x * v.x + v.y * v.y + v.z * v.z);
+    if (length < 1e-2f)
+        length = 1e-2f;
+
+    return IPLVector3{ v.x / length, v.y / length, v.z / length };
 }
 
 void crossfadeInputAndOutput(const float* inBuffer, const int numChannels, const int numSamples, float* outBuffer)

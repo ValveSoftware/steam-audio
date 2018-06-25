@@ -1,6 +1,6 @@
-% Steam Audio Unity Plugin 2.0-beta.13
+% Steam Audio Unity Plugin 2.0-beta.14
 
-# Steam Audio Unity Plugin <small><small>2.0-beta.13</small></small>
+# Steam Audio Unity Plugin <small><small>2.0-beta.14</small></small>
 
 Copyright 2017 Valve Corporation. All rights reserved. Subject to the following license: 
 [https://valvesoftware.github.io/steam-audio/license.html](https://valvesoftware.github.io/steam-audio/license.html)
@@ -183,6 +183,22 @@ When checked, physics-based distance attenuation (inverse distance falloff) is a
 ##### Air Absorption
 When checked, frequency-dependent, distance-based air absorption is applied to the audio. Higher frequencies are
 attenuated more quickly than lower frequencies over distance.
+
+##### Directivity
+Some sound sources emit sound largely within a limited range of directions. For example, a megaphone projects sound
+mostly the the front. Steam Audio can model the effect of such source directivity patterns on both direct and
+indirect sound. To specify a directivity pattern for a source, the following two sliders can be used:
+
+- **Dipole Weight**. When set to 0, the source has a monopole directivity, i.e., is omnidirectional. When set to
+  1, the source has a dipole directivity, i.e., sound is focused to the front and back of the source, and very little
+  sound is emitted to the left or right of the source. Values in between blend between the two directivity patterns.
+  At 0.5, for example, the source has a cardioid directivity, i.e., most of the sound is emitted to the front of the
+  source.
+
+- **Dipole Power**. Specifies how focused the dipole directivity is. Higher values result in sharper directivity
+  patterns.
+
+As you adjust these values, you can see a preview of the directivity pattern in the inspector.
 
 ##### Direct Mix Level
 Direct Mix Level adjusts the contribution of direct sound to the overall mix.
@@ -620,6 +636,11 @@ implies fewer probes need to be baked, so less data needs to be stored.
 If checked, all Probe Boxes are used when baking environmental effects for the source. If unchecked, you can specify a 
 list of Probe Boxes for which to bake environmental effects.
 
+> **NOTE** <br/>
+  Baking indirect sound effects for a static sources causes the source directivity to be baked into the data as well.
+  This means that a baked static source cannot be rotated at run-time; the directivity will not rotate along with it,
+  and the results will not be accurate.
+
 #### Baked Static Listener Settings
 To use Baked Static Listener simulation on a Steam Audio Source, you must first create one or more **Steam Audio Baked
 Static Listener Node** components. You must also add and configure a Steam Audio Listener component to the Audio 
@@ -687,7 +708,7 @@ propagation, baked static listener propagation, real-time listener-centric rever
 
 ##### Enabling TrueAudio Next
 Before enabling TrueAudio Next, you must download the Steam Audio TrueAudio Next support package for Unity
-(`SteamAudio_TrueAudioNext.unitypackage`) from GitHub. Then:
+(`SteamAudio_TrueAudioNext.unitypackage`). Then:
 
 1.  From the Unity menu, choose **Assets** > **Import Package** > **Custom Package**.
 2.  Navigate to the directory where you downloaded the Steam Audio TrueAudio Next support package. Within this
@@ -742,6 +763,36 @@ tasks:
   only supports reserving 8 or more CUs, TrueAudio Next initialization will fail.
 
 ![Configuring Resource Reservation settings for TrueAudio Next.](media/tan-reservation-settings.png)
+
+#### Intel&reg; Embree
+Steam Audio provides optional support for Intel&reg; Embree, which uses highly optimized CPU ray tracing for accelerating 
+real-time simulation and baking. Embree support in Steam Audio is currently restricted to a single CPU core. Embree 
+support will work on any modern CPU based on the x86 or x86_64 architectures, as long as Streaming SIMD Extensions 2 
+(SSE2) instructions are supported. CPUs that support Advanced Vector eXtensions (AVX) or AVX2 instructions will 
+result in improved performance when using Embree support.
+
+> **NOTE** <br/>
+  Embree support is only available on Windows (64-bit), Linux (64-bit), and macOS (64-bit). Embree support on
+  macOS is available only on Macs released in 2011 or later.
+
+##### Enabling Embree
+Before enabling Embree, you must download the Steam Audio Embree support package for Unity 
+(`SteamAudio_Embree.unitypackage`). Then:
+
+1.  From the Unity menu, choose **Assets** > **Import Package** > **Custom Package**.
+2.  Navigate to the directory where you downloaded the Steam Audio Embree support package. Within this folder, 
+    navigate to the `bin/unity/` subdirectory.
+3.  Double-click the `SteamAudio_Embree.unitypackage` file.
+4.  In the Import dialog box that appears, make sure everything is selected, and click the **Import** button.
+
+Next, for each Unity scene in which you want to enable Embree, follow these steps:
+
+1.  In the Hierarchy tab, click the **Steam Audio Manager Settings** object.
+2.  In the Inspector tab, click **Add Component**.
+3.  In the Add Component menu, select **Steam Audio** > **Steam Audio Custom Settings**.
+4.  In the Steam Audio Custom Settings component, set **Ray Tracer Option** to **Embree**.
+
+![Enabling Embree via Steam Audio Custom Settings.](media/embree-enabled.png)
 
 #### Per Frame Query Optimization
 Steam Audio searches the Unity scene graph for an Audio Listener and a Steam Audio Listener every frame. This requires 

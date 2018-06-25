@@ -3,6 +3,7 @@
 // https://valvesoftware.github.io/steam-audio/license.html
 //
 
+using System;
 using UnityEditor;
 using UnityEngine;
 
@@ -25,7 +26,7 @@ namespace SteamAudio
         {
             serializedObject.Update();
 
-            //var rayTracerProperty = serializedObject.FindProperty("rayTracerOption");
+            var rayTracerProperty = serializedObject.FindProperty("rayTracerOption");
             var convolutionProperty = serializedObject.FindProperty("convolutionOption");
             var minCuProperty = serializedObject.FindProperty("minComputeUnitsToReserve");
             var maxCuProperty = serializedObject.FindProperty("maxComputeUnitsToReserve");
@@ -33,7 +34,44 @@ namespace SteamAudio
             var ambisonicsOrderProperty = serializedObject.FindProperty("AmbisonicsOrder");
             var maxSourcesProperty = serializedObject.FindProperty("MaxSources");
 
-            //EditorGUILayout.PropertyField(rayTracerProperty);
+            EditorGUILayout.Space();
+            EditorGUILayout.LabelField("Simulation Settings", EditorStyles.boldLabel);
+
+            int selectedRayTracer = 0;
+            if (rayTracerProperty.enumValueIndex == (int) SceneType.Phonon)
+            {
+                selectedRayTracer = 0;
+            }
+            else if (rayTracerProperty.enumValueIndex == (int) SceneType.Embree)
+            {
+                selectedRayTracer = 1;
+            }
+            else if (rayTracerProperty.enumValueIndex == (int) SceneType.Custom)
+            {
+                selectedRayTracer = 2;
+            }
+            else
+            {
+                Debug.LogError("Invalid ray tracer type: " + rayTracerProperty.enumValueIndex);
+            }
+
+            selectedRayTracer = EditorGUILayout.Popup("Ray Tracer Option", selectedRayTracer, optionsRayTracer);
+
+            switch (selectedRayTracer)
+            {
+                case 0:
+                    rayTracerProperty.enumValueIndex = (int) SceneType.Phonon;
+                    break;
+                case 1:
+                    rayTracerProperty.enumValueIndex = (int) SceneType.Embree;
+                    break;
+                case 2:
+                    rayTracerProperty.enumValueIndex = (int) SceneType.Custom;
+                    break;
+                default:
+                    Debug.LogError("Invalid ray tracer type: " + selectedRayTracer.ToString());
+                    break;
+            }
 
             EditorGUILayout.Space();
             EditorGUILayout.Space();
@@ -69,7 +107,7 @@ namespace SteamAudio
             serializedObject.ApplyModifiedProperties();
         }
 
-        //string[] optionsRayTracer = new string[] { "Phonon", "Embree", "Radeon Rays", "Custom" };
+        string[] optionsRayTracer = new string[] { "Phonon", "Embree", "Custom" };
         string[] optionsConvolution = new string[] { "Phonon", "TrueAudio Next" };
     }
 }

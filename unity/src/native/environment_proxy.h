@@ -101,6 +101,7 @@ private:
 
     /** The Environment object used for the current scene. */
     IPLhandle mEnvironment;
+    mutable IPLhandle mEnvironmentCopy;
 
     /** The convolution engine to use for the current scene. */
     IPLConvolutionType mConvolutionType;

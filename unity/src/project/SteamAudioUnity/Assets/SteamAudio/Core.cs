@@ -47,32 +47,40 @@ namespace SteamAudio
         // Functions for scene export.
         //
 
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        public delegate void ClosestHitCallback(Vector3 origin, Vector3 direction, float minDistance, 
+            float maxDistance, [In, Out] ref float hitDistance, [In, Out] ref Vector3 hitNormal, 
+            [In, Out] ref int hitMaterialIndex, IntPtr userData);
+
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        public delegate void AnyHitCallback(Vector3 origin, Vector3 direction, float minDistance, float maxDistance, 
+            [In, Out] ref int hitExists, IntPtr userData);
+
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        public delegate void BatchedClosestHitCallback(int numRays, Vector3[] origins, Vector3[] directions,
+            int rayStride, float[] minDistances, float[] maxDistances, float[] hitDistances, Vector3[] hitNormals,
+            IntPtr hitMaterials, int hitStride, IntPtr userData);
+
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        public delegate void BatchedAnyHitCallback(int numRays, Vector3[] origins, Vector3[] directions, int rayStride,
+            float[] minDistances, float[] maxDistances, byte[] hitExists, IntPtr userData);
+
         [DllImport("phonon")]
-        public static extern Error iplCreateScene(IntPtr globalContext, IntPtr computeDevice, SimulationSettings simulationSettings, int numMaterials, [In, Out] ref IntPtr scene);
+        public static extern Error iplCreateScene(IntPtr context, IntPtr computeDevice,
+            SimulationSettings simulationSettings, int numMaterials, Material[] materials,
+            ClosestHitCallback closestHitCallback, AnyHitCallback anyHitCallback, 
+            BatchedClosestHitCallback batchedClosestHitCallback, BatchedAnyHitCallback batchedAnyHitCallback, 
+            IntPtr userData, [In, Out] ref IntPtr scene);
 
         [DllImport("phonon")]
         public static extern void iplDestroyScene([In, Out] ref IntPtr scene);
 
         [DllImport("phonon")]
-        public static extern void iplSetSceneMaterial(IntPtr scene, int materialIndex, Material material);
-
-        [DllImport("phonon")]
-        public static extern Error iplCreateStaticMesh(IntPtr scene, int numVertices, int numTriangles, [In, Out] ref IntPtr staticMesh);
+        public static extern Error iplCreateStaticMesh(IntPtr scene, int numVertices, int numTriangles, 
+            Vector3[] vertices, Triangle[] triangles, int[] materialIndices, [In, Out] ref IntPtr staticMesh);
 
         [DllImport("phonon")]
         public static extern void iplDestroyStaticMesh([In, Out] ref IntPtr staticMesh);
-
-        [DllImport("phonon")]
-        public static extern void iplSetStaticMeshVertices(IntPtr scene, IntPtr staticMesh, Vector3[] vertices);
-
-        [DllImport("phonon")]
-        public static extern void iplSetStaticMeshTriangles(IntPtr scene, IntPtr staticMesh, Triangle[] triangles);
-
-        [DllImport("phonon")]
-        public static extern void iplSetStaticMeshMaterials(IntPtr scene, IntPtr staticMesh, int[] materialIndices);
-
-        [DllImport("phonon", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void iplFinalizeScene(IntPtr scene, FinalizeSceneProgressCallback progressCallback);
 
         [DllImport("phonon")]
         public static extern int iplSaveFinalizedScene(IntPtr scene, [In, Out] byte[] data);
@@ -82,23 +90,6 @@ namespace SteamAudio
 
         [DllImport("phonon")]
         public static extern void iplDumpSceneToObjFile(IntPtr scene, byte[] fileName);
-
-        //
-        // Custom ray tracer callback functions.
-        //
-
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        public delegate void ClosestHitCallback(Vector3 origin, Vector3 direction, float minDistance, float maxDistance, [In, Out] ref float hitDistance, [In, Out] ref Vector3 hitNormal, [In, Out] ref int hitMaterialIndex, IntPtr userData);
-
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        public delegate void AnyHitCallback(Vector3 origin, Vector3 direction, float minDistance, float maxDistance, [In, Out] ref int hitExists, IntPtr userData);
-
-        //
-        // Functions for setting up a custom ray tracer.
-        //
-
-        [DllImport("phonon", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void iplSetRayTracerCallbacks(IntPtr scene, ClosestHitCallback closetHitCallback, AnyHitCallback anyHitCallback, IntPtr userData);
 
         //
         // Functions to setup Environment.

@@ -28,6 +28,8 @@ enum SpatializeEffectParams
     SA_SPATIALIZE_PARAM_STATICLISTENER,
     SA_SPATIALIZE_PARAM_NAME,
     SA_SPATIALIZE_PARAM_BYPASSDURINGINIT,
+    SA_SPATIALIZE_PARAM_DIPOLEWEIGHT,
+    SA_SPATIALIZE_PARAM_DIPOLEPOWER,
     SA_SPATIALIZE_NUM_PARAMS
 };
 
@@ -57,6 +59,9 @@ public:
     
     /** Whether or not to apply frequency-dependent air absorption to direct sound. */
     bool airAbsorption;
+
+    float dipoleWeight;
+    float dipolePower;
     
     /** What to do when the direct sound path is occluded. */
     IPLDirectOcclusionMode occlusionMode;
@@ -100,6 +105,8 @@ public:
         hrtfInterpolation{ IPL_HRTFINTERPOLATION_NEAREST },
         distanceAttenuation{ false },
         airAbsorption{ false },
+        dipoleWeight{ 0.0f },
+        dipolePower{ 0.0f },
         occlusionMode{ IPL_DIRECTOCCLUSION_NONE },
         occlusionMethod{ IPL_DIRECTOCCLUSION_RAYCAST },
         sourceRadius{ 1.0f },
@@ -156,6 +163,12 @@ public:
         case SA_SPATIALIZE_PARAM_AIRABSORPTION:
             value = (airAbsorption) ? 1.0f : 0.0f;
             return true;
+        case SA_SPATIALIZE_PARAM_DIPOLEWEIGHT:
+            value = dipoleWeight;
+            return true;
+        case SA_SPATIALIZE_PARAM_DIPOLEPOWER:
+            value = dipolePower;
+            return true;
         case SA_SPATIALIZE_PARAM_OCCLUSIONMODE:
             value = static_cast<float>(static_cast<int>(occlusionMode));
             return true;
@@ -211,6 +224,12 @@ public:
             return true;
         case SA_SPATIALIZE_PARAM_AIRABSORPTION:
             airAbsorption = (value == 1.0f);
+            return true;
+        case SA_SPATIALIZE_PARAM_DIPOLEWEIGHT:
+            dipoleWeight = value;
+            return true;
+        case SA_SPATIALIZE_PARAM_DIPOLEPOWER:
+            dipolePower = value;
             return true;
         case SA_SPATIALIZE_PARAM_OCCLUSIONMODE:
             occlusionMode = static_cast<IPLDirectOcclusionMode>(static_cast<int>(value));
@@ -516,6 +535,16 @@ public:
         auto listenerUp = convertVector(L[1], L[5], L[9]);
         auto listenerAhead = convertVector(L[2], L[6], L[10]);
 
+        auto sourceAhead = unitVector(convertVector(S[8], S[9], S[10]));
+        auto sourceUp = unitVector(convertVector(S[4], S[5], S[6]));
+        auto sourceDirectivity = IPLDirectivity{ dipoleWeight, dipolePower, nullptr, nullptr };
+
+        IPLSource source;
+        source.position = sourcePosition;
+        source.ahead = sourceAhead;
+        source.up = sourceUp;
+        source.directivity = sourceDirectivity;
+
         auto environment = IPLhandle{ nullptr };
         auto environmentalRenderer = IPLhandle{ nullptr };
         if (mEnvironmentalRenderer)
@@ -549,14 +578,15 @@ public:
         {
             // Calculate the direct path parameters.
             auto directPath = gApi.iplGetDirectSoundPath(environment, listenerPosition, listenerAhead, listenerUp,
-                                                         sourcePosition, sourceRadius, occlusionMode,
+                                                         source, sourceRadius, occlusionMode,
                                                          occlusionMethod);
-            
+
             // Apply direct sound modeling to the input audio, resulting in a mono buffer of audio.
             auto directOptions = IPLDirectSoundEffectOptions
             {
                 distanceAttenuation ? IPL_TRUE : IPL_FALSE,
                 airAbsorption ? IPL_TRUE : IPL_FALSE,
+                (dipoleWeight > 0.0f) ? IPL_TRUE : IPL_FALSE,
                 occlusionMode
             };
             gApi.iplApplyDirectSoundEffect(mDirectEffect, inputAudio, directPath, directOptions,
@@ -624,7 +654,7 @@ public:
 
         // Send audio to the convolution effect.
         gApi.iplSetConvolutionEffectIdentifier(mIndirectEffect, identifier);
-        gApi.iplSetDryAudioForConvolutionEffect(mIndirectEffect, sourcePosition, inputAudio);
+        gApi.iplSetDryAudioForConvolutionEffect(mIndirectEffect, source, inputAudio);
         mUsedConvolutionEffect = true;
 
         // If we're using accelerated mixing, stop here.
@@ -844,7 +874,9 @@ UnityAudioParameterDefinition gSpatializeEffectParams[] =
     { "IndirType", "", "Real-time or baked.", 0.0f, 1.0f, 1.0f, 1.0f, 1.0f },
     { "StaticListener", "", "Uses static listener.", 0.0f, 1.0f, 0.0f, 1.0f, 1.0f },
     { "Name", "", "Unique identifier for the source.", -std::numeric_limits<float>::max(), std::numeric_limits<float>::max(), 1.0f, 1.0f, 1.0f },
-    { "BypassAtInit", "", "Bypass the effect during initialization.", 0.0f, 1.0f, 0.0f, 1.0f, 1.0f }
+    { "BypassAtInit", "", "Bypass the effect during initialization.", 0.0f, 1.0f, 0.0f, 1.0f, 1.0f },
+    { "DipoleWeight", "", "Blends between omni and dipole directivity.", 0.0f, 1.0f, 0.0f, 1.0f, 1.0f },
+    { "DipolePower", "", "Sharpness of the dipole directivity.", 0.0f, 10.0f, 0.0f, 1.0f, 1.0f }
 };
 
 /** Descriptor for the Spatializer effect. */

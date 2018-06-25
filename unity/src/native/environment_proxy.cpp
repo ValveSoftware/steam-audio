@@ -14,6 +14,7 @@ EnvironmentProxy::EnvironmentProxy(const IPLSimulationSettings& simulationSettin
     const IPLConvolutionType convolutionType) :
     mSimulationSettings(simulationSettings),
     mEnvironment(environment),
+    mEnvironmentCopy(nullptr),
     mConvolutionType(convolutionType),
     mEnvironmentalRenderer(nullptr),
     mUsingAcceleratedMixing(false)
@@ -25,6 +26,9 @@ EnvironmentProxy::EnvironmentProxy(const IPLSimulationSettings& simulationSettin
 
 EnvironmentProxy::~EnvironmentProxy()
 {
+    if (mEnvironmentCopy)
+        gApi.iplDestroyEnvironment(&mEnvironmentCopy);
+
     if (mEnvironmentalRenderer)
         gApi.iplDestroyEnvironmentalRenderer(&mEnvironmentalRenderer);
 }
@@ -36,7 +40,10 @@ IPLSimulationSettings EnvironmentProxy::simulationSettings() const
 
 IPLhandle EnvironmentProxy::environment() const
 {
-    return mEnvironment;
+    if (mEnvironmentalRenderer)
+        mEnvironmentCopy = gApi.iplGetEnvironmentForRenderer(mEnvironmentalRenderer);
+
+    return (mEnvironmentCopy) ? mEnvironmentCopy : mEnvironment;
 }
 
 IPLhandle EnvironmentProxy::environmentalRenderer()

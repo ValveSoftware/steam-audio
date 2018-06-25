@@ -156,7 +156,7 @@ if (${ANDROID})
   set (CMAKE_CXX_FLAGS                   "-march=armv7-a -mfloat-abi=softfp -mfpu=neon -std=c++14")
   set (CMAKE_CXX_FLAGS_RELEASE           "-O3")
   set (CMAKE_EXE_LINKER_FLAGS            "-llog -landroid")
-  set (CMAKE_SHARED_LINKER_FLAGS         "-llog -landroid")
+  set (CMAKE_SHARED_LINKER_FLAGS         "-llog -landroid -static-libstdc++")
 endif ()
 
 

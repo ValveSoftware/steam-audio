@@ -140,8 +140,10 @@ void loadLibrary()
     gApi.iplDestroyAmbisonicsBinauralEffect = (IPLDestroyAmbisonicsBinauralEffect)  GetProcAddress(library, "iplDestroyAmbisonicsBinauralEffect");
     gApi.iplApplyAmbisonicsBinauralEffect   = (IPLApplyAmbisonicsBinauralEffect)    GetProcAddress(library, "iplApplyAmbisonicsBinauralEffect");
     gApi.iplFlushAmbisonicsBinauralEffect   = (IPLFlushAmbisonicsBinauralEffect)    GetProcAddress(library, "iplFlushAmbisonicsBinauralEffect");
+    gApi.iplDestroyEnvironment              = (IPLDestroyEnvironment)               GetProcAddress(library, "iplDestroyEnvironment");
     gApi.iplCreateEnvironmentalRenderer     = (IPLCreateEnvironmentalRenderer)      GetProcAddress(library, "iplCreateEnvironmentalRenderer");
     gApi.iplDestroyEnvironmentalRenderer    = (IPLDestroyEnvironmentalRenderer)     GetProcAddress(library, "iplDestroyEnvironmentalRenderer");
+    gApi.iplGetEnvironmentForRenderer       = (IPLGetEnvironmentForRenderer)        GetProcAddress(library, "iplGetEnvironmentForRenderer");
     gApi.iplGetDirectSoundPath              = (IPLGetDirectSoundPath)               GetProcAddress(library, "iplGetDirectSoundPath");
     gApi.iplCreateDirectSoundEffect         = (IPLCreateDirectSoundEffect)          GetProcAddress(library, "iplCreateDirectSoundEffect");
     gApi.iplDestroyDirectSoundEffect        = (IPLDestroyDirectSoundEffect)         GetProcAddress(library, "iplDestroyDirectSoundEffect");
@@ -180,8 +182,10 @@ void loadLibrary()
     gApi.iplDestroyAmbisonicsBinauralEffect = (IPLDestroyAmbisonicsBinauralEffect)  dlsym(library, "iplDestroyAmbisonicsBinauralEffect");
     gApi.iplApplyAmbisonicsBinauralEffect   = (IPLApplyAmbisonicsBinauralEffect)    dlsym(library, "iplApplyAmbisonicsBinauralEffect");
     gApi.iplFlushAmbisonicsBinauralEffect   = (IPLFlushAmbisonicsBinauralEffect)    dlsym(library, "iplFlushAmbisonicsBinauralEffect");
+    gApi.iplDestroyEnvironment              = (IPLDestroyEnvironment)               dlsym(library, "iplDestroyEnvironment");
     gApi.iplCreateEnvironmentalRenderer     = (IPLCreateEnvironmentalRenderer)      dlsym(library, "iplCreateEnvironmentalRenderer");
     gApi.iplDestroyEnvironmentalRenderer    = (IPLDestroyEnvironmentalRenderer)     dlsym(library, "iplDestroyEnvironmentalRenderer");
+    gApi.iplGetEnvironmentForRenderer       = (IPLGetEnvironmentForRenderer)        dlsym(library, "iplGetEnvironmentForRenderer");
     gApi.iplGetDirectSoundPath              = (IPLGetDirectSoundPath)               dlsym(library, "iplGetDirectSoundPath");
     gApi.iplCreateDirectSoundEffect         = (IPLCreateDirectSoundEffect)          dlsym(library, "iplCreateDirectSoundEffect");
     gApi.iplDestroyDirectSoundEffect        = (IPLDestroyDirectSoundEffect)         dlsym(library, "iplDestroyDirectSoundEffect");

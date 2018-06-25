@@ -67,6 +67,32 @@ namespace SteamAudio
                 EditorGUILayout.PropertyField(serializedObject.FindProperty("physicsBasedAttenuation"));
                 EditorGUILayout.PropertyField(serializedObject.FindProperty("airAbsorption"));
                 EditorGUILayout.PropertyField(serializedObject.FindProperty("directMixLevel"));
+                EditorGUILayout.Space();
+
+                EditorGUILayout.LabelField("Directivity", EditorStyles.boldLabel);
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("dipoleWeight"));
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("dipolePower"));
+                EditorGUILayout.PrefixLabel("Preview");
+                EditorGUILayout.Space();
+                var rect = EditorGUI.IndentedRect(EditorGUILayout.GetControlRect());
+                var center = rect.center;
+                center.x += 4;
+                rect.center = center;
+                rect.width = 65;
+                rect.height = 65;
+
+                EditorGUILayout.Space();
+                EditorGUILayout.Space();
+                EditorGUILayout.Space();
+                EditorGUILayout.Space();
+                EditorGUILayout.Space();
+                EditorGUILayout.Space();
+                EditorGUILayout.Space();
+                EditorGUILayout.Space();
+                EditorGUILayout.Space();
+
+                DrawDirectivity(serializedObject.FindProperty("dipoleWeight").floatValue, serializedObject.FindProperty("dipolePower").floatValue);
+                EditorGUI.DrawPreviewTexture(rect, directivityPreview);
 
                 // Indirect Sound UX
                 EditorGUILayout.Space();
@@ -132,6 +158,12 @@ namespace SteamAudio
             if (bakedSource.uniqueIdentifier.Length == 0)
                 EditorGUILayout.HelpBox("You must specify a unique identifier name.", MessageType.Warning);
 
+            if (bakedSource.dipoleWeight > 0.0f)
+            {
+                EditorGUILayout.HelpBox("A baked static source should not rotate at run-time, " +
+                    "otherwise indirect sound rendered using baked data may not be accurate.", MessageType.Warning);
+            }
+
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.PrefixLabel(" ");
             if (GUILayout.Button("Bake Effect"))
@@ -167,8 +199,63 @@ namespace SteamAudio
             Repaint();
         }
 
+        void DrawDirectivity(float dipoleWeight, float dipolePower)
+        {
+            if (directivityPreview == null)
+            {
+                directivityPreview = new Texture2D(65, 65);
+            }
+
+            if (directivitySamples == null)
+            {
+                directivitySamples = new float[360];
+                directivityPositions = new Vector2[360];
+            }
+
+            for (var i = 0; i < directivitySamples.Length; ++i)
+            {
+                var theta = (i / 360.0f) * (2.0f * Mathf.PI);
+                directivitySamples[i] = Mathf.Pow(Mathf.Abs((1.0f - dipoleWeight) + dipoleWeight * Mathf.Cos(theta)), dipolePower);
+
+                var r = 31 * Mathf.Abs(directivitySamples[i]);
+                var x = r * Mathf.Cos(theta) + 32;
+                var y = r * Mathf.Sin(theta) + 32;
+                directivityPositions[i] = new Vector2(-y, x);
+            }
+
+            for (var v = 0; v < directivityPreview.height; ++v)
+            {
+                for (var u = 0; u < directivityPreview.width; ++u)
+                {
+                    directivityPreview.SetPixel(u, v, Color.gray);
+                }
+            }
+
+            for (var u = 0; u < directivityPreview.width; ++u)
+            {
+                directivityPreview.SetPixel(u, 32, Color.black);
+            }
+
+            for (var v = 0; v < directivityPreview.height; ++v)
+            {
+                directivityPreview.SetPixel(32, v, Color.black);
+            }
+
+            for (var i = 0; i < directivitySamples.Length; ++i)
+            {
+                var color = (directivitySamples[i] > 0.0f) ? Color.red : Color.blue;
+                directivityPreview.SetPixel((int) directivityPositions[i].x, (int) directivityPositions[i].y, color);
+            }
+
+            directivityPreview.Apply();
+        }
+
         string[] optionsOcclusion = new string[] { "Off", "On, No Transmission", "On, Frequency Independent Transmission", "On, Frequency Dependent Transmission" };
 
         bool showAdvancedOptions = false;
+
+        Texture2D directivityPreview = null;
+        float[] directivitySamples = null;
+        Vector2[] directivityPositions = null;
     }
 }

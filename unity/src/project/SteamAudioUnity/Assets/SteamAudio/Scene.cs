@@ -36,22 +36,6 @@ namespace SteamAudio
 
             simulationSettings.sceneType = SceneType.Phonon;    // Scene type should always be Phonon when exporting.
 
-            error = PhononCore.iplCreateScene(globalContext, computeDevice.GetDevice(), simulationSettings,
-                totalNumMaterials, ref scene);
-            if (error != Error.None)
-            {
-                throw new Exception("Unable to create scene for export (" + objects.Length.ToString() +
-                    " materials): [" + error.ToString() + "]");
-            }
-
-            var staticMesh = IntPtr.Zero;
-            error = PhononCore.iplCreateStaticMesh(scene, totalNumVertices, totalNumTriangles, ref staticMesh);
-            if (error != Error.None)
-            {
-                throw new Exception("Unable to create static mesh for export (" + totalNumVertices.ToString() +
-                    " vertices, " + totalNumTriangles.ToString() + " triangles): [" + error.ToString() + "]");
-            }
-
             var vertices = new Vector3[totalNumVertices];
             var triangles = new Triangle[totalNumTriangles];
             var materialIndices = new int[totalNumTriangles];
@@ -76,16 +60,22 @@ namespace SteamAudio
                     materialIndices, ref materialOffset);
             }
 
-            for (var i = 0; i < totalNumMaterials; ++i)
+            error = PhononCore.iplCreateScene(globalContext, computeDevice.GetDevice(), simulationSettings,
+                materials.Length, materials, null, null, null, null, IntPtr.Zero, ref scene);
+            if (error != Error.None)
             {
-                PhononCore.iplSetSceneMaterial(scene, i, materials[i]);
+                throw new Exception("Unable to create scene for export (" + objects.Length.ToString() +
+                    " materials): [" + error.ToString() + "]");
             }
 
-            PhononCore.iplSetStaticMeshVertices(scene, staticMesh, vertices);
-            PhononCore.iplSetStaticMeshTriangles(scene, staticMesh, triangles);
-            PhononCore.iplSetStaticMeshMaterials(scene, staticMesh, materialIndices);
-
-            PhononCore.iplFinalizeScene(scene, null);
+            var staticMesh = IntPtr.Zero;
+            error = PhononCore.iplCreateStaticMesh(scene, totalNumVertices, totalNumTriangles, vertices, triangles,
+                materialIndices, ref staticMesh);
+            if (error != Error.None)
+            {
+                throw new Exception("Unable to create static mesh for export (" + totalNumVertices.ToString() +
+                    " vertices, " + totalNumTriangles.ToString() + " triangles): [" + error.ToString() + "]");
+            }
 
 #if UNITY_EDITOR
             if (!Directory.Exists(Application.streamingAssetsPath))

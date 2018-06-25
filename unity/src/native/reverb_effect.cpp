@@ -276,7 +276,12 @@ public:
         }
 
         // Apply reverb to the input audio, resulting in an Ambisonics buffer containing the unspatialized reverb.
-        gApi.iplSetDryAudioForConvolutionEffect(mConvolutionEffect, mEnvironmentalRenderer->listenerPosition(), inputAudio);
+        IPLSource reverbSource = {};
+        reverbSource.position = mEnvironmentalRenderer->listenerPosition();
+        reverbSource.ahead = mEnvironmentalRenderer->listenerAhead();
+        reverbSource.up = mEnvironmentalRenderer->listenerUp();
+        reverbSource.directivity = IPLDirectivity{ 0.0f, 0.0f, nullptr, nullptr };
+        gApi.iplSetDryAudioForConvolutionEffect(mConvolutionEffect, reverbSource, inputAudio);
         gApi.iplGetWetAudioForConvolutionEffect(mConvolutionEffect, mEnvironmentalRenderer->listenerPosition(),
             mEnvironmentalRenderer->listenerAhead(), mEnvironmentalRenderer->listenerUp(),
             mIndirectEffectOutputBuffer);

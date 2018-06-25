@@ -24,6 +24,8 @@ namespace SteamAudio
             var hrtfInterpolationValue = (float)steamAudioSource.interpolation;
             var distanceAttenuationValue = (steamAudioSource.physicsBasedAttenuation) ? 1.0f : 0.0f;
             var airAbsorptionValue = (steamAudioSource.airAbsorption) ? 1.0f : 0.0f;
+            var dipoleWeightValue = steamAudioSource.dipoleWeight;
+            var dipolePowerValue = steamAudioSource.dipolePower;
             var occlusionModeValue = (float)steamAudioSource.occlusionMode;
             var occlusionMethodValue = (float)steamAudioSource.occlusionMethod;
             var sourceRadiusValue = steamAudioSource.sourceRadius;
@@ -49,6 +51,8 @@ namespace SteamAudio
             audioSource.SetSpatializerFloat(11, simulationTypeValue);
             audioSource.SetSpatializerFloat(12, usesStaticListenerValue);
             audioSource.SetSpatializerFloat(14, bypassDuringInitValue);
+            audioSource.SetSpatializerFloat(15, dipoleWeightValue);
+            audioSource.SetSpatializerFloat(16, dipolePowerValue);
         }
 
         public override bool ShouldSendIdentifier(SteamAudioSource steamAudioSource)
