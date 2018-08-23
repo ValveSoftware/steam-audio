@@ -33,44 +33,31 @@ namespace SteamAudio
             var durationProperty = serializedObject.FindProperty("Duration");
             var ambisonicsOrderProperty = serializedObject.FindProperty("AmbisonicsOrder");
             var maxSourcesProperty = serializedObject.FindProperty("MaxSources");
+            var bakingBatchSizeProperty = serializedObject.FindProperty("BakingBatchSize");
 
             EditorGUILayout.Space();
             EditorGUILayout.LabelField("Simulation Settings", EditorStyles.boldLabel);
+            rayTracerProperty.enumValueIndex = EditorGUILayout.Popup("Ray Tracer",
+                rayTracerProperty.enumValueIndex, optionsRayTracer);
 
-            int selectedRayTracer = 0;
-            if (rayTracerProperty.enumValueIndex == (int) SceneType.Phonon)
-            {
-                selectedRayTracer = 0;
-            }
-            else if (rayTracerProperty.enumValueIndex == (int) SceneType.Embree)
-            {
-                selectedRayTracer = 1;
-            }
-            else if (rayTracerProperty.enumValueIndex == (int) SceneType.Custom)
-            {
-                selectedRayTracer = 2;
-            }
-            else
-            {
-                Debug.LogError("Invalid ray tracer type: " + rayTracerProperty.enumValueIndex);
-            }
+            if ((SceneType) rayTracerProperty.enumValueIndex == SceneType.Embree) {
+                EditorGUILayout.HelpBox(
+                    "Embree is supported on Windows (64-bit), Linux (64-bit), and macOS (64-bit). On all other " +
+                    "platforms, Steam Audio will revert to Phonon ray tracing.",
+                    MessageType.Info);
+            } else if ((SceneType) rayTracerProperty.enumValueIndex == SceneType.RadeonRays) {
+                EditorGUILayout.HelpBox(
+                    "Radeon Rays is supported on Windows (64-bit). On all other platforms, Steam Audio will revert " +
+                    "to Phonon ray tracing.",
+                    MessageType.Info);
 
-            selectedRayTracer = EditorGUILayout.Popup("Ray Tracer Option", selectedRayTracer, optionsRayTracer);
+                EditorGUILayout.PropertyField(bakingBatchSizeProperty);
 
-            switch (selectedRayTracer)
-            {
-                case 0:
-                    rayTracerProperty.enumValueIndex = (int) SceneType.Phonon;
-                    break;
-                case 1:
-                    rayTracerProperty.enumValueIndex = (int) SceneType.Embree;
-                    break;
-                case 2:
-                    rayTracerProperty.enumValueIndex = (int) SceneType.Custom;
-                    break;
-                default:
-                    Debug.LogError("Invalid ray tracer type: " + selectedRayTracer.ToString());
-                    break;
+                EditorGUILayout.HelpBox(
+                    "Radeon Rays is currently intended to be used for baking only. Using Radeon Rays with Steam " +
+                    "Audio Sources that are configured for real-time indirect sound, or with a Steam Audio " +
+                    "Reverb effect configured for real-time reverb, may lead to decreased frame rates.",
+                    MessageType.Warning);
             }
 
             EditorGUILayout.Space();
@@ -81,6 +68,11 @@ namespace SteamAudio
 
             if ((ConvolutionOption) convolutionProperty.enumValueIndex == ConvolutionOption.TrueAudioNext)
             {
+                EditorGUILayout.HelpBox(
+                    "TrueAudio Next is supported on Windows (64-bit). On all other platforms, Steam Audio will " +
+                    "revert to Phonon convolution.",
+                    MessageType.Info);
+
                 EditorGUILayout.PropertyField(minCuProperty);
                 EditorGUILayout.PropertyField(maxCuProperty);
 
@@ -107,7 +99,7 @@ namespace SteamAudio
             serializedObject.ApplyModifiedProperties();
         }
 
-        string[] optionsRayTracer = new string[] { "Phonon", "Embree", "Custom" };
+        string[] optionsRayTracer = new string[] { "Phonon", "Embree", "Radeon Rays" };
         string[] optionsConvolution = new string[] { "Phonon", "TrueAudio Next" };
     }
 }

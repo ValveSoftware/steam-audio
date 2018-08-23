@@ -7,7 +7,7 @@ import shutil
 import urllib2
 import zipfile
 
-version = "2.0-beta.14"
+version = "2.0-beta.15"
 
 def download_file(url):
     remote_file = urllib2.urlopen(url)
@@ -69,7 +69,19 @@ shutil.copy("steamaudio_embree/bin/osx/libembree.dylib",            "src/project
 shutil.copy("steamaudio_embree/bin/osx/libtbb.dylib",               "src/project/SteamAudioUnity/Assets/Plugins")
 shutil.copy("steamaudio_embree/bin/osx/libtbbmalloc.dylib",         "src/project/SteamAudioUnity/Assets/Plugins")
 
+print "Downloading steamaudio_radeonrays_" + version + ".zip..."
+url = "https://github.com/ValveSoftware/steam-audio/releases/download/v" + version + "/steamaudio_radeonrays_" + version + ".zip"
+download_file(url)
+
+print "Extracting steamaudio_radeonrays_" + version + ".zip..."
+with zipfile.ZipFile(os.path.basename(url), "r") as zip:
+    zip.extractall()
+
+print "Copying files..."
+shutil.copy("steamaudio_radeonrays/bin/windows/x64/RadeonRays.dll",     "src/project/SteamAudioUnity/Assets/Plugins/x86_64")
+
 print "Cleaning up..."
 shutil.rmtree("steamaudio_api")
 shutil.rmtree("steamaudio_tan")
 shutil.rmtree("steamaudio_embree")
+shutil.rmtree("steamaudio_radeonrays")

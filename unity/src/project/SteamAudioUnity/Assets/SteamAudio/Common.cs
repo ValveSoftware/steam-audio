@@ -271,9 +271,11 @@ namespace SteamAudio
         public int rays;
         public int secondaryRays;
         public int bounces;
+        public int threads;
         public float irDuration;
         public int ambisonicsOrder;
         public int maxConvolutionSources;
+        public int bakingBatchSize;
     }
 
     // Choose a compute device.

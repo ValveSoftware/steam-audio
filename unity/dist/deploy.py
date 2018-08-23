@@ -146,6 +146,36 @@ def deploy_embree():
                 embree_zip.write(file_name)
     os.chdir(deploy_directory)
 
+#
+# Package the Radeon Rays libraries for use in all Steam Audio binaries.
+#
+def deploy_radeonrays():
+    print "Deploying: Steam Audio Radeon Rays Support"
+
+    root_path = os.path.abspath(os.getcwd() + "/../..")
+
+    deploy_path = os.path.abspath(os.getcwd() + "/products")
+    deploy_path_radeonrays = deploy_path + "/steamaudio_radeonrays"
+
+    os.makedirs(deploy_path_radeonrays + "/bin/windows/x64")
+    os.makedirs(deploy_path_radeonrays + "/unity")
+
+    copy(root_path + "/core/lib/windows-x64/RadeonRays.dll", deploy_path_radeonrays + "/bin/windows/x64")
+    copy(root_path + "/core/lib/windows-x64/GPUUtilities.dll", deploy_path_radeonrays + "/bin/windows/x64")
+    copy(root_path + "/unity/bin/SteamAudio_RadeonRays.unitypackage", deploy_path_radeonrays + "/unity")
+
+    zip_output = os.path.abspath(os.path.join(deploy_path, "steamaudio_radeonrays.zip"))
+
+    deploy_directory = os.getcwd()
+    products_directory = deploy_directory + "/products"
+    os.chdir(products_directory)
+    with zipfile.ZipFile(zip_output, "w", zipfile.ZIP_DEFLATED) as radeonrays_zip:
+        for directory, subdirectories, files in os.walk("steamaudio_radeonrays"):
+            for file in files:
+                file_name = os.path.join(directory, file)
+                print "Adding " + file_name + "..."
+                radeonrays_zip.write(file_name)
+    os.chdir(deploy_directory)
 
 #
 # Main deployment routine: deploys all products.
@@ -164,6 +194,7 @@ def deploy(configuration):
         deploy_integration_unity(configuration)
         deploy_tan()
         deploy_embree()
+        deploy_radeonrays()
     except Exception as e:
         print "Exception encountered during deployment."
         print e

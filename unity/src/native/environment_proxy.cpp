@@ -26,6 +26,10 @@ EnvironmentProxy::EnvironmentProxy(const IPLSimulationSettings& simulationSettin
 
 EnvironmentProxy::~EnvironmentProxy()
 {
+    if (mEnvironmentalRendererFuture.valid()) {
+        mEnvironmentalRendererFuture.get();
+    }
+
     if (mEnvironmentCopy)
         gApi.iplDestroyEnvironment(&mEnvironmentCopy);
 
@@ -40,7 +44,7 @@ IPLSimulationSettings EnvironmentProxy::simulationSettings() const
 
 IPLhandle EnvironmentProxy::environment() const
 {
-    if (mEnvironmentalRenderer)
+    if (mEnvironmentalRenderer && !mEnvironmentCopy)
         mEnvironmentCopy = gApi.iplGetEnvironmentForRenderer(mEnvironmentalRenderer);
 
     return (mEnvironmentCopy) ? mEnvironmentCopy : mEnvironment;

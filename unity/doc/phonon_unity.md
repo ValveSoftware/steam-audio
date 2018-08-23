@@ -1,6 +1,6 @@
-% Steam Audio Unity Plugin 2.0-beta.14
+% Steam Audio Unity Plugin 2.0-beta.15
 
-# Steam Audio Unity Plugin <small><small>2.0-beta.14</small></small>
+# Steam Audio Unity Plugin <small><small>2.0-beta.15</small></small>
 
 Copyright 2017 Valve Corporation. All rights reserved. Subject to the following license: 
 [https://valvesoftware.github.io/steam-audio/license.html](https://valvesoftware.github.io/steam-audio/license.html)
@@ -495,6 +495,14 @@ options cannot be changed in Play mode or programmatically.
 - **Realtime Bounces**. Number of times the rays are allowed to bounce off of solid objects in real-time. Increasing 
   this improves the quality of the simulation, at the cost of performance.
 
+- **Realtime Bounces**. Number of times the rays are allowed to bounce off of solid objects in real-time. Increasing 
+  this improves the quality of the simulation, at the cost of performance.
+
+- **Realtime CPU Cores (%)**. Percentage of CPU cores to use on an end user's machine for performing real-time computation 
+  of environmental effects. The percentage can also be interpreted as the number of threads to create as a percentage 
+  of the total logical cores available on the machine of an end user. Increasing realtime CPU usage leads to faster 
+  update of the simulation and lower latency.
+
 - **Bake Rays**. This is the number of primary and reflection rays to trace from the listener position for baked 
   computation of environmental effects. Increasing this improves the quality of the simulation while increasing the 
   overall time to bake environmental effects.
@@ -504,6 +512,11 @@ options cannot be changed in Play mode or programmatically.
 
 - **Bake Bounces**. Number of times the rays are allowed to bounce off of solid objects during baking. Increasing this 
   improves the quality of the simulation while increasing the overall time to bake environmental effects.
+
+- **Baking CPU Cores (%)**. Percentage of CPU cores to use on a developer's machine for baking environmental effects during
+  the design phase. The percentage can also be interpreted as the number of threads to create as a percentage of the total 
+  logical cores available on the machine of a developer. Increasing baking CPU usage leads to lower bake times and faster
+  turnaround.
 
 ### Reverb
 Steam Audio also lets you apply listener-centric reverb to audio flowing through any Mixer Group in Unity. This helps
@@ -793,6 +806,42 @@ Next, for each Unity scene in which you want to enable Embree, follow these step
 4.  In the Steam Audio Custom Settings component, set **Ray Tracer Option** to **Embree**.
 
 ![Enabling Embree via Steam Audio Custom Settings.](media/embree-enabled.png)
+
+#### AMD Radeon Rays
+Steam Audio provides optional support for AMD Radeon Rays, which uses GPU-optimized ray tracing for accelerating
+real-time simulation and baking. Radeon Rays support in Steam Audio requires a supported AMD GPU or other OpenCL 1.2+
+device.
+
+> **NOTE** <br/>
+  Radeon Rays support is only available on Windows (64-bit).
+
+##### Enabling Radeon Rays
+Before enabling Radeon Rays, you must download the Steam Audio Radeon Rays support package for Unity
+(`SteamAudio_RadeonRays.unitypackage`). Then:
+
+1.  From the Unity menu, choose **Assets** > **Import Package** > **Custom Package**.
+2.  Navigate to the directory where you downloaded the Steam Audio Radeon Rays support package. Within this folder, 
+    navigate to the `bin/unity/` subdirectory.
+3.  Double-click the `SteamAudio_RadeonRays.unitypackage` file.
+4.  In the Import dialog box that appears, make sure everything is selected, and click the **Import** button.
+
+Next, for each Unity scene in which you want to enable Radeon Rays, follow these steps:
+
+1.  In the Hierarchy tab, click the **Steam Audio Manager Settings** object.
+2.  In the Inspector tab, click **Add Component**.
+3.  In the Add Component menu, select **Steam Audio** > **Steam Audio Custom Settings**.
+4.  In the Steam Audio Custom Settings component, set **Ray Tracer Option** to **Radeon Rays**.
+
+![Enabling Radeon Rays via Steam Audio Custom Settings.](media/radeonrays-enabled.png)
+
+##### Radeon Rays Settings
+When Radeon Rays is enabled in the Steam Audio Custom Settings component, you can configure the following settings,
+which allow you to control how the GPU used for baking:
+
+- **Baking Batch Size**. This is the number of probes that are simultaneously baked on the GPU. Increasing this number
+  results in better utilization of available GPU compute resources, at the cost of increased GPU memory consumption.
+  If this number is set too high, you may encounter errors when baking; if this happens, reduce the Baking Batch Size 
+  value until baking succeeds.
 
 #### Per Frame Query Optimization
 Steam Audio searches the Unity scene graph for an Audio Listener and a Steam Audio Listener every frame. This requires 

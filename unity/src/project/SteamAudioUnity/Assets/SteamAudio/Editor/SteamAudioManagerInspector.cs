@@ -97,6 +97,17 @@ namespace SteamAudio
                 }
             }
 
+            // Display information message about CPU usage.
+            int realTimeThreads = (int)Mathf.Max(1, (steamAudioManager.simulationValue.RealtimeThreadsPercentage * SystemInfo.processorCount) / 100.0f);
+            int bakingThreads = (int)Mathf.Max(1, (steamAudioManager.simulationValue.BakeThreadsPercentage * SystemInfo.processorCount) / 100.0f);
+            string realTimeString = (realTimeThreads == 1) ? "1 of " + SystemInfo.processorCount + " logical processor" : 
+                                                            realTimeThreads + " of " + SystemInfo.processorCount + " logical processors";
+            string bakingString = (bakingThreads == 1) ? "1 of " + SystemInfo.processorCount + " logical processor" :
+                                                            bakingThreads + " of " + SystemInfo.processorCount + " logical processors";
+            EditorGUILayout.HelpBox("On this machine setting realtime CPU cores to " + steamAudioManager.simulationValue.RealtimeThreadsPercentage + 
+                "% will use " + realTimeString + " and setting baking CPU cores to " + steamAudioManager.simulationValue.BakeThreadsPercentage +
+                "% will use " + bakingString + ". The number of logical processors used on an end user's machine might be different.", MessageType.Info);
+
             // Fold Out for Advanced Settings
             EditorGUILayout.Space();
             EditorGUILayout.LabelField("Advanced Options", EditorStyles.boldLabel);

@@ -32,6 +32,7 @@ namespace SteamAudio
 
         void OnApplicationQuit()
         {
+            PhononUnityNative.iplUnityResetAudioEngine();
             PhononCore.iplCleanup();
         }
 

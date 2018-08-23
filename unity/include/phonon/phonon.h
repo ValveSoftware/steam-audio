@@ -270,21 +270,18 @@ extern "C" {
      *  implementation.
      */
     typedef enum {
-        IPL_SCENETYPE_PHONON,   /**< Phonon's built-in ray tracer. This is a highly optimized, but single-threaded
-                                     CPU implementation. */
-        IPL_SCENETYPE_EMBREE,   /**< The Intel Embree ray tracer. This is a multi-core CPU implementation, so is
-                                     likely to be faster than the Phonon ray tracer. However, since it uses all
-                                     available CPU cores, it may end up starving the audio processing thread
-                                     when used for real-time simulation. This is a good choice for reducing
-                                     bake times. */
-        IPL_SCENETYPE_FIRERAYS, /**< The AMD Radeon Rays ray tracer. This is an OpenCL implementation, and can
-                                     use either the CPU or the GPU. If using the GPU, it is likely to be
-                                     significantly faster than the Phonon ray tracer. However, on heavy
-                                     real-time simulation workloads, it may impact the application's frame rate. */
-        IPL_SCENETYPE_CUSTOM    /**< Allows you to specify callbacks to your own ray tracer. Useful if your
-                                     application already uses a high-performance ray tracer. This option uses
-                                     the least amount of memory at run-time, since it does not have to build
-                                     any ray tracing data structures of its own. */
+        IPL_SCENETYPE_PHONON,     /**< Phonon's built-in ray tracer which supports multi-threading. */
+        IPL_SCENETYPE_EMBREE,     /**< The Intel Embree ray tracer. This is a highly-optimized multi-threaded CPU 
+                                       implementation, and is likely to be faster than the Phonon ray tracer. However,
+                                       Embree support requires a 64-bit CPU, and is not available on Android. */
+        IPL_SCENETYPE_RADEONRAYS, /**< The AMD Radeon Rays ray tracer. This is an OpenCL implementation, and can
+                                       use either the CPU or the GPU. If using the GPU, it is likely to be
+                                       significantly faster than the Phonon ray tracer. However, on heavy
+                                       real-time simulation workloads, it may impact the application's frame rate. */
+        IPL_SCENETYPE_CUSTOM      /**< Allows you to specify callbacks to your own ray tracer. Useful if your
+                                       application already uses a high-performance ray tracer. This option uses
+                                       the least amount of memory at run-time, since it does not have to build
+                                       any ray tracing data structures of its own. */
     } IPLSceneType;
 
     /** The type of simulation to perform. All sound sources must use the same type of simulation; it is not
@@ -321,6 +318,9 @@ extern "C" {
                                                          model reverberant spaces, at the cost of increased CPU usage.
                                                          Any positive integer may be specified, but typical values are
                                                          in the range of 1 to 32. */
+        IPLint32            numThreads;             /**< The number of threads to create for the simulation. The performance
+                                                         improves linearly with the number of threads upto the number of 
+                                                         physical cores available on the CPU. */
         IPLfloat32          irDuration;             /**< The time delay between a sound being emitted and the last
                                                          audible reflection. Echoes and reverberation longer than this
                                                          amount will not be modeled by the simulation. Any positive
@@ -339,6 +339,12 @@ extern "C" {
                                                          this number allows more sound sources to be rendered with
                                                          sound propagation effects, but at the cost of increased
                                                          memory consumption. */
+        IPLint32            bakingBatchSize;        /**< The number of probes that should be baked simultaneously.
+                                                         Only used if \c sceneType is set to 
+                                                         \c IPL_SCENETYPE_RADEONRAYS, ignored otherwise. Set this to
+                                                         1 unless you are creating a Scene for the purposes of
+                                                         baking indirect sound using \c iplBakeReverb,
+                                                         \c iplBakePropagation, or \c iplBakeStaticListener. */
     } IPLSimulationSettings;
 
     /** \} */
@@ -406,7 +412,7 @@ extern "C" {
                                                 <b>Used only for direct sound occlusion calculations</b>.*/
     } IPLMaterial;
 
-    /** A callback that is called to update the application on the progress of the iplLoadFinalizedScene function. You 
+    /** A callback that is called to update the application on the progress of the iplLoadScene function. You 
      *  can use this to provide the user with visual feedback, like a progress bar.
      *
      *  \param  progress    Fraction of the loading process that has been completed, between 0.0 and 1.0.
@@ -614,14 +620,14 @@ extern "C" {
      *                              no data is returned; this is useful when finding out the size of the data stored
      *                              in the Scene object.
      */
-    IPLAPI IPLint32 iplSaveFinalizedScene(IPLhandle scene, IPLbyte* data);
+    IPLAPI IPLint32 iplSaveScene(IPLhandle scene, IPLbyte* data);
 
     /** Creates a Scene object based on data stored in a byte array.
      *
      *  \param  context             The Context object used by the game engine.
      *  \param  simulationSettings  The settings to use for the simulation. This must exactly match the settings
      *                              that were used to create the original Scene object that was passed to
-     *                              \c ::iplSaveFinalizedScene, except for the \c sceneType and \c simulationType
+     *                              \c ::iplSaveScene, except for the \c sceneType and \c simulationType
      *                              data members. This allows you to use the same file to create a Scene object
      *                              that uses any ray tracer you prefer.
      *  \param  data                Byte array containing the serialized representation of the Scene object. Must
@@ -635,7 +641,7 @@ extern "C" {
      *
      *  \return Status code indicating whether or not the operation succeeded.
      */
-    IPLAPI IPLerror iplLoadFinalizedScene(IPLhandle context, IPLSimulationSettings simulationSettings,
+    IPLAPI IPLerror iplLoadScene(IPLhandle context, IPLSimulationSettings simulationSettings,
         IPLbyte* data, IPLint32 size, IPLhandle computeDevice, IPLLoadSceneProgressCallback progressCallback, IPLhandle* scene);
 
     /** Saves a Scene object to an OBJ file. An OBJ file is a widely-supported 3D model file format, that can be
@@ -646,7 +652,7 @@ extern "C" {
      *  \param  scene               Handle to the Scene object.
      *  \param  fileBaseName        Absolute or relative path to the OBJ file to generate.
      */
-    IPLAPI IPLvoid iplDumpSceneToObjFile(IPLhandle scene, IPLstring fileBaseName);
+    IPLAPI IPLvoid iplSaveSceneAsObj(IPLhandle scene, IPLstring fileBaseName);
 
     /** \} */
 
@@ -674,7 +680,7 @@ extern "C" {
      *  \param  computeDevice       Handle to a Compute Device object. Only required if using Radeon Rays for
      *                              ray tracing, or if using TrueAudio Next for convolution, may be \c NULL otherwise.
      *  \param  simulationSettings  The settings to use for simulation. This must be the same settings passed to
-     *                              \c ::iplCreateScene or \c ::iplLoadFinalizedScene, whichever was used to create
+     *                              \c ::iplCreateScene or \c ::iplLoadScene, whichever was used to create
      *                              the Scene object passed in the \c scene parameter to this function.
      *  \param  scene               The Scene object. May be \c NULL, in which case only direct sound will be 
      *                              simulated, without occlusion or any other indirect sound propagation.
@@ -1533,22 +1539,6 @@ extern "C" {
 
     /** \} */
 
-    IPLAPI IPLerror iplCreateSimulationData(IPLSimulationSettings simulationSettings,
-        IPLRenderingSettings renderingSettings, IPLhandle* simulationData);
-
-    IPLAPI IPLvoid iplDestroySimulationData(IPLhandle* simulationData);
-
-    IPLAPI IPLint32 iplGetNumIrSamples(IPLhandle simulationData);
-
-    IPLAPI IPLint32 iplGetNumIrChannels(IPLhandle simulationData);
-
-    IPLAPI IPLvoid iplGenerateSimulationData(IPLhandle simulationData, IPLhandle environment,
-        IPLVector3 listenerPosition, IPLVector3 listenerAhead, IPLVector3 listenerUp, IPLVector3* sources);
-
-    IPLAPI IPLvoid iplGetSimulationResult(IPLhandle simulationData, IPLint32 sourceIndex, IPLint32 channel,
-        IPLfloat32* buffer);
-
-
     /*****************************************************************************************************************/
     /* Direct Sound                                                                                                  */
     /*****************************************************************************************************************/
@@ -1568,8 +1558,7 @@ extern "C" {
                                              listener to the source is occluded by any scene geometry. If so, the
                                              sound will be considered to be completely occluded. The Environment
                                              object created by the game engine must have a valid Scene object for
-                                             this to work. **Not supported if using Radeon Rays as your ray
-                                             tracer.** */
+                                             this to work. */
         IPL_DIRECTOCCLUSION_VOLUMETRIC  /**< Performs a slightly more complicated occlusion test: the source is
                                              treated as a sphere, and rays are traced from the listener to various
                                              points in the interior of the sphere. The proportion of rays that are
@@ -2131,7 +2120,8 @@ extern "C" {
 
     /** Bakes reverb at all probes in a Probe Box. Phonon defines reverb as the indirect sound received at a probe
      *  when a source is placed at the probe's location. This is a time-consuming operation, and should typically be
-     *  called from the game engine's editor.
+     *  called from the game engine's editor. The \c numThreads set on the \c IPLSimulationSettings structure passed 
+     *  when calling \c ::iplCreateEnvironment to create the Environment object are used for multi-threaded baking.
      *
      *  \param  environment         Handle to an Environment object.
      *  \param  probeBox            Handle to the Probe Box containing the probes for which to bake reverb.
@@ -2145,7 +2135,8 @@ extern "C" {
     /** Bakes propagation effects from a specified source to all probes in a Probe Box. Sources are defined in terms
      *  of a position and a sphere of influence; all probes in the Probe Box that lie within the sphere of influence
      *  are processed by this function. This is a time-consuming operation, and should typically be called from the
-     *  game engine's editor.
+     *  game engine's editor. The \c numThreads set on the \c IPLSimulationSettings structure passed when calling 
+     *  \c ::iplCreateEnvironment to create the Environment object are used for multi-threaded baking.
      *
      *  \param  environment         Handle to an Environment object.
      *  \param  probeBox            Handle to the Probe Box containing the probes for which to bake reverb.
@@ -2162,7 +2153,9 @@ extern "C" {
 
     /** Bakes propagation effects from all probes in a Probe Box to a specified listener. Listeners are defined
      *  solely by their position; their orientation may freely change at run-time. This is a time-consuming
-     *  operation, and should typically be called from the game engine's editor.
+     *  operation, and should typically be called from the game engine's editor. The \c numThreads set on the 
+     *  \c IPLSimulationSettings structure passed when calling \c ::iplCreateEnvironment to create the Environment 
+     *  object are used for multi-threaded baking.
      *
      *  \param  environment         Handle to an Environment object.
      *  \param  probeBox            Handle to the Probe Box containing the probes for which to bake reverb.
@@ -2202,7 +2195,6 @@ extern "C" {
     IPLAPI IPLint32 iplGetBakedDataSizeByIdentifier(IPLhandle probeBox, IPLBakedDataIdentifier identifier);
 
     /** \} */
-
 
 #ifdef __cplusplus
 }

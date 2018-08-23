@@ -75,6 +75,12 @@ namespace SteamAudio
             "Assets/Plugins/libtbbmalloc.dylib"
         };
 
+        static string[] RadeonRaysPlugins =
+        {
+            "Assets/Plugins/x86_64/RadeonRays.dll",
+            "Assets/Plugins/x86_64/GPUUtilities.dll"
+        };
+
         static string FMODStudioAudioEngineSuffix = "_FMODStudio";
 
         public static string[] FilteredAssets(string directory, string[] excludeSuffixes, string includeOnlySuffix)
@@ -175,6 +181,14 @@ namespace SteamAudio
             var assets = BuildAssetList(assetGroups);
 
             AssetDatabase.ExportPackage(assets, "SteamAudio_Embree.unitypackage", ExportPackageOptions.Recurse);
+        }
+
+        public static void BuildSteamAudioRadeonRays()
+        {
+            var assetGroups = new string[][] { RadeonRaysPlugins };
+            var assets = BuildAssetList(assetGroups);
+
+            AssetDatabase.ExportPackage(assets, "SteamAudio_RadeonRays.unitypackage", ExportPackageOptions.Recurse);
         }
     }
 

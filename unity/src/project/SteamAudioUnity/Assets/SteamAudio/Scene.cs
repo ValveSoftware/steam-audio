@@ -84,14 +84,14 @@ namespace SteamAudio
 
             if (exportOBJ)
             {
-                PhononCore.iplDumpSceneToObjFile(scene, Common.ConvertString(ObjFileName()));
+                PhononCore.iplSaveSceneAsObj(scene, Common.ConvertString(ObjFileName()));
                 Debug.Log("Scene dumped to " + ObjFileName() + ".");
             }
             else
             {
-                var dataSize = PhononCore.iplSaveFinalizedScene(scene, null);
+                var dataSize = PhononCore.iplSaveScene(scene, null);
                 var data = new byte[dataSize];
-                PhononCore.iplSaveFinalizedScene(scene, data);
+                PhononCore.iplSaveScene(scene, data);
 
                 var fileName = SceneFileName();
                 File.WriteAllBytes(fileName, data);
@@ -112,7 +112,7 @@ namespace SteamAudio
 
             byte[] data = File.ReadAllBytes(fileName);
 
-            var error = PhononCore.iplLoadFinalizedScene(globalContext, simulationSettings, data, data.Length,
+            var error = PhononCore.iplLoadScene(globalContext, simulationSettings, data, data.Length,
                 computeDevice.GetDevice(), null, ref scene);
 
             return error;

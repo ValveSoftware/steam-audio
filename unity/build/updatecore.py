@@ -11,6 +11,8 @@ def copy(source, destination):
 	source = "../../" + source
 	destination = "../../" + destination
 	if os.path.isdir(source):
+		if os.path.exists(destination):
+			shutil.rmtree(destination)
 		shutil.copytree(source, destination)
 	else:
 		shutil.copy(source, destination)

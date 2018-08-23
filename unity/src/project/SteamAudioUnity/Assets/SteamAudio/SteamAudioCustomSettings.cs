@@ -45,5 +45,34 @@ namespace SteamAudio
 
         [Range(1, 128)]
         public int MaxSources = 32;
+
+        [Space]
+        [Header("Radeon Rays Settings")]
+
+        [Range(1, 8)]
+        public int BakingBatchSize = 4;
+
+        public SceneType RayTracerType() {
+#if ((UNITY_EDITOR && UNITY_EDITOR_64) || (UNITY_STANDALONE && UNITY_64))
+            if (rayTracerOption == SceneType.Embree) {
+                return rayTracerOption;
+            }
+#endif
+#if ((UNITY_EDITOR_WIN && UNITY_EDITOR_64) || (UNITY_STANDALONE_WIN && UNITY_64))
+            if (rayTracerOption == SceneType.RadeonRays) {
+                return rayTracerOption;
+            }
+#endif
+            return SceneType.Phonon;
+        }
+
+        public ConvolutionOption ConvolutionType() {
+#if ((UNITY_EDITOR_WIN && UNITY_EDITOR_64) || (UNITY_STANDALONE_WIN && UNITY_64))
+            if (convolutionOption == ConvolutionOption.TrueAudioNext) {
+                return convolutionOption;
+            }
+#endif
+            return ConvolutionOption.Phonon;
+        }
     }
 }

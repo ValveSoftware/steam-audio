@@ -16,7 +16,6 @@ namespace SteamAudio
         public override void Destroy()
         {
             PhononUnityNative.iplUnityResetEnvironment();
-            PhononUnityNative.iplUnityResetAudioEngine();
         }
 
         public override void UpdateListener(Vector3 position, Vector3 ahead, Vector3 up)

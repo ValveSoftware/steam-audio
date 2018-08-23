@@ -102,6 +102,14 @@ public:
         mInputFormat = inputFormat;
         mOutputFormat = outputFormat;
 
+        // If the environment has recently been reset, release all everything that relates
+        // to the environmental renderer.
+        if (EnvironmentProxy::hasEnvironmentReset())
+        {
+            terminate();
+            EnvironmentProxy::acknowledgeEnvironmentReset();
+        }
+
         // Make sure the audio engine global state has been initialized.
         if (!mAudioEngineSettings)
         {
@@ -127,22 +135,6 @@ public:
         mBinauralRenderer = mAudioEngineSettings->binauralRenderer();
         if (!mBinauralRenderer)
             return false;
-
-        // If the environment has recently been reset, release all everything that relates
-        // to the environmental renderer.
-        if (EnvironmentProxy::hasEnvironmentReset())
-        {
-            gApi.iplDestroyAmbisonicsBinauralEffect(&mAmbisonicsBinauralEffect);
-            gApi.iplDestroyAmbisonicsPanningEffect(&mAmbisonicsPanningEffect);
-
-            mIndirectSpatializedOutputBufferData.clear();
-            mIndirectEffectOutputBufferChannels.clear();
-            mIndirectEffectOutputBufferData.clear();
-
-            mEnvironmentalRenderer = nullptr;
-
-            EnvironmentProxy::acknowledgeEnvironmentReset();
-        }
 
         // Check to see if an environmental renderer has just been created.
         if (!mEnvironmentalRenderer)
@@ -232,7 +224,7 @@ public:
     /** Applies the Mixer Return effect to audio flowing through a Mixer Group.
      */
     void process(float* inBuffer, float* outBuffer, unsigned int numSamples, int inChannels, int outChannels,
-        int samplingRate, int frameSize, unsigned int flags)
+        int samplingRate, int frameSize, unsigned int flags, UnityAudioSpatializerData* spatializerData)
     {
         // Assume that the number of input and output channels are the same.
         assert(inChannels == outChannels);
@@ -275,10 +267,29 @@ public:
             return;
         }
 
+        IPLVector3 listenerPosition, listenerUp, listenerAhead;
+        if (spatializerData)
+        {
+            auto L = spatializerData->listenermatrix;
+
+            auto Lx = -(L[0] * L[12] + L[1] * L[13] + L[2] * L[14]);
+            auto Ly = -(L[4] * L[12] + L[5] * L[13] + L[6] * L[14]);
+            auto Lz = -(L[8] * L[12] + L[9] * L[13] + L[10] * L[14]);
+
+            listenerPosition = convertVector(Lx, Ly, Lz);
+            listenerUp = convertVector(L[1], L[5], L[9]);
+            listenerAhead = convertVector(L[2], L[6], L[10]);
+        }
+        else
+        {
+            listenerPosition = mEnvironmentalRenderer->listenerPosition();
+            listenerUp = mEnvironmentalRenderer->listenerUp();
+            listenerAhead = mEnvironmentalRenderer->listenerAhead();
+        }
+
         // Retrieve an Ambisonics buffer containing mixed indirect audio.
         gApi.iplGetMixedEnvironmentalAudio(mEnvironmentalRenderer->environmentalRenderer(),
-            mEnvironmentalRenderer->listenerPosition(), mEnvironmentalRenderer->listenerAhead(), 
-            mEnvironmentalRenderer->listenerUp(), mIndirectEffectOutputBuffer);
+            listenerPosition, listenerAhead, listenerUp, mIndirectEffectOutputBuffer);
 
         // Spatialize the mixed indirect audio.
         if (binaural)
@@ -402,7 +413,7 @@ UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK processMixEffect(UnityAudioEffectS
 {
     auto params = state->GetEffectData<MixEffectState>();
     params->process(inBuffer, outBuffer, numSamples, inChannels, outChannels, state->samplerate, state->dspbuffersize,
-        state->flags);
+        state->flags, state->spatializerdata);
     return UNITY_AUDIODSP_OK;
 }
 
@@ -443,7 +454,7 @@ UnityAudioEffectDefinition gMixEffect
     STEAM_AUDIO_PLUGIN_VERSION,
     0, 
     SA_MIX_NUM_PARAMS, 
-    0,
+    UnityAudioEffectDefinitionFlags_NeedsSpatializerData,
     "Steam Audio Mixer Return",
     createMixEffect, 
     releaseMixEffect, 

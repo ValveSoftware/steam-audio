@@ -4,6 +4,7 @@
 //
 
 using System;
+using System.IO;
 using UnityEngine;
 
 namespace SteamAudio
@@ -36,10 +37,9 @@ namespace SteamAudio
 
                 if (customSettings)
                 {
-#if ((UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN) && UNITY_64)
-                    convolutionType = customSettings.convolutionOption;
+                    convolutionType = customSettings.ConvolutionType();
 
-                    if (customSettings.convolutionOption == ConvolutionOption.TrueAudioNext)
+                    if (convolutionType == ConvolutionOption.TrueAudioNext)
                     {
                         useOpenCL = true;
                         requiresTan = true;
@@ -47,14 +47,10 @@ namespace SteamAudio
                         minReservableCUs = customSettings.minComputeUnitsToReserve;
                         maxCUsToReserve = customSettings.maxComputeUnitsToReserve;
                     }
-                    else if (customSettings.rayTracerOption == SceneType.RadeonRays)
+                    else if (customSettings.RayTracerType() == SceneType.RadeonRays)
                     {
                         useOpenCL = true;
                     }
-#else
-                    convolutionType = ConvolutionOption.Phonon;
-                    customSettings.convolutionOption = ConvolutionOption.Phonon;
-#endif
                 }
 
                 try
@@ -75,21 +71,67 @@ namespace SteamAudio
                         e.Message));
 
                     convolutionType = ConvolutionOption.Phonon;
-                    customSettings.convolutionOption = ConvolutionOption.Phonon;
                 }
 
                 var inEditor = !SteamAudioManager.IsAudioEngineInitializing();
 
+                var maxSources = settings.MaxSources;
+                if (customSettings && convolutionType == ConvolutionOption.TrueAudioNext) {
+                    maxSources = customSettings.MaxSources;
+                }
+                if (customSettings && customSettings.RayTracerType() == SceneType.RadeonRays && reason == GameEngineStateInitReason.Baking) {
+                    maxSources = customSettings.BakingBatchSize;
+                }
+
+                var rayTracer = SceneType.Phonon;
+                if (customSettings) {
+                    if (customSettings.RayTracerType() != SceneType.RadeonRays || 
+                        reason != GameEngineStateInitReason.Playing) {
+                        rayTracer = customSettings.RayTracerType();
+                    }
+                }
+
                 simulationSettings = new SimulationSettings
                 {
-                    sceneType               = (customSettings) ? customSettings.rayTracerOption : SceneType.Phonon,
+                    sceneType               = rayTracer,
                     rays                    = (inEditor) ? settings.BakeRays : settings.RealtimeRays,
                     secondaryRays           = (inEditor) ? settings.BakeSecondaryRays : settings.RealtimeSecondaryRays,
                     bounces                 = (inEditor) ? settings.BakeBounces : settings.RealtimeBounces,
-                    irDuration              = (customSettings && customSettings.convolutionOption == ConvolutionOption.TrueAudioNext) ? customSettings.Duration : settings.Duration,
-                    ambisonicsOrder         = (customSettings && customSettings.convolutionOption == ConvolutionOption.TrueAudioNext) ? customSettings.AmbisonicsOrder : settings.AmbisonicsOrder,
-                    maxConvolutionSources   = (customSettings && customSettings.convolutionOption == ConvolutionOption.TrueAudioNext) ? customSettings.MaxSources : settings.MaxSources
+                    threads                 = (inEditor) ? (int) Mathf.Max(1, (settings.BakeThreadsPercentage * SystemInfo.processorCount) / 100.0f) : (int) Mathf.Max(1, (settings.RealtimeThreadsPercentage * SystemInfo.processorCount) / 100.0f),
+                    irDuration              = (customSettings && convolutionType == ConvolutionOption.TrueAudioNext) ? customSettings.Duration : settings.Duration,
+                    ambisonicsOrder         = (customSettings && convolutionType == ConvolutionOption.TrueAudioNext) ? customSettings.AmbisonicsOrder : settings.AmbisonicsOrder,
+                    maxConvolutionSources   = maxSources,
+                    bakingBatchSize         = (customSettings && customSettings.RayTracerType() == SceneType.RadeonRays) ? customSettings.BakingBatchSize : 1
                 };
+
+#if UNITY_EDITOR
+                if (customSettings) {
+                    if (customSettings.RayTracerType() == SceneType.Embree) {
+                        if (!File.Exists(Directory.GetCurrentDirectory() + "/Assets/Plugins/x86_64/embree.dll")) {
+                            throw new Exception(
+                                "Steam Audio configured to use Embree, but Embree support package not installed. " +
+                                "Please import SteamAudio_Embree.unitypackage in order to use Embree support for " +
+                                "Steam Audio.");
+                        }
+                    } else if (customSettings.RayTracerType() == SceneType.RadeonRays) {
+                        if (!File.Exists(Directory.GetCurrentDirectory() + "/Assets/Plugins/x86_64/RadeonRays.dll")) {
+                            throw new Exception(
+                                "Steam Audio configured to use Radeon Rays, but Radeon Rays support package not " +
+                                "installed. Please import SteamAudio_RadeonRays.unitypackage in order to use Radeon " +
+                                "Rays support for Steam Audio.");
+                        }
+                    }
+
+                    if (customSettings.ConvolutionType() == ConvolutionOption.TrueAudioNext) {
+                        if (!File.Exists(Directory.GetCurrentDirectory() + "/Assets/Plugins/x86_64/tanrt64.dll")) {
+                            throw new Exception(
+                                "Steam Audio configured to use TrueAudio Next, but TrueAudio Next support package " +
+                                "not installed. Please import SteamAudio_TrueAudioNext.unitypackage in order to use " +
+                                "TrueAudio Next support for Steam Audio.");
+                        }
+                    }
+                }
+#endif
 
                 if (reason != GameEngineStateInitReason.ExportingScene)
                     scene.Create(computeDevice, simulationSettings, context);

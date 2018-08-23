@@ -29,9 +29,9 @@ namespace SteamAudio
             int numPresets = 4;
             values = new SimulationSettingsValue[numPresets];
 
-            values[0] = new SimulationSettingsValue(4096, 1024, 2, 16384, 4096, 32, 1.0f, 1, 32);
-            values[1] = new SimulationSettingsValue(8192, 1024, 4, 32768, 4096, 64, 1.0f, 1, 32);
-            values[2] = new SimulationSettingsValue(16384, 1024, 8, 65536, 4096, 128, 1.0f, 1, 32);
+            values[0] = new SimulationSettingsValue(4096, 1024, 2, 5, 16384, 4096, 32, 5, 1.0f, 1, 32);
+            values[1] = new SimulationSettingsValue(8192, 1024, 4, 5, 32768, 4096, 64, 5, 1.0f, 1, 32);
+            values[2] = new SimulationSettingsValue(16384, 1024, 8, 5, 65536, 4096, 128, 5, 1.0f, 1, 32);
             values[3] = new SimulationSettingsValue();
         }
 

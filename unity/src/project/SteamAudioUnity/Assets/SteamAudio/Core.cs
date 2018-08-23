@@ -83,13 +83,13 @@ namespace SteamAudio
         public static extern void iplDestroyStaticMesh([In, Out] ref IntPtr staticMesh);
 
         [DllImport("phonon")]
-        public static extern int iplSaveFinalizedScene(IntPtr scene, [In, Out] byte[] data);
+        public static extern int iplSaveScene(IntPtr scene, [In, Out] byte[] data);
 
         [DllImport("phonon", CallingConvention = CallingConvention.Cdecl)]
-        public static extern Error iplLoadFinalizedScene(IntPtr globalContext, SimulationSettings simulationSettings, byte[] data, int size, IntPtr computeDevice, LoadSceneProgressCallback progressCallback, [In, Out] ref IntPtr scene);
+        public static extern Error iplLoadScene(IntPtr globalContext, SimulationSettings simulationSettings, byte[] data, int size, IntPtr computeDevice, LoadSceneProgressCallback progressCallback, [In, Out] ref IntPtr scene);
 
         [DllImport("phonon")]
-        public static extern void iplDumpSceneToObjFile(IntPtr scene, byte[] fileName);
+        public static extern void iplSaveSceneAsObj(IntPtr scene, byte[] fileName);
 
         //
         // Functions to setup Environment.
@@ -349,26 +349,5 @@ namespace SteamAudio
 
         [DllImport("phonon")]
         public static extern int iplGetBakedDataSizeByIdentifier(IntPtr probeBox, BakedDataIdentifier identifier);
-
-        //
-        // Functions for generating IRs for analysis and visualization.
-
-        [DllImport("phonon")]
-        public static extern Error iplCreateSimulationData(SimulationSettings simulationSettings, RenderingSettings renderingSettings, [In, Out] ref IntPtr simulationData);
-
-        [DllImport("phonon")]
-        public static extern void iplDestroySimulationData([In, Out] ref IntPtr simulationData);
-
-        [DllImport("phonon")]
-        public static extern int iplGetNumIrSamples(IntPtr simulationData);
-
-        [DllImport("phonon")]
-        public static extern int iplGetNumIrChannels(IntPtr simulationData);
-
-        [DllImport("phonon")]
-        public static extern void iplGenerateSimulationData(IntPtr simulationData, IntPtr environment, Vector3 listenerPosition, Vector3 listenerAhead, Vector3 listenerUp, Vector3[] sourcePositions);
-
-        [DllImport("phonon")]
-        public static extern void iplGetSimulationResult(IntPtr simulationData, int sourceIndex, int channel, float[] buffer);
     }
 }

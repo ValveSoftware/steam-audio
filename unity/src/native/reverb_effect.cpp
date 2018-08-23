@@ -114,6 +114,14 @@ public:
         mInputFormat = inputFormat;
         mOutputFormat = outputFormat;
 
+        // If the environment has recently been reset, release all everything that relates
+        // to the environmental renderer.
+        if (EnvironmentProxy::hasEnvironmentReset())
+        {
+            terminate();
+            EnvironmentProxy::acknowledgeEnvironmentReset();
+        }
+
         // Make sure the audio engine global state has been initialized.
         if (!mAudioEngineSettings)
         {
@@ -232,7 +240,7 @@ public:
     /** Applies the Reverb effect to audio flowing through a Mixer Group.
      */
     void process(float* inBuffer, float* outBuffer, unsigned int numSamples, int inChannels, int outChannels,
-        int samplingRate, int frameSize, unsigned int flags)
+        int samplingRate, int frameSize, unsigned int flags, UnityAudioSpatializerData* spatializerData)
     {
         // Assume that the number of input and output channels are the same.
         assert(inChannels == outChannels);
@@ -275,16 +283,35 @@ public:
             return;
         }
 
+        IPLVector3 listenerPosition, listenerUp, listenerAhead;
+        if (spatializerData)
+        {
+            auto L = spatializerData->listenermatrix;
+
+            auto Lx = -(L[0] * L[12] + L[1] * L[13] + L[2] * L[14]);
+            auto Ly = -(L[4] * L[12] + L[5] * L[13] + L[6] * L[14]);
+            auto Lz = -(L[8] * L[12] + L[9] * L[13] + L[10] * L[14]);
+
+            listenerPosition = convertVector(Lx, Ly, Lz);
+            listenerUp = convertVector(L[1], L[5], L[9]);
+            listenerAhead = convertVector(L[2], L[6], L[10]);
+        }
+        else
+        {
+            listenerPosition = mEnvironmentalRenderer->listenerPosition();
+            listenerUp = mEnvironmentalRenderer->listenerUp();
+            listenerAhead = mEnvironmentalRenderer->listenerAhead();
+        }
+
         // Apply reverb to the input audio, resulting in an Ambisonics buffer containing the unspatialized reverb.
         IPLSource reverbSource = {};
-        reverbSource.position = mEnvironmentalRenderer->listenerPosition();
-        reverbSource.ahead = mEnvironmentalRenderer->listenerAhead();
-        reverbSource.up = mEnvironmentalRenderer->listenerUp();
+        reverbSource.position = listenerPosition;
+        reverbSource.ahead = listenerAhead;
+        reverbSource.up = listenerAhead;
         reverbSource.directivity = IPLDirectivity{ 0.0f, 0.0f, nullptr, nullptr };
         gApi.iplSetDryAudioForConvolutionEffect(mConvolutionEffect, reverbSource, inputAudio);
-        gApi.iplGetWetAudioForConvolutionEffect(mConvolutionEffect, mEnvironmentalRenderer->listenerPosition(),
-            mEnvironmentalRenderer->listenerAhead(), mEnvironmentalRenderer->listenerUp(),
-            mIndirectEffectOutputBuffer);
+        gApi.iplGetWetAudioForConvolutionEffect(mConvolutionEffect, listenerPosition, listenerAhead,
+            listenerUp, mIndirectEffectOutputBuffer);
 
         // Spatialize the reverb.
         if (binaural)
@@ -411,7 +438,7 @@ UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK processReverbEffect(UnityAudioEffe
 {
     auto params = state->GetEffectData<ReverbEffectState>();
     params->process(inBuffer, outBuffer, numSamples, inChannels, outChannels, state->samplerate, state->dspbuffersize,
-        state->flags);
+        state->flags, state->spatializerdata);
     return UNITY_AUDIODSP_OK;
 }
 
@@ -454,7 +481,7 @@ UnityAudioEffectDefinition gReverbEffect
     STEAM_AUDIO_PLUGIN_VERSION,
     0, 
     SA_REVERB_NUM_PARAMS, 
-    0,
+    UnityAudioEffectDefinitionFlags_NeedsSpatializerData,
     "Steam Audio Reverb",
     createReverbEffect, 
     releaseReverbEffect, 
