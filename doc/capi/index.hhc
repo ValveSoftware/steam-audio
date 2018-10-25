@@ -101,6 +101,7 @@
     <LI><OBJECT type="text/sitemap"><param name="Name" value="IPLSimulationSettings"><param name="Local" value="struct_i_p_l_simulation_settings.html"><param name="ImageNumber" value="1"></OBJECT>
       <UL>
       <LI><OBJECT type="text/sitemap"><param name="Name" value="sceneType"><param name="Local" value="struct_i_p_l_simulation_settings.html#a10bbbea1cc2fffe16bedb0326862ccc9"><param name="ImageNumber" value="11"></OBJECT>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="numOcclusionSamples"><param name="Local" value="struct_i_p_l_simulation_settings.html#ada9c90682cce5eddc2ccb869bb2ea7c8"><param name="ImageNumber" value="11"></OBJECT>
       <LI><OBJECT type="text/sitemap"><param name="Name" value="numRays"><param name="Local" value="struct_i_p_l_simulation_settings.html#a4517d4473fd884f220a8cdaa06e779fb"><param name="ImageNumber" value="11"></OBJECT>
       <LI><OBJECT type="text/sitemap"><param name="Name" value="numDiffuseSamples"><param name="Local" value="struct_i_p_l_simulation_settings.html#a8730cf838ae0febc6de13e84150b3813"><param name="ImageNumber" value="11"></OBJECT>
       <LI><OBJECT type="text/sitemap"><param name="Name" value="numBounces"><param name="Local" value="struct_i_p_l_simulation_settings.html#ace83ed720bf5ceb91447ebe44519327d"><param name="ImageNumber" value="11"></OBJECT>
@@ -234,28 +235,16 @@
     </UL>
   <LI><OBJECT type="text/sitemap"><param name="Name" value="Binaural Renderer"><param name="Local" value="group__binauralrenderer.html"><param name="ImageNumber" value="1"></OBJECT>
     <UL>
-    <LI><OBJECT type="text/sitemap"><param name="Name" value="IPLComplex"><param name="Local" value="struct_i_p_l_complex.html"><param name="ImageNumber" value="1"></OBJECT>
-      <UL>
-      <LI><OBJECT type="text/sitemap"><param name="Name" value="real"><param name="Local" value="struct_i_p_l_complex.html#a6ae4c408317b98522f1b4db2e3d0ea23"><param name="ImageNumber" value="11"></OBJECT>
-      <LI><OBJECT type="text/sitemap"><param name="Name" value="imag"><param name="Local" value="struct_i_p_l_complex.html#a964261f25a2008dea529f8e605eaeb26"><param name="ImageNumber" value="11"></OBJECT>
-      </UL>
     <LI><OBJECT type="text/sitemap"><param name="Name" value="IPLHrtfParams"><param name="Local" value="struct_i_p_l_hrtf_params.html"><param name="ImageNumber" value="1"></OBJECT>
       <UL>
       <LI><OBJECT type="text/sitemap"><param name="Name" value="type"><param name="Local" value="struct_i_p_l_hrtf_params.html#a43fe58026a363899c7767350bab6380f"><param name="ImageNumber" value="11"></OBJECT>
       <LI><OBJECT type="text/sitemap"><param name="Name" value="hrtfData"><param name="Local" value="struct_i_p_l_hrtf_params.html#af2264ab6366b3482931684c93fec0b98"><param name="ImageNumber" value="11"></OBJECT>
-      <LI><OBJECT type="text/sitemap"><param name="Name" value="numHrirSamples"><param name="Local" value="struct_i_p_l_hrtf_params.html#a0fb98c7a1f3dc23c916dce46eff0ef97"><param name="ImageNumber" value="11"></OBJECT>
-      <LI><OBJECT type="text/sitemap"><param name="Name" value="loadCallback"><param name="Local" value="struct_i_p_l_hrtf_params.html#a3182288101464c6810210adb325db2b1"><param name="ImageNumber" value="11"></OBJECT>
-      <LI><OBJECT type="text/sitemap"><param name="Name" value="unloadCallback"><param name="Local" value="struct_i_p_l_hrtf_params.html#a0cb1d872b4e79c03af35481426a5086f"><param name="ImageNumber" value="11"></OBJECT>
-      <LI><OBJECT type="text/sitemap"><param name="Name" value="lookupCallback"><param name="Local" value="struct_i_p_l_hrtf_params.html#abca950c04a28f53211503293d5f9d918"><param name="ImageNumber" value="11"></OBJECT>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="sofaFileName"><param name="Local" value="struct_i_p_l_hrtf_params.html#ad4c8bbdf20db7f7ff1b9ded2780b5b3b"><param name="ImageNumber" value="11"></OBJECT>
       </UL>
-    <LI><OBJECT type="text/sitemap"><param name="Name" value="IPLFftHelper"><param name="Local" value="group__binauralrenderer.html#gafd25001944be9702f49c58d43f68a1d4"><param name="ImageNumber" value="11"></OBJECT>
-    <LI><OBJECT type="text/sitemap"><param name="Name" value="IPLHrtfLoadCallback"><param name="Local" value="group__binauralrenderer.html#ga56ca9f21dde68e143009c9cfbd3bb7b6"><param name="ImageNumber" value="11"></OBJECT>
-    <LI><OBJECT type="text/sitemap"><param name="Name" value="IPLHrtfUnloadCallback"><param name="Local" value="group__binauralrenderer.html#gab2c2c9f6e9f82a92cece59ba300e0e8d"><param name="ImageNumber" value="11"></OBJECT>
-    <LI><OBJECT type="text/sitemap"><param name="Name" value="IPLHrtfLookupCallback"><param name="Local" value="group__binauralrenderer.html#ga90651a9bf84e80cf5eb669cc9c024fdb"><param name="ImageNumber" value="11"></OBJECT>
     <LI><OBJECT type="text/sitemap"><param name="Name" value="IPLHrtfDatabaseType"><param name="Local" value="group__binauralrenderer.html#gac8a67c4db14832ec5fc923dc5cdc41c3"><param name="ImageNumber" value="1"></OBJECT>
       <UL>
       <LI><OBJECT type="text/sitemap"><param name="Name" value="IPL_HRTFDATABASETYPE_DEFAULT"><param name="Local" value="group__binauralrenderer.html#ggac8a67c4db14832ec5fc923dc5cdc41c3a5ecfd401d1000e3fdcf58e5f96d50827"><param name="ImageNumber" value="11"></OBJECT>
-      <LI><OBJECT type="text/sitemap"><param name="Name" value="IPL_HRTFDATABASETYPE_CUSTOM"><param name="Local" value="group__binauralrenderer.html#ggac8a67c4db14832ec5fc923dc5cdc41c3aead64e26ce93db2137ff24da2b4750f7"><param name="ImageNumber" value="11"></OBJECT>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="IPL_HRTFDATABASETYPE_SOFA"><param name="Local" value="group__binauralrenderer.html#ggac8a67c4db14832ec5fc923dc5cdc41c3aaf395ba2c00befd7388f85e7f8237778"><param name="ImageNumber" value="11"></OBJECT>
       </UL>
     <LI><OBJECT type="text/sitemap"><param name="Name" value="iplCreateBinauralRenderer"><param name="Local" value="group__binauralrenderer.html#ga214f23f4a3952891a0881279083a370a"><param name="ImageNumber" value="11"></OBJECT>
     <LI><OBJECT type="text/sitemap"><param name="Name" value="iplDestroyBinauralRenderer"><param name="Local" value="group__binauralrenderer.html#ga09c91f4334dd31236a54e352353d6c09"><param name="ImageNumber" value="11"></OBJECT>
@@ -264,7 +253,7 @@
     <UL>
     <LI><OBJECT type="text/sitemap"><param name="Name" value="iplCreatePanningEffect"><param name="Local" value="group__panningeffect.html#ga21b33b829f314342982ae0a28132595b"><param name="ImageNumber" value="11"></OBJECT>
     <LI><OBJECT type="text/sitemap"><param name="Name" value="iplDestroyPanningEffect"><param name="Local" value="group__panningeffect.html#ga6c5210a45cf253cb54923326284c8163"><param name="ImageNumber" value="11"></OBJECT>
-    <LI><OBJECT type="text/sitemap"><param name="Name" value="iplApplyPanningEffect"><param name="Local" value="group__panningeffect.html#ga9efcf289b9d77989cd3ec9f0a926281d"><param name="ImageNumber" value="11"></OBJECT>
+    <LI><OBJECT type="text/sitemap"><param name="Name" value="iplApplyPanningEffect"><param name="Local" value="group__panningeffect.html#ga25d0316fa61dba8741b93e864de0fb7e"><param name="ImageNumber" value="11"></OBJECT>
     <LI><OBJECT type="text/sitemap"><param name="Name" value="iplFlushPanningEffect"><param name="Local" value="group__panningeffect.html#ga8249bc2b1cfd0b528fe00df218a5ac97"><param name="ImageNumber" value="11"></OBJECT>
     </UL>
   <LI><OBJECT type="text/sitemap"><param name="Name" value="Object-Based Binaural Effect"><param name="Local" value="group__binauraleffect.html"><param name="ImageNumber" value="1"></OBJECT>
@@ -276,29 +265,29 @@
       </UL>
     <LI><OBJECT type="text/sitemap"><param name="Name" value="iplCreateBinauralEffect"><param name="Local" value="group__binauraleffect.html#ga4a9fdcacc0818d11b631271e2db6cb4c"><param name="ImageNumber" value="11"></OBJECT>
     <LI><OBJECT type="text/sitemap"><param name="Name" value="iplDestroyBinauralEffect"><param name="Local" value="group__binauraleffect.html#gab224f46a28b32933b3cfa0d7d398b540"><param name="ImageNumber" value="11"></OBJECT>
-    <LI><OBJECT type="text/sitemap"><param name="Name" value="iplApplyBinauralEffect"><param name="Local" value="group__binauraleffect.html#gae5310df940564dcc92921e2fcef98d1b"><param name="ImageNumber" value="11"></OBJECT>
-    <LI><OBJECT type="text/sitemap"><param name="Name" value="iplApplyBinauralEffectWithParameters"><param name="Local" value="group__binauraleffect.html#ga59e85eba91d478b2323f196851eac581"><param name="ImageNumber" value="11"></OBJECT>
+    <LI><OBJECT type="text/sitemap"><param name="Name" value="iplApplyBinauralEffect"><param name="Local" value="group__binauraleffect.html#ga0eb9074d7c0da77d3fd01ce4856b8f92"><param name="ImageNumber" value="11"></OBJECT>
+    <LI><OBJECT type="text/sitemap"><param name="Name" value="iplApplyBinauralEffectWithParameters"><param name="Local" value="group__binauraleffect.html#gad692419dcc750f62cfca9aa6d471fdb9"><param name="ImageNumber" value="11"></OBJECT>
     <LI><OBJECT type="text/sitemap"><param name="Name" value="iplFlushBinauralEffect"><param name="Local" value="group__binauraleffect.html#ga7aab11c2117aae5354e98f3c28d00e26"><param name="ImageNumber" value="11"></OBJECT>
     </UL>
   <LI><OBJECT type="text/sitemap"><param name="Name" value="Virtual Surround Effect"><param name="Local" value="group__virtualsurround.html"><param name="ImageNumber" value="1"></OBJECT>
     <UL>
     <LI><OBJECT type="text/sitemap"><param name="Name" value="iplCreateVirtualSurroundEffect"><param name="Local" value="group__virtualsurround.html#ga863ae440ab8c77eb47221ca73acfb981"><param name="ImageNumber" value="11"></OBJECT>
     <LI><OBJECT type="text/sitemap"><param name="Name" value="iplDestroyVirtualSurroundEffect"><param name="Local" value="group__virtualsurround.html#ga6654a7a11fa8b4fdcf096694f3f39656"><param name="ImageNumber" value="11"></OBJECT>
-    <LI><OBJECT type="text/sitemap"><param name="Name" value="iplApplyVirtualSurroundEffect"><param name="Local" value="group__virtualsurround.html#gad481d446854ae89bac3c8150acff5c0c"><param name="ImageNumber" value="11"></OBJECT>
+    <LI><OBJECT type="text/sitemap"><param name="Name" value="iplApplyVirtualSurroundEffect"><param name="Local" value="group__virtualsurround.html#ga0a7beb1a7f78534a2b1addfa58db811b"><param name="ImageNumber" value="11"></OBJECT>
     <LI><OBJECT type="text/sitemap"><param name="Name" value="iplFlushVirtualSurroundEffect"><param name="Local" value="group__virtualsurround.html#ga6989b84f64962563fcea1cdd93f37e43"><param name="ImageNumber" value="11"></OBJECT>
     </UL>
   <LI><OBJECT type="text/sitemap"><param name="Name" value="Ambisonics Panning Effect"><param name="Local" value="group__ambisonicspanning.html"><param name="ImageNumber" value="1"></OBJECT>
     <UL>
     <LI><OBJECT type="text/sitemap"><param name="Name" value="iplCreateAmbisonicsPanningEffect"><param name="Local" value="group__ambisonicspanning.html#ga26191be4b6db20b5fc3a8103d0984156"><param name="ImageNumber" value="11"></OBJECT>
     <LI><OBJECT type="text/sitemap"><param name="Name" value="iplDestroyAmbisonicsPanningEffect"><param name="Local" value="group__ambisonicspanning.html#gac393a7fbd002a5c946a5a51a179b3317"><param name="ImageNumber" value="11"></OBJECT>
-    <LI><OBJECT type="text/sitemap"><param name="Name" value="iplApplyAmbisonicsPanningEffect"><param name="Local" value="group__ambisonicspanning.html#gaf0ce4138e19a76de9030e2582a92145f"><param name="ImageNumber" value="11"></OBJECT>
+    <LI><OBJECT type="text/sitemap"><param name="Name" value="iplApplyAmbisonicsPanningEffect"><param name="Local" value="group__ambisonicspanning.html#gae9c5ca6ae1219ae575a6eb1d1a20b485"><param name="ImageNumber" value="11"></OBJECT>
     <LI><OBJECT type="text/sitemap"><param name="Name" value="iplFlushAmbisonicsPanningEffect"><param name="Local" value="group__ambisonicspanning.html#gab86a8fc70702e6585b804f87e65791ee"><param name="ImageNumber" value="11"></OBJECT>
     </UL>
   <LI><OBJECT type="text/sitemap"><param name="Name" value="Ambisonics Binaural Effect"><param name="Local" value="group__ambisonics.html"><param name="ImageNumber" value="1"></OBJECT>
     <UL>
     <LI><OBJECT type="text/sitemap"><param name="Name" value="iplCreateAmbisonicsBinauralEffect"><param name="Local" value="group__ambisonics.html#ga777ab70f2b585d8af92e23c08db01c5e"><param name="ImageNumber" value="11"></OBJECT>
     <LI><OBJECT type="text/sitemap"><param name="Name" value="iplDestroyAmbisonicsBinauralEffect"><param name="Local" value="group__ambisonics.html#ga7407738ab9852fe98aaed3b299a2a44c"><param name="ImageNumber" value="11"></OBJECT>
-    <LI><OBJECT type="text/sitemap"><param name="Name" value="iplApplyAmbisonicsBinauralEffect"><param name="Local" value="group__ambisonics.html#ga31e19d111a96d1b747104066f73ea0ab"><param name="ImageNumber" value="11"></OBJECT>
+    <LI><OBJECT type="text/sitemap"><param name="Name" value="iplApplyAmbisonicsBinauralEffect"><param name="Local" value="group__ambisonics.html#ga3cd19e5560e9c03b51d789d4fb4bc29c"><param name="ImageNumber" value="11"></OBJECT>
     <LI><OBJECT type="text/sitemap"><param name="Name" value="iplFlushAmbisonicsBinauralEffect"><param name="Local" value="group__ambisonics.html#ga8b78544471d21e47dc4e67eecd63a228"><param name="ImageNumber" value="11"></OBJECT>
     </UL>
   <LI><OBJECT type="text/sitemap"><param name="Name" value="Environmental Renderer"><param name="Local" value="group__envrenderer.html"><param name="ImageNumber" value="1"></OBJECT>
@@ -472,11 +461,6 @@
       <LI><OBJECT type="text/sitemap"><param name="Name" value="minCoordinates"><param name="Local" value="struct_i_p_l_box.html#a2b1047fda3bb6147fc67a20272f499f5"><param name="ImageNumber" value="11"></OBJECT>
       <LI><OBJECT type="text/sitemap"><param name="Name" value="maxCoordinates"><param name="Local" value="struct_i_p_l_box.html#a214328c1f7af391ee9920b890bc3e6fe"><param name="ImageNumber" value="11"></OBJECT>
       </UL>
-    <LI><OBJECT type="text/sitemap"><param name="Name" value="IPLComplex"><param name="Local" value="struct_i_p_l_complex.html"><param name="ImageNumber" value="1"></OBJECT>
-      <UL>
-      <LI><OBJECT type="text/sitemap"><param name="Name" value="real"><param name="Local" value="struct_i_p_l_complex.html#a6ae4c408317b98522f1b4db2e3d0ea23"><param name="ImageNumber" value="11"></OBJECT>
-      <LI><OBJECT type="text/sitemap"><param name="Name" value="imag"><param name="Local" value="struct_i_p_l_complex.html#a964261f25a2008dea529f8e605eaeb26"><param name="ImageNumber" value="11"></OBJECT>
-      </UL>
     <LI><OBJECT type="text/sitemap"><param name="Name" value="IPLComputeDeviceFilter"><param name="Local" value="struct_i_p_l_compute_device_filter.html"><param name="ImageNumber" value="1"></OBJECT>
       <UL>
       <LI><OBJECT type="text/sitemap"><param name="Name" value="type"><param name="Local" value="struct_i_p_l_compute_device_filter.html#a8bc48a9676eea11c71b7cd9f76b6007a"><param name="ImageNumber" value="11"></OBJECT>
@@ -512,10 +496,7 @@
       <UL>
       <LI><OBJECT type="text/sitemap"><param name="Name" value="type"><param name="Local" value="struct_i_p_l_hrtf_params.html#a43fe58026a363899c7767350bab6380f"><param name="ImageNumber" value="11"></OBJECT>
       <LI><OBJECT type="text/sitemap"><param name="Name" value="hrtfData"><param name="Local" value="struct_i_p_l_hrtf_params.html#af2264ab6366b3482931684c93fec0b98"><param name="ImageNumber" value="11"></OBJECT>
-      <LI><OBJECT type="text/sitemap"><param name="Name" value="numHrirSamples"><param name="Local" value="struct_i_p_l_hrtf_params.html#a0fb98c7a1f3dc23c916dce46eff0ef97"><param name="ImageNumber" value="11"></OBJECT>
-      <LI><OBJECT type="text/sitemap"><param name="Name" value="loadCallback"><param name="Local" value="struct_i_p_l_hrtf_params.html#a3182288101464c6810210adb325db2b1"><param name="ImageNumber" value="11"></OBJECT>
-      <LI><OBJECT type="text/sitemap"><param name="Name" value="unloadCallback"><param name="Local" value="struct_i_p_l_hrtf_params.html#a0cb1d872b4e79c03af35481426a5086f"><param name="ImageNumber" value="11"></OBJECT>
-      <LI><OBJECT type="text/sitemap"><param name="Name" value="lookupCallback"><param name="Local" value="struct_i_p_l_hrtf_params.html#abca950c04a28f53211503293d5f9d918"><param name="ImageNumber" value="11"></OBJECT>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="sofaFileName"><param name="Local" value="struct_i_p_l_hrtf_params.html#ad4c8bbdf20db7f7ff1b9ded2780b5b3b"><param name="ImageNumber" value="11"></OBJECT>
       </UL>
     <LI><OBJECT type="text/sitemap"><param name="Name" value="IPLMaterial"><param name="Local" value="struct_i_p_l_material.html"><param name="ImageNumber" value="1"></OBJECT>
       <UL>
@@ -557,6 +538,7 @@
     <LI><OBJECT type="text/sitemap"><param name="Name" value="IPLSimulationSettings"><param name="Local" value="struct_i_p_l_simulation_settings.html"><param name="ImageNumber" value="1"></OBJECT>
       <UL>
       <LI><OBJECT type="text/sitemap"><param name="Name" value="sceneType"><param name="Local" value="struct_i_p_l_simulation_settings.html#a10bbbea1cc2fffe16bedb0326862ccc9"><param name="ImageNumber" value="11"></OBJECT>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="numOcclusionSamples"><param name="Local" value="struct_i_p_l_simulation_settings.html#ada9c90682cce5eddc2ccb869bb2ea7c8"><param name="ImageNumber" value="11"></OBJECT>
       <LI><OBJECT type="text/sitemap"><param name="Name" value="numRays"><param name="Local" value="struct_i_p_l_simulation_settings.html#a4517d4473fd884f220a8cdaa06e779fb"><param name="ImageNumber" value="11"></OBJECT>
       <LI><OBJECT type="text/sitemap"><param name="Name" value="numDiffuseSamples"><param name="Local" value="struct_i_p_l_simulation_settings.html#a8730cf838ae0febc6de13e84150b3813"><param name="ImageNumber" value="11"></OBJECT>
       <LI><OBJECT type="text/sitemap"><param name="Name" value="numBounces"><param name="Local" value="struct_i_p_l_simulation_settings.html#ace83ed720bf5ceb91447ebe44519327d"><param name="ImageNumber" value="11"></OBJECT>

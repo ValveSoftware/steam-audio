@@ -25,7 +25,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Steam Audio API
-   &#160;<span id="projectnumber">2.0-beta.15</span>
+   &#160;<span id="projectnumber">2.0-beta.16</span>
    </div>
   </td>
  </tr>
@@ -46,7 +46,6 @@ $(function() {
 <div class="header">
   <div class="summary">
 <a href="#nested-classes">Data Structures</a> &#124;
-<a href="#typedef-members">Typedefs</a> &#124;
 <a href="#enum-members">Enumerations</a> &#124;
 <a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
@@ -59,32 +58,14 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Data Structures</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_i_p_l_complex.html">IPLComplex</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A single-precision complex number.  <a href="struct_i_p_l_complex.html#details">More...</a><br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_i_p_l_hrtf_params.html">IPLHrtfParams</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parameters used to describe the HRTF database you want to use when creating a Binaural Renderer object.  <a href="struct_i_p_l_hrtf_params.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
-Typedefs</h2></td></tr>
-<tr class="memitem:gafd25001944be9702f49c58d43f68a1d4"><td class="memItemLeft" align="right" valign="top">typedef void(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__binauralrenderer.html#gafd25001944be9702f49c58d43f68a1d4">IPLFftHelper</a>) (<a class="el" href="group__types.html#ga502ed08a76de25d1d19b186094a1488b">IPLvoid</a> *data, <a class="el" href="group__types.html#gaae74a77965d451d22a466a60cb622131">IPLfloat32</a> *signal, <a class="el" href="struct_i_p_l_complex.html">IPLComplex</a> *spectrum)</td></tr>
-<tr class="memdesc:gafd25001944be9702f49c58d43f68a1d4"><td class="mdescLeft">&#160;</td><td class="mdescRight">A function that you can call to calculate the Fast Fourier Transform (FFT) of a real-valued time-domain signal.  <a href="#gafd25001944be9702f49c58d43f68a1d4">More...</a><br /></td></tr>
-<tr class="separator:gafd25001944be9702f49c58d43f68a1d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga56ca9f21dde68e143009c9cfbd3bb7b6"><td class="memItemLeft" align="right" valign="top">typedef void(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__binauralrenderer.html#ga56ca9f21dde68e143009c9cfbd3bb7b6">IPLHrtfLoadCallback</a>) (<a class="el" href="group__types.html#ga500a973ddc50b67f4930c3b789475f58">IPLint32</a> signalSize, <a class="el" href="group__types.html#ga500a973ddc50b67f4930c3b789475f58">IPLint32</a> spectrumSize, <a class="el" href="group__binauralrenderer.html#gafd25001944be9702f49c58d43f68a1d4">IPLFftHelper</a> fftHelper, <a class="el" href="group__types.html#ga502ed08a76de25d1d19b186094a1488b">IPLvoid</a> *fftHelperData)</td></tr>
-<tr class="memdesc:ga56ca9f21dde68e143009c9cfbd3bb7b6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pointer to a function that will be called during the execution of iplCreateBinauralRenderer, to allow your application to pre-transform all HRTF data into frequency domain.  <a href="#ga56ca9f21dde68e143009c9cfbd3bb7b6">More...</a><br /></td></tr>
-<tr class="separator:ga56ca9f21dde68e143009c9cfbd3bb7b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gab2c2c9f6e9f82a92cece59ba300e0e8d"><td class="memItemLeft" align="right" valign="top">typedef void(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__binauralrenderer.html#gab2c2c9f6e9f82a92cece59ba300e0e8d">IPLHrtfUnloadCallback</a>) ()</td></tr>
-<tr class="memdesc:gab2c2c9f6e9f82a92cece59ba300e0e8d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pointer to a function that will be called during the execution of iplDestroyBinauralRenderer, to allow your application to free memory allocated during IPLHrtfLoadCallback.  <a href="#gab2c2c9f6e9f82a92cece59ba300e0e8d">More...</a><br /></td></tr>
-<tr class="separator:gab2c2c9f6e9f82a92cece59ba300e0e8d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga90651a9bf84e80cf5eb669cc9c024fdb"><td class="memItemLeft" align="right" valign="top">typedef void(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__binauralrenderer.html#ga90651a9bf84e80cf5eb669cc9c024fdb">IPLHrtfLookupCallback</a>) (<a class="el" href="group__types.html#gaae74a77965d451d22a466a60cb622131">IPLfloat32</a> *direction, <a class="el" href="struct_i_p_l_complex.html">IPLComplex</a> *leftHrtf, <a class="el" href="struct_i_p_l_complex.html">IPLComplex</a> *rightHrtf)</td></tr>
-<tr class="memdesc:ga90651a9bf84e80cf5eb669cc9c024fdb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pointer to a function that will be called during the execution of iplApplyBinauralEffect, to left your application copy HRTF data for a given direction into arrays managed by Phonon.  <a href="#ga90651a9bf84e80cf5eb669cc9c024fdb">More...</a><br /></td></tr>
-<tr class="separator:ga90651a9bf84e80cf5eb669cc9c024fdb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
 Enumerations</h2></td></tr>
 <tr class="memitem:gac8a67c4db14832ec5fc923dc5cdc41c3"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__binauralrenderer.html#gac8a67c4db14832ec5fc923dc5cdc41c3">IPLHrtfDatabaseType</a> { <a class="el" href="group__binauralrenderer.html#ggac8a67c4db14832ec5fc923dc5cdc41c3a5ecfd401d1000e3fdcf58e5f96d50827">IPL_HRTFDATABASETYPE_DEFAULT</a>, 
-<a class="el" href="group__binauralrenderer.html#ggac8a67c4db14832ec5fc923dc5cdc41c3aead64e26ce93db2137ff24da2b4750f7">IPL_HRTFDATABASETYPE_CUSTOM</a>
+<a class="el" href="group__binauralrenderer.html#ggac8a67c4db14832ec5fc923dc5cdc41c3aaf395ba2c00befd7388f85e7f8237778">IPL_HRTFDATABASETYPE_SOFA</a>
  }<tr class="memdesc:gac8a67c4db14832ec5fc923dc5cdc41c3"><td class="mdescLeft">&#160;</td><td class="mdescRight">The type of HRTF database to use for binaural rendering.  <a href="group__binauralrenderer.html#gac8a67c4db14832ec5fc923dc5cdc41c3">More...</a><br /></td></tr>
 </td></tr>
 <tr class="separator:gac8a67c4db14832ec5fc923dc5cdc41c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -101,97 +82,6 @@ Functions</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <p>Functions for managing a Binaural Renderer object. </p>
 <p>Before creating any effect objects that perform spatialization or binaural rendering, you must create a Binaural Renderer object. This object describes global settings and audio pipeline parameters that will be used by all spatialization and binaural rendering effect objects. </p>
-<h2 class="groupheader">Typedef Documentation</h2>
-<a id="gafd25001944be9702f49c58d43f68a1d4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#gafd25001944be9702f49c58d43f68a1d4">&#9670;&nbsp;</a></span>IPLFftHelper</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">typedef void(* IPLFftHelper) (<a class="el" href="group__types.html#ga502ed08a76de25d1d19b186094a1488b">IPLvoid</a> *data, <a class="el" href="group__types.html#gaae74a77965d451d22a466a60cb622131">IPLfloat32</a> *signal, <a class="el" href="struct_i_p_l_complex.html">IPLComplex</a> *spectrum)</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>A function that you can call to calculate the Fast Fourier Transform (FFT) of a real-valued time-domain signal. </p>
-<p>You will typically call this from within your implementation of IPLHrtfLoadCallback, to transform your time-domain Head-Related Impulse Responses (HRIRs) into Head-Related Transfer Functions (HRTFs).</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">data</td><td>Pointer to internal data required for calculating Fourier transforms. This will be passed in to your implementation of IPLHrtfLoadCallback. </td></tr>
-    <tr><td class="paramname">signal</td><td>Array containing the time-domain signal. The number of elements in this array must match the signalSize parameter received by IPLHrtfLoadCallback. </td></tr>
-    <tr><td class="paramname">spectrum</td><td>Array containing the frequency-domain spectrum. The number of elements in this array must match the spectrumSize parameter received by IPLHrtfLoadCallback. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a id="ga56ca9f21dde68e143009c9cfbd3bb7b6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga56ca9f21dde68e143009c9cfbd3bb7b6">&#9670;&nbsp;</a></span>IPLHrtfLoadCallback</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">typedef void(* IPLHrtfLoadCallback) (<a class="el" href="group__types.html#ga500a973ddc50b67f4930c3b789475f58">IPLint32</a> signalSize, <a class="el" href="group__types.html#ga500a973ddc50b67f4930c3b789475f58">IPLint32</a> spectrumSize, <a class="el" href="group__binauralrenderer.html#gafd25001944be9702f49c58d43f68a1d4">IPLFftHelper</a> fftHelper, <a class="el" href="group__types.html#ga502ed08a76de25d1d19b186094a1488b">IPLvoid</a> *fftHelperData)</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Pointer to a function that will be called during the execution of iplCreateBinauralRenderer, to allow your application to pre-transform all HRTF data into frequency domain. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">signalSize</td><td>Number of elements in the time-domain (HRIR) data arrays that must be transformed. This will be greater than the actual size of the HRIRs passed to iplCreateBinauralRenderer. Any array passed to fftHelper must contain the HRIR data at the start, and the rest of the elements must be initialized to zero. For example, if signalSize is 1024, and the HRIRs are 200 samples long, the arrays passed to the signal parameter of fftHelper must be 1024 samples long, with the first 200 samples containing the HRIR data, and the remaining 824 samples containing zeroes. </td></tr>
-    <tr><td class="paramname">spectrumSize</td><td>Number of elements in the frequency-domain (HRTF) data arrays that will contain the results of the transformation. You will typically allocate arrays of this size for each HRIR; they must not be freed until IPLHrtfUnloadCallback is called. </td></tr>
-    <tr><td class="paramname">fftHelper</td><td>Pointer to a function that you can call to calculate the Fourier transforms of the HRIRs. </td></tr>
-    <tr><td class="paramname">fftHelperData</td><td>Internal data required for calculating Fourier transforms. Pass this to fftHelper. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a id="gab2c2c9f6e9f82a92cece59ba300e0e8d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#gab2c2c9f6e9f82a92cece59ba300e0e8d">&#9670;&nbsp;</a></span>IPLHrtfUnloadCallback</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">typedef void(* IPLHrtfUnloadCallback) ()</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Pointer to a function that will be called during the execution of iplDestroyBinauralRenderer, to allow your application to free memory allocated during IPLHrtfLoadCallback. </p>
-
-</div>
-</div>
-<a id="ga90651a9bf84e80cf5eb669cc9c024fdb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga90651a9bf84e80cf5eb669cc9c024fdb">&#9670;&nbsp;</a></span>IPLHrtfLookupCallback</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">typedef void(* IPLHrtfLookupCallback) (<a class="el" href="group__types.html#gaae74a77965d451d22a466a60cb622131">IPLfloat32</a> *direction, <a class="el" href="struct_i_p_l_complex.html">IPLComplex</a> *leftHrtf, <a class="el" href="struct_i_p_l_complex.html">IPLComplex</a> *rightHrtf)</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Pointer to a function that will be called during the execution of iplApplyBinauralEffect, to left your application copy HRTF data for a given direction into arrays managed by Phonon. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">direction</td><td>Array containing the coordinates of the unit vector from the listener to the source, in Cartesian coordinates. </td></tr>
-    <tr><td class="paramname">leftHrtf</td><td>Array into which you should copy the frequency-domain left-ear HRTF for the given direction. </td></tr>
-    <tr><td class="paramname">rightHrtf</td><td>Array into which you should copy the frequency-domain right-ear HRTF for the given direction. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
 <h2 class="groupheader">Enumeration Type Documentation</h2>
 <a id="gac8a67c4db14832ec5fc923dc5cdc41c3"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#gac8a67c4db14832ec5fc923dc5cdc41c3">&#9670;&nbsp;</a></span>IPLHrtfDatabaseType</h2>
@@ -210,8 +100,8 @@ Functions</h2></td></tr>
 <table class="fieldtable">
 <tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="ggac8a67c4db14832ec5fc923dc5cdc41c3a5ecfd401d1000e3fdcf58e5f96d50827"></a>IPL_HRTFDATABASETYPE_DEFAULT&#160;</td><td class="fielddoc"><p>The built-in HRTF database. </p>
 </td></tr>
-<tr><td class="fieldname"><a id="ggac8a67c4db14832ec5fc923dc5cdc41c3aead64e26ce93db2137ff24da2b4750f7"></a>IPL_HRTFDATABASETYPE_CUSTOM&#160;</td><td class="fielddoc"><p>Indicates that your application will supply HRTF data of its own at run-time. </p>
-<p>For this to work, you must implement the necessary HRTF database callbacks described in this section. </p>
+<tr><td class="fieldname"><a id="ggac8a67c4db14832ec5fc923dc5cdc41c3aaf395ba2c00befd7388f85e7f8237778"></a>IPL_HRTFDATABASETYPE_SOFA&#160;</td><td class="fielddoc"><p>An HRTF database loaded from a SOFA file. </p>
+<p>SOFA is an AES standard file format for storing and exchanging acoustic data, including HRTFs. For more information on the SOFA format, see <a href="https://www.sofaconventions.org/">https://www.sofaconventions.org/</a> </p>
 </td></tr>
 </table>
 

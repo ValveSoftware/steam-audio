@@ -25,7 +25,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Steam Audio API
-   &#160;<span id="projectnumber">2.0-beta.15</span>
+   &#160;<span id="projectnumber">2.0-beta.16</span>
    </div>
   </td>
  </tr>
@@ -62,9 +62,9 @@ Functions</h2></td></tr>
 <tr class="memitem:ga6654a7a11fa8b4fdcf096694f3f39656"><td class="memItemLeft" align="right" valign="top">IPLAPI <a class="el" href="group__types.html#ga502ed08a76de25d1d19b186094a1488b">IPLvoid</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__virtualsurround.html#ga6654a7a11fa8b4fdcf096694f3f39656">iplDestroyVirtualSurroundEffect</a> (<a class="el" href="group__types.html#ga08dc6de588508173d4396acfd3e08204">IPLhandle</a> *effect)</td></tr>
 <tr class="memdesc:ga6654a7a11fa8b4fdcf096694f3f39656"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destroys a Virtual Surround Effect object.  <a href="#ga6654a7a11fa8b4fdcf096694f3f39656">More...</a><br /></td></tr>
 <tr class="separator:ga6654a7a11fa8b4fdcf096694f3f39656"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gad481d446854ae89bac3c8150acff5c0c"><td class="memItemLeft" align="right" valign="top">IPLAPI <a class="el" href="group__types.html#ga502ed08a76de25d1d19b186094a1488b">IPLvoid</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__virtualsurround.html#gad481d446854ae89bac3c8150acff5c0c">iplApplyVirtualSurroundEffect</a> (<a class="el" href="group__types.html#ga08dc6de588508173d4396acfd3e08204">IPLhandle</a> effect, <a class="el" href="struct_i_p_l_audio_buffer.html">IPLAudioBuffer</a> inputAudio, <a class="el" href="struct_i_p_l_audio_buffer.html">IPLAudioBuffer</a> outputAudio)</td></tr>
-<tr class="memdesc:gad481d446854ae89bac3c8150acff5c0c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Applies HRTF-based binaural rendering to a buffer of multichannel audio data.  <a href="#gad481d446854ae89bac3c8150acff5c0c">More...</a><br /></td></tr>
-<tr class="separator:gad481d446854ae89bac3c8150acff5c0c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga0a7beb1a7f78534a2b1addfa58db811b"><td class="memItemLeft" align="right" valign="top">IPLAPI <a class="el" href="group__types.html#ga502ed08a76de25d1d19b186094a1488b">IPLvoid</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__virtualsurround.html#ga0a7beb1a7f78534a2b1addfa58db811b">iplApplyVirtualSurroundEffect</a> (<a class="el" href="group__types.html#ga08dc6de588508173d4396acfd3e08204">IPLhandle</a> effect, <a class="el" href="group__types.html#ga08dc6de588508173d4396acfd3e08204">IPLhandle</a> binauralRenderer, <a class="el" href="struct_i_p_l_audio_buffer.html">IPLAudioBuffer</a> inputAudio, <a class="el" href="struct_i_p_l_audio_buffer.html">IPLAudioBuffer</a> outputAudio)</td></tr>
+<tr class="memdesc:ga0a7beb1a7f78534a2b1addfa58db811b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Applies HRTF-based binaural rendering to a buffer of multichannel audio data.  <a href="#ga0a7beb1a7f78534a2b1addfa58db811b">More...</a><br /></td></tr>
+<tr class="separator:ga0a7beb1a7f78534a2b1addfa58db811b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga6989b84f64962563fcea1cdd93f37e43"><td class="memItemLeft" align="right" valign="top">IPLAPI <a class="el" href="group__types.html#ga502ed08a76de25d1d19b186094a1488b">IPLvoid</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__virtualsurround.html#ga6989b84f64962563fcea1cdd93f37e43">iplFlushVirtualSurroundEffect</a> (<a class="el" href="group__types.html#ga08dc6de588508173d4396acfd3e08204">IPLhandle</a> effect)</td></tr>
 <tr class="memdesc:ga6989b84f64962563fcea1cdd93f37e43"><td class="mdescLeft">&#160;</td><td class="mdescRight">Resets any internal state maintained by a Virtual Surround Effect object.  <a href="#ga6989b84f64962563fcea1cdd93f37e43">More...</a><br /></td></tr>
 <tr class="separator:ga6989b84f64962563fcea1cdd93f37e43"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -117,8 +117,8 @@ Functions</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">renderer</td><td>Handle to a Binaural Renderer object. </td></tr>
-    <tr><td class="paramname">inputFormat</td><td>The format of the audio buffers that will be passed as input to this effect. All subsequent calls to <code><a class="el" href="group__virtualsurround.html#gad481d446854ae89bac3c8150acff5c0c" title="Applies HRTF-based binaural rendering to a buffer of multichannel audio data. ">iplApplyVirtualSurroundEffect</a></code> for this effect object must use <code><a class="el" href="struct_i_p_l_audio_buffer.html" title="A buffer containing audio data. ">IPLAudioBuffer</a></code> objects with the same format as specified here. The input format must not be Ambisonics. </td></tr>
-    <tr><td class="paramname">outputFormat</td><td>The format of the audio buffers which will be used to retrieve the output from this effect. All subsequent calls to <code><a class="el" href="group__virtualsurround.html#gad481d446854ae89bac3c8150acff5c0c" title="Applies HRTF-based binaural rendering to a buffer of multichannel audio data. ">iplApplyVirtualSurroundEffect</a></code> for this effect object must use <code><a class="el" href="struct_i_p_l_audio_buffer.html" title="A buffer containing audio data. ">IPLAudioBuffer</a></code> objects with the same format as specified here. The output format must be stereo (2 channels). </td></tr>
+    <tr><td class="paramname">inputFormat</td><td>The format of the audio buffers that will be passed as input to this effect. All subsequent calls to <code><a class="el" href="group__virtualsurround.html#ga0a7beb1a7f78534a2b1addfa58db811b" title="Applies HRTF-based binaural rendering to a buffer of multichannel audio data. ">iplApplyVirtualSurroundEffect</a></code> for this effect object must use <code><a class="el" href="struct_i_p_l_audio_buffer.html" title="A buffer containing audio data. ">IPLAudioBuffer</a></code> objects with the same format as specified here. The input format must not be Ambisonics. </td></tr>
+    <tr><td class="paramname">outputFormat</td><td>The format of the audio buffers which will be used to retrieve the output from this effect. All subsequent calls to <code><a class="el" href="group__virtualsurround.html#ga0a7beb1a7f78534a2b1addfa58db811b" title="Applies HRTF-based binaural rendering to a buffer of multichannel audio data. ">iplApplyVirtualSurroundEffect</a></code> for this effect object must use <code><a class="el" href="struct_i_p_l_audio_buffer.html" title="A buffer containing audio data. ">IPLAudioBuffer</a></code> objects with the same format as specified here. The output format must be stereo (2 channels). </td></tr>
     <tr><td class="paramname">effect</td><td>[out] Handle to the created Virtual Surround Effect object.</td></tr>
   </table>
   </dd>
@@ -153,8 +153,8 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="gad481d446854ae89bac3c8150acff5c0c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#gad481d446854ae89bac3c8150acff5c0c">&#9670;&nbsp;</a></span>iplApplyVirtualSurroundEffect()</h2>
+<a id="ga0a7beb1a7f78534a2b1addfa58db811b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga0a7beb1a7f78534a2b1addfa58db811b">&#9670;&nbsp;</a></span>iplApplyVirtualSurroundEffect()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -164,6 +164,12 @@ Functions</h2></td></tr>
           <td>(</td>
           <td class="paramtype"><a class="el" href="group__types.html#ga08dc6de588508173d4396acfd3e08204">IPLhandle</a>&#160;</td>
           <td class="paramname"><em>effect</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="group__types.html#ga08dc6de588508173d4396acfd3e08204">IPLhandle</a>&#160;</td>
+          <td class="paramname"><em>binauralRenderer</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -189,6 +195,7 @@ Functions</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">effect</td><td>Handle to a Virtual Surround Effect. </td></tr>
+    <tr><td class="paramname">binauralRenderer</td><td>Handle to a Binaural Renderer object that should be used to apply the virtual surround effect. Each Binaural Renderer corresponds to an HRTF (which may be loaded from SOFA files); the value of this parameter determines which HRTF is used to spatialize the input audio. </td></tr>
     <tr><td class="paramname">inputAudio</td><td>Audio buffer containing the data to render using binaural rendering. The format of this buffer must match the <code>inputFormat</code> parameter passed to <code><a class="el" href="group__virtualsurround.html#ga863ae440ab8c77eb47221ca73acfb981" title="Creates a Virtual Surround Effect object. ">iplCreateVirtualSurroundEffect</a></code>. </td></tr>
     <tr><td class="paramname">outputAudio</td><td>Audio buffer that should contain the rendered audio data. The format of this buffer must match the <code>outputFormat</code> parameter passed to <code><a class="el" href="group__virtualsurround.html#ga863ae440ab8c77eb47221ca73acfb981" title="Creates a Virtual Surround Effect object. ">iplCreateVirtualSurroundEffect</a></code>.</td></tr>
   </table>

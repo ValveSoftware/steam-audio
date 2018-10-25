@@ -1,0 +1,92 @@
+[OPTIONS]
+Compiled file=../steamaudio_api.chm
+Compatibility=1.1
+Full-text search=Yes
+Contents file=index.hhc
+Default Window=main
+Default topic=index.html
+Index file=index.hhk
+Language=0x409 English (United States)
+Title=Steam Audio API
+
+[WINDOWS]
+main="Steam Audio API","index.hhc","index.hhk","index.html","index.html",,,,,0x23520,,0x10387e,,,,,,,,0
+
+[FILES]
+page_quickstart.html
+page_compiling.html
+page_integration.html
+page_audio_pipeline.html
+page_audio_engine.html
+page_game_editor.html
+page_game_engine.html
+page_tan.html
+page_embree.html
+page_radeonrays.html
+group__types.html
+group__context.html
+group__geometry.html
+group__compute.html
+group__simsettings.html
+group__scene.html
+group__environment.html
+group__rendersettings.html
+group__audiobuffer.html
+group__binauralrenderer.html
+group__panningeffect.html
+group__binauraleffect.html
+group__virtualsurround.html
+group__ambisonicspanning.html
+group__ambisonics.html
+group__envrenderer.html
+group__directsound.html
+group__directsoundeffect.html
+group__conveffect.html
+group__probes.html
+group__baking.html
+struct_i_p_l_audio_buffer.html
+struct_i_p_l_audio_format.html
+struct_i_p_l_baked_data_identifier.html
+struct_i_p_l_baking_settings.html
+struct_i_p_l_box.html
+struct_i_p_l_compute_device_filter.html
+struct_i_p_l_directivity.html
+struct_i_p_l_direct_sound_effect_options.html
+struct_i_p_l_direct_sound_path.html
+struct_i_p_l_hrtf_params.html
+struct_i_p_l_material.html
+struct_i_p_l_oriented_box.html
+struct_i_p_l_probe_placement_params.html
+struct_i_p_l_quaternion.html
+struct_i_p_l_rendering_settings.html
+struct_i_p_l_simulation_settings.html
+struct_i_p_l_source.html
+struct_i_p_l_sphere.html
+struct_i_p_l_triangle.html
+struct_i_p_l_vector3.html
+dir_64487c75f92555db8bd74e7be47264bb.html
+dir_aebb8dcc11953d78e620bbef0b9e2183.html
+dir_68267d1309a1af8e8297ef4c3efbcdba.html
+index.html
+pages.html
+modules.html
+annotated.html
+classes.html
+functions.html
+functions_vars.html
+tab_a.png
+tab_b.png
+tab_h.png
+tab_s.png
+nav_h.png
+nav_f.png
+bc_s.png
+doxygen.png
+closed.png
+open.png
+bdwn.png
+sync_on.png
+sync_off.png
+pipeline_source.png
+pipeline_reverb.png
+pipeline_ambisonics.png

@@ -25,7 +25,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Steam Audio API
-   &#160;<span id="projectnumber">2.0-beta.15</span>
+   &#160;<span id="projectnumber">2.0-beta.16</span>
    </div>
   </td>
  </tr>
@@ -62,9 +62,9 @@ Functions</h2></td></tr>
 <tr class="memitem:ga6c5210a45cf253cb54923326284c8163"><td class="memItemLeft" align="right" valign="top">IPLAPI <a class="el" href="group__types.html#ga502ed08a76de25d1d19b186094a1488b">IPLvoid</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__panningeffect.html#ga6c5210a45cf253cb54923326284c8163">iplDestroyPanningEffect</a> (<a class="el" href="group__types.html#ga08dc6de588508173d4396acfd3e08204">IPLhandle</a> *effect)</td></tr>
 <tr class="memdesc:ga6c5210a45cf253cb54923326284c8163"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destroys a Panning Effect object.  <a href="#ga6c5210a45cf253cb54923326284c8163">More...</a><br /></td></tr>
 <tr class="separator:ga6c5210a45cf253cb54923326284c8163"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga9efcf289b9d77989cd3ec9f0a926281d"><td class="memItemLeft" align="right" valign="top">IPLAPI <a class="el" href="group__types.html#ga502ed08a76de25d1d19b186094a1488b">IPLvoid</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__panningeffect.html#ga9efcf289b9d77989cd3ec9f0a926281d">iplApplyPanningEffect</a> (<a class="el" href="group__types.html#ga08dc6de588508173d4396acfd3e08204">IPLhandle</a> effect, <a class="el" href="struct_i_p_l_audio_buffer.html">IPLAudioBuffer</a> inputAudio, <a class="el" href="struct_i_p_l_vector3.html">IPLVector3</a> direction, <a class="el" href="struct_i_p_l_audio_buffer.html">IPLAudioBuffer</a> outputAudio)</td></tr>
-<tr class="memdesc:ga9efcf289b9d77989cd3ec9f0a926281d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Applies 3D panning to a buffer of audio data, using the configuration of a Panning Effect object.  <a href="#ga9efcf289b9d77989cd3ec9f0a926281d">More...</a><br /></td></tr>
-<tr class="separator:ga9efcf289b9d77989cd3ec9f0a926281d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga25d0316fa61dba8741b93e864de0fb7e"><td class="memItemLeft" align="right" valign="top">IPLAPI <a class="el" href="group__types.html#ga502ed08a76de25d1d19b186094a1488b">IPLvoid</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__panningeffect.html#ga25d0316fa61dba8741b93e864de0fb7e">iplApplyPanningEffect</a> (<a class="el" href="group__types.html#ga08dc6de588508173d4396acfd3e08204">IPLhandle</a> effect, <a class="el" href="group__types.html#ga08dc6de588508173d4396acfd3e08204">IPLhandle</a> binauralRenderer, <a class="el" href="struct_i_p_l_audio_buffer.html">IPLAudioBuffer</a> inputAudio, <a class="el" href="struct_i_p_l_vector3.html">IPLVector3</a> direction, <a class="el" href="struct_i_p_l_audio_buffer.html">IPLAudioBuffer</a> outputAudio)</td></tr>
+<tr class="memdesc:ga25d0316fa61dba8741b93e864de0fb7e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Applies 3D panning to a buffer of audio data, using the configuration of a Panning Effect object.  <a href="#ga25d0316fa61dba8741b93e864de0fb7e">More...</a><br /></td></tr>
+<tr class="separator:ga25d0316fa61dba8741b93e864de0fb7e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga8249bc2b1cfd0b528fe00df218a5ac97"><td class="memItemLeft" align="right" valign="top">IPLAPI <a class="el" href="group__types.html#ga502ed08a76de25d1d19b186094a1488b">IPLvoid</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__panningeffect.html#ga8249bc2b1cfd0b528fe00df218a5ac97">iplFlushPanningEffect</a> (<a class="el" href="group__types.html#ga08dc6de588508173d4396acfd3e08204">IPLhandle</a> effect)</td></tr>
 <tr class="memdesc:ga8249bc2b1cfd0b528fe00df218a5ac97"><td class="mdescLeft">&#160;</td><td class="mdescRight">Resets any internal state maintained by a Panning Effect object.  <a href="#ga8249bc2b1cfd0b528fe00df218a5ac97">More...</a><br /></td></tr>
 <tr class="separator:ga8249bc2b1cfd0b528fe00df218a5ac97"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -116,8 +116,8 @@ Functions</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">renderer</td><td>Handle to a Binaural Renderer object. </td></tr>
-    <tr><td class="paramname">inputFormat</td><td>The format of the audio buffers that will be passed as input to this effect. All subsequent calls to <code><a class="el" href="group__panningeffect.html#ga9efcf289b9d77989cd3ec9f0a926281d" title="Applies 3D panning to a buffer of audio data, using the configuration of a Panning Effect object...">iplApplyPanningEffect</a></code> for this effect object must use <code><a class="el" href="struct_i_p_l_audio_buffer.html" title="A buffer containing audio data. ">IPLAudioBuffer</a></code> objects with the same format as specified here. The input format must not be Ambisonics. </td></tr>
-    <tr><td class="paramname">outputFormat</td><td>The format of the audio buffers which will be used to retrieve the output from this effect. All subsequent calls to <code><a class="el" href="group__panningeffect.html#ga9efcf289b9d77989cd3ec9f0a926281d" title="Applies 3D panning to a buffer of audio data, using the configuration of a Panning Effect object...">iplApplyPanningEffect</a></code> for this effect object must use <code><a class="el" href="struct_i_p_l_audio_buffer.html" title="A buffer containing audio data. ">IPLAudioBuffer</a></code> objects with the same format as specified here. Any valid audio format may be specified as the output format. </td></tr>
+    <tr><td class="paramname">inputFormat</td><td>The format of the audio buffers that will be passed as input to this effect. All subsequent calls to <code><a class="el" href="group__panningeffect.html#ga25d0316fa61dba8741b93e864de0fb7e" title="Applies 3D panning to a buffer of audio data, using the configuration of a Panning Effect object...">iplApplyPanningEffect</a></code> for this effect object must use <code><a class="el" href="struct_i_p_l_audio_buffer.html" title="A buffer containing audio data. ">IPLAudioBuffer</a></code> objects with the same format as specified here. The input format must not be Ambisonics. </td></tr>
+    <tr><td class="paramname">outputFormat</td><td>The format of the audio buffers which will be used to retrieve the output from this effect. All subsequent calls to <code><a class="el" href="group__panningeffect.html#ga25d0316fa61dba8741b93e864de0fb7e" title="Applies 3D panning to a buffer of audio data, using the configuration of a Panning Effect object...">iplApplyPanningEffect</a></code> for this effect object must use <code><a class="el" href="struct_i_p_l_audio_buffer.html" title="A buffer containing audio data. ">IPLAudioBuffer</a></code> objects with the same format as specified here. Any valid audio format may be specified as the output format. </td></tr>
     <tr><td class="paramname">effect</td><td>[out] Handle to the created Panning Effect object.</td></tr>
   </table>
   </dd>
@@ -152,8 +152,8 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="ga9efcf289b9d77989cd3ec9f0a926281d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga9efcf289b9d77989cd3ec9f0a926281d">&#9670;&nbsp;</a></span>iplApplyPanningEffect()</h2>
+<a id="ga25d0316fa61dba8741b93e864de0fb7e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga25d0316fa61dba8741b93e864de0fb7e">&#9670;&nbsp;</a></span>iplApplyPanningEffect()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -163,6 +163,12 @@ Functions</h2></td></tr>
           <td>(</td>
           <td class="paramtype"><a class="el" href="group__types.html#ga08dc6de588508173d4396acfd3e08204">IPLhandle</a>&#160;</td>
           <td class="paramname"><em>effect</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="group__types.html#ga08dc6de588508173d4396acfd3e08204">IPLhandle</a>&#160;</td>
+          <td class="paramname"><em>binauralRenderer</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -195,6 +201,7 @@ Functions</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">effect</td><td>Handle to a Panning Effect object. </td></tr>
+    <tr><td class="paramname">binauralRenderer</td><td>Handle to a Binaural Renderer object that should be used to apply the panning effect. </td></tr>
     <tr><td class="paramname">inputAudio</td><td>Audio buffer containing the data to render using 3D panning. The format of this buffer must match the <code>inputFormat</code> parameter passed to <code><a class="el" href="group__panningeffect.html#ga21b33b829f314342982ae0a28132595b" title="Creates a Panning Effect object. ">iplCreatePanningEffect</a></code>. </td></tr>
     <tr><td class="paramname">direction</td><td>Unit vector from the listener to the point source, relative to the listener's coordinate system. </td></tr>
     <tr><td class="paramname">outputAudio</td><td>Audio buffer that should contain the rendered audio data. The format of this buffer must match the <code>outputFormat</code> parameter passed to <code><a class="el" href="group__panningeffect.html#ga21b33b829f314342982ae0a28132595b" title="Creates a Panning Effect object. ">iplCreatePanningEffect</a></code>. </td></tr>
