@@ -1,6 +1,6 @@
-% Steam Audio FMOD Studio Plugin 2.0-beta.13
+% Steam Audio FMOD Studio Plugin 2.0-beta.16
 
-# Steam Audio FMOD Studio Plugin <small><small>2.0-beta.13</small></small>
+# Steam Audio FMOD Studio Plugin <small><small>2.0-beta.16</small></small>
 
 Copyright 2017 Valve Corporation. All rights reserved. Subject to the following license: 
 [https://valvesoftware.github.io/steam-audio/license.html](https://valvesoftware.github.io/steam-audio/license.html)
@@ -9,7 +9,10 @@ Copyright 2017 Valve Corporation. All rights reserved. Subject to the following 
 ## Introduction
 
 ### Supported Platforms
-- Windows 7 or later (64-bit only)
+- Windows 7 or later (32-bit and 64-bit)
+- Linux (32-bit and 64-bit, tested with Ubuntu 16.04 LTS)
+- macOS 10.7 or later
+- Android 4.1 or later
 
 ### Supported Integrations
 - FMOD Studio 1.10.01 or later
@@ -22,9 +25,10 @@ Copyright 2017 Valve Corporation. All rights reserved. Subject to the following 
 Before using Steam Audio in your FMOD Studio project, you must install it to a location from which FMOD Studio can
 load it. After unzipping Steam Audio for FMOD Studio, navigate to the `bin/fmod/` subdirectory and copy the following files:
 
-- `windows/x64/phonon.dll`
-- `windows/x64/phonon_fmod.dll`
-- `phonon_fmod.plugin.js`
+- Windows 64-bit editor only: `windows/x64/phonon.dll` and `windows/x64/phonon_fmod.dll`
+- Windows 32-bit editor only: `windows/x86/phonon.dll` and `windows/x86/phonon_fmod.dll`
+- macOS editor only: `osx/phonon.bundle` and `osx/libphonon_fmod.dylib`
+- All platforms: `phonon_fmod.plugin.js`
 
 to one of the directories from which FMOD Studio loads plugins. For more information on these directories, refer to
 the [FMOD Studio documentation](https://fmod.com/resources/documentation-studio?page=plugin-reference.html).
@@ -159,6 +163,22 @@ Indirect Mix Level adjusts the contribution of indirect sound to the overall mix
 
 Ignored if **Indirect** is disabled.
 
+##### Directivity
+Some sound sources emit sound largely within a limited range of directions. For example, a megaphone projects sound
+mostly to the front. Steam Audio can model the effect of such source directivity patterns on both direct and
+indirect sound. To specify a directivity pattern for a source, the following two parameters can be used:
+
+- **Dipole Weight**. When set to 0, the source has a monopole directivity, i.e., is omnidirectional. When set to
+  1, the source has a dipole directivity, i.e., sound is focused to the front and back of the source, and very little
+  sound is emitted to the left or right of the source. Values in between blend between the two directivity patterns.
+  At 0.5, for example, the source has a cardioid directivity, i.e., most of the sound is emitted to the front of the
+  source.
+
+- **Dipole Power**. Specifies how focused the dipole directivity is. Higher values result in sharper directivity
+  patterns.
+
+As you adjust these values, you can see a preview of the directivity pattern in the effect deck.
+
 #### Accelerated Mixing
 If you are using the Steam Audio Spatializer to add indirect effects to many events in your project, you can use the 
 **Steam Audio Mixer Return** effect to reduce the CPU overhead of audio processing for environmental effects. This can be 
@@ -262,6 +282,11 @@ Finally, you must tell Steam Audio that you are using FMOD Studio as your audio 
 1.  From the Unity menu, choose **Window** > **Steam Audio**.
 2.  In the Steam Audio tab, under **Audio Engine**, choose **FMOD Studio**.
 
+#### Configuring FMOD Studio Event Emitters in Unity
+To every GameObject in Unity that contains an FMOD Studio Event Emitter component, you must also attach a Steam Audio
+Source component. Otherwise, distance attenuation, air absorption, directivity, occlusion, and transmission will not
+be rendered correctly.
+
 ### Auditioning Steam Audio Effects
 Events that are configured to use physics-based sound propagation, including occlusion, source-centric propagation,
 and listener-centric reverb, cannot be auditioned using just FMOD Studio. They must be auditioned by entering play mode
@@ -285,3 +310,17 @@ these changes affect the sound produced by Steam Audio.
 When baking sound propagation effects for a source (either in Baked Static Source mode or Baked Static Listener mode),
 you must attach a **Steam Audio Source** component to the GameObject that contains the corresponding **FMOD Studio Event
 Emitter** component.
+
+### Using Custom HRTFs
+The Steam Audio FMOD Studio plugin allows users to replace Steam Audio's built-in HRTF with any HRTF of their choosing. This
+is useful for comparing different HRTF databases, measurement or simulation techniques, or even allowing end users to
+use a preferred HRTF with your game or app. Steam Audio loads HRTFs from _SOFA files_. The Spatially-Oriented Format
+for Acoustics (SOFA) file format is defined by an Audio Engineering Society (AES) standard; for more details refer to
+<https://www.sofaconventions.org/>.
+
+To use custom HRTFs with Steam Audio, refer to the documentation for your game engine integration. For example, if your
+game engine is Unity, refer to the documentation for the Steam Audio Unity plugin.
+
+HRTFs loaded from SOFA files affect direct sound as well as indirect sound generated by Steam Audio Spatializer effects with
+Indirect Binaural checked, Steam Audio Mixer Return effects with Binaural checked, or Steam Audio Reverb effects with
+Binaural checked.

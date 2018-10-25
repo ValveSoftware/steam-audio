@@ -1,0 +1,19 @@
+﻿//
+// Copyright 2017 Valve Corporation. All rights reserved. Subject to the following license:
+// https://valvesoftware.github.io/steam-audio/license.html
+//
+
+namespace SteamAudio
+{
+    public static class Version 
+    {
+        public const int major = @PROJECT_VERSION_MAJOR@;
+        public const int minor = @PROJECT_VERSION_MINOR@;
+        public const int patch = @PROJECT_VERSION_PATCH@;
+
+        public static int GetVersion() 
+        {
+            return (major << 16) | (minor << 8) | patch;
+        }
+    }
+}

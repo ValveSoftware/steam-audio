@@ -58,6 +58,12 @@ namespace SteamAudio
                     "Audio Sources that are configured for real-time indirect sound, or with a Steam Audio " +
                     "Reverb effect configured for real-time reverb, may lead to decreased frame rates.",
                     MessageType.Warning);
+            } else if ((SceneType) rayTracerProperty.enumValueIndex == SceneType.Custom) {
+                EditorGUILayout.HelpBox(
+                    "Unity's built-in ray tracer should only be used for occlusion and transmission. Steam Audio " +
+                    "Sources with real-time or baked indirect sound, Steam Audio Mixer Return effects, or Steam " +
+                    "Audio Reverb effects should not be used with Unity's built-in ray tracer.",
+                    MessageType.Warning);
             }
 
             EditorGUILayout.Space();
@@ -99,7 +105,7 @@ namespace SteamAudio
             serializedObject.ApplyModifiedProperties();
         }
 
-        string[] optionsRayTracer = new string[] { "Phonon", "Embree", "Radeon Rays" };
+        string[] optionsRayTracer = new string[] { "Phonon", "Embree", "Radeon Rays", "Unity" };
         string[] optionsConvolution = new string[] { "Phonon", "TrueAudio Next" };
     }
 }

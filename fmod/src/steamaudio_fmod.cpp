@@ -56,3 +56,17 @@ extern "C" F_EXPORT FMOD_PLUGINLIST* F_CALL FMODGetPluginDescriptionList()
     initReverbParamDescs();
 	return gPluginList;
 }
+
+extern "C" F_EXPORT
+void F_CALL iplFMODGetVersion(unsigned int* major, unsigned int* minor, unsigned int* patch)
+{
+    if (major) {
+        *major = STEAMAUDIO_FMOD_VERSION_MAJOR;
+    }
+    if (minor) {
+        *minor = STEAMAUDIO_FMOD_VERSION_MINOR;
+    }
+    if (patch) {
+        *patch = STEAMAUDIO_FMOD_VERSION_PATCH;
+    }
+}

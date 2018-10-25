@@ -8,6 +8,8 @@
 
 #include <stddef.h>
 
+#include "phonon_version.h"
+
 #if defined(SWIG)
 #define IPLAPI
 #elif (defined(_WIN32) || defined(_WIN64))
@@ -304,6 +306,7 @@ extern "C" {
      */
     typedef struct {
         IPLSceneType        sceneType;              /**< The ray tracer to use for simulation. \see IPLSceneType. */
+        IPLint32            numOcclusionSamples;
         IPLint32            numRays;                /**< The number of rays to trace from the listener. Increasing this
                                                          number increases the accuracy of the simulation, but also
                                                          increases CPU usage. Any positive integer may be specified,
@@ -1012,82 +1015,20 @@ extern "C" {
      */
     typedef enum {
         IPL_HRTFDATABASETYPE_DEFAULT,   /**< The built-in HRTF database. */
-        IPL_HRTFDATABASETYPE_CUSTOM     /**< Indicates that your application will supply HRTF data of its own at
-                                             run-time. For this to work, you must implement the necessary HRTF database
-                                             callbacks described in this section. */
+        IPL_HRTFDATABASETYPE_SOFA       /**< An HRTF database loaded from a SOFA file. SOFA is an AES standard
+                                             file format for storing and exchanging acoustic data, including HRTFs.
+                                             For more information on the SOFA format, see
+                                             https://www.sofaconventions.org/ */
     } IPLHrtfDatabaseType;
-
-    /** A single-precision complex number.
-     */
-    typedef struct {
-        IPLfloat32 real;    /**< The real part. */
-        IPLfloat32 imag;    /**< The imaginary part. */
-    } IPLComplex;
-
-    /** A function that you can call to calculate the Fast Fourier Transform (FFT) of a real-valued time-domain
-     *  signal. You will typically call this from within your implementation of IPLHrtfLoadCallback, to transform your
-     *  time-domain Head-Related Impulse Responses (HRIRs) into Head-Related Transfer Functions (HRTFs).
-     *
-     *  \param  data                Pointer to internal data required for calculating Fourier transforms. This will be
-     *                              passed in to your implementation of IPLHrtfLoadCallback.
-     *  \param  signal              Array containing the time-domain signal. The number of elements in this array must
-     *                              match the signalSize parameter received by IPLHrtfLoadCallback.
-     *  \param  spectrum            Array containing the frequency-domain spectrum. The number of elements in this
-     *                              array must match the spectrumSize parameter received by IPLHrtfLoadCallback.
-     */
-    typedef void (*IPLFftHelper)(IPLvoid* data, IPLfloat32* signal, IPLComplex* spectrum);
-
-    /** Pointer to a function that will be called during the execution of iplCreateBinauralRenderer, to allow your
-     *  application to pre-transform all HRTF data into frequency domain.
-     *
-     *  \param  signalSize          Number of elements in the time-domain (HRIR) data arrays that must be transformed.
-     *                              This will be greater than the actual size of the HRIRs passed to
-     *                              iplCreateBinauralRenderer. Any array passed to fftHelper must contain the HRIR
-     *                              data at the start, and the rest of the elements must be initialized to zero. For
-     *                              example, if signalSize is 1024, and the HRIRs are 200 samples long, the arrays
-     *                              passed to the signal parameter of fftHelper must be 1024 samples long, with the
-     *                              first 200 samples containing the HRIR data, and the remaining 824 samples containing
-     *                              zeroes.
-     *  \param  spectrumSize        Number of elements in the frequency-domain (HRTF) data arrays that will contain the
-     *                              results of the transformation. You will typically allocate arrays of this size for
-     *                              each HRIR; they must not be freed until IPLHrtfUnloadCallback is called.
-     *  \param  fftHelper           Pointer to a function that you can call to calculate the Fourier transforms of the
-     *                              HRIRs.
-     *  \param  fftHelperData       Internal data required for calculating Fourier transforms. Pass this to fftHelper.
-     */
-    typedef void (*IPLHrtfLoadCallback)(IPLint32 signalSize, IPLint32 spectrumSize, IPLFftHelper fftHelper,
-        IPLvoid* fftHelperData);
-
-    /** Pointer to a function that will be called during the execution of iplDestroyBinauralRenderer, to allow your
-     *  application to free memory allocated during IPLHrtfLoadCallback.
-     */
-    typedef void (*IPLHrtfUnloadCallback)();
-
-    /** Pointer to a function that will be called during the execution of iplApplyBinauralEffect, to left your
-     *  application copy HRTF data for a given direction into arrays managed by Phonon.
-     *
-     *  \param  direction           Array containing the coordinates of the unit vector from the listener to the
-     *                              source, in Cartesian coordinates.
-     *  \param  leftHrtf            Array into which you should copy the frequency-domain left-ear HRTF for the given
-     *                              direction.
-     *  \param  rightHrtf           Array into which you should copy the frequency-domain right-ear HRTF for the given
-     *                              direction.
-     */
-    typedef void (*IPLHrtfLookupCallback)(IPLfloat32* direction, IPLComplex* leftHrtf, IPLComplex* rightHrtf);
 
     /** Parameters used to describe the HRTF database you want to use when creating a Binaural Renderer object.
      */
     typedef struct {
-        IPLHrtfDatabaseType             type;                       /**< Type of HRTF database to use. */
-        IPLbyte*                        hrtfData;                   /**< Reserved. Must be NULL. */
-        IPLint32                        numHrirSamples;             /**< If using custom HRTF data, the size of each
-                                                                         time-domain HRIR. */
-        IPLHrtfLoadCallback             loadCallback;               /**< Callback that will be called when creating
-                                                                         a Binaural Renderer object. */
-        IPLHrtfUnloadCallback           unloadCallback;             /**< Callback that will be called when destroying a
-                                                                         Binaural Renderer object. */
-        IPLHrtfLookupCallback           lookupCallback;             /**< Callback that may be called to look up an HRTF
-                                                                         and return a copy of the data. */
+        IPLHrtfDatabaseType type;                       /**< Type of HRTF database to use. */
+        IPLbyte*            hrtfData;                   /**< Reserved. Must be NULL. */
+        IPLstring           sofaFileName;               /**< Name of the SOFA file from which to load HRTF data. Can
+                                                             be a relative or absolute path. Must be a null-terminated
+                                                             UTF-8 string. */
     } IPLHrtfParams;
 
     /** Creates a Binaural Renderer object. This function must be called before creating any Panning Effect objects,
@@ -1160,6 +1101,8 @@ extern "C" {
      *  it will automatically be downmixed to mono.
      *
      *  \param  effect              Handle to a Panning Effect object.
+     *  \param  binauralRenderer    Handle to a Binaural Renderer object that should be used to apply the panning
+     *                              effect.
      *  \param  inputAudio          Audio buffer containing the data to render using 3D panning. The format of this
      *                              buffer must match the \c inputFormat parameter passed to \c ::iplCreatePanningEffect.
      *  \param  direction           Unit vector from the listener to the point source, relative to the listener's
@@ -1167,7 +1110,7 @@ extern "C" {
      *  \param  outputAudio         Audio buffer that should contain the rendered audio data. The format of this buffer
      *                              must match the \c outputFormat parameter passed to \c ::iplCreatePanningEffect.
      */
-    IPLAPI IPLvoid iplApplyPanningEffect(IPLhandle effect, IPLAudioBuffer inputAudio, IPLVector3 direction,
+    IPLAPI IPLvoid iplApplyPanningEffect(IPLhandle effect, IPLhandle binauralRenderer, IPLAudioBuffer inputAudio, IPLVector3 direction,
         IPLAudioBuffer outputAudio);
 
     /** Resets any internal state maintained by a Panning Effect object. This is useful if the Panning Effect object
@@ -1237,6 +1180,10 @@ extern "C" {
      *  for wide-band noise-like sounds, such as radio static, mechanical noise, fire, etc.
      *
      *  \param  effect              Handle to an Object-Based Binaural Effect object.
+     *  \param  binauralRenderer    Handle to a Binaural Renderer object that should be used to apply the binaural
+     *                              effect. Each Binaural Renderer corresponds to an HRTF (which may be loaded from
+     *                              SOFA files); the value of this parameter determines which HRTF is used to
+     *                              spatialize the input audio.
      *  \param  inputAudio          Audio buffer containing the data to render using binaural rendering. The format of
      *                              this buffer must match the \c inputFormat parameter passed to
      *                              \c ::iplCreateBinauralEffect.
@@ -1249,10 +1196,10 @@ extern "C" {
      *                              buffer must match the \c outputFormat parameter passed to
      *                              \c ::iplCreateBinauralEffect.
      */
-    IPLAPI IPLvoid iplApplyBinauralEffect(IPLhandle effect, IPLAudioBuffer inputAudio, IPLVector3 direction,
+    IPLAPI IPLvoid iplApplyBinauralEffect(IPLhandle effect, IPLhandle binauralRenderer, IPLAudioBuffer inputAudio, IPLVector3 direction,
         IPLHrtfInterpolation interpolation, IPLAudioBuffer outputAudio);
 
-    IPLAPI IPLvoid iplApplyBinauralEffectWithParameters(IPLhandle effect, IPLAudioBuffer inputAudio,
+    IPLAPI IPLvoid iplApplyBinauralEffectWithParameters(IPLhandle effect, IPLhandle binauralRenderer, IPLAudioBuffer inputAudio,
         IPLVector3 direction, IPLHrtfInterpolation interpolation, IPLAudioBuffer outputAudio, IPLfloat32* leftDelay,
         IPLfloat32* rightDelay);
 
@@ -1313,6 +1260,10 @@ extern "C" {
     /** Applies HRTF-based binaural rendering to a buffer of multichannel audio data.
      *
      *  \param  effect              Handle to a Virtual Surround Effect.
+     *  \param  binauralRenderer    Handle to a Binaural Renderer object that should be used to apply the virtual surround
+     *                              effect. Each Binaural Renderer corresponds to an HRTF (which may be loaded from
+     *                              SOFA files); the value of this parameter determines which HRTF is used to
+     *                              spatialize the input audio.
      *  \param  inputAudio          Audio buffer containing the data to render using binaural rendering. The format of
      *                              this buffer must match the \c inputFormat parameter passed to
      *                              \c ::iplCreateVirtualSurroundEffect.
@@ -1322,7 +1273,7 @@ extern "C" {
      *
      *  \remark When using a custom HRTF database, calling this function is not supported.
      */
-    IPLAPI IPLvoid iplApplyVirtualSurroundEffect(IPLhandle effect, IPLAudioBuffer inputAudio,
+    IPLAPI IPLvoid iplApplyVirtualSurroundEffect(IPLhandle effect, IPLhandle binauralRenderer, IPLAudioBuffer inputAudio,
         IPLAudioBuffer outputAudio);
 
     /** Resets any internal state maintained by a Virtual Surround Effect object. This is useful if the Virtual 
@@ -1387,6 +1338,8 @@ extern "C" {
      *  object, otherwise the rendered audio will be incorrect.
      *
      *  \param  effect              Handle to an Ambisonics Panning Effect object.
+     *  \param  binauralRenderer    Handle to a Binaural Renderer object that should be used to apply the ambisonics panning
+     *                              effect.
      *  \param  inputAudio          Audio buffer containing the data to render. The format of
      *                              this buffer must match the \c inputFormat parameter passed to
      *                              \c ::iplCreateAmbisonicsPanningEffect.
@@ -1394,7 +1347,7 @@ extern "C" {
      *                              must match the \c outputFormat parameter passed to
      *                              \c ::iplCreateAmbisonicsPanningEffect.
      */
-    IPLAPI IPLvoid iplApplyAmbisonicsPanningEffect(IPLhandle effect, IPLAudioBuffer inputAudio,
+    IPLAPI IPLvoid iplApplyAmbisonicsPanningEffect(IPLhandle effect, IPLhandle binauralRenderer, IPLAudioBuffer inputAudio,
         IPLAudioBuffer outputAudio);
 
     /** Resets any internal state maintained by an Ambisonics Panning Effect object. This is useful if the Ambisonics 
@@ -1460,6 +1413,10 @@ extern "C" {
      *  object, otherwise the rendered audio will be incorrect.
      *
      *  \param  effect              Handle to an Ambisonics Binaural Effect object.
+     *  \param  binauralRenderer    Handle to a Binaural Renderer object that should be used to apply the ambisonics binaural
+     *                              effect. Each Binaural Renderer corresponds to an HRTF (which may be loaded from
+     *                              SOFA files); the value of this parameter determines which HRTF is used to
+     *                              spatialize the input audio.
      *  \param  inputAudio          Audio buffer containing the data to render using binaural rendering. The format of
      *                              this buffer must match the \c inputFormat parameter passed to
      *                              \c ::iplCreateAmbisonicsBinauralEffect.
@@ -1469,7 +1426,7 @@ extern "C" {
      *
      *  \remark When using a custom HRTF database, calling this function is not supported.
      */
-    IPLAPI IPLvoid iplApplyAmbisonicsBinauralEffect(IPLhandle effect, IPLAudioBuffer inputAudio,
+    IPLAPI IPLvoid iplApplyAmbisonicsBinauralEffect(IPLhandle effect, IPLhandle binauralRenderer, IPLAudioBuffer inputAudio,
         IPLAudioBuffer outputAudio);
 
     /** Resets any internal state maintained by an Ambisonics Binaural Effect object. This is useful if the Ambisonics 

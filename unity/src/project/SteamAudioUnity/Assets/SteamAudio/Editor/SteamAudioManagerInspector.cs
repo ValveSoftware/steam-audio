@@ -35,11 +35,35 @@ namespace SteamAudio
             EditorGUILayout.LabelField("Audio Engine Integration", EditorStyles.boldLabel);
             string[] engines = { "Unity", "FMOD Studio" };
             var audioEngineProperty = serializedObject.FindProperty("audioEngine");
-            audioEngineProperty.enumValueIndex = EditorGUILayout.Popup("Audio Engine", 
+            audioEngineProperty.enumValueIndex = EditorGUILayout.Popup("Audio Engine",
                 audioEngineProperty.enumValueIndex, engines);
 
+            EditorGUILayout.Space();
+            EditorGUILayout.LabelField("HRTF Settings", EditorStyles.boldLabel);
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("sofaFiles"), new GUIContent("SOFA Files"), true);
+
+            SteamAudioManager steamAudioManager = (SteamAudioManager)target;
+
+            var wasGUIEnabled = GUI.enabled;
+            GUI.enabled = true;
+
+            var sofaFiles = steamAudioManager.GetSOFAFileNames();
+            if (sofaFiles != null) {
+                var sofaFileNames = new string[sofaFiles.Length];
+                for (var i = 0; i < sofaFileNames.Length; ++i) {
+                    sofaFileNames[i] = sofaFiles[i];
+                    if (sofaFileNames[i].Length == 0 || sofaFileNames[i] == "") {
+                        sofaFileNames[i] = "Default";
+                    }
+                }
+                var currentSOFAFileProperty = serializedObject.FindProperty("currentSOFAFile");
+                currentSOFAFileProperty.intValue = EditorGUILayout.Popup("Current SOFA File",
+                    currentSOFAFileProperty.intValue, sofaFileNames);
+            }
+
+            GUI.enabled = wasGUIEnabled;
+
             // Scene Settings
-            SteamAudioManager steamAudioManager = ((SteamAudioManager)target);
             EditorGUILayout.Space();
             EditorGUILayout.LabelField("Global Material Settings", EditorStyles.boldLabel);
             EditorGUILayout.PropertyField(serializedObject.FindProperty("materialPreset"));
@@ -73,8 +97,10 @@ namespace SteamAudio
                 SimulationSettingsValue actualValue = steamAudioManager.simulationValue;
                 actualValue.CopyFrom(SimulationSettingsPresetList.PresetValue(
                     serializedObject.FindProperty("simulationPreset").enumValueIndex));
-            }
-            else
+
+                EditorGUILayout.Space();
+                UnityRayTracerGUI(true);
+            } else
             {
                 EditorGUILayout.PropertyField(serializedObject.FindProperty("simulationValue"));
 
@@ -88,6 +114,8 @@ namespace SteamAudio
                         "This may significantly increase CPU usage. Consider reducing this value unless necessary.",
                         MessageType.Warning);
                 }
+
+                UnityRayTracerGUI(false);
 
                 if (Application.isEditor && EditorApplication.isPlayingOrWillChangePlaymode)
                 {
@@ -146,6 +174,17 @@ namespace SteamAudio
 
             EditorGUILayout.Space();
             serializedObject.ApplyModifiedProperties();
+        }
+
+        void UnityRayTracerGUI(bool showHeader)
+        {
+            var customSettings = GameObject.FindObjectOfType<SteamAudioCustomSettings>();
+            if (customSettings && customSettings.rayTracerOption == SceneType.Custom) {
+                if (showHeader) {
+                    EditorGUILayout.LabelField("Occlusion Settings", EditorStyles.boldLabel);
+                }
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("layerMask"));
+            }
         }
 
         public bool ProbeGenerationGUI()
@@ -443,6 +482,5 @@ namespace SteamAudio
 
             return true;
         }
-
     }
 }

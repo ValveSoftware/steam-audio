@@ -2,7 +2,13 @@
 # Copyright (c) Valve Corporation. All rights reserved.
 #
 
+if (WIN32)
+    set (SRC_FMOD_VERSION phonon_fmod.rc.in)
+    set (SRC_FMOD_VERSION phonon_fmod.rc)
+endif()
+
 set (SRC_FMOD
+    ${SRC_FMOD_VERSION}
     auto_load_library.h
     auto_load_library.cpp
     audio_engine_settings.h
@@ -17,7 +23,8 @@ set (SRC_FMOD
 )
 
 if (APPLE)
-    add_bundle (phonon_fmod ${SRC_FMOD})
-else ()
-    add_library (phonon_fmod SHARED ${SRC_FMOD})
-endif ()
+    add_bundle(phonon_fmod_bundle ${SRC_FMOD})
+    set_target_properties(phonon_fmod_bundle PROPERTIES OUTPUT_NAME "phonon_fmod")
+endif()
+
+add_library(phonon_fmod SHARED ${SRC_FMOD})

@@ -9,6 +9,10 @@
 
 /** Function pointer types for all the Steam Audio API functions used by the Unity plugin.
  */
+typedef void (*IPLGetVersion)(unsigned int* major, 
+                              unsigned int* minor, 
+                              unsigned int* patch);
+
 typedef IPLerror (*IPLCreateContext)(IPLLogFunction logCallback,
                                      IPLAllocateFunction allocateCallback,
                                      IPLFreeFunction freeCallback,
@@ -31,6 +35,7 @@ typedef IPLerror(*IPLCreatePanningEffect)(IPLhandle renderer,
 typedef IPLvoid(*IPLDestroyPanningEffect)(IPLhandle* effect);
 
 typedef IPLvoid(*IPLApplyPanningEffect)(IPLhandle effect, 
+                                        IPLhandle binauralRenderer,
                                         IPLAudioBuffer inputAudio, 
                                         IPLVector3 direction,    
                                         IPLAudioBuffer outputAudio);
@@ -43,12 +48,22 @@ typedef IPLerror(*IPLCreateBinauralEffect)(IPLhandle renderer,
 typedef IPLvoid(*IPLDestroyBinauralEffect)(IPLhandle* effect);
 
 typedef IPLvoid(*IPLApplyBinauralEffect)(IPLhandle effect, 
-                                         IPLAudioBuffer inputAudio, 
+                                         IPLhandle binauralRenderer,
+                                         IPLAudioBuffer inputAudio,
                                          IPLVector3 direction,    
                                          IPLHrtfInterpolation interpolation, 
                                          IPLAudioBuffer outputAudio);
 
-typedef IPLerror(*IPLCreateAmbisonicsPanningEffect)(IPLhandle renderer, 
+typedef IPLvoid(*IPLApplyBinauralEffectWithParameters)(IPLhandle effect,
+                                                       IPLhandle binauralRenderer,
+                                                       IPLAudioBuffer inputAudio,
+                                                       IPLVector3 direction,
+                                                       IPLHrtfInterpolation interpolation,
+                                                       IPLAudioBuffer outputAudio,
+                                                       IPLfloat32* leftDelay,
+                                                       IPLfloat32* rightDelay);
+
+typedef IPLerror(*IPLCreateAmbisonicsPanningEffect)(IPLhandle renderer,
                                                     IPLAudioFormat inputFormat,    
                                                     IPLAudioFormat outputFormat, 
                                                     IPLhandle* effect);
@@ -56,7 +71,8 @@ typedef IPLerror(*IPLCreateAmbisonicsPanningEffect)(IPLhandle renderer,
 typedef IPLvoid(*IPLDestroyAmbisonicsPanningEffect)(IPLhandle* effect);
 
 typedef IPLvoid(*IPLApplyAmbisonicsPanningEffect)(IPLhandle effect, 
-                                                  IPLAudioBuffer inputAudio,    
+                                                  IPLhandle binauralRenderer,
+                                                  IPLAudioBuffer inputAudio,
                                                   IPLAudioBuffer outputAudio);
 
 typedef IPLvoid(*IPLFlushAmbisonicsPanningEffect)(IPLhandle effect);
@@ -69,7 +85,8 @@ typedef IPLerror(*IPLCreateAmbisonicsBinauralEffect)(IPLhandle renderer,
 typedef IPLvoid(*IPLDestroyAmbisonicsBinauralEffect)(IPLhandle* effect);
 
 typedef IPLvoid(*IPLApplyAmbisonicsBinauralEffect)(IPLhandle effect, 
-                                                   IPLAudioBuffer inputAudio,    
+                                                   IPLhandle binauralRenderer,
+                                                   IPLAudioBuffer inputAudio,
                                                    IPLAudioBuffer outputAudio);
 
 typedef IPLvoid(*IPLFlushAmbisonicsBinauralEffect)(IPLhandle effect);
@@ -154,6 +171,7 @@ struct SteamAudioApi
     IPLCreateBinauralEffect                 iplCreateBinauralEffect;
     IPLDestroyBinauralEffect                iplDestroyBinauralEffect;
     IPLApplyBinauralEffect                  iplApplyBinauralEffect;
+    IPLApplyBinauralEffectWithParameters    iplApplyBinauralEffectWithParameters;
     IPLCreateAmbisonicsPanningEffect        iplCreateAmbisonicsPanningEffect;
     IPLDestroyAmbisonicsPanningEffect       iplDestroyAmbisonicsPanningEffect;
     IPLApplyAmbisonicsPanningEffect         iplApplyAmbisonicsPanningEffect;

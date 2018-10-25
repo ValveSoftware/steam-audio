@@ -35,16 +35,21 @@ namespace SteamAudio
 
             serializedObject.Update();
 
+            var directBinauralProp = serializedObject.FindProperty("directBinaural");
+            var interpolationProp = serializedObject.FindProperty("interpolation");
+            //var hrtfIndexProp = serializedObject.FindProperty("hrtfIndex");
+            //var overrideHRTFIndexProp = serializedObject.FindProperty("overrideHRTFIndex");
+
             if (steamAudioManager.audioEngine == AudioEngine.UnityNative)
             {
                 // Direct Sound UX
                 EditorGUILayout.Space();
                 EditorGUILayout.LabelField("Direct Sound", EditorStyles.boldLabel);
-                EditorGUILayout.PropertyField(serializedObject.FindProperty("directBinaural"));
-                if (serializedObject.FindProperty("directBinaural").boolValue)
-                {
-                    EditorGUILayout.PropertyField(serializedObject.FindProperty("interpolation"),
-                        new GUIContent("HRTF Interpolation"));
+                EditorGUILayout.PropertyField(directBinauralProp);
+                if (directBinauralProp.boolValue) {
+                    EditorGUILayout.PropertyField(interpolationProp, new GUIContent("HRTF Interpolation"));
+                    //EditorGUILayout.PropertyField(overrideHRTFIndexProp, new GUIContent("Override HRTF Index"));
+                    //EditorGUILayout.PropertyField(hrtfIndexProp, new GUIContent("HRTF Index"));
                 }
 
                 serializedObject.FindProperty("occlusionMode").enumValueIndex =
@@ -129,10 +134,11 @@ namespace SteamAudio
                     BakedSourceStatsGUI();
             }
 
-            EditorGUILayout.Space();
-            if (showAdvancedOptions = EditorGUILayout.Foldout(showAdvancedOptions, "Advanced Options"))
-            {
-                EditorGUILayout.PropertyField(serializedObject.FindProperty("avoidSilenceDuringInit"));
+            if (steamAudioManager.audioEngine == AudioEngine.UnityNative) {
+                EditorGUILayout.Space();
+                if (showAdvancedOptions = EditorGUILayout.Foldout(showAdvancedOptions, "Advanced Options")) {
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("avoidSilenceDuringInit"));
+                }
             }
 
             // Save changes.

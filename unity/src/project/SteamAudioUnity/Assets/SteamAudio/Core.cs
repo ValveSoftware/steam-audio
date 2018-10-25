@@ -14,6 +14,11 @@ namespace SteamAudio
     public static class PhononCore
     {
         [DllImport("phonon")]
+        public static extern void iplGetVersion([In, Out] ref uint major,
+                                                [In, Out] ref uint minor,
+                                                [In, Out] ref uint patch);
+
+        [DllImport("phonon")]
         public static extern Error iplCreateContext(LogCallback logCallback, IntPtr allocateCallback, IntPtr freeCallback, [In, Out] ref IntPtr context);
 
         [DllImport("phonon")]
@@ -48,13 +53,22 @@ namespace SteamAudio
         //
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        public delegate void ClosestHitCallback(Vector3 origin, Vector3 direction, float minDistance, 
-            float maxDistance, [In, Out] ref float hitDistance, [In, Out] ref Vector3 hitNormal, 
-            [In, Out] ref int hitMaterialIndex, IntPtr userData);
+        public delegate void ClosestHitCallback([MarshalAs(UnmanagedType.LPArray, SizeConst = 3)] float[] origin,
+                                                [MarshalAs(UnmanagedType.LPArray, SizeConst = 3)] float[] direction, 
+                                                float minDistance, 
+                                                float maxDistance, 
+                                                [In, Out] ref float hitDistance, 
+                                                [In, Out] ref Vector3 hitNormal, 
+                                                [In, Out] ref IntPtr hitMaterial, 
+                                                IntPtr userData);
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        public delegate void AnyHitCallback(Vector3 origin, Vector3 direction, float minDistance, float maxDistance, 
-            [In, Out] ref int hitExists, IntPtr userData);
+        public delegate void AnyHitCallback([MarshalAs(UnmanagedType.LPArray, SizeConst = 3)] float[] origin, 
+                                            [MarshalAs(UnmanagedType.LPArray, SizeConst = 3)] float[] direction, 
+                                            float minDistance, 
+                                            float maxDistance, 
+                                            [In, Out] ref int hitExists, 
+                                            IntPtr userData);
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         public delegate void BatchedClosestHitCallback(int numRays, Vector3[] origins, Vector3[] directions,
@@ -152,7 +166,7 @@ namespace SteamAudio
         public static extern void iplDestroyPanningEffect([In, Out] ref IntPtr effect);
 
         [DllImport("phonon")]
-        public static extern void iplApplyPanningEffect(IntPtr effect, AudioBuffer inputAudio, Vector3 direction, AudioBuffer outputAudio);
+        public static extern void iplApplyPanningEffect(IntPtr effect, IntPtr binauralRenderer, AudioBuffer inputAudio, Vector3 direction, AudioBuffer outputAudio);
 
         [DllImport("phonon")]
         public static extern void iplFlushPanningEffect(IntPtr effect);
@@ -164,7 +178,7 @@ namespace SteamAudio
         public static extern void iplDestroyBinauralEffect([In, Out] ref IntPtr effect);
 
         [DllImport("phonon")]
-        public static extern void iplApplyBinauralEffect(IntPtr effect, AudioBuffer inputAudio, Vector3 direction, HRTFInterpolation interpolation, AudioBuffer outputAudio);
+        public static extern void iplApplyBinauralEffect(IntPtr effect, IntPtr binauralRenderer, AudioBuffer inputAudio, Vector3 direction, HRTFInterpolation interpolation, AudioBuffer outputAudio);
 
         [DllImport("phonon")]
         public static extern void iplFlushBinauralEffect(IntPtr effect);
@@ -176,7 +190,7 @@ namespace SteamAudio
         public static extern void iplDestroyVirtualSurroundEffect([In, Out] ref IntPtr effect);
 
         [DllImport("phonon")]
-        public static extern void iplApplyVirtualSurroundEffect(IntPtr effect, AudioBuffer inputAudio, AudioBuffer outputAudio);
+        public static extern void iplApplyVirtualSurroundEffect(IntPtr effect, IntPtr binauralRenderer, AudioBuffer inputAudio, AudioBuffer outputAudio);
 
         [DllImport("phonon")]
         public static extern void iplFlushVirtualSurroundEffect(IntPtr effect);
@@ -188,7 +202,7 @@ namespace SteamAudio
         public static extern void iplDestroyAmbisonicsPanningEffect([In, Out] ref IntPtr effect);
 
         [DllImport("phonon")]
-        public static extern void iplApplyAmbisonicsPanningEffect(IntPtr effect, AudioBuffer inputAudio, AudioBuffer outputAudio);
+        public static extern void iplApplyAmbisonicsPanningEffect(IntPtr effect, IntPtr binauralRenderer, AudioBuffer inputAudio, AudioBuffer outputAudio);
 
         [DllImport("phonon")]
         public static extern void iplFlushAmbisonicsPanningEffect(IntPtr effect);
@@ -200,7 +214,7 @@ namespace SteamAudio
         public static extern void iplDestroyAmbisonicsBinauralEffect([In, Out] ref IntPtr effect);
 
         [DllImport("phonon")]
-        public static extern void iplApplyAmbisonicsBinauralEffect(IntPtr effect, AudioBuffer inputAudio, AudioBuffer outputAudio);
+        public static extern void iplApplyAmbisonicsBinauralEffect(IntPtr effect, IntPtr binauralRenderer, AudioBuffer inputAudio, AudioBuffer outputAudio);
 
         [DllImport("phonon")]
         public static extern void iplFlushAmbisonicsBinauralEffect(IntPtr effect);
@@ -222,7 +236,14 @@ namespace SteamAudio
         //
 
         [DllImport("phonon")]
-        public static extern DirectSoundPath iplGetDirectSoundPath(IntPtr environment, Vector3 listenerPosition, Vector3 listenerAhead, Vector3 listenerUp, Vector3 sourcePosition, float sourceRadius, OcclusionMode occlusionMode, OcclusionMethod occlusionMethod);
+        public static extern DirectSoundPath iplGetDirectSoundPath(IntPtr environment, 
+                                                                   Vector3 listenerPosition, 
+                                                                   Vector3 listenerAhead, 
+                                                                   Vector3 listenerUp, 
+                                                                   Source source,
+                                                                   float sourceRadius, 
+                                                                   OcclusionMode occlusionMode, 
+                                                                   OcclusionMethod occlusionMethod);
 
         //
         // Direct Sound Effect.

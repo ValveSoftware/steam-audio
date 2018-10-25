@@ -75,6 +75,7 @@ def parse_command_line(host_system):
     parser.add_argument('-c', '--configuration', help = "Build configuration.", choices = ['debug', 'development', 'release'], type = str.lower)
     parser.add_argument('-i', '--integration', help = "Integration.", choices = ['unity'], type = str.lower)
     parser.add_argument('--ci', help = "Build in CI mode.", dest = 'ci', action = 'store_true')
+    parser.add_argument('--versionstamp', help = "Update version stamps in the source code based on CMake project configuration.", action = 'store_true')
     parser.set_defaults(ci = False)
     args = parser.parse_args()
 
@@ -247,6 +248,11 @@ def generate_build_system(paths, args):
         cmake_args = cmake_args + ["-DANDROID_PATH=" + paths.android]
         cmake_args = cmake_args + ["-DANT_PATH=" + paths.ant]
 
+    if args.versionstamp:
+        cmake_args = cmake_args + ["-DUPDATE_VERSION_STAMPS=TRUE"]
+    else:
+        cmake_args = cmake_args + ["-DUPDATE_VERSION_STAMPS=FALSE"]
+
     run_cmake(paths, cmake_args)
     os.chdir(original_dir)
 
@@ -291,4 +297,5 @@ if args.integration == "unity":
     build_unity(args)
 else:
     generate_build_system(paths, args)
-    build(paths, args)
+    if args.versionstamp is not True:
+        build(paths, args)

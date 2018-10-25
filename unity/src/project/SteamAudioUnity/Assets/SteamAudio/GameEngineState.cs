@@ -94,6 +94,7 @@ namespace SteamAudio
                 simulationSettings = new SimulationSettings
                 {
                     sceneType               = rayTracer,
+                    occlusionSamples        = settings.OcclusionSamples,
                     rays                    = (inEditor) ? settings.BakeRays : settings.RealtimeRays,
                     secondaryRays           = (inEditor) ? settings.BakeSecondaryRays : settings.RealtimeSecondaryRays,
                     bounces                 = (inEditor) ? settings.BakeBounces : settings.RealtimeBounces,

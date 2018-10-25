@@ -5,6 +5,7 @@
 
 using System;
 using System.IO;
+using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -106,22 +107,105 @@ namespace SteamAudio
 
         public Error Create(ComputeDevice computeDevice, SimulationSettings simulationSettings, IntPtr globalContext)
         {
-            string fileName = SceneFileName();
-            if (!File.Exists(fileName))
-                return Error.Fail;
+            if (simulationSettings.sceneType == SceneType.Custom) {
+                if (materialBuffer == IntPtr.Zero) {
+                    materialBuffer = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(Material)));
+                }
 
-            byte[] data = File.ReadAllBytes(fileName);
+                var error = PhononCore.iplCreateScene(globalContext, computeDevice.GetDevice(), simulationSettings, 0, 
+                                                      null, RayTracer.ClosestHit, RayTracer.AnyHit, null, null, 
+                                                      IntPtr.Zero, ref scene);
+                return error;
+            } else {
+                string fileName = SceneFileName();
+                if (!File.Exists(fileName)) {
+                    return Error.Fail;
+                }
 
-            var error = PhononCore.iplLoadScene(globalContext, simulationSettings, data, data.Length,
-                computeDevice.GetDevice(), null, ref scene);
+                byte[] data = File.ReadAllBytes(fileName);
 
-            return error;
+                var error = PhononCore.iplLoadScene(globalContext, simulationSettings, data, data.Length,
+                                                    computeDevice.GetDevice(), null, ref scene);
+
+                return error;
+            }
         }
 
         public void Destroy()
         {
+            if (materialBuffer != IntPtr.Zero) {
+                Marshal.FreeHGlobal(materialBuffer);
+                materialBuffer = IntPtr.Zero;
+            }
+
             if (scene != IntPtr.Zero)
                 PhononCore.iplDestroyScene(ref scene);
+        }
+
+        static IntPtr materialBuffer = IntPtr.Zero;
+
+        static Material CopyMaterial(MaterialValue materialValue)
+        {
+            var material = new Material();
+            material.absorptionLow    = materialValue.LowFreqAbsorption;
+            material.absorptionMid    = materialValue.MidFreqAbsorption;
+            material.absorptionHigh   = materialValue.HighFreqAbsorption;
+            material.scattering       = materialValue.Scattering;
+            material.transmissionLow  = materialValue.LowFreqTransmission;
+            material.transmissionMid  = materialValue.MidFreqTransmission;
+            material.transmissionHigh = materialValue.HighFreqTransmission;
+            return material;
+        }
+
+        public static LayerMask GetSteamAudioLayerMask()
+        {
+            var steamAudioManager = GameObject.FindObjectOfType<SteamAudioManager>();
+            if (steamAudioManager == null) {
+                return new LayerMask();
+            }
+
+            return steamAudioManager.layerMask;
+        }
+
+        public static bool HasSteamAudioGeometry(Transform obj)
+        {
+            var currentObject = obj;
+            while (currentObject != null) {
+                var steamAudioGeometry = currentObject.GetComponent<SteamAudioGeometry>();
+                if (steamAudioGeometry != null) {
+                    return (currentObject == obj || steamAudioGeometry.exportAllChildren);
+                }
+                currentObject = currentObject.parent;
+            }
+            return false;
+        }
+
+        public static IntPtr GetSteamAudioMaterialBuffer(Transform obj)
+        {
+            var material = new Material();
+            var found = false;
+
+            var currentObject = obj;
+            while (currentObject != null) {
+                var steamAudioMaterial = currentObject.GetComponent<SteamAudioMaterial>();
+                if (steamAudioMaterial != null) {
+                    material = CopyMaterial(steamAudioMaterial.Value);
+                    found = true;
+                    break;
+                }
+                currentObject = currentObject.parent;
+            }
+
+            if (!found) {
+                var steamAudioManager = GameObject.FindObjectOfType<SteamAudioManager>();
+                if (steamAudioManager == null) {
+                    return IntPtr.Zero;
+                }
+                material = CopyMaterial(steamAudioManager.materialValue);
+            }
+
+            Marshal.StructureToPtr(material, materialBuffer, true);
+            return materialBuffer;
         }
 
         static string SceneFileName()

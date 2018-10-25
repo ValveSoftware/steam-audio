@@ -19,9 +19,12 @@ studio.plugins.registerPluginDescription("Steam Audio Spatializer", {
 		"IndirBinaural":   {displayName: "Indirect Binaural"},
 		"IndirLevel":      {displayName: "Indirect Mix Level"},
 		"IndirType":       {displayName: "Simulation Type"},
-		"StaticListener":  {displayName: "Static Listener"}
+		"StaticListener":  {displayName: "Static Listener"},
+		"DipoleWeight":    {displayName: "Dipole Weight"},
+		"DipolePower":     {displayName: "Dipole Power"},
 	},
 	deckUi: {
+
 		deckWidgetType: studio.ui.deckWidgetType.Layout,
 		layout: studio.ui.layoutType.HBoxLayout,
 		minimumWidth: 700,
@@ -81,7 +84,7 @@ studio.plugins.registerPluginDescription("Steam Audio Spatializer", {
 			{
 				deckWidgetType: studio.ui.deckWidgetType.Fader,
 				binding: "DirectLevel",
-				maximumWidth: 64
+				maximumWidth: 64,
 			},
 			{
 				deckWidgetType: studio.ui.deckWidgetType.Layout,
@@ -117,7 +120,36 @@ studio.plugins.registerPluginDescription("Steam Audio Spatializer", {
 			{
 				deckWidgetType: studio.ui.deckWidgetType.Fader,
 				binding: "IndirLevel",
-				maximumWidth: 64
+				maximumWidth: 64,
+			},
+			{
+				deckWidgetType: studio.ui.deckWidgetType.Spacer,
+			},
+			{
+				deckWidgetType: studio.ui.deckWidgetType.Layout,
+				layout: studio.ui.layoutType.VBoxLayout,
+				items: [
+					{
+						deckWidgetType: studio.ui.deckWidgetType.PolarDirectivityGraph,
+						directivityBinding: 'DipoleWeight',
+						sharpnessBinding: 'DipolePower',
+					},
+					{
+						deckWidgetType: studio.ui.deckWidgetType.Layout,
+						layout: studio.ui.layoutType.HBoxLayout,
+						spacing: 10,
+						items: [
+						{
+							deckWidgetType: studio.ui.deckWidgetType.NumberBox,
+							binding: 'DipoleWeight',
+						},
+						{
+							deckWidgetType: studio.ui.deckWidgetType.NumberBox,
+							binding: 'DipolePower',
+						},
+					]
+					}
+				]
 			}
 		]
 	}

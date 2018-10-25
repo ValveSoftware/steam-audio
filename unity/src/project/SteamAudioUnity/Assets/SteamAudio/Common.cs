@@ -4,9 +4,11 @@
 //
 
 using System;
+using System.IO;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text;
+using UnityEngine;
 
 namespace SteamAudio
 {
@@ -182,7 +184,7 @@ namespace SteamAudio
     public enum HRTFDatabaseType
     {
         Default,
-        Custom
+        SOFA
     }
 
     [StructLayout(LayoutKind.Sequential)]
@@ -190,10 +192,7 @@ namespace SteamAudio
     {
         public HRTFDatabaseType type;
         public IntPtr hrtfData;
-        public int numHrirSamples;
-        public HRTFLoadCallback loadCallback;
-        public HRTFUnloadCallback unloadCallback;
-        public HRTFLookupCallback lookupCallback;
+        public string sofaFileName;
     }
 
     // HRTF interpolation options.
@@ -268,6 +267,7 @@ namespace SteamAudio
     public struct SimulationSettings
     {
         public SceneType sceneType;
+        public int occlusionSamples;
         public int rays;
         public int secondaryRays;
         public int bounces;
@@ -358,6 +358,26 @@ namespace SteamAudio
         public float transmissionFactorLow;
         public float transmissionFactorMid;
         public float transmissionFactorHigh;
+        public float directivityFactor;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct Directivity
+    {
+        public float dipoleWeight;
+        public float dipolePower;
+        public IntPtr callback;
+        public IntPtr userData;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct Source
+    {
+        public Vector3 position;
+        public Vector3 ahead;
+        public Vector3 up;
+        public Vector3 right;
+        public Directivity directivity;
     }
 
     // Direct Sound Effect options.
@@ -442,6 +462,40 @@ namespace SteamAudio
                 return ConvertString(identifier);
             else
                 return ConvertString(prefix + HashForIdentifier(identifier).ToString());
+        }
+
+        public static string GetStreamingAssetsFileName(string fileName) 
+        {
+            var streamingAssetsFileName = Path.Combine(Application.streamingAssetsPath, fileName);
+
+#if UNITY_ANDROID && !UNITY_EDITOR
+            var tempFileName = Path.Combine(Application.temporaryCachePath, fileName);
+
+            if (File.Exists(tempFileName)) {
+                File.Delete(tempFileName);
+            }
+
+            try {
+                var streamingAssetLoader = new WWW(streamingAssetsFileName);
+                while (!streamingAssetLoader.isDone) {
+                }
+
+                if (string.IsNullOrEmpty(streamingAssetLoader.error)) {
+                    using (var dataWriter = new BinaryWriter(new FileStream(tempFileName, FileMode.Create))) {
+                        dataWriter.Write(streamingAssetLoader.bytes);
+                        dataWriter.Close();
+                    }
+                } else {
+                    Debug.LogError(streamingAssetLoader.error);
+                }
+            } catch (Exception exception) {
+                Debug.LogError(exception.ToString());
+            }
+
+            return tempFileName;
+#else
+            return streamingAssetsFileName;
+#endif
         }
     }
 }

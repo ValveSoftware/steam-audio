@@ -132,6 +132,7 @@ void loadLibrary()
     gApi.iplCreateBinauralEffect            = (IPLCreateBinauralEffect)             GetProcAddress(library, "iplCreateBinauralEffect");
     gApi.iplDestroyBinauralEffect           = (IPLDestroyBinauralEffect)            GetProcAddress(library, "iplDestroyBinauralEffect");
     gApi.iplApplyBinauralEffect             = (IPLApplyBinauralEffect)              GetProcAddress(library, "iplApplyBinauralEffect");
+    gApi.iplApplyBinauralEffectWithParameters = (IPLApplyBinauralEffectWithParameters) GetProcAddress(library, "iplApplyBinauralEffectWithParameters");
     gApi.iplCreateAmbisonicsPanningEffect   = (IPLCreateAmbisonicsPanningEffect)    GetProcAddress(library, "iplCreateAmbisonicsPanningEffect");
     gApi.iplDestroyAmbisonicsPanningEffect  = (IPLDestroyAmbisonicsPanningEffect)   GetProcAddress(library, "iplDestroyAmbisonicsPanningEffect");
     gApi.iplApplyAmbisonicsPanningEffect    = (IPLApplyAmbisonicsPanningEffect)     GetProcAddress(library, "iplApplyAmbisonicsPanningEffect");
@@ -174,6 +175,7 @@ void loadLibrary()
     gApi.iplCreateBinauralEffect            = (IPLCreateBinauralEffect)             dlsym(library, "iplCreateBinauralEffect");
     gApi.iplDestroyBinauralEffect           = (IPLDestroyBinauralEffect)            dlsym(library, "iplDestroyBinauralEffect");
     gApi.iplApplyBinauralEffect             = (IPLApplyBinauralEffect)              dlsym(library, "iplApplyBinauralEffect");
+    gApi.iplApplyBinauralEffectWithParameters = (IPLApplyBinauralEffectWithParameters) dlsym(library, "iplApplyBinauralEffectWithParameters");
     gApi.iplCreateAmbisonicsPanningEffect   = (IPLCreateAmbisonicsPanningEffect)    dlsym(library, "iplCreateAmbisonicsPanningEffect");
     gApi.iplDestroyAmbisonicsPanningEffect  = (IPLDestroyAmbisonicsPanningEffect)   dlsym(library, "iplDestroyAmbisonicsPanningEffect");
     gApi.iplApplyAmbisonicsPanningEffect    = (IPLApplyAmbisonicsPanningEffect)     dlsym(library, "iplApplyAmbisonicsPanningEffect");

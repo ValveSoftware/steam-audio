@@ -11,7 +11,21 @@ namespace SteamAudio
     public static class PhononUnityNative
     {
         [DllImport("audioplugin_phonon")]
+        public static extern void iplUnityGetVersion([In, Out] ref uint major,
+                                                     [In, Out] ref uint minor,
+                                                     [In, Out] ref uint patch);
+
+        [DllImport("audioplugin_phonon")]
         public static extern void iplUnityResetAudioEngine();
+
+        [DllImport("audioplugin_phonon")]
+        public static extern int iplUnityAddSOFAFileName(string sofaFileName);
+
+        [DllImport("audioplugin_phonon")]
+        public static extern void iplUnityRemoveSOFAFileName(string sofaFileName);
+
+        [DllImport("audioplugin_phonon")]
+        public static extern void iplUnitySetCurrentSOFAFile(int index);
 
         [DllImport("audioplugin_phonon")]
         public static extern void iplUnitySetEnvironment(SimulationSettings simulationSettings, IntPtr environment,

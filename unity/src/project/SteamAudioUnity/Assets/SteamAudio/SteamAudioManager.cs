@@ -4,6 +4,7 @@
 //
 
 using System.Collections;
+using System.IO;
 using UnityEngine;
 
 namespace SteamAudio
@@ -53,6 +54,8 @@ namespace SteamAudio
                     managerData.audioEngineState.UpdateListener(listenerPosition, listenerAhead, listenerUp);
                 }
 
+                managerData.audioEngineState.UpdateSOFAFile(currentSOFAFile);
+
                 yield return waitForEndOfFrame;
             }
         }
@@ -61,7 +64,27 @@ namespace SteamAudio
         // Initialize will be performed only once despite repeated calls to Initialize without calls to Destroy.
         public void Initialize(GameEngineStateInitReason reason)
         {
-            managerData.Initialize(reason, audioEngine, simulationValue);
+            var sofaFiles = GetSOFAFileNames();
+
+            var sofaPaths = new string[sofaFiles.Length];
+            for (var i = 0; i < sofaFiles.Length; ++i) {
+                var sofaPath = "";
+                if (sofaFiles[i] != null && sofaFiles[i].Length > 0) {
+                    var sofaFileName = sofaFiles[i];
+                    if (!sofaFileName.EndsWith(".sofa")) {
+                        sofaFileName += ".sofa";
+                    }
+
+                    sofaPath = Common.GetStreamingAssetsFileName(sofaFileName);
+                    if (!File.Exists(sofaPath)) {
+                        Debug.LogWarning("Unable to find SOFA file: " + sofaPath + ", reverting to built-in HRTF.");
+                        sofaPath = "";
+                    }
+                }
+                sofaPaths[i] = sofaPath;
+            }
+
+            managerData.Initialize(reason, audioEngine, simulationValue, sofaPaths);
         }
 
         // Destroys Phonon Manager.
@@ -120,6 +143,39 @@ namespace SteamAudio
             return managerSingleton;
         }
 
+        public int NumSOFAFiles() 
+        {
+            var numSOFAFiles = 0;
+            if (sofaFiles != null) {
+                foreach (var sofaFile in sofaFiles) {
+                    if (sofaFile.Length > 0) {
+                        ++numSOFAFiles;
+                    }
+                }
+            }
+            return numSOFAFiles;
+        }
+
+        public string[] GetSOFAFileNames() 
+        {
+            var numSOFAFiles = NumSOFAFiles();
+            var sofaFileNames = new string[numSOFAFiles + 1];
+
+            sofaFileNames[0] = "";
+
+            var index = 1;
+            if (sofaFiles != null) {
+                foreach (var sofaFile in sofaFiles) {
+                    if (sofaFile.Length > 0) {
+                        sofaFileNames[index] = sofaFile;
+                        ++index;
+                    }
+                }
+            }
+
+            return sofaFileNames;
+        }
+
         static void ClearSingleton()
         {
             managerSingleton = null;
@@ -131,6 +187,8 @@ namespace SteamAudio
         WaitForEndOfFrame   waitForEndOfFrame   = new WaitForEndOfFrame();
 
         public AudioEngine              audioEngine             = AudioEngine.UnityNative;
+        public string[]                 sofaFiles               = null;
+        public int                      currentSOFAFile         = 0;
         public MaterialPreset           materialPreset          = MaterialPreset.Generic;
         public MaterialValue            materialValue;
         public SimulationSettingsPreset simulationPreset        = SimulationSettingsPreset.Low;
@@ -140,5 +198,6 @@ namespace SteamAudio
         public bool                     showLoadTimeOptions     = false;
         public bool                     showMassBakingOptions   = false;
         public Baker                    phononBaker             = new Baker();
+        public LayerMask                layerMask               = new LayerMask();
     }
 }

@@ -109,7 +109,7 @@ public:
         // Make sure the audio engine global state has been initialized.
         if (!mGlobalState)
         {
-            mGlobalState = GlobalState::get();
+            mGlobalState = AudioEngineSettings::get();
             if (!mGlobalState)
                 return false;
         }
@@ -262,7 +262,7 @@ public:
                 mUsedAmbisonicsPanningEffect = false;
             }
 
-            gApi.iplApplyAmbisonicsBinauralEffect(mAmbisonicsBinauralEffect, mIndirectEffectOutputBuffer,
+            gApi.iplApplyAmbisonicsBinauralEffect(mAmbisonicsBinauralEffect, mBinauralRenderer, mIndirectEffectOutputBuffer,
                 mIndirectSpatializedOutputBuffer);
 
             mUsedAmbisonicsBinauralEffect = true;
@@ -275,7 +275,7 @@ public:
                 mUsedAmbisonicsBinauralEffect = false;
             }
 
-            gApi.iplApplyAmbisonicsPanningEffect(mAmbisonicsPanningEffect, mIndirectEffectOutputBuffer,
+            gApi.iplApplyAmbisonicsPanningEffect(mAmbisonicsPanningEffect, mAmbisonicsBinauralEffect, mIndirectEffectOutputBuffer,
                 mIndirectSpatializedOutputBuffer);
 
             mUsedAmbisonicsPanningEffect = true;
@@ -304,7 +304,7 @@ private:
     IPLhandle mBinauralRenderer;
 
     /** An object that contains the rendering settings and binaural renderer used globally. */
-    std::shared_ptr<GlobalState> mGlobalState;
+    std::shared_ptr<AudioEngineSettings> mGlobalState;
 
     /** An object that contains the environmental renderer for the current scene. */
     std::shared_ptr<SceneState> mSceneState;
@@ -429,7 +429,7 @@ FMOD_DSP_DESCRIPTION gMixEffect
 {
     FMOD_PLUGIN_SDK_VERSION,
     "Steam Audio Mixer Return",
-    STEAM_AUDIO_PLUGIN_VERSION,
+    STEAMAUDIO_FMOD_VERSION,
     1, 1,
     createMixEffect,
     releaseMixEffect,

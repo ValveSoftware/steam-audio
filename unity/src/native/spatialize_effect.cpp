@@ -30,6 +30,18 @@ enum SpatializeEffectParams
     SA_SPATIALIZE_PARAM_BYPASSDURINGINIT,
     SA_SPATIALIZE_PARAM_DIPOLEWEIGHT,
     SA_SPATIALIZE_PARAM_DIPOLEPOWER,
+    SA_SPATIALIZE_PARAM_HRTFINDEX,
+    SA_SPATIALIZE_PARAM_OVERRIDEHRTFINDEX,
+    SA_SPATIALIZE_PARAM_DP_DISTANCEATTENUATION,
+    SA_SPATIALIZE_PARAM_DP_AIRABSORPTIONLOW,
+    SA_SPATIALIZE_PARAM_DP_AIRABSORPTIONMID,
+    SA_SPATIALIZE_PARAM_DP_AIRABSORPTIONHIGH,
+    SA_SPATIALIZE_PARAM_DP_PROPAGATIONDELAY,
+    SA_SPATIALIZE_PARAM_DP_OCCLUSION,
+    SA_SPATIALIZE_PARAM_DP_TRANSMISSIONLOW,
+    SA_SPATIALIZE_PARAM_DP_TRANSMISSIONMID,
+    SA_SPATIALIZE_PARAM_DP_TRANSMISSIONHIGH,
+    SA_SPATIALIZE_PARAM_DP_DIRECTIVITY,
     SA_SPATIALIZE_NUM_PARAMS
 };
 
@@ -98,6 +110,11 @@ public:
     /** Whether the effect should emit silence or dry audio while initialization is underway. */
     bool bypassDuringInitialization;
 
+    int hrtfIndex;
+    bool overrideHRTFIndex;
+
+    IPLDirectSoundPath directPath;
+
     /** The default constructor initializes parameters to default values.
      */
     SpatializeEffectState() :
@@ -118,6 +135,8 @@ public:
         identifier{},
         usesStaticListener{ false },
         bypassDuringInitialization{ false },
+        hrtfIndex(0),
+        overrideHRTFIndex(false),
         mInputFormat{},
         mOutputFormat{},
         mBinauralRenderer{ nullptr },
@@ -136,7 +155,18 @@ public:
         mPreviousDirectMixLevel{ 0.0f },
         mPreviousIndirectMixLevel{ 0.0f },
         mBypassedInPreviousFrame{ false }
-    {}
+    {
+        directPath.distanceAttenuation = 1.0f;
+        directPath.airAbsorption[0] = 1.0f;
+        directPath.airAbsorption[1] = 1.0f;
+        directPath.airAbsorption[2] = 1.0f;
+        directPath.propagationDelay = 0.0f;
+        directPath.occlusionFactor = 1.0f;
+        directPath.transmissionFactor[0] = 1.0f;
+        directPath.transmissionFactor[1] = 1.0f;
+        directPath.transmissionFactor[2] = 1.0f;
+        directPath.directivityFactor = 1.0f;
+    }
 
     /** The destructor ensures that audio processing state is destroyed.
      */
@@ -202,6 +232,42 @@ public:
         case SA_SPATIALIZE_PARAM_BYPASSDURINGINIT:
             value = (bypassDuringInitialization) ? 1.0f : 0.0f;
             return true;
+        case SA_SPATIALIZE_PARAM_HRTFINDEX:
+            value = static_cast<float>(hrtfIndex);
+            return true;
+        case SA_SPATIALIZE_PARAM_OVERRIDEHRTFINDEX:
+            value = (overrideHRTFIndex) ? 1.0f : 0.0f;
+            return true;
+        case SA_SPATIALIZE_PARAM_DP_DISTANCEATTENUATION:
+            value = directPath.distanceAttenuation;
+            return true;
+        case SA_SPATIALIZE_PARAM_DP_AIRABSORPTIONLOW:
+            value = directPath.airAbsorption[0];
+            return true;
+        case SA_SPATIALIZE_PARAM_DP_AIRABSORPTIONMID:
+            value = directPath.airAbsorption[1];
+            return true;
+        case SA_SPATIALIZE_PARAM_DP_AIRABSORPTIONHIGH:
+            value = directPath.airAbsorption[2];
+            return true;
+        case SA_SPATIALIZE_PARAM_DP_PROPAGATIONDELAY:
+            value = directPath.propagationDelay;
+            return true;
+        case SA_SPATIALIZE_PARAM_DP_OCCLUSION:
+            value = directPath.occlusionFactor;
+            return true;
+        case SA_SPATIALIZE_PARAM_DP_TRANSMISSIONLOW:
+            value = directPath.transmissionFactor[0];
+            return true;
+        case SA_SPATIALIZE_PARAM_DP_TRANSMISSIONMID:
+            value = directPath.transmissionFactor[1];
+            return true;
+        case SA_SPATIALIZE_PARAM_DP_TRANSMISSIONHIGH:
+            value = directPath.transmissionFactor[2];
+            return true;
+        case SA_SPATIALIZE_PARAM_DP_DIRECTIVITY:
+            value = directPath.directivityFactor;
+            return true;
         default:
             return false;
         }
@@ -265,6 +331,42 @@ public:
         case SA_SPATIALIZE_PARAM_BYPASSDURINGINIT:
             bypassDuringInitialization = (value == 1.0f);
             return true;
+        case SA_SPATIALIZE_PARAM_HRTFINDEX:
+            hrtfIndex = (int) value;
+            return true;
+        case SA_SPATIALIZE_PARAM_OVERRIDEHRTFINDEX:
+            overrideHRTFIndex = (value == 1.0f);
+            return true;
+        case SA_SPATIALIZE_PARAM_DP_DISTANCEATTENUATION:
+            directPath.distanceAttenuation = value;
+            return true;
+        case SA_SPATIALIZE_PARAM_DP_AIRABSORPTIONLOW:
+            directPath.airAbsorption[0] = value;
+            return true;
+        case SA_SPATIALIZE_PARAM_DP_AIRABSORPTIONMID:
+            directPath.airAbsorption[1] = value;
+            return true;
+        case SA_SPATIALIZE_PARAM_DP_AIRABSORPTIONHIGH:
+            directPath.airAbsorption[2] = value;
+            return true;
+        case SA_SPATIALIZE_PARAM_DP_PROPAGATIONDELAY:
+            directPath.propagationDelay = value;
+            return true;
+        case SA_SPATIALIZE_PARAM_DP_OCCLUSION:
+            directPath.occlusionFactor = value;
+            return true;
+        case SA_SPATIALIZE_PARAM_DP_TRANSMISSIONLOW:
+            directPath.transmissionFactor[0] = value;
+            return true;
+        case SA_SPATIALIZE_PARAM_DP_TRANSMISSIONMID:
+            directPath.transmissionFactor[1] = value;
+            return true;
+        case SA_SPATIALIZE_PARAM_DP_TRANSMISSIONHIGH:
+            directPath.transmissionFactor[2] = value;
+            return true;
+        case SA_SPATIALIZE_PARAM_DP_DIRECTIVITY:
+            directPath.directivityFactor = value;
+            return true;
         default:
             return false;
         }
@@ -302,7 +404,11 @@ public:
             }
         }
 
-        mBinauralRenderer = mAudioEngineSettings->binauralRenderer();
+        if (overrideHRTFIndex) {
+            mBinauralRenderer = mAudioEngineSettings->binauralRenderer(hrtfIndex);
+        } else {
+            mBinauralRenderer = mAudioEngineSettings->binauralRenderer();
+        }
         if (!mBinauralRenderer)
             return false;
 
@@ -335,6 +441,13 @@ public:
             mDirectSpatializedOutputBuffer.format = mOutputFormat;
             mDirectSpatializedOutputBuffer.numSamples = frameSize;
             mDirectSpatializedOutputBuffer.interleavedBuffer = mDirectSpatializedOutputBufferData.data();
+        }
+
+        if (mIndirectEffectInputBufferData.empty()) {
+            mIndirectEffectInputBufferData.resize(mInputFormat.numSpeakers * frameSize);
+            mIndirectEffectInputBuffer.format = mInputFormat;
+            mIndirectEffectInputBuffer.numSamples = frameSize;
+            mIndirectEffectInputBuffer.interleavedBuffer = mIndirectEffectInputBufferData.data();
         }
 
         // Make sure the temporary buffer for storing the indirect sound has been created.
@@ -458,6 +571,62 @@ public:
         mEnvironmentalRenderer = nullptr;
     }
 
+    void applyUnityDistanceAttenuation(const int numSamples,
+                                       float* buffer)
+    {
+        for (auto i = 0; i < numSamples; ++i) {
+            buffer[i] *= mUnityDistanceAttenuation;
+        }
+    }
+
+    void applySpatialBlend(const float spatialBlend,
+                           const float leftDelay,
+                           const float rightDelay,
+                           const int samplingRate,
+                           const int frameSize,
+                           const int numSamples,
+                           const int numInChannels,
+                           const float* inBuffer,
+                           const int numOutChannels,
+                           float* outBuffer)
+    {
+        if (spatialBlend < 0.0f) {
+            return;
+        }
+
+        if (mDelayLine.size() != numSamples * numInChannels * 2) {
+            mDelayLine.resize(numSamples * numInChannels * 2);
+            memset(mDelayLine.data(), 0, mDelayLine.size() * sizeof(float));
+        }
+
+        auto leftDelaySamples = ((int) (leftDelay * samplingRate)) + (frameSize / 4);
+        auto rightDelaySamples = ((int) (rightDelay * samplingRate)) + (frameSize / 4);
+        if (leftDelaySamples < 0) {
+            leftDelaySamples = 0;
+        }
+        if (rightDelaySamples < 0) {
+            rightDelaySamples = 0;
+        }
+
+        memcpy(&mDelayLine[numSamples * numInChannels], &mDelayLine[0], numSamples * numInChannels * sizeof(float));
+        memcpy(&mDelayLine[0], inBuffer, numSamples * numInChannels * sizeof(float));
+
+        for (auto i = 0, index = 0; i < numSamples; ++i) {
+            for (auto j = 0; j < numOutChannels; ++j, ++index) {
+                auto inChannel = j;
+                if (inChannel >= numInChannels) {
+                    inChannel = 0;
+                }
+
+                auto delaySamples = (j == 0) ? leftDelaySamples : rightDelaySamples;
+                auto delayLineSampleIndex = (numSamples + i - delaySamples) * numInChannels + inChannel;
+                auto inSamples = mDelayLine[delayLineSampleIndex];
+
+                outBuffer[index] = (1.0f - spatialBlend) * inBuffer[index];
+            }
+        }
+    }
+
     /** Applies the Spatialize effect to audio flowing through an Audio Source.
      */
     void process(float* inBuffer, float* outBuffer, unsigned int numSamples, int inChannels, int outChannels,
@@ -572,15 +741,13 @@ public:
                     
                     mDirectEffectOutputBuffer.deinterleavedBuffer[0][i] /= static_cast<float>(inChannels);
                 }
+
+                applyUnityDistanceAttenuation(mDirectEffectOutputBuffer.numSamples, 
+                                              mDirectEffectOutputBuffer.deinterleavedBuffer[0]);
             }
         }
         else
         {
-            // Calculate the direct path parameters.
-            auto directPath = gApi.iplGetDirectSoundPath(environment, listenerPosition, listenerAhead, listenerUp,
-                                                         source, sourceRadius, occlusionMode,
-                                                         occlusionMethod);
-
             // Apply direct sound modeling to the input audio, resulting in a mono buffer of audio.
             auto directOptions = IPLDirectSoundEffectOptions
             {
@@ -591,18 +758,32 @@ public:
             };
             gApi.iplApplyDirectSoundEffect(mDirectEffect, inputAudio, directPath, directOptions,
                                            mDirectEffectOutputBuffer);
+
+            if (!distanceAttenuation) {
+                applyUnityDistanceAttenuation(mDirectEffectOutputBuffer.numSamples,
+                                              mDirectEffectOutputBuffer.deinterleavedBuffer[0]);
+            }
         }
 
         // Spatialize the direct sound.
         if (directBinaural)
         {
-            gApi.iplApplyBinauralEffect(mBinauralEffect, mDirectEffectOutputBuffer, direction, hrtfInterpolation,
-                mDirectSpatializedOutputBuffer);
+            auto leftDelay = 0.0f, rightDelay = 0.0f;
+            gApi.iplApplyBinauralEffectWithParameters(mBinauralEffect, mBinauralRenderer, mDirectEffectOutputBuffer, 
+                                                      direction, hrtfInterpolation, mDirectSpatializedOutputBuffer, 
+                                                      &leftDelay, &rightDelay);
+
+            applySpatialBlend(spatializerData->spatialblend, leftDelay, rightDelay, samplingRate, frameSize,
+                              numSamples, inChannels, inputAudio.interleavedBuffer, outChannels,
+                              outputAudio.interleavedBuffer);
         }
         else
         {
-            gApi.iplApplyPanningEffect(mPanningEffect, mDirectEffectOutputBuffer, direction,
+            gApi.iplApplyPanningEffect(mPanningEffect, mBinauralRenderer, mDirectEffectOutputBuffer, direction,
                 mDirectSpatializedOutputBuffer);
+
+            applySpatialBlend(spatializerData->spatialblend, 0.0f, 0.0f, samplingRate, frameSize, numSamples, 
+                              inChannels, inputAudio.interleavedBuffer, outChannels, outputAudio.interleavedBuffer);
         }
 
         // Adjust the level of direct sound according to the user-specified parameter.
@@ -612,7 +793,9 @@ public:
             auto fraction = sample / (numSamples - 1.0f);
             auto level = fraction * directLevel + (1.0f - fraction) * mPreviousDirectMixLevel;
 
-            outputAudio.interleavedBuffer[i] = level * mDirectSpatializedOutputBuffer.interleavedBuffer[i];
+            level *= spatializerData->spatialblend;
+
+            outputAudio.interleavedBuffer[i] += level * mDirectSpatializedOutputBuffer.interleavedBuffer[i];
         }
         mPreviousDirectMixLevel = directLevel;
 
@@ -634,27 +817,21 @@ public:
             return;
         }
 
-        // We need to cancel out any distance attenuation applied by Unity before applying indirect effects to the
-        // input audio.
-        auto adjustedIndirectLevel = indirectLevel;
-        auto cancellationFactor = (1.0f - spatializerData->spatialblend) + 
-            spatializerData->spatialblend * mUnityDistanceAttenuation;
-        if (cancellationFactor > 1e-4f)
-            adjustedIndirectLevel /= cancellationFactor;
-
         // Adjust the level of indirect sound according to the user-specified parameter.
         for (auto i = 0u; i < inChannels * numSamples; ++i)
         {
             auto fraction = i / (numSamples - 1.0f);
-            auto level = fraction * adjustedIndirectLevel + (1.0f - fraction) * mPreviousIndirectMixLevel;
+            auto level = fraction * indirectLevel + (1.0f - fraction) * mPreviousIndirectMixLevel;
 
-            inputAudio.interleavedBuffer[i] *= level;
+            level *= spatializerData->spatialblend;
+
+            mIndirectEffectInputBuffer.interleavedBuffer[i] = level * inputAudio.interleavedBuffer[i];
         }
-        mPreviousIndirectMixLevel = adjustedIndirectLevel;
+        mPreviousIndirectMixLevel = indirectLevel;
 
         // Send audio to the convolution effect.
         gApi.iplSetConvolutionEffectIdentifier(mIndirectEffect, identifier);
-        gApi.iplSetDryAudioForConvolutionEffect(mIndirectEffect, source, inputAudio);
+        gApi.iplSetDryAudioForConvolutionEffect(mIndirectEffect, source, mIndirectEffectInputBuffer);
         mUsedConvolutionEffect = true;
 
         // If we're using accelerated mixing, stop here.
@@ -674,7 +851,7 @@ public:
                 mUsedAmbisonicsPanningEffect = false;
             }
 
-            gApi.iplApplyAmbisonicsBinauralEffect(mAmbisonicsBinauralEffect, mIndirectEffectOutputBuffer,
+            gApi.iplApplyAmbisonicsBinauralEffect(mAmbisonicsBinauralEffect, mBinauralRenderer, mIndirectEffectOutputBuffer,
                 mIndirectSpatializedOutputBuffer);
 
             mUsedAmbisonicsBinauralEffect = true;
@@ -687,7 +864,7 @@ public:
                 mUsedAmbisonicsBinauralEffect = false;
             }
 
-            gApi.iplApplyAmbisonicsPanningEffect(mAmbisonicsPanningEffect, mIndirectEffectOutputBuffer,
+            gApi.iplApplyAmbisonicsPanningEffect(mAmbisonicsPanningEffect, mBinauralRenderer, mIndirectEffectOutputBuffer,
                 mIndirectSpatializedOutputBuffer);
 
             mUsedAmbisonicsPanningEffect = true;
@@ -757,6 +934,9 @@ private:
     /** Steam Audio buffer descriptor for the above buffer. */
     IPLAudioBuffer mDirectSpatializedOutputBuffer;
 
+    std::vector<float> mIndirectEffectInputBufferData;
+    IPLAudioBuffer mIndirectEffectInputBuffer;
+
     /** Contiguous, deinterleaved buffer for storing the indirect sound, before spatialization. */
     std::vector<float> mIndirectEffectOutputBufferData;
 
@@ -771,6 +951,8 @@ private:
 
     /** Steam Audio buffer descriptor for the above buffer. */
     IPLAudioBuffer mIndirectSpatializedOutputBuffer;
+
+    std::vector<float> mDelayLine;
 
     /** Have we used the convolution effect in the previous frame? */
     bool mUsedConvolutionEffect;
@@ -852,7 +1034,7 @@ UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK getSpatializeEffectParam(UnityAudi
 UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK recordUnityDistanceAttenuation(UnityAudioEffectState* state,
     float distanceIn, float attenuationIn, float* attenuationOut)
 {
-    *attenuationOut = attenuationIn;
+    *attenuationOut = 1.0f;
     state->GetEffectData<SpatializeEffectState>()->mUnityDistanceAttenuation = attenuationIn;
     return UNITY_AUDIODSP_OK;
 }
@@ -876,7 +1058,19 @@ UnityAudioParameterDefinition gSpatializeEffectParams[] =
     { "Name", "", "Unique identifier for the source.", -std::numeric_limits<float>::max(), std::numeric_limits<float>::max(), 1.0f, 1.0f, 1.0f },
     { "BypassAtInit", "", "Bypass the effect during initialization.", 0.0f, 1.0f, 0.0f, 1.0f, 1.0f },
     { "DipoleWeight", "", "Blends between omni and dipole directivity.", 0.0f, 1.0f, 0.0f, 1.0f, 1.0f },
-    { "DipolePower", "", "Sharpness of the dipole directivity.", 0.0f, 10.0f, 0.0f, 1.0f, 1.0f }
+    { "DipolePower", "", "Sharpness of the dipole directivity.", 0.0f, 10.0f, 0.0f, 1.0f, 1.0f },
+    { "HRTFIndex", "", "Index of the HRTF to use.", 0.0f, static_cast<float>(std::numeric_limits<int>::max()), 0.0f, 1.0f, 1.0f },
+    { "OverrideHRTF", "", "Whether to override HRTF index per-source.", 0.0f, 1.0f, 0.0f, 1.0f, 1.0f },
+    { "DP_Distance", "", "DirectPath distance attenuation.", 0.0f, 1.0f, 1.0f, 1.0f, 1.0f },
+    { "DP_AirAbsLow", "", "DirectPath air absorption, low.", 0.0f, 1.0f, 1.0f, 1.0f, 1.0f },
+    { "DP_AirAbsMid", "", "DirectPath air absorption, mid.", 0.0f, 1.0f, 1.0f, 1.0f, 1.0f },
+    { "DP_AirAbsHigh", "", "DirectPath air absorption, high.", 0.0f, 1.0f, 1.0f, 1.0f, 1.0f },
+    { "DP_Delay", "", "DirectPath propagation delay.", 0.0f, std::numeric_limits<float>::max(), 0.0f, 1.0f, 1.0f },
+    { "DP_Occlusion", "", "DirectPath occlusion.", 0.0f, 1.0f, 1.0f, 1.0f, 1.0f },
+    { "DP_TransLow", "", "DirectPath transmission, low.", 0.0f, 1.0f, 1.0f, 1.0f, 1.0f },
+    { "DP_TransMid", "", "DirectPath transmission, mid.", 0.0f, 1.0f, 1.0f, 1.0f, 1.0f },
+    { "DP_TransHigh", "", "DirectPath transmission, high.", 0.0f, 1.0f, 1.0f, 1.0f, 1.0f },
+    { "DP_Directivity", "", "DirectPath directivity.", 0.0f, 1.0f, 1.0f, 1.0f, 1.0f }
 };
 
 /** Descriptor for the Spatializer effect. */
@@ -885,7 +1079,7 @@ UnityAudioEffectDefinition gSpatializeEffect
     sizeof(UnityAudioEffectDefinition), 
     sizeof(UnityAudioParameterDefinition),
     UNITY_AUDIO_PLUGIN_API_VERSION, 
-    STEAM_AUDIO_PLUGIN_VERSION,
+    STEAMAUDIO_UNITY_VERSION,
     0, 
     SA_SPATIALIZE_NUM_PARAMS, 
     UnityAudioEffectDefinitionFlags_IsSpatializer,

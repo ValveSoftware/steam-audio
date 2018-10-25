@@ -65,3 +65,17 @@ extern "C" UNITY_AUDIODSP_EXPORT_API int UnityGetAudioEffectDefinitions(UnityAud
     *definitions = effects;
     return (sizeof(effects) / sizeof(effects[0]));
 }
+
+extern "C" UNITY_AUDIODSP_EXPORT_API 
+void iplUnityGetVersion(unsigned int* major, unsigned int* minor, unsigned int* patch)
+{
+    if (major) {
+        *major = STEAMAUDIO_UNITY_VERSION_MAJOR;
+    }
+    if (minor) {
+        *minor = STEAMAUDIO_UNITY_VERSION_MINOR;
+    }
+    if (patch) {
+        *patch = STEAMAUDIO_UNITY_VERSION_PATCH;
+    }
+}

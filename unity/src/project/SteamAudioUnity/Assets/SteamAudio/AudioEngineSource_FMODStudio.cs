@@ -11,6 +11,16 @@ namespace SteamAudio
 {
     public sealed class FMODAudioEngineSource : AudioEngineSource
     {
+        private const int k_occlusionModeIndex = 4;
+        private const int k_occlusionMethodIndex = 5;
+        private const int k_sourceRadiusIndex = 6;
+        private const int k_enableIndirectIndex = 8;
+        private const int k_useBakedStaticListenerIndex = 12;
+        private const int k_setIdentifierIndex = 13;
+        private const int k_dipoleWeightIndex = 15;
+        private const int k_dipolePowerIndex = 16;
+        private const int k_directPathIndexStart = 19;
+
         public override void Initialize(GameObject gameObject)
         {
             FindDSP(gameObject);
@@ -28,10 +38,14 @@ namespace SteamAudio
             FMODUnity_StudioEventEmitter_EventInstance = FMODUnity_StudioEventEmitter.GetProperty("EventInstance");
 
             FMOD_Studio_EventInstance_getChannelGroup = FMOD_Studio_EventInstance.GetMethod("getChannelGroup");
+            FMOD_Studio_EventInstance_isValid = FMOD_Studio_EventInstance.GetMethod("isValid");
             FMOD_ChannelGroup_getNumDSPs = FMOD_ChannelGroup.GetMethod("getNumDSPs");
             FMOD_ChannelGroup_getDSP = FMOD_ChannelGroup.GetMethod("getDSP");
             FMOD_DSP_getParameterBool = FMOD_DSP.GetMethod("getParameterBool");
+            FMOD_DSP_getParameterFloat = FMOD_DSP.GetMethod("getParameterFloat");
+            FMOD_DSP_getParameterInt = FMOD_DSP.GetMethod("getParameterInt");
             FMOD_DSP_setParameterData = FMOD_DSP.GetMethod("setParameterData");
+            FMOD_DSP_setParameterFloat = FMOD_DSP.GetMethod("setParameterFloat");
 
             var candidates = FMOD_DSP.GetMethods();
             foreach (var candidate in candidates)
@@ -56,6 +70,8 @@ namespace SteamAudio
                 return;
 
             var eventInstance = FMODUnity_StudioEventEmitter_EventInstance.GetValue(eventEmitter, null);
+            if (!((bool) FMOD_Studio_EventInstance_isValid.Invoke(eventInstance, null)))
+                return;
 
             var channelGroup = Activator.CreateInstance(FMOD_ChannelGroup);
 
@@ -96,6 +112,65 @@ namespace SteamAudio
             foundDSP = false;
         }
 
+        public override void UpdateParameters(SteamAudioSource steamAudioSource)
+        {
+            FindDSP(steamAudioSource.gameObject);
+            if (!foundDSP)
+                return;
+
+            // update the values of the directPath in Fmod
+            var index = k_directPathIndexStart;	// this is where the directPath settings begin
+
+            FMOD_DSP_setParameterFloat.Invoke(dsp, new object[] { index++, steamAudioSource.directPath.distanceAttenuation });
+            FMOD_DSP_setParameterFloat.Invoke(dsp, new object[] { index++, steamAudioSource.directPath.airAbsorptionLow });
+            FMOD_DSP_setParameterFloat.Invoke(dsp, new object[] { index++, steamAudioSource.directPath.airAbsorptionMid });
+            FMOD_DSP_setParameterFloat.Invoke(dsp, new object[] { index++, steamAudioSource.directPath.airAbsorptionHigh });
+            FMOD_DSP_setParameterFloat.Invoke(dsp, new object[] { index++, steamAudioSource.directPath.propagationDelay });
+            FMOD_DSP_setParameterFloat.Invoke(dsp, new object[] { index++, steamAudioSource.directPath.occlusionFactor });
+            FMOD_DSP_setParameterFloat.Invoke(dsp, new object[] { index++, steamAudioSource.directPath.transmissionFactorLow });
+            FMOD_DSP_setParameterFloat.Invoke(dsp, new object[] { index++, steamAudioSource.directPath.transmissionFactorMid });
+            FMOD_DSP_setParameterFloat.Invoke(dsp, new object[] { index++, steamAudioSource.directPath.transmissionFactorHigh });
+            FMOD_DSP_setParameterFloat.Invoke(dsp, new object[] { index++, steamAudioSource.directPath.directivityFactor });
+        }
+
+        public override void GetParameters(SteamAudioSource steamAudioSource)
+        {
+            FindDSP(steamAudioSource.gameObject);
+            if (!foundDSP)
+                return;
+
+            // get values set in Fmod and pass to AudioEngineSource so it can do the audibility checks
+            {
+                var getParameterFloatArgs = new object[] { k_dipoleWeightIndex, 0.0f };
+                FMOD_DSP_getParameterFloat.Invoke(dsp, getParameterFloatArgs);
+                steamAudioSource.dipoleWeight = (float)getParameterFloatArgs[1];
+
+                getParameterFloatArgs[0] = k_dipolePowerIndex;
+                FMOD_DSP_getParameterFloat.Invoke(dsp, getParameterFloatArgs);
+                steamAudioSource.dipolePower = (float)getParameterFloatArgs[1];
+
+                getParameterFloatArgs[0] = k_sourceRadiusIndex;
+                FMOD_DSP_getParameterFloat.Invoke(dsp, getParameterFloatArgs);
+                steamAudioSource.sourceRadius = (float)getParameterFloatArgs[1];
+            }
+
+            {
+                var getParameterIntArgs = new object[] { k_occlusionModeIndex, 0 };
+                FMOD_DSP_getParameterInt.Invoke(dsp, getParameterIntArgs);
+                steamAudioSource.occlusionMode = (OcclusionMode)getParameterIntArgs[1];
+
+                getParameterIntArgs[0] = k_occlusionMethodIndex;
+                FMOD_DSP_getParameterInt.Invoke(dsp, getParameterIntArgs);
+                steamAudioSource.occlusionMethod = (OcclusionMethod)getParameterIntArgs[1];
+            }
+
+            {
+                var getParameterBoolArgs = new object[] { k_enableIndirectIndex, false };
+                FMOD_DSP_getParameterBool.Invoke(dsp, getParameterBoolArgs);
+                steamAudioSource.reflections = (bool)getParameterBoolArgs[1];
+            }
+        }
+
         public override bool UsesBakedStaticListener(SteamAudioSource steamAudioSource)
         {
             FindDSP(steamAudioSource.gameObject);
@@ -104,7 +179,7 @@ namespace SteamAudio
 
             var usesBakedStaticListener = false;
 
-            var getParameterBoolArgs = new object[] { 12, usesBakedStaticListener };
+            var getParameterBoolArgs = new object[] { k_useBakedStaticListenerIndex, usesBakedStaticListener };
             FMOD_DSP_getParameterBool.Invoke(dsp, getParameterBoolArgs);
             usesBakedStaticListener = (bool) getParameterBoolArgs[1];
 
@@ -117,7 +192,7 @@ namespace SteamAudio
             if (!foundDSP)
                 return;
 
-            FMOD_DSP_setParameterData.Invoke(dsp, new object[] { 13, BitConverter.GetBytes(identifier) });
+            FMOD_DSP_setParameterData.Invoke(dsp, new object[] { k_setIdentifierIndex, BitConverter.GetBytes(identifier) });
         }
 
         bool foundDSP = false;
@@ -131,10 +206,14 @@ namespace SteamAudio
         PropertyInfo FMODUnity_StudioEventEmitter_EventInstance;
 
         MethodInfo FMOD_Studio_EventInstance_getChannelGroup;
+        MethodInfo FMOD_Studio_EventInstance_isValid;
         MethodInfo FMOD_ChannelGroup_getNumDSPs;
         MethodInfo FMOD_ChannelGroup_getDSP;
         MethodInfo FMOD_DSP_getInfo;
         MethodInfo FMOD_DSP_getParameterBool;
+        MethodInfo FMOD_DSP_getParameterFloat;
+        MethodInfo FMOD_DSP_getParameterInt;
         MethodInfo FMOD_DSP_setParameterData;
+        MethodInfo FMOD_DSP_setParameterFloat;
     }
 }

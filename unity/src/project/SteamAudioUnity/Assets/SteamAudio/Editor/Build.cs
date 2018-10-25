@@ -48,12 +48,12 @@ namespace SteamAudio
 
         static string[] FMODStudioPlugins =
         {
-            // "Assets/Plugins/x86/phonon_fmod.dll",
-            "Assets/Plugins/x86_64/phonon_fmod.dll" //,
-            // "Assets/Plugins/x86/libphonon_fmod.so",
-            // "Assets/Plugins/x86_64/libphonon_fmod.so",
-            // "Assets/Plugins/phonon_fmod.bundle",
-            // "Assets/Plugins/android/libphonon_fmod.so"
+            "Assets/Plugins/x86/phonon_fmod.dll",
+            "Assets/Plugins/x86_64/phonon_fmod.dll",
+            "Assets/Plugins/x86/libphonon_fmod.so",
+            "Assets/Plugins/x86_64/libphonon_fmod.so",
+            "Assets/Plugins/phonon_fmod.bundle",
+            "Assets/Plugins/android/libphonon_fmod.so"
         };
 
         static string[] TrueAudioNextPlugins =
@@ -91,7 +91,7 @@ namespace SteamAudio
             var assets = new List<string>();
             foreach (var file in files)
             {
-                if (file.Contains(".meta"))
+                if (file.Contains(".meta") || file.Contains(".in"))
                     continue;
 
                 if (excludeSuffixes != null)

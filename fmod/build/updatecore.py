@@ -11,6 +11,8 @@ def copy(source, destination):
 	source = "../../" + source
 	destination = "../../" + destination
 	if os.path.isdir(source):
+		if os.path.exists(destination):
+			shutil.rmtree(destination)
 		shutil.copytree(source, destination)
 	else:
 		shutil.copy(source, destination)
@@ -22,6 +24,7 @@ def component_includes(specifiedcomponent, testcomponent):
 def update_core(component, configuration):
 	if component_includes(component, "header"):
 		copy("core/src/core/api/phonon.h", "fmod/include/phonon/phonon.h")
+		copy("core/src/core/api/phonon_version.h", "fmod/include/phonon/phonon_version.h")
 	if component_includes(component, "win32"):
 		copy("core/bin/windows-vs2015-x86-"+configuration+"/phonon.dll", "fmod/lib/windows-x86/phonon.dll")
 		copy("core/bin/windows-vs2015-x86-"+configuration+"/phonon.pdb", "fmod/lib/windows-x86/phonon.pdb")
@@ -33,6 +36,7 @@ def update_core(component, configuration):
 	if component_includes(component, "linux64"):
 		copy("core/bin/linux-x64-"+configuration+"/libphonon.so", "fmod/lib/linux-x64/libphonon.so")
 	if component_includes(component, "osx"):
+		copy("core/bin/osx-"+configuration+"/libphonon.dylib", "fmod/lib/osx/libphonon.dylib")
 		copy("core/bin/osx-"+configuration+"/phonon_bundle.bundle", "fmod/lib/osx/phonon.bundle")
 	if component_includes(component, "android"):
 		copy("core/bin/android-armv7-"+configuration+"/libphonon.so", "fmod/lib/android-armv7/libphonon.so")

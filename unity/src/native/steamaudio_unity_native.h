@@ -9,7 +9,7 @@
 #include <unity5/AudioPluginInterface.h>
 #include <phonon.h>
 
-#define STEAM_AUDIO_PLUGIN_VERSION 0x020006
+#include "steamaudio_unity_version.h"
 
 /** Returns an IPLAudioFormat that corresponds to a given number of channels.
  */

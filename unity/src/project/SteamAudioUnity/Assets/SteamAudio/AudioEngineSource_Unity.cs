@@ -36,6 +36,8 @@ namespace SteamAudio
             var simulationTypeValue = (steamAudioSource.simulationType == SourceSimulationType.Realtime) ? 0.0f : 1.0f;
             var usesStaticListenerValue = (steamAudioSource.simulationType == SourceSimulationType.BakedStaticListener) ? 1.0f : 0.0f;
             var bypassDuringInitValue = (steamAudioSource.avoidSilenceDuringInit) ? 1.0f : 0.0f;
+            var hrtfIndexValue = (float) steamAudioSource.hrtfIndex;
+            var overrideHRTFIndexValue = (steamAudioSource.overrideHRTFIndex) ? 1.0f : 0.0f;
 
             audioSource.SetSpatializerFloat(0, directBinauralValue);
             audioSource.SetSpatializerFloat(1, hrtfInterpolationValue);
@@ -53,6 +55,20 @@ namespace SteamAudio
             audioSource.SetSpatializerFloat(14, bypassDuringInitValue);
             audioSource.SetSpatializerFloat(15, dipoleWeightValue);
             audioSource.SetSpatializerFloat(16, dipolePowerValue);
+            audioSource.SetSpatializerFloat(17, hrtfIndexValue);
+            audioSource.SetSpatializerFloat(18, overrideHRTFIndexValue);
+
+            var index = 19;
+            audioSource.SetSpatializerFloat(index++, steamAudioSource.directPath.distanceAttenuation);
+            audioSource.SetSpatializerFloat(index++, steamAudioSource.directPath.airAbsorptionLow);
+            audioSource.SetSpatializerFloat(index++, steamAudioSource.directPath.airAbsorptionMid);
+            audioSource.SetSpatializerFloat(index++, steamAudioSource.directPath.airAbsorptionHigh);
+            audioSource.SetSpatializerFloat(index++, steamAudioSource.directPath.propagationDelay);
+            audioSource.SetSpatializerFloat(index++, steamAudioSource.directPath.occlusionFactor);
+            audioSource.SetSpatializerFloat(index++, steamAudioSource.directPath.transmissionFactorLow);
+            audioSource.SetSpatializerFloat(index++, steamAudioSource.directPath.transmissionFactorMid);
+            audioSource.SetSpatializerFloat(index++, steamAudioSource.directPath.transmissionFactorHigh);
+            audioSource.SetSpatializerFloat(index++, steamAudioSource.directPath.directivityFactor);
         }
 
         public override bool ShouldSendIdentifier(SteamAudioSource steamAudioSource)

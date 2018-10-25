@@ -8,7 +8,7 @@
 #include <fmod/fmod.hpp>
 #include <phonon/phonon.h>
 
-#define STEAM_AUDIO_PLUGIN_VERSION 0x020012
+#include "steamaudio_fmod_version.h"
 
 /** Returns an IPLAudioFormat that corresponds to a given number of channels.
 */

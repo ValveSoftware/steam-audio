@@ -13,7 +13,7 @@ cmake_minimum_required (VERSION 3.0)
 set (CMAKE_CXX_STANDARD 11)
 
 # Define the project.
-project (Phonon)
+project (Phonon VERSION 2.0.16)
 
 # Precompiled headers.
 set (CMAKE_MODULE_PATH "${CMAKE_HOME_DIRECTORY}/build")
@@ -98,7 +98,7 @@ endif ()
 ###############################################################################
 
 # For Mac OS X, always build universal binaries.
-set (CMAKE_OSX_ARCHITECTURES "i386;x86_64")
+set (CMAKE_OSX_ARCHITECTURES "x86_64")
 
 # Adds a .bundle for Mac OS X.
 function (add_bundle name)
@@ -180,6 +180,19 @@ else ()
         add_definitions (-DIPL_OS_LINUX)
     endif ()
 endif ()
+
+
+###############################################################################
+# VERSION STAMPING
+###############################################################################
+
+if (UPDATE_VERSION_STAMPS)
+  message("Updating version stamps to v${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH}...")
+  configure_file(${CMAKE_HOME_DIRECTORY}/src/native/steamaudio_unity_version.h.in ${CMAKE_HOME_DIRECTORY}/src/native/steamaudio_unity_version.h)
+  configure_file(${CMAKE_HOME_DIRECTORY}/src/native/audioplugin_phonon.rc.in ${CMAKE_HOME_DIRECTORY}/src/native/audioplugin_phonon.rc)
+  configure_file(${CMAKE_HOME_DIRECTORY}/src/project/SteamAudioUnity/Assets/SteamAudio/Version.cs.in ${CMAKE_HOME_DIRECTORY}/src/project/SteamAudioUnity/Assets/SteamAudio/Version.cs)
+  configure_file(${CMAKE_HOME_DIRECTORY}/doc/phonon_unity.md.in ${CMAKE_HOME_DIRECTORY}/doc/phonon_unity.md)
+endif()
 
 
 ###############################################################################

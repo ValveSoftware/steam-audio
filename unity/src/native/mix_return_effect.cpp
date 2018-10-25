@@ -300,7 +300,7 @@ public:
                 mUsedAmbisonicsPanningEffect = false;
             }
 
-            gApi.iplApplyAmbisonicsBinauralEffect(mAmbisonicsBinauralEffect, mIndirectEffectOutputBuffer,
+            gApi.iplApplyAmbisonicsBinauralEffect(mAmbisonicsBinauralEffect, mBinauralRenderer, mIndirectEffectOutputBuffer,
                 mIndirectSpatializedOutputBuffer);
 
             mUsedAmbisonicsBinauralEffect = true;
@@ -313,7 +313,7 @@ public:
                 mUsedAmbisonicsBinauralEffect = false;
             }
 
-            gApi.iplApplyAmbisonicsPanningEffect(mAmbisonicsPanningEffect, mIndirectEffectOutputBuffer,
+            gApi.iplApplyAmbisonicsPanningEffect(mAmbisonicsPanningEffect, mBinauralRenderer, mIndirectEffectOutputBuffer,
                 mIndirectSpatializedOutputBuffer);
 
             mUsedAmbisonicsPanningEffect = true;
@@ -451,7 +451,7 @@ UnityAudioEffectDefinition gMixEffect
     sizeof(UnityAudioEffectDefinition), 
     sizeof(UnityAudioParameterDefinition),
     UNITY_AUDIO_PLUGIN_API_VERSION, 
-    STEAM_AUDIO_PLUGIN_VERSION,
+    STEAMAUDIO_UNITY_VERSION,
     0, 
     SA_MIX_NUM_PARAMS, 
     UnityAudioEffectDefinitionFlags_NeedsSpatializerData,

@@ -12,6 +12,9 @@
 
 #include <string>
 
+const int k_MaxHRTFIndices = 1000000;	// very big number for max # of HRTF data. FMod doesn't like this number to be too big.
+const float k_maxPropagationDelay = 100000.0f;	// very big propagation delay since FMod doesn't like big numbers.
+
 enum SpatializerEffectParams
 {
     SA_SPATIALIZE_PARAM_DIRECTBINAURAL,
@@ -28,8 +31,23 @@ enum SpatializerEffectParams
     SA_SPATIALIZE_PARAM_SIMTYPE,
     SA_SPATIALIZE_PARAM_STATICLISTENER,
     SA_SPATIALIZE_PARAM_NAME,
-    SA_SPATIALIZE_PARAM_SOURCEPOSITION,
-    SA_SPATIALIZE_NUM_PARAMS
+	SA_SPATIALIZE_PARAM_SOURCEPOSITION,
+	SA_SPATIALIZE_PARAM_DIPOLEWEIGHT,
+	SA_SPATIALIZE_PARAM_DIPOLEPOWER,
+	SA_SPATIALIZE_PARAM_HRTFINDEX,
+	SA_SPATIALIZE_PARAM_OVERRIDEHRTFINDEX,
+	SA_SPATIALIZE_PARAM_DP_DISTANCEATTENUATION,
+	SA_SPATIALIZE_PARAM_DP_AIRABSORPTIONLOW,
+	SA_SPATIALIZE_PARAM_DP_AIRABSORPTIONMID,
+	SA_SPATIALIZE_PARAM_DP_AIRABSORPTIONHIGH,
+	SA_SPATIALIZE_PARAM_DP_PROPAGATIONDELAY,
+	SA_SPATIALIZE_PARAM_DP_OCCLUSION,
+	SA_SPATIALIZE_PARAM_DP_TRANSMISSIONLOW,
+	SA_SPATIALIZE_PARAM_DP_TRANSMISSIONMID,
+	SA_SPATIALIZE_PARAM_DP_TRANSMISSIONHIGH,
+	SA_SPATIALIZE_PARAM_DP_DIRECTIVITY,
+	SA_SPATIALIZE_PARAM_OVERALLGAIN,
+	SA_SPATIALIZE_NUM_PARAMS
 };
 
 FMOD_DSP_PARAMETER_DESC gSpatializerParamDirectBinaural = { FMOD_DSP_PARAMETER_TYPE_BOOL, "DirectBinaural", "", "Spatialize direct sound using HRTF." };
@@ -47,6 +65,21 @@ FMOD_DSP_PARAMETER_DESC gSpatializerParamIndirectType = { FMOD_DSP_PARAMETER_TYP
 FMOD_DSP_PARAMETER_DESC gSpatializerParamStaticListener = { FMOD_DSP_PARAMETER_TYPE_BOOL, "StaticListener", "", "Uses static listener." };
 FMOD_DSP_PARAMETER_DESC gSpatializerParamName = { FMOD_DSP_PARAMETER_TYPE_DATA, "Name", "", "Unique identifier for the source." };
 FMOD_DSP_PARAMETER_DESC gSpatializerParamSourcePosition = { FMOD_DSP_PARAMETER_TYPE_DATA, "SourcePos", "", "Position of the source." };
+FMOD_DSP_PARAMETER_DESC gSpatializerParamDipoleWeight = { FMOD_DSP_PARAMETER_TYPE_FLOAT, "DipoleWeight", "", "Weighting of the dipole for the source." };
+FMOD_DSP_PARAMETER_DESC gSpatializerParamDipolePower = { FMOD_DSP_PARAMETER_TYPE_FLOAT, "DipolePower", "", "Relative level of direct sound." };
+FMOD_DSP_PARAMETER_DESC gSpatializerParamHRTFIndex = { FMOD_DSP_PARAMETER_TYPE_INT, "HRTFIndex", "", "Index of the HRTF data set." };
+FMOD_DSP_PARAMETER_DESC gSpatializerParamOverrideHRTF = { FMOD_DSP_PARAMETER_TYPE_BOOL, "OverrideHRTF", "", "True if using HRTFIndex." };
+FMOD_DSP_PARAMETER_DESC gSpatializerParamDP_Distance = { FMOD_DSP_PARAMETER_TYPE_FLOAT, "DP_Distance", "", "Internal directPatchValues" };
+FMOD_DSP_PARAMETER_DESC gSpatializerParamDP_AirAbsLow = { FMOD_DSP_PARAMETER_TYPE_FLOAT, "DP_AirAbsLow", "", "Internal directPatchValues" };
+FMOD_DSP_PARAMETER_DESC gSpatializerParamDP_AirAbsMid = { FMOD_DSP_PARAMETER_TYPE_FLOAT, "DP_AirAbsMid", "", "Internal directPatchValues" };
+FMOD_DSP_PARAMETER_DESC gSpatializerParamDP_AirAbsHigh = { FMOD_DSP_PARAMETER_TYPE_FLOAT, "DP_AirAbsHigh", "", "Internal directPatchValues" };
+FMOD_DSP_PARAMETER_DESC gSpatializerParamDP_Delay = { FMOD_DSP_PARAMETER_TYPE_FLOAT, "DP_Delay", "", "Internal directPatchValues" };
+FMOD_DSP_PARAMETER_DESC gSpatializerParamDP_Occlusion = { FMOD_DSP_PARAMETER_TYPE_FLOAT, "DP_Occlusion", "", "Internal directPatchValues" };
+FMOD_DSP_PARAMETER_DESC gSpatializerParamDP_TransLow = { FMOD_DSP_PARAMETER_TYPE_FLOAT, "DP_TransLow", "", "Internal directPatchValues" };
+FMOD_DSP_PARAMETER_DESC gSpatializerParamDP_TransMid = { FMOD_DSP_PARAMETER_TYPE_FLOAT, "DP_TransMid", "", "Internal directPatchValues" };
+FMOD_DSP_PARAMETER_DESC gSpatializerParamDP_TransHigh = { FMOD_DSP_PARAMETER_TYPE_FLOAT, "DP_TransHigh", "", "Internal directPatchValues" };
+FMOD_DSP_PARAMETER_DESC gSpatializerParamDP_Directivity = { FMOD_DSP_PARAMETER_TYPE_FLOAT, "DP_Directivity", "", "Internal directPatchValues" };
+FMOD_DSP_PARAMETER_DESC gSpatializerParamOverallGain = { FMOD_DSP_PARAMETER_TYPE_DATA, "OverallGain", "", "Gaining to the max." };
 
 FMOD_DSP_PARAMETER_DESC* gSpatializerEffectParams[] =
 {
@@ -64,7 +97,22 @@ FMOD_DSP_PARAMETER_DESC* gSpatializerEffectParams[] =
     &gSpatializerParamIndirectType,
     &gSpatializerParamStaticListener,
     &gSpatializerParamName,
-    &gSpatializerParamSourcePosition
+    &gSpatializerParamSourcePosition,
+	&gSpatializerParamDipoleWeight,
+	&gSpatializerParamDipolePower,
+	&gSpatializerParamHRTFIndex,
+	&gSpatializerParamOverrideHRTF,
+	&gSpatializerParamDP_Distance,
+	&gSpatializerParamDP_AirAbsLow,
+	&gSpatializerParamDP_AirAbsMid,
+	&gSpatializerParamDP_AirAbsHigh,
+	&gSpatializerParamDP_Delay,
+	&gSpatializerParamDP_Occlusion,
+	&gSpatializerParamDP_TransLow,
+	&gSpatializerParamDP_TransMid,
+	&gSpatializerParamDP_TransHigh,
+	&gSpatializerParamDP_Directivity,
+	&gSpatializerParamOverallGain,
 };
 
 char* gInterpolationValues[] = { "Nearest", "Bilinear" };
@@ -89,6 +137,21 @@ void initSpatializerParamDescs()
     gSpatializerParamStaticListener.booldesc = { false, nullptr };
     gSpatializerParamName.datadesc = { FMOD_DSP_PARAMETER_DATA_TYPE_USER };
     gSpatializerParamSourcePosition.datadesc = { FMOD_DSP_PARAMETER_DATA_TYPE_3DATTRIBUTES };
+	gSpatializerParamDipoleWeight.floatdesc = { 0.0f, 1.0f , 0.0f};
+	gSpatializerParamDipolePower.floatdesc = { 0.0f, 4.0f, 0.0f };
+	gSpatializerParamHRTFIndex.intdesc = { 0, k_MaxHRTFIndices, 0, false };
+	gSpatializerParamOverrideHRTF.booldesc = { false, nullptr };
+	gSpatializerParamDP_Distance.floatdesc = { 0.0f, 1.0f, 1.0f };
+	gSpatializerParamDP_AirAbsLow.floatdesc = { 0.0f, 1.0f, 1.0f };
+	gSpatializerParamDP_AirAbsMid.floatdesc = { 0.0f, 1.0f, 1.0f };
+	gSpatializerParamDP_AirAbsHigh.floatdesc = { 0.0f, 1.0f, 1.0f };
+	gSpatializerParamDP_Delay.floatdesc = { 0.0f, k_maxPropagationDelay, 0.0f };
+	gSpatializerParamDP_Occlusion.floatdesc = { 0.0f, 1.0f, 1.0f };
+	gSpatializerParamDP_TransLow.floatdesc = { 0.0f, 1.0f, 1.0f };
+	gSpatializerParamDP_TransMid.floatdesc = { 0.0f, 1.0f, 1.0f };
+	gSpatializerParamDP_TransHigh.floatdesc = { 0.0f, 1.0f, 1.0f };
+	gSpatializerParamDP_Directivity.floatdesc = { 0.0f, 1.0f, 1.0f };
+	gSpatializerParamOverallGain.datadesc = { FMOD_DSP_PARAMETER_DATA_TYPE_OVERALLGAIN };
 }
 
 /** A native audio spatializer effect that applies binaural rendering, direct path attenuation, occlusion, and
@@ -141,11 +204,22 @@ public:
     indirect sound. Ignored if using real-time simulation. */
     IPLBakedDataIdentifier identifier;
 
+	/** Weighting for the dipole (directivity) function. Values from 0.0 (no effect) to 1.0f (full effect) */
+	float dipoleWeight;
+
+	/** Power for the dipole (directivity) function. Values from 0.0 to 4.0f */
+	float dipolePower;
+
     /** Whether or not the baked data we're using corresponds to a static listener node. Ignored if using real-time
     simulation. */
     bool usesStaticListener;
 
-    FMOD_DSP_PARAMETER_3DATTRIBUTES sourcePosition;
+    int hrtfIndex;
+    bool overrideHRTFIndex;
+
+	FMOD_DSP_PARAMETER_3DATTRIBUTES sourcePosition;
+    FMOD_DSP_PARAMETER_OVERALLGAIN overallGain;
+	IPLDirectSoundPath directPath;
 
     /** The default constructor initializes parameters to default values.
     */
@@ -161,10 +235,14 @@ public:
         indirect{ false },
         indirectBinaural{ false },
         indirectLevel{ 1.0f },
+		dipoleWeight{ 0.0f },
+		dipolePower{ 0.0f }, 
         indirectType{ IPL_SIMTYPE_REALTIME },
         identifier{},
         usesStaticListener{ false },
-        mInputFormat{},
+		hrtfIndex(0),
+		overrideHRTFIndex(false),
+		mInputFormat{},
         mOutputFormat{},
         mBinauralRenderer{ nullptr },
         mPanningEffect{ nullptr },
@@ -180,8 +258,20 @@ public:
         mUsedAmbisonicsPanningEffect{ false },
         mUsedAmbisonicsBinauralEffect{ false },
         mPreviousDirectMixLevel{ 0.0f },
-        mPreviousIndirectMixLevel{ 0.0f }
-    {}
+        mPreviousIndirectMixLevel{ 0.0f },
+        overallGain{ 1.0f, 0.0f }
+	{
+		directPath.distanceAttenuation = 1.0f;
+		directPath.airAbsorption[0] = 1.0f;
+		directPath.airAbsorption[1] = 1.0f;
+		directPath.airAbsorption[2] = 1.0f;
+		directPath.propagationDelay = 0.0f;
+		directPath.occlusionFactor = 1.0f;
+		directPath.transmissionFactor[0] = 1.0f;
+		directPath.transmissionFactor[1] = 1.0f;
+		directPath.transmissionFactor[2] = 1.0f;
+		directPath.directivityFactor = 1.0f;
+	}
 
     /** The destructor ensures that audio processing state is destroyed.
     */
@@ -215,7 +305,10 @@ public:
         case SA_SPATIALIZE_PARAM_STATICLISTENER:
             value = usesStaticListener;
             return true;
-        default:
+		case SA_SPATIALIZE_PARAM_OVERRIDEHRTFINDEX:
+			value = overrideHRTFIndex;
+			return true;
+		default:
             return false;
         }
     }
@@ -237,7 +330,10 @@ public:
         case SA_SPATIALIZE_PARAM_SIMTYPE:
             value = static_cast<int>(indirectType);
             return true;
-        default:
+		case SA_SPATIALIZE_PARAM_HRTFINDEX:
+			value = hrtfIndex;
+			return true;
+		default:
             return false;
         }
     }
@@ -256,12 +352,62 @@ public:
         case SA_SPATIALIZE_PARAM_INDIRECTLEVEL:
             value = indirectLevel;
             return true;
-        default:
+		case SA_SPATIALIZE_PARAM_DIPOLEPOWER:
+			value = dipolePower;
+			return true;
+		case SA_SPATIALIZE_PARAM_DIPOLEWEIGHT:
+			value = dipoleWeight;
+			return true;
+		case SA_SPATIALIZE_PARAM_DP_DISTANCEATTENUATION:
+			value = directPath.distanceAttenuation;
+			return true;
+		case SA_SPATIALIZE_PARAM_DP_AIRABSORPTIONLOW:
+			value = directPath.airAbsorption[0];
+			return true;
+		case SA_SPATIALIZE_PARAM_DP_AIRABSORPTIONMID:
+			value = directPath.airAbsorption[1];
+			return true;
+		case SA_SPATIALIZE_PARAM_DP_AIRABSORPTIONHIGH:
+			value = directPath.airAbsorption[2];
+			return true;
+		case SA_SPATIALIZE_PARAM_DP_PROPAGATIONDELAY:
+			value = directPath.propagationDelay;
+			return true;
+		case SA_SPATIALIZE_PARAM_DP_OCCLUSION:
+			value = directPath.occlusionFactor;
+			return true;
+		case SA_SPATIALIZE_PARAM_DP_TRANSMISSIONLOW:
+			value = directPath.transmissionFactor[0];
+			return true;
+		case SA_SPATIALIZE_PARAM_DP_TRANSMISSIONMID:
+			value = directPath.transmissionFactor[1];
+			return true;
+		case SA_SPATIALIZE_PARAM_DP_TRANSMISSIONHIGH:
+			value = directPath.transmissionFactor[2];
+			return true;
+		case SA_SPATIALIZE_PARAM_DP_DIRECTIVITY:
+			value = directPath.directivityFactor;
+			return true;
+		default:
             return false;
         }
     }
 
-    /** Sets a parameter to a value provided by Unity. Returns true if the parameter index is valid.
+    bool getParameter(SpatializerEffectParams index,
+                        void** value, unsigned int *length)
+    {
+        switch (index)
+        {
+        case SA_SPATIALIZE_PARAM_OVERALLGAIN:
+            *value = static_cast<void*>(&overallGain);
+            *length = sizeof(overallGain);
+            return true;
+        default:
+            return false;
+        }
+    }
+	
+	/** Sets a parameter to a value provided by Unity. Returns true if the parameter index is valid.
     */
     bool setParameter(SpatializerEffectParams index, 
                       bool value)
@@ -287,7 +433,10 @@ public:
             usesStaticListener = value;
             identifier.type = (usesStaticListener) ? IPL_BAKEDDATATYPE_STATICLISTENER : IPL_BAKEDDATATYPE_STATICSOURCE;
             return true;
-        default:
+		case SA_SPATIALIZE_PARAM_OVERRIDEHRTFINDEX:
+			overrideHRTFIndex = value;
+			return true;
+		default:
             return false;
         }
     }
@@ -308,8 +457,11 @@ public:
             return true;
         case SA_SPATIALIZE_PARAM_SIMTYPE:
             indirectType = static_cast<IPLSimulationType>(value);
-            return true;
-        default:
+			return true;
+		case SA_SPATIALIZE_PARAM_HRTFINDEX:
+			hrtfIndex = value;
+			return true;
+		default:
             return false;
         }
     }
@@ -325,10 +477,46 @@ public:
         case SA_SPATIALIZE_PARAM_DIRECTLEVEL:
             directLevel = value;
             return true;
-        case SA_SPATIALIZE_PARAM_INDIRECTLEVEL:
-            indirectLevel = value;
-            return true;
-        default:
+		case SA_SPATIALIZE_PARAM_INDIRECTLEVEL:
+			indirectLevel = value;
+			return true;
+		case SA_SPATIALIZE_PARAM_DIPOLEWEIGHT:
+			dipoleWeight = value;
+			return true;
+		case SA_SPATIALIZE_PARAM_DIPOLEPOWER:
+			dipolePower = value;
+			return true;
+		case SA_SPATIALIZE_PARAM_DP_DISTANCEATTENUATION:
+			directPath.distanceAttenuation = value;
+			return true;
+		case SA_SPATIALIZE_PARAM_DP_AIRABSORPTIONLOW:
+			directPath.airAbsorption[0] = value;
+			return true;
+		case SA_SPATIALIZE_PARAM_DP_AIRABSORPTIONMID:
+			directPath.airAbsorption[1] = value;
+			return true;
+		case SA_SPATIALIZE_PARAM_DP_AIRABSORPTIONHIGH:
+			directPath.airAbsorption[2] = value;
+			return true;
+		case SA_SPATIALIZE_PARAM_DP_PROPAGATIONDELAY:
+			directPath.propagationDelay = value;
+			return true;
+		case SA_SPATIALIZE_PARAM_DP_OCCLUSION:
+			directPath.occlusionFactor = value;
+			return true;
+		case SA_SPATIALIZE_PARAM_DP_TRANSMISSIONLOW:
+			directPath.transmissionFactor[0] = value;
+			return true;
+		case SA_SPATIALIZE_PARAM_DP_TRANSMISSIONMID:
+			directPath.transmissionFactor[1] = value;
+			return true;
+		case SA_SPATIALIZE_PARAM_DP_TRANSMISSIONHIGH:
+			directPath.transmissionFactor[2] = value;
+			return true;
+		case SA_SPATIALIZE_PARAM_DP_DIRECTIVITY:
+			directPath.directivityFactor = value;
+			return true;
+		default:
             return false;
         }
     }
@@ -348,13 +536,18 @@ public:
         // Make sure the audio engine global state has been initialized, and the binaural renderer has been created.
         if (!mGlobalState)
         {
-            mGlobalState = GlobalState::get();
+            mGlobalState = AudioEngineSettings::get();
             if (!mGlobalState)
                 return false;
         }
 
-        mBinauralRenderer = mGlobalState->binauralRenderer();
-        if (!mBinauralRenderer)
+		if (overrideHRTFIndex) {
+			mBinauralRenderer = mGlobalState->binauralRenderer(hrtfIndex);
+		}
+		else {
+			mBinauralRenderer = mGlobalState->binauralRenderer();
+		}
+		if (!mBinauralRenderer)
             return false;
 
         // Check to see if an environmental renderer has just been created.
@@ -510,6 +703,97 @@ public:
         mGlobalState = nullptr;
     }
 
+    float calcDirectPathVolume(const IPLDirectSoundPath& directPath)
+    {
+        auto GetMaxFromArray = [](const float* myArray, int numElements)
+        {
+            float max = 0.0f;
+
+            for (int i = 1; i < numElements ; ++i)
+            {
+	            max = std::max(max, myArray[i]);
+            }
+
+            return max;
+        };
+	
+        float directPathVolume = (distanceAttenuation ? directPath.distanceAttenuation : 1.0f) *
+                        (dipoleWeight > 0.0f ? directPath.directivityFactor : 1.0f);
+
+        if (occlusionMode != IPL_DIRECTOCCLUSION_NONE)
+        {
+            float occlusionAttenuationFactor = 1.0f;
+            
+            if (occlusionMode == IPL_DIRECTOCCLUSION_NOTRANSMISSION)
+            {
+                occlusionAttenuationFactor = directPath.occlusionFactor;
+            }
+            else
+            {
+                occlusionAttenuationFactor = (directPath.occlusionFactor + (1 - directPath.occlusionFactor) * GetMaxFromArray(directPath.transmissionFactor, 3));
+            }
+	        directPathVolume *= occlusionAttenuationFactor;
+        }
+
+        if (airAbsorption)
+        {
+	        directPathVolume *= GetMaxFromArray(directPath.airAbsorption, 3);
+        }
+
+        return directPathVolume;
+
+    }
+
+    void setOverallGain(float gain)
+    {
+	    overallGain.linear_gain = std::min(1.0f, gain);
+	    overallGain.linear_gain_additive = 0.0f;	// this is 0, as this is a volume Fmod sends to "behind the scenes" cooperative plugins, and we don't currently have that
+    }
+
+	IPLSource getSource()
+	{
+
+		auto CrossProduct = [](const IPLVector3& lhs, const IPLVector3& rhs)
+		{
+			IPLVector3 cross;
+
+			cross.x = lhs.y * rhs.z - lhs.z * rhs.y;
+			cross.y = lhs.z * rhs.x - lhs.x * rhs.z;
+			cross.z = lhs.x * rhs.y - lhs.y * rhs.x;
+
+			return cross;
+		};
+
+		auto sourcePos = convertVector(sourcePosition.absolute.position.x, sourcePosition.absolute.position.y,
+			sourcePosition.absolute.position.z);
+
+		// Create the source structure
+		IPLSource source;
+		source.position = sourcePos;
+		source.ahead = convertVector(sourcePosition.absolute.forward.x, sourcePosition.absolute.forward.y, sourcePosition.absolute.forward.z);
+		source.up = convertVector(sourcePosition.absolute.up.x, sourcePosition.absolute.up.y, sourcePosition.absolute.up.z);
+		source.right = CrossProduct(source.ahead, source.up);
+		source.directivity = IPLDirectivity{ dipoleWeight, dipolePower, nullptr, nullptr };
+
+		return source;
+    }
+
+	/** Updates the overall gain for Fmod to determine if the sound should be audible when it's trying to manage limited
+     *  channel usage. If we don't update it, Fmod will never know it's louder than any currently playing sounds.
+     */
+    void updateOverallGain()
+    {
+        float spatializerLevel = directLevel;
+
+        if (distanceAttenuation || airAbsorption || (dipoleWeight > 0.0f) || (occlusionMode != IPL_DIRECTOCCLUSION_NONE))
+        {
+            spatializerLevel *= calcDirectPathVolume(directPath);
+        }
+
+        mPreviousDirectMixLevel = directLevel;
+        setOverallGain(spatializerLevel +  ((float) indirect) * indirectLevel);
+    }
+
     /** Applies the Spatialize effect to audio flowing through an Audio Source.
      */
     void process(float* inBuffer, 
@@ -555,23 +839,23 @@ public:
             }
         }
 
-        auto sourcePos = convertVector(sourcePosition.absolute.position.x, sourcePosition.absolute.position.y,
-            sourcePosition.absolute.position.z);
-
-        auto direction = gApi.iplCalculateRelativeDirection(sourcePos, listenerPosition, listenerAhead, listenerUp);
+        auto source = getSource();
+        auto direction = gApi.iplCalculateRelativeDirection(source.position, listenerPosition, listenerAhead, listenerUp);
 
         if (mSceneState && mSceneState->environmentalRenderer())
         {
             // Calculate the direct path parameters.
-            auto directPath = gApi.iplGetDirectSoundPath(mSceneState->environment(),
-                listenerPosition, listenerAhead, listenerUp, sourcePos, sourceRadius, occlusionMode,
-                occlusionMethod);
+            // NOTE - this is now done in unity, and updated via the SetParameters settings. directPath is now a member variable
+            //auto directPath = gApi.iplGetDirectSoundPath(mSceneState->environment(),
+            //    listenerPosition, listenerAhead, listenerUp, source, sourceRadius, occlusionMode,
+            //    occlusionMethod);
 
             // Apply direct sound modeling to the input audio, resulting in a mono buffer of audio.
             auto directOptions = IPLDirectSoundEffectOptions
             {
                 distanceAttenuation ? IPL_TRUE : IPL_FALSE,
                 airAbsorption ? IPL_TRUE : IPL_FALSE,
+                (dipoleWeight > 0.0f) ? IPL_TRUE : IPL_FALSE,
                 occlusionMode
             };
 
@@ -595,12 +879,12 @@ public:
         // Spatialize the direct sound.
         if (directBinaural)
         {
-            gApi.iplApplyBinauralEffect(mBinauralEffect, mDirectEffectOutputBuffer, direction, hrtfInterpolation,
+            gApi.iplApplyBinauralEffect(mBinauralEffect, mBinauralRenderer, mDirectEffectOutputBuffer, direction, hrtfInterpolation,
                 mDirectSpatializedOutputBuffer);
-        }
+		}
         else
         {
-            gApi.iplApplyPanningEffect(mPanningEffect, mDirectEffectOutputBuffer, direction,
+            gApi.iplApplyPanningEffect(mPanningEffect, mBinauralRenderer, mDirectEffectOutputBuffer, direction,
                 mDirectSpatializedOutputBuffer);
         }
 
@@ -644,7 +928,7 @@ public:
 
         // Send audio to the convolution effect.
         gApi.iplSetConvolutionEffectIdentifier(mIndirectEffect, identifier);
-        gApi.iplSetDryAudioForConvolutionEffect(mIndirectEffect, sourcePos, inputAudio);
+        gApi.iplSetDryAudioForConvolutionEffect(mIndirectEffect, source, inputAudio);
         mUsedConvolutionEffect = true;
 
         // If we're using accelerated mixing, stop here.
@@ -664,7 +948,7 @@ public:
                 mUsedAmbisonicsPanningEffect = false;
             }
 
-            gApi.iplApplyAmbisonicsBinauralEffect(mAmbisonicsBinauralEffect, mIndirectEffectOutputBuffer,
+            gApi.iplApplyAmbisonicsBinauralEffect(mAmbisonicsBinauralEffect, mBinauralRenderer, mIndirectEffectOutputBuffer,
                 mIndirectSpatializedOutputBuffer);
 
             mUsedAmbisonicsBinauralEffect = true;
@@ -677,8 +961,8 @@ public:
                 mUsedAmbisonicsBinauralEffect = false;
             }
 
-            gApi.iplApplyAmbisonicsPanningEffect(mAmbisonicsPanningEffect, mIndirectEffectOutputBuffer,
-                mIndirectSpatializedOutputBuffer);
+            gApi.iplApplyAmbisonicsPanningEffect(mAmbisonicsPanningEffect, mAmbisonicsBinauralEffect,
+				mIndirectEffectOutputBuffer, mIndirectSpatializedOutputBuffer);
 
             mUsedAmbisonicsPanningEffect = true;
         }
@@ -709,7 +993,7 @@ private:
     IPLhandle mBinauralEffect;
 
     /** An object that contains the rendering settings and binaural renderer used globally. */
-    std::shared_ptr<GlobalState> mGlobalState;
+    std::shared_ptr<AudioEngineSettings> mGlobalState;
 
     /** An object that contains the environmental renderer for the current scene. */
     std::shared_ptr<SceneState> mSceneState;
@@ -800,6 +1084,16 @@ FMOD_RESULT F_CALL getSpatializerBool(FMOD_DSP_STATE* state,
     return status ? FMOD_OK : FMOD_ERR_INVALID_PARAM;
 }
 
+FMOD_RESULT F_CALL getSpatializerData(FMOD_DSP_STATE* state,
+                                      int index, 
+                                      void** value, 
+                                      unsigned int *length, 
+                                      char *valuestr)
+{
+    auto* params = reinterpret_cast<SpatializeEffectState*>(state->plugindata);
+    return params->getParameter(static_cast<SpatializerEffectParams>(index), value, length) ? FMOD_OK : FMOD_ERR_INVALID_PARAM;
+}
+
 FMOD_RESULT F_CALL getSpatializerInt(FMOD_DSP_STATE* state, 
                                      int index, 
                                      int* value, 
@@ -872,6 +1166,17 @@ FMOD_RESULT F_CALL processSpatializerEffect(FMOD_DSP_STATE* state,
                                             FMOD_BOOL inputsIdle,
                                             FMOD_DSP_PROCESS_OPERATION operation)
 {
+    auto GetListenerVectors = [](FMOD_DSP_STATE* state, IPLVector3& listenerPosition, IPLVector3& listenerAhead, IPLVector3& listenerUp)
+    {
+        auto numListeners = 1;
+        FMOD_3D_ATTRIBUTES listener;
+        state->functions->getlistenerattributes(state, &numListeners, &listener);
+
+        listenerPosition = convertVector(listener.position.x, listener.position.y, listener.position.z);
+        listenerAhead = convertVector(listener.forward.x, listener.forward.y, listener.forward.z);
+        listenerUp = convertVector(listener.up.x, listener.up.y, listener.up.z);
+    };
+
     if (operation == FMOD_DSP_PROCESS_QUERY)
     {
         if (outputBuffers)
@@ -882,26 +1187,33 @@ FMOD_RESULT F_CALL processSpatializerEffect(FMOD_DSP_STATE* state,
         }
 
         if (inputsIdle)
+        {
+            // if the sound is idle, we still need to check the expected overall gain to help manage
+            // channel counts. updateOverallGain won't do any processing - just determine how loud
+            // the sound would be (according to attenuation, etc) if it were playing.
+            // Note: the SteamAudio Unity plugin now calculates iplGetDirectSoundPath so this is even lighter
+            auto* params = reinterpret_cast<SpatializeEffectState*>(state->plugindata);
+            params->updateOverallGain();
+
             return FMOD_ERR_DSP_DONTPROCESS;
+        }
         else
             return FMOD_OK;
     }
     else if (operation == FMOD_DSP_PROCESS_PERFORM)
     {
         auto* params = reinterpret_cast<SpatializeEffectState*>(state->plugindata);
+        params->updateOverallGain();
 
         auto samplingRate = 0;
         auto frameSize = 0u;
         state->functions->getsamplerate(state, &samplingRate);
         state->functions->getblocksize(state, &frameSize);
 
-        auto numListeners = 1;
-        FMOD_3D_ATTRIBUTES listener;
-        state->functions->getlistenerattributes(state, &numListeners, &listener);
-
-        auto listenerPosition = convertVector(listener.position.x, listener.position.y, listener.position.z);
-        auto listenerAhead = convertVector(listener.forward.x, listener.forward.y, listener.forward.z);
-        auto listenerUp = convertVector(listener.up.x, listener.up.y, listener.up.z);
+        IPLVector3 listenerPosition;
+        IPLVector3 listenerAhead;
+        IPLVector3 listenerUp;
+        GetListenerVectors(state, listenerPosition, listenerAhead, listenerUp);
 
         params->process(inputBuffers->buffers[0], outputBuffers->buffers[0], length, 
                         inputBuffers->buffernumchannels[0], outputBuffers->buffernumchannels[0], samplingRate, 
@@ -925,14 +1237,14 @@ FMOD_RESULT F_CALL registerSpatializerEffect(FMOD_DSP_STATE* state)
     outputFormat.channelLayout = IPL_CHANNELLAYOUT_STEREO;
     outputFormat.channelOrder = IPL_CHANNELORDER_INTERLEAVED;
 
-    GlobalState::create(renderingSettings, outputFormat);
+	AudioEngineSettings::create(renderingSettings, outputFormat);
 
     return FMOD_OK;
 }
 
 FMOD_RESULT F_CALL deregisterSpatializerEffect(FMOD_DSP_STATE* state)
 {
-    GlobalState::destroy();
+	AudioEngineSettings::destroy();
 
     return FMOD_OK;
 }
@@ -941,7 +1253,7 @@ FMOD_DSP_DESCRIPTION gSpatializerEffect =
 {
     FMOD_PLUGIN_SDK_VERSION,
     "Steam Audio Spatializer",
-    STEAM_AUDIO_PLUGIN_VERSION,
+    STEAMAUDIO_FMOD_VERSION,
     1, 1,
     createSpatializerEffect,
     releaseSpatializerEffect,
@@ -958,7 +1270,7 @@ FMOD_DSP_DESCRIPTION gSpatializerEffect =
     getSpatializerFloat,
     getSpatializerInt,
     getSpatializerBool,
-    nullptr,
+    getSpatializerData,
     nullptr,
     nullptr,
     registerSpatializerEffect,

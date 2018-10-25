@@ -9,6 +9,10 @@
 
 /** Function pointer types for all the Steam Audio API functions used by the Unity plugin.
  */
+typedef void (*IPLGetVersion)(unsigned int* major, 
+                              unsigned int* minor, 
+                              unsigned int* patch);
+
 typedef IPLerror (*IPLCreateContext)(IPLLogFunction logCallback,
                                      IPLAllocateFunction allocateCallback,
                                      IPLFreeFunction freeCallback,
@@ -36,6 +40,7 @@ typedef IPLerror(*IPLCreatePanningEffect)(IPLhandle renderer,
 typedef IPLvoid(*IPLDestroyPanningEffect)(IPLhandle* effect);
 
 typedef IPLvoid(*IPLApplyPanningEffect)(IPLhandle effect, 
+										IPLhandle binauralRenderer,
                                         IPLAudioBuffer inputAudio, 
                                         IPLVector3 direction,
                                         IPLAudioBuffer outputAudio);
@@ -48,6 +53,7 @@ typedef IPLerror(*IPLCreateBinauralEffect)(IPLhandle renderer,
 typedef IPLvoid(*IPLDestroyBinauralEffect)(IPLhandle* effect);
 
 typedef IPLvoid(*IPLApplyBinauralEffect)(IPLhandle effect, 
+										 IPLhandle binauralRenderer,
                                          IPLAudioBuffer inputAudio, 
                                          IPLVector3 direction,
                                          IPLHrtfInterpolation interpolation, 
@@ -61,6 +67,7 @@ typedef IPLerror(*IPLCreateAmbisonicsPanningEffect)(IPLhandle renderer,
 typedef IPLvoid(*IPLDestroyAmbisonicsPanningEffect)(IPLhandle* effect);
 
 typedef IPLvoid(*IPLApplyAmbisonicsPanningEffect)(IPLhandle effect, 
+												  IPLhandle binauralRenderer,
                                                   IPLAudioBuffer inputAudio,
                                                   IPLAudioBuffer outputAudio);
 
@@ -74,6 +81,7 @@ typedef IPLerror(*IPLCreateAmbisonicsBinauralEffect)(IPLhandle renderer,
 typedef IPLvoid(*IPLDestroyAmbisonicsBinauralEffect)(IPLhandle* effect);
 
 typedef IPLvoid(*IPLApplyAmbisonicsBinauralEffect)(IPLhandle effect, 
+												   IPLhandle binauralRenderer,
                                                    IPLAudioBuffer inputAudio,
                                                    IPLAudioBuffer outputAudio);
 
@@ -93,7 +101,7 @@ typedef IPLDirectSoundPath(*IPLGetDirectSoundPath)(IPLhandle renderer,
                                                    IPLVector3 listenerPosition,
                                                    IPLVector3 listenerAhead, 
                                                    IPLVector3 listenerUp, 
-                                                   IPLVector3 sourcePosition, 
+                                                   IPLSource source, 
                                                    IPLfloat32 sourceRadius,
                                                    IPLDirectOcclusionMode occlusionMode, 
                                                    IPLDirectOcclusionMethod occlusionMethod);
@@ -124,7 +132,7 @@ typedef IPLvoid(*IPLSetConvolutionEffectIdentifier)(IPLhandle effect,
                                                     IPLBakedDataIdentifier identifier);
 
 typedef IPLvoid(*IPLSetDryAudioForConvolutionEffect)(IPLhandle effect, 
-                                                     IPLVector3 sourcePosition,
+                                                     IPLSource source,
                                                      IPLAudioBuffer dryAudio);
 
 typedef IPLvoid(*IPLGetWetAudioForConvolutionEffect)(IPLhandle effect, 

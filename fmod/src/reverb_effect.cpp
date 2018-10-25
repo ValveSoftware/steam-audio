@@ -146,7 +146,7 @@ public:
         // Make sure the audio engine global state has been initialized.
         if (!mGlobalState)
         {
-            mGlobalState = GlobalState::get();
+            mGlobalState = AudioEngineSettings::get();
             if (!mGlobalState)
                 return false;
         }
@@ -275,7 +275,12 @@ public:
         }
 
         // Apply reverb to the input audio, resulting in an Ambisonics buffer containing the unspatialized reverb.
-        gApi.iplSetDryAudioForConvolutionEffect(mConvolutionEffect, listenerPosition, inputAudio);
+		IPLSource reverbSource = {};
+		reverbSource.position = listenerPosition;
+		reverbSource.ahead = listenerAhead;
+		reverbSource.up = listenerAhead;
+		reverbSource.directivity = IPLDirectivity{ 0.0f, 0.0f, nullptr, nullptr };
+		gApi.iplSetDryAudioForConvolutionEffect(mConvolutionEffect, reverbSource, inputAudio);
         gApi.iplGetWetAudioForConvolutionEffect(mConvolutionEffect, listenerPosition, listenerAhead, listenerUp, 
                                                 mIndirectEffectOutputBuffer);
 
@@ -288,7 +293,7 @@ public:
                 mUsedAmbisonicsPanningEffect = false;
             }
 
-            gApi.iplApplyAmbisonicsBinauralEffect(mAmbisonicsBinauralEffect, mIndirectEffectOutputBuffer,
+            gApi.iplApplyAmbisonicsBinauralEffect(mAmbisonicsBinauralEffect, mBinauralRenderer, mIndirectEffectOutputBuffer,
                 mIndirectSpatializedOutputBuffer);
 
             mUsedAmbisonicsBinauralEffect = true;
@@ -301,8 +306,8 @@ public:
                 mUsedAmbisonicsBinauralEffect = false;
             }
 
-            gApi.iplApplyAmbisonicsPanningEffect(mAmbisonicsPanningEffect, mIndirectEffectOutputBuffer,
-                mIndirectSpatializedOutputBuffer);
+            gApi.iplApplyAmbisonicsPanningEffect(mAmbisonicsPanningEffect, mAmbisonicsBinauralEffect, 
+				mIndirectEffectOutputBuffer, mIndirectSpatializedOutputBuffer);
 
             mUsedAmbisonicsPanningEffect = true;
         }
@@ -329,7 +334,7 @@ private:
     IPLhandle mBinauralRenderer;
     
     /** An object that contains the rendering settings and binaural renderer used globally. */
-    std::shared_ptr<GlobalState> mGlobalState;
+    std::shared_ptr<AudioEngineSettings> mGlobalState;
 
     /** An object that contains the environmental renderer for the current scene. */
     std::shared_ptr<SceneState> mSceneState;
@@ -468,7 +473,7 @@ FMOD_DSP_DESCRIPTION gReverbEffect
 {
     FMOD_PLUGIN_SDK_VERSION,
     "Steam Audio Reverb",
-    STEAM_AUDIO_PLUGIN_VERSION,
+    STEAMAUDIO_FMOD_VERSION,
     1, 1,
     createReverbEffect,
     releaseReverbEffect,

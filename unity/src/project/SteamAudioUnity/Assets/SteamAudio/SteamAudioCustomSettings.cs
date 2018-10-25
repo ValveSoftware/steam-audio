@@ -53,6 +53,10 @@ namespace SteamAudio
         public int BakingBatchSize = 4;
 
         public SceneType RayTracerType() {
+            if (rayTracerOption == SceneType.Custom) {
+                return rayTracerOption;
+            }
+
 #if ((UNITY_EDITOR && UNITY_EDITOR_64) || (UNITY_STANDALONE && UNITY_64))
             if (rayTracerOption == SceneType.Embree) {
                 return rayTracerOption;

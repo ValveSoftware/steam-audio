@@ -18,6 +18,9 @@ namespace SteamAudio
         public virtual void UpdateParameters(SteamAudioSource steamAudioSource)
         { }
 
+        public virtual void GetParameters(SteamAudioSource steamAudioSource)
+        { }
+
         public virtual bool ShouldSendIdentifier(SteamAudioSource steamAudioSource)
         {
             return true;

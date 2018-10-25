@@ -36,17 +36,17 @@ def deploy_integration_fmod(configuration):
     os.makedirs(deploy_path + "\\steamaudio_fmod\\bin\\fmod\\windows")
     os.makedirs(deploy_path + "\\steamaudio_fmod\\bin\\fmod\\windows\\x86")
     os.makedirs(deploy_path + "\\steamaudio_fmod\\bin\\fmod\\windows\\x64")
-    os.makedirs(deploy_path + "\\steamaudio_fmod\\bin\\fmod\\linux")
-    os.makedirs(deploy_path + "\\steamaudio_fmod\\bin\\fmod\\linux\\x86")
-    os.makedirs(deploy_path + "\\steamaudio_fmod\\bin\\fmod\\linux\\x64")
+    #os.makedirs(deploy_path + "\\steamaudio_fmod\\bin\\fmod\\linux")
+    #os.makedirs(deploy_path + "\\steamaudio_fmod\\bin\\fmod\\linux\\x86")
+    #os.makedirs(deploy_path + "\\steamaudio_fmod\\bin\\fmod\\linux\\x64")
     os.makedirs(deploy_path + "\\steamaudio_fmod\\bin\\fmod\\osx")
-    os.makedirs(deploy_path + "\\steamaudio_fmod\\bin\\fmod\\android")
+    #os.makedirs(deploy_path + "\\steamaudio_fmod\\bin\\fmod\\android")
     os.makedirs(deploy_path + "\\steamaudio_fmod\\bin\\unity")
     os.makedirs(deploy_path + "\\steamaudio_fmod\\doc")
 
     # Copy FMOD Studio plugin - phonon.dll.
-    # copy(os.path.join(deploy_path, "..\\..\\lib\\windows-x86\\phonon.dll"),
-    #      os.path.join(deploy_path, ".\\steamaudio_fmod\\bin\\fmod\\windows\\x86"))
+    copy(os.path.join(deploy_path, "..\\..\\lib\\windows-x86\\phonon.dll"),
+         os.path.join(deploy_path, ".\\steamaudio_fmod\\bin\\fmod\\windows\\x86"))
     copy(os.path.join(deploy_path, "..\\..\\lib\\windows-x64\\phonon.dll"),
          os.path.join(deploy_path, ".\\steamaudio_fmod\\bin\\fmod\\windows\\x64"))
     # copy(os.path.join(deploy_path, "..\\..\\lib\\linux-x86\\libphonon.so"),
@@ -55,12 +55,12 @@ def deploy_integration_fmod(configuration):
     #      os.path.join(deploy_path, ".\\steamaudio_fmod\\bin\\fmod\\linux\\x64"))
     # copy(os.path.join(deploy_path, "..\\..\\lib\\android-armv7\\libphonon.so"),
     #      os.path.join(deploy_path, ".\\steamaudio_fmod\\bin\\fmod\\android"))
-    # shutil.copytree(os.path.join(deploy_path, "..\\..\\lib\\osx\\phonon.bundle"),
-    #                 os.path.join(deploy_path, ".\\steamaudio_fmod\\bin\\fmod\\osx\\phonon.bundle"))
+    shutil.copytree(os.path.join(deploy_path, "..\\..\\lib\\osx\\phonon.bundle"),
+           os.path.join(deploy_path, ".\\steamaudio_fmod\\bin\\fmod\\osx\\phonon.bundle"))
 
     # Copy FMOD Studio plugin - phonon_fmod.dll.
-    # copy(os.path.join(deploy_path, "..\\..\\bin\\windows-vs2015-x86-" + configuration + "\\phonon_fmod.dll"),
-    #      os.path.join(deploy_path, ".\\steamaudio_fmod\\bin\\fmod\\windows\\x86"))
+    copy(os.path.join(deploy_path, "..\\..\\bin\\windows-vs2015-x86-" + configuration + "\\phonon_fmod.dll"),
+         os.path.join(deploy_path, ".\\steamaudio_fmod\\bin\\fmod\\windows\\x86"))
     copy(os.path.join(deploy_path, "..\\..\\bin\\windows-vs2015-x64-" + configuration + "\\phonon_fmod.dll"),
          os.path.join(deploy_path, ".\\steamaudio_fmod\\bin\\fmod\\windows\\x64"))
     # copy(os.path.join(deploy_path, "..\\..\\bin\\linux-x86-" + configuration + "\\libphonon_fmod.so"),
@@ -69,8 +69,8 @@ def deploy_integration_fmod(configuration):
     #      os.path.join(deploy_path, ".\\steamaudio_fmod\\bin\\fmod\\linux\\x64"))
     # copy(os.path.join(deploy_path, "..\\..\\bin\\android-armv7-" + configuration + "\\libphonon_fmod.so"),
     #      os.path.join(deploy_path, ".\\steamaudio_fmod\\bin\\fmod\\android"))
-    # shutil.copytree(os.path.join(deploy_path, "..\\..\\bin\\osx-" + configuration + "\\phonon_fmod.bundle"),
-    #                 os.path.join(deploy_path, ".\\steamaudio_fmod\\bin\\fmod\\osx\\phonon_fmod.bundle"))
+    copy(deploy_path + "/../../bin/osx-" + configuration + "/libphonon_fmod.dylib",
+         deploy_path + "/steamaudio_fmod/bin/fmod/osx/libphonon_fmod.dylib")
     
     copy(os.path.join(deploy_path, "..\\..\\src\\phonon_fmod.plugin.js"),
          os.path.join(deploy_path, ".\\steamaudio_fmod\\bin\\fmod"))

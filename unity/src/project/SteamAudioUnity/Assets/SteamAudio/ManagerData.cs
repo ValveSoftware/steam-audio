@@ -15,7 +15,7 @@ namespace SteamAudio
         public AudioEngineState    audioEngineState    = null;
         public int                 referenceCount      = 0;
 
-        public void Initialize(GameEngineStateInitReason reason, AudioEngine audioEngine, SimulationSettingsValue simulationValue)
+        public void Initialize(GameEngineStateInitReason reason, AudioEngine audioEngine, SimulationSettingsValue simulationValue, string[] sofaFileNames)
         {
             if (referenceCount == 0)
             {
@@ -25,7 +25,7 @@ namespace SteamAudio
                 if (reason == GameEngineStateInitReason.Playing)
                 {
                     audioEngineState = AudioEngineStateFactory.Create(audioEngine);
-                    audioEngineState.Initialize(componentCache, gameEngineState);
+                    audioEngineState.Initialize(componentCache, gameEngineState, sofaFileNames);
                 }
             }
 

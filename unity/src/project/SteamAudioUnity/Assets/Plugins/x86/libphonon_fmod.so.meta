@@ -1,7 +1,5 @@
 fileFormatVersion: 2
 guid: ed3bc4e619368084a9cd90e4da347c7a
-timeCreated: 1513811598
-licenseType: Pro
 PluginImporter:
   externalObjects: {}
   serializedVersion: 2
@@ -11,17 +9,40 @@ PluginImporter:
   isOverridable: 0
   platformData:
   - first:
+      '': Any
+    second:
+      enabled: 0
+      settings:
+        Exclude Android: 1
+        Exclude Editor: 0
+        Exclude Linux: 0
+        Exclude Linux64: 1
+        Exclude LinuxUniversal: 0
+        Exclude OSXUniversal: 1
+        Exclude Win: 0
+        Exclude Win64: 0
+        Exclude WindowsStoreApps: 1
+        Exclude iOS: 1
+        Exclude tvOS: 1
+  - first:
+      Android: Android
+    second:
+      enabled: 0
+      settings:
+        CPU: ARMv7
+  - first:
       Any: 
     second:
-      enabled: 1
+      enabled: 0
       settings: {}
   - first:
       Editor: Editor
     second:
-      enabled: 0
+      enabled: 1
       settings:
         CPU: x86
         DefaultValueInitialized: true
+        OS: Linux
   - first:
       Facebook: Win
     second:
@@ -69,7 +90,7 @@ PluginImporter:
     second:
       enabled: 0
       settings:
-        CPU: x86
+        CPU: None
   - first:
       Standalone: Win
     second:
@@ -79,9 +100,34 @@ PluginImporter:
   - first:
       Standalone: Win64
     second:
-      enabled: 0
+      enabled: 1
       settings:
         CPU: None
+  - first:
+      Windows Store Apps: WindowsStoreApps
+    second:
+      enabled: 0
+      settings:
+        CPU: AnyCPU
+        DontProcess: false
+        PlaceholderPath: 
+        SDK: AnySDK
+        ScriptingBackend: AnyScriptingBackend
+  - first:
+      iPhone: iOS
+    second:
+      enabled: 0
+      settings:
+        AddToEmbeddedBinaries: false
+        CompileFlags: 
+        FrameworkDependencies: 
+  - first:
+      tvOS: tvOS
+    second:
+      enabled: 0
+      settings:
+        CompileFlags: 
+        FrameworkDependencies: 
   userData: 
   assetBundleName: 
   assetBundleVariant: 

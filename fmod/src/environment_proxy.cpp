@@ -10,6 +10,7 @@ std::mutex                    SceneState::sMutex{};
 std::shared_ptr<SceneState>   SceneState::sSceneState{ nullptr };
 bool                          SceneState::sEnvironmentHasReset{ false };
 
+
 SceneState::SceneState(const IPLSimulationSettings& simulationSettings, 
                        const IPLhandle environment,
                        const IPLConvolutionType convolutionType) :
@@ -41,7 +42,7 @@ IPLhandle SceneState::environmentalRenderer() const
     if (!mEnvironment)
         return nullptr;
 
-    auto globalState = GlobalState::get();
+    auto globalState = AudioEngineSettings::get();
     if (!globalState)
         return nullptr;
 

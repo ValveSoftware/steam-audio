@@ -2,9 +2,17 @@
 # Copyright (c) Valve Corporation. All rights reserved.
 #
 
+if (WIN32)
+    set (SRC_UNITYNATIVE_VERSION audioplugin_phonon.rc.in)
+    set (SRC_UNITYNATIVE_VERSION audioplugin_phonon.rc)
+endif()
+
 set (SRC_UNITYNATIVE
+    ${SRC_UNITYNATIVE_VERSION}
     auto_load_library.h
     auto_load_library.cpp
+	steamaudio_unity_version.h.in
+	steamaudio_unity_version.h
 	steamaudio_unity_native.h
     steamaudio_unity_native.cpp
     audio_engine_settings.h

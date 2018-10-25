@@ -24,6 +24,7 @@ def component_includes(specifiedcomponent, testcomponent):
 def update_core(component, configuration):
 	if component_includes(component, "header"):
 		copy("core/src/core/api/phonon.h", "unity/include/phonon/phonon.h")
+		copy("core/src/core/api/phonon_version.h", "unity/include/phonon/phonon_version.h")
 	if component_includes(component, "win32"):
 		copy("core/bin/windows-vs2015-x86-"+configuration+"/phonon.dll", "unity/src/project/SteamAudioUnity/Assets/Plugins/x86/phonon.dll")
 		copy("core/bin/windows-vs2015-x86-"+configuration+"/phonon.pdb", "unity/src/project/SteamAudioUnity/Assets/Plugins/x86/phonon.pdb")

@@ -17,7 +17,16 @@ namespace SteamAudio
         public static extern void iplFmodSetEnvironment(SimulationSettings simulationSettings, IntPtr environment,
             ConvolutionOption convolutionType);
 
-        [DllImport("phonon_fmod")]
-        public static extern void iplFmodResetEnvironment();
-    }
+		[DllImport("phonon_fmod")]
+		public static extern int iplFmodAddSOFAFileName(string sofaFileName);
+
+		[DllImport("phonon_fmod")]
+		public static extern void iplFmodSetCurrentSOFAFile(int index);
+
+		[DllImport("phonon_fmod")]
+		public static extern void iplFmodRemoveSOFAFileName(string sofaFileName);
+
+		[DllImport("phonon_fmod")]
+		public static extern void iplFmodResetEnvironment();
+	}
 }

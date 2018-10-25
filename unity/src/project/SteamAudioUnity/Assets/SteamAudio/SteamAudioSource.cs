@@ -61,6 +61,8 @@ namespace SteamAudio
 
         void Update()
         {
+            audioEngineSource.GetParameters(this);
+
             var requiresScene = (occlusionMode != OcclusionMode.NoOcclusion || reflections);
             var sceneExported = (managerData.gameEngineState.Scene().GetScene() != IntPtr.Zero);
             if (requiresScene && !sceneExported)
@@ -68,6 +70,34 @@ namespace SteamAudio
                 Debug.LogError("Scene not found. Make sure to pre-export the scene.");
                 return;
             }
+
+            var environment = managerData.gameEngineState.Environment().GetEnvironment();
+
+            var listener = GameObject.FindObjectOfType<AudioListener>();
+            var listenerPosition = Common.ConvertVector(listener.transform.position);
+            var listenerAhead = Common.ConvertVector(listener.transform.forward);
+            var listenerUp = Common.ConvertVector(listener.transform.up);
+
+            var sourcePosition = Common.ConvertVector(transform.position);
+            var sourceAhead = Common.ConvertVector(transform.forward);
+            var sourceUp = Common.ConvertVector(transform.up);
+            var sourceRight = Common.ConvertVector(transform.right);
+
+            var source = new Source {
+                position = sourcePosition,
+                ahead = sourceAhead,
+                up = sourceUp,
+                right = sourceRight,
+                directivity = new Directivity {
+                    dipoleWeight = this.dipoleWeight,
+                    dipolePower = this.dipolePower,
+                    callback = IntPtr.Zero,
+                    userData = IntPtr.Zero
+                }
+            };
+
+            directPath = PhononCore.iplGetDirectSoundPath(environment, listenerPosition, listenerAhead, listenerUp, 
+                source, sourceRadius, occlusionMode, occlusionMethod);
 
             audioEngineSource.UpdateParameters(this);
 
@@ -321,6 +351,11 @@ namespace SteamAudio
         public string               uniqueIdentifier    = "";
 
         public bool                 avoidSilenceDuringInit  = false;
+
+        public bool                 overrideHRTFIndex   = false;
+        public int                  hrtfIndex           = 0;
+
+        public DirectSoundPath      directPath = new DirectSoundPath();
 
         [Range(1f, 1024f)]
         public float                bakingRadius        = 16f;
