@@ -55,9 +55,8 @@ struct_i_p_l_direct_sound_effect_options.html
 struct_i_p_l_direct_sound_path.html
 struct_i_p_l_hrtf_params.html
 struct_i_p_l_material.html
-struct_i_p_l_oriented_box.html
+struct_i_p_l_matrix4x4.html
 struct_i_p_l_probe_placement_params.html
-struct_i_p_l_quaternion.html
 struct_i_p_l_rendering_settings.html
 struct_i_p_l_simulation_settings.html
 struct_i_p_l_source.html

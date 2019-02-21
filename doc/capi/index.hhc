@@ -53,23 +53,10 @@
       <LI><OBJECT type="text/sitemap"><param name="Name" value="y"><param name="Local" value="struct_i_p_l_vector3.html#ac5c3c9765dd7c72db0377a4de2a75fcd"><param name="ImageNumber" value="11"></OBJECT>
       <LI><OBJECT type="text/sitemap"><param name="Name" value="z"><param name="Local" value="struct_i_p_l_vector3.html#a970e43fd19ab708e91945c728cc7acf2"><param name="ImageNumber" value="11"></OBJECT>
       </UL>
-    <LI><OBJECT type="text/sitemap"><param name="Name" value="IPLQuaternion"><param name="Local" value="struct_i_p_l_quaternion.html"><param name="ImageNumber" value="1"></OBJECT>
-      <UL>
-      <LI><OBJECT type="text/sitemap"><param name="Name" value="x"><param name="Local" value="struct_i_p_l_quaternion.html#a6158e9f85a82724281a2f98d5ca81f3e"><param name="ImageNumber" value="11"></OBJECT>
-      <LI><OBJECT type="text/sitemap"><param name="Name" value="y"><param name="Local" value="struct_i_p_l_quaternion.html#ac5c3c9765dd7c72db0377a4de2a75fcd"><param name="ImageNumber" value="11"></OBJECT>
-      <LI><OBJECT type="text/sitemap"><param name="Name" value="z"><param name="Local" value="struct_i_p_l_quaternion.html#a970e43fd19ab708e91945c728cc7acf2"><param name="ImageNumber" value="11"></OBJECT>
-      <LI><OBJECT type="text/sitemap"><param name="Name" value="w"><param name="Local" value="struct_i_p_l_quaternion.html#a6b069733a6b90d675b84adb2551e656e"><param name="ImageNumber" value="11"></OBJECT>
-      </UL>
     <LI><OBJECT type="text/sitemap"><param name="Name" value="IPLBox"><param name="Local" value="struct_i_p_l_box.html"><param name="ImageNumber" value="1"></OBJECT>
       <UL>
       <LI><OBJECT type="text/sitemap"><param name="Name" value="minCoordinates"><param name="Local" value="struct_i_p_l_box.html#a2b1047fda3bb6147fc67a20272f499f5"><param name="ImageNumber" value="11"></OBJECT>
       <LI><OBJECT type="text/sitemap"><param name="Name" value="maxCoordinates"><param name="Local" value="struct_i_p_l_box.html#a214328c1f7af391ee9920b890bc3e6fe"><param name="ImageNumber" value="11"></OBJECT>
-      </UL>
-    <LI><OBJECT type="text/sitemap"><param name="Name" value="IPLOrientedBox"><param name="Local" value="struct_i_p_l_oriented_box.html"><param name="ImageNumber" value="1"></OBJECT>
-      <UL>
-      <LI><OBJECT type="text/sitemap"><param name="Name" value="mCenter"><param name="Local" value="struct_i_p_l_oriented_box.html#a0200140c3bd2a736e1d64d6202005854"><param name="ImageNumber" value="11"></OBJECT>
-      <LI><OBJECT type="text/sitemap"><param name="Name" value="mExtents"><param name="Local" value="struct_i_p_l_oriented_box.html#a61a058d73e2c5b6563cc4b8af4a8d6e5"><param name="ImageNumber" value="11"></OBJECT>
-      <LI><OBJECT type="text/sitemap"><param name="Name" value="mRotation"><param name="Local" value="struct_i_p_l_oriented_box.html#a4af13075f22179df64de7004b84f1ee8"><param name="ImageNumber" value="11"></OBJECT>
       </UL>
     <LI><OBJECT type="text/sitemap"><param name="Name" value="IPLSphere"><param name="Local" value="struct_i_p_l_sphere.html"><param name="ImageNumber" value="1"></OBJECT>
       <UL>
@@ -83,9 +70,8 @@
     <LI><OBJECT type="text/sitemap"><param name="Name" value="IPLComputeDeviceFilter"><param name="Local" value="struct_i_p_l_compute_device_filter.html"><param name="ImageNumber" value="1"></OBJECT>
       <UL>
       <LI><OBJECT type="text/sitemap"><param name="Name" value="type"><param name="Local" value="struct_i_p_l_compute_device_filter.html#a8bc48a9676eea11c71b7cd9f76b6007a"><param name="ImageNumber" value="11"></OBJECT>
-      <LI><OBJECT type="text/sitemap"><param name="Name" value="requiresTrueAudioNext"><param name="Local" value="struct_i_p_l_compute_device_filter.html#aa83daff1bc426eb82a4ab18ee8eefcf2"><param name="ImageNumber" value="11"></OBJECT>
-      <LI><OBJECT type="text/sitemap"><param name="Name" value="minReservableCUs"><param name="Local" value="struct_i_p_l_compute_device_filter.html#a03add7f2037478efd170d8d2704b1b2e"><param name="ImageNumber" value="11"></OBJECT>
       <LI><OBJECT type="text/sitemap"><param name="Name" value="maxCUsToReserve"><param name="Local" value="struct_i_p_l_compute_device_filter.html#a1b511297b000f7cbfd0d6ef92e363ac9"><param name="ImageNumber" value="11"></OBJECT>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="fractionCUsForIRUpdate"><param name="Local" value="struct_i_p_l_compute_device_filter.html#ae8daf3f73c5f1e6d0437f14e6cb35f3d"><param name="ImageNumber" value="11"></OBJECT>
       </UL>
     <LI><OBJECT type="text/sitemap"><param name="Name" value="IPLComputeDeviceType"><param name="Local" value="group__compute.html#ga71377539a09621fe3259cbfab80bbb55"><param name="ImageNumber" value="1"></OBJECT>
       <UL>
@@ -110,6 +96,7 @@
       <LI><OBJECT type="text/sitemap"><param name="Name" value="ambisonicsOrder"><param name="Local" value="struct_i_p_l_simulation_settings.html#acc2de2bae26d02f1ff1b84fec45c0292"><param name="ImageNumber" value="11"></OBJECT>
       <LI><OBJECT type="text/sitemap"><param name="Name" value="maxConvolutionSources"><param name="Local" value="struct_i_p_l_simulation_settings.html#a7e099f45fae30ec70f7908d0c62d1b03"><param name="ImageNumber" value="11"></OBJECT>
       <LI><OBJECT type="text/sitemap"><param name="Name" value="bakingBatchSize"><param name="Local" value="struct_i_p_l_simulation_settings.html#aac838953dc9e80667e5a8f9bd1020b23"><param name="ImageNumber" value="11"></OBJECT>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="irradianceMinDistance"><param name="Local" value="struct_i_p_l_simulation_settings.html#a56bf18dbfbf2e9b69465971ea3a14df8"><param name="ImageNumber" value="11"></OBJECT>
       </UL>
     <LI><OBJECT type="text/sitemap"><param name="Name" value="IPLSceneType"><param name="Local" value="group__simsettings.html#ga35d01ba9362309add292009a29f10c5d"><param name="ImageNumber" value="1"></OBJECT>
       <UL>
@@ -140,6 +127,10 @@
       <LI><OBJECT type="text/sitemap"><param name="Name" value="midFreqTransmission"><param name="Local" value="struct_i_p_l_material.html#af6a12aab0acc066c12aa569586f94675"><param name="ImageNumber" value="11"></OBJECT>
       <LI><OBJECT type="text/sitemap"><param name="Name" value="highFreqTransmission"><param name="Local" value="struct_i_p_l_material.html#a3d3c32ebae51165fdc4974fec7afed36"><param name="ImageNumber" value="11"></OBJECT>
       </UL>
+    <LI><OBJECT type="text/sitemap"><param name="Name" value="IPLMatrix4x4"><param name="Local" value="struct_i_p_l_matrix4x4.html"><param name="ImageNumber" value="1"></OBJECT>
+      <UL>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="elements"><param name="Local" value="struct_i_p_l_matrix4x4.html#a07e0a85997a1e103a3990a575df12393"><param name="ImageNumber" value="11"></OBJECT>
+      </UL>
     <LI><OBJECT type="text/sitemap"><param name="Name" value="IPLLoadSceneProgressCallback"><param name="Local" value="group__scene.html#ga4ebfb206a16a156e61e7de613474b692"><param name="ImageNumber" value="11"></OBJECT>
     <LI><OBJECT type="text/sitemap"><param name="Name" value="IPLFinalizeSceneProgressCallback"><param name="Local" value="group__scene.html#gaa6222c3fa8e272a83995ce088e6268d4"><param name="ImageNumber" value="11"></OBJECT>
     <LI><OBJECT type="text/sitemap"><param name="Name" value="IPLClosestHitCallback"><param name="Local" value="group__scene.html#gaa25aa32e0a7cd60ac0b15d1880c06592"><param name="ImageNumber" value="11"></OBJECT>
@@ -153,6 +144,12 @@
     <LI><OBJECT type="text/sitemap"><param name="Name" value="iplSaveScene"><param name="Local" value="group__scene.html#gae3836d4d49c1b2909d0834b5cff3c07f"><param name="ImageNumber" value="11"></OBJECT>
     <LI><OBJECT type="text/sitemap"><param name="Name" value="iplLoadScene"><param name="Local" value="group__scene.html#ga30dd5036b31c3f41ef05faff5219ae9a"><param name="ImageNumber" value="11"></OBJECT>
     <LI><OBJECT type="text/sitemap"><param name="Name" value="iplSaveSceneAsObj"><param name="Local" value="group__scene.html#ga562ba6624a930b239604f55655cef091"><param name="ImageNumber" value="11"></OBJECT>
+    <LI><OBJECT type="text/sitemap"><param name="Name" value="iplCreateInstancedMesh"><param name="Local" value="group__scene.html#ga4cf1b0ed1a4a908dc7d07cb799acb34a"><param name="ImageNumber" value="11"></OBJECT>
+    <LI><OBJECT type="text/sitemap"><param name="Name" value="iplDestroyInstancedMesh"><param name="Local" value="group__scene.html#gad5774e105ba9953e12d91bb0d283eb87"><param name="ImageNumber" value="11"></OBJECT>
+    <LI><OBJECT type="text/sitemap"><param name="Name" value="iplAddInstancedMesh"><param name="Local" value="group__scene.html#ga65490bbd7e9c6b61f188d017b12b28a2"><param name="ImageNumber" value="11"></OBJECT>
+    <LI><OBJECT type="text/sitemap"><param name="Name" value="iplRemoveInstancedMesh"><param name="Local" value="group__scene.html#ga07bebc49c4537f119ed6fbe4a95387c2"><param name="ImageNumber" value="11"></OBJECT>
+    <LI><OBJECT type="text/sitemap"><param name="Name" value="iplUpdateInstancedMeshTransform"><param name="Local" value="group__scene.html#gabb8f95a576d7f404de7c0e9b615d659f"><param name="ImageNumber" value="11"></OBJECT>
+    <LI><OBJECT type="text/sitemap"><param name="Name" value="iplCommitScene"><param name="Local" value="group__scene.html#gad9e0029b18261c1b71b4659cce352edc"><param name="ImageNumber" value="11"></OBJECT>
     </UL>
   <LI><OBJECT type="text/sitemap"><param name="Name" value="Environment"><param name="Local" value="group__environment.html"><param name="ImageNumber" value="1"></OBJECT>
     <UL>
@@ -230,7 +227,7 @@
     <LI><OBJECT type="text/sitemap"><param name="Name" value="iplConvertAudioBufferFormat"><param name="Local" value="group__audiobuffer.html#ga224f2e35fdbd311ce04d93c4e5b04448"><param name="ImageNumber" value="11"></OBJECT>
     <LI><OBJECT type="text/sitemap"><param name="Name" value="iplCreateAmbisonicsRotator"><param name="Local" value="group__audiobuffer.html#gaa6746d8c25d3adcaf8426b6ed361d359"><param name="ImageNumber" value="11"></OBJECT>
     <LI><OBJECT type="text/sitemap"><param name="Name" value="iplDestroyAmbisonicsRotator"><param name="Local" value="group__audiobuffer.html#gada68d42c5d35f9871757ab3cf36fbba3"><param name="ImageNumber" value="11"></OBJECT>
-    <LI><OBJECT type="text/sitemap"><param name="Name" value="iplSetAmbisonicsRotation"><param name="Local" value="group__audiobuffer.html#ga56b3da1aa372cf93d623efb4978df9b8"><param name="ImageNumber" value="11"></OBJECT>
+    <LI><OBJECT type="text/sitemap"><param name="Name" value="iplSetAmbisonicsRotation"><param name="Local" value="group__audiobuffer.html#gab7798a710c27d45841c5ace4983f2130"><param name="ImageNumber" value="11"></OBJECT>
     <LI><OBJECT type="text/sitemap"><param name="Name" value="iplRotateAmbisonicsAudioBuffer"><param name="Local" value="group__audiobuffer.html#ga2b18a681aa7875a8ae6dd60c41a89fdb"><param name="ImageNumber" value="11"></OBJECT>
     </UL>
   <LI><OBJECT type="text/sitemap"><param name="Name" value="Binaural Renderer"><param name="Local" value="group__binauralrenderer.html"><param name="ImageNumber" value="1"></OBJECT>
@@ -464,9 +461,8 @@
     <LI><OBJECT type="text/sitemap"><param name="Name" value="IPLComputeDeviceFilter"><param name="Local" value="struct_i_p_l_compute_device_filter.html"><param name="ImageNumber" value="1"></OBJECT>
       <UL>
       <LI><OBJECT type="text/sitemap"><param name="Name" value="type"><param name="Local" value="struct_i_p_l_compute_device_filter.html#a8bc48a9676eea11c71b7cd9f76b6007a"><param name="ImageNumber" value="11"></OBJECT>
-      <LI><OBJECT type="text/sitemap"><param name="Name" value="requiresTrueAudioNext"><param name="Local" value="struct_i_p_l_compute_device_filter.html#aa83daff1bc426eb82a4ab18ee8eefcf2"><param name="ImageNumber" value="11"></OBJECT>
-      <LI><OBJECT type="text/sitemap"><param name="Name" value="minReservableCUs"><param name="Local" value="struct_i_p_l_compute_device_filter.html#a03add7f2037478efd170d8d2704b1b2e"><param name="ImageNumber" value="11"></OBJECT>
       <LI><OBJECT type="text/sitemap"><param name="Name" value="maxCUsToReserve"><param name="Local" value="struct_i_p_l_compute_device_filter.html#a1b511297b000f7cbfd0d6ef92e363ac9"><param name="ImageNumber" value="11"></OBJECT>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="fractionCUsForIRUpdate"><param name="Local" value="struct_i_p_l_compute_device_filter.html#ae8daf3f73c5f1e6d0437f14e6cb35f3d"><param name="ImageNumber" value="11"></OBJECT>
       </UL>
     <LI><OBJECT type="text/sitemap"><param name="Name" value="IPLDirectivity"><param name="Local" value="struct_i_p_l_directivity.html"><param name="ImageNumber" value="1"></OBJECT>
       <UL>
@@ -508,11 +504,9 @@
       <LI><OBJECT type="text/sitemap"><param name="Name" value="midFreqTransmission"><param name="Local" value="struct_i_p_l_material.html#af6a12aab0acc066c12aa569586f94675"><param name="ImageNumber" value="11"></OBJECT>
       <LI><OBJECT type="text/sitemap"><param name="Name" value="highFreqTransmission"><param name="Local" value="struct_i_p_l_material.html#a3d3c32ebae51165fdc4974fec7afed36"><param name="ImageNumber" value="11"></OBJECT>
       </UL>
-    <LI><OBJECT type="text/sitemap"><param name="Name" value="IPLOrientedBox"><param name="Local" value="struct_i_p_l_oriented_box.html"><param name="ImageNumber" value="1"></OBJECT>
+    <LI><OBJECT type="text/sitemap"><param name="Name" value="IPLMatrix4x4"><param name="Local" value="struct_i_p_l_matrix4x4.html"><param name="ImageNumber" value="1"></OBJECT>
       <UL>
-      <LI><OBJECT type="text/sitemap"><param name="Name" value="mCenter"><param name="Local" value="struct_i_p_l_oriented_box.html#a0200140c3bd2a736e1d64d6202005854"><param name="ImageNumber" value="11"></OBJECT>
-      <LI><OBJECT type="text/sitemap"><param name="Name" value="mExtents"><param name="Local" value="struct_i_p_l_oriented_box.html#a61a058d73e2c5b6563cc4b8af4a8d6e5"><param name="ImageNumber" value="11"></OBJECT>
-      <LI><OBJECT type="text/sitemap"><param name="Name" value="mRotation"><param name="Local" value="struct_i_p_l_oriented_box.html#a4af13075f22179df64de7004b84f1ee8"><param name="ImageNumber" value="11"></OBJECT>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="elements"><param name="Local" value="struct_i_p_l_matrix4x4.html#a07e0a85997a1e103a3990a575df12393"><param name="ImageNumber" value="11"></OBJECT>
       </UL>
     <LI><OBJECT type="text/sitemap"><param name="Name" value="IPLProbePlacementParams"><param name="Local" value="struct_i_p_l_probe_placement_params.html"><param name="ImageNumber" value="1"></OBJECT>
       <UL>
@@ -521,13 +515,6 @@
       <LI><OBJECT type="text/sitemap"><param name="Name" value="heightAboveFloor"><param name="Local" value="struct_i_p_l_probe_placement_params.html#aa7ea2c88393415154c89679e19fcb784"><param name="ImageNumber" value="11"></OBJECT>
       <LI><OBJECT type="text/sitemap"><param name="Name" value="maxOctreeTriangles"><param name="Local" value="struct_i_p_l_probe_placement_params.html#a8ddb0c1df3fac21c0128befe1325e59a"><param name="ImageNumber" value="11"></OBJECT>
       <LI><OBJECT type="text/sitemap"><param name="Name" value="maxOctreeDepth"><param name="Local" value="struct_i_p_l_probe_placement_params.html#a363f3786c5fb5ea36f4d129e2ab87606"><param name="ImageNumber" value="11"></OBJECT>
-      </UL>
-    <LI><OBJECT type="text/sitemap"><param name="Name" value="IPLQuaternion"><param name="Local" value="struct_i_p_l_quaternion.html"><param name="ImageNumber" value="1"></OBJECT>
-      <UL>
-      <LI><OBJECT type="text/sitemap"><param name="Name" value="x"><param name="Local" value="struct_i_p_l_quaternion.html#a6158e9f85a82724281a2f98d5ca81f3e"><param name="ImageNumber" value="11"></OBJECT>
-      <LI><OBJECT type="text/sitemap"><param name="Name" value="y"><param name="Local" value="struct_i_p_l_quaternion.html#ac5c3c9765dd7c72db0377a4de2a75fcd"><param name="ImageNumber" value="11"></OBJECT>
-      <LI><OBJECT type="text/sitemap"><param name="Name" value="z"><param name="Local" value="struct_i_p_l_quaternion.html#a970e43fd19ab708e91945c728cc7acf2"><param name="ImageNumber" value="11"></OBJECT>
-      <LI><OBJECT type="text/sitemap"><param name="Name" value="w"><param name="Local" value="struct_i_p_l_quaternion.html#a6b069733a6b90d675b84adb2551e656e"><param name="ImageNumber" value="11"></OBJECT>
       </UL>
     <LI><OBJECT type="text/sitemap"><param name="Name" value="IPLRenderingSettings"><param name="Local" value="struct_i_p_l_rendering_settings.html"><param name="ImageNumber" value="1"></OBJECT>
       <UL>
@@ -547,6 +534,7 @@
       <LI><OBJECT type="text/sitemap"><param name="Name" value="ambisonicsOrder"><param name="Local" value="struct_i_p_l_simulation_settings.html#acc2de2bae26d02f1ff1b84fec45c0292"><param name="ImageNumber" value="11"></OBJECT>
       <LI><OBJECT type="text/sitemap"><param name="Name" value="maxConvolutionSources"><param name="Local" value="struct_i_p_l_simulation_settings.html#a7e099f45fae30ec70f7908d0c62d1b03"><param name="ImageNumber" value="11"></OBJECT>
       <LI><OBJECT type="text/sitemap"><param name="Name" value="bakingBatchSize"><param name="Local" value="struct_i_p_l_simulation_settings.html#aac838953dc9e80667e5a8f9bd1020b23"><param name="ImageNumber" value="11"></OBJECT>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="irradianceMinDistance"><param name="Local" value="struct_i_p_l_simulation_settings.html#a56bf18dbfbf2e9b69465971ea3a14df8"><param name="ImageNumber" value="11"></OBJECT>
       </UL>
     <LI><OBJECT type="text/sitemap"><param name="Name" value="IPLSource"><param name="Local" value="struct_i_p_l_source.html"><param name="ImageNumber" value="1"></OBJECT>
       <UL>
