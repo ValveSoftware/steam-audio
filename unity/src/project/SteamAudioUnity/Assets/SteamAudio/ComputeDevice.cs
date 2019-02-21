@@ -24,8 +24,8 @@ namespace SteamAudio
                 if (error != Error.None)
                 {
                     throw new Exception("Unable to create OpenCL compute device (" + deviceFilter.type.ToString() + 
-                        ", " + deviceFilter.minReservableCUs.ToString() + " to " + 
-                        deviceFilter.maxCUsToReserve.ToString() + " CUs): [" + error.ToString() + "]");
+                        ", " + deviceFilter.maxCUsToReserve.ToString() + " max CUs, " + 
+                        deviceFilter.fractionCUsForIRUpdate.ToString("0.00") + " fraction of IR Update CUs): [" + error.ToString() + "]");
                 }
             }
 

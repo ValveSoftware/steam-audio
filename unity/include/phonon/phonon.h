@@ -151,29 +151,12 @@ extern "C" {
         IPLfloat32 z;   /**< The z-coordinate. */
     } IPLVector3;
 
-    /** A unit-length quaternion. Quaternions are used to represent a rotation or orientation.
-     */
-    typedef struct {
-        IPLfloat32 x;   /**< The x-coordinate of the vector part. */
-        IPLfloat32 y;   /**< The y-coordinate of the vector part. */
-        IPLfloat32 z;   /**< The z-coordinate of the vector part. */
-        IPLfloat32 w;   /**< The scalar part. */
-    } IPLQuaternion;
-
     /** An axis-aligned box. Axis-aligned boxes are used to specify a volume of 3D space.
      */
     typedef struct {
         IPLVector3  minCoordinates; /**< The minimum coordinates of any vertex. */
         IPLVector3  maxCoordinates; /**< The maximum coordinates of any vertex. */
     } IPLBox;
-
-    /** An oriented box. Oriented boxes are used to specify a volume of 3D space.
-    */
-    typedef struct {
-        IPLVector3     mCenter;        /**< The center of the box. */
-        IPLVector3     mExtents;       /**< The extents of the box. */
-        IPLQuaternion  mRotation;      /**< The rotation of the box. */
-    } IPLOrientedBox;
 
     /** A sphere. Spheres are used to define a region of influence around a point.
      */
@@ -228,12 +211,45 @@ extern "C" {
      *	\c iplCreateComputeDevice.
      */
     typedef struct {
-        IPLComputeDeviceType    type;                   /**< The type of device to use. */
-        IPLbool                 requiresTrueAudioNext;  /**< Whether the device must support AMD TrueAudio Next. */
-        IPLint32                minReservableCUs;       /**< The minimum number of CUs that should be possible to
-                                                             reserve on the device, for TrueAudio Next. */
-        IPLint32                maxCUsToReserve;        /**< The maximum number of CUs that the application needs to
-                                                             reserve on the device, for TrueAudio Next. */
+        IPLComputeDeviceType    type;                      /**< The type of device to use. */
+        IPLint32                maxCUsToReserve;           /**< The maximum number of GPU compute units (CUs) that the 
+                                                             application will reserve on the device. When set to zero, 
+                                                             resource reservation is disabled and the entire GPU is used.*/
+        IPLfloat32              fractionCUsForIRUpdate;    /**< Fraction of maximum reserved CUs that should be used 
+                                                             for impulse response (IR) update. The IR update includes 
+                                                             any simulation performed by Radeon Rays to calculate IR and/or
+                                                             pre-transformation of the IR for convolution with input audio.
+                                                             The remaining reserved CUs are used for convolution.
+                                                             Below are typical scenarios: 
+
+                                                             - <b>Using only AMD TrueAudio Next with Steam Audio.</b>
+                                                             Set \c fractionCUsForIRUpdate to a value greater than 0 and less
+                                                             than 1 in this case. This ensures that reserved CUs are
+                                                             available for IR update as well as convolution. For example,
+                                                             setting \c maxCUsToReserve to 8 and \c fractionCUsForIRUpdate 
+                                                             to .5 will use 4 reserved CUs for convolution and 4 reserved
+                                                             CUs to pre-transform IR calculated on CPU or GPU. 
+
+                                                             - <b>Using AMD TrueAudio Next and AMD Radeon Rays with Steam Audio.</b>
+                                                             Choosing \c fractionCUsForIRUpdate may require some experimentation 
+                                                             to utilize reserved CUs optimally. For example, setting
+                                                             \c maxCUsToReserve to 8 and \c fractionCUsForIRUpdate to .5 will use
+                                                             4 reserved CUs for convolution and 4 reserved CUs for IR update.
+                                                             However, if IR calculation has high latency with these settings, 
+                                                             you may want to increase \c fractionCUsForIRUpdate to devote
+                                                             additional reserved CUs for IR update.
+
+                                                             - <b>Using only AMD Radeon Rays with Steam Audio.</b>
+                                                             Set \c fractionCUsForIRUpdate to 1 to make sure all the 
+                                                             reserved CUs are used for calculating IRs using Radeon Rays 
+                                                             and pre-transforming the calculated IRs.
+
+                                                             If the number of reserved CUs assigned for convolution or IR
+                                                             update are 0, then the entire GPU minus the reserved CUs are 
+                                                             used for the corresponding calculations. For example,
+                                                             if \c maxCUsToReserve is set to 8 and \c fractionCUsForIRUpdate 
+                                                             is set to 0 then all the reserved CUs are used for convolution and
+                                                             the rest of the GPU is used for IR update.*/
     } IPLComputeDeviceFilter;
 
     /** Creates a Compute Device object. The same Compute Device must be used by the game engine and audio engine
@@ -306,7 +322,12 @@ extern "C" {
      */
     typedef struct {
         IPLSceneType        sceneType;              /**< The ray tracer to use for simulation. \see IPLSceneType. */
-        IPLint32            numOcclusionSamples;
+        IPLint32            numOcclusionSamples;    /**< The number of rays to trace from the listener to a source
+                                                         when simulating volumetric occlusion. Increasing this number
+                                                         increases the smoothness of occlusion transitions, but also
+                                                         increases CPU usage and memory consumption. Any positive
+                                                         integer may be specified, but typical values are in the range
+                                                         of 32 to 512. */
         IPLint32            numRays;                /**< The number of rays to trace from the listener. Increasing this
                                                          number increases the accuracy of the simulation, but also
                                                          increases CPU usage. Any positive integer may be specified,
@@ -348,6 +369,12 @@ extern "C" {
                                                          1 unless you are creating a Scene for the purposes of
                                                          baking indirect sound using \c iplBakeReverb,
                                                          \c iplBakePropagation, or \c iplBakeStaticListener. */
+        IPLfloat32          irradianceMinDistance;  /**< The minimum distance between a source and a scene surface,
+                                                         used when calculating the energy received at the surface from
+                                                         the source during indirect sound simulation. Increasing this
+                                                         number reduces the loudness of reflections when standing
+                                                         close to a wall; decreasing this number results in a more
+                                                         physically realistic model. */
     } IPLSimulationSettings;
 
     /** \} */
@@ -656,6 +683,80 @@ extern "C" {
      *  \param  fileBaseName        Absolute or relative path to the OBJ file to generate.
      */
     IPLAPI IPLvoid iplSaveSceneAsObj(IPLhandle scene, IPLstring fileBaseName);
+
+    /** A 4x4 matrix used to represent an affine transform. The matrix elements are stored in row-major order.
+     */
+    typedef struct {
+        float elements[4][4];   /**< The elements of the matrix, in row-major order. */
+    } IPLMatrix4x4;
+
+    /** Creates an Instanced Mesh object. An Instanced Mesh takes one scene and positions it within another scene.
+     *  This is useful if you have the same object, like a pillar, that you want to instantiate multiple times within
+     *  the same scene. A scene can be instantiated multiple times within another scene, without incurring any significant
+     *  memory overhead. The Instanced Mesh can be moved, rotated, and scaled freely at any time, providing an easy way to
+     *  implement dynamic objects whose motion can be described purely in terms of rigid-body transformations.
+     *
+     *  \param  scene               The scene in which to instantiate another scene.
+     *  \param  instancedScene      The scene to instantiate.
+     *  \param  transform           A transform matrix that maps from the coordinate space of \c instancedScene to the
+     *                              coordinate space of \c scene. This is used to position and orient \c instancedScene
+     *                              within \c scene. This parameter specifies the initial value of the transform; it can be
+     *                              freely changed once the Instanced Mesh is created, using 
+     *                              \c iplUpdateInstancedMeshTransform.
+     *  \param  instancedMesh       [out] Handle to the created Instanced Mesh object.
+     *
+     *  \return Status code indicating whether or not the operation succeeded.
+     */
+    IPLAPI IPLerror iplCreateInstancedMesh(IPLhandle scene,
+                                           IPLhandle instancedScene,
+                                           IPLMatrix4x4 transform,
+                                           IPLhandle* instancedMesh);
+
+    /** Destroys an Instanced Mesh object. If any other API objects are still referencing the Instanced Mesh object,
+     *  it will not be destroyed; destruction occurs when the object's reference count reaches zero.
+     *
+     *  \param  instancedMesh       [in, out] Address of a handle to the Instanced Mesh object to destroy.
+     */
+    IPLAPI void iplDestroyInstancedMesh(IPLhandle* instancedMesh);
+
+    /** Adds an Instanced Mesh object to a Scene object. This function should be called after \c iplCreateInstancedMesh, or
+     *  at any point after calling \c iplRemoveInstancedMesh, for the Instanced Mesh to start affecting sound
+     *  propagation.
+     *
+     *  \param  scene               The Scene to which to add the Instanced Mesh. This must be the Scene which was passed
+     *                              as the \c scene parameter when calling \c iplCreateInstancedMesh to create the
+     *                              Instanced Mesh.
+     *  \param  instancedMesh       The Instanced Mesh to add to the Scene.
+     */
+    IPLAPI void iplAddInstancedMesh(IPLhandle scene,
+                                    IPLhandle instancedMesh);
+
+    /** Removes an Instanced Mesh object from a Scene object. After this function is called, the Instanced Mesh will stop
+     *  affecting sound propagation, until a subsequent call to \c iplAddInstancedMesh.
+     *
+     *  \param  scene               The Scene from which to remove the Instanced Mesh.
+     *  \param  instancedMesh       The Instanced Mesh to remove from the Scene.
+     */
+    IPLAPI void iplRemoveInstancedMesh(IPLhandle scene,
+                                       IPLhandle instancedMesh);
+
+    /** Updates the local-to-world transform of an Instanced Mesh within a Scene. This function allows the Instanced
+     *  Mesh to be moved, rotated, and scaled dynamically. After calling this function, you must call
+     *  \c iplCommitScene for the changes to take effect.
+     *
+     *  \param  instancedMesh       The Instanced Mesh whose transform is to be updated.
+     *  \param  transform           The new 4x4 transform matrix.
+     */
+    IPLAPI void iplUpdateInstancedMeshTransform(IPLhandle instancedMesh,
+                                                IPLMatrix4x4 transform);
+
+    /** Commits a series of changes to Instanced Meshes in a Scene. This function should be called after any calls to
+     *  \c iplUpdateInstancedMeshTransform for the changes to take effect. For best performance, call this function after
+     *  all transforms have been updated for a given frame.
+     *
+     *  \param  scene               The Scene to commit changes to.
+     */
+    IPLAPI void iplCommitScene(IPLhandle scene);
 
     /** \} */
 
@@ -977,10 +1078,10 @@ extern "C" {
      *  rotate an Ambisonics-encoded audio buffer, or the resulting audio will be incorrect.
      *
      *  \param  rotator             Handle to an Ambisonics Rotator object.
-     *  \param  quaternion          A unit quaternion describing the 3D transformation from world space to listener
-     *                              space coordinates.
+     *  \param  listenerAhead       Unit vector pointing in the direction in which the listener is looking.
+     *  \param  listenerUp          Unit vector pointing upwards from the listener.
      */
-    IPLAPI IPLvoid iplSetAmbisonicsRotation(IPLhandle rotator, IPLQuaternion quaternion);
+    IPLAPI IPLvoid iplSetAmbisonicsRotation(IPLhandle rotator, IPLVector3 listenerAhead, IPLVector3 listenerUp);
 
     /** Rotates an Ambisonics-encoded audio buffer. The \c ::iplSetAmbisonicsRotation function must have been called
      *  prior to calling this function, or the resulting audio will be incorrect. It is possible to pass the same

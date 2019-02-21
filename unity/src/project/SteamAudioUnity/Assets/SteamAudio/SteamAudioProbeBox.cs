@@ -24,7 +24,7 @@ namespace SteamAudio
             Color oldColor = Gizmos.color;
             Gizmos.color = Color.magenta;
 
-            Matrix4x4 oldMatrix = Gizmos.matrix;
+            var oldMatrix = Gizmos.matrix;
             Gizmos.matrix = transform.localToWorldMatrix;
             Gizmos.DrawWireCube(new UnityEngine.Vector3(0, 0, 0), new UnityEngine.Vector3(1, 1, 1));
             Gizmos.matrix = oldMatrix;

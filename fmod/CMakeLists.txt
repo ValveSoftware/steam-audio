@@ -13,7 +13,7 @@ cmake_minimum_required (VERSION 3.0)
 set (CMAKE_CXX_STANDARD 11)
 
 # Define the project.
-project (Phonon VERSION 2.0.16)
+project (Phonon VERSION 2.0.17)
 
 # Precompiled headers.
 set (CMAKE_MODULE_PATH "${CMAKE_HOME_DIRECTORY}/build")

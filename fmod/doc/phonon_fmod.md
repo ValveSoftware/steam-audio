@@ -1,6 +1,6 @@
-% Steam Audio FMOD Studio Plugin 2.0-beta.16
+% Steam Audio FMOD Studio Plugin 2.0-beta.17
 
-# Steam Audio FMOD Studio Plugin <small><small>2.0-beta.16</small></small>
+# Steam Audio FMOD Studio Plugin <small><small>2.0-beta.17</small></small>
 
 Copyright 2017 Valve Corporation. All rights reserved. Subject to the following license: 
 [https://valvesoftware.github.io/steam-audio/license.html](https://valvesoftware.github.io/steam-audio/license.html)

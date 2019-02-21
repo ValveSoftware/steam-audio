@@ -61,8 +61,9 @@ To build the native plugin on any platform, you will need to install the followi
 
 - Python 2.x (<http://www.python.org>)
 - CMake 3.8 or later (<https://cmake.org/>)
+- Pandoc 2.6 or later (<https://pandoc.org>)
 
-Both Python and CMake must be added to your search path.
+Python, CMake, and Pandoc must be added to your search path.
 
 In addition, for each platform you want build the native plugin for, you will need to install the appropriate
 prerequisites as discussed below.

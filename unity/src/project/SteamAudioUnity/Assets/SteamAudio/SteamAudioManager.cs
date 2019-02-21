@@ -3,7 +3,9 @@
 // https://valvesoftware.github.io/steam-audio/license.html
 //
 
+using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
@@ -33,8 +35,23 @@ namespace SteamAudio
 
         void OnApplicationQuit()
         {
+            var instancedScenes = managerData.gameEngineState.instancedScenes;
+            if (instancedScenes != null) {
+                foreach (var item in instancedScenes) {
+                    var instancedScene = item.Value;
+                    PhononCore.iplDestroyScene(ref instancedScene);
+                }
+                instancedScenes.Clear();
+            }
+
             PhononUnityNative.iplUnityResetAudioEngine();
             PhononCore.iplCleanup();
+        }
+
+        void Update()
+        {
+            var scene = managerData.gameEngineState.Scene().GetScene();
+            PhononCore.iplCommitScene(scene);
         }
 
         IEnumerator EndOfFrameUpdate()
@@ -179,6 +196,95 @@ namespace SteamAudio
         static void ClearSingleton()
         {
             managerSingleton = null;
+        }
+
+        public void CreateInstancedMesh(string assetFileName, Transform instanceTransform, ref IntPtr instancedMesh)
+        {
+            var status = Error.None;
+
+            var serializedData = File.ReadAllBytes(Application.streamingAssetsPath + "/" + assetFileName);
+            if (serializedData == null || serializedData.Length == 0) {
+                return;
+            }
+
+            var context = managerData.gameEngineState.Context();
+            var computeDevice = managerData.gameEngineState.ComputeDevice().GetDevice();
+            var simulationSettings = managerData.gameEngineState.SimulationSettings();
+            var scene = managerData.gameEngineState.Scene().GetScene();
+
+            if (simulationSettings.sceneType != SceneType.Embree) {
+                Debug.LogWarning("Dynamic Objects are only supported with Embree.");
+                return;
+            }
+
+            var instancedScenes = managerData.gameEngineState.instancedScenes;
+
+            var instancedScene = IntPtr.Zero;
+            if (instancedScenes != null && instancedScenes.ContainsKey(assetFileName)) {
+                instancedScene = instancedScenes[assetFileName];
+            } else {
+                status = PhononCore.iplLoadScene(context, simulationSettings, serializedData, serializedData.Length,
+                    computeDevice, null, ref instancedScene);
+                if (status != Error.None) {
+                    throw new Exception();
+                }
+            }
+
+            var transformMatrix = Common.ConvertTransform(instanceTransform);
+
+            status = PhononCore.iplCreateInstancedMesh(scene, instancedScene, transformMatrix, ref instancedMesh);
+            if (status != Error.None) {
+                throw new Exception();
+            }
+
+            if (instancedScenes == null) {
+                managerData.gameEngineState.instancedScenes = new Dictionary<string, IntPtr>();
+            }
+            if (!managerData.gameEngineState.instancedScenes.ContainsKey(assetFileName)) {
+                managerData.gameEngineState.instancedScenes.Add(assetFileName, instancedScene);
+            }
+        }
+
+        public void DestroyInstancedMesh(ref IntPtr instancedMesh)
+        {
+            if (instancedMesh == IntPtr.Zero) {
+                return;
+            }
+
+            PhononCore.iplDestroyInstancedMesh(ref instancedMesh);
+        }
+
+        public void EnableInstancedMesh(IntPtr instancedMesh)
+        {
+            if (instancedMesh == IntPtr.Zero) {
+                return;
+            }
+
+            var scene = managerData.gameEngineState.Scene().GetScene();
+
+            PhononCore.iplAddInstancedMesh(scene, instancedMesh);
+        }
+
+        public void DisableInstancedMesh(IntPtr instancedMesh)
+        {
+            if (instancedMesh == IntPtr.Zero) {
+                return;
+            }
+
+            var scene = managerData.gameEngineState.Scene().GetScene();
+
+            PhononCore.iplRemoveInstancedMesh(scene, instancedMesh);
+        }
+
+        public void UpdateInstancedMeshTransform(IntPtr instancedMesh, Transform instanceTransform)
+        {
+            if (instancedMesh == IntPtr.Zero) {
+                return;
+            }
+
+            var transformMatrix = Common.ConvertTransform(instanceTransform);
+
+            PhononCore.iplUpdateInstancedMeshTransform(instancedMesh, transformMatrix);
         }
 
         static SteamAudioManager managerSingleton = null;

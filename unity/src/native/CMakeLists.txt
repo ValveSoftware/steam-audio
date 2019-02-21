@@ -19,6 +19,7 @@ set (SRC_UNITYNATIVE
     audio_engine_settings.cpp
     environment_proxy.h
     environment_proxy.cpp
+	ambisonic_decoder_effect.cpp
     spatialize_effect.cpp
     reverb_effect.cpp
     mix_return_effect.cpp

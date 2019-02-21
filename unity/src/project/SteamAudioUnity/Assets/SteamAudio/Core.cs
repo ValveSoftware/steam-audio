@@ -106,6 +106,30 @@ namespace SteamAudio
         public static extern void iplSaveSceneAsObj(IntPtr scene, byte[] fileName);
 
         //
+        // Instanced Mesh
+        //
+
+        [DllImport("phonon", CallingConvention = CallingConvention.Cdecl)]
+        public static extern Error iplCreateInstancedMesh(IntPtr scene, IntPtr instancedScene, Matrix4x4 transform,
+            [In, Out] ref IntPtr instancedMesh);
+
+        [DllImport("phonon", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void iplDestroyInstancedMesh([In, Out] ref IntPtr instancedMesh);
+
+        [DllImport("phonon", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void iplAddInstancedMesh(IntPtr scene, IntPtr instancedMesh);
+
+        [DllImport("phonon", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void iplRemoveInstancedMesh(IntPtr scene, IntPtr instancedMesh);
+
+        [DllImport("phonon", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void iplUpdateInstancedMeshTransform(IntPtr instancedMesh, Matrix4x4 transform);
+
+        [DllImport("phonon", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void iplCommitScene(IntPtr scene);
+
+
+        //
         // Functions to setup Environment.
         //
 
@@ -135,13 +159,13 @@ namespace SteamAudio
         public static extern void iplConvertAudioBufferFormat(AudioBuffer inputAudio, AudioBuffer outputAudio);
 
         [DllImport("phonon")]
-        public static extern Error iplCreateAmbisonicsRotator(int order, [In, Out] ref IntPtr rotator);
+        public static extern Error iplCreateAmbisonicsRotator(IntPtr globalContext, int order, [In, Out] ref IntPtr rotator);
 
         [DllImport("phonon")]
         public static extern void iplDestroyAmbisonicsRotator([In, Out] ref IntPtr rotator);
 
         [DllImport("phonon")]
-        public static extern void iplSetAmbisonicsRotation(IntPtr rotator, Quaternion quaternion);
+        public static extern void iplSetAmbisonicsRotation(IntPtr rotator, Vector3 listenerAhead, Vector3 listenerUp);
 
         [DllImport("phonon")]
         public static extern void iplRotateAmbisonicsAudioBuffer(IntPtr rotator, AudioBuffer inputAudio, AudioBuffer outputAudio);

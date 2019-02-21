@@ -344,8 +344,7 @@ public:
         // Add the spatialized reverb to the input audio, and place the result in the output buffer.
         for (auto i = 0u; i < outChannels * numSamples; ++i)
         {
-            outputAudio.interleavedBuffer[i] = inputAudio.interleavedBuffer[i] +
-                mIndirectSpatializedOutputBuffer.interleavedBuffer[i];
+            outputAudio.interleavedBuffer[i] = mIndirectSpatializedOutputBuffer.interleavedBuffer[i];
         }
 
         if (mBypassedInPreviousFrame)

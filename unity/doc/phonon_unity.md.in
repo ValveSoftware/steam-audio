@@ -13,7 +13,15 @@ or VR experience. It has the following capabilities:
   direction of a sound source relative to the listener. Users can get an impression of the height of the source, as well 
   as whether the source is in front of or behind them.
 
-- **Occlusion and partial occlusion**. Steam Audio can quickly model raycast occlusion of direct sound by solid objects. 
+- **3D audio for Ambisonics recordings.** Steam Audio can also spatialize Ambisonics audio clips, rotating them based
+  on the listener's orientation in the virtual world. This is useful for creating spatialized ambiences that are
+  fixed in place relative to the virtual world.
+
+- **Custom HRTFs using SOFA files.** In addition to its built-in HRTF, Steam Audio can spatialize point sources and
+  Ambisonics sources using any HRTF specified by the user. These files should be in the AES standard SOFA format
+  (https://www.sofaconventions.org/).
+
+- **Occlusion and partial occlusion.** Steam Audio can quickly model raycast occlusion of direct sound by solid objects. 
   Steam Audio also models partial occlusion for non-point sources.
 
 - **Model a wide range of environmental effects.** Steam Audio can model many kinds of environmental audio effects, 
@@ -29,10 +37,18 @@ or VR experience. It has the following capabilities:
   automated real-time or pre-computation based process where environmental audio properties are calculated (using 
   physics principles) throughout your scene.
 
+- **Dynamic geometry support.** Steam Audio can model how moving geometry impacts occlusion and environmental effects.
+  For example, opening doors can result in an occluded sound becoming unoccluded; making a room larger during gameplay
+  can increase the amount of reverb in it.
+
 - **Generate high-quality convolution reverb.** Steam Audio can calculate convolution reverb. This involves calculating 
   Impulse Responses (IRs) at several points throughout the scene. Convolution reverb results in compelling environments 
   that sound more realistic than with parametric reverb. This is particularly true for outdoor spaces, where parametric 
   reverbs have several limitations.
+
+- **Multi-core CPU and GPU acceleration.** Steam Audio can use multi-core CPUs to accelerate simulation of environmental
+  effects. Steam Audio can also use supported GPUs for accelerating simulation and rendering of environmental effects,
+  while ensuring that its audio workloads do not adversely impact other GPU workloads or frame rate stability.
 
 - **Head tracking support.** For VR applications, Steam Audio can use head tracking information to make the sound field 
   change smoothly and accurately as the listener turns or moves their head.
@@ -90,6 +106,7 @@ Before using Steam Audio to spatialize Audio Sources in Unity, you must select S
 
 1.  Click **Edit** > **Project Settings** > **Audio**.
 2.  Under **Spatializer Plugin**, choose **Steam Audio Spatializer**.
+3.  Under **Ambisonic Decoder Plugin**, choose **Steam Audio Ambisonics** if using Ambisonic audio clips in your project.
 
 ![Setting Steam Audio as the spatializer plugin.](media/enable-spatializer-plugin.png)
 
@@ -326,6 +343,37 @@ The default behavior is desirable for the common case where an occluded sound sh
 while initialization occurs. On the other hand, for some kinds of sounds, like dialog, the default behavior may result
 in the first few syllables becoming inaudible; checking this box will allow all the dialog to be heard.
 
+### Ambisonic Audio
+Steam Audio can decode and spatialize Ambisonic audio clips. If you plan to use Steam Audio to spatialize Audio Sources 
+containing Ambisonic audio clips, make sure to select **Steam Audio Ambisonics** as your project's Ambisonic Decoder 
+Plugin. (See above for more details.)
+
+> **NOTE** <br/>
+  Set Spatialize to false on the Audio Source with the Ambisonic audio clip.
+
+Steam Audio uses HRTF-based binaural rendering by default when spatializing an Audio Source that contains an Ambisonic 
+audio clip. To change the default settings, you must add a **Steam Audio Ambisonics Source** component to the Audio 
+Source:
+
+1.  Select the GameObject containing the Audio Source.
+2.  In the Inspector view, click **Add Component**.
+3.  In the Add Component menu, select **Steam Audio** > **Steam Audio Ambisonics Source**.
+
+![Adding a Steam Audio Ambisonics Source component.](media/ambisonics-source-component.png)
+
+#### Ambisonics Source Settings
+In this section, we describe the settings for the Steam Audio Ambisonics Source component.
+
+##### Enable Binaural
+If checked, Steam Audio uses HRTF-based binaural rendering when spatializing the Ambisonic audio clip played by 
+this Audio Source. If unchecked, Steam Audio uses panning to spatialize the Ambisonic audio clip.
+
+![Configuring a Steam Audio Ambisonics Source.](media/ambisonics-source-settings.png)
+
+#### Custom HRTF
+Steam Audio automatically makes use of any custom HRTFs specified in the Steam Audio tab when spatializing Ambisonic 
+Audio Sources. See the previous section on **Using Custom HRTFs** for more details.
+
 ### Scene Setup
 To use Steam Audio for occlusion and environmental effects in your video game or VR experience, the scene needs to be 
 set up by tagging geometry and specifying acoustic materials for the objects in your scene.
@@ -445,10 +493,103 @@ changes are available to Steam Audio. To pre-export:
 1.  In Unity’s main menu, click **Window** > **Steam Audio**.
 2.  Click **Pre-Export Scene**.
 
-#### Limited Dynamic Geometry Support with Unity Ray Tracer
-Exporting a scene as described above means that if the geometry moves in any way at run-time, the acoustics are _not_
-updated accordingly. This is not always desirable. If your game or app only uses occlusion, and not reflections or
-reverb, then Steam Audio can be configured to use Unity's built-in ray tracer to handle dynamic geometry. To do this:
+#### Dynamic Geometry
+Steam Audio can model the effect of dynamic geometry when simulating occlusion, transmission, and indirect sound in
+real-time. For example, if a door opens, a previously occluded sound can become unoccluded; if a room is made larger,
+reverb may change substantially.
+
+There are two ways of enabling dynamic geometry support in Steam Audio. These approaches are mutually exclusive, so
+you must choose based on the requirements of your project. The two approaches are:
+
+- **Steam Audio Dynamic Object components**. This approach allows geometry to be moved, rotated, and scaled at
+  run-time. Geometry may also be added to or removed from the scene at run-time. Geometry may not be deformed or
+  broken in any way. Dynamic geometry is included in occlusion, transmission, and indirect sound simulations.
+  This functionality requires the use of Embree as your ray tracer. (See below for more on how to enable Embree
+  for your project.)
+
+- **Unity's built-in ray tracer**. This approach allows geometry to change in any way supported by Unity's
+  run-time ray tracer. Dynamic geometry is included in occlusion and transmission simulation only; indirect
+  sound simulation is not supported. This approach is somewhat more flexible and supports a wider range of
+  platforms as compared to Dynamic Object components, but is limited in terms of what can be simulated.
+
+##### Steam Audio Dynamic Object
+A Steam Audio Dynamic Object component can be attached to any GameObject in your scene hierarchy. Doing so tells
+Steam Audio to treat that GameObject and all of its children as a dynamic object. At run-time, any changes made
+to the Transform of the GameObject to which the Dynamic Object component has been attached will automatically be
+passed to Steam Audio.
+
+> **NOTE** <br/>
+  Changes made to the transforms of _children_ of the Dynamic Object will _not_ be passed to Steam Audio. The
+  Dynamic Object and all its children must move/animate as a rigid body.
+
+To specify that a GameObject (and all its children) should be treated as a dynamic object:
+
+1.  In the Hierarchy tab, click the GameObject that you want to treat as dynamic.
+2.  In the Inspector tab, click **Add Component**.
+3.  In the Add Component menu, select **Steam Audio** > **Steam Audio Dynamic Object**.
+
+![Adding a Steam Audio Dynamic Object component.](media/add-dynamic-object-component.png)
+
+Just like with the static geometry in your scene, you still need to tag geometry and materials for dynamic objects.
+This process is discussed in more detail below.
+
+###### Tagging Geometry for Dynamic Objects
+At least one of the Dynamic Object or its children must also have a Steam Audio Geometry component attached. The 
+Geometry component works in the same way as for the static part of your scene; see above for more details on this 
+process. Briefly, if a Geometry component is attached to a GameObject containing a Dynamic Object component (or one of 
+its children):
+
+- if the GameObject has a Mesh or Terrain component, its geometry is used by Steam Audio
+- if **Export All Children** is checked, then the geometry of any Mesh or Terrain in the children of the GameObject
+  is used by Steam Audio
+
+A convenient approach to tagging dynamic geometry is to add a Geometry component to the GameObject containing the 
+Dynamic Object component, and check Export All Children. This tells Steam Audio to use all geometry under the
+Dynamic Geometry as dynamic geometry.
+
+###### Tagging Materials for Dynamic Objects
+The GameObject containing the Dynamic Object component must also have a Steam Audio Material component attached
+(one is created automatically if needed). This Material is treated as the default material for the Dynamic Object,
+and can by overriden by attaching Material components to children of the Dynamic Object. The scene-wide default
+material is not used by Dynamic Objects.
+
+Apart from this, tagging materials for dynamic geometry works similarly to static geometry. A common scenario for
+dynamic objects that are mostly made of a single material is to just set the material once on the GameObject that
+contains the Dynamic Object component.
+
+###### Exporting Dynamic Objects
+After tagging a Dynamic Object with Geometry and Material components, you must export it. Since dynamic objects can be
+added or removed from a scene at any time during gameplay, they are not included when exporting the static portion of
+the scene from the Steam Audio tab.
+
+To export a dynamic object, select it and click **Export Dynamic Object** in the Inspector. You specify any file name
+you like, as long as the file is saved under `Assets/StreamingAssets`.
+
+![A Dynamic Object component after exporting.](media/dynamic-object-component.png)
+
+You can change the file to which the dynamic object is exported by clicking **Export Dynamic Object To New Asset**.
+After this, the old exported file can be safely deleted.
+
+If you make changes to the geometry or materials of a dynamic object, you must re-export it. To simplify the process
+of re-exporting many dynamic objects, you can perform a batch re-export as follows:
+
+1.  In Unity's main menu, click **Window** > **Steam Audio**.
+2.  Under **Scene Export**, click **Export All Dynamic Objects**.
+
+Steam Audio will search through your entire Unity project, find any Dynamic Object component that's present in any
+scene or prefab, and re-export it. Dynamic Objects that haven't been exported at least once will be skipped
+during this process.
+
+###### Dynamic Objects in Prefabs
+You can attach a Steam Audio Dynamic Object component in a prefab as well. After tagging the prefab with Geometry
+and Material components and exporting it, the prefab can be freely instantiated in any scene and moved around;
+Steam Audio will automatically update occlusion, transmission, and indirect sound accordingly. For example, this can
+be used to create a door prefab that automatically occludes sound when added to any scene, or large walls that a
+player can build, which automatically reflect sound.
+
+##### Limited Dynamic Geometry Support with Unity Ray Tracer
+If your game or app only uses occlusion, and not reflections or reverb, then Steam Audio can be configured to use 
+Unity's built-in ray tracer to handle dynamic geometry. To do this:
 
 1.  In the Hierarchy tab, click the **Steam Audio Manager Settings** object.
 2.  In the Inspector tab, click **Add Component**.
@@ -613,6 +754,10 @@ options cannot be changed in Play mode or programmatically.
   the design phase. The percentage can also be interpreted as the number of threads to create as a percentage of the total 
   logical cores available on the machine of a developer. Increasing baking CPU usage leads to lower bake times and faster
   turnaround.
+
+- **Irradiance Min Distance**. The minimum distance between a source and a scene surface, used when calculating the energy 
+  received at the surface from the source during indirect sound simulation. Increasing this number reduces the loudness of 
+  reflections when standing close to a wall; decreasing this number results in a more physically realistic model.
 
 ### Reverb
 Steam Audio also lets you apply listener-centric reverb to audio flowing through any Mixer Group in Unity. This helps
@@ -854,22 +999,22 @@ These overrides allow you to switch to a higher level of acoustic detail when th
 GPU, while seamlessly falling back to using the CPU with the settings configured on the Steam Audio Manager
 Settings component if a supported GPU is not found.
 
-##### Resource Reservation
+##### GPU Resource Reservation
 When TrueAudio Next is enabled in the Steam Audio Custom Settings component, you can configure the following
-Resource Reservation settings, which allow you to control how much of the GPU is set aside for audio processing
+GPU Resource Reservation settings, which allow you to control how much of the GPU is set aside for audio processing
 tasks:
 
-- **Min Compute Units To Reserve**. This is the smallest number of GPU Compute Units (CUs) that should be possible
-  to reserve for audio processing. If the user's GPU does not support this many reserved CUs, then TrueAudio Next
-  initialization will fail and Steam Audio will fall back to CPU convolution. For example, if this value is set to 4,
-  but the user's GPU only supports reserving up to 2 CUs, TrueAudio Next initialization will fail.
-
 - **Max Compute Units To Reserve**. This is the largest number of CUs that Steam Audio will try to reserve for audio
-  processing. Steam Audio will try to reserve as many CUs as it can, up to this limit. If the user's GPU does not
-  support reserving any number of CUs between **Min Compute Units To Reserve** and **Max Compute Units To Reserve**,
-  then TrueAudio Next initialization will fail and Steam Audio will fall back to CPU convolution. For example, if
-  **Min Compute Units To Reserve** is set to 2 and **Max Compute Units To Reserve** is set to 4, but the user's GPU
-  only supports reserving 8 or more CUs, TrueAudio Next initialization will fail.
+  processing at runtime. When set to 0, entire GPU is used for audio processing. If compute units fewer than minimum
+  possible reservable on a particular GPU are requested, TrueAudio Next initialization will fail. For example, if
+  **Max Compute Units To Reserve** is set to 2 and minimum number of compute units that can be reserved on a user's 
+  GPU are 4, TrueAudio Next initialization will fail.
+
+- **Fraction Compute Units for IR Update**. Multiple resources can be reserved by Steam Audio on GPU for audio 
+  processing and other tasks like preparing IR calculated on CPU for audio processing or indirect sound processing 
+  on GPU (see section on **Radeon Rays** below). This value determines the fraction of **Max Compute Units To Reserve** 
+  used for IR update. For example, if **Max Compute Units To Reserve** is set to 8 and **Fraction Compute Units for IR Update** 
+  is set to 0.5, then 4 compute units are used for audio processing and 4 compute units are used for IR update.
 
 ![Configuring Resource Reservation settings for TrueAudio Next.](media/tan-reservation-settings.png)
 
@@ -938,6 +1083,16 @@ which allow you to control how the GPU used for baking:
   results in better utilization of available GPU compute resources, at the cost of increased GPU memory consumption.
   If this number is set too high, you may encounter errors when baking; if this happens, reduce the Baking Batch Size 
   value until baking succeeds.
+
+##### GPU Resource Reservation
+GPU Resource Reservation reserves a portion of GPU (specified as number of compute units) for calculating real-time indirect 
+sound. This way, real-time indirect sound calculation is restricted to reserved GPU resources only and they do not interfere
+with other rendering or other game logic using GPU resources during runtime. For baking, entire GPU is always used.
+
+- **Max Compute Units To Reserve**. Maximum number of compute units to reserve on GPU for real-time indirect sound simulation. 
+When set to 0, entire GPU is used for real-time simulation. For baking, entire GPU is always used. If TrueAudio Next is enabled, 
+dual resource reservation is active and different amout of GPU resources are reserved for IR update / real-time indirect sound 
+and real-time convolution.
 
 #### Per Frame Query Optimization
 Steam Audio searches the Unity scene graph for an Audio Listener and a Steam Audio Listener every frame. This requires 

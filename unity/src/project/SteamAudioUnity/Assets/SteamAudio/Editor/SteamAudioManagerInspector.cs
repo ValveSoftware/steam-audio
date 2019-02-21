@@ -32,6 +32,8 @@ namespace SteamAudio
             // Audio Engine
             GUI.enabled = !EditorApplication.isPlayingOrWillChangePlaymode;
             EditorGUILayout.Space();
+            EditorGUILayout.HelpBox("Do not manually add Steam Audio Manager component. " +
+                "Click Window > Steam Audio.", MessageType.Info);
             EditorGUILayout.LabelField("Audio Engine Integration", EditorStyles.boldLabel);
             string[] engines = { "Unity", "FMOD Studio" };
             var audioEngineProperty = serializedObject.FindProperty("audioEngine");
@@ -57,6 +59,10 @@ namespace SteamAudio
                     }
                 }
                 var currentSOFAFileProperty = serializedObject.FindProperty("currentSOFAFile");
+                if (currentSOFAFileProperty.intValue >= sofaFiles.Length) 
+                {
+                    currentSOFAFileProperty.intValue = 0;
+                }
                 currentSOFAFileProperty.intValue = EditorGUILayout.Popup("Current SOFA File",
                     currentSOFAFileProperty.intValue, sofaFileNames);
             }
@@ -80,13 +86,13 @@ namespace SteamAudio
 
             EditorGUILayout.Space();
             EditorGUILayout.LabelField("Scene Export", EditorStyles.boldLabel);
-            EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.PrefixLabel(" ");
-            if (GUILayout.Button("Export to OBJ"))
-                steamAudioManager.ExportScene(true);
             if (GUILayout.Button("Pre-Export Scene"))
                 steamAudioManager.ExportScene(false);
-            EditorGUILayout.EndHorizontal();
+            if (GUILayout.Button("Export All Dynamic Objects")) {
+                ExportAllDynamicObjects();
+            }
+            if (GUILayout.Button("Export to OBJ"))
+                steamAudioManager.ExportScene(true);
 
             // Simulation Settings
             EditorGUILayout.Space();
@@ -169,9 +175,6 @@ namespace SteamAudio
             }
 
             GUI.enabled = true;
-            EditorGUILayout.HelpBox("Do not manually add Steam Audio Manager component. " +
-                "Click Window > Steam Audio.", MessageType.Info);
-
             EditorGUILayout.Space();
             serializedObject.ApplyModifiedProperties();
         }
@@ -265,8 +268,7 @@ namespace SteamAudio
             SteamAudioSource[] bakedSources = GameObject.FindObjectsOfType<SteamAudioSource>();
             foreach (SteamAudioSource bakedSource in bakedSources)
             {
-                if (bakedSource.reflections && bakedSource.uniqueIdentifier.Length != 0 &&
-                    bakedSource.simulationType == SourceSimulationType.BakedStaticSource && bakedSource.bakeToggle)
+                if (bakedSource.uniqueIdentifier.Length != 0 && bakedSource.bakeToggle)
                 {
                     gameObjects.Add(bakedSource.gameObject);
                     identifers.Add(bakedSource.bakedDataIdentifier);
@@ -342,8 +344,7 @@ namespace SteamAudio
             SteamAudioSource[] bakedSources = GameObject.FindObjectsOfType<SteamAudioSource>();
             foreach (SteamAudioSource bakedSource in bakedSources)
             {
-                if (bakedSource.reflections && bakedSource.uniqueIdentifier.Length != 0
-                    && bakedSource.simulationType == SourceSimulationType.BakedStaticSource)
+                if (bakedSource.uniqueIdentifier.Length != 0)
                 {
                     bakedSource.bakeToggle = select;
                 }
@@ -373,8 +374,7 @@ namespace SteamAudio
             bool showBakedSources = false;
             foreach (SteamAudioSource bakedSource in bakedSources)
             {
-                if (bakedSource.reflections && bakedSource.uniqueIdentifier.Length != 0
-                    && bakedSource.simulationType == SourceSimulationType.BakedStaticSource)
+                if (bakedSource.uniqueIdentifier.Length != 0)
                 {
                     showBakedSources = true;
                     break;
@@ -388,8 +388,7 @@ namespace SteamAudio
 
             foreach (SteamAudioSource bakedSource in bakedSources)
             {
-                if (!bakedSource.reflections || bakedSource.uniqueIdentifier.Length == 0
-                    || bakedSource.simulationType != SourceSimulationType.BakedStaticSource)
+                if (bakedSource.uniqueIdentifier.Length == 0)
                     continue;
 
                 GUI.enabled = !Baker.IsBakeActive() && !EditorApplication.isPlayingOrWillChangePlaymode;
@@ -481,6 +480,87 @@ namespace SteamAudio
             GUI.enabled = true;
 
             return true;
+        }
+
+        void ExportAllDynamicObjects()
+        {
+            Debug.Log("Starting batched export of Steam Audio Dynamic Objects...");
+
+            var scenes = AssetDatabase.FindAssets("t:Scene");
+            var prefabs = AssetDatabase.FindAssets("t:Prefab");
+
+            int numItems = scenes.Length + prefabs.Length;
+
+            // todo: what if we clicked export on the instance and not the prefab?
+            Debug.Log("Steam Audio Dynamic Object: Searching scenes...");
+            int index = 0;
+            foreach (var sceneGUID in scenes) {
+                var scenePath = AssetDatabase.GUIDToAssetPath(sceneGUID);
+                Debug.Log(string.Format("Processing scene {0}...", scenePath));
+                EditorUtility.DisplayProgressBar("Steam Audio", string.Format("Processing scene: {0}", scenePath), (float)index / (float)numItems);
+
+                var activeScene = EditorSceneManager.GetActiveScene();
+                var isLoadedScene = (scenePath == activeScene.path);
+
+                var scene = activeScene;
+                if (!isLoadedScene) {
+                    scene = EditorSceneManager.OpenScene(scenePath, OpenSceneMode.Additive);
+                }
+
+                var rootObjects = scene.GetRootGameObjects();
+                foreach (var rootObject in rootObjects) {
+                    var dynamicObjects = rootObject.GetComponentsInChildren<SteamAudioDynamicObject>();
+                    ExportDynamicObjectsInArray(false, scenePath, dynamicObjects);
+                }
+
+                if (!isLoadedScene) {
+                    EditorSceneManager.CloseScene(scene, true);
+                }
+
+                ++index;
+            }
+
+            Debug.Log("Steam Audio Dynamic Object: Searching prefabs...");
+            foreach (var prefabGUID in prefabs) {
+                var prefabPath = AssetDatabase.GUIDToAssetPath(prefabGUID);
+                Debug.Log(string.Format("Processing prefab {0}...", prefabPath));
+                EditorUtility.DisplayProgressBar("Steam Audio", string.Format("Processing prefab: {0}", prefabPath), (float)index / (float)numItems);
+
+                var prefab = AssetDatabase.LoadMainAssetAtPath(prefabPath) as GameObject;
+                var dynamicObjects = prefab.GetComponentsInChildren<SteamAudioDynamicObject>();
+                ExportDynamicObjectsInArray(true, prefabPath, dynamicObjects);
+
+                ++index;
+            }
+
+            Debug.Log(string.Format("{0} scenes, {1} prefabs", scenes.Length, prefabs.Length));
+            EditorUtility.DisplayProgressBar("Steam Audio", "", 1.0f);
+            EditorUtility.ClearProgressBar();
+        }
+
+        void ExportDynamicObjectsInArray(bool isPrefab, string path, SteamAudioDynamicObject[] dynamicObjects)
+        {
+            var typeString = (isPrefab) ? "Prefab" : "Scene";
+
+            foreach (var dynamicObject in dynamicObjects) {
+                if (!isPrefab) {
+                    var prefabType = PrefabUtility.GetPrefabType(dynamicObject);
+                    if (prefabType == PrefabType.PrefabInstance) {
+                        Debug.Log(string.Format("Scene {0}, GameObject {1}: Prefab instance detected, skipping " +
+                            "export.", path, dynamicObject.name));
+                        continue;
+                    }
+                }
+
+                var hasAssetFileName = (dynamicObject.assetFileName != null &&
+                    dynamicObject.assetFileName.Length > 0);
+                if (hasAssetFileName) {
+                    dynamicObject.Export(dynamicObject.assetFileName, false);
+                } else {
+                    Debug.LogWarning(string.Format("{0} {1}, GameObject {2}: Asset file name not set for " +
+                        "Steam Audio Dynamic Object, skipping export.", typeString, path, dynamicObject.name));
+                }
+            }
         }
     }
 }

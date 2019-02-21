@@ -15,28 +15,17 @@ namespace SteamAudio
     [AddComponentMenu("Steam Audio/Steam Audio Custom Settings")]
     public class SteamAudioCustomSettings : MonoBehaviour
     {
-        [Space]
         [Header("Simulation Settings")]
-
         public SceneType rayTracerOption = SceneType.Phonon;
 
-        [Space]
         [Header("Rendering Settings")]
-
         public ConvolutionOption convolutionOption = ConvolutionOption.Phonon;
 
-        [Space]
-        [Header("Resource Reservation")]
-
-        [Range(0, 16)]
-        public int minComputeUnitsToReserve = 4;
-
-        [Range(0, 64)]
+        [Header("GPU Resource Reservation")]
+        [Range(0, 32)]
         public int maxComputeUnitsToReserve = 8;
 
-        [Space]
         [Header("Override Simulation Settings")]
-
         [Range(0.1f, 5.0f)]
         public float Duration = 1.0f;
 
@@ -46,11 +35,12 @@ namespace SteamAudio
         [Range(1, 128)]
         public int MaxSources = 32;
 
-        [Space]
         [Header("Radeon Rays Settings")]
-
         [Range(1, 8)]
         public int BakingBatchSize = 4;
+
+        [Range(0, 1)]
+        public float fractionComputeUnitsForIRUpdate = .5f;
 
         public SceneType RayTracerType() {
             if (rayTracerOption == SceneType.Custom) {

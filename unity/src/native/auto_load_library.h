@@ -20,7 +20,30 @@ typedef IPLerror (*IPLCreateContext)(IPLLogFunction logCallback,
 
 typedef IPLvoid (*IPLDestroyContext)(IPLhandle* context);
 
-typedef IPLerror(*IPLCreateBinauralRenderer)(IPLhandle context, 
+typedef IPLvoid(*IPLInterleaveAudioBuffer)(IPLAudioBuffer inputAudio,
+                                           IPLAudioBuffer outputAudio);
+
+typedef IPLvoid(*IPLDeinterleaveAudioBuffer)(IPLAudioBuffer inputAudio,
+                                             IPLAudioBuffer outputAudio);
+
+typedef IPLvoid(*IPLConvertAudioBufferFormat)(IPLAudioBuffer inputAudio,
+                                              IPLAudioBuffer outputAudio);
+
+typedef IPLerror(*IPLCreateAmbisonicsRotator)(IPLhandle context,
+                                              IPLint32 order,
+                                              IPLhandle* rotator);
+
+typedef IPLvoid(*IPLDestroyAmbisonicsRotator)(IPLhandle* rotator);
+
+typedef IPLvoid(*IPLSetAmbisonicsRotation)(IPLhandle rotator,
+                                           IPLVector3 listenerAhead,
+                                           IPLVector3 listenerUp);
+
+typedef IPLvoid(*IPLRotateAmbisonicsAudioBuffer)(IPLhandle rotator,
+                                                 IPLAudioBuffer inputAudio,
+                                                 IPLAudioBuffer outputAudio);
+
+typedef IPLerror(*IPLCreateBinauralRenderer)(IPLhandle context,
                                              IPLRenderingSettings renderingSettings,    
                                              IPLHrtfParams params, 
                                              IPLhandle* renderer);
@@ -157,12 +180,20 @@ typedef IPLvoid(*IPLGetMixedEnvironmentalAudio)(IPLhandle renderer,
 
 typedef IPLvoid(*IPLFlushConvolutionEffect)(IPLhandle effect);
 
+
 /** An interface object that contains function pointers to the Steam Audio API.
  */
 struct SteamAudioApi
 {
     IPLCreateContext                        iplCreateContext;
     IPLDestroyContext                       iplDestroyContext;
+    IPLInterleaveAudioBuffer                iplInterleaveAudioBuffer;
+    IPLDeinterleaveAudioBuffer              iplDeinterleaveAudioBuffer;
+    IPLConvertAudioBufferFormat             iplConvertAudioBufferFormat;
+    IPLCreateAmbisonicsRotator              iplCreateAmbisonicsRotator;
+    IPLDestroyAmbisonicsRotator             iplDestroyAmbisonicsRotator;
+    IPLSetAmbisonicsRotation                iplSetAmbisonicsRotation;
+    IPLRotateAmbisonicsAudioBuffer          iplRotateAmbisonicsAudioBuffer;
     IPLCreateBinauralRenderer               iplCreateBinauralRenderer;
     IPLDestroyBinauralRenderer              iplDestroyBinauralRenderer;
     IPLCreatePanningEffect                  iplCreatePanningEffect;

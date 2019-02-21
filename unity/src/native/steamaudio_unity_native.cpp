@@ -9,6 +9,7 @@
 extern UnityAudioEffectDefinition gMixEffect;
 extern UnityAudioEffectDefinition gReverbEffect;
 extern UnityAudioEffectDefinition gSpatializeEffect;
+extern UnityAudioEffectDefinition gAmbisonicDecoder;
 
 IPLAudioFormat audioFormatForNumChannels(int numChannels)
 {
@@ -61,7 +62,7 @@ void crossfadeInputAndOutput(const float* inBuffer, const int numChannels, const
 // effects implemented in this DLL.
 extern "C" UNITY_AUDIODSP_EXPORT_API int UnityGetAudioEffectDefinitions(UnityAudioEffectDefinition*** definitions)
 {
-    static UnityAudioEffectDefinition* effects[] = { &gMixEffect, &gReverbEffect, &gSpatializeEffect };
+    static UnityAudioEffectDefinition* effects[] = { &gMixEffect, &gReverbEffect, &gSpatializeEffect, &gAmbisonicDecoder };
     *definitions = effects;
     return (sizeof(effects) / sizeof(effects[0]));
 }

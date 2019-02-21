@@ -27,7 +27,10 @@ namespace SteamAudio
         //
         // Constructor.
         //
-        public SimulationSettingsValue(int realtimeRays, int realtimeSecondaryRays, int realtimeBounces, int realtimeThreadsPercentage, int bakeRays, int bakeSecondaryRays, int bakeBounces, int bakeThreadsPercentage, float duration, int ambisonicsOrder, int maxSources)
+        public SimulationSettingsValue(int realtimeRays, int realtimeSecondaryRays, int realtimeBounces, 
+            int realtimeThreadsPercentage, int bakeRays, int bakeSecondaryRays, int bakeBounces, 
+            int bakeThreadsPercentage, float duration, int ambisonicsOrder, int maxSources,
+            float irradianceMinDistance)
         {
             RealtimeRays = realtimeRays;
             RealtimeSecondaryRays = realtimeSecondaryRays;
@@ -40,6 +43,7 @@ namespace SteamAudio
             Duration = duration;
             AmbisonicsOrder = ambisonicsOrder;
             MaxSources = maxSources;
+            IrradianceMinDistance = irradianceMinDistance;
         }
 
         //
@@ -66,6 +70,7 @@ namespace SteamAudio
             Duration = other.Duration;
             AmbisonicsOrder = other.AmbisonicsOrder;
             MaxSources = other.MaxSources;
+            IrradianceMinDistance = other.IrradianceMinDistance;
         }
 
         //
@@ -120,5 +125,8 @@ namespace SteamAudio
         // Maximum number of supported sources.
         [Range(1, 128)]
         public int MaxSources = 32;
+
+        [Range(0.1f, 10.0f)]
+        public float IrradianceMinDistance = 1.0f;
     }
 }

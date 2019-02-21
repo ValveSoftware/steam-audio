@@ -19,7 +19,7 @@ namespace SteamAudio
         void OnDrawGizmosSelected()
         {
             Color oldColor = Gizmos.color;
-            Matrix4x4 oldMatrix = Gizmos.matrix;
+            var oldMatrix = Gizmos.matrix;
 
             Gizmos.color = Color.yellow;
             Gizmos.DrawWireSphere(gameObject.transform.position, bakingRadius);

@@ -21,7 +21,7 @@ namespace SteamAudio
         //
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
-            return 264;
+            return 280;
         }
 
         //
@@ -42,6 +42,8 @@ namespace SteamAudio
             EditorGUI.PropertyField(position, property.FindPropertyRelative("AmbisonicsOrder"));
             position.y += 16f;
             EditorGUI.PropertyField(position, property.FindPropertyRelative("MaxSources"));
+            position.y += 16f;
+            EditorGUI.PropertyField(position, property.FindPropertyRelative("IrradianceMinDistance"));
             position.y += 24f;
             EditorGUI.LabelField(position, "Realtime Settings", EditorStyles.boldLabel);
             position.y += 16f;

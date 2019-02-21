@@ -23,59 +23,39 @@ namespace SteamAudio
         {
             var error = Error.None;
 
-            var objects = GameObject.FindObjectsOfType<SteamAudioGeometry>();
-            var totalNumVertices = 0;
-            var totalNumTriangles = 0;
-            var totalNumMaterials = 1;  // Global material.
-
-            for (var i = 0; i < objects.Length; ++i)
-            {
-                totalNumVertices += objects[i].GetNumVertices();
-                totalNumTriangles += objects[i].GetNumTriangles();
-                totalNumMaterials += objects[i].GetNumMaterials();
-            }
-
             simulationSettings.sceneType = SceneType.Phonon;    // Scene type should always be Phonon when exporting.
 
-            var vertices = new Vector3[totalNumVertices];
-            var triangles = new Triangle[totalNumTriangles];
-            var materialIndices = new int[totalNumTriangles];
-            var materials = new Material[totalNumMaterials + 1];    // Offset added to avoid creating Material
-                                                                    // for each object and then copying it.
+            var objects = SceneExporter.GetStaticGameObjectsForExport(SceneManager.GetActiveScene());
 
-            var vertexOffset = 0;
-            var triangleOffset = 0;
+            Vector3[] vertices = null;
+            Triangle[] triangles = null;
+            int[] materialIndices = null;
+            Material[] materials = null;
+            SceneExporter.GetGeometryAndMaterialBuffers(objects, ref vertices, ref triangles, ref materialIndices,
+                ref materials, false, exportOBJ);
 
-            var materialOffset = 1;
-            materials[0].absorptionHigh = defaultMaterial.HighFreqAbsorption;
-            materials[0].absorptionMid = defaultMaterial.MidFreqAbsorption;
-            materials[0].absorptionLow = defaultMaterial.LowFreqAbsorption;
-            materials[0].scattering = defaultMaterial.Scattering;
-            materials[0].transmissionHigh = defaultMaterial.HighFreqTransmission;
-            materials[0].transmissionMid = defaultMaterial.MidFreqTransmission;
-            materials[0].transmissionLow = defaultMaterial.LowFreqTransmission;
-
-            for (var i = 0; i < objects.Length; ++i)
+            if (vertices.Length == 0 || triangles.Length == 0 || materialIndices.Length == 0 || materials.Length == 0) 
             {
-                objects[i].GetGeometry(vertices, ref vertexOffset, triangles, ref triangleOffset, materials, 
-                    materialIndices, ref materialOffset);
+                throw new Exception(
+                    "No Steam Audio Geometry tagged. Attach Steam Audio Geometry to one or more GameObjects that " +
+                    "contain Mesh or Terrain geometry.");
             }
 
             error = PhononCore.iplCreateScene(globalContext, computeDevice.GetDevice(), simulationSettings,
                 materials.Length, materials, null, null, null, null, IntPtr.Zero, ref scene);
             if (error != Error.None)
             {
-                throw new Exception("Unable to create scene for export (" + objects.Length.ToString() +
+                throw new Exception("Unable to create scene for export (" + materials.Length.ToString() +
                     " materials): [" + error.ToString() + "]");
             }
 
             var staticMesh = IntPtr.Zero;
-            error = PhononCore.iplCreateStaticMesh(scene, totalNumVertices, totalNumTriangles, vertices, triangles,
+            error = PhononCore.iplCreateStaticMesh(scene, vertices.Length, triangles.Length, vertices, triangles,
                 materialIndices, ref staticMesh);
             if (error != Error.None)
             {
-                throw new Exception("Unable to create static mesh for export (" + totalNumVertices.ToString() +
-                    " vertices, " + totalNumTriangles.ToString() + " triangles): [" + error.ToString() + "]");
+                throw new Exception("Unable to create static mesh for export (" + vertices.Length.ToString() +
+                    " vertices, " + triangles.Length.ToString() + " triangles): [" + error.ToString() + "]");
             }
 
 #if UNITY_EDITOR
@@ -86,7 +66,7 @@ namespace SteamAudio
             if (exportOBJ)
             {
                 PhononCore.iplSaveSceneAsObj(scene, Common.ConvertString(ObjFileName()));
-                Debug.Log("Scene dumped to " + ObjFileName() + ".");
+                Debug.Log("Scene exported to " + ObjFileName() + ".");
             }
             else
             {
@@ -103,6 +83,36 @@ namespace SteamAudio
             PhononCore.iplDestroyStaticMesh(ref staticMesh);
             PhononCore.iplDestroyScene(ref scene);
             return error;
+        }
+
+        SteamAudioGeometry[] FilterGameObjectsWithDynamicGeometry(SteamAudioGeometry[] objects)
+        {
+            if (objects == null || objects.Length <= 0) {
+                return null;
+            }
+
+            var numExcluded = 0;
+            var excluded = new bool[objects.Length];
+            for (var i = 0; i < objects.Length; ++i) {
+                var dynamicObjects = objects[i].GetComponentsInParent<SteamAudioDynamicObject>();
+                excluded[i] = (dynamicObjects != null && dynamicObjects.Length > 0);
+                if (excluded[i]) {
+                    ++numExcluded;
+                }
+            }
+            var numIncluded = objects.Length - numExcluded;
+
+            var filteredObjects = new SteamAudioGeometry[numIncluded];
+            var index = 0;
+            for (var i = 0; i < objects.Length; ++i) {
+                if (excluded[i]) {
+                    continue;
+                }
+                filteredObjects[index] = objects[i];
+                ++index;
+            }
+
+            return filteredObjects;
         }
 
         public Error Create(ComputeDevice computeDevice, SimulationSettings simulationSettings, IntPtr globalContext)

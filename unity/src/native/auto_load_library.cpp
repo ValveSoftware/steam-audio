@@ -124,6 +124,13 @@ void loadLibrary()
 
     gApi.iplCreateContext                   = (IPLCreateContext)                    GetProcAddress(library, "iplCreateContext");
     gApi.iplDestroyContext                  = (IPLDestroyContext)                   GetProcAddress(library, "iplDestroyContext");
+    gApi.iplInterleaveAudioBuffer           = (IPLInterleaveAudioBuffer)            GetProcAddress(library, "iplInterleaveAudioBuffer");
+    gApi.iplDeinterleaveAudioBuffer         = (IPLDeinterleaveAudioBuffer)          GetProcAddress(library, "iplDeinterleaveAudioBuffer");
+    gApi.iplConvertAudioBufferFormat        = (IPLConvertAudioBufferFormat)         GetProcAddress(library, "iplConvertAudioBufferFormat");
+    gApi.iplCreateAmbisonicsRotator         = (IPLCreateAmbisonicsRotator)          GetProcAddress(library, "iplCreateAmbisonicsRotator");
+    gApi.iplDestroyAmbisonicsRotator        = (IPLDestroyAmbisonicsRotator)         GetProcAddress(library, "iplDestroyAmbisonicsRotator");
+    gApi.iplSetAmbisonicsRotation           = (IPLSetAmbisonicsRotation)            GetProcAddress(library, "iplSetAmbisonicsRotation");
+    gApi.iplRotateAmbisonicsAudioBuffer     = (IPLRotateAmbisonicsAudioBuffer)      GetProcAddress(library, "iplRotateAmbisonicsAudioBuffer");
     gApi.iplCreateBinauralRenderer          = (IPLCreateBinauralRenderer)           GetProcAddress(library, "iplCreateBinauralRenderer");
     gApi.iplDestroyBinauralRenderer         = (IPLDestroyBinauralRenderer)          GetProcAddress(library, "iplDestroyBinauralRenderer");
     gApi.iplCreatePanningEffect             = (IPLCreatePanningEffect)              GetProcAddress(library, "iplCreatePanningEffect");
@@ -167,6 +174,13 @@ void loadLibrary()
 
     gApi.iplCreateContext                   = (IPLCreateContext)                    dlsym(library, "iplCreateContext");
     gApi.iplDestroyContext                  = (IPLDestroyContext)                   dlsym(library, "iplDestroyContext");
+    gApi.iplInterleaveAudioBuffer           = (IPLInterleaveAudioBuffer)            dlsym(library, "iplInterleaveAudioBuffer");
+    gApi.iplDeinterleaveAudioBuffer         = (IPLDeinterleaveAudioBuffer)          dlsym(library, "iplDeinterleaveAudioBuffer");
+    gApi.iplConvertAudioBufferFormat        = (IPLConvertAudioBufferFormat)         dlsym(library, "iplConvertAudioBufferFormat");
+    gApi.iplCreateAmbisonicsRotator         = (IPLCreateAmbisonicsRotator)          dlsym(library, "iplCreateAmbisonicsRotator");
+    gApi.iplDestroyAmbisonicsRotator        = (IPLDestroyAmbisonicsRotator)         dlsym(library, "iplDestroyAmbisonicsRotator");
+    gApi.iplSetAmbisonicsRotation           = (IPLSetAmbisonicsRotation)            dlsym(library, "iplSetAmbisonicsRotation");
+    gApi.iplRotateAmbisonicsAudioBuffer     = (IPLRotateAmbisonicsAudioBuffer)      dlsym(library, "iplRotateAmbisonicsAudioBuffer");
     gApi.iplCreateBinauralRenderer          = (IPLCreateBinauralRenderer)           dlsym(library, "iplCreateBinauralRenderer");
     gApi.iplDestroyBinauralRenderer         = (IPLDestroyBinauralRenderer)          dlsym(library, "iplDestroyBinauralRenderer");
     gApi.iplCreatePanningEffect             = (IPLCreatePanningEffect)              dlsym(library, "iplCreatePanningEffect");
