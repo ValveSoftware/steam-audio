@@ -151,7 +151,7 @@
 <h3 id="setting-up-your-unreal-project">Setting up Your Unreal Project</h3>
 <p>To get started, users must make sure they are running with the newest audio engine, enable the plugin, and enable the plugin on a per-platform basis.</p>
 <h4 id="enabling-audio-mixer-functionality">Enabling Audio Mixer Functionality</h4>
-<p>Steam Audio requires the latest Audio Mixer functionality available in Unreal Engine 4.20 onwards. In Unreal 4.24, this functionality is disabled by default. You can enable it several ways. First, you can enable it on a per-platform basis by editing platform config files for your project. For example, on Windows, you can add <strong>&lt;Project&gt;/Config/Windows/WindowEngine.ini</strong> with the following:</p>
+<p>Steam Audio requires the latest Audio Mixer functionality available in Unreal Engine 4.20 onwards. In Unreal 4.24, this functionality is disabled by default. You can enable it several ways. First, you can enable it on a per-platform basis by editing platform config files for your project. For example, on Windows, you can add <strong>&lt;Project&gt;/Config/Windows/WindowsEngine.ini</strong> with the following:</p>
 <pre><code>[Audio]
 UseAudioMixer=true</code></pre>
 <p>Second, you can pass <code>-audiomixer</code> to the Unreal executable on startup. For example, you can create a shortcut to the Unreal Engine editor:</p>
@@ -593,16 +593,26 @@ UseAudioMixer=true</code></pre>
 <p><strong>NOTE</strong> <br /> Embree support is only available on Windows (64-bit).</p>
 </blockquote>
 <h4 id="enabling-embree">Enabling Embree</h4>
-<p>TODO</p>
+<p>To enable Intel® Embree for Steam Audio:</p>
+<ol type="1">
+<li>In the main menu, click <strong>Edit</strong> &gt; <strong>Project Settings</strong>.</li>
+<li>In the left pane, under <strong>Plugins</strong>, select <strong>Steam Audio</strong>.</li>
+<li>In the <strong>Ray Tracer</strong> dropdown, select <strong>Intel Embree</strong>.</li>
+</ol>
 <h3 id="amd-radeon-rays">AMD Radeon Rays</h3>
 <p>Steam Audio provides optional support for AMD Radeon Rays, which uses GPU-optimized ray tracing for accelerating real-time simulation and baking. Radeon Rays support in Steam Audio requires a supported AMD GPU or other OpenCL 1.2+ device.</p>
 <blockquote>
 <p><strong>NOTE</strong> <br /> Radeon Rays support is only available on Windows (64-bit).</p>
 </blockquote>
 <h4 id="enabling-radeon-rays">Enabling Radeon Rays</h4>
-<p>TODO</p>
+<p>To enable AMD Radeon Rays for Steam Audio:</p>
+<ol type="1">
+<li>In the main menu, click <strong>Edit</strong> &gt; <strong>Project Settings</strong>.</li>
+<li>In the left pane, under <strong>Plugins</strong>, select <strong>Steam Audio</strong>.</li>
+<li>In the <strong>Ray Tracer</strong> dropdown, select <strong>AMD Radeon Rays</strong>.</li>
+</ol>
 <h4 id="radeon-rays-settings">Radeon Rays Settings</h4>
-<p>When Radeon Rays is enabled in the Steam Audio Custom Settings component, you can configure the following settings, which allow you to control how the GPU used for baking:</p>
+<p>When Radeon Rays is enabled, you can configure the following settings, which allow you to control how the GPU used for baking:</p>
 <ul>
 <li><strong>Baking Batch Size</strong>. This is the number of probes that are simultaneously baked on the GPU. Increasing this number results in better utilization of available GPU compute resources, at the cost of increased GPU memory consumption. If this number is set too high, you may encounter errors when baking; if this happens, reduce the Baking Batch Size value until baking succeeds.</li>
 </ul>
