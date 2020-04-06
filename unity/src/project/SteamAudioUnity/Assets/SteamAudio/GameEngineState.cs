@@ -6,6 +6,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using AOT;
 using UnityEngine;
 
 namespace SteamAudio
@@ -239,6 +240,7 @@ namespace SteamAudio
             }
         }
 
+        [MonoPInvokeCallback(typeof(LogCallback))]
         static void LogMessage(string message)
         {
             Debug.Log(message);
