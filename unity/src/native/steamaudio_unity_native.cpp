@@ -48,6 +48,20 @@ IPLVector3 unitVector(IPLVector3 v)
     return IPLVector3{ v.x / length, v.y / length, v.z / length };
 }
 
+float dot(const IPLVector3& a, const IPLVector3& b)
+{
+    return (a.x * b.x + a.y * b.y + a.z * b.z);
+}
+
+IPLVector3 cross(const IPLVector3& a, const IPLVector3& b)
+{
+    IPLVector3 c;
+    c.x = a.y * b.z - a.z * b.y;
+    c.y = a.z * b.x - a.x * b.z;
+    c.z = a.x * b.y - a.y * b.x;
+    return c;
+}
+
 void crossfadeInputAndOutput(const float* inBuffer, const int numChannels, const int numSamples, float* outBuffer)
 {
     auto step = 1.0f / (numSamples - 1);

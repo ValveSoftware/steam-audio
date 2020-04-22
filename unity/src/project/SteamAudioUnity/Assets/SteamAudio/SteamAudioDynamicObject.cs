@@ -88,13 +88,10 @@ namespace SteamAudio
             }
 
             var computeDevice = IntPtr.Zero;
-
-            var simulationSettings = new SimulationSettings {
-                sceneType = SceneType.Phonon
-            };
+            var sceneType = SceneType.Phonon;
 
             var scene = IntPtr.Zero;
-            status = PhononCore.iplCreateScene(context, computeDevice, simulationSettings, materials.Length, materials,
+            status = PhononCore.iplCreateScene(context, computeDevice, sceneType, materials.Length, materials,
                 null, null, null, null, IntPtr.Zero, ref scene);
             if (status != Error.None) {
                 throw new Exception();

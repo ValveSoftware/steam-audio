@@ -637,8 +637,8 @@ public:
         // Make sure the direct sound effect has been created.
         if (mSceneState && !mDirectEffect)
         {
-            if (gApi.iplCreateDirectSoundEffect(mSceneState->environmentalRenderer(), mInputFormat,
-                mDirectEffectOutputBuffer.format, &mDirectEffect) != IPL_STATUS_SUCCESS)
+            if (gApi.iplCreateDirectSoundEffect(mInputFormat, mDirectEffectOutputBuffer.format,
+                                                mGlobalState->renderingSettings(), &mDirectEffect) != IPL_STATUS_SUCCESS)
             {
                 return false;
             }
@@ -774,6 +774,8 @@ public:
 		source.up = convertVector(sourcePosition.absolute.up.x, sourcePosition.absolute.up.y, sourcePosition.absolute.up.z);
 		source.right = CrossProduct(source.ahead, source.up);
 		source.directivity = IPLDirectivity{ dipoleWeight, dipolePower, nullptr, nullptr };
+        source.distanceAttenuationModel = IPLDistanceAttenuationModel{ IPL_DISTANCEATTENUATION_DEFAULT };
+        source.airAbsorptionModel = IPLAirAbsorptionModel{ IPL_AIRABSORPTION_DEFAULT };
 
 		return source;
     }
@@ -879,8 +881,8 @@ public:
         // Spatialize the direct sound.
         if (directBinaural)
         {
-            gApi.iplApplyBinauralEffect(mBinauralEffect, mBinauralRenderer, mDirectEffectOutputBuffer, direction, hrtfInterpolation,
-                mDirectSpatializedOutputBuffer);
+            gApi.iplApplyBinauralEffect(mBinauralEffect, mBinauralRenderer, mDirectEffectOutputBuffer, direction,
+                                        hrtfInterpolation, 1.0f, mDirectSpatializedOutputBuffer);
 		}
         else
         {

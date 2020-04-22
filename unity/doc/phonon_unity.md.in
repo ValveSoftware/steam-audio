@@ -72,7 +72,7 @@ between multiple threads. Steam Audio interacts with three main threads:
    48000, depending on the audio driver) samples per second.
 
 ### Integration and Platforms
-Steam Audio supports **Unity 5.3 or higher**. If you are using a different game engine or audio middleware, you will 
+Steam Audio supports **Unity 2017.1 or higher**. If you are using a different game engine or audio middleware, you will 
 need to use the Steam Audio C API. Refer to the *Steam Audio API Reference* for further information.
 
 The Steam Audio Unity plugin currently supports:
@@ -80,7 +80,7 @@ The Steam Audio Unity plugin currently supports:
 * Windows 7 or later (32-bit and 64-bit)
 * Linux (32-bit and 64-bit, tested with Ubuntu 16.04 LTS)
 * macOS 10.7 or later
-* Android 4.1 or later
+* Android 5.0 or later (32-bit ARM, 64-bit ARM, 32-bit Intel)
 
 
 ## Unity Integration
@@ -154,15 +154,16 @@ default settings, without adding any occlusion or indirect sound:
 ##### Spatial Blend
 Audio Source components provide a **Spatial Blend** parameter which allows users to blend between spatialized and
 unspatialized versions of an Audio Clip. When using Steam Audio to spatialize an Audio Source, the Spatial Blend
-parameter affects direct sound, distance attenuation, air absorption, occlusion, transmission, and indirect sound.
-For example, when Spatial Blend is set to 1 (3D), Steam Audio spatialization will be heard. When Spatial Blend is set to
-0 (2D), no spatialization is heard. When Spatial Blend is set to 0.5, Steam Audio spatialization will be heard, but:
+parameter affects direct sound and distance attenuation. For example:
 
-- Sound will be be less localized to a point source.
-- Distance attenuation and air absorption will not be as strong, i.e., the sound will be louder and less muffled than
-  with Spatial Blend set to 1.
-- Occlusion will not be as strong, i.e., more sound will be heard in spite of occluders.
-- Reflections will not be as strong.
+- When Spatial Blend is set to 1 (3D): The Audio Source is fully positional. Distance attenuation is applied, either
+  Physics-Based Attenuation (if checked), or using the Audio Source's attenuation curve.
+- When Spatial Blend is set to 0 (2D): The Audio Source is not spatialized at all. No distance attenuation is applied.
+- When Spatial Blend is set to 0.5: The Audio Source is somewhat positional. Distance attenuation is partially
+  applied, i.e., the Audio Source is not attenuated as much as with Spatial Blend set to 1.
+
+Air absorption, occlusion, and indirect sound are always applied as configured in the Steam Audio Source settings.
+They are not affected by Spatial Blend.
 
 #### Direct Sound Settings
 Steam Audio uses the following settings by default when spatializing an Audio Source:
@@ -203,12 +204,6 @@ HRTF Interpolation specifies what interpolation scheme to use for HRTF-based 3D 
 
 ##### Physics-Based Attenuation
 When checked, physics-based distance attenuation (inverse distance falloff) is applied to the audio.
-
-> **NOTE** <br/>
-  Physics-based attenuation is applied on top of any distance attenuation specified in the 3D Sound Settings of an Audio 
-  Source. To avoid applying distance attenuation multiple times, you can uncheck Physics Based Attenuation on the
-  Steam Audio Source. Alternatively, ensure that no distance attenuation is applied by the Audio Source, either by
-  setting **Spatial Blend** to **2D** or by making the distance curve flat.
 
 ##### Air Absorption
 When checked, frequency-dependent, distance-based air absorption is applied to the audio. Higher frequencies are
@@ -649,6 +644,14 @@ This determines what kind of simulation is performed to calculate environmental 
   when using this mode. For a VR experience where the camera can only transport to a few locations, this mode allows you 
   to reduce CPU overhead at the cost of increased memory consumption.
 
+##### Physics Based Attenuation For Indirect Sound
+When checked (the default), Steam Audio applies a physics-based distance attenuation model (inverse distance falloff) to
+every reflection path that sound can take as it bounces from the source to the listener. When unchecked, the distance
+attenuation model specified in the Audio Source's Volume Rolloff curve will be applied to each reflection path instead.
+
+When using the Unity editor, if the Volume Rolloff curve is changed while in Play mode, the indirect sound will update
+automatically to match the new distance attenuation model.
+
 ##### Indirect Mix Level
 Indirect Mix Level adjusts the contribution of indirect sound to the overall mix.
 
@@ -1020,10 +1023,9 @@ tasks:
 
 #### Intel&reg; Embree
 Steam Audio provides optional support for Intel&reg; Embree, which uses highly optimized CPU ray tracing for accelerating 
-real-time simulation and baking. Embree support in Steam Audio is currently restricted to a single CPU core. Embree 
-support will work on any modern CPU based on the x86 or x86_64 architectures, as long as Streaming SIMD Extensions 2 
-(SSE2) instructions are supported. CPUs that support Advanced Vector eXtensions (AVX) or AVX2 instructions will 
-result in improved performance when using Embree support.
+real-time simulation and baking. Embree support will work on any modern CPU based on the x86 or x86_64 architectures, 
+as long as Streaming SIMD Extensions 2 (SSE2) instructions are supported. CPUs that support Advanced Vector eXtensions 
+(AVX) or AVX2 instructions will result in improved performance when using Embree support.
 
 > **NOTE** <br/>
   Embree support is only available on Windows (64-bit), Linux (64-bit), and macOS (64-bit). Embree support on

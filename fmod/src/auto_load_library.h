@@ -56,7 +56,8 @@ typedef IPLvoid(*IPLApplyBinauralEffect)(IPLhandle effect,
 										 IPLhandle binauralRenderer,
                                          IPLAudioBuffer inputAudio, 
                                          IPLVector3 direction,
-                                         IPLHrtfInterpolation interpolation, 
+                                         IPLHrtfInterpolation interpolation,
+                                         IPLfloat32 spatialBlend,
                                          IPLAudioBuffer outputAudio);
 
 typedef IPLerror(*IPLCreateAmbisonicsPanningEffect)(IPLhandle renderer, 
@@ -103,12 +104,13 @@ typedef IPLDirectSoundPath(*IPLGetDirectSoundPath)(IPLhandle renderer,
                                                    IPLVector3 listenerUp, 
                                                    IPLSource source, 
                                                    IPLfloat32 sourceRadius,
+                                                   IPLint32 numSamples,
                                                    IPLDirectOcclusionMode occlusionMode, 
                                                    IPLDirectOcclusionMethod occlusionMethod);
 
-typedef IPLerror(*IPLCreateDirectSoundEffect)(IPLhandle renderer, 
-                                              IPLAudioFormat inputFormat,
-                                              IPLAudioFormat outputFormat, 
+typedef IPLerror(*IPLCreateDirectSoundEffect)(IPLAudioFormat inputFormat,
+                                              IPLAudioFormat outputFormat,
+                                              IPLRenderingSettings renderingSettings,
                                               IPLhandle* effect);
 
 typedef IPLvoid(*IPLDestroyDirectSoundEffect)(IPLhandle* effect);

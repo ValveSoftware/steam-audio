@@ -1,6 +1,6 @@
-% Steam Audio FMOD Studio Plugin 2.0-beta.17
+% Steam Audio FMOD Studio Plugin 2.0-beta.18
 
-# Steam Audio FMOD Studio Plugin <small><small>2.0-beta.17</small></small>
+# Steam Audio FMOD Studio Plugin <small><small>2.0-beta.18</small></small>
 
 Copyright 2017 Valve Corporation. All rights reserved. Subject to the following license: 
 [https://valvesoftware.github.io/steam-audio/license.html](https://valvesoftware.github.io/steam-audio/license.html)
@@ -12,11 +12,11 @@ Copyright 2017 Valve Corporation. All rights reserved. Subject to the following 
 - Windows 7 or later (32-bit and 64-bit)
 - Linux (32-bit and 64-bit, tested with Ubuntu 16.04 LTS)
 - macOS 10.7 or later
-- Android 4.1 or later
+- Android 5.0 or later (32-bit ARM, 64-bit ARM, 32-bit Intel)
 
 ### Supported Integrations
 - FMOD Studio 1.10.01 or later
-- Unity 5.3 or later
+- Unity 2017.1 or later
 
 
 ## FMOD Studio Integration

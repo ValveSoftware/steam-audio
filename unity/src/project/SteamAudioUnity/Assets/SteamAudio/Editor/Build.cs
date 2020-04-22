@@ -42,8 +42,12 @@ namespace SteamAudio
             "Assets/Plugins/x86/libaudioplugin_phonon.so",
             "Assets/Plugins/x86_64/libphonon.so",
             "Assets/Plugins/x86_64/libaudioplugin_phonon.so",
-            "Assets/Plugins/android/libphonon.so",
-            "Assets/Plugins/android/libaudioplugin_phonon.so"
+            "Assets/Plugins/android/libs/armv7/libphonon.so",
+            "Assets/Plugins/android/libs/armv7/libaudioplugin_phonon.so",
+            "Assets/Plugins/android/libs/arm64/libphonon.so",
+            "Assets/Plugins/android/libs/arm64/libaudioplugin_phonon.so",
+            "Assets/Plugins/android/libs/x86/libphonon.so",
+            "Assets/Plugins/android/libs/x86/libaudioplugin_phonon.so"
         };
 
         static string[] FMODStudioPlugins =
@@ -53,7 +57,9 @@ namespace SteamAudio
             "Assets/Plugins/x86/libphonon_fmod.so",
             "Assets/Plugins/x86_64/libphonon_fmod.so",
             "Assets/Plugins/phonon_fmod.bundle",
-            "Assets/Plugins/android/libphonon_fmod.so"
+            "Assets/Plugins/android/libs/armv7/libphonon_fmod.so",
+            "Assets/Plugins/android/libs/arm64/libphonon_fmod.so",
+            "Assets/Plugins/android/libs/x86/libphonon_fmod.so"
         };
 
         static string[] TrueAudioNextPlugins =
@@ -210,6 +216,7 @@ namespace SteamAudio
                         // Embree .dll files are correctly copied on Windows, so nothing to do here.
                         break;
 
+#if !UNITY_2019_2_OR_NEWER
                     case BuildTarget.StandaloneLinux64:
                     case BuildTarget.StandaloneLinuxUniversal:
                         FileUtil.CopyFileOrDirectory("Assets/Plugins/x86_64/libtbb.so.2",
@@ -217,11 +224,19 @@ namespace SteamAudio
                         FileUtil.CopyFileOrDirectory("Assets/Plugins/x86_64/libtbbmalloc.so.2",
                             playerDirectory + "/" + playerName + "_Data/Plugins/x86_64/libtbbmalloc.so.2");
                         break;
+#else
+                    case BuildTarget.StandaloneLinux64:
+                        FileUtil.CopyFileOrDirectory("Assets/Plugins/x86_64/libtbb.so.2",
+                            playerDirectory + "/" + playerName + "_Data/Plugins/libtbb.so.2");
+                        FileUtil.CopyFileOrDirectory("Assets/Plugins/x86_64/libtbbmalloc.so.2",
+                            playerDirectory + "/" + playerName + "_Data/Plugins/libtbbmalloc.so.2");
+                        break;
+#endif
 
 #if UNITY_2017_3_OR_NEWER
                     case BuildTarget.StandaloneOSX:
 #else
-                case BuildTarget.StandaloneOSXUniversal:
+                    case BuildTarget.StandaloneOSXUniversal:
 #endif
                         FileUtil.CopyFileOrDirectory("Assets/Plugins/libembree.dylib",
                             playerDirectory + "/" + playerName + ".app/Contents/Plugins/libembree.dylib");

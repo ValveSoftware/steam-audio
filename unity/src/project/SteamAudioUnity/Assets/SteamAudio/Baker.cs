@@ -3,6 +3,7 @@
 // https://valvesoftware.github.io/steam-audio/license.html
 //
 
+using AOT;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -42,6 +43,7 @@ namespace SteamAudio
             BakingSettings bakeSettings;
             bakeSettings.bakeConvolution = bakeConvolution ? Bool.True : Bool.False;
             bakeSettings.bakeParametric = bakeParameteric ? Bool.True : Bool.False;
+            bakeSettings.irDurationForBake = bakeIRDuration;
 
 #if UNITY_EDITOR
             totalObjects = duringBakeObjects.Length;
@@ -214,6 +216,7 @@ namespace SteamAudio
             EditorApplication.update += InEditorUpdate;
 #endif
 
+            bakeIRDuration = steamAudioManager.GameEngineState().SimulationSettings().irDuration;
             bakeThread = new Thread(new ThreadStart(BakeEffectThread));
             bakeThread.Start();
         }
@@ -279,7 +282,8 @@ namespace SteamAudio
             return bakeStatus;
         }
 
-        void AdvanceProgress(float bakeProgressFraction)
+        [MonoPInvokeCallback(typeof(PhononCore.BakeProgressCallback))]
+        static void AdvanceProgress(float bakeProgressFraction)
         {
 #if UNITY_EDITOR
             probeBoxBakingProgress = bakeProgressFraction;
@@ -326,12 +330,13 @@ namespace SteamAudio
 #if UNITY_EDITOR
         int totalProbeBoxes = 0;
         int totalObjects = 0;
-        float probeBoxBakingProgress = .0f;
+        static float probeBoxBakingProgress = .0f;
 #endif
 
         bool bakeConvolution = true;
         bool bakeParameteric = false;
         bool cancelBake = false;
+        float bakeIRDuration = 1.0f;
 
         BakeStatus bakeStatus = BakeStatus.Ready;
         SteamAudioManager steamAudioManager = null;

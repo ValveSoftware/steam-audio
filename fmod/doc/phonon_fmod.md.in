@@ -12,11 +12,11 @@ Copyright 2017 Valve Corporation. All rights reserved. Subject to the following 
 - Windows 7 or later (32-bit and 64-bit)
 - Linux (32-bit and 64-bit, tested with Ubuntu 16.04 LTS)
 - macOS 10.7 or later
-- Android 4.1 or later
+- Android 5.0 or later (32-bit ARM, 64-bit ARM, 32-bit Intel)
 
 ### Supported Integrations
 - FMOD Studio 1.10.01 or later
-- Unity 5.3 or later
+- Unity 2017.1 or later
 
 
 ## FMOD Studio Integration

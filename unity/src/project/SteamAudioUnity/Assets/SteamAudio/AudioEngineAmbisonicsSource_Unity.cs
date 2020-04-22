@@ -21,7 +21,7 @@ namespace SteamAudio
 
         public override void UpdateParameters(SteamAudioAmbisonicsSource steamAudioAmbisonicsSource)
         {
-            if (!audioSource || !audioSource.isPlaying)
+            if (!audioSource)
                 return;
 
             var enableBinauralValue = (steamAudioAmbisonicsSource.enableBinaural) ? 1.0f : 0.0f;

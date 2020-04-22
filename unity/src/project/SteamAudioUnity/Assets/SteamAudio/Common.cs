@@ -171,18 +171,6 @@ namespace SteamAudio
         public float imag;
     }
 
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate void FFTHelper(IntPtr data, IntPtr signal, IntPtr spectrum);
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate void HRTFLoadCallback(int signalSize, int spectrumSize, FFTHelper fftHelper, IntPtr data);
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate void HRTFUnloadCallback();
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate void HRTFLookupCallback(IntPtr direction, IntPtr leftHrtf, IntPtr rightHrtf);
-
     public enum HRTFDatabaseType
     {
         Default,
@@ -269,7 +257,7 @@ namespace SteamAudio
     public struct SimulationSettings
     {
         public SceneType sceneType;
-        public int occlusionSamples;
+        public int maxOcclusionSamples;
         public int rays;
         public int secondaryRays;
         public int bounces;
@@ -329,6 +317,7 @@ namespace SteamAudio
     {
         public Bool bakeParametric;
         public Bool bakeConvolution;
+        public float irDurationForBake;
     }
 
     public enum BakedDataType
@@ -372,6 +361,51 @@ namespace SteamAudio
         public IntPtr userData;
     }
 
+    public enum DistanceAttenuationModelType
+    {
+        Default,
+        InverseDistance,
+        Callback
+    }
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate float DistanceAttenuationCallback(float distance,
+                                                      IntPtr userData);
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct DistanceAttenuationModel
+    {
+        public DistanceAttenuationModelType type;
+        public float minDistance;
+        public DistanceAttenuationCallback callback;
+        public IntPtr userData;
+        public Bool dirty;
+    }
+
+    public enum AirAbsorptionModelType
+    {
+        Default,
+        Exponential,
+        Callback
+    }
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate float AirAbsorptionCallback(float distance,
+                                                int band,
+                                                IntPtr userData);
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct AirAbsorptionModel
+    {
+        public AirAbsorptionModelType type;
+        public float coefficients0;
+        public float coefficients1;
+        public float coefficients2;
+        public AirAbsorptionCallback callback;
+        public IntPtr userData;
+        public Bool dirty;
+    }
+
     [StructLayout(LayoutKind.Sequential)]
     public struct Source
     {
@@ -380,6 +414,8 @@ namespace SteamAudio
         public Vector3 up;
         public Vector3 right;
         public Directivity directivity;
+        public DistanceAttenuationModel distanceAttenuationModel;
+        public AirAbsorptionModel airAbsorptionModel;
     }
 
     // Direct Sound Effect options.

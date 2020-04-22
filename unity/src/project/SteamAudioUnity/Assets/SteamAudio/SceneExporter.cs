@@ -10,50 +10,80 @@ namespace SteamAudio
 {
     public static class SceneExporter
     {
-        static bool IsDynamicSubObject(GameObject root, GameObject obj)
+        static bool IsDynamicSubObject(GameObject root, 
+                                       GameObject obj)
         {
             return (root.GetComponentInParent<SteamAudioDynamicObject>() !=
-                obj.GetComponentInParent<SteamAudioDynamicObject>());
+                    obj.GetComponentInParent<SteamAudioDynamicObject>());
         }
 
-        public static List<GameObject> GetGameObjectsForExport(GameObject root, bool exportingStaticObjects = false)
+        // Ideally, we want to use GameObject.activeInHierarchy to check if a GameObject is active. However, when
+        // we batch-export dynamic objects, Prefabs are instantiated using AssetDatabase.LoadMainAssetAtPath,
+        // and isActiveInHierarchy returns false even if all GameObjects in the Prefab return true for
+        // GameObject.activeSelf. Therefore, we manually walk up the hierarchy and check if the GameObject is active.
+        static bool IsActiveInHierarchy(Transform obj)
+        {
+            if (obj == null)
+                return true;
+
+            return (obj.gameObject.activeSelf && IsActiveInHierarchy(obj.parent));
+        }
+
+        public static List<GameObject> GetGameObjectsForExport(GameObject root, 
+                                                               bool exportingStaticObjects = false)
         {
             var gameObjects = new List<GameObject>();
 
-            if (exportingStaticObjects && root.GetComponentInParent<SteamAudioDynamicObject>() != null) {
+            if (exportingStaticObjects && root.GetComponentInParent<SteamAudioDynamicObject>() != null)
                 return new List<GameObject>();
-            }
 
             var geometries = root.GetComponentsInChildren<SteamAudioGeometry>();
-            foreach (var geometry in geometries) {
-                if (IsDynamicSubObject(root, geometry.gameObject)) {
+            foreach (var geometry in geometries)
+            {
+                if (IsDynamicSubObject(root, geometry.gameObject))
                     continue;
-                }
 
-                if (geometry.exportAllChildren) {
+                if (geometry.exportAllChildren)
+                {
                     var meshes = geometry.GetComponentsInChildren<MeshFilter>();
-                    foreach (var mesh in meshes) {
-                        if (!IsDynamicSubObject(root, mesh.gameObject)) {
-                            gameObjects.Add(mesh.gameObject);
+                    foreach (var mesh in meshes)
+                    {
+                        if (!IsDynamicSubObject(root, mesh.gameObject))
+                        {
+                            if (IsActiveInHierarchy(mesh.gameObject.transform))
+                            {
+                                gameObjects.Add(mesh.gameObject);
+                            }
                         }
                     }
 
                     var terrains = geometry.GetComponentsInChildren<Terrain>();
-                    foreach (var terrain in terrains) {
-                        if (!IsDynamicSubObject(root, terrain.gameObject)) {
-                            gameObjects.Add(terrain.gameObject);
+                    foreach (var terrain in terrains)
+                    {
+                        if (!IsDynamicSubObject(root, terrain.gameObject))
+                        {
+                            if (IsActiveInHierarchy(terrain.gameObject.transform))
+                            {
+                                gameObjects.Add(terrain.gameObject);
+                            }
                         }
                     }
-                } else {
+                }
+                else
+                {
                     // todo: what if this object has no mesh or terrain?
-                    gameObjects.Add(geometry.gameObject);
+                    if (IsActiveInHierarchy(geometry.gameObject.transform))
+                    {
+                        gameObjects.Add(geometry.gameObject);
+                    }
                 }
             }
 
             var uniqueGameObjects = new HashSet<GameObject>(gameObjects);
 
             gameObjects.Clear();
-            foreach (var uniqueGameObject in uniqueGameObjects) {
+            foreach (var uniqueGameObject in uniqueGameObjects)
+            {
                 gameObjects.Add(uniqueGameObject);
             }
 
@@ -65,7 +95,8 @@ namespace SteamAudio
             var gameObjects = new List<GameObject>();
 
             var roots = scene.GetRootGameObjects();
-            foreach (var root in roots) {
+            foreach (var root in roots)
+            {
                 gameObjects.AddRange(GetGameObjectsForExport(root, true));
             }
 
@@ -81,11 +112,10 @@ namespace SteamAudio
         {
             // todo: report error if there's a dynamic object component between gameobject and material.
             var steamAudioMaterial = gameObject.GetComponentInParent<SteamAudioMaterial>();
-            if (steamAudioMaterial == null) {
+            if (steamAudioMaterial == null)
                 return SteamAudioManager.GetSingleton().materialValue;
-            } else {
+            else
                 return steamAudioMaterial.Value;
-            }
         }
 
         static Material MaterialFromSteamAudioMaterial(MaterialValue steamAudioMaterial)
@@ -101,13 +131,17 @@ namespace SteamAudio
             return material;
         }
 
-        static void GetMaterialMapping(GameObject[] gameObjects, ref Material[] materials, ref int[] materialIndices)
+        static void GetMaterialMapping(GameObject[] gameObjects, 
+                                       ref Material[] materials, 
+                                       ref int[] materialIndices)
         {
             var materialMapping = new Dictionary<MaterialValue, List<int>>();
 
-            for (var i = 0; i < gameObjects.Length; ++i) {
+            for (var i = 0; i < gameObjects.Length; ++i)
+            {
                 var material = GetMaterialForGameObject(gameObjects[i]);
-                if (!materialMapping.ContainsKey(material)) {
+                if (!materialMapping.ContainsKey(material))
+                {
                     materialMapping.Add(material, new List<int>());
                 }
                 materialMapping[material].Add(i);
@@ -117,9 +151,11 @@ namespace SteamAudio
             materialIndices = new int[gameObjects.Length];
 
             var index = 0;
-            foreach (var material in materialMapping.Keys) {
+            foreach (var material in materialMapping.Keys)
+            {
                 materials[index] = MaterialFromSteamAudioMaterial(material);
-                foreach (var gameObjectIndex in materialMapping[material]) {
+                foreach (var gameObjectIndex in materialMapping[material])
+                {
                     materialIndices[gameObjectIndex] = index;
                 }
                 ++index;
@@ -136,16 +172,20 @@ namespace SteamAudio
             var mesh = gameObject.GetComponent<MeshFilter>();
             var terrain = gameObject.GetComponent<Terrain>();
 
-            if (mesh != null) {
+            if (mesh != null)
+            {
                 return mesh.sharedMesh.vertexCount;
-            } else if (terrain != null) {
+            }
+            else if (terrain != null)
+            {
                 var terrainSimplificationLevel = GetTerrainSimplificationLevel(terrain);
 
                 var w = terrain.terrainData.heightmapWidth;
                 var h = terrain.terrainData.heightmapHeight;
-                var s = Mathf.Min(w - 1, Mathf.Min(h - 1, (int)Mathf.Pow(2.0f, terrainSimplificationLevel)));
+                var s = Mathf.Min(w - 1, Mathf.Min(h - 1, (int) Mathf.Pow(2.0f, terrainSimplificationLevel)));
 
-                if (s == 0) {
+                if (s == 0)
+                {
                     s = 1;
                 }
 
@@ -153,7 +193,9 @@ namespace SteamAudio
                 h = ((h - 1) / s) + 1;
 
                 return (w * h);
-            } else {
+            }
+            else
+            {
                 return 0;
             }
         }
@@ -163,16 +205,20 @@ namespace SteamAudio
             var mesh = gameObject.GetComponent<MeshFilter>();
             var terrain = gameObject.GetComponent<Terrain>();
 
-            if (mesh != null) {
+            if (mesh != null)
+            {
                 return mesh.sharedMesh.triangles.Length / 3;
-            } else if (terrain != null) {
+            }
+            else if (terrain != null)
+            {
                 var terrainSimplificationLevel = GetTerrainSimplificationLevel(terrain);
 
                 var w = terrain.terrainData.heightmapWidth;
                 var h = terrain.terrainData.heightmapHeight;
-                var s = Mathf.Min(w - 1, Mathf.Min(h - 1, (int)Mathf.Pow(2.0f, terrainSimplificationLevel)));
+                var s = Mathf.Min(w - 1, Mathf.Min(h - 1, (int) Mathf.Pow(2.0f, terrainSimplificationLevel)));
 
-                if (s == 0) {
+                if (s == 0)
+                {
                     s = 1;
                 }
 
@@ -180,32 +226,43 @@ namespace SteamAudio
                 h = ((h - 1) / s) + 1;
 
                 return ((w - 1) * (h - 1) * 2);
-            } else {
+            }
+            else
+            {
                 return 0;
             }
         }
 
-        static void GetVertices(GameObject gameObject, Vector3[] vertices, int offset, Transform transform)
+        static void GetVertices(GameObject gameObject, 
+                                Vector3[] vertices, 
+                                int offset, 
+                                Transform transform)
         {
             var mesh = gameObject.GetComponent<MeshFilter>();
             var terrain = gameObject.GetComponent<Terrain>();
 
-            if (mesh != null) {
+            if (mesh != null)
+            {
                 var vertexArray = mesh.sharedMesh.vertices;
-                for (var i = 0; i < vertexArray.Length; ++i) {
+                for (var i = 0; i < vertexArray.Length; ++i)
+                {
                     var transformedVertex = mesh.transform.TransformPoint(vertexArray[i]);
-                    if (transform != null) {
+                    if (transform != null)
+                    {
                         transformedVertex = transform.InverseTransformPoint(transformedVertex);
                     }
                     vertices[offset + i] = Common.ConvertVector(transformedVertex);
                 }
-            } else if (terrain != null) {
+            }
+            else if (terrain != null)
+            {
                 var terrainSimplificationLevel = GetTerrainSimplificationLevel(terrain);
 
                 var w = terrain.terrainData.heightmapWidth;
                 var h = terrain.terrainData.heightmapHeight;
-                var s = Mathf.Min(w - 1, Mathf.Min(h - 1, (int)Mathf.Pow(2.0f, terrainSimplificationLevel)));
-                if (s == 0) {
+                var s = Mathf.Min(w - 1, Mathf.Min(h - 1, (int) Mathf.Pow(2.0f, terrainSimplificationLevel)));
+                if (s == 0)
+                {
                     s = 1;
                 }
 
@@ -217,19 +274,22 @@ namespace SteamAudio
                     terrain.terrainData.heightmapHeight);
 
                 var index = 0;
-                for (var v = 0; v < terrain.terrainData.heightmapHeight; v += s) {
-                    for (var u = 0; u < terrain.terrainData.heightmapWidth; u += s) {
+                for (var v = 0; v < terrain.terrainData.heightmapHeight; v += s)
+                {
+                    for (var u = 0; u < terrain.terrainData.heightmapWidth; u += s)
+                    {
                         var height = heights[v, u];
 
-                        var x = position.x + (((float)u / terrain.terrainData.heightmapWidth) *
+                        var x = position.x + (((float) u / terrain.terrainData.heightmapWidth) *
                             terrain.terrainData.size.x);
                         var y = position.y + (height * terrain.terrainData.size.y);
-                        var z = position.z + (((float)v / terrain.terrainData.heightmapHeight) *
+                        var z = position.z + (((float) v / terrain.terrainData.heightmapHeight) *
                             terrain.terrainData.size.z);
 
                         var vertex = new UnityEngine.Vector3 { x = x, y = y, z = z };
                         var transformedVertex = terrain.transform.TransformPoint(vertex);
-                        if (transform != null) {
+                        if (transform != null)
+                        {
                             transformedVertex = transform.InverseTransformPoint(transformedVertex);
                         }
                         vertices[offset + index] = Common.ConvertVector(transformedVertex);
@@ -239,25 +299,32 @@ namespace SteamAudio
             }
         }
 
-        static void GetTriangles(GameObject gameObject, Triangle[] triangles, int offset)
+        static void GetTriangles(GameObject gameObject, 
+                                 Triangle[] triangles, 
+                                 int offset)
         {
             var mesh = gameObject.GetComponent<MeshFilter>();
             var terrain = gameObject.GetComponent<Terrain>();
 
-            if (mesh != null) {
+            if (mesh != null)
+            {
                 var triangleArray = mesh.sharedMesh.triangles;
-                for (var i = 0; i < triangleArray.Length / 3; ++i) {
+                for (var i = 0; i < triangleArray.Length / 3; ++i)
+                {
                     triangles[offset + i].index0 = triangleArray[3 * i + 0];
                     triangles[offset + i].index1 = triangleArray[3 * i + 1];
                     triangles[offset + i].index2 = triangleArray[3 * i + 2];
                 }
-            } else if (terrain != null) {
+            }
+            else if (terrain != null)
+            {
                 var terrainSimplificationLevel = GetTerrainSimplificationLevel(terrain);
 
                 var w = terrain.terrainData.heightmapWidth;
                 var h = terrain.terrainData.heightmapHeight;
-                var s = Mathf.Min(w - 1, Mathf.Min(h - 1, (int)Mathf.Pow(2.0f, terrainSimplificationLevel)));
-                if (s == 0) {
+                var s = Mathf.Min(w - 1, Mathf.Min(h - 1, (int) Mathf.Pow(2.0f, terrainSimplificationLevel)));
+                if (s == 0)
+                {
                     s = 1;
                 }
 
@@ -265,12 +332,15 @@ namespace SteamAudio
                 h = ((h - 1) / s) + 1;
 
                 var index = 0;
-                for (var v = 0; v < h - 1; ++v) {
-                    for (var u = 0; u < w - 1; ++u) {
+                for (var v = 0; v < h - 1; ++v)
+                {
+                    for (var u = 0; u < w - 1; ++u)
+                    {
                         var i0 = v * w + u;
                         var i1 = (v + 1) * w + u;
                         var i2 = v * w + (u + 1);
-                        triangles[offset + index] = new Triangle {
+                        triangles[offset + index] = new Triangle
+                        {
                             index0 = i0,
                             index1 = i1,
                             index2 = i2
@@ -279,7 +349,8 @@ namespace SteamAudio
                         i0 = v * w + (u + 1);
                         i1 = (v + 1) * w + u;
                         i2 = (v + 1) * w + (u + 1);
-                        triangles[offset + index + 1] = new Triangle {
+                        triangles[offset + index + 1] = new Triangle
+                        {
                             index0 = i0,
                             index1 = i1,
                             index2 = i2
@@ -291,24 +362,49 @@ namespace SteamAudio
             }
         }
 
-        static void FixupTriangleIndices(Triangle[] triangles, int startIndex, int endIndex, int indexOffset)
+        static void FixupTriangleIndices(Triangle[] triangles, 
+                                         int startIndex, 
+                                         int endIndex, 
+                                         int indexOffset)
         {
-            for (var i = startIndex; i < endIndex; ++i) {
+            for (var i = startIndex; i < endIndex; ++i)
+            {
                 triangles[i].index0 += indexOffset;
                 triangles[i].index1 += indexOffset;
                 triangles[i].index2 += indexOffset;
             }
         }
 
-        public static void GetGeometryAndMaterialBuffers(GameObject[] gameObjects, ref Vector3[] vertices,
-            ref Triangle[] triangles, ref int[] materialIndices, ref Material[] materials, bool isDynamic,
-            bool exportOBJ)
+        // Ideally, we want to use GameObject.GetComponentInParent<>() to find the SteamAudioDynamicObject attached to
+        // an ancestor of this GameObject. However, GetComponentInParent only returns "active" components, which in
+        // turn seem to be subject to the same behavior as activeInHierarchy (see above), so we have to manually walk
+        // the hierarchy upwards to find the first SteamAudioDynamicObject.
+        static SteamAudioDynamicObject GetDynamicObjectInParent(Transform obj)
+        {
+            if (obj == null)
+                return null;
+
+            var dynamicObject = obj.gameObject.GetComponent<SteamAudioDynamicObject>();
+            if (dynamicObject != null)
+                return dynamicObject;
+
+            return GetDynamicObjectInParent(obj.parent);
+        }
+
+        public static void GetGeometryAndMaterialBuffers(GameObject[] gameObjects, 
+                                                         ref Vector3[] vertices,
+                                                         ref Triangle[] triangles, 
+                                                         ref int[] materialIndices, 
+                                                         ref Material[] materials, 
+                                                         bool isDynamic,            
+                                                         bool exportOBJ)
         {
             var numVertices = new int[gameObjects.Length];
             var numTriangles = new int[gameObjects.Length];
             var totalNumVertices = 0;
             var totalNumTriangles = 0;
-            for (var i = 0; i < gameObjects.Length; ++i) {
+            for (var i = 0; i < gameObjects.Length; ++i)
+            {
                 numVertices[i] = GetNumVertices(gameObjects[i]);
                 numTriangles[i] = GetNumTriangles(gameObjects[i]);
                 totalNumVertices += numVertices[i];
@@ -323,22 +419,26 @@ namespace SteamAudio
             materialIndices = new int[totalNumTriangles];
 
             Transform transform = null;
-            if (isDynamic && !exportOBJ) {
+            if (isDynamic && !exportOBJ)
+            {
                 var dynamicObject = gameObjects[0].GetComponent<SteamAudioDynamicObject>();
-                if (dynamicObject == null) {
-                    dynamicObject = gameObjects[0].GetComponentInParent<SteamAudioDynamicObject>();
+                if (dynamicObject == null)
+                {
+                    dynamicObject = GetDynamicObjectInParent(gameObjects[0].transform);
                 }
                 transform = dynamicObject.transform;
             }
 
             var verticesOffset = 0;
             var trianglesOffset = 0;
-            for (var i = 0; i < gameObjects.Length; ++i) {
+            for (var i = 0; i < gameObjects.Length; ++i)
+            {
                 GetVertices(gameObjects[i], vertices, verticesOffset, transform);
                 GetTriangles(gameObjects[i], triangles, trianglesOffset);
                 FixupTriangleIndices(triangles, trianglesOffset, trianglesOffset + numTriangles[i], verticesOffset);
 
-                for (int j = 0; j < numTriangles[i]; ++j) {
+                for (int j = 0; j < numTriangles[i]; ++j)
+                {
                     materialIndices[trianglesOffset + j] = materialIndicesPerObject[i];
                 }
 

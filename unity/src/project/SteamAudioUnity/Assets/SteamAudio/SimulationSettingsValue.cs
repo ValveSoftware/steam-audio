@@ -77,8 +77,8 @@ namespace SteamAudio
         // Data members.
         //
 
-        [Range(4, 1024)]
-        public int OcclusionSamples = 128;
+        [Range(4, 256)]
+        public int MaxOcclusionSamples = 128;
 
         // Number of rays to trace for realtime simulation.
         [Range(512, 16384)]

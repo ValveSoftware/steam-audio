@@ -29,9 +29,13 @@ if (APPLE)
     add_bundle (audioplugin_phonon ${SRC_UNITYNATIVE})
 else ()
     add_library (audioplugin_phonon SHARED ${SRC_UNITYNATIVE})
-endif ()    
+endif ()
 
-if (MSVC)
+if (LINUX)
+    target_link_libraries (audioplugin_phonon dl pthread)
+endif ()
+
+if (WIN32)
     if (BUILDING_64BIT)
         add_custom_command (TARGET audioplugin_phonon POST_BUILD 
                             COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:audioplugin_phonon> ${CMAKE_HOME_DIRECTORY}/src/project/SteamAudioUnity/Assets/Plugins/x86_64/)
@@ -43,8 +47,16 @@ elseif (APPLE)
     add_custom_command (TARGET audioplugin_phonon POST_BUILD
                         COMMAND cp -Rv ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}-$<LOWER_CASE:$<CONFIG>>/audioplugin_phonon.bundle ${CMAKE_HOME_DIRECTORY}/src/project/SteamAudioUnity/Assets/Plugins/)
 elseif (ANDROID)
-    add_custom_command (TARGET audioplugin_phonon POST_BUILD
-                        COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:audioplugin_phonon> ${CMAKE_HOME_DIRECTORY}/src/project/SteamAudioUnity/Assets/Plugins/android/)
+    if (ANDROID_ARM)
+        add_custom_command (TARGET audioplugin_phonon POST_BUILD
+                            COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:audioplugin_phonon> ${CMAKE_HOME_DIRECTORY}/src/project/SteamAudioUnity/Assets/Plugins/android/libs/armv7)
+    elseif (ANDROID_ARM64)
+        add_custom_command (TARGET audioplugin_phonon POST_BUILD
+                            COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:audioplugin_phonon> ${CMAKE_HOME_DIRECTORY}/src/project/SteamAudioUnity/Assets/Plugins/android/libs/arm64)
+    elseif (ANDROID_X86)
+        add_custom_command (TARGET audioplugin_phonon POST_BUILD
+                            COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:audioplugin_phonon> ${CMAKE_HOME_DIRECTORY}/src/project/SteamAudioUnity/Assets/Plugins/android/libs/x86)
+    endif()
 else ()
     if (BUILDING_64BIT)
         add_custom_command (TARGET audioplugin_phonon POST_BUILD 

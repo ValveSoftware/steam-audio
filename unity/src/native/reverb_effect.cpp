@@ -288,13 +288,15 @@ public:
         {
             auto L = spatializerData->listenermatrix;
 
-            auto Lx = -(L[0] * L[12] + L[1] * L[13] + L[2] * L[14]);
-            auto Ly = -(L[4] * L[12] + L[5] * L[13] + L[6] * L[14]);
-            auto Lz = -(L[8] * L[12] + L[9] * L[13] + L[10] * L[14]);
+            auto listenerScaleSquared = 1.0f / (L[1] * L[1] + L[5] * L[5] + L[9] * L[9]);
+
+            auto Lx = -listenerScaleSquared * (L[0] * L[12] + L[1] * L[13] + L[2] * L[14]);
+            auto Ly = -listenerScaleSquared * (L[4] * L[12] + L[5] * L[13] + L[6] * L[14]);
+            auto Lz = -listenerScaleSquared * (L[8] * L[12] + L[9] * L[13] + L[10] * L[14]);
 
             listenerPosition = convertVector(Lx, Ly, Lz);
-            listenerUp = convertVector(L[1], L[5], L[9]);
-            listenerAhead = convertVector(L[2], L[6], L[10]);
+            listenerUp = unitVector(convertVector(L[1], L[5], L[9]));
+            listenerAhead = unitVector(convertVector(L[2], L[6], L[10]));
         }
         else
         {
@@ -309,6 +311,8 @@ public:
         reverbSource.ahead = listenerAhead;
         reverbSource.up = listenerAhead;
         reverbSource.directivity = IPLDirectivity{ 0.0f, 0.0f, nullptr, nullptr };
+        reverbSource.distanceAttenuationModel = IPLDistanceAttenuationModel{IPL_DISTANCEATTENUATION_DEFAULT};
+        reverbSource.airAbsorptionModel = IPLAirAbsorptionModel{IPL_AIRABSORPTION_DEFAULT};
         gApi.iplSetDryAudioForConvolutionEffect(mConvolutionEffect, reverbSource, inputAudio);
         gApi.iplGetWetAudioForConvolutionEffect(mConvolutionEffect, listenerPosition, listenerAhead,
             listenerUp, mIndirectEffectOutputBuffer);

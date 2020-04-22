@@ -223,8 +223,8 @@ namespace SteamAudio
             if (instancedScenes != null && instancedScenes.ContainsKey(assetFileName)) {
                 instancedScene = instancedScenes[assetFileName];
             } else {
-                status = PhononCore.iplLoadScene(context, simulationSettings, serializedData, serializedData.Length,
-                    computeDevice, null, ref instancedScene);
+                status = PhononCore.iplLoadScene(context, simulationSettings.sceneType, serializedData, 
+                    serializedData.Length, computeDevice, null, ref instancedScene);
                 if (status != Error.None) {
                     throw new Exception();
                 }

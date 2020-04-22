@@ -322,12 +322,12 @@ extern "C" {
      */
     typedef struct {
         IPLSceneType        sceneType;              /**< The ray tracer to use for simulation. \see IPLSceneType. */
-        IPLint32            numOcclusionSamples;    /**< The number of rays to trace from the listener to a source
-                                                         when simulating volumetric occlusion. Increasing this number
-                                                         increases the smoothness of occlusion transitions, but also
-                                                         increases CPU usage and memory consumption. Any positive
-                                                         integer may be specified, but typical values are in the range
-                                                         of 32 to 512. */
+        IPLint32            maxNumOcclusionSamples; /**< The maximum number of rays to trace from the listener to a 
+                                                         source when simulating volumetric occlusion. Increasing this 
+                                                         number allows increased smoothness of occlusion transitions, 
+                                                         but also increases memory consumption. Any positive integer 
+                                                         may be specified, but typical values are in the range of 32 to 
+                                                         512. */
         IPLint32            numRays;                /**< The number of rays to trace from the listener. Increasing this
                                                          number increases the accuracy of the simulation, but also
                                                          increases CPU usage. Any positive integer may be specified,
@@ -569,7 +569,7 @@ extern "C" {
      *  \param  context             The Context object used by the game engine.
      *  \param  computeDevice       Handle to a Compute Device object. Only required if using Radeon Rays for
      *                              ray tracing, may be \c NULL otherwise.
-     *  \param  simulationSettings  The settings to use for simulation.
+     *  \param  sceneType           The ray tracer to use for scene representation and simulation.
      *  \param  numMaterials        The number of materials that are used to describe the various surfaces in
      *                              the scene. Materials may not be added or removed once the Scene object is
      *                              created.
@@ -591,7 +591,7 @@ extern "C" {
      *  \return Status code indicating whether or not the operation succeeded.
      */
     IPLAPI IPLerror iplCreateScene(IPLhandle context, IPLhandle computeDevice, 
-                                   IPLSimulationSettings simulationSettings, IPLint32 numMaterials, 
+                                   IPLSceneType sceneType, IPLint32 numMaterials, 
                                    IPLMaterial* materials, IPLClosestHitCallback closestHitCallback, 
                                    IPLAnyHitCallback anyHitCallback, 
                                    IPLBatchedClosestHitCallback batchedClosestHitCallback,
@@ -655,11 +655,7 @@ extern "C" {
     /** Creates a Scene object based on data stored in a byte array.
      *
      *  \param  context             The Context object used by the game engine.
-     *  \param  simulationSettings  The settings to use for the simulation. This must exactly match the settings
-     *                              that were used to create the original Scene object that was passed to
-     *                              \c ::iplSaveScene, except for the \c sceneType and \c simulationType
-     *                              data members. This allows you to use the same file to create a Scene object
-     *                              that uses any ray tracer you prefer.
+     *  \param  sceneType           The ray tracer to use for scene representation and simulation.
      *  \param  data                Byte array containing the serialized representation of the Scene object. Must
      *                              not be \c NULL.
      *  \param  size                Size (in bytes) of the serialized data.
@@ -671,7 +667,7 @@ extern "C" {
      *
      *  \return Status code indicating whether or not the operation succeeded.
      */
-    IPLAPI IPLerror iplLoadScene(IPLhandle context, IPLSimulationSettings simulationSettings,
+    IPLAPI IPLerror iplLoadScene(IPLhandle context, IPLSceneType sceneType,
         IPLbyte* data, IPLint32 size, IPLhandle computeDevice, IPLLoadSceneProgressCallback progressCallback, IPLhandle* scene);
 
     /** Saves a Scene object to an OBJ file. An OBJ file is a widely-supported 3D model file format, that can be
@@ -1293,16 +1289,31 @@ extern "C" {
      *  \param  interpolation       The interpolation technique to use when rendering a point source at a location
      *                              that is not contained in the measured HRTF data used by Phonon. **If using a custom
      *                              HRTF database, this value must be set to IPL_HRTFINTERPOLATION_BILINEAR.**
+     *  \param  spatialBlend        Amount to blend inputAudio with spatialized audio. When set to 0, outputAudio is not
+     *                              spatialized at all and is close to inputAudio. If set to 1, outputAudio is fully
+     *                              spatialized.
      *  \param  outputAudio         Audio buffer that should contain the rendered audio data. The format of this
      *                              buffer must match the \c outputFormat parameter passed to
      *                              \c ::iplCreateBinauralEffect.
      */
-    IPLAPI IPLvoid iplApplyBinauralEffect(IPLhandle effect, IPLhandle binauralRenderer, IPLAudioBuffer inputAudio, IPLVector3 direction,
-        IPLHrtfInterpolation interpolation, IPLAudioBuffer outputAudio);
+    IPLAPI IPLvoid iplApplyBinauralEffect(IPLhandle effect,
+                                          IPLhandle binauralRenderer,
+                                          IPLAudioBuffer inputAudio,
+                                          IPLVector3 direction,
+                                          IPLHrtfInterpolation interpolation,
+                                          IPLfloat32 spatialBlend,
+                                          IPLAudioBuffer outputAudio);
 
-    IPLAPI IPLvoid iplApplyBinauralEffectWithParameters(IPLhandle effect, IPLhandle binauralRenderer, IPLAudioBuffer inputAudio,
-        IPLVector3 direction, IPLHrtfInterpolation interpolation, IPLAudioBuffer outputAudio, IPLfloat32* leftDelay,
-        IPLfloat32* rightDelay);
+    IPLAPI IPLvoid iplApplyBinauralEffectWithParameters(IPLhandle effect, 
+                                                        IPLhandle binauralRenderer,
+                                                        IPLAudioBuffer inputAudio,
+                                                        IPLVector3 direction,
+                                                        IPLHrtfInterpolation interpolation,
+                                                        IPLbool enableSpatialBlend,
+                                                        IPLfloat32 spatialBlend,
+                                                        IPLAudioBuffer outputAudio, 
+                                                        IPLfloat32* leftDelay,
+                                                        IPLfloat32* rightDelay);
 
     /** Resets any internal state maintained by an Object-Based Binaural Effect object. This is useful if the 
      *  Object-Based Binaural Effect object is going to be disabled/unused for a few frames; resetting the internal 
@@ -1608,6 +1619,112 @@ extern "C" {
      *  \{
      */
 
+    /** The kind of distance attenuation model to use when calculating frequency-independent distance attenuation
+     *  along a path from the source to the listener.
+     */
+    typedef enum {
+        IPL_DISTANCEATTENUATION_DEFAULT,            /**< The default distance attenuation model. Same as
+                                                         \c IPL_DISTANCEATTENUATION_INVERSEDISTANCE with
+                                                         \c minDistance = 1. */
+        IPL_DISTANCEATTENUATION_INVERSEDISTANCE,    /**< A physically-based inverse-distance attenuation
+                                                         model. The attenuated amplitude of a source is
+                                                         1 / max(\c distance, \c minDistance), where
+                                                         \c distance is the length of the path from the
+                                                         source to the listener, and \c minDistance is a
+                                                         parameter (see \c IPLDistanceAttenuationModel). */
+        IPL_DISTANCEATTENUATION_CALLBACK            /**< A user-specified distance attenuation model that uses
+                                                         a callback function whenever the distance attenuation
+                                                         value needs to be calculated. */
+    } IPLDistanceAttenuationModelType;
+
+    /** Callback function that is called when the distance attenuation needs to be evaluated for a given distance.
+        This function may be called many times when simulating indirect sound, and should not perform any long,
+        blocking operations.
+
+        \param  distance        Length of the path from the source to the listener.
+        \param  userData        User-specified data that was specified via \c IPLDistanceAttenuationModel.
+
+        \return Amplitude of the sound after distance attenuation. Typically between 0.0 and 1.0.
+     */
+    typedef float (*IPLDistanceAttenuationCallback)(float distance,
+                                                    void* userData);
+
+    /** A distance attenuation model for use when calculating frequency-independent distance attenuation along a
+     *  path from the source to the listener.
+     */
+    typedef struct {
+        IPLDistanceAttenuationModelType type;           /**< The type of distance attenuation model to use. */
+        IPLfloat32                      minDistance;    /**< The minimum distance parameter for the model. Only
+                                                             used if \c type is 
+                                                             \c IPL_DISTANCEATTENUATION_INVERSEDISTANCE. */
+        IPLDistanceAttenuationCallback  callback;       /**< The callback function to call when evaluating
+                                                             distance attenuation. Only used if \c type is
+                                                             \c IPL_DISTANCEATTENUATION_CALLBACK. */
+        void*                           userData;       /**< User-specified data that should be passed to the callback 
+                                                             function when it is called. Use this to pass in any 
+                                                             source-specific data that must be known to the 
+                                                             callback function. Only used if \c type is
+                                                             \c IPL_DISTANCEATTENUATION_CALLBACK. */
+        IPLbool                         dirty;          /**< Flag indicating whether \c userData has been changed.
+                                                             When \c type is set to \c IPL_DISTANCEATTENUATION_CALLBACK,
+                                                             Steam Audio can avoid repeating some calculations
+                                                             if \c dirty is set to \c false; these calculations are
+                                                             should only be carried out when \c userData changes,
+                                                             in which case \c dirty should be set to \c true. */
+    } IPLDistanceAttenuationModel;
+
+    /** The kind of air absorption model to use when calculating frequency-dependent air absorption along a path from 
+     *  the source to the listener.
+     */
+    typedef enum {
+        IPL_AIRABSORPTION_DEFAULT,      /**< The default air absorption model. Same as
+                                             \c IPL_AIRABSORPTION_EXPONENTIAL with \c coefficients = {0.0002, 0.0017, 
+                                             0.0182}. */
+        IPL_AIRABSORPTION_EXPONENTIAL,  /**< An exponential decay model for air absorption. The attenuated amplitude of
+                                             sound at distance r is exp(-kr), with k being a frequency-dependent
+                                             coefficient. */
+        IPL_AIRABSORPTION_CALLBACK      /**< A user-specified air absorption model that uses a callback function
+                                             whenever the air absorption value needs to be calculated. */
+    } IPLAirAbsorptionModelType;
+
+    /** Callback function that is called when the air absorption needs to be evaluated for a given distance. This
+     *  function may be called many times when simulated indirect sound, and should not perform any long, blocking
+     *  operations.
+     *
+     *  \param  distance        Length of the path from the source to the listener.
+     *  \param  band            Index of the frequency band for which to calculate air absorption.
+     *  \param  userData        User-specified data that was specified via \c IPLAirAbsorptionModel.
+     *
+     *  \return EQ coefficient for the given band after air absorption. Typically between 0.0 and 1.0.
+     */
+    typedef float (*IPLAirAbsorptionCallback)(float distance,
+                                              int band,
+                                              void* userData);
+
+    /** An air absorption model for use when calculating frequency-dependent air absorption along a path from the
+     *  source to the listener.
+     */
+    typedef struct {
+        IPLAirAbsorptionModelType   type;               /**< The type of air absorption model to use. */
+        IPLfloat32                  coefficients[3];    /**< The frequency-dependent exponential decay coefficients.
+                                                             Only used if \c type is 
+                                                             \c IPL_AIRABSORPTION_EXPONENTIAL. */
+        IPLAirAbsorptionCallback    callback;           /**< The callback function to call when evaluating
+                                                             air absorption. Only used if \c type is
+                                                             \c IPL_AIRABSORPTION_CALLBACK. */
+        void*                       userData;           /**< User-specified data that should be passed to the callback 
+                                                             function when it is called. Use this to pass in any 
+                                                             source-specific data that must be known to the 
+                                                             callback function. Only used if \c type is
+                                                             \c IPL_AIRABSORPTION_CALLBACK. */
+        IPLbool                     dirty;              /**< Flag indicating whether \c userData has been changed.
+                                                             When \c type is set to \c IPL_AIRABSORPTION_CALLBACK,
+                                                             Steam Audio can avoid repeating some calculations
+                                                             if \c dirty is set to \c false; these calculations are
+                                                             should only be carried out when \c userData changes,
+                                                             in which case \c dirty should be set to \c true. */
+    } IPLAirAbsorptionModel;
+
     /** The algorithm to use when checking for direct path occlusion. Phonon can check whether a direct sound path is
      *  occluded by scene geometry, and optionally how much of a sound source is occluded.
      */
@@ -1701,11 +1818,13 @@ extern "C" {
     /** Specifies information associated with a sound source.
      */
     typedef struct {
-        IPLVector3      position;       /**< World-space position of the source. */
-        IPLVector3      ahead;          /**< Unit vector pointing forwards from the source. */
-        IPLVector3      up;             /**< Unit vector pointing upwards from the source. */
-        IPLVector3      right;          /**< Unit vector pointing to the right of the source. */
-        IPLDirectivity  directivity;    /**< The source's directivity pattern. */
+        IPLVector3                  position;                   /**< World-space position of the source. */
+        IPLVector3                  ahead;                      /**< Unit vector pointing forwards from the source. */
+        IPLVector3                  up;                         /**< Unit vector pointing upwards from the source. */
+        IPLVector3                  right;                      /**< Unit vector pointing to the right of the source. */
+        IPLDirectivity              directivity;                /**< The source's directivity pattern. */
+        IPLDistanceAttenuationModel distanceAttenuationModel;   /**< The source's distance attenuation model. */
+        IPLAirAbsorptionModel       airAbsorptionModel;         /**< The source's air absorption model. */
     } IPLSource;
 
     /** Calculates direct sound path parameters for a single source. It is up to the audio engine to perform audio
@@ -1718,14 +1837,24 @@ extern "C" {
      *  \param  source              Position, orientation, and directivity of the source.
      *  \param  sourceRadius        Radius of the sphere defined around the source, for use with
      *                              \c ::IPL_DIRECTOCCLUSION_VOLUMETRIC only.
+     *  \param  numSamples          Number of rays to trace, for use with \c ::IPL_DIRECTOCCLUSION_VOLUMETRIC only.
+     *                              Increasing this value results in smoother occlusion, but also increases CPU cost.
+     *                              This value must be a positive integer less than the \c maxNumOcclusionSamples value
+     *                              of the \c IPLSimulationSettings struct passed to \c iplCreateEnvironment.
      *  \param  occlusionMode       Confuguring the occlusion mode for direct path.
      *  \param  occlusionMethod     Algorithm to use for checking for direct path occlusion.
      *
      *  \return Parameters of the direct path from the source to the listener.
      */
-    IPLAPI IPLDirectSoundPath iplGetDirectSoundPath(IPLhandle environment, IPLVector3 listenerPosition,
-        IPLVector3 listenerAhead, IPLVector3 listenerUp, IPLSource source, IPLfloat32 sourceRadius,
-        IPLDirectOcclusionMode occlusionMode, IPLDirectOcclusionMethod occlusionMethod);
+    IPLAPI IPLDirectSoundPath iplGetDirectSoundPath(IPLhandle environment, 
+                                                    IPLVector3 listenerPosition,
+                                                    IPLVector3 listenerAhead, 
+                                                    IPLVector3 listenerUp, 
+                                                    IPLSource source, 
+                                                    IPLfloat32 sourceRadius,
+                                                    IPLint32 numSamples,
+                                                    IPLDirectOcclusionMode occlusionMode,
+                                                    IPLDirectOcclusionMethod occlusionMethod);
 
     /** \} */
 
@@ -1753,19 +1882,21 @@ extern "C" {
 
     /** Creates a Direct Sound Effect object.
      *
-     *  \param  renderer            Handle to an Environmental Renderer object.
      *  \param  inputFormat         The format of the audio buffers that will be passed as input to this effect. All
      *                              subsequent calls to \c ::iplApplyDirectSoundEffect for this effect object must use
      *                              \c IPLAudioBuffer objects with the same format as specified here.
      *  \param  outputFormat        The format of the audio buffers which will be used to retrieve the output from this
      *                              effect. All subsequent calls to \c ::iplApplyDirectSoundEffect for this effect 
      *                              object must use \c IPLAudioBuffer objects with the same format as specified here.
+     *  \param  renderingSettings   An \c IPLRenderingSettings object describing the audio pipeline's DSP processing
+     *                              parameters. These properties must remain constant throughout the lifetime of your
+     *                              application.
      *  \param  effect              [out] Handle to the created Direct Sound Effect object.
      *
      *  \return Status code indicating whether or not the operation succeeded.
      */
-    IPLAPI IPLerror iplCreateDirectSoundEffect(IPLhandle renderer, IPLAudioFormat inputFormat, 
-        IPLAudioFormat outputFormat, IPLhandle* effect);
+    IPLAPI IPLerror iplCreateDirectSoundEffect(IPLAudioFormat inputFormat, IPLAudioFormat outputFormat, 
+        IPLRenderingSettings renderingSettings, IPLhandle* effect);
 
     /** Destroys a Direct Sound Effect object.
      *
@@ -2166,6 +2297,7 @@ extern "C" {
                                          This is suited for all kinds of spaces, and for reverb as well as
                                          source-to-listener propagation. However, it consumes significantly more
                                          memory per probe. */
+        IPLfloat32 irDurationForBake; /**< Must be set to the same value as \c irDuration in \c IPLSimulationSettings. */
     } IPLBakingSettings;
 
     /** A callback that is called to update the application on the progress of the \c ::iplBakeReverb or

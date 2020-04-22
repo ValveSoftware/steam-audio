@@ -50,6 +50,11 @@ namespace SteamAudio
             audioEngineSource.UpdateParameters(this);
         }
 
+        void OnEnable()
+        {
+            audioEngineSource.UpdateParameters(this);
+        }
+
         void OnDestroy()
         {
             if (managerData != null)
@@ -82,26 +87,21 @@ namespace SteamAudio
             var listenerAhead = Common.ConvertVector(listener.transform.forward);
             var listenerUp = Common.ConvertVector(listener.transform.up);
 
-            var sourcePosition = Common.ConvertVector(transform.position);
-            var sourceAhead = Common.ConvertVector(transform.forward);
-            var sourceUp = Common.ConvertVector(transform.up);
-            var sourceRight = Common.ConvertVector(transform.right);
+            var source = new Source();
+            source.position = Common.ConvertVector(transform.position);
+            source.ahead = Common.ConvertVector(transform.forward);
+            source.up = Common.ConvertVector(transform.up);
+            source.right = Common.ConvertVector(transform.right);
+            source.directivity = new Directivity();
+            source.directivity.dipoleWeight = dipoleWeight;
+            source.directivity.dipolePower = dipolePower;
+            source.directivity.callback = IntPtr.Zero;
+            source.distanceAttenuationModel = distanceAttenuationModel;
+            source.airAbsorptionModel = airAbsorptionModel;
 
-            var source = new Source {
-                position = sourcePosition,
-                ahead = sourceAhead,
-                up = sourceUp,
-                right = sourceRight,
-                directivity = new Directivity {
-                    dipoleWeight = this.dipoleWeight,
-                    dipolePower = this.dipolePower,
-                    callback = IntPtr.Zero,
-                    userData = IntPtr.Zero
-                }
-            };
-
-            directPath = PhononCore.iplGetDirectSoundPath(environment, listenerPosition, listenerAhead, listenerUp, 
-                source, sourceRadius, occlusionMode, occlusionMethod);
+            directPath = PhononCore.iplGetDirectSoundPath(environment, listenerPosition, 
+                listenerAhead, listenerUp, source, sourceRadius, occlusionSamples,
+                occlusionMode, occlusionMethod);
 
             audioEngineSource.UpdateParameters(this);
 
@@ -331,57 +331,45 @@ namespace SteamAudio
             deformedSphereMesh.vertices = deformedSphereVertices;
         }
 
-        public bool                 directBinaural      = true;
-        public HRTFInterpolation    interpolation       = HRTFInterpolation.Nearest;
-        public bool                 physicsBasedAttenuation = false;
-        public bool                 airAbsorption       = false;
-        [Range(0.0f, 1.0f)]
-        public float                dipoleWeight        = 0.0f;
-        [Range(0.0f, 4.0f)]
-        public float                dipolePower         = 0.0f;
-        public OcclusionMode        occlusionMode       = OcclusionMode.NoOcclusion;
-        public OcclusionMethod      occlusionMethod     = OcclusionMethod.Raycast;
-        [Range(0.1f, 10.0f)]
-        public float                sourceRadius        = 1.0f;
-        [Range(0.0f, 1.0f)]
-        public float                directMixLevel      = 1.0f;
+        public bool directBinaural = true;
+        public HRTFInterpolation interpolation = HRTFInterpolation.Nearest;
+        public bool physicsBasedAttenuation = false;
+        public DistanceAttenuationModel distanceAttenuationModel = new DistanceAttenuationModel();
+        public bool airAbsorption = false;
+        public AirAbsorptionModel airAbsorptionModel = new AirAbsorptionModel();
+        [Range(0.0f, 1.0f)] public float dipoleWeight = 0.0f;
+        [Range(0.0f, 4.0f)] public float dipolePower = 0.0f;
+        public OcclusionMode occlusionMode = OcclusionMode.NoOcclusion;
+        public OcclusionMethod occlusionMethod = OcclusionMethod.Raycast;
+        [Range(0.1f, 10.0f)] public float sourceRadius = 1.0f;
+        [Range(2, 256)] public int occlusionSamples = 16;
+        [Range(0.0f, 1.0f)] public float directMixLevel = 1.0f;
+        public bool reflections = false;
+        public bool indirectBinaural = false;
+        public bool physicsBasedAttenuationForIndirect = true;
+        [Range(0.0f, 10.0f)] public float indirectMixLevel = 1.0f;
+        public SourceSimulationType simulationType = SourceSimulationType.Realtime;
+        public string uniqueIdentifier = "";
+        public bool avoidSilenceDuringInit = false;
+        public bool overrideHRTFIndex = false;
+        public int hrtfIndex = 0;
+        public DirectSoundPath directPath = new DirectSoundPath();
+        [Range(1f, 1024f)] public float bakingRadius = 16f;
+        public bool useAllProbeBoxes = false;
+        public SteamAudioProbeBox[] probeBoxes = null;
+        public Baker baker = new Baker();
+        public List<string> bakedProbeNames = new List<string>();
+        public List<int> bakedProbeDataSizes = new List<int>();
+        public int bakedDataSize = 0;
+        public bool bakedStatsFoldout = false;
+        public bool bakeToggle = false;
+        public BakedDataIdentifier bakedDataIdentifier;
 
-        public bool                 reflections         = false;
-        public bool                 indirectBinaural    = false;
-        [Range(0.0f, 10.0f)]
-        public float                indirectMixLevel    = 1.0f;
-        public SourceSimulationType simulationType      = SourceSimulationType.Realtime;
-
-        public string               uniqueIdentifier    = "";
-
-        public bool                 avoidSilenceDuringInit  = false;
-
-        public bool                 overrideHRTFIndex   = false;
-        public int                  hrtfIndex           = 0;
-
-        public DirectSoundPath      directPath = new DirectSoundPath();
-
-        [Range(1f, 1024f)]
-        public float                bakingRadius        = 16f;
-        public bool                 useAllProbeBoxes    = false;
-        public SteamAudioProbeBox[] probeBoxes          = null;
-        public Baker                baker               = new Baker();
-
-        public List<string>         bakedProbeNames     = new List<string>();
-        public List<int>            bakedProbeDataSizes = new List<int>();
-        public int                  bakedDataSize       = 0;
-        public bool                 bakedStatsFoldout   = false;
-        public bool                 bakeToggle          = false;
-
-        public BakedDataIdentifier  bakedDataIdentifier;
-
-        ManagerData                 managerData         = null;
-        AudioEngine                 audioEngine         = AudioEngine.UnityNative;
-
-        AudioEngineSource           audioEngineSource   = null;
-
-        UnityEngine.Vector3[]       sphereVertices          = null;
-        UnityEngine.Vector3[]       deformedSphereVertices  = null;
-        Mesh                        deformedSphereMesh      = null;
+        ManagerData managerData = null;
+        AudioEngine audioEngine = AudioEngine.UnityNative;
+        AudioEngineSource audioEngineSource = null;
+        UnityEngine.Vector3[] sphereVertices = null;
+        UnityEngine.Vector3[] deformedSphereVertices = null;
+        Mesh deformedSphereMesh = null;
     }
 }

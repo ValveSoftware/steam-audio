@@ -53,8 +53,8 @@ namespace SteamAudio
         //
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        public delegate void ClosestHitCallback([MarshalAs(UnmanagedType.LPArray, SizeConst = 3)] float[] origin,
-                                                [MarshalAs(UnmanagedType.LPArray, SizeConst = 3)] float[] direction, 
+        public delegate void ClosestHitCallback(IntPtr origin,
+                                                IntPtr direction, 
                                                 float minDistance, 
                                                 float maxDistance, 
                                                 [In, Out] ref float hitDistance, 
@@ -63,8 +63,8 @@ namespace SteamAudio
                                                 IntPtr userData);
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        public delegate void AnyHitCallback([MarshalAs(UnmanagedType.LPArray, SizeConst = 3)] float[] origin, 
-                                            [MarshalAs(UnmanagedType.LPArray, SizeConst = 3)] float[] direction, 
+        public delegate void AnyHitCallback(IntPtr origin, 
+                                            IntPtr direction, 
                                             float minDistance, 
                                             float maxDistance, 
                                             [In, Out] ref int hitExists, 
@@ -81,7 +81,7 @@ namespace SteamAudio
 
         [DllImport("phonon")]
         public static extern Error iplCreateScene(IntPtr context, IntPtr computeDevice,
-            SimulationSettings simulationSettings, int numMaterials, Material[] materials,
+            SceneType sceneType, int numMaterials, Material[] materials,
             ClosestHitCallback closestHitCallback, AnyHitCallback anyHitCallback, 
             BatchedClosestHitCallback batchedClosestHitCallback, BatchedAnyHitCallback batchedAnyHitCallback, 
             IntPtr userData, [In, Out] ref IntPtr scene);
@@ -100,7 +100,9 @@ namespace SteamAudio
         public static extern int iplSaveScene(IntPtr scene, [In, Out] byte[] data);
 
         [DllImport("phonon", CallingConvention = CallingConvention.Cdecl)]
-        public static extern Error iplLoadScene(IntPtr globalContext, SimulationSettings simulationSettings, byte[] data, int size, IntPtr computeDevice, LoadSceneProgressCallback progressCallback, [In, Out] ref IntPtr scene);
+        public static extern Error iplLoadScene(IntPtr globalContext, 
+            SceneType sceneType, byte[] data, int size, IntPtr computeDevice, 
+            LoadSceneProgressCallback progressCallback, [In, Out] ref IntPtr scene);
 
         [DllImport("phonon")]
         public static extern void iplSaveSceneAsObj(IntPtr scene, byte[] fileName);
@@ -174,76 +176,6 @@ namespace SteamAudio
         public static extern Vector3 iplCalculateRelativeDirection(Vector3 sourcePosition, Vector3 listenerPosition, Vector3 listenerAhead, Vector3 listenerUp);
 
         //
-        // Functions for HRTF based 3D audio processing.
-        //
-
-        [DllImport("phonon")]
-        public static extern Error iplCreateBinauralRenderer(IntPtr globalContext, RenderingSettings renderingSettings, HRTFParams hrtfParams, [In, Out] ref IntPtr renderer);
-
-        [DllImport("phonon")]
-        public static extern void iplDestroyBinauralRenderer([In, Out] ref IntPtr renderer);
-
-        [DllImport("phonon")]
-        public static extern Error iplCreatePanningEffect(IntPtr renderer, AudioFormat inputFormat, AudioFormat outputFormat, [In, Out] ref IntPtr effect);
-
-        [DllImport("phonon")]
-        public static extern void iplDestroyPanningEffect([In, Out] ref IntPtr effect);
-
-        [DllImport("phonon")]
-        public static extern void iplApplyPanningEffect(IntPtr effect, IntPtr binauralRenderer, AudioBuffer inputAudio, Vector3 direction, AudioBuffer outputAudio);
-
-        [DllImport("phonon")]
-        public static extern void iplFlushPanningEffect(IntPtr effect);
-
-        [DllImport("phonon")]
-        public static extern Error iplCreateBinauralEffect(IntPtr renderer, AudioFormat inputFormat, AudioFormat outputFormat, [In, Out] ref IntPtr effect);
-
-        [DllImport("phonon")]
-        public static extern void iplDestroyBinauralEffect([In, Out] ref IntPtr effect);
-
-        [DllImport("phonon")]
-        public static extern void iplApplyBinauralEffect(IntPtr effect, IntPtr binauralRenderer, AudioBuffer inputAudio, Vector3 direction, HRTFInterpolation interpolation, AudioBuffer outputAudio);
-
-        [DllImport("phonon")]
-        public static extern void iplFlushBinauralEffect(IntPtr effect);
-
-        [DllImport("phonon")]
-        public static extern Error iplCreateVirtualSurroundEffect(IntPtr renderer, AudioFormat inputFormat, AudioFormat outputFormat, [In, Out] ref IntPtr effect);
-
-        [DllImport("phonon")]
-        public static extern void iplDestroyVirtualSurroundEffect([In, Out] ref IntPtr effect);
-
-        [DllImport("phonon")]
-        public static extern void iplApplyVirtualSurroundEffect(IntPtr effect, IntPtr binauralRenderer, AudioBuffer inputAudio, AudioBuffer outputAudio);
-
-        [DllImport("phonon")]
-        public static extern void iplFlushVirtualSurroundEffect(IntPtr effect);
-
-        [DllImport("phonon")]
-        public static extern Error iplCreateAmbisonicsPanningEffect(IntPtr renderer, AudioFormat inputFormat, AudioFormat outputFormat, [In, Out] ref IntPtr effect);
-
-        [DllImport("phonon")]
-        public static extern void iplDestroyAmbisonicsPanningEffect([In, Out] ref IntPtr effect);
-
-        [DllImport("phonon")]
-        public static extern void iplApplyAmbisonicsPanningEffect(IntPtr effect, IntPtr binauralRenderer, AudioBuffer inputAudio, AudioBuffer outputAudio);
-
-        [DllImport("phonon")]
-        public static extern void iplFlushAmbisonicsPanningEffect(IntPtr effect);
-
-        [DllImport("phonon")]
-        public static extern Error iplCreateAmbisonicsBinauralEffect(IntPtr renderer, AudioFormat inputFormat, AudioFormat outputFormat, [In, Out] ref IntPtr effect);
-
-        [DllImport("phonon")]
-        public static extern void iplDestroyAmbisonicsBinauralEffect([In, Out] ref IntPtr effect);
-
-        [DllImport("phonon")]
-        public static extern void iplApplyAmbisonicsBinauralEffect(IntPtr effect, IntPtr binauralRenderer, AudioBuffer inputAudio, AudioBuffer outputAudio);
-
-        [DllImport("phonon")]
-        public static extern void iplFlushAmbisonicsBinauralEffect(IntPtr effect);
-
-        //
         // Functions for Environment renderer.
         //
 
@@ -266,24 +198,9 @@ namespace SteamAudio
                                                                    Vector3 listenerUp, 
                                                                    Source source,
                                                                    float sourceRadius, 
+                                                                   int numSamples,
                                                                    OcclusionMode occlusionMode, 
                                                                    OcclusionMethod occlusionMethod);
-
-        //
-        // Direct Sound Effect.
-        //
-
-        [DllImport("phonon")]
-        public static extern Error iplCreateDirectSoundEffect(IntPtr renderer, AudioFormat inputFormat, AudioFormat outputFormat, [In, Out] ref IntPtr effect);
-
-        [DllImport("phonon")]
-        public static extern void iplDestroyDirectSoundEffect([In, Out] ref IntPtr effect);
-
-        [DllImport("phonon")]
-        public static extern void iplApplyDirectSoundEffect(IntPtr effect, AudioBuffer inputAudio, DirectSoundPath directSoundPath, DirectSoundEffectOptions directSoundEffectOptions, AudioBuffer outputAudio);
-
-        [DllImport("phonon")]
-        public static extern void iplFlushDirectSoundEffect(IntPtr effect);
 
         //
         // Convolution Effect.

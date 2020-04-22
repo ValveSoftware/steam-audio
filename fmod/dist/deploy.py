@@ -41,6 +41,9 @@ def deploy_integration_fmod(configuration):
     #os.makedirs(deploy_path + "\\steamaudio_fmod\\bin\\fmod\\linux\\x64")
     os.makedirs(deploy_path + "\\steamaudio_fmod\\bin\\fmod\\osx")
     #os.makedirs(deploy_path + "\\steamaudio_fmod\\bin\\fmod\\android")
+    #os.makedirs(deploy_path + "\\steamaudio_fmod\\bin\\fmod\\android\\armv7")
+    #os.makedirs(deploy_path + "\\steamaudio_fmod\\bin\\fmod\\android\\arm64")
+    #os.makedirs(deploy_path + "\\steamaudio_fmod\\bin\\fmod\\android\\x86")
     os.makedirs(deploy_path + "\\steamaudio_fmod\\bin\\unity")
     os.makedirs(deploy_path + "\\steamaudio_fmod\\doc")
 
@@ -54,7 +57,11 @@ def deploy_integration_fmod(configuration):
     # copy(os.path.join(deploy_path, "..\\..\\lib\\linux-x64\\libphonon.so"),
     #      os.path.join(deploy_path, ".\\steamaudio_fmod\\bin\\fmod\\linux\\x64"))
     # copy(os.path.join(deploy_path, "..\\..\\lib\\android-armv7\\libphonon.so"),
-    #      os.path.join(deploy_path, ".\\steamaudio_fmod\\bin\\fmod\\android"))
+    #      os.path.join(deploy_path, ".\\steamaudio_fmod\\bin\\fmod\\android\\armv7"))
+    # copy(os.path.join(deploy_path, "..\\..\\lib\\android-arm64\\libphonon.so"),
+    #      os.path.join(deploy_path, ".\\steamaudio_fmod\\bin\\fmod\\android\\arm64"))
+    # copy(os.path.join(deploy_path, "..\\..\\lib\\android-x86\\libphonon.so"),
+    #      os.path.join(deploy_path, ".\\steamaudio_fmod\\bin\\fmod\\android\\x86"))
     shutil.copytree(os.path.join(deploy_path, "..\\..\\lib\\osx\\phonon.bundle"),
            os.path.join(deploy_path, ".\\steamaudio_fmod\\bin\\fmod\\osx\\phonon.bundle"))
 
@@ -68,7 +75,11 @@ def deploy_integration_fmod(configuration):
     # copy(os.path.join(deploy_path, "..\\..\\bin\\linux-x64-" + configuration + "\\libphonon_fmod.so"),
     #      os.path.join(deploy_path, ".\\steamaudio_fmod\\bin\\fmod\\linux\\x64"))
     # copy(os.path.join(deploy_path, "..\\..\\bin\\android-armv7-" + configuration + "\\libphonon_fmod.so"),
-    #      os.path.join(deploy_path, ".\\steamaudio_fmod\\bin\\fmod\\android"))
+    #      os.path.join(deploy_path, ".\\steamaudio_fmod\\bin\\fmod\\android\\armv7"))
+    # copy(os.path.join(deploy_path, "..\\..\\bin\\android-arm64-" + configuration + "\\libphonon_fmod.so"),
+    #      os.path.join(deploy_path, ".\\steamaudio_fmod\\bin\\fmod\\android\\arm64"))
+    # copy(os.path.join(deploy_path, "..\\..\\bin\\android-x86-" + configuration + "\\libphonon_fmod.so"),
+    #      os.path.join(deploy_path, ".\\steamaudio_fmod\\bin\\fmod\\android\\x86"))
     copy(deploy_path + "/../../bin/osx-" + configuration + "/libphonon_fmod.dylib",
          deploy_path + "/steamaudio_fmod/bin/fmod/osx/libphonon_fmod.dylib")
     

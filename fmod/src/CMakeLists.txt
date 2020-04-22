@@ -28,3 +28,7 @@ if (APPLE)
 endif()
 
 add_library(phonon_fmod SHARED ${SRC_FMOD})
+
+if (LINUX)
+    target_link_libraries (phonon_fmod dl pthread)
+endif ()

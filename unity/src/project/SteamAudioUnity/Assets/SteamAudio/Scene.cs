@@ -13,17 +13,21 @@ namespace SteamAudio
 {
     public class Scene
     {
+        static IntPtr materialBuffer = IntPtr.Zero;
+        static UnityEngine.SceneManagement.Scene s_activeScene;
+        static SteamAudioManager s_steamAudioManager = null;
+
         public IntPtr GetScene()
         {
             return scene;
         }
 
-        public Error Export(ComputeDevice computeDevice, SimulationSettings simulationSettings, 
-            MaterialValue defaultMaterial, IntPtr globalContext, bool exportOBJ = false)
+        public Error Export(ComputeDevice computeDevice, MaterialValue defaultMaterial, 
+            IntPtr globalContext, bool exportOBJ = false)
         {
             var error = Error.None;
 
-            simulationSettings.sceneType = SceneType.Phonon;    // Scene type should always be Phonon when exporting.
+            SceneType sceneType = SceneType.Phonon;    // Scene type should always be Phonon when exporting.
 
             var objects = SceneExporter.GetStaticGameObjectsForExport(SceneManager.GetActiveScene());
 
@@ -41,7 +45,7 @@ namespace SteamAudio
                     "contain Mesh or Terrain geometry.");
             }
 
-            error = PhononCore.iplCreateScene(globalContext, computeDevice.GetDevice(), simulationSettings,
+            error = PhononCore.iplCreateScene(globalContext, computeDevice.GetDevice(), sceneType,
                 materials.Length, materials, null, null, null, null, IntPtr.Zero, ref scene);
             if (error != Error.None)
             {
@@ -122,9 +126,10 @@ namespace SteamAudio
                     materialBuffer = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(Material)));
                 }
 
-                var error = PhononCore.iplCreateScene(globalContext, computeDevice.GetDevice(), simulationSettings, 0, 
-                                                      null, RayTracer.ClosestHit, RayTracer.AnyHit, null, null, 
-                                                      IntPtr.Zero, ref scene);
+                var error = PhononCore.iplCreateScene(globalContext, computeDevice.GetDevice(), 
+                    simulationSettings.sceneType, 0, null, RayTracer.ClosestHit, RayTracer.AnyHit, null, null, 
+                    IntPtr.Zero, ref scene);
+
                 return error;
             } else {
                 string fileName = SceneFileName();
@@ -134,8 +139,8 @@ namespace SteamAudio
 
                 byte[] data = File.ReadAllBytes(fileName);
 
-                var error = PhononCore.iplLoadScene(globalContext, simulationSettings, data, data.Length,
-                                                    computeDevice.GetDevice(), null, ref scene);
+                var error = PhononCore.iplLoadScene(globalContext, simulationSettings.sceneType, data, data.Length,
+                    computeDevice.GetDevice(), null, ref scene);
 
                 return error;
             }
@@ -152,8 +157,6 @@ namespace SteamAudio
                 PhononCore.iplDestroyScene(ref scene);
         }
 
-        static IntPtr materialBuffer = IntPtr.Zero;
-
         static Material CopyMaterial(MaterialValue materialValue)
         {
             var material = new Material();
@@ -169,12 +172,19 @@ namespace SteamAudio
 
         public static LayerMask GetSteamAudioLayerMask()
         {
-            var steamAudioManager = GameObject.FindObjectOfType<SteamAudioManager>();
-            if (steamAudioManager == null) {
+            UnityEngine.SceneManagement.Scene activeScene = SceneManager.GetActiveScene();
+            if (s_activeScene != activeScene) 
+            {
+                s_activeScene = activeScene;
+                s_steamAudioManager = GameObject.FindObjectOfType<SteamAudioManager>();
+            }
+            
+            if (s_steamAudioManager == null)
+            {
                 return new LayerMask();
             }
 
-            return steamAudioManager.layerMask;
+            return s_steamAudioManager.layerMask;
         }
 
         public static bool HasSteamAudioGeometry(Transform obj)

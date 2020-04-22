@@ -8,7 +8,7 @@
 
 #define STEAMAUDIO_VERSION_MAJOR 2
 #define STEAMAUDIO_VERSION_MINOR 0
-#define STEAMAUDIO_VERSION_PATCH 17
+#define STEAMAUDIO_VERSION_PATCH 18
 #define STEAMAUDIO_VERSION       ((unsigned int(STEAMAUDIO_VERSION_MAJOR) << 16) | \
                                   (unsigned int(STEAMAUDIO_VERSION_MINOR) << 8) |  \
                                   (unsigned int(STEAMAUDIO_VERSION_PATCH)))

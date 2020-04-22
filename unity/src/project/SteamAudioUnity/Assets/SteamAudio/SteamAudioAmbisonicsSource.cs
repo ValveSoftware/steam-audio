@@ -34,6 +34,11 @@ namespace SteamAudio
             audioEngineAmbisonicsSource.UpdateParameters(this);
         }
 
+        void OnEnable()
+        {
+            audioEngineAmbisonicsSource.UpdateParameters(this);
+        }
+
         void OnDestroy()
         {
             if (managerData != null)

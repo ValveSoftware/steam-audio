@@ -75,6 +75,7 @@ typedef IPLvoid(*IPLApplyBinauralEffect)(IPLhandle effect,
                                          IPLAudioBuffer inputAudio,
                                          IPLVector3 direction,    
                                          IPLHrtfInterpolation interpolation, 
+                                         IPLfloat32 spatialBlend,
                                          IPLAudioBuffer outputAudio);
 
 typedef IPLvoid(*IPLApplyBinauralEffectWithParameters)(IPLhandle effect,
@@ -82,6 +83,8 @@ typedef IPLvoid(*IPLApplyBinauralEffectWithParameters)(IPLhandle effect,
                                                        IPLAudioBuffer inputAudio,
                                                        IPLVector3 direction,
                                                        IPLHrtfInterpolation interpolation,
+                                                       IPLbool enableSpatialBlend,
+                                                       IPLfloat32 spatialBlend,
                                                        IPLAudioBuffer outputAudio,
                                                        IPLfloat32* leftDelay,
                                                        IPLfloat32* rightDelay);
@@ -137,9 +140,9 @@ typedef IPLDirectSoundPath(*IPLGetDirectSoundPath)(IPLhandle renderer,
                                                    IPLDirectOcclusionMode occlusionMode, 
                                                    IPLDirectOcclusionMethod occlusionMethod);
 
-typedef IPLerror(*IPLCreateDirectSoundEffect)(IPLhandle renderer, 
-                                              IPLAudioFormat inputFormat,    
+typedef IPLerror(*IPLCreateDirectSoundEffect)(IPLAudioFormat inputFormat,    
                                               IPLAudioFormat outputFormat, 
+                                              IPLRenderingSettings renderingSettings,
                                               IPLhandle* effect);
 
 typedef IPLvoid(*IPLDestroyDirectSoundEffect)(IPLhandle* effect);

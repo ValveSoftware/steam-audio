@@ -47,9 +47,9 @@ def get_tool_paths(host_system):
 
     # On Windows, configure the Android SDK and NDK toolchains.
     if host_system == "Windows":
-        path_gcc        = "C:/Android/sdk/ndk-toolchain-armv7-clang/bin/"
+        path_gcc        = "C:/Android/sdk/standalone-toolchains/android-armv7/bin/"
         path_make       = "C:/Android/sdk/ndk-bundle/prebuilt/windows-x86_64/bin/"
-        path_sysroot    = "C:/Android/sdk/ndk-toolchain-armv7-clang/sysroot/"
+        path_sysroot    = "C:/Android/sdk/standalone-toolchains/android-armv7/sysroot/"
         path_android    = "C:/Android/sdk/tools/"
         path_ant        = "C:/Android/ant/bin/"
 
@@ -70,8 +70,8 @@ def parse_command_line(host_system):
 
     parser = argparse.ArgumentParser()
     parser.add_argument('-p', '--platform', help = "Target operating system.", choices = ['windows', 'osx', 'linux', 'android'], type = str.lower)
-    parser.add_argument('-t', '--toolchain', help = argparse.SUPPRESS, choices = ['vs2013', 'vs2015'], type = str.lower)
-    parser.add_argument('-a', '--architecture', help = "CPU architecture.", choices = ['x86', 'x64', 'armv7'], type = str.lower)
+    parser.add_argument('-t', '--toolchain', help = argparse.SUPPRESS, choices = ['vs2013', 'vs2015', 'vs2017'], type = str.lower)
+    parser.add_argument('-a', '--architecture', help = "CPU architecture.", choices = ['x86', 'x64', 'armv7', 'arm64'], type = str.lower)
     parser.add_argument('-c', '--configuration', help = "Build configuration.", choices = ['debug', 'development', 'release'], type = str.lower)
     parser.add_argument('-i', '--integration', help = "Integration.", choices = ['unity'], type = str.lower)
     parser.add_argument('--ci', help = "Build in CI mode.", dest = 'ci', action = 'store_true')
@@ -242,22 +242,24 @@ def get_bin_dir_name(args):
 # Returns the generator name to pass to CMake, based on the platform.
 #
 def get_cmake_generator_name(args):
-
     if args.platform == 'windows':
+        suffix = '';
+        if args.architecture == 'x64':
+            suffix = ' Win64';
+
+        generator = '';            
         if args.toolchain == 'vs2013':
-            if args.architecture == 'x86':
-                return "Visual Studio 12 2013"
-            elif args.architecture == 'x64':
-                return "Visual Studio 12 2013 Win64"
+            generator = 'Visual Studio 12 2013'
         elif args.toolchain == 'vs2015':
-            if args.architecture == 'x86':
-                return "Visual Studio 14 2015"
-            elif args.architecture == 'x64':
-                return "Visual Studio 14 2015 Win64"
+            generator = 'Visual Studio 14 2015'
+        elif args.toolchain == 'vs2017':
+            generator = 'Visual Studio 15 2017'
+
+        return generator + suffix        
     elif args.platform == 'osx':
-        return "Xcode"
+        return 'Xcode'
     elif args.platform in ['linux', 'android']:
-        return "Unix Makefiles"
+        return 'Unix Makefiles'
 
 
 #
@@ -322,17 +324,15 @@ def generate_build_system(paths, args):
     # For Android, a cross-compilation toolchain must be specified. This
     # toolchain assumes ARMv7 as the architecture. The toolchain can be created
     # using the Android NDK utility "make-standalone-toolchain".
-    if args.platform == 'android' and args.architecture == 'armv7':
-        cmake_args = cmake_args + ["-DANDROID=TRUE"]
-        cmake_args = cmake_args + ["-DCMAKE_SYSTEM_NAME=Linux"]
-        cmake_args = cmake_args + ["-DCMAKE_SYSTEM_PROCESSOR=arm"]
-        cmake_args = cmake_args + ["-DCMAKE_MAKE_PROGRAM=" + paths.make + "make.exe"]
-        cmake_args = cmake_args + ["-DCMAKE_C_COMPILER=" + paths.gcc + "clang.cmd"]
-        cmake_args = cmake_args + ["-DCMAKE_CXX_COMPILER=" + paths.gcc + "clang++.cmd"]
-        cmake_args = cmake_args + ["-DCMAKE_AR=" + paths.gcc + "arm-linux-androideabi-ar.exe"]
-        cmake_args = cmake_args + ["-DCMAKE_SYSROOT=" + paths.sysroot]
-        cmake_args = cmake_args + ["-DANDROID_PATH=" + paths.android]
-        cmake_args = cmake_args + ["-DANT_PATH=" + paths.ant]
+    if args.platform == 'android':
+        if args.architecture == "armv7":
+            cmake_args = cmake_args + ["-DCMAKE_TOOLCHAIN_FILE=build/toolchain_android_armv7.cmake"]
+        elif args.architecture == "arm64":
+            cmake_args = cmake_args + ["-DCMAKE_TOOLCHAIN_FILE=build/toolchain_android_armv8.cmake"]
+        elif args.architecture == "x86":
+            cmake_args = cmake_args + ["-DCMAKE_TOOLCHAIN_FILE=build/toolchain_android_x86.cmake"]
+        elif args.architecture == "x64":
+            cmake_args = cmake_args + ["-DCMAKE_TOOLCHAIN_FILE=build/toolchain_android_x64.cmake"]
 
     if args.versionstamp:
         cmake_args = cmake_args + ["-DUPDATE_VERSION_STAMPS=TRUE"]

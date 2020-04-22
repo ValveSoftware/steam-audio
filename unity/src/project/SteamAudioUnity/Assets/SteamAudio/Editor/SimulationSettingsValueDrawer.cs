@@ -67,7 +67,7 @@ namespace SteamAudio
             position.y += 24f;
             EditorGUI.LabelField(position, "Occlusion Settings", EditorStyles.boldLabel);
             position.y += 16f;
-            EditorGUI.PropertyField(position, property.FindPropertyRelative("OcclusionSamples"));
+            EditorGUI.PropertyField(position, property.FindPropertyRelative("MaxOcclusionSamples"));
         }
     }
 }

@@ -24,7 +24,6 @@ namespace SteamAudio
         public override void Destroy()
         {
             PhononFmod.iplFmodResetEnvironment();
-            PhononFmod.iplFmodResetAudioEngine();
         }
 
 		public override void UpdateSOFAFile(int index)

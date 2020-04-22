@@ -52,6 +52,9 @@ namespace SteamAudio
                     //EditorGUILayout.PropertyField(hrtfIndexProp, new GUIContent("HRTF Index"));
                 }
 
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("physicsBasedAttenuation"));
+                EditorGUILayout.Space();
+
                 serializedObject.FindProperty("occlusionMode").enumValueIndex =
                     EditorGUILayout.Popup("Direct Sound Occlusion",
                     serializedObject.FindProperty("occlusionMode").enumValueIndex, optionsOcclusion);
@@ -66,10 +69,10 @@ namespace SteamAudio
                     {
                         EditorGUILayout.PropertyField(serializedObject.FindProperty("sourceRadius"),
                             new GUIContent("Source Radius (meters)"));
+                        EditorGUILayout.PropertyField(serializedObject.FindProperty("occlusionSamples"));
                     }
                 }
 
-                EditorGUILayout.PropertyField(serializedObject.FindProperty("physicsBasedAttenuation"));
                 EditorGUILayout.PropertyField(serializedObject.FindProperty("airAbsorption"));
                 EditorGUILayout.PropertyField(serializedObject.FindProperty("directMixLevel"));
                 EditorGUILayout.Space();
@@ -107,6 +110,7 @@ namespace SteamAudio
                 if (serializedObject.FindProperty("reflections").boolValue)
                 {
                     EditorGUILayout.PropertyField(serializedObject.FindProperty("simulationType"));
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("physicsBasedAttenuationForIndirect"));
                     EditorGUILayout.PropertyField(serializedObject.FindProperty("indirectMixLevel"));
                     EditorGUILayout.PropertyField(serializedObject.FindProperty("indirectBinaural"));
 

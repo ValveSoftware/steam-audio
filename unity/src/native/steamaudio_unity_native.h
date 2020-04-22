@@ -23,6 +23,12 @@ IPLVector3 convertVector(float x, float y, float z);
  */
 IPLVector3 unitVector(IPLVector3 v);
 
+// Calculates the dot product of two 3D vectors.
+float dot(const IPLVector3& a, const IPLVector3& b);
+
+// Calculates the cross product of two 3D vectors.
+IPLVector3 cross(const IPLVector3& a, const IPLVector3& b);
+
 /** Crossfades between dry and wet audio.
  */
 void crossfadeInputAndOutput(const float* inBuffer, const int numChannels, const int numSamples, float* outBuffer);

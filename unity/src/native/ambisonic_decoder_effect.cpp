@@ -229,9 +229,10 @@ public:
         // the in and out channel count. The ambisonicOutChannels field will be set to 2. In this common scenario, 
         // the plugin should output its spatialized data to the first 2 channels and zero out the other 2 channels.
 
+        int minChannels = std::min(ambisonicsChannels, outChannels);
         for (unsigned int sample = 0; sample < numSamples; ++sample)
         {
-            for (int channel = 0; channel < ambisonicsChannels; ++channel)
+            for (int channel = 0; channel < minChannels; ++channel)
             {
                 outBuffer[sample * outChannels + channel] = mBinauralAmbisonicsBuffer[sample * ambisonicsChannels + channel];
             }
@@ -299,8 +300,8 @@ public:
         gApi.iplConvertAudioBufferFormat(deinterleavedInputAudio, deinterleavedN3DAudio);
 
         auto S = ambisonicData->sourcematrix;
-        IPLVector3 sourceAhead = IPLVector3{ S[1], S[5] , S[9] };
-        IPLVector3 sourceUp = IPLVector3{ S[2], S[9] , S[10] };
+        auto sourceAhead = unitVector(IPLVector3{S[8], S[9], S[10]});
+        auto sourceUp = unitVector(IPLVector3{S[4], S[5], S[6]});
 
         auto L = ambisonicData->listenermatrix; //Matrix that transforms source into the local space of the listener.
         auto ambisonicAheadX = L[0] * sourceAhead.x + L[4] * sourceAhead.y + L[8] * sourceAhead.z;
@@ -310,10 +311,23 @@ public:
         auto ambisonicUpY = L[1] * sourceUp.x + L[5] * sourceUp.y + L[9] * sourceUp.z;
         auto ambisonicUpZ = L[2] * sourceUp.x + L[6] * sourceUp.y + L[10] * sourceUp.z;
 
-        IPLVector3 ambisonicAhead = convertVector(ambisonicAheadX, ambisonicAheadY, ambisonicAheadZ);
-        IPLVector3 ambisonicUp = convertVector(ambisonicUpX, ambisonicUpY, ambisonicUpZ);
+        auto ambisonicAhead = unitVector(convertVector(ambisonicAheadX, ambisonicAheadY, ambisonicAheadZ));
+        auto ambisonicUp = unitVector(convertVector(ambisonicUpX, ambisonicUpY, ambisonicUpZ));
+        auto ambisonicRight = unitVector(cross(ambisonicAhead, ambisonicUp));
 
-        gApi.iplSetAmbisonicsRotation(mAmbisonicsRotator, ambisonicAhead, ambisonicUp);
+        IPLVector3 listenerAhead;
+        listenerAhead.x = -ambisonicRight.z;
+        listenerAhead.y = -ambisonicUp.z;
+        listenerAhead.z = ambisonicAhead.z;
+        listenerAhead = unitVector(listenerAhead);
+
+        IPLVector3 listenerUp;
+        listenerUp.x = ambisonicRight.y;
+        listenerUp.y = ambisonicUp.y;
+        listenerUp.z = -ambisonicAhead.y;
+        listenerUp = unitVector(listenerUp);
+
+        gApi.iplSetAmbisonicsRotation(mAmbisonicsRotator, listenerAhead, listenerUp);
         gApi.iplRotateAmbisonicsAudioBuffer(mAmbisonicsRotator, deinterleavedN3DAudio, deinterleavedN3DAudio);
 
         // Apply Ambisonics binaural or panning effect.
@@ -337,12 +351,10 @@ public:
         // unspatialized mono clip of peak magnitude 1.
         const float kPi = 3.141592f; 
         float scalar = 1.0f / sqrtf(4.0f * kPi);
-        for (unsigned int i = 0; i < numSamples * outChannels; i += outChannels)
+
+        for (unsigned int i = 0; i < numSamples * outChannels; ++i)
         {
-            for (int j = 0; j < ambisonicData->ambisonicOutChannels; ++j)
-            {
-                outBuffer[i + j] *= scalar;
-            }
+            outBuffer[i] *= scalar;
         }
     }
 

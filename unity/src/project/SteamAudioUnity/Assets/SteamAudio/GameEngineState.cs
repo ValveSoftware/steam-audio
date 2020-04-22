@@ -90,12 +90,18 @@ namespace SteamAudio
                 {
                     if (customSettings && convolutionType == ConvolutionOption.TrueAudioNext) 
                     {
-                        if (!File.Exists(Directory.GetCurrentDirectory() + "/Assets/Plugins/x86_64/tanrt64.dll")) 
+                        var eInEditor = !SteamAudioManager.IsAudioEngineInitializing();
+                        if (eInEditor && (!File.Exists(Directory.GetCurrentDirectory() + "/Assets/Plugins/x86_64/tanrt64.dll"))) 
                         {
                             throw new Exception(
                                 "Steam Audio configured to use TrueAudio Next, but TrueAudio Next support package " +
                                 "not installed. Please import SteamAudio_TrueAudioNext.unitypackage in order to use " +
                                 "TrueAudio Next support for Steam Audio.");
+                        }
+                        else
+                        {
+                            Debug.LogWarning(String.Format("Unable to create compute device: {0}. Using Phonon convolution and raytracer.",
+                                e.Message));
                         }
                     }
                     else 
@@ -121,7 +127,7 @@ namespace SteamAudio
                 simulationSettings = new SimulationSettings
                 {
                     sceneType               = rayTracer,
-                    occlusionSamples        = settings.OcclusionSamples,
+                    maxOcclusionSamples     = settings.MaxOcclusionSamples,
                     rays                    = (inEditor) ? settings.BakeRays : settings.RealtimeRays,
                     secondaryRays           = (inEditor) ? settings.BakeSecondaryRays : settings.RealtimeSecondaryRays,
                     bounces                 = (inEditor) ? settings.BakeBounces : settings.RealtimeBounces,
@@ -154,7 +160,7 @@ namespace SteamAudio
                     if (convolutionType == ConvolutionOption.TrueAudioNext) {
                         if (!File.Exists(Directory.GetCurrentDirectory() + "/Assets/Plugins/x86_64/tanrt64.dll")) {
                             throw new Exception(
-                                "Steam Audio configured to use TrueAudio Next, but TrueAudio Next support package " +
+                                "Editor: Steam Audio configured to use TrueAudio Next, but TrueAudio Next support package " +
                                 "not installed. Please import SteamAudio_TrueAudioNext.unitypackage in order to use " +
                                 "TrueAudio Next support for Steam Audio.");
                         }
@@ -232,7 +238,7 @@ namespace SteamAudio
         {
             try
             {
-                scene.Export(computeDevice, simulationSettings, defaultMaterial, context, exportOBJ);
+                scene.Export(computeDevice, defaultMaterial, context, exportOBJ);
             }
             catch (Exception e)
             {

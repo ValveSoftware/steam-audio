@@ -544,12 +544,21 @@ namespace SteamAudio
 
             foreach (var dynamicObject in dynamicObjects) {
                 if (!isPrefab) {
+#if UNITY_2018_3_OR_NEWER
+                    if (PrefabUtility.IsPartOfPrefabInstance(dynamicObject))
+                    {
+                        Debug.Log(string.Format("Scene {0}, GameObject {1}: Prefab instance detected, skipping " +
+                            "export.", path, dynamicObject.name));
+                        continue;
+                    }
+#else
                     var prefabType = PrefabUtility.GetPrefabType(dynamicObject);
                     if (prefabType == PrefabType.PrefabInstance) {
                         Debug.Log(string.Format("Scene {0}, GameObject {1}: Prefab instance detected, skipping " +
                             "export.", path, dynamicObject.name));
                         continue;
                     }
+#endif
                 }
 
                 var hasAssetFileName = (dynamicObject.assetFileName != null &&

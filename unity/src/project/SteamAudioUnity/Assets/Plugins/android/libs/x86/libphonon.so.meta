@@ -1,21 +1,21 @@
 fileFormatVersion: 2
-guid: ffe21b29955d39f4dbc21d79dee8f2eb
-timeCreated: 1513811598
-licenseType: Pro
+guid: d6d5bdf8052a5e146b27c150cf967d7e
 PluginImporter:
   externalObjects: {}
   serializedVersion: 2
   iconMap: {}
   executionOrder: {}
+  defineConstraints: []
   isPreloaded: 0
   isOverridable: 0
+  isExplicitlyReferenced: 0
   platformData:
   - first:
       Android: Android
     second:
       enabled: 1
       settings:
-        CPU: ARMv7
+        CPU: x86
   - first:
       Any: 
     second:
