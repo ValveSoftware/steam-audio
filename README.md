@@ -1,4 +1,4 @@
-% Steam Audio 2.0-beta.18
+% Steam Audio 2.0-beta.19
 % Valve Corporation
 
 Supported Platforms
