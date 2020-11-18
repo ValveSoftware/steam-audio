@@ -197,6 +197,19 @@ void AudioEngineSettings::createPendingBinauralRenderers()
     }
 }
 
+bool AudioEngineSettings::settingsChanged(IPLRenderingSettings updatedSettings)
+{
+    IPLRenderingSettings currentSettings = renderingSettings();
+    
+    if (currentSettings.frameSize != updatedSettings.frameSize)
+        return true;
+
+    if (currentSettings.samplingRate != updatedSettings.samplingRate)
+        return true;
+
+    return false;
+}
+
 // --------------------------------------------------------------------------------------------------------------------
 // Exported Functions
 // --------------------------------------------------------------------------------------------------------------------

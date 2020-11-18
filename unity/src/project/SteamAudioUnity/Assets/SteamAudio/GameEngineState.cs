@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.IO;
 using AOT;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace SteamAudio
 {
@@ -52,7 +53,10 @@ namespace SteamAudio
                 }
 
                 // Enable some settings which are commong whether Radeon Rays is enabled for baking or realtime.
-                if (customSettings && (reason == GameEngineStateInitReason.Baking || reason == GameEngineStateInitReason.Playing))
+                if (customSettings 
+                    && (reason == GameEngineStateInitReason.Baking 
+                    || reason == GameEngineStateInitReason.GeneratingProbes 
+                    || reason == GameEngineStateInitReason.Playing))
                 {
                     if (customSettings.RayTracerType() != SceneType.RadeonRays)
                     {
@@ -141,14 +145,7 @@ namespace SteamAudio
 
 #if UNITY_EDITOR
                 if (customSettings) {
-                    if (rayTracer == SceneType.Embree) {
-                        if (!File.Exists(Directory.GetCurrentDirectory() + "/Assets/Plugins/x86_64/embree.dll")) {
-                            throw new Exception(
-                                "Steam Audio configured to use Embree, but Embree support package not installed. " +
-                                "Please import SteamAudio_Embree.unitypackage in order to use Embree support for " +
-                                "Steam Audio.");
-                        }
-                    } else if (rayTracer == SceneType.RadeonRays) {
+                    if (rayTracer == SceneType.RadeonRays) {
                         if (!File.Exists(Directory.GetCurrentDirectory() + "/Assets/Plugins/x86_64/RadeonRays.dll")) {
                             throw new Exception(
                                 "Steam Audio configured to use Radeon Rays, but Radeon Rays support package not " +
@@ -171,6 +168,38 @@ namespace SteamAudio
                 if (reason != GameEngineStateInitReason.ExportingScene)
                     scene.Create(computeDevice, simulationSettings, context);
 
+                // Add other scenes in the hierarchy
+                if (scene.GetScene() != IntPtr.Zero 
+                    && (reason == GameEngineStateInitReason.GeneratingProbes || reason == GameEngineStateInitReason.Baking))
+                {
+                    for (int i = 0; i < SceneManager.sceneCount; ++i)
+                    {
+                        var unityScene = SceneManager.GetSceneAt(i);
+                        if (!unityScene.isLoaded)
+                            continue;
+
+                        if (unityScene == SceneManager.GetActiveScene())
+                            continue;
+
+                        IntPtr additiveScene, additiveMesh;
+                        var error = scene.AddAdditiveScene(unityScene, scene.GetScene(), 
+                            computeDevice, simulationSettings, context,  out additiveScene, out additiveMesh);
+
+                        if (error != Error.None)
+                            continue;
+
+                        if (additiveScenes == null)
+                            editorAdditiveScenes = new List<IntPtr>();
+                        editorAdditiveScenes.Add(additiveScene);
+
+                        if (editorAdditiveSceneMeshes == null)
+                            editorAdditiveSceneMeshes = new List<IntPtr>();
+                        editorAdditiveSceneMeshes.Add(additiveMesh);
+                    }
+
+                    PhononCore.iplCommitScene(scene.GetScene());
+                }
+
                 if (reason == GameEngineStateInitReason.Playing)
                     probeManager.Create(context);
 
@@ -191,6 +220,31 @@ namespace SteamAudio
 
         public void Destroy()
         {
+            if (editorAdditiveSceneMeshes != null)
+            {
+                for (int i = 0; i < editorAdditiveSceneMeshes.Count; ++i)
+                {
+                    IntPtr additiveMesh = editorAdditiveSceneMeshes[i];
+                    PhononCore.iplRemoveInstancedMesh(scene.GetScene(), additiveMesh);
+                    PhononCore.iplDestroyInstancedMesh(ref additiveMesh);
+                }
+
+                editorAdditiveSceneMeshes.Clear();
+                editorAdditiveSceneMeshes = null;
+            }
+
+            if (editorAdditiveScenes != null)
+            {
+                for (int i = 0; i < editorAdditiveScenes.Count; ++i)
+                {
+                    IntPtr additiveScene = editorAdditiveScenes[i];
+                    PhononCore.iplDestroyScene(ref additiveScene);
+                }
+
+                editorAdditiveScenes.Clear();
+                editorAdditiveScenes = null;
+            }
+
             environment.Destroy();
             probeManager.Destroy();
             scene.Destroy();
@@ -260,6 +314,16 @@ namespace SteamAudio
         Environment         environment         = new Environment();
         ConvolutionOption   convolutionType     = ConvolutionOption.Phonon;
 
+        // Scene instances for dynamic objects at runtime.
         public Dictionary<string, IntPtr> instancedScenes = null;
+
+        // Scene instances for additive scenes at runtime.
+        public Dictionary<UnityEngine.SceneManagement.Scene, IntPtr> additiveScenes = null;
+        public Dictionary<UnityEngine.SceneManagement.Scene, IntPtr> additiveSceneMeshes = null;
+
+        // Scene instances for additive scenes during editing. This data is destroyed by GameEngineState
+        // as opposed to Steam Audio Manager.
+        List<IntPtr> editorAdditiveScenes = null;
+        List<IntPtr> editorAdditiveSceneMeshes = null;
     }
 }

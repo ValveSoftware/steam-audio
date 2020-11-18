@@ -8,6 +8,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace SteamAudio
 {
@@ -25,25 +26,26 @@ namespace SteamAudio
         void OnEnable()
         {
             StartCoroutine(EndOfFrameUpdate());
+            SceneManager.sceneLoaded += OnSceneLoaded;
+            SceneManager.sceneUnloaded += OnSceneUnloaded;
+        }
+
+        private void OnDisable()
+        {
+            SceneManager.sceneLoaded -= OnSceneLoaded;
+            SceneManager.sceneUnloaded -= OnSceneUnloaded;
         }
 
         private void OnDestroy()
         {
+            RemoveAllInstancedScenes();
+            RemoveAllAdditiveScenes();
             Destroy();
             ClearSingleton();
         }
 
         void OnApplicationQuit()
         {
-            var instancedScenes = managerData.gameEngineState.instancedScenes;
-            if (instancedScenes != null) {
-                foreach (var item in instancedScenes) {
-                    var instancedScene = item.Value;
-                    PhononCore.iplDestroyScene(ref instancedScene);
-                }
-                instancedScenes.Clear();
-            }
-
             PhononUnityNative.iplUnityResetAudioEngine();
             PhononCore.iplCleanup();
         }
@@ -285,6 +287,148 @@ namespace SteamAudio
             var transformMatrix = Common.ConvertTransform(instanceTransform);
 
             PhononCore.iplUpdateInstancedMeshTransform(instancedMesh, transformMatrix);
+        }
+
+        public void AddAdditiveScene(UnityEngine.SceneManagement.Scene unityScene)
+        {
+            string steamAudioSceneFile = Scene.SceneFileName(unityScene.name);
+            if (!File.Exists(steamAudioSceneFile))
+            {
+                return;
+            }
+
+            var context = managerData.gameEngineState.Context();
+            var computeDevice = managerData.gameEngineState.ComputeDevice().GetDevice();
+            var simulationSettings = managerData.gameEngineState.SimulationSettings();
+
+            if (simulationSettings.sceneType != SceneType.Embree)
+            {
+                Debug.LogWarning("Additive scenes are only supported with Embree.");
+                return;
+            }
+
+            var scene = IntPtr.Zero;
+            byte[] data = File.ReadAllBytes(steamAudioSceneFile);
+            var error = PhononCore.iplLoadScene(context, simulationSettings.sceneType, data, data.Length,
+                computeDevice, null, ref scene);
+
+            var additiveScenes = managerData.gameEngineState.additiveScenes;
+            if (additiveScenes == null)
+            {
+                managerData.gameEngineState.additiveScenes = new Dictionary<UnityEngine.SceneManagement.Scene, IntPtr>();
+            }
+
+            if (!managerData.gameEngineState.additiveScenes.ContainsKey(unityScene))
+            {
+                managerData.gameEngineState.additiveScenes.Add(unityScene, scene);
+            }
+
+            var activeScene = managerData.gameEngineState.Scene().GetScene();
+            var additiveSceneMeshes = managerData.gameEngineState.additiveSceneMeshes;
+            var sceneMesh = IntPtr.Zero;
+
+            var transformMatrix = new Matrix4x4
+            {
+                m00 = 1.0f, m01 = 0.0f, m02 = 0.0f, m03 = 0.0f,
+                m10 = 0.0f, m11 = 1.0f, m12 = 0.0f, m13 = 0.0f,
+                m20 = 0.0f, m21 = 0.0f, m22 = 1.0f, m23 = 0.0f,
+                m30 = 0.0f, m31 = 0.0f, m32 = 0.0f, m33 = 1.0f
+            };
+
+            error = PhononCore.iplCreateInstancedMesh(activeScene, scene, transformMatrix, ref sceneMesh);
+            if (error != Error.None)
+            {
+                throw new Exception();
+            }
+
+            PhononCore.iplAddInstancedMesh(activeScene, sceneMesh);
+            if (additiveSceneMeshes == null)
+            {
+                managerData.gameEngineState.additiveSceneMeshes = new Dictionary<UnityEngine.SceneManagement.Scene, IntPtr>();
+            }
+            if (!managerData.gameEngineState.additiveSceneMeshes.ContainsKey(unityScene))
+            {
+                managerData.gameEngineState.additiveSceneMeshes.Add(unityScene, sceneMesh);
+            }
+        }
+
+        public void RemoveAdditiveScene(UnityEngine.SceneManagement.Scene unityScene)
+        {
+            var additiveSceneMeshes = managerData.gameEngineState.additiveSceneMeshes;
+            var additiveScenes = managerData.gameEngineState.additiveScenes;
+            var activeScene = managerData.gameEngineState.Scene().GetScene();
+
+            if (additiveSceneMeshes != null && additiveSceneMeshes.ContainsKey(unityScene))
+            {
+                IntPtr sceneMesh = additiveSceneMeshes[unityScene];
+                PhononCore.iplRemoveInstancedMesh(activeScene, sceneMesh);
+                PhononCore.iplDestroyInstancedMesh(ref sceneMesh);
+                additiveSceneMeshes.Remove(unityScene);
+            }
+
+            if (additiveScenes != null && additiveScenes.ContainsKey(unityScene))
+            {
+                IntPtr scene = additiveScenes[unityScene];
+                PhononCore.iplDestroyScene(ref scene);
+                additiveScenes.Remove(unityScene);
+            }
+        }
+
+        public void RemoveAllAdditiveScenes()
+        {
+            var additiveSceneMeshes = managerData.gameEngineState.additiveSceneMeshes;
+            var additiveScenes = managerData.gameEngineState.additiveScenes;
+            var activeScene = managerData.gameEngineState.Scene().GetScene();
+
+            if (additiveSceneMeshes != null)
+            {
+                foreach (var additiveMesh in additiveSceneMeshes)
+                {
+                    IntPtr sceneMesh = additiveMesh.Value;
+                    PhononCore.iplRemoveInstancedMesh(activeScene, sceneMesh);
+                    PhononCore.iplDestroyInstancedMesh(ref sceneMesh);
+                }
+
+                additiveSceneMeshes.Clear();
+            }
+
+            if (additiveScenes != null)
+            {
+                foreach (var additiveScene in additiveScenes)
+                {
+                    IntPtr scene = additiveScene.Value;
+                    PhononCore.iplDestroyScene(ref scene);
+                }
+
+                additiveScenes.Clear();
+            }
+        }
+
+        public void RemoveAllInstancedScenes()
+        {
+            var instancedScenes = managerData.gameEngineState.instancedScenes;
+            if (instancedScenes != null)
+            {
+                foreach (var item in instancedScenes)
+                {
+                    var instancedScene = item.Value;
+                    PhononCore.iplDestroyScene(ref instancedScene);
+                }
+                instancedScenes.Clear();
+            }
+        }
+
+        private void OnSceneLoaded(UnityEngine.SceneManagement.Scene additiveScene, LoadSceneMode mode)
+        {
+            if (mode != LoadSceneMode.Additive)
+                return;
+
+            AddAdditiveScene(additiveScene);
+        }
+
+        private void OnSceneUnloaded(UnityEngine.SceneManagement.Scene additiveScene)
+        {
+            RemoveAdditiveScene(additiveScene);
         }
 
         static SteamAudioManager managerSingleton = null;

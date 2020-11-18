@@ -472,11 +472,15 @@ public:
         if (!mAudioEngineSettings)
         {
             mAudioEngineSettings = AudioEngineSettings::get();
-            if (!mAudioEngineSettings)
+            IPLRenderingSettings renderingSettings{ samplingRate, frameSize, IPL_CONVOLUTIONTYPE_PHONON };
+
+            if (!mAudioEngineSettings || mAudioEngineSettings->settingsChanged(renderingSettings))
             {
                 try
                 {
-                    IPLRenderingSettings renderingSettings{ samplingRate, frameSize, IPL_CONVOLUTIONTYPE_PHONON };
+                    if (mAudioEngineSettings)
+                        mAudioEngineSettings->destroy();
+
                     AudioEngineSettings::create(renderingSettings, outFormat);
                 }
                 catch (std::exception)

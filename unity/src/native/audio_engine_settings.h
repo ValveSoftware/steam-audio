@@ -110,6 +110,11 @@ public:
     IPLhandle binauralRenderer() const;
     IPLhandle binauralRenderer(const int index) const;
 
+    /** Returns true if the updated settings are different from current settings
+     *  of the audio engine.
+     */
+    bool settingsChanged(IPLRenderingSettings updatedSettings);
+
     /** Returns the global Audio Engine Settings object.
      */
     static std::shared_ptr<AudioEngineSettings> get();

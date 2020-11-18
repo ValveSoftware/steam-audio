@@ -1,6 +1,6 @@
-% Steam Audio Unity Plugin 2.0-beta.18
+% Steam Audio Unity Plugin 2.0-beta.19
 
-# Steam Audio Unity Plugin <small><small>2.0-beta.18</small></small>
+# Steam Audio Unity Plugin <small><small>2.0-beta.19</small></small>
 
 Copyright 2017 Valve Corporation. All rights reserved. Subject to the following license: 
 [https://valvesoftware.github.io/steam-audio/license.html](https://valvesoftware.github.io/steam-audio/license.html)

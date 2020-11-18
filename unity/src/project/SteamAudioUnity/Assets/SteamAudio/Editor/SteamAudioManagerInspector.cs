@@ -8,6 +8,10 @@ using UnityEditor;
 using UnityEngine.SceneManagement;
 using UnityEditor.SceneManagement;
 
+#if UNITY_2019_2_OR_NEWER
+using UnityEditor.PackageManager;
+#endif
+
 using System;
 using System.Collections.Generic;
 
@@ -504,6 +508,15 @@ namespace SteamAudio
 
                 var scene = activeScene;
                 if (!isLoadedScene) {
+#if UNITY_2019_2_OR_NEWER
+                    var packageInfo = UnityEditor.PackageManager.PackageInfo.FindForAssetPath(scenePath);
+                    if (!(packageInfo == null || packageInfo.source == PackageSource.Embedded || packageInfo.source == PackageSource.Local))
+                    {
+                        Debug.LogWarning(string.Format("Unable to process scene: {0}", scenePath));
+                        continue;
+                    }
+#endif
+
                     scene = EditorSceneManager.OpenScene(scenePath, OpenSceneMode.Additive);
                 }
 

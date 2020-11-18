@@ -68,19 +68,6 @@ namespace SteamAudio
             "Assets/Plugins/x86_64/GPUUtilities.dll"
         };
 
-        static string[] EmbreePlugins =
-        {
-            "Assets/Plugins/x86_64/embree.dll",
-            "Assets/Plugins/x86_64/tbb.dll",
-            "Assets/Plugins/x86_64/tbbmalloc.dll",
-            "Assets/Plugins/x86_64/libembree.so",
-            "Assets/Plugins/x86_64/libtbb.so.2",
-            "Assets/Plugins/x86_64/libtbbmalloc.so.2",
-            "Assets/Plugins/libembree.dylib",
-            "Assets/Plugins/libtbb.dylib",
-            "Assets/Plugins/libtbbmalloc.dylib"
-        };
-
         static string[] RadeonRaysPlugins =
         {
             "Assets/Plugins/x86_64/RadeonRays.dll",
@@ -181,75 +168,12 @@ namespace SteamAudio
             AssetDatabase.ExportPackage(assets, "SteamAudio_TrueAudioNext.unitypackage", ExportPackageOptions.Recurse);
         }
 
-        public static void BuildSteamAudioEmbree()
-        {
-            var assetGroups = new string[][] { EmbreePlugins };
-            var assets = BuildAssetList(assetGroups);
-
-            AssetDatabase.ExportPackage(assets, "SteamAudio_Embree.unitypackage", ExportPackageOptions.Recurse);
-        }
-
         public static void BuildSteamAudioRadeonRays()
         {
             var assetGroups = new string[][] { RadeonRaysPlugins };
             var assets = BuildAssetList(assetGroups);
 
             AssetDatabase.ExportPackage(assets, "SteamAudio_RadeonRays.unitypackage", ExportPackageOptions.Recurse);
-        }
-    }
-
-    public static class PlayerBuildPostprocessor
-    {
-        [PostProcessBuild]
-        public static void OnBuildPlayer(BuildTarget target, string playerPath)
-        {
-            var playerDirectory = Path.GetDirectoryName(playerPath);
-            var playerName = Path.GetFileNameWithoutExtension(playerPath);
-
-            var embreeAssets = Directory.GetFiles(Directory.GetCurrentDirectory() + "/Assets/Plugins/x86_64", "embree.dll");
-
-            if (embreeAssets != null && embreeAssets.Length > 0)
-            {
-                switch (target)
-                {
-                    case BuildTarget.StandaloneWindows64:
-                        // Embree .dll files are correctly copied on Windows, so nothing to do here.
-                        break;
-
-#if !UNITY_2019_2_OR_NEWER
-                    case BuildTarget.StandaloneLinux64:
-                    case BuildTarget.StandaloneLinuxUniversal:
-                        FileUtil.CopyFileOrDirectory("Assets/Plugins/x86_64/libtbb.so.2",
-                            playerDirectory + "/" + playerName + "_Data/Plugins/x86_64/libtbb.so.2");
-                        FileUtil.CopyFileOrDirectory("Assets/Plugins/x86_64/libtbbmalloc.so.2",
-                            playerDirectory + "/" + playerName + "_Data/Plugins/x86_64/libtbbmalloc.so.2");
-                        break;
-#else
-                    case BuildTarget.StandaloneLinux64:
-                        FileUtil.CopyFileOrDirectory("Assets/Plugins/x86_64/libtbb.so.2",
-                            playerDirectory + "/" + playerName + "_Data/Plugins/libtbb.so.2");
-                        FileUtil.CopyFileOrDirectory("Assets/Plugins/x86_64/libtbbmalloc.so.2",
-                            playerDirectory + "/" + playerName + "_Data/Plugins/libtbbmalloc.so.2");
-                        break;
-#endif
-
-#if UNITY_2017_3_OR_NEWER
-                    case BuildTarget.StandaloneOSX:
-#else
-                    case BuildTarget.StandaloneOSXUniversal:
-#endif
-                        FileUtil.CopyFileOrDirectory("Assets/Plugins/libembree.dylib",
-                            playerDirectory + "/" + playerName + ".app/Contents/Plugins/libembree.dylib");
-                        FileUtil.CopyFileOrDirectory("Assets/Plugins/libtbb.dylib",
-                            playerDirectory + "/" + playerName + ".app/Contents/Plugins/libtbb.dylib");
-                        FileUtil.CopyFileOrDirectory("Assets/Plugins/libtbbmalloc.dylib",
-                            playerDirectory + "/" + playerName + ".app/Contents/Plugins/libtbbmalloc.dylib");
-                        break;
-
-                    default:
-                        break;
-                }
-            }
         }
     }
 }

@@ -25,68 +25,87 @@ namespace SteamAudio
         public Error Export(ComputeDevice computeDevice, MaterialValue defaultMaterial, 
             IntPtr globalContext, bool exportOBJ = false)
         {
-            var error = Error.None;
-
             SceneType sceneType = SceneType.Phonon;    // Scene type should always be Phonon when exporting.
+            int exportedScenesCount = 0;
 
-            var objects = SceneExporter.GetStaticGameObjectsForExport(SceneManager.GetActiveScene());
-
-            Vector3[] vertices = null;
-            Triangle[] triangles = null;
-            int[] materialIndices = null;
-            Material[] materials = null;
-            SceneExporter.GetGeometryAndMaterialBuffers(objects, ref vertices, ref triangles, ref materialIndices,
-                ref materials, false, exportOBJ);
-
-            if (vertices.Length == 0 || triangles.Length == 0 || materialIndices.Length == 0 || materials.Length == 0) 
+            for (int i = 0; i < SceneManager.sceneCount; ++i)
             {
-                throw new Exception(
-                    "No Steam Audio Geometry tagged. Attach Steam Audio Geometry to one or more GameObjects that " +
-                    "contain Mesh or Terrain geometry.");
-            }
+                var unityScene = SceneManager.GetSceneAt(i);
+                if (!unityScene.isLoaded)
+                {
+                    Debug.LogWarning("Scene " + SceneManager.GetSceneAt(i).name + " is not loaded in the hierarchy.");
+                    continue;
+                }
 
-            error = PhononCore.iplCreateScene(globalContext, computeDevice.GetDevice(), sceneType,
-                materials.Length, materials, null, null, null, null, IntPtr.Zero, ref scene);
-            if (error != Error.None)
-            {
-                throw new Exception("Unable to create scene for export (" + materials.Length.ToString() +
-                    " materials): [" + error.ToString() + "]");
-            }
+                var objects = SceneExporter.GetStaticGameObjectsForExport(unityScene);
 
-            var staticMesh = IntPtr.Zero;
-            error = PhononCore.iplCreateStaticMesh(scene, vertices.Length, triangles.Length, vertices, triangles,
-                materialIndices, ref staticMesh);
-            if (error != Error.None)
-            {
-                throw new Exception("Unable to create static mesh for export (" + vertices.Length.ToString() +
-                    " vertices, " + triangles.Length.ToString() + " triangles): [" + error.ToString() + "]");
-            }
+                Vector3[] vertices = null;
+                Triangle[] triangles = null;
+                int[] materialIndices = null;
+                Material[] materials = null;
+                SceneExporter.GetGeometryAndMaterialBuffers(objects, ref vertices, ref triangles, ref materialIndices,
+                    ref materials, false, exportOBJ);
+
+                if (vertices.Length == 0 || triangles.Length == 0 || materialIndices.Length == 0 || materials.Length == 0)
+                {
+                    Debug.LogWarning("Scene " + unityScene.name + " has no Steam Audio geometry.");
+                    continue;
+                }
+
+                ++exportedScenesCount;
+
+                Error error = PhononCore.iplCreateScene(globalContext, computeDevice.GetDevice(), sceneType,
+                    materials.Length, materials, null, null, null, null, IntPtr.Zero, ref scene);
+                if (error != Error.None)
+                {
+                    throw new Exception("Unable to create scene for export (" + materials.Length.ToString() +
+                        " materials): [" + error.ToString() + "]");
+                }
+
+                var staticMesh = IntPtr.Zero;
+                error = PhononCore.iplCreateStaticMesh(scene, vertices.Length, triangles.Length, vertices, triangles,
+                    materialIndices, ref staticMesh);
+                if (error != Error.None)
+                {
+                    throw new Exception("Unable to create static mesh for export (" + vertices.Length.ToString() +
+                        " vertices, " + triangles.Length.ToString() + " triangles): [" + error.ToString() + "]");
+                }
 
 #if UNITY_EDITOR
-            if (!Directory.Exists(Application.streamingAssetsPath))
-                UnityEditor.AssetDatabase.CreateFolder("Assets", "StreamingAssets");
+                if (!Directory.Exists(Application.streamingAssetsPath))
+                    UnityEditor.AssetDatabase.CreateFolder("Assets", "StreamingAssets");
 #endif
 
-            if (exportOBJ)
-            {
-                PhononCore.iplSaveSceneAsObj(scene, Common.ConvertString(ObjFileName()));
-                Debug.Log("Scene exported to " + ObjFileName() + ".");
+                if (exportOBJ)
+                {
+                    var fileName = ObjFileName(unityScene.name);
+                    PhononCore.iplSaveSceneAsObj(scene, Common.ConvertString(fileName));
+                    Debug.Log("Scene exported to " + fileName + ".");
+                }
+                else
+                {
+                    var dataSize = PhononCore.iplSaveScene(scene, null);
+                    var data = new byte[dataSize];
+                    PhononCore.iplSaveScene(scene, data);
+
+                    var fileName = SceneFileName(unityScene.name);
+                    File.WriteAllBytes(fileName, data);
+
+                    Debug.Log("Scene exported to " + fileName + ".");
+                }
+
+                PhononCore.iplDestroyStaticMesh(ref staticMesh);
+                PhononCore.iplDestroyScene(ref scene);
             }
-            else
+
+            if (exportedScenesCount == 0)
             {
-                var dataSize = PhononCore.iplSaveScene(scene, null);
-                var data = new byte[dataSize];
-                PhononCore.iplSaveScene(scene, data);
-
-                var fileName = SceneFileName();
-                File.WriteAllBytes(fileName, data);
-
-                Debug.Log("Scene exported to " + fileName + ".");
+                throw new Exception(
+                    "No Steam Audio Geometry tagged in the scene hierarchy. Attach Steam Audio Geometry " +
+                    "to one or more GameObjects that contain Mesh or Terrain geometry.");
             }
 
-            PhononCore.iplDestroyStaticMesh(ref staticMesh);
-            PhononCore.iplDestroyScene(ref scene);
-            return error;
+            return Error.None;
         }
 
         SteamAudioGeometry[] FilterGameObjectsWithDynamicGeometry(SteamAudioGeometry[] objects)
@@ -132,7 +151,7 @@ namespace SteamAudio
 
                 return error;
             } else {
-                string fileName = SceneFileName();
+                string fileName = SceneFileName(SceneManager.GetActiveScene().name);
                 if (!File.Exists(fileName)) {
                     return Error.Fail;
                 }
@@ -144,6 +163,47 @@ namespace SteamAudio
 
                 return error;
             }
+        }
+
+        public Error AddAdditiveScene(UnityEngine.SceneManagement.Scene unityScene, IntPtr activeScene,
+            ComputeDevice computeDevice, SimulationSettings simulationSettings, IntPtr globalContext,
+            out IntPtr addedScene, out IntPtr addedMesh)
+        {
+            addedScene = IntPtr.Zero;
+            addedMesh = IntPtr.Zero;
+
+            if (simulationSettings.sceneType != SceneType.Embree)
+            {
+                Debug.LogWarning("Additive scenes are only supported with Embree.");
+                return Error.Fail;
+            }
+
+            string fileName = SceneFileName(unityScene.name);
+            if (!File.Exists(fileName))
+            {
+                return Error.Fail;
+            }
+
+            byte[] data = File.ReadAllBytes(fileName);
+            var error = PhononCore.iplLoadScene(globalContext, simulationSettings.sceneType, data, data.Length,
+                computeDevice.GetDevice(), null, ref addedScene);
+
+            var transformMatrix = new Matrix4x4
+            {
+                m00 = 1.0f, m01 = 0.0f, m02 = 0.0f, m03 = 0.0f,
+                m10 = 0.0f, m11 = 1.0f, m12 = 0.0f, m13 = 0.0f,
+                m20 = 0.0f, m21 = 0.0f, m22 = 1.0f, m23 = 0.0f,
+                m30 = 0.0f, m31 = 0.0f, m32 = 0.0f, m33 = 1.0f
+            };
+
+            error = PhononCore.iplCreateInstancedMesh(activeScene, addedScene, transformMatrix, ref addedMesh);
+            if (error != Error.None)
+            {
+                return error;
+            }
+
+            PhononCore.iplAddInstancedMesh(activeScene, addedMesh);
+            return error;
         }
 
         public void Destroy()
@@ -228,9 +288,9 @@ namespace SteamAudio
             return materialBuffer;
         }
 
-        static string SceneFileName()
+        public static string SceneFileName(string sceneName)
         {
-            var fileName = Path.GetFileNameWithoutExtension(SceneManager.GetActiveScene().name) + ".phononscene";
+            var fileName = Path.GetFileNameWithoutExtension(sceneName) + ".phononscene";
             var streamingAssetsFileName = Path.Combine(Application.streamingAssetsPath, fileName);
 
 #if UNITY_ANDROID && !UNITY_EDITOR
@@ -267,9 +327,9 @@ namespace SteamAudio
 #endif
         }
 
-        static string ObjFileName()
+        static string ObjFileName(string sceneName)
         {
-            var fileName = Path.GetFileNameWithoutExtension(SceneManager.GetActiveScene().name) + ".obj";
+            var fileName = Path.GetFileNameWithoutExtension(sceneName) + ".obj";
             return Path.Combine(Application.streamingAssetsPath, fileName);
         }
 

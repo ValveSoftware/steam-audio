@@ -47,7 +47,7 @@ namespace SteamAudio
                 return rayTracerOption;
             }
 
-#if ((UNITY_EDITOR && UNITY_EDITOR_64) || (UNITY_STANDALONE && UNITY_64))
+#if (UNITY_EDITOR || UNITY_STANDALONE_WIN || UNITY_STANDALONE_LINUX || UNITY_STANDALONE_OSX)
             if (rayTracerOption == SceneType.Embree) {
                 return rayTracerOption;
             }

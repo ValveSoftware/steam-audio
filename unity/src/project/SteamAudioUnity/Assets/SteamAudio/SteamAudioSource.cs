@@ -109,6 +109,13 @@ namespace SteamAudio
             {
                 audioEngineSource.SendIdentifier(this, GetIdentifierToSend());
             }
+
+            if (reflections && simulationType == SourceSimulationType.BakedStaticSource && (bakedDataSize == 0))
+            {
+                Debug.LogWarning("Steam Audio Source (" + uniqueIdentifier + ") with " +
+                    "Baked Static Source setting does not have any baked data.");
+            }
+
         }
 
         public void BeginBake()

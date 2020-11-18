@@ -92,61 +92,6 @@ def deploy_tan():
 
 
 #
-# Package the Embree libraries for use in all Steam Audio binaries.
-#
-def deploy_embree():
-    print "Deploying: Steam Audio Embree Support"
-
-    deploy_path = os.path.abspath(os.path.join(os.getcwd(), "products"))
-    deploy_path_embree = os.path.join(deploy_path, "steamaudio_embree")
-
-    os.makedirs(deploy_path_embree)
-    os.makedirs(os.path.join(deploy_path_embree, "bin"))
-    os.makedirs(os.path.join(deploy_path_embree, "bin\\windows"))
-    os.makedirs(os.path.join(deploy_path_embree, "bin\\windows\\x64"))
-    os.makedirs(os.path.join(deploy_path_embree, "bin\\linux"))
-    os.makedirs(os.path.join(deploy_path_embree, "bin\\linux\\x64"))
-    os.makedirs(os.path.join(deploy_path_embree, "bin\\osx"))
-    os.makedirs(os.path.join(deploy_path_embree, "unity"))
-
-    copy(os.path.join(os.getcwd(), "../../core/lib/windows-x64/embree.dll"),
-         os.path.join(deploy_path_embree, "bin/windows/x64"))
-    copy(os.path.join(os.getcwd(), "../../core/lib/windows-x64/tbb.dll"),
-         os.path.join(deploy_path_embree, "bin/windows/x64"))
-    copy(os.path.join(os.getcwd(), "../../core/lib/windows-x64/tbbmalloc.dll"),
-         os.path.join(deploy_path_embree, "bin/windows/x64"))
-
-    copy(os.path.join(os.getcwd(), "../../core/lib/linux-x64/libembree.so"),
-         os.path.join(deploy_path_embree, "bin/linux/x64"))
-    copy(os.path.join(os.getcwd(), "../../core/lib/linux-x64/libtbb.so.2"),
-         os.path.join(deploy_path_embree, "bin/linux/x64"))
-    copy(os.path.join(os.getcwd(), "../../core/lib/linux-x64/libtbbmalloc.so.2"),
-         os.path.join(deploy_path_embree, "bin/linux/x64"))
-
-    copy(os.path.join(os.getcwd(), "../../core/lib/osx/libembree.dylib"),
-         os.path.join(deploy_path_embree, "bin/osx"))
-    copy(os.path.join(os.getcwd(), "../../core/lib/osx/libtbb.dylib"),
-         os.path.join(deploy_path_embree, "bin/osx"))
-    copy(os.path.join(os.getcwd(), "../../core/lib/osx/libtbbmalloc.dylib"),
-         os.path.join(deploy_path_embree, "bin/osx"))
-
-    copy(os.path.join(os.getcwd(), "../bin/SteamAudio_Embree.unitypackage"),
-         os.path.join(deploy_path_embree, "unity"))
-
-    zip_output = os.path.abspath(os.path.join(deploy_path, "steamaudio_embree.zip"))
-
-    deploy_directory = os.getcwd()
-    products_directory = deploy_directory + "\\products"
-    os.chdir(products_directory)
-    with zipfile.ZipFile(zip_output, "w", zipfile.ZIP_DEFLATED) as embree_zip:
-        for directory, subdirectories, files in os.walk("steamaudio_embree"):
-            for file in files:
-                file_name = os.path.join(directory, file)
-                print "Adding " + file_name + "..."
-                embree_zip.write(file_name)
-    os.chdir(deploy_directory)
-
-#
 # Package the Radeon Rays libraries for use in all Steam Audio binaries.
 #
 def deploy_radeonrays():
@@ -193,7 +138,6 @@ def deploy(configuration):
     try:
         deploy_integration_unity(configuration)
         deploy_tan()
-        deploy_embree()
         deploy_radeonrays()
     except Exception as e:
         print "Exception encountered during deployment."

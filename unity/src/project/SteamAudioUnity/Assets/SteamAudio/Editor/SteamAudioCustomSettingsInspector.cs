@@ -94,7 +94,7 @@ namespace SteamAudio
             if ((SceneType)rayTracerProperty.enumValueIndex == SceneType.Embree)
             {
                 EditorGUILayout.HelpBox(
-                    "Embree is supported on Windows (64-bit), Linux (64-bit), and macOS (64-bit). On all other " +
+                    "Embree is supported on Windows, Linux, and macOS. On all other " +
                     "platforms, Steam Audio will revert to Phonon ray tracing.",
                     MessageType.Info);
             }
