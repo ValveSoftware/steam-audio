@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.15"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Steam Audio API: IPLBox Struct Reference</title>
+<title>Steam Audio API: IPLComplex Struct Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -25,7 +25,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Steam Audio API
-   &#160;<span id="projectnumber">2.0-beta.17</span>
+   &#160;<span id="projectnumber">2.0-beta.8</span>
    </div>
   </td>
  </tr>
@@ -48,58 +48,60 @@ $(function() {
   <div class="summary">
 <a href="#pub-attribs">Data Fields</a>  </div>
   <div class="headertitle">
-<div class="title">IPLBox Struct Reference<div class="ingroups"><a class="el" href="group__geometry.html">Geometry</a></div></div>  </div>
+<div class="title">IPLComplex Struct Reference<div class="ingroups"><a class="el" href="group__binauralrenderer.html">Binaural Renderer</a></div></div>  </div>
 </div><!--header-->
 <div class="contents">
 
-<p>An axis-aligned box.  
- <a href="struct_i_p_l_box.html#details">More...</a></p>
+<p>A single-precision complex number.  
+ <a href="struct_i_p_l_complex.html#details">More...</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Data Fields</h2></td></tr>
-<tr class="memitem:a2b1047fda3bb6147fc67a20272f499f5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_i_p_l_vector3.html">IPLVector3</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_i_p_l_box.html#a2b1047fda3bb6147fc67a20272f499f5">minCoordinates</a></td></tr>
-<tr class="memdesc:a2b1047fda3bb6147fc67a20272f499f5"><td class="mdescLeft">&#160;</td><td class="mdescRight">The minimum coordinates of any vertex.  <a href="#a2b1047fda3bb6147fc67a20272f499f5">More...</a><br /></td></tr>
-<tr class="separator:a2b1047fda3bb6147fc67a20272f499f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a214328c1f7af391ee9920b890bc3e6fe"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_i_p_l_vector3.html">IPLVector3</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_i_p_l_box.html#a214328c1f7af391ee9920b890bc3e6fe">maxCoordinates</a></td></tr>
-<tr class="memdesc:a214328c1f7af391ee9920b890bc3e6fe"><td class="mdescLeft">&#160;</td><td class="mdescRight">The maximum coordinates of any vertex.  <a href="#a214328c1f7af391ee9920b890bc3e6fe">More...</a><br /></td></tr>
-<tr class="separator:a214328c1f7af391ee9920b890bc3e6fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6ae4c408317b98522f1b4db2e3d0ea23"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group__types.html#gaae74a77965d451d22a466a60cb622131">IPLfloat32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_i_p_l_complex.html#a6ae4c408317b98522f1b4db2e3d0ea23">real</a></td></tr>
+<tr class="memdesc:a6ae4c408317b98522f1b4db2e3d0ea23"><td class="mdescLeft">&#160;</td><td class="mdescRight">The real part.  <a href="#a6ae4c408317b98522f1b4db2e3d0ea23">More...</a><br /></td></tr>
+<tr class="separator:a6ae4c408317b98522f1b4db2e3d0ea23"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a964261f25a2008dea529f8e605eaeb26"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group__types.html#gaae74a77965d451d22a466a60cb622131">IPLfloat32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_i_p_l_complex.html#a964261f25a2008dea529f8e605eaeb26">imag</a></td></tr>
+<tr class="memdesc:a964261f25a2008dea529f8e605eaeb26"><td class="mdescLeft">&#160;</td><td class="mdescRight">The imaginary part.  <a href="#a964261f25a2008dea529f8e605eaeb26">More...</a><br /></td></tr>
+<tr class="separator:a964261f25a2008dea529f8e605eaeb26"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>An axis-aligned box. </p>
-<p>Axis-aligned boxes are used to specify a volume of 3D space. </p>
+<div class="textblock"><p>A single-precision complex number. </p>
 </div><h2 class="groupheader">Field Documentation</h2>
-<a id="a2b1047fda3bb6147fc67a20272f499f5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2b1047fda3bb6147fc67a20272f499f5">&#9670;&nbsp;</a></span>minCoordinates</h2>
+<a id="a6ae4c408317b98522f1b4db2e3d0ea23"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6ae4c408317b98522f1b4db2e3d0ea23">&#9670;&nbsp;</a></span>real</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="struct_i_p_l_vector3.html">IPLVector3</a> minCoordinates</td>
+          <td class="memname"><a class="el" href="group__types.html#gaae74a77965d451d22a466a60cb622131">IPLfloat32</a> real</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>The minimum coordinates of any vertex. </p>
+<p>The real part. </p>
 
 </div>
 </div>
-<a id="a214328c1f7af391ee9920b890bc3e6fe"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a214328c1f7af391ee9920b890bc3e6fe">&#9670;&nbsp;</a></span>maxCoordinates</h2>
+<a id="a964261f25a2008dea529f8e605eaeb26"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a964261f25a2008dea529f8e605eaeb26">&#9670;&nbsp;</a></span>imag</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="struct_i_p_l_vector3.html">IPLVector3</a> maxCoordinates</td>
+          <td class="memname"><a class="el" href="group__types.html#gaae74a77965d451d22a466a60cb622131">IPLfloat32</a> imag</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>The maximum coordinates of any vertex. </p>
+<p>The imaginary part. </p>
 
 </div>
 </div>
+<hr/>The documentation for this struct was generated from the following file:<ul>
+<li>D:/coding/phonon/phonon/rel/core/src/core/api/<a class="el" href="phonon_8h_source.html">phonon.h</a></li>
+</ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
