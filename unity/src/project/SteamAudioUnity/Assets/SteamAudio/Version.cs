@@ -9,7 +9,7 @@ namespace SteamAudio
     {
         public const int major = 2;
         public const int minor = 0;
-        public const int patch = 19;
+        public const int patch = 20;
 
         public static int GetVersion() 
         {

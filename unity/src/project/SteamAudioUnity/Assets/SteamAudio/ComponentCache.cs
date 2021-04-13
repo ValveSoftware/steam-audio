@@ -33,7 +33,12 @@ namespace SteamAudio
 
         public AudioListener AudioListener()
         {
-            audioListener = GameObject.FindObjectOfType<AudioListener>();
+            if (!isAudioListenerSet && audioListener == null)
+            {
+                audioListener = GameObject.FindObjectOfType<AudioListener>();
+                isAudioListenerSet = true;
+            }
+
             return audioListener;
         }
 
@@ -75,6 +80,7 @@ namespace SteamAudio
         SteamAudioCustomSpeakerLayout   steamAudioCustomSpeakerLayout       = null;
         SteamAudioCustomSettings        steamAudioCustomSettings            = null;
 
+        bool                            isAudioListenerSet                  = false;
         bool                            isSteamAudioListenerSet             = false;
         bool                            isSteamAudioCustomSpeakerLayoutSet  = false;
         bool                            isSteamAudioCustomSettingsSet       = false;

@@ -74,6 +74,8 @@ namespace SteamAudio
 
     public sealed class UnityAudioEngineSource : AudioEngineSource
     {
+        byte[] mIntPtrBuffer = new byte[sizeof(Int64)];
+
         public override void Initialize(GameObject gameObject)
         {
             audioSource = gameObject.GetComponent<AudioSource>();
@@ -87,6 +89,9 @@ namespace SteamAudio
 
         public override void GetParameters(SteamAudioSource steamAudioSource)
         {
+            if (mAudioSourceDataInitialized)
+                return;
+
             // todo: can we copy the curve only if it's changed?
             m_curAudioSourceData.rolloffMode = audioSource.rolloffMode;
             m_curAudioSourceData.minDistance = audioSource.minDistance;
@@ -116,6 +121,45 @@ namespace SteamAudio
             }
 
             steamAudioSource.airAbsorptionModel.type = AirAbsorptionModelType.Default;
+
+            mAudioSourceDataInitialized = true;
+        }
+
+        void SetSpatializerIntPtr(IntPtr ptr, ref int index)
+        {
+            if (IntPtr.Size == sizeof(Int64))
+            {
+                var ptrValue = ptr.ToInt64();
+
+                mIntPtrBuffer[0] = (byte) (ptrValue >> 0);
+                mIntPtrBuffer[1] = (byte) (ptrValue >> 8);
+                mIntPtrBuffer[2] = (byte) (ptrValue >> 16);
+                mIntPtrBuffer[3] = (byte) (ptrValue >> 24);
+                mIntPtrBuffer[4] = (byte) (ptrValue >> 32);
+                mIntPtrBuffer[5] = (byte) (ptrValue >> 40);
+                mIntPtrBuffer[6] = (byte) (ptrValue >> 48);
+                mIntPtrBuffer[7] = (byte) (ptrValue >> 56);
+
+                var valueLow = BitConverter.ToSingle(mIntPtrBuffer, 0);
+                var valueHigh = BitConverter.ToSingle(mIntPtrBuffer, 4);
+
+                audioSource.SetSpatializerFloat(index++, valueLow);
+                audioSource.SetSpatializerFloat(index++, valueHigh);
+            }
+            else
+            {
+                var ptrValue = ptr.ToInt32();
+
+                mIntPtrBuffer[0] = (byte) (ptrValue >> 0);
+                mIntPtrBuffer[1] = (byte) (ptrValue >> 8);
+                mIntPtrBuffer[2] = (byte) (ptrValue >> 16);
+                mIntPtrBuffer[3] = (byte) (ptrValue >> 24);
+
+                var value = BitConverter.ToSingle(mIntPtrBuffer, 0);
+
+                audioSource.SetSpatializerFloat(index++, value);
+                audioSource.SetSpatializerFloat(index++, 0.0f);
+            }
         }
 
         public override void UpdateParameters(SteamAudioSource steamAudioSource)
@@ -191,33 +235,8 @@ namespace SteamAudio
 
             audioSource.SetSpatializerFloat(index++, steamAudioSource.distanceAttenuationModel.minDistance);
 
-            if (IntPtr.Size == sizeof(Int64)) 
-            {
-                // note: assumes little-endian
-                var valueBytes = BitConverter.GetBytes(distanceAttenuationCallback.ToInt64());
-                var valueLow = BitConverter.ToSingle(valueBytes, 0);
-                var valueHigh = BitConverter.ToSingle(valueBytes, 4);
-                audioSource.SetSpatializerFloat(index++, valueLow);
-                audioSource.SetSpatializerFloat(index++, valueHigh);
-
-                valueBytes = BitConverter.GetBytes(distanceAttenuationUserData.ToInt64());
-                valueLow = BitConverter.ToSingle(valueBytes, 0);
-                valueHigh = BitConverter.ToSingle(valueBytes, 4);
-                audioSource.SetSpatializerFloat(index++, valueLow);
-                audioSource.SetSpatializerFloat(index++, valueHigh);
-            } 
-            else 
-            {
-                var valueBytes = BitConverter.GetBytes(distanceAttenuationCallback.ToInt32());
-                var valueLow = BitConverter.ToSingle(valueBytes, 0);
-                audioSource.SetSpatializerFloat(index++, valueLow);
-                audioSource.SetSpatializerFloat(index++, 0.0f);
-
-                valueBytes = BitConverter.GetBytes(distanceAttenuationUserData.ToInt32());
-                valueLow = BitConverter.ToSingle(valueBytes, 0);
-                audioSource.SetSpatializerFloat(index++, valueLow);
-                audioSource.SetSpatializerFloat(index++, 0.0f);
-            }
+            SetSpatializerIntPtr(distanceAttenuationCallback, ref index);
+            SetSpatializerIntPtr(distanceAttenuationUserData, ref index);
 
             audioSource.SetSpatializerFloat(index++, (steamAudioSource.distanceAttenuationModel.dirty == Bool.True) ? 1.0f : 0.0f);
         }
@@ -285,5 +304,6 @@ namespace SteamAudio
 
         UnityAudioSourceData m_curAudioSourceData = new UnityAudioSourceData();
         UnityAudioSourceData m_prevAudioSourceData = new UnityAudioSourceData();
+        bool mAudioSourceDataInitialized = false;
     }
 }

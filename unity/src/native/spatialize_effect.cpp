@@ -123,6 +123,8 @@ public:
     IPLDirectSoundPath directPath;
     IPLDistanceAttenuationModel distanceAttenuationModel;
 
+    bool mInputStarted;
+
     /** The default constructor initializes parameters to default values.
      */
     SpatializeEffectState() :
@@ -146,6 +148,7 @@ public:
         hrtfIndex(0),
         overrideHRTFIndex(false),
         distanceAttenuationModel{IPL_DISTANCEATTENUATION_DEFAULT, 1.0f, nullptr},
+        mInputStarted{ false },
         mInputFormat{},
         mOutputFormat{},
         mBinauralRenderer{ nullptr },
@@ -648,6 +651,29 @@ public:
         {
             terminate();
             return;
+        }
+
+        // Unity can call the process callback even when the audio source is not actually playing. When it does so, it
+        // sends incorrect values for spatial blend, distance attenuation, and all the other parameters. Because the
+        // direct effect performs a smooth ramp between gain values across multiple frames, it can try to smoothly ramp from
+        // incorrect to correct values once playback actually starts. This will result in an audible artifact: the first
+        // few frames of audio may be unexpectedly loud. To work around this, we don't perform any audio processing until
+        // we see the first non-zero input audio sample, at which point parameters should be correct as well.
+        if (!mInputStarted)
+        {
+            for (auto i = 0u; i < inChannels * numSamples; ++i)
+            {
+                if (fabsf(inBuffer[i]) != 0.0f)
+                {
+                    mInputStarted = true;
+                    break;
+                }
+            }
+
+            if (!mInputStarted)
+            {
+                return;
+            }
         }
 
         // Prepare the input and output buffers.

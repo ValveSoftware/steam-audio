@@ -78,7 +78,7 @@ namespace SteamAudio
 
             var environment = managerData.gameEngineState.Environment().GetEnvironment();
 
-            var listener = GameObject.FindObjectOfType<AudioListener>();
+            var listener = managerData.componentCache.AudioListener();
             if (!listener) {
                 return;
             }

@@ -8,7 +8,7 @@
 
 cmake_minimum_required(VERSION 3.9)
 set(CMAKE_CXX_STANDARD 14)
-project(Phonon VERSION 2.0.19)
+project(Phonon VERSION 2.0.20)
 
 set(CMAKE_MODULE_PATH "${CMAKE_HOME_DIRECTORY}/build")
 include(cotire)
