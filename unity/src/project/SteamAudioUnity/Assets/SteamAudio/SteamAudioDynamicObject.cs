@@ -16,6 +16,7 @@ namespace SteamAudio
         public string assetFileName = "";
 
         SteamAudioManager manager = null;
+        ManagerData managerData = null;
         IntPtr instancedMesh = IntPtr.Zero;
 
         void Awake()
@@ -25,6 +26,7 @@ namespace SteamAudio
                 throw new Exception();
             }
             manager.Initialize(GameEngineStateInitReason.Playing);
+            managerData = manager.ManagerData();
 
             if (assetFileName != null && assetFileName.Length > 0) {
                 manager.CreateInstancedMesh(assetFileName, transform, ref instancedMesh);
@@ -33,6 +35,9 @@ namespace SteamAudio
 
         void OnDestroy()
         {
+            if (managerData != null)
+                managerData.Destroy();
+
             if (manager == null || instancedMesh == IntPtr.Zero) {
                 return;
             }
