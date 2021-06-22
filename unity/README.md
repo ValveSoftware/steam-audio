@@ -78,7 +78,7 @@ Building the native plugin for Windows requires the following software:
 #### Build Instructions
 To build the plugin on Windows, run the following from a command prompt in the `unity` directory of the repository:
 
-```
+```sh
 cd build
 python build.py
 ```
@@ -110,7 +110,7 @@ Building the native plugin for Linux requires the following software:
 #### Build Instructions
 To build the plugin on Linux, run the following from a command prompt in the `unity` directory of the repository:
 
-```
+```sh
 cd build
 python build.py
 ```
@@ -138,7 +138,7 @@ Building the native plugin for macOS requires the following software:
 #### Build Instructions
 To build the plugin on macOS, run the following from a command prompt in the `unity` directory of the repository:
 
-```
+```sh
 cd build
 python build.py
 ```
@@ -169,7 +169,7 @@ Building the native plugin for Android requires the following software:
 Before you can build the native plugin, you must create an Android NDK standalone toolchain. To do this, run the
 following from the root directory of the Android SDK:
 
-```
+```sh
 cd ndk-bundle/build/tools
 python make_standalone_toolchain.py --arch arm --api 16 --stl libc++ --install-dir ../../../ndk-toolchain-armv7-clang
 ```
@@ -179,7 +179,7 @@ This will set up a toolchain that uses Clang as its compiler and generates 32-bi
 #### Build Instructions
 To build the plugin, run the following from a command prompt in the `unity` directory of the repository:
 
-```
+```sh
 cd build
 python build.py -p android
 ```
@@ -201,7 +201,7 @@ Building the Unity Package
 Building the Unity package is currently only supported on Windows. To build it, run the following from a command prompt
 in the `unity` directory of the repository:
 
-```
+```sh
 cd build
 python build.py -i unity
 ```
@@ -229,7 +229,7 @@ Packaging the Plugin
 As an optional step, you can package the plugin, including documentation, into a zip file. To do this, run the following
 from a command prompt in the `unity` directory of the repository:
 
-```
+```sh
 cd dist
 python deploy.py -c (configuration)
 ```

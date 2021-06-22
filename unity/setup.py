@@ -7,7 +7,7 @@ import shutil
 import urllib2
 import zipfile
 
-version = "2.0-beta.15"
+__version__ = "2.0-beta.15"
 
 def download_file(url):
     remote_file = urllib2.urlopen(url)
@@ -18,11 +18,11 @@ def download_file(url):
                 break
             local_file.write(data)
 
-print "Downloading steamaudio_api_" + version + ".zip..."
-url = "https://github.com/ValveSoftware/steam-audio/releases/download/v" + version + "/steamaudio_api_" + version + ".zip"
+print "Downloading steamaudio_api_" + __version__ + ".zip..."
+url = "https://github.com/ValveSoftware/steam-audio/releases/download/v" + __version__ + "/steamaudio_api_" + __version__ + ".zip"
 download_file(url)
 
-print "Extracting steamaudio_api_" + version + ".zip..."
+print "Extracting steamaudio_api_" + __version__ + ".zip..."
 with zipfile.ZipFile(os.path.basename(url), "r") as zip:
 	zip.extractall()
 
@@ -38,11 +38,11 @@ except:
 shutil.copytree("steamaudio_api/bin/OSX/phonon.bundle",  "src/project/SteamAudioUnity/Assets/Plugins/phonon.bundle")
 shutil.copy("steamaudio_api/lib/Android/libphonon.so",   "src/project/SteamAudioUnity/Assets/Plugins/android")
 
-print "Downloading steamaudio_tan_" + version + ".zip..."
-url = "https://github.com/ValveSoftware/steam-audio/releases/download/v" + version + "/steamaudio_tan_" + version + ".zip"
+print "Downloading steamaudio_tan_" + __version__ + ".zip..."
+url = "https://github.com/ValveSoftware/steam-audio/releases/download/v" + __version__ + "/steamaudio_tan_" + __version__ + ".zip"
 download_file(url)
 
-print "Extracting steamaudio_tan_" + version + ".zip..."
+print "Extracting steamaudio_tan_" + __version__ + ".zip..."
 with zipfile.ZipFile(os.path.basename(url), "r") as zip:
     zip.extractall()
 
@@ -50,11 +50,11 @@ print "Copying files..."
 shutil.copy("steamaudio_tan/bin/windows/x64/tanrt64.dll",      "src/project/SteamAudioUnity/Assets/Plugins/x86_64")
 shutil.copy("steamaudio_tan/bin/windows/x64/GPUUtilities.dll", "src/project/SteamAudioUnity/Assets/Plugins/x86_64")
 
-print "Downloading steamaudio_embree_" + version + ".zip..."
-url = "https://github.com/ValveSoftware/steam-audio/releases/download/v" + version + "/steamaudio_embree_" + version + ".zip"
+print "Downloading steamaudio_embree_" + __version__ + ".zip..."
+url = "https://github.com/ValveSoftware/steam-audio/releases/download/v" + __version__ + "/steamaudio_embree_" + __version__ + ".zip"
 download_file(url)
 
-print "Extracting steamaudio_embree_" + version + ".zip..."
+print "Extracting steamaudio_embree_" + __version__ + ".zip..."
 with zipfile.ZipFile(os.path.basename(url), "r") as zip:
     zip.extractall()
 
@@ -69,11 +69,11 @@ shutil.copy("steamaudio_embree/bin/osx/libembree.dylib",            "src/project
 shutil.copy("steamaudio_embree/bin/osx/libtbb.dylib",               "src/project/SteamAudioUnity/Assets/Plugins")
 shutil.copy("steamaudio_embree/bin/osx/libtbbmalloc.dylib",         "src/project/SteamAudioUnity/Assets/Plugins")
 
-print "Downloading steamaudio_radeonrays_" + version + ".zip..."
-url = "https://github.com/ValveSoftware/steam-audio/releases/download/v" + version + "/steamaudio_radeonrays_" + version + ".zip"
+print "Downloading steamaudio_radeonrays_" + __version__ + ".zip..."
+url = "https://github.com/ValveSoftware/steam-audio/releases/download/v" + __version__ + "/steamaudio_radeonrays_" + __version__ + ".zip"
 download_file(url)
 
-print "Extracting steamaudio_radeonrays_" + version + ".zip..."
+print "Extracting steamaudio_radeonrays_" + __version__ + ".zip..."
 with zipfile.ZipFile(os.path.basename(url), "r") as zip:
     zip.extractall()
 

@@ -7,7 +7,7 @@ import shutil
 import urllib2
 import zipfile
 
-version = "2.0-beta.13"
+__version__ = "2.0-beta.13"
 
 def download_file(url):
     remote_file = urllib2.urlopen(url)
@@ -18,11 +18,11 @@ def download_file(url):
                 break
             local_file.write(data)
 
-print "Downloading Steam Audio SDK v" + version + "..."
-url = "https://github.com/ValveSoftware/steam-audio/releases/download/v" + version + "/steamaudio_api_" + version + ".zip"
+print "Downloading Steam Audio SDK v" + __version__ + "..."
+url = "https://github.com/ValveSoftware/steam-audio/releases/download/v" + __version__ + "/steamaudio_api_" + __version__ + ".zip"
 download_file(url)
 
-print "Extracting steamaudio_api_" + version + ".zip..."
+print "Extracting steamaudio_api_" + __version__ + ".zip..."
 with zipfile.ZipFile(os.path.basename(url), "r") as zip:
 	zip.extractall()
 
