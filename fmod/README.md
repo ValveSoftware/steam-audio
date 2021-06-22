@@ -75,7 +75,7 @@ Building the plugin for Windows requires the following software:
 #### Build Instructions
 To build the plugin on Windows, run the following from a command prompt in the `fmod` directory of the repository:
 
-```
+```sh
 cd build
 python build.py
 ```
@@ -106,7 +106,7 @@ Unity. If you are using a different game engine, you can skip this step.
 Building the Unity package is currently only supported on Windows. To build it, run the following from a command prompt
 in the `unity` directory of the repository:
 
-```
+```sh
 cd build
 python build.py -i unity
 ```
@@ -126,7 +126,7 @@ Packaging the Plugin
 As an optional step, you can package the plugin, including documentation, into a zip file. To do this, run the following
 from a command prompt in the `fmod` directory of the repository:
 
-```
+```sh
 cd dist
 python deploy.py -c (configuration)
 ```
