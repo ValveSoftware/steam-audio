@@ -1,0 +1,311 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Getting Started &mdash; Steam Audio FMOD Studio Integration  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/tabs.css" type="text/css" />
+  <link rel="stylesheet" href="_static/steamaudio.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/tabs.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="User’s Guide" href="guide.html" />
+    <link rel="prev" title="Steam Audio FMOD Studio Integration" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html">
+          
+
+          
+            
+            <img src="_static/steam-audio-logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                4.0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">FMOD Studio Integration</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Getting Started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#requirements">Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#add-steam-audio-to-your-fmod-studio-project">Add Steam Audio to your FMOD Studio project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#spatialize-an-event">Spatialize an event</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#integrate-steam-audio-with-your-game-engine">Integrate Steam Audio with your game engine</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="guide.html">User’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="build-instructions.html">Build Instructions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference.html">Reference</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Steam Audio FMOD Studio Integration</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Getting Started</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="getting-started">
+<h1>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="requirements">
+<h2>Requirements<a class="headerlink" href="#requirements" title="Permalink to this headline">¶</a></h2>
+<p>Steam Audio requires <strong>FMOD Studio 2.00</strong> or later.</p>
+<p>The Steam Audio FMOD Studio integration supports the following platforms:</p>
+<ul class="simple">
+<li><p>Windows 7 or later (32-bit and 64-bit)</p></li>
+<li><p>Linux (32-bit and 64-bit, tested with Ubuntu 16.04 LTS)</p></li>
+<li><p>macOS 10.7 or later (64-bit Intel)</p></li>
+<li><p>Android 5.0 or later (32-bit ARM, 64-bit ARM, 32-bit Intel)</p></li>
+</ul>
+</div>
+<div class="section" id="add-steam-audio-to-your-fmod-studio-project">
+<h2>Add Steam Audio to your FMOD Studio project<a class="headerlink" href="#add-steam-audio-to-your-fmod-studio-project" title="Permalink to this headline">¶</a></h2>
+<p>To add Steam Audio to your FMOD Studio project:</p>
+<ol class="arabic simple">
+<li><p>Download the latest version of the Steam Audio FMOD Studio integration: <code class="docutils literal notranslate"><span class="pre">steamaudio_fmod.zip</span></code>. Extract the contents of this file to any directory of your choosing.</p></li>
+<li><p>In your project directory (this is the directory containing your project’s <code class="docutils literal notranslate"><span class="pre">.fspro</span></code> file), create a subdirectory called <code class="docutils literal notranslate"><span class="pre">Plugins</span></code>, if it doesn’t already exist.</p></li>
+<li><p>Copy the following files from the directory you extracted <code class="docutils literal notranslate"><span class="pre">steamaudio_fmod.zip</span></code> into, to the <code class="docutils literal notranslate"><span class="pre">Plugins</span></code> directory of your FMOD Studio project.</p>
+<ul class="simple">
+<li><p>(Windows 32-bit editor only) <code class="docutils literal notranslate"><span class="pre">lib/windows-x86/phonon.dll</span></code> and <code class="docutils literal notranslate"><span class="pre">lib/windows-x86/phonon_fmod.dll</span></code></p></li>
+<li><p>(Windows 64-bit editor only) <code class="docutils literal notranslate"><span class="pre">lib/windows-x64/phonon.dll</span></code> and <code class="docutils literal notranslate"><span class="pre">lib/windows-x64/phonon_fmod.dll</span></code></p></li>
+<li><p>(macOS editor only) <code class="docutils literal notranslate"><span class="pre">lib/osx/phonon.bundle</span></code> and <code class="docutils literal notranslate"><span class="pre">lib/osx/libphonon_fmod.dylib</span></code></p></li>
+<li><p>(all platforms) <code class="docutils literal notranslate"><span class="pre">src/phonon_fmod.plugin.js</span></code></p></li>
+</ul>
+</li>
+</ol>
+</div>
+<div class="section" id="spatialize-an-event">
+<h2>Spatialize an event<a class="headerlink" href="#spatialize-an-event" title="Permalink to this headline">¶</a></h2>
+<p>Once Steam Audio is added to your project, you can spatialize any event:</p>
+<ol class="arabic simple">
+<li><p>Select the event you want to spatialize.</p></li>
+<li><p>Click the <strong>Master</strong> track for the event.</p></li>
+<li><p>In the effects deck at the bottom of the window, right-click an empty spot, and choose <strong>Add Effect</strong> &gt; <strong>Plug-in Effects</strong> &gt; <strong>Valve</strong> &gt; <strong>Steam Audio Spatializer</strong>.</p></li>
+<li><p>Drag the Steam Audio Spatializer to an appropriate position in the effect chain.</p></li>
+</ol>
+<img alt="_images/spatializer_placement.png" src="_images/spatializer_placement.png" />
+<p>If the event already contains FMOD’s built-in spatializer effect, you can delete or bypass it.</p>
+</div>
+<div class="section" id="integrate-steam-audio-with-your-game-engine">
+<h2>Integrate Steam Audio with your game engine<a class="headerlink" href="#integrate-steam-audio-with-your-game-engine" title="Permalink to this headline">¶</a></h2>
+<p>Before you can use the Steam Audio FMOD Studio integration in your game, you must configure your game engine to use Steam Audio and load the Steam Audio FMOD Studio integration.</p>
+<p>If you are using Unity as your game engine, see the Unity tab below. Otherwise, see the C++ tab for instructions on how to configure your game engine to load the Steam Audio FMOD Studio integration via C++ code.</p>
+<div class="sphinx-tabs docutils container">
+<div aria-label="Tabbed content" class="closeable" role="tablist"><button aria-controls="panel-0-VW5pdHk=" aria-selected="true" class="sphinx-tabs-tab group-tab" id="tab-0-VW5pdHk=" name="VW5pdHk=" role="tab" tabindex="0">Unity</button><button aria-controls="panel-0-Qysr" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-0-Qysr" name="Qysr" role="tab" tabindex="-1">C++</button></div><div aria-labelledby="tab-0-VW5pdHk=" class="sphinx-tabs-panel group-tab" id="panel-0-VW5pdHk=" name="VW5pdHk=" role="tabpanel" tabindex="0"><p>These instructions assume that you have added the FMOD Studio Unity integration and the Steam Audio Unity integration to your Unity project.</p>
+<p class="rubric">Configure the FMOD Studio Unity integration to use Steam Audio</p>
+<ol class="arabic simple">
+<li><p>In Unity’s main menu, click <strong>FMOD</strong> &gt; <strong>Edit Settings</strong>.</p></li>
+<li><p>Under <strong>Dynamic Plugins</strong>, click <strong>Add Plugin</strong>.</p></li>
+<li><p>In the text box that appears, enter <code class="docutils literal notranslate"><span class="pre">phonon_fmod</span></code>.</p></li>
+</ol>
+<img alt="_images/unity_fmodsettings.png" src="_images/unity_fmodsettings.png" />
+<p class="rubric">Configure the Steam Audio Unity integration to use FMOD Studio</p>
+<ol class="arabic simple">
+<li><p>In Unity’s main menu, click <strong>Steam Audio</strong> &gt; <strong>Settings</strong>.</p></li>
+<li><p>Set <strong>Audio Engine</strong> to <strong>FMOD Studio</strong>.</p></li>
+</ol>
+<img alt="_images/unity_steamaudiosettings.png" src="_images/unity_steamaudiosettings.png" />
+</div><div aria-labelledby="tab-0-Qysr" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-0-Qysr" name="Qysr" role="tabpanel" tabindex="0"><p>These instructions assume that you have integrated Steam Audio with your game engine via the Steam Audio SDK.</p>
+<p class="rubric">Load the Steam Audio FMOD Studio integration</p>
+<ol class="arabic simple">
+<li><p>When initializing FMOD Studio in your game engine, call <code class="docutils literal notranslate"><span class="pre">FMOD::System::loadPlugin</span></code> to load the Steam Audio FMOD Studio integration. The plugin files can be found in the <code class="docutils literal notranslate"><span class="pre">steamaudio_fmod.zip</span></code> file you downloaded earlier. The file name of the plugin depends on the platform:</p>
+<ul class="simple">
+<li><p>Windows 32-bit: <code class="docutils literal notranslate"><span class="pre">lib/windows-x86/phonon_fmod.dll</span></code></p></li>
+<li><p>Windows 64-bit: <code class="docutils literal notranslate"><span class="pre">lib/windows-x64/phonon_fmod.dll</span></code></p></li>
+<li><p>Linux 32-bit: <code class="docutils literal notranslate"><span class="pre">lib/linux-x86/libphonon_fmod.so</span></code></p></li>
+<li><p>Linux 64-bit: <code class="docutils literal notranslate"><span class="pre">lib/linux-x64/libphonon_fmod.so</span></code></p></li>
+<li><p>macOS: <code class="docutils literal notranslate"><span class="pre">lib/osx/libphonon_fmod.dylib</span></code></p></li>
+<li><p>Android ARMv7 (32-bit): <code class="docutils literal notranslate"><span class="pre">lib/android-armv7/libphonon_fmod.so</span></code></p></li>
+<li><p>Android ARMv8/AArch64 (64-bit): <code class="docutils literal notranslate"><span class="pre">lib/android-armv8/libphonon_fmod.so</span></code></p></li>
+<li><p>Android x86 (32-bit): <code class="docutils literal notranslate"><span class="pre">lib/android-x86/libphonon_fmod.so</span></code></p></li>
+</ul>
+</li>
+</ol>
+<p class="rubric">Initialize the Steam Audio FMOD Studio integration</p>
+<ol class="arabic simple" start="2">
+<li><p>Call <code class="docutils literal notranslate"><span class="pre">iplFMODInitialize</span></code> after creating the Steam Audio context.</p></li>
+<li><p>Create an HRTF (typically the default HRTF), and call <code class="docutils literal notranslate"><span class="pre">iplFMODSetHRTF</span></code>.</p></li>
+<li><p>Determine the simulation settings to use for subsequent simulations, and call <code class="docutils literal notranslate"><span class="pre">iplFMODSetSimulationSettings</span></code>.</p></li>
+</ol>
+</div></div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="guide.html" class="btn btn-neutral float-right" title="User’s Guide" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="index.html" class="btn btn-neutral float-left" title="Steam Audio FMOD Studio Integration" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Valve Corporation.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

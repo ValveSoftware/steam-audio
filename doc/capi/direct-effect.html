@@ -1,0 +1,471 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Direct Effect &mdash; Steam Audio C API  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/steamaudio.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Reflection Effect" href="reflections-effect.html" />
+    <link rel="prev" title="Ambisonics Decode Effect" href="ambisonics-decode-effect.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html">
+          
+
+          
+            
+            <img src="_static/steam-audio-logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                4.0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Steam Audio SDK</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guide.html">Programmer’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="integration.html">Integrating Steam Audio</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="reference.html">API Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="types.html">Basic Data Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="context.html">Context</a></li>
+<li class="toctree-l2"><a class="reference internal" href="geometry.html">Geometry</a></li>
+<li class="toctree-l2"><a class="reference internal" href="serialization.html">Serialization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="embree.html">Embree</a></li>
+<li class="toctree-l2"><a class="reference internal" href="opencl.html">OpenCL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="radeon-rays.html">Radeon Rays</a></li>
+<li class="toctree-l2"><a class="reference internal" href="trueaudio-next.html">TrueAudio Next</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scene.html">Scene</a></li>
+<li class="toctree-l2"><a class="reference internal" href="audio-buffers.html">Audio Buffers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hrtf.html">HRTF</a></li>
+<li class="toctree-l2"><a class="reference internal" href="panning-effect.html">Panning Effect</a></li>
+<li class="toctree-l2"><a class="reference internal" href="binaural-effect.html">Binaural Effect</a></li>
+<li class="toctree-l2"><a class="reference internal" href="virtual-surround-effect.html">Virtual Surround Effect</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ambisonics-encode-effect.html">Ambisonics Encode Effect</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ambisonics-panning-effect.html">Ambisonics Panning Effect</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ambisonics-binaural-effect.html">Ambisonics Binaural Effect</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ambisonics-rotation-effect.html">Ambisonics Rotation Effect</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ambisonics-decode-effect.html">Ambisonics Decode Effect</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Direct Effect</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#typedefs">Typedefs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#functions">Functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#structures">Structures</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#enumerations">Enumerations</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="reflections-effect.html">Reflection Effect</a></li>
+<li class="toctree-l2"><a class="reference internal" href="path-effect.html">Path Effect</a></li>
+<li class="toctree-l2"><a class="reference internal" href="probes.html">Probes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="baking.html">Baking</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simulation.html">Simulation</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Steam Audio C API</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="reference.html">API Reference</a> &raquo;</li>
+        
+      <li>Direct Effect</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="direct-effect">
+<h1>Direct Effect<a class="headerlink" href="#direct-effect" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="typedefs">
+<h2>Typedefs<a class="headerlink" href="#typedefs" title="Permalink to this headline">¶</a></h2>
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv415IPLDirectEffect">
+<span id="_CPPv315IPLDirectEffect"></span><span id="_CPPv215IPLDirectEffect"></span><span id="IPLDirectEffect"></span><span class="target" id="group__directeffect_1ga65d59706e681a6094f4323d54ef3e52e"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="n"><span class="pre">_IPLDirectEffect_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">IPLDirectEffect</span></span></span><a class="headerlink" href="#_CPPv415IPLDirectEffect" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Filters and attenuates an audio signal based on various properties of the direct path between a point source and the listener. </p>
+</dd></dl>
+
+</div>
+<div class="section" id="functions">
+<h2>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h2>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv421iplDirectEffectCreate10IPLContextP16IPLAudioSettingsP23IPLDirectEffectSettingsP15IPLDirectEffect">
+<span id="_CPPv321iplDirectEffectCreate10IPLContextP16IPLAudioSettingsP23IPLDirectEffectSettingsP15IPLDirectEffect"></span><span id="_CPPv221iplDirectEffectCreate10IPLContextP16IPLAudioSettingsP23IPLDirectEffectSettingsP15IPLDirectEffect"></span><span id="iplDirectEffectCreate__IPLContext.IPLAudioSettingsP.IPLDirectEffectSettingsP.IPLDirectEffectP"></span><span class="target" id="group__directeffect_1ga96a3e384ea2eae36006f8d3e7a46c8a6"></span><a class="reference internal" href="types.html#_CPPv48IPLerror" title="IPLerror"><span class="n"><span class="pre">IPLerror</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplDirectEffectCreate</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="context.html#_CPPv410IPLContext" title="IPLContext"><span class="n"><span class="pre">IPLContext</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">context</span></span>, <a class="reference internal" href="audio-buffers.html#_CPPv416IPLAudioSettings" title="IPLAudioSettings"><span class="n"><span class="pre">IPLAudioSettings</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">audioSettings</span></span>, <a class="reference internal" href="#_CPPv423IPLDirectEffectSettings" title="IPLDirectEffectSettings"><span class="n"><span class="pre">IPLDirectEffectSettings</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">effectSettings</span></span>, <a class="reference internal" href="#_CPPv415IPLDirectEffect" title="IPLDirectEffect"><span class="n"><span class="pre">IPLDirectEffect</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">effect</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv421iplDirectEffectCreate10IPLContextP16IPLAudioSettingsP23IPLDirectEffectSettingsP15IPLDirectEffect" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Creates a direct effect. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>context</strong> – The context used to initialize Steam Audio. </p></li>
+<li><p><strong>audioSettings</strong> – Global audio processing settings. </p></li>
+<li><p><strong>effectSettings</strong> – The settings to use when creating the direct effect. </p></li>
+<li><p><strong>effect</strong> – [out] The created direct effect.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Status code indicating whether or not the operation succeeded. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv421iplDirectEffectRetain15IPLDirectEffect">
+<span id="_CPPv321iplDirectEffectRetain15IPLDirectEffect"></span><span id="_CPPv221iplDirectEffectRetain15IPLDirectEffect"></span><span id="iplDirectEffectRetain__IPLDirectEffect"></span><span class="target" id="group__directeffect_1ga1698ff627af678ea3f258b5ec7247f73"></span><a class="reference internal" href="#_CPPv415IPLDirectEffect" title="IPLDirectEffect"><span class="n"><span class="pre">IPLDirectEffect</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplDirectEffectRetain</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv415IPLDirectEffect" title="IPLDirectEffect"><span class="n"><span class="pre">IPLDirectEffect</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">effect</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv421iplDirectEffectRetain15IPLDirectEffect" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Retains an additional reference to a direct effect. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>effect</strong> – The direct effect to retain a reference to.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The additional reference to the direct effect. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv422iplDirectEffectReleaseP15IPLDirectEffect">
+<span id="_CPPv322iplDirectEffectReleaseP15IPLDirectEffect"></span><span id="_CPPv222iplDirectEffectReleaseP15IPLDirectEffect"></span><span id="iplDirectEffectRelease__IPLDirectEffectP"></span><span class="target" id="group__directeffect_1ga31b52ae82027e841798a9ac6f21922cf"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplDirectEffectRelease</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv415IPLDirectEffect" title="IPLDirectEffect"><span class="n"><span class="pre">IPLDirectEffect</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">effect</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv422iplDirectEffectReleaseP15IPLDirectEffect" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Releases a reference to a direct effect. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>effect</strong> – The direct effect to release a reference to. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv420iplDirectEffectReset15IPLDirectEffect">
+<span id="_CPPv320iplDirectEffectReset15IPLDirectEffect"></span><span id="_CPPv220iplDirectEffectReset15IPLDirectEffect"></span><span id="iplDirectEffectReset__IPLDirectEffect"></span><span class="target" id="group__directeffect_1ga921d6543dfe338f569ed501f3f401d23"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplDirectEffectReset</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv415IPLDirectEffect" title="IPLDirectEffect"><span class="n"><span class="pre">IPLDirectEffect</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">effect</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv420iplDirectEffectReset15IPLDirectEffect" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Resets the internal processing state of a direct effect. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>effect</strong> – The direct effect to reset. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv420iplDirectEffectApply15IPLDirectEffectP21IPLDirectEffectParamsP14IPLAudioBufferP14IPLAudioBuffer">
+<span id="_CPPv320iplDirectEffectApply15IPLDirectEffectP21IPLDirectEffectParamsP14IPLAudioBufferP14IPLAudioBuffer"></span><span id="_CPPv220iplDirectEffectApply15IPLDirectEffectP21IPLDirectEffectParamsP14IPLAudioBufferP14IPLAudioBuffer"></span><span id="iplDirectEffectApply__IPLDirectEffect.IPLDirectEffectParamsP.IPLAudioBufferP.IPLAudioBufferP"></span><span class="target" id="group__directeffect_1gac5a8654f0bf4f0a903bc68874c22064f"></span><a class="reference internal" href="audio-buffers.html#_CPPv419IPLAudioEffectState" title="IPLAudioEffectState"><span class="n"><span class="pre">IPLAudioEffectState</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplDirectEffectApply</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv415IPLDirectEffect" title="IPLDirectEffect"><span class="n"><span class="pre">IPLDirectEffect</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">effect</span></span>, <a class="reference internal" href="#_CPPv421IPLDirectEffectParams" title="IPLDirectEffectParams"><span class="n"><span class="pre">IPLDirectEffectParams</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">params</span></span>, <a class="reference internal" href="audio-buffers.html#_CPPv414IPLAudioBuffer" title="IPLAudioBuffer"><span class="n"><span class="pre">IPLAudioBuffer</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">in</span></span>, <a class="reference internal" href="audio-buffers.html#_CPPv414IPLAudioBuffer" title="IPLAudioBuffer"><span class="n"><span class="pre">IPLAudioBuffer</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">out</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv420iplDirectEffectApply15IPLDirectEffectP21IPLDirectEffectParamsP14IPLAudioBufferP14IPLAudioBuffer" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Applies a direct effect to an audio buffer. </p>
+<p>This effect CAN be applied in-place.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>effect</strong> – The direct effect to apply. </p></li>
+<li><p><strong>params</strong> – Parameters for applying the effect. </p></li>
+<li><p><strong>in</strong> – The input audio buffer. Must have as many channels as specified when creating the effect. </p></li>
+<li><p><strong>out</strong> – The output audio buffer. Must have as many channels as specified when creating the effect.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">IPL_AUDIOEFFECTSTATE_TAILREMAINING</span></code> if any tail samples remain in the effect’s internal buffers, or <code class="docutils literal notranslate"><span class="pre">IPL_AUDIOEFFECTSTATE_TAILCOMPLETE</span></code> otherwise. </p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="structures">
+<h2>Structures<a class="headerlink" href="#structures" title="Permalink to this headline">¶</a></h2>
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv423IPLDirectEffectSettings">
+<span id="_CPPv323IPLDirectEffectSettings"></span><span id="_CPPv223IPLDirectEffectSettings"></span><span id="IPLDirectEffectSettings"></span><span class="target" id="struct_i_p_l_direct_effect_settings"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLDirectEffectSettings</span></span></span><a class="headerlink" href="#_CPPv423IPLDirectEffectSettings" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Settings used to create a direct effect. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N23IPLDirectEffectSettings11numChannelsE">
+<span id="_CPPv3N23IPLDirectEffectSettings11numChannelsE"></span><span id="_CPPv2N23IPLDirectEffectSettings11numChannelsE"></span><span id="IPLDirectEffectSettings::numChannels__IPLint32"></span><span class="target" id="struct_i_p_l_direct_effect_settings_1a3df0be9c0be579048507de45c80aed57"></span><a class="reference internal" href="types.html#_CPPv48IPLint32" title="IPLint32"><span class="n"><span class="pre">IPLint32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">numChannels</span></span></span><a class="headerlink" href="#_CPPv4N23IPLDirectEffectSettings11numChannelsE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Number of channels that will be used by input and output buffers. </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv421IPLDirectEffectParams">
+<span id="_CPPv321IPLDirectEffectParams"></span><span id="_CPPv221IPLDirectEffectParams"></span><span id="IPLDirectEffectParams"></span><span class="target" id="struct_i_p_l_direct_effect_params"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLDirectEffectParams</span></span></span><a class="headerlink" href="#_CPPv421IPLDirectEffectParams" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Parameters for applying a direct effect to an audio buffer. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N21IPLDirectEffectParams5flagsE">
+<span id="_CPPv3N21IPLDirectEffectParams5flagsE"></span><span id="_CPPv2N21IPLDirectEffectParams5flagsE"></span><span id="IPLDirectEffectParams::flags__IPLDirectEffectFlags"></span><span class="target" id="struct_i_p_l_direct_effect_params_1aea423b12e2c14337d8e808802b8edeed"></span><a class="reference internal" href="#_CPPv420IPLDirectEffectFlags" title="IPLDirectEffectFlags"><span class="n"><span class="pre">IPLDirectEffectFlags</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">flags</span></span></span><a class="headerlink" href="#_CPPv4N21IPLDirectEffectParams5flagsE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Flags indicating which direct path effects to apply. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N21IPLDirectEffectParams16transmissionTypeE">
+<span id="_CPPv3N21IPLDirectEffectParams16transmissionTypeE"></span><span id="_CPPv2N21IPLDirectEffectParams16transmissionTypeE"></span><span id="IPLDirectEffectParams::transmissionType__IPLTransmissionType"></span><span class="target" id="struct_i_p_l_direct_effect_params_1a8a92cd6a0e59cd563a96abb896dab521"></span><a class="reference internal" href="#_CPPv419IPLTransmissionType" title="IPLTransmissionType"><span class="n"><span class="pre">IPLTransmissionType</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">transmissionType</span></span></span><a class="headerlink" href="#_CPPv4N21IPLDirectEffectParams16transmissionTypeE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Mode of applying transmission effect, if <code class="docutils literal notranslate"><span class="pre">IPL_DIRECTEFFECTFLAGS_APPLYTRANSMISSION</span></code> is enabled. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N21IPLDirectEffectParams19distanceAttenuationE">
+<span id="_CPPv3N21IPLDirectEffectParams19distanceAttenuationE"></span><span id="_CPPv2N21IPLDirectEffectParams19distanceAttenuationE"></span><span id="IPLDirectEffectParams::distanceAttenuation__IPLfloat32"></span><span class="target" id="struct_i_p_l_direct_effect_params_1a4b75a7278e9bb2d5380138a607f3e5bd"></span><a class="reference internal" href="types.html#_CPPv410IPLfloat32" title="IPLfloat32"><span class="n"><span class="pre">IPLfloat32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">distanceAttenuation</span></span></span><a class="headerlink" href="#_CPPv4N21IPLDirectEffectParams19distanceAttenuationE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Value of distance attenuation, between 0 and 1. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N21IPLDirectEffectParams13airAbsorptionE">
+<span id="_CPPv3N21IPLDirectEffectParams13airAbsorptionE"></span><span id="_CPPv2N21IPLDirectEffectParams13airAbsorptionE"></span><span id="IPLDirectEffectParams::airAbsorption__IPLfloat32A"></span><span class="target" id="struct_i_p_l_direct_effect_params_1a647c0f3f570b20ba3e6dfbd4483d3376"></span><a class="reference internal" href="types.html#_CPPv410IPLfloat32" title="IPLfloat32"><span class="n"><span class="pre">IPLfloat32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">airAbsorption</span></span></span><span class="p"><span class="pre">[</span></span><span class="m"><span class="pre">3</span></span><span class="p"><span class="pre">]</span></span><a class="headerlink" href="#_CPPv4N21IPLDirectEffectParams13airAbsorptionE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>3-band EQ coefficients for air absorption, each between 0 and 1. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N21IPLDirectEffectParams11directivityE">
+<span id="_CPPv3N21IPLDirectEffectParams11directivityE"></span><span id="_CPPv2N21IPLDirectEffectParams11directivityE"></span><span id="IPLDirectEffectParams::directivity__IPLfloat32"></span><span class="target" id="struct_i_p_l_direct_effect_params_1a7004a06fde8904292c2b0d885a63af23"></span><a class="reference internal" href="types.html#_CPPv410IPLfloat32" title="IPLfloat32"><span class="n"><span class="pre">IPLfloat32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">directivity</span></span></span><a class="headerlink" href="#_CPPv4N21IPLDirectEffectParams11directivityE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Value of directivity term, between 0 and 1. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N21IPLDirectEffectParams9occlusionE">
+<span id="_CPPv3N21IPLDirectEffectParams9occlusionE"></span><span id="_CPPv2N21IPLDirectEffectParams9occlusionE"></span><span id="IPLDirectEffectParams::occlusion__IPLfloat32"></span><span class="target" id="struct_i_p_l_direct_effect_params_1a6858a2b8fda457d5fb40b45767b1dd76"></span><a class="reference internal" href="types.html#_CPPv410IPLfloat32" title="IPLfloat32"><span class="n"><span class="pre">IPLfloat32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">occlusion</span></span></span><a class="headerlink" href="#_CPPv4N21IPLDirectEffectParams9occlusionE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Value of occlusion factor, between 0 and 1. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N21IPLDirectEffectParams12transmissionE">
+<span id="_CPPv3N21IPLDirectEffectParams12transmissionE"></span><span id="_CPPv2N21IPLDirectEffectParams12transmissionE"></span><span id="IPLDirectEffectParams::transmission__IPLfloat32A"></span><span class="target" id="struct_i_p_l_direct_effect_params_1ac5cc1eac71b99a73f157d39faf589322"></span><a class="reference internal" href="types.html#_CPPv410IPLfloat32" title="IPLfloat32"><span class="n"><span class="pre">IPLfloat32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">transmission</span></span></span><span class="p"><span class="pre">[</span></span><span class="m"><span class="pre">3</span></span><span class="p"><span class="pre">]</span></span><a class="headerlink" href="#_CPPv4N21IPLDirectEffectParams12transmissionE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>3-band EQ coefficients for transmission, each between 0 and 1. </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="enumerations">
+<h2>Enumerations<a class="headerlink" href="#enumerations" title="Permalink to this headline">¶</a></h2>
+<dl class="cpp enum">
+<dt class="sig sig-object cpp" id="_CPPv420IPLDirectEffectFlags">
+<span id="_CPPv320IPLDirectEffectFlags"></span><span id="_CPPv220IPLDirectEffectFlags"></span><span class="target" id="group__directeffect_1ga98e48055bc6b6d2a73a6d071265f7a8d"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLDirectEffectFlags</span></span></span><a class="headerlink" href="#_CPPv420IPLDirectEffectFlags" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Flags indicating which direct path parameters to apply. </p>
+<p><em>Values:</em></p>
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N20IPLDirectEffectFlags46IPL_DIRECTEFFECTFLAGS_APPLYDISTANCEATTENUATIONE">
+<span id="_CPPv3N20IPLDirectEffectFlags46IPL_DIRECTEFFECTFLAGS_APPLYDISTANCEATTENUATIONE"></span><span id="_CPPv2N20IPLDirectEffectFlags46IPL_DIRECTEFFECTFLAGS_APPLYDISTANCEATTENUATIONE"></span><span class="target" id="group__directeffect_1gga98e48055bc6b6d2a73a6d071265f7a8dade86188bb3a16609214109045765dd3b"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_DIRECTEFFECTFLAGS_APPLYDISTANCEATTENUATION</span></span></span><a class="headerlink" href="#_CPPv4N20IPLDirectEffectFlags46IPL_DIRECTEFFECTFLAGS_APPLYDISTANCEATTENUATIONE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Apply frequency-independent distance attenuation. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N20IPLDirectEffectFlags40IPL_DIRECTEFFECTFLAGS_APPLYAIRABSORPTIONE">
+<span id="_CPPv3N20IPLDirectEffectFlags40IPL_DIRECTEFFECTFLAGS_APPLYAIRABSORPTIONE"></span><span id="_CPPv2N20IPLDirectEffectFlags40IPL_DIRECTEFFECTFLAGS_APPLYAIRABSORPTIONE"></span><span class="target" id="group__directeffect_1gga98e48055bc6b6d2a73a6d071265f7a8daf9cf7cdc6fa032408cc81cdf64cd8b91"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_DIRECTEFFECTFLAGS_APPLYAIRABSORPTION</span></span></span><a class="headerlink" href="#_CPPv4N20IPLDirectEffectFlags40IPL_DIRECTEFFECTFLAGS_APPLYAIRABSORPTIONE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Apply frequency-dependent air absorption as a function of distance. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N20IPLDirectEffectFlags38IPL_DIRECTEFFECTFLAGS_APPLYDIRECTIVITYE">
+<span id="_CPPv3N20IPLDirectEffectFlags38IPL_DIRECTEFFECTFLAGS_APPLYDIRECTIVITYE"></span><span id="_CPPv2N20IPLDirectEffectFlags38IPL_DIRECTEFFECTFLAGS_APPLYDIRECTIVITYE"></span><span class="target" id="group__directeffect_1gga98e48055bc6b6d2a73a6d071265f7a8da7c1216b5d625e81d7da5d8945f3a8677"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_DIRECTEFFECTFLAGS_APPLYDIRECTIVITY</span></span></span><a class="headerlink" href="#_CPPv4N20IPLDirectEffectFlags38IPL_DIRECTEFFECTFLAGS_APPLYDIRECTIVITYE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Apply attenuation due to source directivity pattern. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N20IPLDirectEffectFlags36IPL_DIRECTEFFECTFLAGS_APPLYOCCLUSIONE">
+<span id="_CPPv3N20IPLDirectEffectFlags36IPL_DIRECTEFFECTFLAGS_APPLYOCCLUSIONE"></span><span id="_CPPv2N20IPLDirectEffectFlags36IPL_DIRECTEFFECTFLAGS_APPLYOCCLUSIONE"></span><span class="target" id="group__directeffect_1gga98e48055bc6b6d2a73a6d071265f7a8da6bcb0dfe73826ef7bb1c4419fba57d95"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_DIRECTEFFECTFLAGS_APPLYOCCLUSION</span></span></span><a class="headerlink" href="#_CPPv4N20IPLDirectEffectFlags36IPL_DIRECTEFFECTFLAGS_APPLYOCCLUSIONE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Apply occlusion. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N20IPLDirectEffectFlags39IPL_DIRECTEFFECTFLAGS_APPLYTRANSMISSIONE">
+<span id="_CPPv3N20IPLDirectEffectFlags39IPL_DIRECTEFFECTFLAGS_APPLYTRANSMISSIONE"></span><span id="_CPPv2N20IPLDirectEffectFlags39IPL_DIRECTEFFECTFLAGS_APPLYTRANSMISSIONE"></span><span class="target" id="group__directeffect_1gga98e48055bc6b6d2a73a6d071265f7a8da777556c26a51b49b62f0243d4127f0f7"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_DIRECTEFFECTFLAGS_APPLYTRANSMISSION</span></span></span><a class="headerlink" href="#_CPPv4N20IPLDirectEffectFlags39IPL_DIRECTEFFECTFLAGS_APPLYTRANSMISSIONE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Apply transmission along with occlusion. </p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="cpp enum">
+<dt class="sig sig-object cpp" id="_CPPv419IPLTransmissionType">
+<span id="_CPPv319IPLTransmissionType"></span><span id="_CPPv219IPLTransmissionType"></span><span class="target" id="group__directeffect_1gab76061903ddef35c2e325db15fa47447"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLTransmissionType</span></span></span><a class="headerlink" href="#_CPPv419IPLTransmissionType" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Modes of applying transmission effects. </p>
+<p><em>Values:</em></p>
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N19IPLTransmissionType36IPL_TRANSMISSIONTYPE_FREQINDEPENDENTE">
+<span id="_CPPv3N19IPLTransmissionType36IPL_TRANSMISSIONTYPE_FREQINDEPENDENTE"></span><span id="_CPPv2N19IPLTransmissionType36IPL_TRANSMISSIONTYPE_FREQINDEPENDENTE"></span><span class="target" id="group__directeffect_1ggab76061903ddef35c2e325db15fa47447a2a47c2758e9d1e091714b63cb9e91f03"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_TRANSMISSIONTYPE_FREQINDEPENDENT</span></span></span><a class="headerlink" href="#_CPPv4N19IPLTransmissionType36IPL_TRANSMISSIONTYPE_FREQINDEPENDENTE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Transmission is frequency-independent. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N19IPLTransmissionType34IPL_TRANSMISSIONTYPE_FREQDEPENDENTE">
+<span id="_CPPv3N19IPLTransmissionType34IPL_TRANSMISSIONTYPE_FREQDEPENDENTE"></span><span id="_CPPv2N19IPLTransmissionType34IPL_TRANSMISSIONTYPE_FREQDEPENDENTE"></span><span class="target" id="group__directeffect_1ggab76061903ddef35c2e325db15fa47447a4de7589b20401d32a10e8864d057ed34"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_TRANSMISSIONTYPE_FREQDEPENDENT</span></span></span><a class="headerlink" href="#_CPPv4N19IPLTransmissionType34IPL_TRANSMISSIONTYPE_FREQDEPENDENTE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Transmission is frequency-dependent. </p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="reflections-effect.html" class="btn btn-neutral float-right" title="Reflection Effect" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="ambisonics-decode-effect.html" class="btn btn-neutral float-left" title="Ambisonics Decode Effect" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Valve Corporation.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

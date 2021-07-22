@@ -1,0 +1,267 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Steam Audio Probe Batch &mdash; Steam Audio Unity Integration  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/steamaudio.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Steam Audio Source" href="source.html" />
+    <link rel="prev" title="Steam Audio Manager" href="manager.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html">
+          
+
+          
+            
+            <img src="_static/steam-audio-logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                4.0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Unity Integration</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guide.html">User’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="build-instructions.html">Build Instructions</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="reference.html">Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="components.html">Components</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="ambisonic-source.html">Steam Audio Ambisonic Source</a></li>
+<li class="toctree-l3"><a class="reference internal" href="baked-listener.html">Steam Audio Baked Listener</a></li>
+<li class="toctree-l3"><a class="reference internal" href="baked-source.html">Steam Audio Baked Source</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dynamic-object.html">Steam Audio Dynamic Object</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geometry.html">Steam Audio Geometry</a></li>
+<li class="toctree-l3"><a class="reference internal" href="listener.html">Steam Audio Listener</a></li>
+<li class="toctree-l3"><a class="reference internal" href="manager.html">Steam Audio Manager</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Steam Audio Probe Batch</a></li>
+<li class="toctree-l3"><a class="reference internal" href="source.html">Steam Audio Source</a></li>
+<li class="toctree-l3"><a class="reference internal" href="static-mesh.html">Steam Audio Static Mesh</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="mixer-effects.html">Mixer Effects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="asset-types.html">Asset Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="menu-commands.html">Menu Commands</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Steam Audio Unity Integration</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="reference.html">Reference</a> &raquo;</li>
+        
+          <li><a href="components.html">Components</a> &raquo;</li>
+        
+      <li>Steam Audio Probe Batch</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="steam-audio-probe-batch">
+<h1>Steam Audio Probe Batch<a class="headerlink" href="#steam-audio-probe-batch" title="Permalink to this headline">¶</a></h1>
+<p>A volume in which sound probes can be generated. When baking reflections, reverb, or pathing, baked data is stored in one or more probe batches.</p>
+<p>Can be attached to any GameObject. Typically, this is attached to an empty GameObject created just for this purpose.</p>
+<p>Each probe batch contains one or more probes within its volume. This volume is shown in the <strong>Scene</strong> tab as a magenta wireframe outline. You can control the size and shape of this volume using Unity’s translate, rotate, and scale tools, just like any other GameObject.</p>
+<img alt="_images/probe_batch.png" src="_images/probe_batch.png" />
+<dl class="simple">
+<dt>Asset</dt><dd><p>Reference to the asset that contains the exported baked data for this probe batch. Automatically generated by Steam Audio.</p>
+</dd>
+<dt>Placement Strategy</dt><dd><p>Specifies how probes should be generated and placed within this volume.</p>
+<ul class="simple">
+<li><p><em>Centroid</em>. Places a single probe at the center of the volume.</p></li>
+<li><p><em>Uniform Floor</em>. Places probes at a specified height above the floor with a specified horizontal spacing between probes. The “floor” is defined as any geometry that would intersect rays cast within the volume and parallel to the -y axis in the local coordinate system of the probe batch.</p></li>
+</ul>
+</dd>
+<dt>Horizontal Spacing</dt><dd><p>The horizontal distance (in meters) between adjacent probes. Only used if <strong>Placement Strategy</strong> is <strong>Uniform Floor</strong>.</p>
+</dd>
+<dt>Height Above Floor</dt><dd><p>The height (in meters) above the floor at which probes should be placed. Only used if <strong>Placement Strategy</strong> is <strong>Uniform Floor</strong>.</p>
+</dd>
+<dt>Generate Probes</dt><dd><p>Generates probes within the volume of this probe batch.</p>
+</dd>
+<dt>Bake</dt><dd><p>Starts baking pathing data for this probe batch.</p>
+</dd>
+<dt>Probe Statistics</dt><dd><p>Shows the size (in bytes) of various baked data stored in this probe batch.</p>
+</dd>
+</dl>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="source.html" class="btn btn-neutral float-right" title="Steam Audio Source" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="manager.html" class="btn btn-neutral float-left" title="Steam Audio Manager" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Valve Corporation.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

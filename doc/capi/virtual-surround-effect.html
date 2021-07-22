@@ -1,0 +1,383 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Virtual Surround Effect &mdash; Steam Audio C API  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/steamaudio.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Ambisonics Encode Effect" href="ambisonics-encode-effect.html" />
+    <link rel="prev" title="Binaural Effect" href="binaural-effect.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html">
+          
+
+          
+            
+            <img src="_static/steam-audio-logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                4.0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Steam Audio SDK</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guide.html">Programmer’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="integration.html">Integrating Steam Audio</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="reference.html">API Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="types.html">Basic Data Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="context.html">Context</a></li>
+<li class="toctree-l2"><a class="reference internal" href="geometry.html">Geometry</a></li>
+<li class="toctree-l2"><a class="reference internal" href="serialization.html">Serialization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="embree.html">Embree</a></li>
+<li class="toctree-l2"><a class="reference internal" href="opencl.html">OpenCL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="radeon-rays.html">Radeon Rays</a></li>
+<li class="toctree-l2"><a class="reference internal" href="trueaudio-next.html">TrueAudio Next</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scene.html">Scene</a></li>
+<li class="toctree-l2"><a class="reference internal" href="audio-buffers.html">Audio Buffers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hrtf.html">HRTF</a></li>
+<li class="toctree-l2"><a class="reference internal" href="panning-effect.html">Panning Effect</a></li>
+<li class="toctree-l2"><a class="reference internal" href="binaural-effect.html">Binaural Effect</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Virtual Surround Effect</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#typedefs">Typedefs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#functions">Functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#structures">Structures</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="ambisonics-encode-effect.html">Ambisonics Encode Effect</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ambisonics-panning-effect.html">Ambisonics Panning Effect</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ambisonics-binaural-effect.html">Ambisonics Binaural Effect</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ambisonics-rotation-effect.html">Ambisonics Rotation Effect</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ambisonics-decode-effect.html">Ambisonics Decode Effect</a></li>
+<li class="toctree-l2"><a class="reference internal" href="direct-effect.html">Direct Effect</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reflections-effect.html">Reflection Effect</a></li>
+<li class="toctree-l2"><a class="reference internal" href="path-effect.html">Path Effect</a></li>
+<li class="toctree-l2"><a class="reference internal" href="probes.html">Probes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="baking.html">Baking</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simulation.html">Simulation</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Steam Audio C API</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="reference.html">API Reference</a> &raquo;</li>
+        
+      <li>Virtual Surround Effect</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="virtual-surround-effect">
+<h1>Virtual Surround Effect<a class="headerlink" href="#virtual-surround-effect" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="typedefs">
+<h2>Typedefs<a class="headerlink" href="#typedefs" title="Permalink to this headline">¶</a></h2>
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv424IPLVirtualSurroundEffect">
+<span id="_CPPv324IPLVirtualSurroundEffect"></span><span id="_CPPv224IPLVirtualSurroundEffect"></span><span id="IPLVirtualSurroundEffect"></span><span class="target" id="group__virtualsurround_1gacb2caf8a45ef5d818234c5bbad900448"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="n"><span class="pre">_IPLVirtualSurroundEffect_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">IPLVirtualSurroundEffect</span></span></span><a class="headerlink" href="#_CPPv424IPLVirtualSurroundEffect" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Spatializes multi-channel speaker-based audio (e.g., stereo, quadraphonic, 5.1, or 7.1) using HRTF-based binaural rendering. </p>
+<p>The audio signal for each speaker is spatialized from a point in space corresponding to the speaker’s location. This allows users to experience a surround sound mix over regular stereo headphones.</p>
+<p>Virtual surround is also a fast way to get approximate binaural rendering. All sources can be panned to some surround format (say, 7.1). After the sources are mixed, the mix can be rendered using virtual surround. This can reduce CPU usage, at the cost of spatialization accuracy. </p>
+</dd></dl>
+
+</div>
+<div class="section" id="functions">
+<h2>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h2>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv430iplVirtualSurroundEffectCreate10IPLContextP16IPLAudioSettingsP32IPLVirtualSurroundEffectSettingsP24IPLVirtualSurroundEffect">
+<span id="_CPPv330iplVirtualSurroundEffectCreate10IPLContextP16IPLAudioSettingsP32IPLVirtualSurroundEffectSettingsP24IPLVirtualSurroundEffect"></span><span id="_CPPv230iplVirtualSurroundEffectCreate10IPLContextP16IPLAudioSettingsP32IPLVirtualSurroundEffectSettingsP24IPLVirtualSurroundEffect"></span><span id="iplVirtualSurroundEffectCreate__IPLContext.IPLAudioSettingsP.IPLVirtualSurroundEffectSettingsP.IPLVirtualSurroundEffectP"></span><span class="target" id="group__virtualsurround_1gaf7fa1f4c0a9b66e4c533854d9a802735"></span><a class="reference internal" href="types.html#_CPPv48IPLerror" title="IPLerror"><span class="n"><span class="pre">IPLerror</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplVirtualSurroundEffectCreate</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="context.html#_CPPv410IPLContext" title="IPLContext"><span class="n"><span class="pre">IPLContext</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">context</span></span>, <a class="reference internal" href="audio-buffers.html#_CPPv416IPLAudioSettings" title="IPLAudioSettings"><span class="n"><span class="pre">IPLAudioSettings</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">audioSettings</span></span>, <a class="reference internal" href="#_CPPv432IPLVirtualSurroundEffectSettings" title="IPLVirtualSurroundEffectSettings"><span class="n"><span class="pre">IPLVirtualSurroundEffectSettings</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">effectSettings</span></span>, <a class="reference internal" href="#_CPPv424IPLVirtualSurroundEffect" title="IPLVirtualSurroundEffect"><span class="n"><span class="pre">IPLVirtualSurroundEffect</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">effect</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv430iplVirtualSurroundEffectCreate10IPLContextP16IPLAudioSettingsP32IPLVirtualSurroundEffectSettingsP24IPLVirtualSurroundEffect" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Creates a virtual surround effect. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>context</strong> – The context used to initialize Steam Audio. </p></li>
+<li><p><strong>audioSettings</strong> – Global audio processing settings. </p></li>
+<li><p><strong>effectSettings</strong> – The settings to use when creating the virtual surround effect. </p></li>
+<li><p><strong>effect</strong> – [out] The created virtual surround effect.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Status code indicating whether or not the operation succeeded. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv430iplVirtualSurroundEffectRetain24IPLVirtualSurroundEffect">
+<span id="_CPPv330iplVirtualSurroundEffectRetain24IPLVirtualSurroundEffect"></span><span id="_CPPv230iplVirtualSurroundEffectRetain24IPLVirtualSurroundEffect"></span><span id="iplVirtualSurroundEffectRetain__IPLVirtualSurroundEffect"></span><span class="target" id="group__virtualsurround_1ga7f93d90801b5a18a88de235cc8e4d549"></span><a class="reference internal" href="#_CPPv424IPLVirtualSurroundEffect" title="IPLVirtualSurroundEffect"><span class="n"><span class="pre">IPLVirtualSurroundEffect</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplVirtualSurroundEffectRetain</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv424IPLVirtualSurroundEffect" title="IPLVirtualSurroundEffect"><span class="n"><span class="pre">IPLVirtualSurroundEffect</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">effect</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv430iplVirtualSurroundEffectRetain24IPLVirtualSurroundEffect" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Retains an additional reference to a virtual surround effect. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>effect</strong> – The virtual surround effect to retain a reference to.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The additional reference to the virtual surround effect. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv431iplVirtualSurroundEffectReleaseP24IPLVirtualSurroundEffect">
+<span id="_CPPv331iplVirtualSurroundEffectReleaseP24IPLVirtualSurroundEffect"></span><span id="_CPPv231iplVirtualSurroundEffectReleaseP24IPLVirtualSurroundEffect"></span><span id="iplVirtualSurroundEffectRelease__IPLVirtualSurroundEffectP"></span><span class="target" id="group__virtualsurround_1ga66af656af2d9b739f779abd2f208267a"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplVirtualSurroundEffectRelease</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv424IPLVirtualSurroundEffect" title="IPLVirtualSurroundEffect"><span class="n"><span class="pre">IPLVirtualSurroundEffect</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">effect</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv431iplVirtualSurroundEffectReleaseP24IPLVirtualSurroundEffect" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Releases a reference to a virtual surround effect. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>effect</strong> – The virtual surround effect to release a reference to. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv429iplVirtualSurroundEffectReset24IPLVirtualSurroundEffect">
+<span id="_CPPv329iplVirtualSurroundEffectReset24IPLVirtualSurroundEffect"></span><span id="_CPPv229iplVirtualSurroundEffectReset24IPLVirtualSurroundEffect"></span><span id="iplVirtualSurroundEffectReset__IPLVirtualSurroundEffect"></span><span class="target" id="group__virtualsurround_1ga23278c0f6eff871a2961821386f6edb5"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplVirtualSurroundEffectReset</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv424IPLVirtualSurroundEffect" title="IPLVirtualSurroundEffect"><span class="n"><span class="pre">IPLVirtualSurroundEffect</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">effect</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv429iplVirtualSurroundEffectReset24IPLVirtualSurroundEffect" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Resets the internal processing state of a virtual surround effect. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>effect</strong> – The virtual surround effect to reset. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv429iplVirtualSurroundEffectApply24IPLVirtualSurroundEffectP30IPLVirtualSurroundEffectParamsP14IPLAudioBufferP14IPLAudioBuffer">
+<span id="_CPPv329iplVirtualSurroundEffectApply24IPLVirtualSurroundEffectP30IPLVirtualSurroundEffectParamsP14IPLAudioBufferP14IPLAudioBuffer"></span><span id="_CPPv229iplVirtualSurroundEffectApply24IPLVirtualSurroundEffectP30IPLVirtualSurroundEffectParamsP14IPLAudioBufferP14IPLAudioBuffer"></span><span id="iplVirtualSurroundEffectApply__IPLVirtualSurroundEffect.IPLVirtualSurroundEffectParamsP.IPLAudioBufferP.IPLAudioBufferP"></span><span class="target" id="group__virtualsurround_1ga365cc09b05b4e921b79746897818d42b"></span><a class="reference internal" href="audio-buffers.html#_CPPv419IPLAudioEffectState" title="IPLAudioEffectState"><span class="n"><span class="pre">IPLAudioEffectState</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplVirtualSurroundEffectApply</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv424IPLVirtualSurroundEffect" title="IPLVirtualSurroundEffect"><span class="n"><span class="pre">IPLVirtualSurroundEffect</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">effect</span></span>, <a class="reference internal" href="#_CPPv430IPLVirtualSurroundEffectParams" title="IPLVirtualSurroundEffectParams"><span class="n"><span class="pre">IPLVirtualSurroundEffectParams</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">params</span></span>, <a class="reference internal" href="audio-buffers.html#_CPPv414IPLAudioBuffer" title="IPLAudioBuffer"><span class="n"><span class="pre">IPLAudioBuffer</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">in</span></span>, <a class="reference internal" href="audio-buffers.html#_CPPv414IPLAudioBuffer" title="IPLAudioBuffer"><span class="n"><span class="pre">IPLAudioBuffer</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">out</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv429iplVirtualSurroundEffectApply24IPLVirtualSurroundEffectP30IPLVirtualSurroundEffectParamsP14IPLAudioBufferP14IPLAudioBuffer" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Applies a virtual surround effect to an audio buffer. </p>
+<p>This effect CANNOT be applied in-place.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>effect</strong> – The virtual surround effect to apply. </p></li>
+<li><p><strong>params</strong> – Parameters for applying the effect. </p></li>
+<li><p><strong>in</strong> – The input audio buffer. Must have as many channels as needed for the speaker layout specified when creating the virtual surround effect. </p></li>
+<li><p><strong>out</strong> – The output audio buffer. Must be 2-channel.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">IPL_AUDIOEFFECTSTATE_TAILREMAINING</span></code> if any tail samples remain in the effect’s internal buffers, or <code class="docutils literal notranslate"><span class="pre">IPL_AUDIOEFFECTSTATE_TAILCOMPLETE</span></code> otherwise. </p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="structures">
+<h2>Structures<a class="headerlink" href="#structures" title="Permalink to this headline">¶</a></h2>
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv432IPLVirtualSurroundEffectSettings">
+<span id="_CPPv332IPLVirtualSurroundEffectSettings"></span><span id="_CPPv232IPLVirtualSurroundEffectSettings"></span><span id="IPLVirtualSurroundEffectSettings"></span><span class="target" id="struct_i_p_l_virtual_surround_effect_settings"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLVirtualSurroundEffectSettings</span></span></span><a class="headerlink" href="#_CPPv432IPLVirtualSurroundEffectSettings" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Settings used to create a virtual surround effect. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N32IPLVirtualSurroundEffectSettings13speakerLayoutE">
+<span id="_CPPv3N32IPLVirtualSurroundEffectSettings13speakerLayoutE"></span><span id="_CPPv2N32IPLVirtualSurroundEffectSettings13speakerLayoutE"></span><span id="IPLVirtualSurroundEffectSettings::speakerLayout__IPLSpeakerLayout"></span><span class="target" id="struct_i_p_l_virtual_surround_effect_settings_1ae2881f808b7ed510cf1be3a24c2f0ac5"></span><a class="reference internal" href="audio-buffers.html#_CPPv416IPLSpeakerLayout" title="IPLSpeakerLayout"><span class="n"><span class="pre">IPLSpeakerLayout</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">speakerLayout</span></span></span><a class="headerlink" href="#_CPPv4N32IPLVirtualSurroundEffectSettings13speakerLayoutE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The speaker layout that will be used by input audio buffers. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N32IPLVirtualSurroundEffectSettings4hrtfE">
+<span id="_CPPv3N32IPLVirtualSurroundEffectSettings4hrtfE"></span><span id="_CPPv2N32IPLVirtualSurroundEffectSettings4hrtfE"></span><span id="IPLVirtualSurroundEffectSettings::hrtf__IPLHRTF"></span><span class="target" id="struct_i_p_l_virtual_surround_effect_settings_1afdfe641bbcb9a02f2350ea7b4a997482"></span><a class="reference internal" href="hrtf.html#_CPPv47IPLHRTF" title="IPLHRTF"><span class="n"><span class="pre">IPLHRTF</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">hrtf</span></span></span><a class="headerlink" href="#_CPPv4N32IPLVirtualSurroundEffectSettings4hrtfE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The HRTF to use. </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv430IPLVirtualSurroundEffectParams">
+<span id="_CPPv330IPLVirtualSurroundEffectParams"></span><span id="_CPPv230IPLVirtualSurroundEffectParams"></span><span id="IPLVirtualSurroundEffectParams"></span><span class="target" id="struct_i_p_l_virtual_surround_effect_params"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLVirtualSurroundEffectParams</span></span></span><a class="headerlink" href="#_CPPv430IPLVirtualSurroundEffectParams" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Parameters for applying a virtual surround effect to an audio buffer. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N30IPLVirtualSurroundEffectParams4hrtfE">
+<span id="_CPPv3N30IPLVirtualSurroundEffectParams4hrtfE"></span><span id="_CPPv2N30IPLVirtualSurroundEffectParams4hrtfE"></span><span id="IPLVirtualSurroundEffectParams::hrtf__IPLHRTF"></span><span class="target" id="struct_i_p_l_virtual_surround_effect_params_1afdfe641bbcb9a02f2350ea7b4a997482"></span><a class="reference internal" href="hrtf.html#_CPPv47IPLHRTF" title="IPLHRTF"><span class="n"><span class="pre">IPLHRTF</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">hrtf</span></span></span><a class="headerlink" href="#_CPPv4N30IPLVirtualSurroundEffectParams4hrtfE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The HRTF to use. </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="ambisonics-encode-effect.html" class="btn btn-neutral float-right" title="Ambisonics Encode Effect" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="binaural-effect.html" class="btn btn-neutral float-left" title="Binaural Effect" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Valve Corporation.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,375 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Panning Effect &mdash; Steam Audio C API  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/steamaudio.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Binaural Effect" href="binaural-effect.html" />
+    <link rel="prev" title="HRTF" href="hrtf.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html">
+          
+
+          
+            
+            <img src="_static/steam-audio-logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                4.0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Steam Audio SDK</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guide.html">Programmer’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="integration.html">Integrating Steam Audio</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="reference.html">API Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="types.html">Basic Data Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="context.html">Context</a></li>
+<li class="toctree-l2"><a class="reference internal" href="geometry.html">Geometry</a></li>
+<li class="toctree-l2"><a class="reference internal" href="serialization.html">Serialization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="embree.html">Embree</a></li>
+<li class="toctree-l2"><a class="reference internal" href="opencl.html">OpenCL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="radeon-rays.html">Radeon Rays</a></li>
+<li class="toctree-l2"><a class="reference internal" href="trueaudio-next.html">TrueAudio Next</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scene.html">Scene</a></li>
+<li class="toctree-l2"><a class="reference internal" href="audio-buffers.html">Audio Buffers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hrtf.html">HRTF</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Panning Effect</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#typedefs">Typedefs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#functions">Functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#structures">Structures</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="binaural-effect.html">Binaural Effect</a></li>
+<li class="toctree-l2"><a class="reference internal" href="virtual-surround-effect.html">Virtual Surround Effect</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ambisonics-encode-effect.html">Ambisonics Encode Effect</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ambisonics-panning-effect.html">Ambisonics Panning Effect</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ambisonics-binaural-effect.html">Ambisonics Binaural Effect</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ambisonics-rotation-effect.html">Ambisonics Rotation Effect</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ambisonics-decode-effect.html">Ambisonics Decode Effect</a></li>
+<li class="toctree-l2"><a class="reference internal" href="direct-effect.html">Direct Effect</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reflections-effect.html">Reflection Effect</a></li>
+<li class="toctree-l2"><a class="reference internal" href="path-effect.html">Path Effect</a></li>
+<li class="toctree-l2"><a class="reference internal" href="probes.html">Probes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="baking.html">Baking</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simulation.html">Simulation</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Steam Audio C API</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="reference.html">API Reference</a> &raquo;</li>
+        
+      <li>Panning Effect</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="panning-effect">
+<h1>Panning Effect<a class="headerlink" href="#panning-effect" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="typedefs">
+<h2>Typedefs<a class="headerlink" href="#typedefs" title="Permalink to this headline">¶</a></h2>
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv416IPLPanningEffect">
+<span id="_CPPv316IPLPanningEffect"></span><span id="_CPPv216IPLPanningEffect"></span><span id="IPLPanningEffect"></span><span class="target" id="group__panningeffect_1gac0039ccdc1feec683f55c033f116547a"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="n"><span class="pre">_IPLPanningEffect_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">IPLPanningEffect</span></span></span><a class="headerlink" href="#_CPPv416IPLPanningEffect" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Pans a single-channel point source to a multi-channel speaker layout based on the 3D position of the source relative to the listener. </p>
+</dd></dl>
+
+</div>
+<div class="section" id="functions">
+<h2>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h2>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv422iplPanningEffectCreate10IPLContextP16IPLAudioSettingsP24IPLPanningEffectSettingsP16IPLPanningEffect">
+<span id="_CPPv322iplPanningEffectCreate10IPLContextP16IPLAudioSettingsP24IPLPanningEffectSettingsP16IPLPanningEffect"></span><span id="_CPPv222iplPanningEffectCreate10IPLContextP16IPLAudioSettingsP24IPLPanningEffectSettingsP16IPLPanningEffect"></span><span id="iplPanningEffectCreate__IPLContext.IPLAudioSettingsP.IPLPanningEffectSettingsP.IPLPanningEffectP"></span><span class="target" id="group__panningeffect_1ga49450ba5c4da34a4195c52bd9259012e"></span><a class="reference internal" href="types.html#_CPPv48IPLerror" title="IPLerror"><span class="n"><span class="pre">IPLerror</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplPanningEffectCreate</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="context.html#_CPPv410IPLContext" title="IPLContext"><span class="n"><span class="pre">IPLContext</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">context</span></span>, <a class="reference internal" href="audio-buffers.html#_CPPv416IPLAudioSettings" title="IPLAudioSettings"><span class="n"><span class="pre">IPLAudioSettings</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">audioSettings</span></span>, <a class="reference internal" href="#_CPPv424IPLPanningEffectSettings" title="IPLPanningEffectSettings"><span class="n"><span class="pre">IPLPanningEffectSettings</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">effectSettings</span></span>, <a class="reference internal" href="#_CPPv416IPLPanningEffect" title="IPLPanningEffect"><span class="n"><span class="pre">IPLPanningEffect</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">effect</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv422iplPanningEffectCreate10IPLContextP16IPLAudioSettingsP24IPLPanningEffectSettingsP16IPLPanningEffect" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Creates a panning effect. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>context</strong> – The context used to initialize Steam Audio. </p></li>
+<li><p><strong>audioSettings</strong> – Global audio processing settings. </p></li>
+<li><p><strong>effectSettings</strong> – The settings to use when creating the panning effect. </p></li>
+<li><p><strong>effect</strong> – [out] The created panning effect.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Status code indicating whether or not the operation succeeded. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv422iplPanningEffectRetain16IPLPanningEffect">
+<span id="_CPPv322iplPanningEffectRetain16IPLPanningEffect"></span><span id="_CPPv222iplPanningEffectRetain16IPLPanningEffect"></span><span id="iplPanningEffectRetain__IPLPanningEffect"></span><span class="target" id="group__panningeffect_1ga189f125b0c50cb6dc5bec731e25ac138"></span><a class="reference internal" href="#_CPPv416IPLPanningEffect" title="IPLPanningEffect"><span class="n"><span class="pre">IPLPanningEffect</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplPanningEffectRetain</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv416IPLPanningEffect" title="IPLPanningEffect"><span class="n"><span class="pre">IPLPanningEffect</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">effect</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv422iplPanningEffectRetain16IPLPanningEffect" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Retains an additional reference to a panning effect. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>effect</strong> – The panning effect to retain a reference to.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The additional reference to the panning effect. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv423iplPanningEffectReleaseP16IPLPanningEffect">
+<span id="_CPPv323iplPanningEffectReleaseP16IPLPanningEffect"></span><span id="_CPPv223iplPanningEffectReleaseP16IPLPanningEffect"></span><span id="iplPanningEffectRelease__IPLPanningEffectP"></span><span class="target" id="group__panningeffect_1ga542da9fd95204724aaa194504a8a6e7d"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplPanningEffectRelease</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv416IPLPanningEffect" title="IPLPanningEffect"><span class="n"><span class="pre">IPLPanningEffect</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">effect</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv423iplPanningEffectReleaseP16IPLPanningEffect" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Releases a reference to a panning effect. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>effect</strong> – The panning effect to release a reference to. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv421iplPanningEffectReset16IPLPanningEffect">
+<span id="_CPPv321iplPanningEffectReset16IPLPanningEffect"></span><span id="_CPPv221iplPanningEffectReset16IPLPanningEffect"></span><span id="iplPanningEffectReset__IPLPanningEffect"></span><span class="target" id="group__panningeffect_1ga140b9d769804912a6ee4c6fda75901d7"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplPanningEffectReset</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv416IPLPanningEffect" title="IPLPanningEffect"><span class="n"><span class="pre">IPLPanningEffect</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">effect</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv421iplPanningEffectReset16IPLPanningEffect" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Resets the internal processing state of a panning effect. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>effect</strong> – The panning effect to reset. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv421iplPanningEffectApply16IPLPanningEffectP22IPLPanningEffectParamsP14IPLAudioBufferP14IPLAudioBuffer">
+<span id="_CPPv321iplPanningEffectApply16IPLPanningEffectP22IPLPanningEffectParamsP14IPLAudioBufferP14IPLAudioBuffer"></span><span id="_CPPv221iplPanningEffectApply16IPLPanningEffectP22IPLPanningEffectParamsP14IPLAudioBufferP14IPLAudioBuffer"></span><span id="iplPanningEffectApply__IPLPanningEffect.IPLPanningEffectParamsP.IPLAudioBufferP.IPLAudioBufferP"></span><span class="target" id="group__panningeffect_1ga93294af68a10b5846a7f64bec6beb9e4"></span><a class="reference internal" href="audio-buffers.html#_CPPv419IPLAudioEffectState" title="IPLAudioEffectState"><span class="n"><span class="pre">IPLAudioEffectState</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplPanningEffectApply</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv416IPLPanningEffect" title="IPLPanningEffect"><span class="n"><span class="pre">IPLPanningEffect</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">effect</span></span>, <a class="reference internal" href="#_CPPv422IPLPanningEffectParams" title="IPLPanningEffectParams"><span class="n"><span class="pre">IPLPanningEffectParams</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">params</span></span>, <a class="reference internal" href="audio-buffers.html#_CPPv414IPLAudioBuffer" title="IPLAudioBuffer"><span class="n"><span class="pre">IPLAudioBuffer</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">in</span></span>, <a class="reference internal" href="audio-buffers.html#_CPPv414IPLAudioBuffer" title="IPLAudioBuffer"><span class="n"><span class="pre">IPLAudioBuffer</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">out</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv421iplPanningEffectApply16IPLPanningEffectP22IPLPanningEffectParamsP14IPLAudioBufferP14IPLAudioBuffer" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Applies a panning effect to an audio buffer. </p>
+<p>This effect CANNOT be applied in-place.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>effect</strong> – The panning effect to apply. </p></li>
+<li><p><strong>params</strong> – Parameters for applying the effect. </p></li>
+<li><p><strong>in</strong> – The input audio buffer. Must be 1-channel. </p></li>
+<li><p><strong>out</strong> – The output audio buffer. Must have as many channels as needed for the speaker layout specified when creating the panning effect. For example, if the speaker layout is <code class="docutils literal notranslate"><span class="pre">IPL_SPEAKERLAYOUTTYPE_SURROUND_5_1</span></code>, the output buffer must contain 6 channels.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">IPL_AUDIOEFFECTSTATE_TAILCOMPLETE</span></code> to indicate that this effect does not generate any tail samples. </p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="structures">
+<h2>Structures<a class="headerlink" href="#structures" title="Permalink to this headline">¶</a></h2>
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv424IPLPanningEffectSettings">
+<span id="_CPPv324IPLPanningEffectSettings"></span><span id="_CPPv224IPLPanningEffectSettings"></span><span id="IPLPanningEffectSettings"></span><span class="target" id="struct_i_p_l_panning_effect_settings"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLPanningEffectSettings</span></span></span><a class="headerlink" href="#_CPPv424IPLPanningEffectSettings" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Settings used to create a panning effect. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N24IPLPanningEffectSettings13speakerLayoutE">
+<span id="_CPPv3N24IPLPanningEffectSettings13speakerLayoutE"></span><span id="_CPPv2N24IPLPanningEffectSettings13speakerLayoutE"></span><span id="IPLPanningEffectSettings::speakerLayout__IPLSpeakerLayout"></span><span class="target" id="struct_i_p_l_panning_effect_settings_1ae2881f808b7ed510cf1be3a24c2f0ac5"></span><a class="reference internal" href="audio-buffers.html#_CPPv416IPLSpeakerLayout" title="IPLSpeakerLayout"><span class="n"><span class="pre">IPLSpeakerLayout</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">speakerLayout</span></span></span><a class="headerlink" href="#_CPPv4N24IPLPanningEffectSettings13speakerLayoutE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The speaker layout to pan input audio to. </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv422IPLPanningEffectParams">
+<span id="_CPPv322IPLPanningEffectParams"></span><span id="_CPPv222IPLPanningEffectParams"></span><span id="IPLPanningEffectParams"></span><span class="target" id="struct_i_p_l_panning_effect_params"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLPanningEffectParams</span></span></span><a class="headerlink" href="#_CPPv422IPLPanningEffectParams" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Parameters for applying a panning effect to an audio buffer. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N22IPLPanningEffectParams9directionE">
+<span id="_CPPv3N22IPLPanningEffectParams9directionE"></span><span id="_CPPv2N22IPLPanningEffectParams9directionE"></span><span id="IPLPanningEffectParams::direction__IPLVector3"></span><span class="target" id="struct_i_p_l_panning_effect_params_1a6d6d43ed60cddbbc9a71b9e83b073db5"></span><a class="reference internal" href="geometry.html#_CPPv410IPLVector3" title="IPLVector3"><span class="n"><span class="pre">IPLVector3</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">direction</span></span></span><a class="headerlink" href="#_CPPv4N22IPLPanningEffectParams9directionE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Unit vector pointing from the listener towards the source. </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="binaural-effect.html" class="btn btn-neutral float-right" title="Binaural Effect" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="hrtf.html" class="btn btn-neutral float-left" title="HRTF" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Valve Corporation.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

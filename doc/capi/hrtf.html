@@ -1,0 +1,362 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>HRTF &mdash; Steam Audio C API  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/steamaudio.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Panning Effect" href="panning-effect.html" />
+    <link rel="prev" title="Audio Buffers" href="audio-buffers.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html">
+          
+
+          
+            
+            <img src="_static/steam-audio-logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                4.0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Steam Audio SDK</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guide.html">Programmer’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="integration.html">Integrating Steam Audio</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="reference.html">API Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="types.html">Basic Data Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="context.html">Context</a></li>
+<li class="toctree-l2"><a class="reference internal" href="geometry.html">Geometry</a></li>
+<li class="toctree-l2"><a class="reference internal" href="serialization.html">Serialization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="embree.html">Embree</a></li>
+<li class="toctree-l2"><a class="reference internal" href="opencl.html">OpenCL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="radeon-rays.html">Radeon Rays</a></li>
+<li class="toctree-l2"><a class="reference internal" href="trueaudio-next.html">TrueAudio Next</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scene.html">Scene</a></li>
+<li class="toctree-l2"><a class="reference internal" href="audio-buffers.html">Audio Buffers</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">HRTF</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#typedefs">Typedefs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#functions">Functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#structures">Structures</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#enumerations">Enumerations</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="panning-effect.html">Panning Effect</a></li>
+<li class="toctree-l2"><a class="reference internal" href="binaural-effect.html">Binaural Effect</a></li>
+<li class="toctree-l2"><a class="reference internal" href="virtual-surround-effect.html">Virtual Surround Effect</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ambisonics-encode-effect.html">Ambisonics Encode Effect</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ambisonics-panning-effect.html">Ambisonics Panning Effect</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ambisonics-binaural-effect.html">Ambisonics Binaural Effect</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ambisonics-rotation-effect.html">Ambisonics Rotation Effect</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ambisonics-decode-effect.html">Ambisonics Decode Effect</a></li>
+<li class="toctree-l2"><a class="reference internal" href="direct-effect.html">Direct Effect</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reflections-effect.html">Reflection Effect</a></li>
+<li class="toctree-l2"><a class="reference internal" href="path-effect.html">Path Effect</a></li>
+<li class="toctree-l2"><a class="reference internal" href="probes.html">Probes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="baking.html">Baking</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simulation.html">Simulation</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Steam Audio C API</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="reference.html">API Reference</a> &raquo;</li>
+        
+      <li>HRTF</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="hrtf">
+<h1>HRTF<a class="headerlink" href="#hrtf" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="typedefs">
+<h2>Typedefs<a class="headerlink" href="#typedefs" title="Permalink to this headline">¶</a></h2>
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv47IPLHRTF">
+<span id="_CPPv37IPLHRTF"></span><span id="_CPPv27IPLHRTF"></span><span id="IPLHRTF"></span><span class="target" id="group__hrtf_1ga4031cfce006d672def5ce98602f3c2ef"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="n"><span class="pre">_IPLHRTF_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">IPLHRTF</span></span></span><a class="headerlink" href="#_CPPv47IPLHRTF" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>A Head-Related Transfer Function (HRTF). </p>
+<p>HRTFs describe how sound from different directions is perceived by a each of a listener’s ears, and are a crucial component of spatial audio. Steam Audio includes a built-in HRTF, while also allowing developers and users to import their own custom HRTFs. </p>
+</dd></dl>
+
+</div>
+<div class="section" id="functions">
+<h2>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h2>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv413iplHRTFCreate10IPLContextP16IPLAudioSettingsP15IPLHRTFSettingsP7IPLHRTF">
+<span id="_CPPv313iplHRTFCreate10IPLContextP16IPLAudioSettingsP15IPLHRTFSettingsP7IPLHRTF"></span><span id="_CPPv213iplHRTFCreate10IPLContextP16IPLAudioSettingsP15IPLHRTFSettingsP7IPLHRTF"></span><span id="iplHRTFCreate__IPLContext.IPLAudioSettingsP.IPLHRTFSettingsP.IPLHRTFP"></span><span class="target" id="group__hrtf_1ga665891a71b232856827a37251a21acd8"></span><a class="reference internal" href="types.html#_CPPv48IPLerror" title="IPLerror"><span class="n"><span class="pre">IPLerror</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplHRTFCreate</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="context.html#_CPPv410IPLContext" title="IPLContext"><span class="n"><span class="pre">IPLContext</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">context</span></span>, <a class="reference internal" href="audio-buffers.html#_CPPv416IPLAudioSettings" title="IPLAudioSettings"><span class="n"><span class="pre">IPLAudioSettings</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">audioSettings</span></span>, <a class="reference internal" href="#_CPPv415IPLHRTFSettings" title="IPLHRTFSettings"><span class="n"><span class="pre">IPLHRTFSettings</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">hrtfSettings</span></span>, <a class="reference internal" href="#_CPPv47IPLHRTF" title="IPLHRTF"><span class="n"><span class="pre">IPLHRTF</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">hrtf</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv413iplHRTFCreate10IPLContextP16IPLAudioSettingsP15IPLHRTFSettingsP7IPLHRTF" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Creates an HRTF. </p>
+<p>Calling this function is somewhat expensive; avoid creating HRTF objects in your audio thread at all if possible.</p>
+<p>This function is not thread-safe. Do not simultaneously call it from multiple threads.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>context</strong> – The context used to initialize Steam Audio. </p></li>
+<li><p><strong>audioSettings</strong> – Global audio processing settings. </p></li>
+<li><p><strong>hrtfSettings</strong> – The settings used to create the HRTF object. </p></li>
+<li><p><strong>hrtf</strong> – [out] The created HRTF object.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Status code indicating whether or not the operation succeeded. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv413iplHRTFRetain7IPLHRTF">
+<span id="_CPPv313iplHRTFRetain7IPLHRTF"></span><span id="_CPPv213iplHRTFRetain7IPLHRTF"></span><span id="iplHRTFRetain__IPLHRTF"></span><span class="target" id="group__hrtf_1ga48c389895d380cef3a9a1e8c045ff916"></span><a class="reference internal" href="#_CPPv47IPLHRTF" title="IPLHRTF"><span class="n"><span class="pre">IPLHRTF</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplHRTFRetain</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv47IPLHRTF" title="IPLHRTF"><span class="n"><span class="pre">IPLHRTF</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hrtf</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv413iplHRTFRetain7IPLHRTF" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Retains an additional reference to an HRTF object. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>hrtf</strong> – The HRTF object to retain a reference to.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The additional reference to the HRTF object. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv414iplHRTFReleaseP7IPLHRTF">
+<span id="_CPPv314iplHRTFReleaseP7IPLHRTF"></span><span id="_CPPv214iplHRTFReleaseP7IPLHRTF"></span><span id="iplHRTFRelease__IPLHRTFP"></span><span class="target" id="group__hrtf_1gae399792b3c3d4a7a558d57fcf5fce534"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplHRTFRelease</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv47IPLHRTF" title="IPLHRTF"><span class="n"><span class="pre">IPLHRTF</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">hrtf</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv414iplHRTFReleaseP7IPLHRTF" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Releases a reference to an HRTF object. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>hrtf</strong> – The HRTF object to release a reference to. </p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="structures">
+<h2>Structures<a class="headerlink" href="#structures" title="Permalink to this headline">¶</a></h2>
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv415IPLHRTFSettings">
+<span id="_CPPv315IPLHRTFSettings"></span><span id="_CPPv215IPLHRTFSettings"></span><span id="IPLHRTFSettings"></span><span class="target" id="struct_i_p_l_h_r_t_f_settings"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLHRTFSettings</span></span></span><a class="headerlink" href="#_CPPv415IPLHRTFSettings" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Settings used to create an HRTF object. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N15IPLHRTFSettings4typeE">
+<span id="_CPPv3N15IPLHRTFSettings4typeE"></span><span id="_CPPv2N15IPLHRTFSettings4typeE"></span><span id="IPLHRTFSettings::type__IPLHRTFType"></span><span class="target" id="struct_i_p_l_h_r_t_f_settings_1ae7b21108a2433826ac54c40e1bb60c11"></span><a class="reference internal" href="#_CPPv411IPLHRTFType" title="IPLHRTFType"><span class="n"><span class="pre">IPLHRTFType</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">type</span></span></span><a class="headerlink" href="#_CPPv4N15IPLHRTFSettings4typeE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The type of HRTF to create. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N15IPLHRTFSettings12sofaFileNameE">
+<span id="_CPPv3N15IPLHRTFSettings12sofaFileNameE"></span><span id="_CPPv2N15IPLHRTFSettings12sofaFileNameE"></span><span id="IPLHRTFSettings::sofaFileName__cCP"></span><span class="target" id="struct_i_p_l_h_r_t_f_settings_1a84e20a1b782c5de682b81056e631605e"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">sofaFileName</span></span></span><a class="headerlink" href="#_CPPv4N15IPLHRTFSettings12sofaFileNameE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>SOFA file from which to load HRTF data. </p>
+<p>Only for <code class="docutils literal notranslate"><span class="pre">IPL_HRTFTYPE_SOFA</span></code>. </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="enumerations">
+<h2>Enumerations<a class="headerlink" href="#enumerations" title="Permalink to this headline">¶</a></h2>
+<dl class="cpp enum">
+<dt class="sig sig-object cpp" id="_CPPv411IPLHRTFType">
+<span id="_CPPv311IPLHRTFType"></span><span id="_CPPv211IPLHRTFType"></span><span class="target" id="group__hrtf_1gab7c1588e0d89c2ab2d6a4efc3de1ab9f"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLHRTFType</span></span></span><a class="headerlink" href="#_CPPv411IPLHRTFType" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The type of HRTF to use. </p>
+<p><em>Values:</em></p>
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N11IPLHRTFType20IPL_HRTFTYPE_DEFAULTE">
+<span id="_CPPv3N11IPLHRTFType20IPL_HRTFTYPE_DEFAULTE"></span><span id="_CPPv2N11IPLHRTFType20IPL_HRTFTYPE_DEFAULTE"></span><span class="target" id="group__hrtf_1ggab7c1588e0d89c2ab2d6a4efc3de1ab9facaa7e397bda9db00bc00bc131d0a240c"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_HRTFTYPE_DEFAULT</span></span></span><a class="headerlink" href="#_CPPv4N11IPLHRTFType20IPL_HRTFTYPE_DEFAULTE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The built-in HRTF. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N11IPLHRTFType17IPL_HRTFTYPE_SOFAE">
+<span id="_CPPv3N11IPLHRTFType17IPL_HRTFTYPE_SOFAE"></span><span id="_CPPv2N11IPLHRTFType17IPL_HRTFTYPE_SOFAE"></span><span class="target" id="group__hrtf_1ggab7c1588e0d89c2ab2d6a4efc3de1ab9fac13d130f24721bc78381da12fb92ab57"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_HRTFTYPE_SOFA</span></span></span><a class="headerlink" href="#_CPPv4N11IPLHRTFType17IPL_HRTFTYPE_SOFAE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>An HRTF loaded from a SOFA file. </p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="panning-effect.html" class="btn btn-neutral float-right" title="Panning Effect" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="audio-buffers.html" class="btn btn-neutral float-left" title="Audio Buffers" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Valve Corporation.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

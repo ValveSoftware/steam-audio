@@ -1,0 +1,7 @@
+html.writer-html5 .rst-content dl[class]:not(.option-list):not(.field-list):not(.footnote):not(.glossary):not(.simple)>dt {
+    display: inline-block;
+}
+
+.rst-content .section ul li>p:only-child, .rst-content .section ul li>p:only-child:last-child {
+    margin-bottom: 0.75em;
+}

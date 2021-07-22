@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>Steam Audio SDK &mdash; Steam Audio C API  documentation</title>
+  <title>Steam Audio Unity Integration &mdash; Steam Audio Unity Integration  documentation</title>
   
 
   
@@ -94,12 +94,12 @@
               
             
             
-              <p class="caption"><span class="caption-text">Steam Audio SDK</span></p>
+              <p class="caption"><span class="caption-text">Unity Integration</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting Started</a></li>
-<li class="toctree-l1"><a class="reference internal" href="guide.html">Programmer’s Guide</a></li>
-<li class="toctree-l1"><a class="reference internal" href="integration.html">Integrating Steam Audio</a></li>
-<li class="toctree-l1"><a class="reference internal" href="reference.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guide.html">User’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="build-instructions.html">Build Instructions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference.html">Reference</a></li>
 </ul>
 
             
@@ -115,7 +115,7 @@
       <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="#">Steam Audio C API</a>
+          <a href="#">Steam Audio Unity Integration</a>
         
       </nav>
 
@@ -148,7 +148,7 @@
     
       <li><a href="#" class="icon icon-home"></a> &raquo;</li>
         
-      <li>Steam Audio SDK</li>
+      <li>Steam Audio Unity Integration</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -165,8 +165,8 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="steam-audio-sdk">
-<h1>Steam Audio SDK<a class="headerlink" href="#steam-audio-sdk" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="steam-audio-unity-integration">
+<h1>Steam Audio Unity Integration<a class="headerlink" href="#steam-audio-unity-integration" title="Permalink to this headline">¶</a></h1>
 <div class="toctree-wrapper compound">
 </div>
 <p>Steam Audio is a cross-platform software toolkit for spatial audio. You can use it to add rich, immersive positional and environmental audio effects to games and VR/AR apps. Steam Audio offers a wide variety of features, including:</p>
@@ -184,10 +184,9 @@
 <li><p><strong>Use multi-core CPU and GPU acceleration.</strong> Steam Audio can use multi-core CPUs to accelerate simulation of environmental effects. Steam Audio can also use supported GPUs for accelerating simulation and rendering of environmental effects, while ensuring that its audio workloads do not adversely impact other GPU workloads or frame rate stability.</p></li>
 <li><p><strong>Balance physical realism and artistic intent.</strong> Steam Audio lets designers modify the results of physics-based simulation before they are used for rendering audio effects. This lets designers treat the simulation results as a high-quality starting point, while providing many ways to tweak the results to achieve their artistic goals. For example, designers can adjust the material-dependent EQ filters used to model transmission of sound through geometry, or make a reverb tail longer or shorter while retaining the characteristics of the early reflections.</p></li>
 </ul>
-<p>This document describes the Steam Audio SDK, which is a C library that you can use to add spatial audio capabilities to any application. For example, if you want to use Steam Audio with a custom game engine, a custom audio middleware tool, or a Digital Audio Workstation (DAW), the Steam Audio SDK is the right tool for the job. Since the SDK provides a C API, you can use it from any programming language that can call functions in external libraries, such as C/C++, C#, Java, Rust, and many more.</p>
-<p>If you are using Unity as your game engine, refer to the documentation for the Steam Audio Unity integration.</p>
-<p>If you are using Unreal Engine 4 as your game engine, refer to the documentation for the Steam Audio Unreal Engine integration.</p>
+<p>This document describes the Steam Audio Unity integration, which lets you use Steam Audio to add a variety of spatial audio features to your Unity project. You can use it with Unity’s built-in audio engine, or with third-party audio middleware like FMOD Studio.</p>
 <p>If you are using FMOD Studio as your audio middleware, refer to the documentation for the Steam Audio FMOD Studio integration.</p>
+<p>If you are using some other third-party audio middleware, refer to the documentation for the Steam Audio SDK for more information on how to integrate Steam Audio with your audio middleware.</p>
 </div>
 
 

@@ -1,0 +1,594 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Getting Started &mdash; Steam Audio C API  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/steamaudio.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Programmer’s Guide" href="guide.html" />
+    <link rel="prev" title="Steam Audio SDK" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html">
+          
+
+          
+            
+            <img src="_static/steam-audio-logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                4.0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Steam Audio SDK</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Getting Started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#requirements">Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#compiling-and-linking-with-steam-audio">Compiling and linking with Steam Audio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#example-spatializing-an-audio-clip">Example: Spatializing an audio clip</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#initialization-context">Initialization: Context</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#initialization-hrtf">Initialization: HRTF</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#initialization-binaural-effect">Initialization: Binaural Effect</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#initialization-audio-buffers">Initialization: Audio Buffers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#main-loop">Main Loop</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cleanup">Cleanup</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#full-program-listing">Full program listing</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="guide.html">Programmer’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="integration.html">Integrating Steam Audio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference.html">API Reference</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Steam Audio C API</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Getting Started</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="getting-started">
+<h1>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="requirements">
+<h2>Requirements<a class="headerlink" href="#requirements" title="Permalink to this headline">¶</a></h2>
+<p>Steam Audio supports the following platforms:</p>
+<ul class="simple">
+<li><p>Windows 7 or later (32-bit and 64-bit)</p></li>
+<li><p>Linux (32-bit and 64-bit, tested with Ubuntu 16.04 LTS)</p></li>
+<li><p>macOS 10.7 or later (64-bit Intel)</p></li>
+<li><p>Android 5.0 or later (32-bit ARM, 64-bit ARM, 32-bit Intel, and 64-bit Intel)</p></li>
+</ul>
+<p>Steam Audio supports the following C/C++ compilers on different platforms:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 15%" />
+<col style="width: 85%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Platform</p></th>
+<th class="head"><p>Compiler Version</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Windows</p></td>
+<td><p>Microsoft Visual Studio 2015 or later</p></td>
+</tr>
+<tr class="row-odd"><td><p>Linux</p></td>
+<td><p>GCC 5.0 or later</p></td>
+</tr>
+<tr class="row-even"><td><p>macOS</p></td>
+<td><p>Xcode 7 or later</p></td>
+</tr>
+<tr class="row-odd"><td><p>Android</p></td>
+<td><p>Android NDK r10e or later, Clang 3.6 or later</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="compiling-and-linking-with-steam-audio">
+<h2>Compiling and linking with Steam Audio<a class="headerlink" href="#compiling-and-linking-with-steam-audio" title="Permalink to this headline">¶</a></h2>
+<p>Before you can access any Steam Audio API functionality, you must point your compiler to the Steam Audio headers. To do this, add <code class="docutils literal notranslate"><span class="pre">SDKROOT/include</span></code> to your compiler’s header file search path.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>In all instructions on this page, <code class="docutils literal notranslate"><span class="pre">SDKROOT</span></code> refers to the directory in which you extracted the <code class="docutils literal notranslate"><span class="pre">steamaudio.zip</span></code> file.</p>
+</div>
+<p>Next, you must include the necessary header file:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;phonon.h&gt;</span><span class="cp"></span>
+</pre></div>
+</div>
+<p>This will pull in all the Steam Audio API functions, and make them available for use in your program.</p>
+<p>Finally, you must point your compiler to the Steam Audio libraries. This involves setting the library search path, and specifying the libraries to link against:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 30%" />
+<col style="width: 42%" />
+<col style="width: 28%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Platform</p></th>
+<th class="head"><p>Library Directory</p></th>
+<th class="head"><p>Library To Link</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Windows 32-bit</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">SDKROOT/lib/windows-x86</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">phonon.dll</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>Windows 64-bit</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">SDKROOT/lib/windows-x64</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">phonon.dll</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>Linux 32-bit</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">SDKROOT/lib/linux-x86</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">libphonon.so</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>Linux 64-bit</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">SDKROOT/lib/linux-x64</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">libphonon.so</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>macOS</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">SDKROOT/lib/osx</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">libphonon.dylib</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>Android ARMv7</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">SDKROOT/lib/android-armv7</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">libphonon.so</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>Android ARMv8/AArch64</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">SDKROOT/lib/android-armv8</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">libphonon.so</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>Android x86</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">SDKROOT/lib/android-x86</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">libphonon.so</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>Android x64</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">SDKROOT/lib/android-x64</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">libphonon.so</span></code></p></td>
+</tr>
+</tbody>
+</table>
+<p>For more instructions on how to configure search paths and link libraries in your development environment, refer to the documentation for your compiler or IDE.</p>
+</div>
+<div class="section" id="example-spatializing-an-audio-clip">
+<h2>Example: Spatializing an audio clip<a class="headerlink" href="#example-spatializing-an-audio-clip" title="Permalink to this headline">¶</a></h2>
+<p>This example shows how to use the Steam Audio SDK to apply HRTF-based 3D audio to mono (single-channel) audio clip.</p>
+<p>To avoid complicating this example with code related to graphical rendering, audio engines, and codecs, this example is a C++ command-line tool that loads audio data from a file, applies 3D audio effects to it, and saves it to another file.</p>
+<p>Before using any Steam Audio functionality, include the necessary headers:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;phonon.h&gt;</span><span class="cp"></span>
+</pre></div>
+</div>
+<div class="section" id="initialization-context">
+<h3>Initialization: Context<a class="headerlink" href="#initialization-context" title="Permalink to this headline">¶</a></h3>
+<p>The first step in initializing Steam Audio is to create a <em>context</em> object. This object keeps track of various optional global settings of Steam Audio, and will be used to create all other Steam Audio API objects.</p>
+<p>To create a context object, first initialize an <code class="docutils literal notranslate"><span class="pre">IPLContextSettings</span></code> structure with the settings we want to use when creating the context:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">IPLContextSettings</span> <span class="n">contextSettings</span><span class="p">{};</span>
+<span class="n">contextSettings</span><span class="p">.</span><span class="n">version</span> <span class="o">=</span> <span class="n">STEAMAUDIO_VERSION</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>The only setting we need to specify is <code class="docutils literal notranslate"><span class="pre">version</span></code>. This is the version of the Steam Audio API that your program is compiled with, and will typically be set to <code class="docutils literal notranslate"><span class="pre">STEAMAUDIO_VERSION</span></code>. There are other optional settings that you can specify, such as custom memory allocation functions that Steam Audio should use whenever it needs to allocate or free memory. For the purposes of this example, though, we’ll leave everything at their default (zero) values.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Creating any Steam Audio object follows the same pattern: first, you set up a structure with all the relevant settings for the object, then you call a function to create the object.</p>
+</div>
+<p>Next, we create the context by calling <code class="docutils literal notranslate"><span class="pre">iplContextCreate</span></code>:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">IPLContext</span> <span class="n">context</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
+<span class="n">iplContextCreate</span><span class="p">(</span><span class="o">&amp;</span><span class="n">contextSettings</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">context</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>Here, <code class="docutils literal notranslate"><span class="pre">context</span></code> is a handle to the Steam Audio context object. You will typically create a single context, which will persist throughout the lifetime of your application.</p>
+</div>
+<div class="section" id="initialization-hrtf">
+<h3>Initialization: HRTF<a class="headerlink" href="#initialization-hrtf" title="Permalink to this headline">¶</a></h3>
+<p>After creating the context, we need to load Head-Related Transfer Function (HRTF) data. An HRTF is a set of filters that is applied to audio in order to spatialize it. Steam Audio provides a default HRTF, and that’s what we’ll use for this example:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">IPLHRTFSettings</span> <span class="n">hrtfSettings</span><span class="p">{};</span>
+<span class="n">hrtfSettings</span><span class="p">.</span><span class="n">type</span> <span class="o">=</span> <span class="n">IPL_HRTFTYPE_DEFAULT</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>We also need to specify some key properties that define how we will process audio. All audio processing in Steam Audio is done using uncompressed Pulse Code Modulated (PCM) audio data. Audio signals are represented as a series of <em>samples</em> measured at discrete, regularly-spaced points in time. Multi-channel audio is represented as multiple audio signals: for example, stereo (2-channel) audio contains 2 audio signals, so there are 2 samples for any given point in time.</p>
+<p>The audio processing properties we need are:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><strong>Sampling rate.</strong> This is the frequency (in Hz) at which audio data is sampled. Typical sampling rates on most platforms are 44100 Hz (CD quality) or 48000 Hz.</p></li>
+<li><p><strong>Frame size</strong>. Most audio engines process audio in <em>frames</em> (also known as <em>chunks</em> or <em>buffers</em>). The frame size is the number of samples in a single frame of a single channel of audio. Typical values are 512 or 1024 samples per frame.</p></li>
+</ul>
+</div></blockquote>
+<p>We specify these properties using a separate structure, since it will be needed in multiple places:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">IPLAudioSettings</span> <span class="n">audioSettings</span><span class="p">{};</span>
+<span class="n">audioSettings</span><span class="p">.</span><span class="n">samplingRate</span> <span class="o">=</span> <span class="mi">44100</span><span class="p">;</span>
+<span class="n">audioSettings</span><span class="p">.</span><span class="n">frameSize</span> <span class="o">=</span> <span class="mi">1024</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>Now, we create the HRTF:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">IPLHRTF</span> <span class="n">hrtf</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
+<span class="n">iplHRTFCreate</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">audioSettings</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">hrtfSettings</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">hrtf</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>This loads and initializes Steam Audio’s default HRTF. You can also use custom HRTFs that are loaded from SOFA files. For more information, see <a class="reference internal" href="guide.html#ref-guide-sofa"><span class="std std-ref">Custom HRTFs</span></a>.</p>
+<p>You will typically load one or more HRTFs, which will persist throughout the lifetime of your application.</p>
+</div>
+<div class="section" id="initialization-binaural-effect">
+<h3>Initialization: Binaural Effect<a class="headerlink" href="#initialization-binaural-effect" title="Permalink to this headline">¶</a></h3>
+<p>The actual work of spatializing an audio signal is performed by a <em>binaural effect</em>. This is an object that contains all the state that must persist from one audio frame to the next, for a single audio source.</p>
+<p>As usual, we first populate a settings structure:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">IPLBinauralEffectSettings</span> <span class="n">effectSettings</span><span class="p">{};</span>
+<span class="n">effectSettings</span><span class="p">.</span><span class="n">hrtf</span> <span class="o">=</span> <span class="n">hrtf</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>The only setting we need to specify is the HRTF that we want to use for spatialization. Now we can create the binaural effect:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">IPLBinauralEffect</span> <span class="n">effect</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
+<span class="n">iplBinauralEffectCreate</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">audioSettings</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">effectSettings</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">effect</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>We are now ready to spatialize some audio! But first, we need to load our audio signal and allocate some buffers for audio processing.</p>
+</div>
+<div class="section" id="initialization-audio-buffers">
+<h3>Initialization: Audio Buffers<a class="headerlink" href="#initialization-audio-buffers" title="Permalink to this headline">¶</a></h3>
+<p>To avoid dealing with codecs and audio file loaders in this sample application, we assume that the input audio data is stored in a “raw” audio file. This file contains nothing but the contents of the input audio signal, stored in PCM format with 32-bit single-precision floating point samples. You can use free tools like <a class="reference external" href="http://www.audacityteam.org/">Audacity</a> to create and listen to such audio files.</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;</span> <span class="n">inputaudio</span> <span class="o">=</span> <span class="n">load_input_audio</span><span class="p">(</span><span class="s">&quot;inputaudio.raw&quot;</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>This loads the audio data from the file inputaudio.raw and stores it in an <code class="docutils literal notranslate"><span class="pre">std::vector&lt;float&gt;</span></code>. For more details on how the <code class="docutils literal notranslate"><span class="pre">load_input_audio</span></code> function is implemented, see the complete code listing at the end of this page.</p>
+<p>We also create a <code class="docutils literal notranslate"><span class="pre">std::vector&lt;float&gt;</span></code> to store the final output data:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;</span> <span class="n">outputaudio</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>Next, we create <code class="docutils literal notranslate"><span class="pre">IPLAudioBuffer</span></code> structures that define audio buffers that will be used as input to and output from the binaural effect. First, the input buffer:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="kt">float</span><span class="o">*</span> <span class="n">inData</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span> <span class="n">inputaudio</span><span class="p">.</span><span class="n">data</span><span class="p">()</span> <span class="p">};</span>
+
+<span class="n">IPLAudioBuffer</span> <span class="n">inBuffer</span><span class="p">{};</span>
+<span class="n">inBuffer</span><span class="p">.</span><span class="n">numChannels</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+<span class="n">inBuffer</span><span class="p">.</span><span class="n">numSamples</span> <span class="o">=</span> <span class="n">audioSettings</span><span class="p">.</span><span class="n">frameSize</span><span class="p">;</span>
+<span class="n">inBuffer</span><span class="p">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">inData</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>The input buffer contains 1 channel, and the number of samples per channel is equal to the frame size. Audio buffers in Steam Audio are always <em>deinterleaved</em>, i.e., the samples for the first channel are stored contiguously in one array, the samples for the second channel are store contiguously in a second array, and so on. In the <code class="docutils literal notranslate"><span class="pre">IPLAudioBuffer</span></code> structure, the <code class="docutils literal notranslate"><span class="pre">data</span></code> field should point to an array of pointers, each of which points to the data for a single channel. Here, the input buffer points to the first 1024 samples of data loaded from the input file.</p>
+<p>For the output buffer, we need to allocate memory for 1024 samples of 2-channel data, and set up an <code class="docutils literal notranslate"><span class="pre">IPLAudioBuffer</span></code> structure to point to it. We can do this using the <code class="docutils literal notranslate"><span class="pre">iplAudioBufferAllocate</span></code> function:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">IPLAudioBuffer</span> <span class="n">outBuffer</span><span class="p">{};</span>
+<span class="n">iplAudioBufferAllocate</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">audioSettings</span><span class="p">.</span><span class="n">frameSize</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">outBuffer</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>This allocates a deinterleaved audio buffer that can store a single frame of stereo audio. Since we’ll want to save <em>interleaved</em> audio to disk, we need to allocate memory for that, too:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;</span> <span class="n">outputaudioframe</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">audioSettings</span><span class="p">.</span><span class="n">frameSize</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="main-loop">
+<h3>Main Loop<a class="headerlink" href="#main-loop" title="Permalink to this headline">¶</a></h3>
+<p>The main processing loop applies 3D audio effects to the input audio one frame at a time, accumulating the results in an output buffer that will be written to disk at the end of the loop.</p>
+<p>We first calculate the number of audio frames that we will be processing:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span> <span class="n">numframes</span> <span class="o">=</span> <span class="n">inputaudio</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">/</span> <span class="n">audioSettings</span><span class="p">.</span><span class="n">frameSize</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>The processing loop is run <code class="docutils literal notranslate"><span class="pre">numframes</span></code> times:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">numframes</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="c1">// render a frame of spatialized audio and append to the end of outputaudio</span>
+    <span class="c1">// ...</span>
+
+    <span class="c1">// advance the input to the next frame</span>
+    <span class="n">inData</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+=</span> <span class="n">audioSettings</span><span class="p">.</span><span class="n">frameSize</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Inside the loop, rendering a frame of spatialized audio involves the following steps. First, we use the binaural effect to spatialize the input buffer, storing the results in the deinterleaved output buffer <code class="docutils literal notranslate"><span class="pre">outBuffer</span></code>:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">IPLBinauralEffectParams</span> <span class="n">effectParams</span><span class="p">{};</span>
+<span class="n">effectParams</span><span class="p">.</span><span class="n">direction</span> <span class="o">=</span> <span class="n">IPLVector3</span><span class="p">{</span><span class="mf">1.0f</span><span class="p">,</span> <span class="mf">1.0f</span><span class="p">,</span> <span class="mf">1.0f</span><span class="p">};</span>
+<span class="n">effectParams</span><span class="p">.</span><span class="n">interpolation</span> <span class="o">=</span> <span class="n">IPL_HRTFINTERPOLATION_NEAREST</span><span class="p">;</span>
+<span class="n">effectParams</span><span class="p">.</span><span class="n">spatialBlend</span> <span class="o">=</span> <span class="mf">1.0f</span><span class="p">;</span>
+<span class="n">effectParams</span><span class="p">.</span><span class="n">hrtf</span> <span class="o">=</span> <span class="n">hrtf</span><span class="p">;</span>
+
+<span class="n">iplBinauralEffectApply</span><span class="p">(</span><span class="n">effect</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">effectParams</span><span class="p">,</span> <span class="n">inBuffer</span><span class="p">,</span> <span class="n">outBuffer</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>All audio processing effects in Steam Audio follow a similar pattern: you populate a structure containing various parameters for the effect, then you call a function to apply the effect to an audio buffer. For the binaural effect, the parameters are:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">direction</span></code> The direction vector from the listener to the source, relative to the listener’s coordinates.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">interpolation</span></code> How to estimate the HRTF to use when the source direction doesn’t correspond to any direction for which the HRTF data contains any measurements. <code class="docutils literal notranslate"><span class="pre">IPL_HRTFINTERPOLATION_NEAREST</span></code> specifies <em>nearest-neighbor</em> interpolation, which just picks the closest direction for which the HRTF contains measured data. This is the most efficient option, but you can also use <em>bilinear</em> interpolation for smoother rendering of moving sources. In our case, since the source doesn’t move, nearest-neighbor is fine.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">spatialBlend</span></code> This parameter lets you blend between spatialized and unspatialized audio. If its value is 1 (as here), the output will be fully spatialized. If its value is 0, the output will be unspatialized (i.e., identical to the input). Intermediate values result in partial spatialization.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">hrtf</span></code> This is the HRTF to use for spatializing the input. Here, we set it to the same value we passed in the <code class="docutils literal notranslate"><span class="pre">IPLBinauralEffectSettings</span></code> structure when creating the effect. Steam Audio lets you change the HRTF on the fly, and the HRTF you pass in the <code class="docutils literal notranslate"><span class="pre">IPLBinauralEffectParams</span></code> structure is always the one used for rendering.</p></li>
+</ul>
+<p>Next, we interleave the audio buffer:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">iplAudioBufferInterleave</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="n">outBuffer</span><span class="p">,</span> <span class="n">outputaudioframe</span><span class="p">.</span><span class="n">data</span><span class="p">());</span>
+</pre></div>
+</div>
+<p>At this point, <code class="docutils literal notranslate"><span class="pre">outputaudioframe</span></code> contains a single frame of interleaved stereo audio. We then append this to <code class="docutils literal notranslate"><span class="pre">outputaudio</span></code>, the buffer that will be written to disk:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">std</span><span class="o">::</span><span class="n">copy</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">begin</span><span class="p">(</span><span class="n">outputaudioframe</span><span class="p">),</span> <span class="n">std</span><span class="o">::</span><span class="n">end</span><span class="p">(</span><span class="n">outputaudioframe</span><span class="p">),</span> <span class="n">std</span><span class="o">::</span><span class="n">back_inserter</span><span class="p">(</span><span class="n">outputaudio</span><span class="p">));</span>
+</pre></div>
+</div>
+<p>Once the loop finishes, we write this buffer to disk:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">save_output_audio</span><span class="p">(</span><span class="s">&quot;outputaudio.raw&quot;</span><span class="p">,</span> <span class="n">outputaudio</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>For details on how <code class="docutils literal notranslate"><span class="pre">save_output_audio</span></code> is implemented, see the complete code listing below.</p>
+</div>
+<div class="section" id="cleanup">
+<h3>Cleanup<a class="headerlink" href="#cleanup" title="Permalink to this headline">¶</a></h3>
+<p>Finally, before our program exits, we clean up all the objects we created using the Steam Audio API:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">iplAudioBufferFree</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">outBuffer</span><span class="p">);</span>
+<span class="n">iplBinauralEffectRelease</span><span class="p">(</span><span class="o">&amp;</span><span class="n">effect</span><span class="p">);</span>
+<span class="n">iplHRTFRelease</span><span class="p">(</span><span class="o">&amp;</span><span class="n">hrtf</span><span class="p">);</span>
+<span class="n">iplContextRelease</span><span class="p">(</span><span class="o">&amp;</span><span class="n">context</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>And that completes this example program for spatializing an audio file using Steam Audio! For a full listing of this example program, see below.</p>
+</div>
+</div>
+<div class="section" id="full-program-listing">
+<h2>Full program listing<a class="headerlink" href="#full-program-listing" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;algorithm&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;fstream&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;iterator&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;vector&gt;</span><span class="cp"></span>
+
+<span class="cp">#include</span> <span class="cpf">&lt;phonon.h&gt;</span><span class="cp"></span>
+
+<span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;</span> <span class="n">load_input_audio</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">filename</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">ifstream</span> <span class="nf">file</span><span class="p">(</span><span class="n">filename</span><span class="p">.</span><span class="n">c_str</span><span class="p">(),</span> <span class="n">std</span><span class="o">::</span><span class="n">ios</span><span class="o">::</span><span class="n">binary</span><span class="p">);</span>
+
+    <span class="n">file</span><span class="p">.</span><span class="n">seekg</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">ios</span><span class="o">::</span><span class="n">end</span><span class="p">);</span>
+    <span class="k">auto</span> <span class="n">filesize</span> <span class="o">=</span> <span class="n">file</span><span class="p">.</span><span class="n">tellg</span><span class="p">();</span>
+    <span class="k">auto</span> <span class="n">numsamples</span> <span class="o">=</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">(</span><span class="n">filesize</span> <span class="o">/</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">float</span><span class="p">));</span>
+
+    <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;</span> <span class="n">inputaudio</span><span class="p">(</span><span class="n">numsamples</span><span class="p">);</span>
+    <span class="n">file</span><span class="p">.</span><span class="n">seekg</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">ios</span><span class="o">::</span><span class="n">beg</span><span class="p">);</span>
+    <span class="n">file</span><span class="p">.</span><span class="n">read</span><span class="p">(</span><span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">*&gt;</span><span class="p">(</span><span class="n">inputaudio</span><span class="p">.</span><span class="n">data</span><span class="p">()),</span> <span class="n">filesize</span><span class="p">);</span>
+
+    <span class="k">return</span> <span class="n">inputaudio</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="n">save_output_audio</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">filename</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;</span> <span class="n">outputaudio</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">ofstream</span> <span class="nf">file</span><span class="p">(</span><span class="n">filename</span><span class="p">.</span><span class="n">c_str</span><span class="p">(),</span> <span class="n">std</span><span class="o">::</span><span class="n">ios</span><span class="o">::</span><span class="n">binary</span><span class="p">);</span>
+    <span class="n">file</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">*&gt;</span><span class="p">(</span><span class="n">outputaudio</span><span class="p">.</span><span class="n">data</span><span class="p">()),</span> <span class="n">outputaudio</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">*</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">float</span><span class="p">));</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="n">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span><span class="o">**</span> <span class="n">argv</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">auto</span> <span class="n">inputaudio</span> <span class="o">=</span> <span class="n">load_input_audio</span><span class="p">(</span><span class="s">&quot;inputaudio.raw&quot;</span><span class="p">);</span>
+
+    <span class="n">IPLContext</span> <span class="n">context</span><span class="p">{};</span>
+    <span class="n">IPLContextSettings</span> <span class="n">contextSettings</span><span class="p">{};</span>
+    <span class="n">iplContextCreate</span><span class="p">(</span><span class="o">&amp;</span><span class="n">contextSettings</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">context</span><span class="p">);</span>
+
+    <span class="k">auto</span> <span class="k">const</span> <span class="n">samplingrate</span> <span class="o">=</span> <span class="mi">44100</span><span class="p">;</span>
+    <span class="k">auto</span> <span class="k">const</span> <span class="n">framesize</span>    <span class="o">=</span> <span class="mi">1024</span><span class="p">;</span>
+    <span class="n">IPLAudioSettings</span> <span class="n">audioSettings</span><span class="p">{</span> <span class="n">samplingrate</span><span class="p">,</span> <span class="n">framesize</span> <span class="p">};</span>
+
+    <span class="n">IPLHRTFSettings</span> <span class="n">hrtfSettings</span><span class="p">;</span>
+    <span class="n">hrtfSettings</span><span class="p">.</span><span class="n">type</span> <span class="o">=</span> <span class="n">IPL_HRTFTYPE_DEFAULT</span><span class="p">;</span>
+
+    <span class="n">IPLHRTF</span> <span class="n">hrtf</span><span class="p">{};</span>
+    <span class="n">iplHRTFCreate</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">audioSettings</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">hrtfSettings</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">hrtf</span><span class="p">);</span>
+
+    <span class="n">IPLBinauralEffectSettings</span> <span class="n">effectSettings</span><span class="p">;</span>
+    <span class="n">effectSettings</span><span class="p">.</span><span class="n">hrtf</span> <span class="o">=</span> <span class="n">hrtf</span><span class="p">;</span>
+
+    <span class="n">IPLBinauralEffect</span> <span class="n">effect</span><span class="p">{};</span>
+    <span class="n">iplBinauralEffectCreate</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">audioSettings</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">effectSettings</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">effect</span><span class="p">);</span>
+
+    <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;</span> <span class="n">outputaudioframe</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">framesize</span><span class="p">);</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;</span> <span class="n">outputaudio</span><span class="p">;</span>
+
+    <span class="k">auto</span> <span class="n">numframes</span> <span class="o">=</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">(</span><span class="n">inputaudio</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">/</span> <span class="n">framesize</span><span class="p">);</span>
+    <span class="kt">float</span><span class="o">*</span> <span class="n">inData</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span> <span class="n">inputaudio</span><span class="p">.</span><span class="n">data</span><span class="p">()</span> <span class="p">};</span>
+
+    <span class="n">IPLAudioBuffer</span> <span class="n">inBuffer</span><span class="p">{</span> <span class="mi">1</span><span class="p">,</span> <span class="n">audioSettings</span><span class="p">.</span><span class="n">frameSize</span><span class="p">,</span> <span class="n">inData</span> <span class="p">};</span>
+
+    <span class="n">IPLAudioBuffer</span> <span class="n">outBuffer</span><span class="p">;</span>
+    <span class="n">iplAudioBufferAllocate</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">audioSettings</span><span class="p">.</span><span class="n">frameSize</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">outBuffer</span><span class="p">);</span>
+
+    <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">numframes</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">IPLBinauralEffectParams</span> <span class="n">params</span><span class="p">;</span>
+        <span class="n">params</span><span class="p">.</span><span class="n">direction</span> <span class="o">=</span> <span class="n">IPLVector3</span><span class="p">{</span> <span class="mf">1.0f</span><span class="p">,</span> <span class="mf">1.0f</span><span class="p">,</span> <span class="mf">1.0f</span> <span class="p">};</span>
+        <span class="n">params</span><span class="p">.</span><span class="n">interpolation</span> <span class="o">=</span> <span class="n">IPL_HRTFINTERPOLATION_NEAREST</span><span class="p">;</span>
+        <span class="n">params</span><span class="p">.</span><span class="n">spatialBlend</span> <span class="o">=</span> <span class="mf">1.0f</span><span class="p">;</span>
+        <span class="n">params</span><span class="p">.</span><span class="n">hrtf</span> <span class="o">=</span> <span class="n">hrtf</span><span class="p">;</span>
+
+        <span class="n">iplBinauralEffectApply</span><span class="p">(</span><span class="n">effect</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">params</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">inBuffer</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">outBuffer</span><span class="p">);</span>
+
+        <span class="n">iplAudioBufferInterleave</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">outBuffer</span><span class="p">,</span> <span class="n">outputaudioframe</span><span class="p">.</span><span class="n">data</span><span class="p">());</span>
+
+        <span class="n">std</span><span class="o">::</span><span class="n">copy</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">begin</span><span class="p">(</span><span class="n">outputaudioframe</span><span class="p">),</span> <span class="n">std</span><span class="o">::</span><span class="n">end</span><span class="p">(</span><span class="n">outputaudioframe</span><span class="p">),</span> <span class="n">std</span><span class="o">::</span><span class="n">back_inserter</span><span class="p">(</span><span class="n">outputaudio</span><span class="p">));</span>
+
+        <span class="n">inData</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+=</span> <span class="n">audioSettings</span><span class="p">.</span><span class="n">frameSize</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="n">iplAudioBufferFree</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">outBuffer</span><span class="p">);</span>
+    <span class="n">iplBinauralEffectRelease</span><span class="p">(</span><span class="o">&amp;</span><span class="n">effect</span><span class="p">);</span>
+    <span class="n">iplHRTFRelease</span><span class="p">(</span><span class="o">&amp;</span><span class="n">hrtf</span><span class="p">);</span>
+    <span class="n">iplContextRelease</span><span class="p">(</span><span class="o">&amp;</span><span class="n">context</span><span class="p">);</span>
+
+    <span class="n">save_output_audio</span><span class="p">(</span><span class="s">&quot;outputaudio.raw&quot;</span><span class="p">,</span> <span class="n">outputaudio</span><span class="p">);</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="guide.html" class="btn btn-neutral float-right" title="Programmer’s Guide" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="index.html" class="btn btn-neutral float-left" title="Steam Audio SDK" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Valve Corporation.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

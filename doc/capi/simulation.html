@@ -1,0 +1,1266 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Simulation &mdash; Steam Audio C API  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/steamaudio.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Baking" href="baking.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html">
+          
+
+          
+            
+            <img src="_static/steam-audio-logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                4.0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Steam Audio SDK</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guide.html">Programmer’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="integration.html">Integrating Steam Audio</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="reference.html">API Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="types.html">Basic Data Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="context.html">Context</a></li>
+<li class="toctree-l2"><a class="reference internal" href="geometry.html">Geometry</a></li>
+<li class="toctree-l2"><a class="reference internal" href="serialization.html">Serialization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="embree.html">Embree</a></li>
+<li class="toctree-l2"><a class="reference internal" href="opencl.html">OpenCL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="radeon-rays.html">Radeon Rays</a></li>
+<li class="toctree-l2"><a class="reference internal" href="trueaudio-next.html">TrueAudio Next</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scene.html">Scene</a></li>
+<li class="toctree-l2"><a class="reference internal" href="audio-buffers.html">Audio Buffers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hrtf.html">HRTF</a></li>
+<li class="toctree-l2"><a class="reference internal" href="panning-effect.html">Panning Effect</a></li>
+<li class="toctree-l2"><a class="reference internal" href="binaural-effect.html">Binaural Effect</a></li>
+<li class="toctree-l2"><a class="reference internal" href="virtual-surround-effect.html">Virtual Surround Effect</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ambisonics-encode-effect.html">Ambisonics Encode Effect</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ambisonics-panning-effect.html">Ambisonics Panning Effect</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ambisonics-binaural-effect.html">Ambisonics Binaural Effect</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ambisonics-rotation-effect.html">Ambisonics Rotation Effect</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ambisonics-decode-effect.html">Ambisonics Decode Effect</a></li>
+<li class="toctree-l2"><a class="reference internal" href="direct-effect.html">Direct Effect</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reflections-effect.html">Reflection Effect</a></li>
+<li class="toctree-l2"><a class="reference internal" href="path-effect.html">Path Effect</a></li>
+<li class="toctree-l2"><a class="reference internal" href="probes.html">Probes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="baking.html">Baking</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Simulation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#typedefs">Typedefs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#functions">Functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#structures">Structures</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#enumerations">Enumerations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#callbacks">Callbacks</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Steam Audio C API</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="reference.html">API Reference</a> &raquo;</li>
+        
+      <li>Simulation</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="simulation">
+<span id="ref-simulation"></span><h1>Simulation<a class="headerlink" href="#simulation" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="typedefs">
+<h2>Typedefs<a class="headerlink" href="#typedefs" title="Permalink to this headline">¶</a></h2>
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv49IPLSource">
+<span id="_CPPv39IPLSource"></span><span id="_CPPv29IPLSource"></span><span id="IPLSource"></span><span class="target" id="group__simulation_1ga3d43b02333af95608b61302ff212704b"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="n"><span class="pre">_IPLSource_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">IPLSource</span></span></span><a class="headerlink" href="#_CPPv49IPLSource" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>A sound source, for the purposes of simulation. </p>
+<p>This object is used to specify various parameters for direct and indirect sound propagation simulation, and to retrieve the simulation results. </p>
+</dd></dl>
+
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv412IPLSimulator">
+<span id="_CPPv312IPLSimulator"></span><span id="_CPPv212IPLSimulator"></span><span id="IPLSimulator"></span><span class="target" id="group__simulation_1ga1c1a2e71337c66f1063a3494bda6daa7"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="n"><span class="pre">_IPLSimulator_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">IPLSimulator</span></span></span><a class="headerlink" href="#_CPPv412IPLSimulator" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Manages direct and indirect sound propagation simulation for multiple sources. </p>
+<p>Your application will typically create one simulator object and use it to run simulations with different source and listener parameters between consecutive simulation runs. The simulator can also be reused across scene changes. </p>
+</dd></dl>
+
+</div>
+<div class="section" id="functions">
+<h2>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h2>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv431iplDistanceAttenuationCalculate10IPLContext10IPLVector310IPLVector3P27IPLDistanceAttenuationModel">
+<span id="_CPPv331iplDistanceAttenuationCalculate10IPLContext10IPLVector310IPLVector3P27IPLDistanceAttenuationModel"></span><span id="_CPPv231iplDistanceAttenuationCalculate10IPLContext10IPLVector310IPLVector3P27IPLDistanceAttenuationModel"></span><span id="iplDistanceAttenuationCalculate__IPLContext.IPLVector3.IPLVector3.IPLDistanceAttenuationModelP"></span><span class="target" id="group__advancedsim_1ga3ca5e5907bc5150b21dd3d93d2c5b7dd"></span><a class="reference internal" href="types.html#_CPPv410IPLfloat32" title="IPLfloat32"><span class="n"><span class="pre">IPLfloat32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplDistanceAttenuationCalculate</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="context.html#_CPPv410IPLContext" title="IPLContext"><span class="n"><span class="pre">IPLContext</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">context</span></span>, <a class="reference internal" href="geometry.html#_CPPv410IPLVector3" title="IPLVector3"><span class="n"><span class="pre">IPLVector3</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">source</span></span>, <a class="reference internal" href="geometry.html#_CPPv410IPLVector3" title="IPLVector3"><span class="n"><span class="pre">IPLVector3</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">listener</span></span>, <a class="reference internal" href="#_CPPv427IPLDistanceAttenuationModel" title="IPLDistanceAttenuationModel"><span class="n"><span class="pre">IPLDistanceAttenuationModel</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">model</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv431iplDistanceAttenuationCalculate10IPLContext10IPLVector310IPLVector3P27IPLDistanceAttenuationModel" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Calculates the distance attenuation between a source and a listener. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>context</strong> – The context used to initialize Steam Audio. </p></li>
+<li><p><strong>source</strong> – The position of the source. </p></li>
+<li><p><strong>listener</strong> – The position of the listener. </p></li>
+<li><p><strong>model</strong> – The distance attenuation model to use.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The distance attenuation to apply, between <code class="docutils literal notranslate"><span class="pre">0</span></code> and <code class="docutils literal notranslate"><span class="pre">1</span></code>. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv425iplAirAbsorptionCalculate10IPLContext10IPLVector310IPLVector3P21IPLAirAbsorptionModelP10IPLfloat32">
+<span id="_CPPv325iplAirAbsorptionCalculate10IPLContext10IPLVector310IPLVector3P21IPLAirAbsorptionModelP10IPLfloat32"></span><span id="_CPPv225iplAirAbsorptionCalculate10IPLContext10IPLVector310IPLVector3P21IPLAirAbsorptionModelP10IPLfloat32"></span><span id="iplAirAbsorptionCalculate__IPLContext.IPLVector3.IPLVector3.IPLAirAbsorptionModelP.IPLfloat32P"></span><span class="target" id="group__advancedsim_1gac2ba2648367c6585fb396d0913c545dc"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplAirAbsorptionCalculate</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="context.html#_CPPv410IPLContext" title="IPLContext"><span class="n"><span class="pre">IPLContext</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">context</span></span>, <a class="reference internal" href="geometry.html#_CPPv410IPLVector3" title="IPLVector3"><span class="n"><span class="pre">IPLVector3</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">source</span></span>, <a class="reference internal" href="geometry.html#_CPPv410IPLVector3" title="IPLVector3"><span class="n"><span class="pre">IPLVector3</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">listener</span></span>, <a class="reference internal" href="#_CPPv421IPLAirAbsorptionModel" title="IPLAirAbsorptionModel"><span class="n"><span class="pre">IPLAirAbsorptionModel</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">model</span></span>, <a class="reference internal" href="types.html#_CPPv410IPLfloat32" title="IPLfloat32"><span class="n"><span class="pre">IPLfloat32</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">airAbsorption</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv425iplAirAbsorptionCalculate10IPLContext10IPLVector310IPLVector3P21IPLAirAbsorptionModelP10IPLfloat32" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Calculates the air absorption coefficients between a source and a listener. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>context</strong> – The context used to initialize Steam Audio. </p></li>
+<li><p><strong>source</strong> – The position of the source. </p></li>
+<li><p><strong>listener</strong> – The position of the listener. </p></li>
+<li><p><strong>model</strong> – The air absorption model to use. </p></li>
+<li><p><strong>airAbsorption</strong> – [out] The 3-band air absorption coefficients, each between <code class="docutils literal notranslate"><span class="pre">0</span></code> and <code class="docutils literal notranslate"><span class="pre">1</span></code>. </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv423iplDirectivityCalculate10IPLContext19IPLCoordinateSpace310IPLVector3P14IPLDirectivity">
+<span id="_CPPv323iplDirectivityCalculate10IPLContext19IPLCoordinateSpace310IPLVector3P14IPLDirectivity"></span><span id="_CPPv223iplDirectivityCalculate10IPLContext19IPLCoordinateSpace310IPLVector3P14IPLDirectivity"></span><span id="iplDirectivityCalculate__IPLContext.IPLCoordinateSpace3.IPLVector3.IPLDirectivityP"></span><span class="target" id="group__advancedsim_1ga44a25886245664010fc975c10efde41a"></span><a class="reference internal" href="types.html#_CPPv410IPLfloat32" title="IPLfloat32"><span class="n"><span class="pre">IPLfloat32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplDirectivityCalculate</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="context.html#_CPPv410IPLContext" title="IPLContext"><span class="n"><span class="pre">IPLContext</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">context</span></span>, <a class="reference internal" href="geometry.html#_CPPv419IPLCoordinateSpace3" title="IPLCoordinateSpace3"><span class="n"><span class="pre">IPLCoordinateSpace3</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">source</span></span>, <a class="reference internal" href="geometry.html#_CPPv410IPLVector3" title="IPLVector3"><span class="n"><span class="pre">IPLVector3</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">listener</span></span>, <a class="reference internal" href="#_CPPv414IPLDirectivity" title="IPLDirectivity"><span class="n"><span class="pre">IPLDirectivity</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">model</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv423iplDirectivityCalculate10IPLContext19IPLCoordinateSpace310IPLVector3P14IPLDirectivity" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Calculates the attenuation of a source due to its directivity pattern and orientation relative to a listener. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>context</strong> – The context used to initialize Steam Audio. </p></li>
+<li><p><strong>source</strong> – The position and orientation of the source. </p></li>
+<li><p><strong>listener</strong> – The position of the listener. </p></li>
+<li><p><strong>model</strong> – The directivity pattern to use.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The directivity value to apply, between <code class="docutils literal notranslate"><span class="pre">0</span></code> and <code class="docutils literal notranslate"><span class="pre">1</span></code>. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv415iplSourceCreate12IPLSimulatorP17IPLSourceSettingsP9IPLSource">
+<span id="_CPPv315iplSourceCreate12IPLSimulatorP17IPLSourceSettingsP9IPLSource"></span><span id="_CPPv215iplSourceCreate12IPLSimulatorP17IPLSourceSettingsP9IPLSource"></span><span id="iplSourceCreate__IPLSimulator.IPLSourceSettingsP.IPLSourceP"></span><span class="target" id="group__simulation_1ga15e12ec5ec1389dac7557202b3b3d409"></span><a class="reference internal" href="types.html#_CPPv48IPLerror" title="IPLerror"><span class="n"><span class="pre">IPLerror</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplSourceCreate</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv412IPLSimulator" title="IPLSimulator"><span class="n"><span class="pre">IPLSimulator</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">simulator</span></span>, <a class="reference internal" href="#_CPPv417IPLSourceSettings" title="IPLSourceSettings"><span class="n"><span class="pre">IPLSourceSettings</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">settings</span></span>, <a class="reference internal" href="#_CPPv49IPLSource" title="IPLSource"><span class="n"><span class="pre">IPLSource</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">source</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv415iplSourceCreate12IPLSimulatorP17IPLSourceSettingsP9IPLSource" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Creates a simulation source. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>simulator</strong> – The simulator with which this source will be used. </p></li>
+<li><p><strong>settings</strong> – The settings to use for creating the source. </p></li>
+<li><p><strong>source</strong> – [out] The created source.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Status code indicating whether or not the operation succeeded. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv415iplSourceRetain9IPLSource">
+<span id="_CPPv315iplSourceRetain9IPLSource"></span><span id="_CPPv215iplSourceRetain9IPLSource"></span><span id="iplSourceRetain__IPLSource"></span><span class="target" id="group__simulation_1gaa6c9ea957a8e5d6909adf2934df2fbff"></span><a class="reference internal" href="#_CPPv49IPLSource" title="IPLSource"><span class="n"><span class="pre">IPLSource</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplSourceRetain</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv49IPLSource" title="IPLSource"><span class="n"><span class="pre">IPLSource</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">source</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv415iplSourceRetain9IPLSource" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Retains an additional reference to a source. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>source</strong> – The source to retain a reference to.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The additional reference to the source. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv416iplSourceReleaseP9IPLSource">
+<span id="_CPPv316iplSourceReleaseP9IPLSource"></span><span id="_CPPv216iplSourceReleaseP9IPLSource"></span><span id="iplSourceRelease__IPLSourceP"></span><span class="target" id="group__simulation_1ga6388df1f050a93f4b58df48dccf50e35"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplSourceRelease</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv49IPLSource" title="IPLSource"><span class="n"><span class="pre">IPLSource</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">source</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv416iplSourceReleaseP9IPLSource" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Releases a reference to a source. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>source</strong> – The source to release a reference to. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv412iplSourceAdd9IPLSource12IPLSimulator">
+<span id="_CPPv312iplSourceAdd9IPLSource12IPLSimulator"></span><span id="_CPPv212iplSourceAdd9IPLSource12IPLSimulator"></span><span id="iplSourceAdd__IPLSource.IPLSimulator"></span><span class="target" id="group__simulation_1gadefa90a3fe8c8792ab34fb62ae3c23c4"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplSourceAdd</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv49IPLSource" title="IPLSource"><span class="n"><span class="pre">IPLSource</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">source</span></span>, <a class="reference internal" href="#_CPPv412IPLSimulator" title="IPLSimulator"><span class="n"><span class="pre">IPLSimulator</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">simulator</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv412iplSourceAdd9IPLSource12IPLSimulator" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Adds a source to the set of sources processed by a simulator in subsequent simulations. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>simulator</strong> – The simulator being used. </p></li>
+<li><p><strong>source</strong> – The source to add. </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv415iplSourceRemove9IPLSource12IPLSimulator">
+<span id="_CPPv315iplSourceRemove9IPLSource12IPLSimulator"></span><span id="_CPPv215iplSourceRemove9IPLSource12IPLSimulator"></span><span id="iplSourceRemove__IPLSource.IPLSimulator"></span><span class="target" id="group__simulation_1ga1abe00213ca7caf8448646820e7c0704"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplSourceRemove</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv49IPLSource" title="IPLSource"><span class="n"><span class="pre">IPLSource</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">source</span></span>, <a class="reference internal" href="#_CPPv412IPLSimulator" title="IPLSimulator"><span class="n"><span class="pre">IPLSimulator</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">simulator</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv415iplSourceRemove9IPLSource12IPLSimulator" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Removes a source from the set of sources processed by a simulator in subsequent simulations. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>simulator</strong> – The simulator being used. </p></li>
+<li><p><strong>source</strong> – The source to remove. </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv418iplSourceSetInputs9IPLSource18IPLSimulationFlagsP19IPLSimulationInputs">
+<span id="_CPPv318iplSourceSetInputs9IPLSource18IPLSimulationFlagsP19IPLSimulationInputs"></span><span id="_CPPv218iplSourceSetInputs9IPLSource18IPLSimulationFlagsP19IPLSimulationInputs"></span><span id="iplSourceSetInputs__IPLSource.IPLSimulationFlags.IPLSimulationInputsP"></span><span class="target" id="group__simulation_1ga13c963c2b176f5630cb1667a425acd10"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplSourceSetInputs</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv49IPLSource" title="IPLSource"><span class="n"><span class="pre">IPLSource</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">source</span></span>, <a class="reference internal" href="#_CPPv418IPLSimulationFlags" title="IPLSimulationFlags"><span class="n"><span class="pre">IPLSimulationFlags</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">flags</span></span>, <a class="reference internal" href="#_CPPv419IPLSimulationInputs" title="IPLSimulationInputs"><span class="n"><span class="pre">IPLSimulationInputs</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">inputs</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv418iplSourceSetInputs9IPLSource18IPLSimulationFlagsP19IPLSimulationInputs" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Specifies simulation parameters for a source. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>source</strong> – The source to specify parameters for. </p></li>
+<li><p><strong>flags</strong> – The types of simulation for which to specify inputs. If, for example, direct and reflections simulations are being run on separate threads, you can call this function on the direct simulation thread with <code class="docutils literal notranslate"><span class="pre">IPL_SIMULATIONFLAGS_DIRECT</span></code>, and on the reflections simulation thread with <code class="docutils literal notranslate"><span class="pre">IPL_SIMULATIONFLAGS_REFLECTIONS</span></code>, without requiring any synchronization between the calls. </p></li>
+<li><p><strong>inputs</strong> – The input parameters to set. </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv419iplSourceGetOutputs9IPLSource18IPLSimulationFlagsP20IPLSimulationOutputs">
+<span id="_CPPv319iplSourceGetOutputs9IPLSource18IPLSimulationFlagsP20IPLSimulationOutputs"></span><span id="_CPPv219iplSourceGetOutputs9IPLSource18IPLSimulationFlagsP20IPLSimulationOutputs"></span><span id="iplSourceGetOutputs__IPLSource.IPLSimulationFlags.IPLSimulationOutputsP"></span><span class="target" id="group__simulation_1ga80aea3355470055cc2c343b425db4eaa"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplSourceGetOutputs</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv49IPLSource" title="IPLSource"><span class="n"><span class="pre">IPLSource</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">source</span></span>, <a class="reference internal" href="#_CPPv418IPLSimulationFlags" title="IPLSimulationFlags"><span class="n"><span class="pre">IPLSimulationFlags</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">flags</span></span>, <a class="reference internal" href="#_CPPv420IPLSimulationOutputs" title="IPLSimulationOutputs"><span class="n"><span class="pre">IPLSimulationOutputs</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">outputs</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv419iplSourceGetOutputs9IPLSource18IPLSimulationFlagsP20IPLSimulationOutputs" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Retrieves simulation results for a source. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>source</strong> – The source to retrieve results for. </p></li>
+<li><p><strong>flags</strong> – The types of simulation for which to retrieve results. </p></li>
+<li><p><strong>outputs</strong> – [out] The simulation results. </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv418iplSimulatorCreate10IPLContextP21IPLSimulationSettingsP12IPLSimulator">
+<span id="_CPPv318iplSimulatorCreate10IPLContextP21IPLSimulationSettingsP12IPLSimulator"></span><span id="_CPPv218iplSimulatorCreate10IPLContextP21IPLSimulationSettingsP12IPLSimulator"></span><span id="iplSimulatorCreate__IPLContext.IPLSimulationSettingsP.IPLSimulatorP"></span><span class="target" id="group__simulation_1ga69b107cc4ffdba010cb049406743395f"></span><a class="reference internal" href="types.html#_CPPv48IPLerror" title="IPLerror"><span class="n"><span class="pre">IPLerror</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplSimulatorCreate</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="context.html#_CPPv410IPLContext" title="IPLContext"><span class="n"><span class="pre">IPLContext</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">context</span></span>, <a class="reference internal" href="#_CPPv421IPLSimulationSettings" title="IPLSimulationSettings"><span class="n"><span class="pre">IPLSimulationSettings</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">settings</span></span>, <a class="reference internal" href="#_CPPv412IPLSimulator" title="IPLSimulator"><span class="n"><span class="pre">IPLSimulator</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">simulator</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv418iplSimulatorCreate10IPLContextP21IPLSimulationSettingsP12IPLSimulator" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Creates a simulator. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>context</strong> – The context used to initialize Steam Audio. </p></li>
+<li><p><strong>settings</strong> – The settings to use when creating the simulator. </p></li>
+<li><p><strong>simulator</strong> – [out] The created simulator.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Status code indicating whether or not the operation succeeded. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv418iplSimulatorRetain12IPLSimulator">
+<span id="_CPPv318iplSimulatorRetain12IPLSimulator"></span><span id="_CPPv218iplSimulatorRetain12IPLSimulator"></span><span id="iplSimulatorRetain__IPLSimulator"></span><span class="target" id="group__simulation_1ga8a83648fd331a81d51398b1ef68ea579"></span><a class="reference internal" href="#_CPPv412IPLSimulator" title="IPLSimulator"><span class="n"><span class="pre">IPLSimulator</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplSimulatorRetain</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv412IPLSimulator" title="IPLSimulator"><span class="n"><span class="pre">IPLSimulator</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">simulator</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv418iplSimulatorRetain12IPLSimulator" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Retains an additional reference to a simulator. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>simulator</strong> – The simulator to retain a reference to.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The additional reference to the simulator. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv419iplSimulatorReleaseP12IPLSimulator">
+<span id="_CPPv319iplSimulatorReleaseP12IPLSimulator"></span><span id="_CPPv219iplSimulatorReleaseP12IPLSimulator"></span><span id="iplSimulatorRelease__IPLSimulatorP"></span><span class="target" id="group__simulation_1gac2db222b91457266ac2fdc20edb1122a"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplSimulatorRelease</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv412IPLSimulator" title="IPLSimulator"><span class="n"><span class="pre">IPLSimulator</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">simulator</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv419iplSimulatorReleaseP12IPLSimulator" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Releases a reference to a simulator. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>simulator</strong> – The simulator to release a reference to. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv420iplSimulatorSetScene12IPLSimulator8IPLScene">
+<span id="_CPPv320iplSimulatorSetScene12IPLSimulator8IPLScene"></span><span id="_CPPv220iplSimulatorSetScene12IPLSimulator8IPLScene"></span><span id="iplSimulatorSetScene__IPLSimulator.IPLScene"></span><span class="target" id="group__simulation_1ga97babc8cf4ee6001a9af90f925476c34"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplSimulatorSetScene</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv412IPLSimulator" title="IPLSimulator"><span class="n"><span class="pre">IPLSimulator</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">simulator</span></span>, <a class="reference internal" href="scene.html#_CPPv48IPLScene" title="IPLScene"><span class="n"><span class="pre">IPLScene</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">scene</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv420iplSimulatorSetScene12IPLSimulator8IPLScene" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Specifies the scene within which all subsequent simulations should be run. </p>
+<p>Call <code class="docutils literal notranslate"><span class="pre">iplSimulatorCommit</span></code> after calling this function for the changes to take effect.</p>
+<p>This function cannot be called while any simulation is running.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>simulator</strong> – The simulator being used. </p></li>
+<li><p><strong>scene</strong> – The scene to use for simulations. </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv425iplSimulatorAddProbeBatch12IPLSimulator13IPLProbeBatch">
+<span id="_CPPv325iplSimulatorAddProbeBatch12IPLSimulator13IPLProbeBatch"></span><span id="_CPPv225iplSimulatorAddProbeBatch12IPLSimulator13IPLProbeBatch"></span><span id="iplSimulatorAddProbeBatch__IPLSimulator.IPLProbeBatch"></span><span class="target" id="group__simulation_1ga2fb3c7d427e81683b32c7d93a924b344"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplSimulatorAddProbeBatch</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv412IPLSimulator" title="IPLSimulator"><span class="n"><span class="pre">IPLSimulator</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">simulator</span></span>, <a class="reference internal" href="probes.html#_CPPv413IPLProbeBatch" title="IPLProbeBatch"><span class="n"><span class="pre">IPLProbeBatch</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">probeBatch</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv425iplSimulatorAddProbeBatch12IPLSimulator13IPLProbeBatch" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Adds a probe batch for use in subsequent simulations. </p>
+<p>Sources that require baked data can then use the data contained in the specified probe batch.</p>
+<p>Call <code class="docutils literal notranslate"><span class="pre">iplSimulatorCommit</span></code> after calling this function for the changes to take effect.</p>
+<p>This function cannot be called while any simulation is running.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>probeBatch</strong> – The probe batch to add. </p></li>
+<li><p><strong>simulator</strong> – The simulator being used. </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv428iplSimulatorRemoveProbeBatch12IPLSimulator13IPLProbeBatch">
+<span id="_CPPv328iplSimulatorRemoveProbeBatch12IPLSimulator13IPLProbeBatch"></span><span id="_CPPv228iplSimulatorRemoveProbeBatch12IPLSimulator13IPLProbeBatch"></span><span id="iplSimulatorRemoveProbeBatch__IPLSimulator.IPLProbeBatch"></span><span class="target" id="group__simulation_1gac7cf13b3a0af175bf6ea7363e1649695"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplSimulatorRemoveProbeBatch</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv412IPLSimulator" title="IPLSimulator"><span class="n"><span class="pre">IPLSimulator</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">simulator</span></span>, <a class="reference internal" href="probes.html#_CPPv413IPLProbeBatch" title="IPLProbeBatch"><span class="n"><span class="pre">IPLProbeBatch</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">probeBatch</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv428iplSimulatorRemoveProbeBatch12IPLSimulator13IPLProbeBatch" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Removed a probe batch from use in subsequent simulations. </p>
+<p>Sources that require baked data will then stop using the data contained in the specified probe batch.</p>
+<p>Call <code class="docutils literal notranslate"><span class="pre">iplSimulatorCommit</span></code> after calling this function for the changes to take effect.</p>
+<p>This function cannot be called while any simulation is running.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>probeBatch</strong> – The probe batch to remove. </p></li>
+<li><p><strong>simulator</strong> – The simulator being used. </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv427iplSimulatorSetSharedInputs12IPLSimulator18IPLSimulationFlagsP25IPLSimulationSharedInputs">
+<span id="_CPPv327iplSimulatorSetSharedInputs12IPLSimulator18IPLSimulationFlagsP25IPLSimulationSharedInputs"></span><span id="_CPPv227iplSimulatorSetSharedInputs12IPLSimulator18IPLSimulationFlagsP25IPLSimulationSharedInputs"></span><span id="iplSimulatorSetSharedInputs__IPLSimulator.IPLSimulationFlags.IPLSimulationSharedInputsP"></span><span class="target" id="group__simulation_1ga04620c863cccedaa4c083c1eda5e1e2f"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplSimulatorSetSharedInputs</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv412IPLSimulator" title="IPLSimulator"><span class="n"><span class="pre">IPLSimulator</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">simulator</span></span>, <a class="reference internal" href="#_CPPv418IPLSimulationFlags" title="IPLSimulationFlags"><span class="n"><span class="pre">IPLSimulationFlags</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">flags</span></span>, <a class="reference internal" href="#_CPPv425IPLSimulationSharedInputs" title="IPLSimulationSharedInputs"><span class="n"><span class="pre">IPLSimulationSharedInputs</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">sharedInputs</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv427iplSimulatorSetSharedInputs12IPLSimulator18IPLSimulationFlagsP25IPLSimulationSharedInputs" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Specifies simulation parameters that are not associated with any particular source. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>simulator</strong> – The simulator being used. </p></li>
+<li><p><strong>flags</strong> – The types of simulation for which to specify shared inputs. If, for example, direct and reflections simulations are being run on separate threads, you can call this function on the direct simulation thread with <code class="docutils literal notranslate"><span class="pre">IPL_SIMULATIONFLAGS_DIRECT</span></code>, and on the reflections simulation thread with <code class="docutils literal notranslate"><span class="pre">IPL_SIMULATIONFLAGS_REFLECTIONS</span></code>, without requiring any synchronization between the calls. </p></li>
+<li><p><strong>sharedInputs</strong> – The shared input parameters to set. </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv418iplSimulatorCommit12IPLSimulator">
+<span id="_CPPv318iplSimulatorCommit12IPLSimulator"></span><span id="_CPPv218iplSimulatorCommit12IPLSimulator"></span><span id="iplSimulatorCommit__IPLSimulator"></span><span class="target" id="group__simulation_1ga663aeb4be05cb25587aba2af5ae010d2"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplSimulatorCommit</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv412IPLSimulator" title="IPLSimulator"><span class="n"><span class="pre">IPLSimulator</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">simulator</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv418iplSimulatorCommit12IPLSimulator" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Commits changes to the scene or probe batches used for simulation. </p>
+<p>Call this function after calling <code class="docutils literal notranslate"><span class="pre">iplSimulatorSetScene</span></code>, <code class="docutils literal notranslate"><span class="pre">iplSimulatorAddProbeBatch</span></code>, or <code class="docutils literal notranslate"><span class="pre">iplSimulatorRemoveProbeBatch</span></code> for the changes to take effect.</p>
+<p>This function cannot be called while any simulation is running.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>simulator</strong> – The simulator being used. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv421iplSimulatorRunDirect12IPLSimulator">
+<span id="_CPPv321iplSimulatorRunDirect12IPLSimulator"></span><span id="_CPPv221iplSimulatorRunDirect12IPLSimulator"></span><span id="iplSimulatorRunDirect__IPLSimulator"></span><span class="target" id="group__simulation_1ga66688114d2a14ef42738fdbb0bfa0292"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplSimulatorRunDirect</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv412IPLSimulator" title="IPLSimulator"><span class="n"><span class="pre">IPLSimulator</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">simulator</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv421iplSimulatorRunDirect12IPLSimulator" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Runs a direct simulation for all sources added to the simulator. </p>
+<p>This may include distance attenuation, air absorption, directivity, occlusion, and transmission.</p>
+<p>This function should not be called from the audio processing thread if occlusion and/or transmission are enabled.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>simulator</strong> – The simulator being used. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv426iplSimulatorRunReflections12IPLSimulator">
+<span id="_CPPv326iplSimulatorRunReflections12IPLSimulator"></span><span id="_CPPv226iplSimulatorRunReflections12IPLSimulator"></span><span id="iplSimulatorRunReflections__IPLSimulator"></span><span class="target" id="group__simulation_1gad8aff006e75fd800636dc15cfded7767"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplSimulatorRunReflections</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv412IPLSimulator" title="IPLSimulator"><span class="n"><span class="pre">IPLSimulator</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">simulator</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv426iplSimulatorRunReflections12IPLSimulator" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Runs a reflections simulation for all sources added to the simulator. </p>
+<p>This function can be CPU intensive, and should be called from a separate thread in order to not block either the audio processing thread or the game’s main update thread.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>simulator</strong> – The simulator being used. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv422iplSimulatorRunPathing12IPLSimulator">
+<span id="_CPPv322iplSimulatorRunPathing12IPLSimulator"></span><span id="_CPPv222iplSimulatorRunPathing12IPLSimulator"></span><span id="iplSimulatorRunPathing__IPLSimulator"></span><span class="target" id="group__simulation_1gab1313c64e43ed4fb22801b559ee264d1"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplSimulatorRunPathing</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv412IPLSimulator" title="IPLSimulator"><span class="n"><span class="pre">IPLSimulator</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">simulator</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv422iplSimulatorRunPathing12IPLSimulator" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Runs a pathing simulation for all sources added to the simulator. </p>
+<p>This function can be CPU intensive, and should be called from a separate thread in order to not block either the audio processing thread or the game’s main update thread.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>simulator</strong> – The simulator being used. </p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="structures">
+<h2>Structures<a class="headerlink" href="#structures" title="Permalink to this headline">¶</a></h2>
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv427IPLDistanceAttenuationModel">
+<span id="_CPPv327IPLDistanceAttenuationModel"></span><span id="_CPPv227IPLDistanceAttenuationModel"></span><span id="IPLDistanceAttenuationModel"></span><span class="target" id="struct_i_p_l_distance_attenuation_model"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLDistanceAttenuationModel</span></span></span><a class="headerlink" href="#_CPPv427IPLDistanceAttenuationModel" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>A distance attenuation model that can be used for modeling attenuation of sound over distance. </p>
+<p>Can be used with both direct and indirect sound propagation. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N27IPLDistanceAttenuationModel4typeE">
+<span id="_CPPv3N27IPLDistanceAttenuationModel4typeE"></span><span id="_CPPv2N27IPLDistanceAttenuationModel4typeE"></span><span id="IPLDistanceAttenuationModel::type__IPLDistanceAttenuationModelType"></span><span class="target" id="struct_i_p_l_distance_attenuation_model_1abf94f5ac2a49b7913bf811e92fd47709"></span><a class="reference internal" href="#_CPPv431IPLDistanceAttenuationModelType" title="IPLDistanceAttenuationModelType"><span class="n"><span class="pre">IPLDistanceAttenuationModelType</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">type</span></span></span><a class="headerlink" href="#_CPPv4N27IPLDistanceAttenuationModel4typeE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The type of distance attenuation model to use. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N27IPLDistanceAttenuationModel11minDistanceE">
+<span id="_CPPv3N27IPLDistanceAttenuationModel11minDistanceE"></span><span id="_CPPv2N27IPLDistanceAttenuationModel11minDistanceE"></span><span id="IPLDistanceAttenuationModel::minDistance__IPLfloat32"></span><span class="target" id="struct_i_p_l_distance_attenuation_model_1a7bf0690bb46feae55758ed661a6b74f1"></span><a class="reference internal" href="types.html#_CPPv410IPLfloat32" title="IPLfloat32"><span class="n"><span class="pre">IPLfloat32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">minDistance</span></span></span><a class="headerlink" href="#_CPPv4N27IPLDistanceAttenuationModel11minDistanceE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>When <code class="docutils literal notranslate"><span class="pre">type</span></code> is <code class="docutils literal notranslate"><span class="pre">IPL_DISTANCEATTENUATIONTYPE_INVERSEDISTANCE</span></code>, no distance attenuation is applied to any sound whose distance from the listener is less than this value. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N27IPLDistanceAttenuationModel8callbackE">
+<span id="_CPPv3N27IPLDistanceAttenuationModel8callbackE"></span><span id="_CPPv2N27IPLDistanceAttenuationModel8callbackE"></span><span id="IPLDistanceAttenuationModel::callback__IPLDistanceAttenuationCallback"></span><span class="target" id="struct_i_p_l_distance_attenuation_model_1a7e6eb9ec65c6a729bb69ed2256c6b890"></span><a class="reference internal" href="#_CPPv430IPLDistanceAttenuationCallback" title="IPLDistanceAttenuationCallback"><span class="n"><span class="pre">IPLDistanceAttenuationCallback</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">callback</span></span></span><a class="headerlink" href="#_CPPv4N27IPLDistanceAttenuationModel8callbackE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>When <code class="docutils literal notranslate"><span class="pre">type</span></code> is <code class="docutils literal notranslate"><span class="pre">IPL_DISTANCEATTENUATIONTYPE_CALLBACK</span></code>, this function will be called whenever Steam Audio needs to evaluate distance attenuation. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N27IPLDistanceAttenuationModel8userDataE">
+<span id="_CPPv3N27IPLDistanceAttenuationModel8userDataE"></span><span id="_CPPv2N27IPLDistanceAttenuationModel8userDataE"></span><span id="IPLDistanceAttenuationModel::userData__voidP"></span><span class="target" id="struct_i_p_l_distance_attenuation_model_1a2e294dd14122c554baa0665072b4ca7a"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">userData</span></span></span><a class="headerlink" href="#_CPPv4N27IPLDistanceAttenuationModel8userDataE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Pointer to arbitrary data that will be provided to the <code class="docutils literal notranslate"><span class="pre">callback</span></code> function whenever it is called. </p>
+<p>May be <code class="docutils literal notranslate"><span class="pre">NULL</span></code>. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N27IPLDistanceAttenuationModel5dirtyE">
+<span id="_CPPv3N27IPLDistanceAttenuationModel5dirtyE"></span><span id="_CPPv2N27IPLDistanceAttenuationModel5dirtyE"></span><span id="IPLDistanceAttenuationModel::dirty__IPLbool"></span><span class="target" id="struct_i_p_l_distance_attenuation_model_1a14f6674d3d47bb0e046ddd1c4b91856c"></span><a class="reference internal" href="types.html#_CPPv47IPLbool" title="IPLbool"><span class="n"><span class="pre">IPLbool</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dirty</span></span></span><a class="headerlink" href="#_CPPv4N27IPLDistanceAttenuationModel5dirtyE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Set to <code class="docutils literal notranslate"><span class="pre">IPL_TRUE</span></code> to indicate that the distance attenuation model defined by the <code class="docutils literal notranslate"><span class="pre">callback</span></code> function has changed since the last time simulation was run. </p>
+<p>For example, the callback may be evaluating a curve defined in a GUI. If the user is editing the curve in real-time, set this to <code class="docutils literal notranslate"><span class="pre">IPL_TRUE</span></code> whenever the curve changes, so Steam Audio can update simulation results to match. </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv421IPLAirAbsorptionModel">
+<span id="_CPPv321IPLAirAbsorptionModel"></span><span id="_CPPv221IPLAirAbsorptionModel"></span><span id="IPLAirAbsorptionModel"></span><span class="target" id="struct_i_p_l_air_absorption_model"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLAirAbsorptionModel</span></span></span><a class="headerlink" href="#_CPPv421IPLAirAbsorptionModel" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>An air absorption model that can be used for modeling frequency-dependent attenuation of sound over distance. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N21IPLAirAbsorptionModel4typeE">
+<span id="_CPPv3N21IPLAirAbsorptionModel4typeE"></span><span id="_CPPv2N21IPLAirAbsorptionModel4typeE"></span><span id="IPLAirAbsorptionModel::type__IPLAirAbsorptionModelType"></span><span class="target" id="struct_i_p_l_air_absorption_model_1ab32921d68d5d4ecd046a97ca3f1fdeb8"></span><a class="reference internal" href="#_CPPv425IPLAirAbsorptionModelType" title="IPLAirAbsorptionModelType"><span class="n"><span class="pre">IPLAirAbsorptionModelType</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">type</span></span></span><a class="headerlink" href="#_CPPv4N21IPLAirAbsorptionModel4typeE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The type of air absorption model to use. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N21IPLAirAbsorptionModel12coefficientsE">
+<span id="_CPPv3N21IPLAirAbsorptionModel12coefficientsE"></span><span id="_CPPv2N21IPLAirAbsorptionModel12coefficientsE"></span><span id="IPLAirAbsorptionModel::coefficients__IPLfloat32A"></span><span class="target" id="struct_i_p_l_air_absorption_model_1a7fe685b7f0c7c49498c3621b68629294"></span><a class="reference internal" href="types.html#_CPPv410IPLfloat32" title="IPLfloat32"><span class="n"><span class="pre">IPLfloat32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">coefficients</span></span></span><span class="p"><span class="pre">[</span></span><span class="m"><span class="pre">3</span></span><span class="p"><span class="pre">]</span></span><a class="headerlink" href="#_CPPv4N21IPLAirAbsorptionModel12coefficientsE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The exponential falloff coefficients to use when <code class="docutils literal notranslate"><span class="pre">type</span></code> is <code class="docutils literal notranslate"><span class="pre">IPL_AIRABSORPTIONTYPE_EXPONENTIAL</span></code>. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N21IPLAirAbsorptionModel8callbackE">
+<span id="_CPPv3N21IPLAirAbsorptionModel8callbackE"></span><span id="_CPPv2N21IPLAirAbsorptionModel8callbackE"></span><span id="IPLAirAbsorptionModel::callback__IPLAirAbsorptionCallback"></span><span class="target" id="struct_i_p_l_air_absorption_model_1ab7941abbf70b2bba09891883cc331807"></span><a class="reference internal" href="#_CPPv424IPLAirAbsorptionCallback" title="IPLAirAbsorptionCallback"><span class="n"><span class="pre">IPLAirAbsorptionCallback</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">callback</span></span></span><a class="headerlink" href="#_CPPv4N21IPLAirAbsorptionModel8callbackE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>When <code class="docutils literal notranslate"><span class="pre">type</span></code> is <code class="docutils literal notranslate"><span class="pre">IPL_AIRABSORPTIONTYPE_CALLBACK</span></code>, this function will be called whenever Steam Audio needs to evaluate air absorption. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N21IPLAirAbsorptionModel8userDataE">
+<span id="_CPPv3N21IPLAirAbsorptionModel8userDataE"></span><span id="_CPPv2N21IPLAirAbsorptionModel8userDataE"></span><span id="IPLAirAbsorptionModel::userData__voidP"></span><span class="target" id="struct_i_p_l_air_absorption_model_1a2e294dd14122c554baa0665072b4ca7a"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">userData</span></span></span><a class="headerlink" href="#_CPPv4N21IPLAirAbsorptionModel8userDataE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Pointer to arbitrary data that will be provided to the <code class="docutils literal notranslate"><span class="pre">callback</span></code> function whenever it is called. </p>
+<p>May be <code class="docutils literal notranslate"><span class="pre">NULL</span></code>. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N21IPLAirAbsorptionModel5dirtyE">
+<span id="_CPPv3N21IPLAirAbsorptionModel5dirtyE"></span><span id="_CPPv2N21IPLAirAbsorptionModel5dirtyE"></span><span id="IPLAirAbsorptionModel::dirty__IPLbool"></span><span class="target" id="struct_i_p_l_air_absorption_model_1a14f6674d3d47bb0e046ddd1c4b91856c"></span><a class="reference internal" href="types.html#_CPPv47IPLbool" title="IPLbool"><span class="n"><span class="pre">IPLbool</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dirty</span></span></span><a class="headerlink" href="#_CPPv4N21IPLAirAbsorptionModel5dirtyE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Set to <code class="docutils literal notranslate"><span class="pre">IPL_TRUE</span></code> to indicate that the air absorption model defined by the <code class="docutils literal notranslate"><span class="pre">callback</span></code> function has changed since the last time simulation was run. </p>
+<p>For example, the callback may be evaluating a set of curves defined in a GUI. If the user is editing the curves in real-time, set this to <code class="docutils literal notranslate"><span class="pre">IPL_TRUE</span></code> whenever the curves change, so Steam Audio can update simulation results to match. </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv414IPLDirectivity">
+<span id="_CPPv314IPLDirectivity"></span><span id="_CPPv214IPLDirectivity"></span><span id="IPLDirectivity"></span><span class="target" id="struct_i_p_l_directivity"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLDirectivity</span></span></span><a class="headerlink" href="#_CPPv414IPLDirectivity" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>A directivity pattern that can be used to model changes in sound intensity as a function of the source’s orientation. </p>
+<p>Can be used with both direct and indirect sound propagation.</p>
+<p>The default directivity model is a weighted dipole. This is a linear blend between an omnidirectional source (which emits sound with equal intensity in all directions), and a dipole oriented along the z-axis in the source’s coordinate system (which focuses sound along the +z and -z axes). A callback function can be specified to implement any other arbitrary directivity pattern. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N14IPLDirectivity12dipoleWeightE">
+<span id="_CPPv3N14IPLDirectivity12dipoleWeightE"></span><span id="_CPPv2N14IPLDirectivity12dipoleWeightE"></span><span id="IPLDirectivity::dipoleWeight__IPLfloat32"></span><span class="target" id="struct_i_p_l_directivity_1ab23f5b671a41914cb64a2f5bf0081c2b"></span><a class="reference internal" href="types.html#_CPPv410IPLfloat32" title="IPLfloat32"><span class="n"><span class="pre">IPLfloat32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dipoleWeight</span></span></span><a class="headerlink" href="#_CPPv4N14IPLDirectivity12dipoleWeightE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>How much of the dipole to blend into the directivity pattern. </p>
+<p><code class="docutils literal notranslate"><span class="pre">0</span></code> = pure omnidirectional, <code class="docutils literal notranslate"><span class="pre">1</span></code> = pure dipole. <code class="docutils literal notranslate"><span class="pre">0.5f</span></code> results in a cardioid directivity pattern. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N14IPLDirectivity11dipolePowerE">
+<span id="_CPPv3N14IPLDirectivity11dipolePowerE"></span><span id="_CPPv2N14IPLDirectivity11dipolePowerE"></span><span id="IPLDirectivity::dipolePower__IPLfloat32"></span><span class="target" id="struct_i_p_l_directivity_1a2917ea20a35a0e0ab33d35b42c46cd76"></span><a class="reference internal" href="types.html#_CPPv410IPLfloat32" title="IPLfloat32"><span class="n"><span class="pre">IPLfloat32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dipolePower</span></span></span><a class="headerlink" href="#_CPPv4N14IPLDirectivity11dipolePowerE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>How “sharp” the dipole is. </p>
+<p>Higher values result in sound being focused within a narrower range of directions. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N14IPLDirectivity8callbackE">
+<span id="_CPPv3N14IPLDirectivity8callbackE"></span><span id="_CPPv2N14IPLDirectivity8callbackE"></span><span id="IPLDirectivity::callback__IPLDirectivityCallback"></span><span class="target" id="struct_i_p_l_directivity_1a3c2d26f80f4796f9004f6ae580e5ec6b"></span><a class="reference internal" href="#_CPPv422IPLDirectivityCallback" title="IPLDirectivityCallback"><span class="n"><span class="pre">IPLDirectivityCallback</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">callback</span></span></span><a class="headerlink" href="#_CPPv4N14IPLDirectivity8callbackE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>If non <code class="docutils literal notranslate"><span class="pre">NULL</span></code>, this function will be called whenever Steam Audio needs to evaluate a directivity pattern. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N14IPLDirectivity8userDataE">
+<span id="_CPPv3N14IPLDirectivity8userDataE"></span><span id="_CPPv2N14IPLDirectivity8userDataE"></span><span id="IPLDirectivity::userData__voidP"></span><span class="target" id="struct_i_p_l_directivity_1a2e294dd14122c554baa0665072b4ca7a"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">userData</span></span></span><a class="headerlink" href="#_CPPv4N14IPLDirectivity8userDataE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Pointer to arbitrary data that will be provided to the <code class="docutils literal notranslate"><span class="pre">callback</span></code> function whenever it is called. </p>
+<p>May be <code class="docutils literal notranslate"><span class="pre">NULL</span></code>. </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv421IPLSimulationSettings">
+<span id="_CPPv321IPLSimulationSettings"></span><span id="_CPPv221IPLSimulationSettings"></span><span id="IPLSimulationSettings"></span><span class="target" id="struct_i_p_l_simulation_settings"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLSimulationSettings</span></span></span><a class="headerlink" href="#_CPPv421IPLSimulationSettings" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Settings used to create a simulator. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N21IPLSimulationSettings5flagsE">
+<span id="_CPPv3N21IPLSimulationSettings5flagsE"></span><span id="_CPPv2N21IPLSimulationSettings5flagsE"></span><span id="IPLSimulationSettings::flags__IPLSimulationFlags"></span><span class="target" id="struct_i_p_l_simulation_settings_1ae6598b28a6d812f5bce4efd284d3e04b"></span><a class="reference internal" href="#_CPPv418IPLSimulationFlags" title="IPLSimulationFlags"><span class="n"><span class="pre">IPLSimulationFlags</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">flags</span></span></span><a class="headerlink" href="#_CPPv4N21IPLSimulationSettings5flagsE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The types of simulation that this simulator will be used for. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N21IPLSimulationSettings9sceneTypeE">
+<span id="_CPPv3N21IPLSimulationSettings9sceneTypeE"></span><span id="_CPPv2N21IPLSimulationSettings9sceneTypeE"></span><span id="IPLSimulationSettings::sceneType__IPLSceneType"></span><span class="target" id="struct_i_p_l_simulation_settings_1a10bbbea1cc2fffe16bedb0326862ccc9"></span><a class="reference internal" href="scene.html#_CPPv412IPLSceneType" title="IPLSceneType"><span class="n"><span class="pre">IPLSceneType</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">sceneType</span></span></span><a class="headerlink" href="#_CPPv4N21IPLSimulationSettings9sceneTypeE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The type of scene that will be used for simulations via <code class="docutils literal notranslate"><span class="pre">iplSimulatorSetScene</span></code>. </p>
+<p>The scene type cannot change during the lifetime of a simulator object. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N21IPLSimulationSettings14reflectionTypeE">
+<span id="_CPPv3N21IPLSimulationSettings14reflectionTypeE"></span><span id="_CPPv2N21IPLSimulationSettings14reflectionTypeE"></span><span id="IPLSimulationSettings::reflectionType__IPLReflectionEffectType"></span><span class="target" id="struct_i_p_l_simulation_settings_1ad46da3d21719a10c94ebd73bd29b4aed"></span><a class="reference internal" href="reflections-effect.html#_CPPv423IPLReflectionEffectType" title="IPLReflectionEffectType"><span class="n"><span class="pre">IPLReflectionEffectType</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">reflectionType</span></span></span><a class="headerlink" href="#_CPPv4N21IPLSimulationSettings14reflectionTypeE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The type of reflections effect that will be used to render the results of reflections simulation. </p>
+<p>The reflections effect type cannot change during the lifetime of a simulator object. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N21IPLSimulationSettings22maxNumOcclusionSamplesE">
+<span id="_CPPv3N21IPLSimulationSettings22maxNumOcclusionSamplesE"></span><span id="_CPPv2N21IPLSimulationSettings22maxNumOcclusionSamplesE"></span><span id="IPLSimulationSettings::maxNumOcclusionSamples__IPLint32"></span><span class="target" id="struct_i_p_l_simulation_settings_1a972e0a21e5249c32a7ed331ecfd5ebc8"></span><a class="reference internal" href="types.html#_CPPv48IPLint32" title="IPLint32"><span class="n"><span class="pre">IPLint32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">maxNumOcclusionSamples</span></span></span><a class="headerlink" href="#_CPPv4N21IPLSimulationSettings22maxNumOcclusionSamplesE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The maximum number of point samples to consider when calculating occlusion using the volumetric occlusion algorithm. </p>
+<p>Different sources can use different numbers of samples, and the number of samples can change between simulation runs, but this is the maximum value. Increasing this value results in smoother occlusion transitions, at the cost of increased CPU usage. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N21IPLSimulationSettings10maxNumRaysE">
+<span id="_CPPv3N21IPLSimulationSettings10maxNumRaysE"></span><span id="_CPPv2N21IPLSimulationSettings10maxNumRaysE"></span><span id="IPLSimulationSettings::maxNumRays__IPLint32"></span><span class="target" id="struct_i_p_l_simulation_settings_1af8e83859554df43e6229e518b0bc5f57"></span><a class="reference internal" href="types.html#_CPPv48IPLint32" title="IPLint32"><span class="n"><span class="pre">IPLint32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">maxNumRays</span></span></span><a class="headerlink" href="#_CPPv4N21IPLSimulationSettings10maxNumRaysE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The maximum number of rays to trace from the listener when simulating reflections. </p>
+<p>You can use different numbers of rays between simulation runs, but this is the maximum value. Increasing this value results in more accurate reflections, at the cost of increased CPU usage. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N21IPLSimulationSettings17numDiffuseSamplesE">
+<span id="_CPPv3N21IPLSimulationSettings17numDiffuseSamplesE"></span><span id="_CPPv2N21IPLSimulationSettings17numDiffuseSamplesE"></span><span id="IPLSimulationSettings::numDiffuseSamples__IPLint32"></span><span class="target" id="struct_i_p_l_simulation_settings_1a8730cf838ae0febc6de13e84150b3813"></span><a class="reference internal" href="types.html#_CPPv48IPLint32" title="IPLint32"><span class="n"><span class="pre">IPLint32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">numDiffuseSamples</span></span></span><a class="headerlink" href="#_CPPv4N21IPLSimulationSettings17numDiffuseSamplesE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The number of directions to sample when generating diffusely reflected rays. </p>
+<p>Increasing this value may increase the accuracy of diffuse reflections. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N21IPLSimulationSettings11maxDurationE">
+<span id="_CPPv3N21IPLSimulationSettings11maxDurationE"></span><span id="_CPPv2N21IPLSimulationSettings11maxDurationE"></span><span id="IPLSimulationSettings::maxDuration__IPLfloat32"></span><span class="target" id="struct_i_p_l_simulation_settings_1a6690e4e48c1b97a01816f947e336d083"></span><a class="reference internal" href="types.html#_CPPv410IPLfloat32" title="IPLfloat32"><span class="n"><span class="pre">IPLfloat32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">maxDuration</span></span></span><a class="headerlink" href="#_CPPv4N21IPLSimulationSettings11maxDurationE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The maximum length (in seconds) of impulse responses generated by reflection simulations. </p>
+<p>You can change this value betweeen simulation runs, but this is the maximum value. Increasing this value results in longer, more accurate reverb tails, at the cost of increased CPU and memory usage. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N21IPLSimulationSettings8maxOrderE">
+<span id="_CPPv3N21IPLSimulationSettings8maxOrderE"></span><span id="_CPPv2N21IPLSimulationSettings8maxOrderE"></span><span id="IPLSimulationSettings::maxOrder__IPLint32"></span><span class="target" id="struct_i_p_l_simulation_settings_1a51ad17576848f04fd5c9ddac74b7bd05"></span><a class="reference internal" href="types.html#_CPPv48IPLint32" title="IPLint32"><span class="n"><span class="pre">IPLint32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">maxOrder</span></span></span><a class="headerlink" href="#_CPPv4N21IPLSimulationSettings8maxOrderE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The maximum Ambisonic order of impulse responses generated by reflection simulations. </p>
+<p>You can change this value between simulation runs, but this is the maximum value. Increasing this value results in more accurate directional variations in the impulse responses, at the cost of increased CPU and memory usage. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N21IPLSimulationSettings13maxNumSourcesE">
+<span id="_CPPv3N21IPLSimulationSettings13maxNumSourcesE"></span><span id="_CPPv2N21IPLSimulationSettings13maxNumSourcesE"></span><span id="IPLSimulationSettings::maxNumSources__IPLint32"></span><span class="target" id="struct_i_p_l_simulation_settings_1a1e5309f6161d67ee12593c6e01d20c0d"></span><a class="reference internal" href="types.html#_CPPv48IPLint32" title="IPLint32"><span class="n"><span class="pre">IPLint32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">maxNumSources</span></span></span><a class="headerlink" href="#_CPPv4N21IPLSimulationSettings13maxNumSourcesE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The maximum number of sources for which reflection simulations will be run at any given time. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N21IPLSimulationSettings10numThreadsE">
+<span id="_CPPv3N21IPLSimulationSettings10numThreadsE"></span><span id="_CPPv2N21IPLSimulationSettings10numThreadsE"></span><span id="IPLSimulationSettings::numThreads__IPLint32"></span><span class="target" id="struct_i_p_l_simulation_settings_1a4dc15724c71b1817aaf7ce8ef6135c1e"></span><a class="reference internal" href="types.html#_CPPv48IPLint32" title="IPLint32"><span class="n"><span class="pre">IPLint32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">numThreads</span></span></span><a class="headerlink" href="#_CPPv4N21IPLSimulationSettings10numThreadsE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The number of threads used for real-time reflection simulations. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N21IPLSimulationSettings12rayBatchSizeE">
+<span id="_CPPv3N21IPLSimulationSettings12rayBatchSizeE"></span><span id="_CPPv2N21IPLSimulationSettings12rayBatchSizeE"></span><span id="IPLSimulationSettings::rayBatchSize__IPLint32"></span><span class="target" id="struct_i_p_l_simulation_settings_1adb5cfbd14f645db25d0d3f3a3857d891"></span><a class="reference internal" href="types.html#_CPPv48IPLint32" title="IPLint32"><span class="n"><span class="pre">IPLint32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">rayBatchSize</span></span></span><a class="headerlink" href="#_CPPv4N21IPLSimulationSettings12rayBatchSizeE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>If using custom ray tracer callbacks, this the number of rays that will be passed to the callbacks every time rays need to be traced. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N21IPLSimulationSettings13numVisSamplesE">
+<span id="_CPPv3N21IPLSimulationSettings13numVisSamplesE"></span><span id="_CPPv2N21IPLSimulationSettings13numVisSamplesE"></span><span id="IPLSimulationSettings::numVisSamples__IPLint32"></span><span class="target" id="struct_i_p_l_simulation_settings_1ac46aadd4611b1239ddf1f6dbe2166b12"></span><a class="reference internal" href="types.html#_CPPv48IPLint32" title="IPLint32"><span class="n"><span class="pre">IPLint32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">numVisSamples</span></span></span><a class="headerlink" href="#_CPPv4N21IPLSimulationSettings13numVisSamplesE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The number of point samples to consider when calculating probe-to-probe visibility for pathing simulations. </p>
+<p>Baked paths may end up being occluded by dynamic objects, in which case you can configure the simulator to look for alternate paths in real time. This process will involve checking visibility between probes. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N21IPLSimulationSettings12samplingRateE">
+<span id="_CPPv3N21IPLSimulationSettings12samplingRateE"></span><span id="_CPPv2N21IPLSimulationSettings12samplingRateE"></span><span id="IPLSimulationSettings::samplingRate__IPLint32"></span><span class="target" id="struct_i_p_l_simulation_settings_1a2b81c828d28baf3f53a4e39385eae42f"></span><a class="reference internal" href="types.html#_CPPv48IPLint32" title="IPLint32"><span class="n"><span class="pre">IPLint32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">samplingRate</span></span></span><a class="headerlink" href="#_CPPv4N21IPLSimulationSettings12samplingRateE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The sampling rate (in Hz) used for audio processing. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N21IPLSimulationSettings9frameSizeE">
+<span id="_CPPv3N21IPLSimulationSettings9frameSizeE"></span><span id="_CPPv2N21IPLSimulationSettings9frameSizeE"></span><span id="IPLSimulationSettings::frameSize__IPLint32"></span><span class="target" id="struct_i_p_l_simulation_settings_1a585c33529103fcfd1cef24179f8f6bee"></span><a class="reference internal" href="types.html#_CPPv48IPLint32" title="IPLint32"><span class="n"><span class="pre">IPLint32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">frameSize</span></span></span><a class="headerlink" href="#_CPPv4N21IPLSimulationSettings9frameSizeE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The size (in samples) of the audio buffers used for audio processing. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N21IPLSimulationSettings12openCLDeviceE">
+<span id="_CPPv3N21IPLSimulationSettings12openCLDeviceE"></span><span id="_CPPv2N21IPLSimulationSettings12openCLDeviceE"></span><span id="IPLSimulationSettings::openCLDevice__IPLOpenCLDevice"></span><span class="target" id="struct_i_p_l_simulation_settings_1af7381122f92e9616941a1c5b69a6ba85"></span><a class="reference internal" href="opencl.html#_CPPv415IPLOpenCLDevice" title="IPLOpenCLDevice"><span class="n"><span class="pre">IPLOpenCLDevice</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">openCLDevice</span></span></span><a class="headerlink" href="#_CPPv4N21IPLSimulationSettings12openCLDeviceE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The OpenCL device being used. </p>
+<p>Only necessary if  is <code class="docutils literal notranslate"><span class="pre">IPL_SCENETYPE_RADEONRAYS</span></code>, or <code class="docutils literal notranslate"><span class="pre">reflectionType</span></code> is <code class="docutils literal notranslate"><span class="pre">IPL_REFLECTIONEFFECTTYPE_TAN</span></code>. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N21IPLSimulationSettings16radeonRaysDeviceE">
+<span id="_CPPv3N21IPLSimulationSettings16radeonRaysDeviceE"></span><span id="_CPPv2N21IPLSimulationSettings16radeonRaysDeviceE"></span><span id="IPLSimulationSettings::radeonRaysDevice__IPLRadeonRaysDevice"></span><span class="target" id="struct_i_p_l_simulation_settings_1ad6438f682333e23677f449b454f71abe"></span><a class="reference internal" href="radeon-rays.html#_CPPv419IPLRadeonRaysDevice" title="IPLRadeonRaysDevice"><span class="n"><span class="pre">IPLRadeonRaysDevice</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">radeonRaysDevice</span></span></span><a class="headerlink" href="#_CPPv4N21IPLSimulationSettings16radeonRaysDeviceE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The Radeon Rays device being used. </p>
+<p>Only necessary if  is <code class="docutils literal notranslate"><span class="pre">IPL_SCENETYPE_RADEONRAYS</span></code>. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N21IPLSimulationSettings9tanDeviceE">
+<span id="_CPPv3N21IPLSimulationSettings9tanDeviceE"></span><span id="_CPPv2N21IPLSimulationSettings9tanDeviceE"></span><span id="IPLSimulationSettings::tanDevice__IPLTrueAudioNextDevice"></span><span class="target" id="struct_i_p_l_simulation_settings_1a7b0114f64f8383f0eccf5a4456255e02"></span><a class="reference internal" href="trueaudio-next.html#_CPPv422IPLTrueAudioNextDevice" title="IPLTrueAudioNextDevice"><span class="n"><span class="pre">IPLTrueAudioNextDevice</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">tanDevice</span></span></span><a class="headerlink" href="#_CPPv4N21IPLSimulationSettings9tanDeviceE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The TrueAudio Next device being used. </p>
+<p>Only necessary if <code class="docutils literal notranslate"><span class="pre">reflectionType</span></code> is <code class="docutils literal notranslate"><span class="pre">IPL_REFLECTIONEFFECTTYPE_TAN</span></code>. </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv417IPLSourceSettings">
+<span id="_CPPv317IPLSourceSettings"></span><span id="_CPPv217IPLSourceSettings"></span><span id="IPLSourceSettings"></span><span class="target" id="struct_i_p_l_source_settings"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLSourceSettings</span></span></span><a class="headerlink" href="#_CPPv417IPLSourceSettings" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Settings used to create a source. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N17IPLSourceSettings5flagsE">
+<span id="_CPPv3N17IPLSourceSettings5flagsE"></span><span id="_CPPv2N17IPLSourceSettings5flagsE"></span><span id="IPLSourceSettings::flags__IPLSimulationFlags"></span><span class="target" id="struct_i_p_l_source_settings_1ae6598b28a6d812f5bce4efd284d3e04b"></span><a class="reference internal" href="#_CPPv418IPLSimulationFlags" title="IPLSimulationFlags"><span class="n"><span class="pre">IPLSimulationFlags</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">flags</span></span></span><a class="headerlink" href="#_CPPv4N17IPLSourceSettings5flagsE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The types of simulation that may be run for this source. </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv419IPLSimulationInputs">
+<span id="_CPPv319IPLSimulationInputs"></span><span id="_CPPv219IPLSimulationInputs"></span><span id="IPLSimulationInputs"></span><span class="target" id="struct_i_p_l_simulation_inputs"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLSimulationInputs</span></span></span><a class="headerlink" href="#_CPPv419IPLSimulationInputs" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Simulation parameters for a source. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N19IPLSimulationInputs5flagsE">
+<span id="_CPPv3N19IPLSimulationInputs5flagsE"></span><span id="_CPPv2N19IPLSimulationInputs5flagsE"></span><span id="IPLSimulationInputs::flags__IPLSimulationFlags"></span><span class="target" id="struct_i_p_l_simulation_inputs_1ae6598b28a6d812f5bce4efd284d3e04b"></span><a class="reference internal" href="#_CPPv418IPLSimulationFlags" title="IPLSimulationFlags"><span class="n"><span class="pre">IPLSimulationFlags</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">flags</span></span></span><a class="headerlink" href="#_CPPv4N19IPLSimulationInputs5flagsE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The types of simulation to run for this source. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N19IPLSimulationInputs11directFlagsE">
+<span id="_CPPv3N19IPLSimulationInputs11directFlagsE"></span><span id="_CPPv2N19IPLSimulationInputs11directFlagsE"></span><span id="IPLSimulationInputs::directFlags__IPLDirectSimulationFlags"></span><span class="target" id="struct_i_p_l_simulation_inputs_1a35c6cb691d60646a1ea961221d413fdb"></span><a class="reference internal" href="#_CPPv424IPLDirectSimulationFlags" title="IPLDirectSimulationFlags"><span class="n"><span class="pre">IPLDirectSimulationFlags</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">directFlags</span></span></span><a class="headerlink" href="#_CPPv4N19IPLSimulationInputs11directFlagsE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The types of direct simulation to run for this source. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N19IPLSimulationInputs6sourceE">
+<span id="_CPPv3N19IPLSimulationInputs6sourceE"></span><span id="_CPPv2N19IPLSimulationInputs6sourceE"></span><span id="IPLSimulationInputs::source__IPLCoordinateSpace3"></span><span class="target" id="struct_i_p_l_simulation_inputs_1adfd596c30262df98ac6abacdfc3d9ab3"></span><a class="reference internal" href="geometry.html#_CPPv419IPLCoordinateSpace3" title="IPLCoordinateSpace3"><span class="n"><span class="pre">IPLCoordinateSpace3</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">source</span></span></span><a class="headerlink" href="#_CPPv4N19IPLSimulationInputs6sourceE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The position and orientation of this source. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N19IPLSimulationInputs24distanceAttenuationModelE">
+<span id="_CPPv3N19IPLSimulationInputs24distanceAttenuationModelE"></span><span id="_CPPv2N19IPLSimulationInputs24distanceAttenuationModelE"></span><span id="IPLSimulationInputs::distanceAttenuationModel__IPLDistanceAttenuationModel"></span><span class="target" id="struct_i_p_l_simulation_inputs_1a3da4d518c7c08b3cf8889821720f81bb"></span><a class="reference internal" href="#_CPPv427IPLDistanceAttenuationModel" title="IPLDistanceAttenuationModel"><span class="n"><span class="pre">IPLDistanceAttenuationModel</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">distanceAttenuationModel</span></span></span><a class="headerlink" href="#_CPPv4N19IPLSimulationInputs24distanceAttenuationModelE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The distance attenuation model to use for this source. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N19IPLSimulationInputs18airAbsorptionModelE">
+<span id="_CPPv3N19IPLSimulationInputs18airAbsorptionModelE"></span><span id="_CPPv2N19IPLSimulationInputs18airAbsorptionModelE"></span><span id="IPLSimulationInputs::airAbsorptionModel__IPLAirAbsorptionModel"></span><span class="target" id="struct_i_p_l_simulation_inputs_1a37f0822cf8d97a510a54aac84aebb06f"></span><a class="reference internal" href="#_CPPv421IPLAirAbsorptionModel" title="IPLAirAbsorptionModel"><span class="n"><span class="pre">IPLAirAbsorptionModel</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">airAbsorptionModel</span></span></span><a class="headerlink" href="#_CPPv4N19IPLSimulationInputs18airAbsorptionModelE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The air absorption model to use for this source. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N19IPLSimulationInputs11directivityE">
+<span id="_CPPv3N19IPLSimulationInputs11directivityE"></span><span id="_CPPv2N19IPLSimulationInputs11directivityE"></span><span id="IPLSimulationInputs::directivity__IPLDirectivity"></span><span class="target" id="struct_i_p_l_simulation_inputs_1a64bec8d1c79b3524dc53a0165b4dca9a"></span><a class="reference internal" href="#_CPPv414IPLDirectivity" title="IPLDirectivity"><span class="n"><span class="pre">IPLDirectivity</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">directivity</span></span></span><a class="headerlink" href="#_CPPv4N19IPLSimulationInputs11directivityE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The directivity pattern to use for this source. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N19IPLSimulationInputs13occlusionTypeE">
+<span id="_CPPv3N19IPLSimulationInputs13occlusionTypeE"></span><span id="_CPPv2N19IPLSimulationInputs13occlusionTypeE"></span><span id="IPLSimulationInputs::occlusionType__IPLOcclusionType"></span><span class="target" id="struct_i_p_l_simulation_inputs_1aab2fbb070836a5a464f2e90283cd61f8"></span><a class="reference internal" href="#_CPPv416IPLOcclusionType" title="IPLOcclusionType"><span class="n"><span class="pre">IPLOcclusionType</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">occlusionType</span></span></span><a class="headerlink" href="#_CPPv4N19IPLSimulationInputs13occlusionTypeE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The occlusion algorithm to use for this source. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N19IPLSimulationInputs15occlusionRadiusE">
+<span id="_CPPv3N19IPLSimulationInputs15occlusionRadiusE"></span><span id="_CPPv2N19IPLSimulationInputs15occlusionRadiusE"></span><span id="IPLSimulationInputs::occlusionRadius__IPLfloat32"></span><span class="target" id="struct_i_p_l_simulation_inputs_1ab76fac7e40dda89b200957aec10bf8fa"></span><a class="reference internal" href="types.html#_CPPv410IPLfloat32" title="IPLfloat32"><span class="n"><span class="pre">IPLfloat32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">occlusionRadius</span></span></span><a class="headerlink" href="#_CPPv4N19IPLSimulationInputs15occlusionRadiusE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>If using volumetric occlusion, the source is modeled as a sphere with this radius. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N19IPLSimulationInputs19numOcclusionSamplesE">
+<span id="_CPPv3N19IPLSimulationInputs19numOcclusionSamplesE"></span><span id="_CPPv2N19IPLSimulationInputs19numOcclusionSamplesE"></span><span id="IPLSimulationInputs::numOcclusionSamples__IPLint32"></span><span class="target" id="struct_i_p_l_simulation_inputs_1ada9c90682cce5eddc2ccb869bb2ea7c8"></span><a class="reference internal" href="types.html#_CPPv48IPLint32" title="IPLint32"><span class="n"><span class="pre">IPLint32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">numOcclusionSamples</span></span></span><a class="headerlink" href="#_CPPv4N19IPLSimulationInputs19numOcclusionSamplesE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>If using volumetric occlusion, this is the number of point samples to consider when tracing rays. </p>
+<p>This value can change between simulation runs. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N19IPLSimulationInputs11reverbScaleE">
+<span id="_CPPv3N19IPLSimulationInputs11reverbScaleE"></span><span id="_CPPv2N19IPLSimulationInputs11reverbScaleE"></span><span id="IPLSimulationInputs::reverbScale__IPLfloat32A"></span><span class="target" id="struct_i_p_l_simulation_inputs_1acf722f969cf8a89c002baea34fcc54ee"></span><a class="reference internal" href="types.html#_CPPv410IPLfloat32" title="IPLfloat32"><span class="n"><span class="pre">IPLfloat32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">reverbScale</span></span></span><span class="p"><span class="pre">[</span></span><span class="m"><span class="pre">3</span></span><span class="p"><span class="pre">]</span></span><a class="headerlink" href="#_CPPv4N19IPLSimulationInputs11reverbScaleE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>If using parametric or hybrid reverb for rendering reflections, the reverb decay times for each frequency band are scaled by these values. </p>
+<p>Set to <code class="docutils literal notranslate"><span class="pre">{1.0f</span></code>, 1.0f, 1.0f} to use the simulated values without modification. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N19IPLSimulationInputs26hybridReverbTransitionTimeE">
+<span id="_CPPv3N19IPLSimulationInputs26hybridReverbTransitionTimeE"></span><span id="_CPPv2N19IPLSimulationInputs26hybridReverbTransitionTimeE"></span><span id="IPLSimulationInputs::hybridReverbTransitionTime__IPLfloat32"></span><span class="target" id="struct_i_p_l_simulation_inputs_1ac49c3a12256be66b8be25e59d3470021"></span><a class="reference internal" href="types.html#_CPPv410IPLfloat32" title="IPLfloat32"><span class="n"><span class="pre">IPLfloat32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">hybridReverbTransitionTime</span></span></span><a class="headerlink" href="#_CPPv4N19IPLSimulationInputs26hybridReverbTransitionTimeE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>If using hybrid reverb for rendering reflections, this is the length (in seconds) of impulse response to use for convolution reverb. </p>
+<p>The rest of the impulse response will be used for parametric reverb estimation only. Increasing this value results in more accurate reflections, at the cost of increased CPU usage. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N19IPLSimulationInputs26hybridReverbOverlapPercentE">
+<span id="_CPPv3N19IPLSimulationInputs26hybridReverbOverlapPercentE"></span><span id="_CPPv2N19IPLSimulationInputs26hybridReverbOverlapPercentE"></span><span id="IPLSimulationInputs::hybridReverbOverlapPercent__IPLfloat32"></span><span class="target" id="struct_i_p_l_simulation_inputs_1aa60a24c1b3dbdabd5ae35a2ee80dbcf4"></span><a class="reference internal" href="types.html#_CPPv410IPLfloat32" title="IPLfloat32"><span class="n"><span class="pre">IPLfloat32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">hybridReverbOverlapPercent</span></span></span><a class="headerlink" href="#_CPPv4N19IPLSimulationInputs26hybridReverbOverlapPercentE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>If using hybrid reverb for rendering reflections, this is the amount of overlap between the convolution and parametric parts. </p>
+<p>To ensure smooth transitions from the early convolution part to the late parametric part, the two are cross-faded towards the end of the convolution part. For example, if <code class="docutils literal notranslate"><span class="pre">hybridReverbTransitionTime</span></code> is <code class="docutils literal notranslate"><span class="pre">1.0f</span></code>, and <code class="docutils literal notranslate"><span class="pre">hybridReverbOverlapPercent</span></code> is <code class="docutils literal notranslate"><span class="pre">0.25f</span></code>, then the first 0.75 seconds are pure convolution, the next 0.25 seconds are a blend between convolution and parametric, and the portion of the tail beyond 1.0 second is pure parametric. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N19IPLSimulationInputs5bakedE">
+<span id="_CPPv3N19IPLSimulationInputs5bakedE"></span><span id="_CPPv2N19IPLSimulationInputs5bakedE"></span><span id="IPLSimulationInputs::baked__IPLbool"></span><span class="target" id="struct_i_p_l_simulation_inputs_1a72a61bde482bb3ece77ec73f21841f16"></span><a class="reference internal" href="types.html#_CPPv47IPLbool" title="IPLbool"><span class="n"><span class="pre">IPLbool</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">baked</span></span></span><a class="headerlink" href="#_CPPv4N19IPLSimulationInputs5bakedE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>If <code class="docutils literal notranslate"><span class="pre">IPL_TRUE</span></code>, this source will used baked data for reflections simulation. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N19IPLSimulationInputs19bakedDataIdentifierE">
+<span id="_CPPv3N19IPLSimulationInputs19bakedDataIdentifierE"></span><span id="_CPPv2N19IPLSimulationInputs19bakedDataIdentifierE"></span><span id="IPLSimulationInputs::bakedDataIdentifier__IPLBakedDataIdentifier"></span><span class="target" id="struct_i_p_l_simulation_inputs_1ab4f52bd1171b70b715c9dca3fa7b7c08"></span><a class="reference internal" href="probes.html#_CPPv422IPLBakedDataIdentifier" title="IPLBakedDataIdentifier"><span class="n"><span class="pre">IPLBakedDataIdentifier</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">bakedDataIdentifier</span></span></span><a class="headerlink" href="#_CPPv4N19IPLSimulationInputs19bakedDataIdentifierE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The identifier used to specify which layer of baked data to use for simulating reflections for this source. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N19IPLSimulationInputs13pathingProbesE">
+<span id="_CPPv3N19IPLSimulationInputs13pathingProbesE"></span><span id="_CPPv2N19IPLSimulationInputs13pathingProbesE"></span><span id="IPLSimulationInputs::pathingProbes__IPLProbeBatch"></span><span class="target" id="struct_i_p_l_simulation_inputs_1a19d407f24fd066d27a540a680bf1ac4e"></span><a class="reference internal" href="probes.html#_CPPv413IPLProbeBatch" title="IPLProbeBatch"><span class="n"><span class="pre">IPLProbeBatch</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">pathingProbes</span></span></span><a class="headerlink" href="#_CPPv4N19IPLSimulationInputs13pathingProbesE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The probe batch within which to find paths from this source to the listener. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N19IPLSimulationInputs9visRadiusE">
+<span id="_CPPv3N19IPLSimulationInputs9visRadiusE"></span><span id="_CPPv2N19IPLSimulationInputs9visRadiusE"></span><span id="IPLSimulationInputs::visRadius__IPLfloat32"></span><span class="target" id="struct_i_p_l_simulation_inputs_1a46e72a36c6c06e0ed2b00289b6997985"></span><a class="reference internal" href="types.html#_CPPv410IPLfloat32" title="IPLfloat32"><span class="n"><span class="pre">IPLfloat32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">visRadius</span></span></span><a class="headerlink" href="#_CPPv4N19IPLSimulationInputs9visRadiusE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>When testing for mutual visibility between a pair of probes, each probe is treated as a sphere of this radius (in meters), and point samples are generated within this sphere. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N19IPLSimulationInputs12visThresholdE">
+<span id="_CPPv3N19IPLSimulationInputs12visThresholdE"></span><span id="_CPPv2N19IPLSimulationInputs12visThresholdE"></span><span id="IPLSimulationInputs::visThreshold__IPLfloat32"></span><span class="target" id="struct_i_p_l_simulation_inputs_1ab6bcb0326fcb30924525dba7af07ac35"></span><a class="reference internal" href="types.html#_CPPv410IPLfloat32" title="IPLfloat32"><span class="n"><span class="pre">IPLfloat32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">visThreshold</span></span></span><a class="headerlink" href="#_CPPv4N19IPLSimulationInputs12visThresholdE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>When tracing rays to test for mutual visibility between a pair of probes, the fraction of rays that are unoccluded must be greater than this threshold for the pair of probes to be considered mutually visible. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N19IPLSimulationInputs8visRangeE">
+<span id="_CPPv3N19IPLSimulationInputs8visRangeE"></span><span id="_CPPv2N19IPLSimulationInputs8visRangeE"></span><span id="IPLSimulationInputs::visRange__IPLfloat32"></span><span class="target" id="struct_i_p_l_simulation_inputs_1a71c6f5cfd79da0a2d7c9f74451ce26cf"></span><a class="reference internal" href="types.html#_CPPv410IPLfloat32" title="IPLfloat32"><span class="n"><span class="pre">IPLfloat32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">visRange</span></span></span><a class="headerlink" href="#_CPPv4N19IPLSimulationInputs8visRangeE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>If the distance between two probes is greater than this value, the probes are not considered mutually visible. </p>
+<p>Increasing this value can result in simpler paths, at the cost of increased CPU usage. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N19IPLSimulationInputs12pathingOrderE">
+<span id="_CPPv3N19IPLSimulationInputs12pathingOrderE"></span><span id="_CPPv2N19IPLSimulationInputs12pathingOrderE"></span><span id="IPLSimulationInputs::pathingOrder__IPLint32"></span><span class="target" id="struct_i_p_l_simulation_inputs_1a7c331aa8fb4b393eeab16350e3c73be5"></span><a class="reference internal" href="types.html#_CPPv48IPLint32" title="IPLint32"><span class="n"><span class="pre">IPLint32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">pathingOrder</span></span></span><a class="headerlink" href="#_CPPv4N19IPLSimulationInputs12pathingOrderE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>If simulating pathing, this is the Ambisonic order used for representing path directionality. </p>
+<p>Higher values result in more precise spatialization of paths, at the cost of increased CPU usage. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N19IPLSimulationInputs16enableValidationE">
+<span id="_CPPv3N19IPLSimulationInputs16enableValidationE"></span><span id="_CPPv2N19IPLSimulationInputs16enableValidationE"></span><span id="IPLSimulationInputs::enableValidation__IPLbool"></span><span class="target" id="struct_i_p_l_simulation_inputs_1a6ac7e9e199797a1abb24789e931d405d"></span><a class="reference internal" href="types.html#_CPPv47IPLbool" title="IPLbool"><span class="n"><span class="pre">IPLbool</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">enableValidation</span></span></span><a class="headerlink" href="#_CPPv4N19IPLSimulationInputs16enableValidationE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>If <code class="docutils literal notranslate"><span class="pre">IPL_TRUE</span></code>, baked paths are tested for visibility. </p>
+<p>This is useful if your scene has dynamic objects that might occlude baked paths. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N19IPLSimulationInputs18findAlternatePathsE">
+<span id="_CPPv3N19IPLSimulationInputs18findAlternatePathsE"></span><span id="_CPPv2N19IPLSimulationInputs18findAlternatePathsE"></span><span id="IPLSimulationInputs::findAlternatePaths__IPLbool"></span><span class="target" id="struct_i_p_l_simulation_inputs_1a51d6610dc375c58a916712fa12cd7137"></span><a class="reference internal" href="types.html#_CPPv47IPLbool" title="IPLbool"><span class="n"><span class="pre">IPLbool</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">findAlternatePaths</span></span></span><a class="headerlink" href="#_CPPv4N19IPLSimulationInputs18findAlternatePathsE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>If <code class="docutils literal notranslate"><span class="pre">IPL_TRUE</span></code>, and <code class="docutils literal notranslate"><span class="pre">enableValidation</span></code> is <code class="docutils literal notranslate"><span class="pre">IPL_TRUE</span></code>, then if a baked path is occluded by dynamic geometry, path finding is re-run in real-time to find alternate paths that take into account the dynamic geometry. </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv425IPLSimulationSharedInputs">
+<span id="_CPPv325IPLSimulationSharedInputs"></span><span id="_CPPv225IPLSimulationSharedInputs"></span><span id="IPLSimulationSharedInputs"></span><span class="target" id="struct_i_p_l_simulation_shared_inputs"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLSimulationSharedInputs</span></span></span><a class="headerlink" href="#_CPPv425IPLSimulationSharedInputs" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Simulation parameters that are not specific to any source. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N25IPLSimulationSharedInputs8listenerE">
+<span id="_CPPv3N25IPLSimulationSharedInputs8listenerE"></span><span id="_CPPv2N25IPLSimulationSharedInputs8listenerE"></span><span id="IPLSimulationSharedInputs::listener__IPLCoordinateSpace3"></span><span class="target" id="struct_i_p_l_simulation_shared_inputs_1aa748549a6aa4a6f9e2f151371816021e"></span><a class="reference internal" href="geometry.html#_CPPv419IPLCoordinateSpace3" title="IPLCoordinateSpace3"><span class="n"><span class="pre">IPLCoordinateSpace3</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">listener</span></span></span><a class="headerlink" href="#_CPPv4N25IPLSimulationSharedInputs8listenerE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The position and orientation of the listener. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N25IPLSimulationSharedInputs7numRaysE">
+<span id="_CPPv3N25IPLSimulationSharedInputs7numRaysE"></span><span id="_CPPv2N25IPLSimulationSharedInputs7numRaysE"></span><span id="IPLSimulationSharedInputs::numRays__IPLint32"></span><span class="target" id="struct_i_p_l_simulation_shared_inputs_1a4517d4473fd884f220a8cdaa06e779fb"></span><a class="reference internal" href="types.html#_CPPv48IPLint32" title="IPLint32"><span class="n"><span class="pre">IPLint32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">numRays</span></span></span><a class="headerlink" href="#_CPPv4N25IPLSimulationSharedInputs7numRaysE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The number of rays to trace from the listener. </p>
+<p>Increasing this value results in more accurate reflections, at the cost of increased CPU usage. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N25IPLSimulationSharedInputs10numBouncesE">
+<span id="_CPPv3N25IPLSimulationSharedInputs10numBouncesE"></span><span id="_CPPv2N25IPLSimulationSharedInputs10numBouncesE"></span><span id="IPLSimulationSharedInputs::numBounces__IPLint32"></span><span class="target" id="struct_i_p_l_simulation_shared_inputs_1ace83ed720bf5ceb91447ebe44519327d"></span><a class="reference internal" href="types.html#_CPPv48IPLint32" title="IPLint32"><span class="n"><span class="pre">IPLint32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">numBounces</span></span></span><a class="headerlink" href="#_CPPv4N25IPLSimulationSharedInputs10numBouncesE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The number of times each ray traced from the listener is reflected when it encounters a solid object. </p>
+<p>Increasing this value results in longer, more accurate reverb tails, at the cost of increased CPU usage during simulation. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N25IPLSimulationSharedInputs8durationE">
+<span id="_CPPv3N25IPLSimulationSharedInputs8durationE"></span><span id="_CPPv2N25IPLSimulationSharedInputs8durationE"></span><span id="IPLSimulationSharedInputs::duration__IPLfloat32"></span><span class="target" id="struct_i_p_l_simulation_shared_inputs_1aeda5a21fb3c88f8f9185a228686e29f8"></span><a class="reference internal" href="types.html#_CPPv410IPLfloat32" title="IPLfloat32"><span class="n"><span class="pre">IPLfloat32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">duration</span></span></span><a class="headerlink" href="#_CPPv4N25IPLSimulationSharedInputs8durationE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The duration (in seconds) of the impulse responses generated when simulating reflections. </p>
+<p>Increasing this value results in longer, more accurate reverb tails, at the cost of increased CPU usage during audio processing. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N25IPLSimulationSharedInputs5orderE">
+<span id="_CPPv3N25IPLSimulationSharedInputs5orderE"></span><span id="_CPPv2N25IPLSimulationSharedInputs5orderE"></span><span id="IPLSimulationSharedInputs::order__IPLint32"></span><span class="target" id="struct_i_p_l_simulation_shared_inputs_1a8f0bc3d342c8bf145d3f4fc741f84df9"></span><a class="reference internal" href="types.html#_CPPv48IPLint32" title="IPLint32"><span class="n"><span class="pre">IPLint32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">order</span></span></span><a class="headerlink" href="#_CPPv4N25IPLSimulationSharedInputs5orderE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The Ambisonic order of the impulse responses generated when simulating reflections. </p>
+<p>Increasing this value results in more accurate directional variation of reflected sound, at the cost of increased CPU usage during audio processing. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N25IPLSimulationSharedInputs21irradianceMinDistanceE">
+<span id="_CPPv3N25IPLSimulationSharedInputs21irradianceMinDistanceE"></span><span id="_CPPv2N25IPLSimulationSharedInputs21irradianceMinDistanceE"></span><span id="IPLSimulationSharedInputs::irradianceMinDistance__IPLfloat32"></span><span class="target" id="struct_i_p_l_simulation_shared_inputs_1a56bf18dbfbf2e9b69465971ea3a14df8"></span><a class="reference internal" href="types.html#_CPPv410IPLfloat32" title="IPLfloat32"><span class="n"><span class="pre">IPLfloat32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">irradianceMinDistance</span></span></span><a class="headerlink" href="#_CPPv4N25IPLSimulationSharedInputs21irradianceMinDistanceE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>When calculating how much sound energy reaches a surface directly from a source, any source that is closer than <code class="docutils literal notranslate"><span class="pre">irradianceMinDistance</span></code> to the surface is assumed to be at a distance of <code class="docutils literal notranslate"><span class="pre">irradianceMinDistance</span></code>, for the purposes of energy calculations. </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv420IPLSimulationOutputs">
+<span id="_CPPv320IPLSimulationOutputs"></span><span id="_CPPv220IPLSimulationOutputs"></span><span id="IPLSimulationOutputs"></span><span class="target" id="struct_i_p_l_simulation_outputs"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLSimulationOutputs</span></span></span><a class="headerlink" href="#_CPPv420IPLSimulationOutputs" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Simulation results for a source. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N20IPLSimulationOutputs6directE">
+<span id="_CPPv3N20IPLSimulationOutputs6directE"></span><span id="_CPPv2N20IPLSimulationOutputs6directE"></span><span id="IPLSimulationOutputs::direct__IPLDirectEffectParams"></span><span class="target" id="struct_i_p_l_simulation_outputs_1a0603831248b3dbcd0bd7159ac6a33efc"></span><a class="reference internal" href="direct-effect.html#_CPPv421IPLDirectEffectParams" title="IPLDirectEffectParams"><span class="n"><span class="pre">IPLDirectEffectParams</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">direct</span></span></span><a class="headerlink" href="#_CPPv4N20IPLSimulationOutputs6directE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Direct path simulation results. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N20IPLSimulationOutputs11reflectionsE">
+<span id="_CPPv3N20IPLSimulationOutputs11reflectionsE"></span><span id="_CPPv2N20IPLSimulationOutputs11reflectionsE"></span><span id="IPLSimulationOutputs::reflections__IPLReflectionEffectParams"></span><span class="target" id="struct_i_p_l_simulation_outputs_1a6098294083137ca1d48ed102ef5439c0"></span><a class="reference internal" href="reflections-effect.html#_CPPv425IPLReflectionEffectParams" title="IPLReflectionEffectParams"><span class="n"><span class="pre">IPLReflectionEffectParams</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">reflections</span></span></span><a class="headerlink" href="#_CPPv4N20IPLSimulationOutputs11reflectionsE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Reflection simulation results. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N20IPLSimulationOutputs7pathingE">
+<span id="_CPPv3N20IPLSimulationOutputs7pathingE"></span><span id="_CPPv2N20IPLSimulationOutputs7pathingE"></span><span id="IPLSimulationOutputs::pathing__IPLPathEffectParams"></span><span class="target" id="struct_i_p_l_simulation_outputs_1a7f16de982e534a2faf308c01970217c4"></span><a class="reference internal" href="path-effect.html#_CPPv419IPLPathEffectParams" title="IPLPathEffectParams"><span class="n"><span class="pre">IPLPathEffectParams</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">pathing</span></span></span><a class="headerlink" href="#_CPPv4N20IPLSimulationOutputs7pathingE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Pathing simulation results. </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="enumerations">
+<h2>Enumerations<a class="headerlink" href="#enumerations" title="Permalink to this headline">¶</a></h2>
+<dl class="cpp enum">
+<dt class="sig sig-object cpp" id="_CPPv418IPLSimulationFlags">
+<span id="_CPPv318IPLSimulationFlags"></span><span id="_CPPv218IPLSimulationFlags"></span><span class="target" id="group__simulation_1ga83542073a89a35dc1fbcc93041aef165"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLSimulationFlags</span></span></span><a class="headerlink" href="#_CPPv418IPLSimulationFlags" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Flags indicating which types of simulation should be enabled for a given <code class="docutils literal notranslate"><span class="pre">IPLSource</span></code>. </p>
+<p><em>Values:</em></p>
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N18IPLSimulationFlags26IPL_SIMULATIONFLAGS_DIRECTE">
+<span id="_CPPv3N18IPLSimulationFlags26IPL_SIMULATIONFLAGS_DIRECTE"></span><span id="_CPPv2N18IPLSimulationFlags26IPL_SIMULATIONFLAGS_DIRECTE"></span><span class="target" id="group__simulation_1gga83542073a89a35dc1fbcc93041aef165aece8f5500ca877867d5f2343044a6661"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_SIMULATIONFLAGS_DIRECT</span></span></span><a class="headerlink" href="#_CPPv4N18IPLSimulationFlags26IPL_SIMULATIONFLAGS_DIRECTE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Enable direct simulation. </p>
+<p>This includes distance attenuation, air absorption, directivity, occlusion, and transmission. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N18IPLSimulationFlags31IPL_SIMULATIONFLAGS_REFLECTIONSE">
+<span id="_CPPv3N18IPLSimulationFlags31IPL_SIMULATIONFLAGS_REFLECTIONSE"></span><span id="_CPPv2N18IPLSimulationFlags31IPL_SIMULATIONFLAGS_REFLECTIONSE"></span><span class="target" id="group__simulation_1gga83542073a89a35dc1fbcc93041aef165a6050a4cac0d924479b2c06f0b3f1731a"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_SIMULATIONFLAGS_REFLECTIONS</span></span></span><a class="headerlink" href="#_CPPv4N18IPLSimulationFlags31IPL_SIMULATIONFLAGS_REFLECTIONSE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Enable reflections simulation. </p>
+<p>This includes both real-time and baked simulation. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N18IPLSimulationFlags27IPL_SIMULATIONFLAGS_PATHINGE">
+<span id="_CPPv3N18IPLSimulationFlags27IPL_SIMULATIONFLAGS_PATHINGE"></span><span id="_CPPv2N18IPLSimulationFlags27IPL_SIMULATIONFLAGS_PATHINGE"></span><span class="target" id="group__simulation_1gga83542073a89a35dc1fbcc93041aef165ad42dda0f94ed7efa8e8594b277058050"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_SIMULATIONFLAGS_PATHING</span></span></span><a class="headerlink" href="#_CPPv4N18IPLSimulationFlags27IPL_SIMULATIONFLAGS_PATHINGE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Enable pathing simulation. </p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="cpp enum">
+<dt class="sig sig-object cpp" id="_CPPv424IPLDirectSimulationFlags">
+<span id="_CPPv324IPLDirectSimulationFlags"></span><span id="_CPPv224IPLDirectSimulationFlags"></span><span class="target" id="group__simulation_1ga16bfd3085cac9b4c7e5f8099169f8c4e"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLDirectSimulationFlags</span></span></span><a class="headerlink" href="#_CPPv424IPLDirectSimulationFlags" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Flags indicating which types of direct simulation should be enabled for a given <code class="docutils literal notranslate"><span class="pre">IPLSource</span></code>. </p>
+<p><em>Values:</em></p>
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N24IPLDirectSimulationFlags45IPL_DIRECTSIMULATIONFLAGS_DISTANCEATTENUATIONE">
+<span id="_CPPv3N24IPLDirectSimulationFlags45IPL_DIRECTSIMULATIONFLAGS_DISTANCEATTENUATIONE"></span><span id="_CPPv2N24IPLDirectSimulationFlags45IPL_DIRECTSIMULATIONFLAGS_DISTANCEATTENUATIONE"></span><span class="target" id="group__simulation_1gga16bfd3085cac9b4c7e5f8099169f8c4eac6c88989040d98106aba20f7e2dc378c"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_DIRECTSIMULATIONFLAGS_DISTANCEATTENUATION</span></span></span><a class="headerlink" href="#_CPPv4N24IPLDirectSimulationFlags45IPL_DIRECTSIMULATIONFLAGS_DISTANCEATTENUATIONE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Enable distance attenuation calculations. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N24IPLDirectSimulationFlags39IPL_DIRECTSIMULATIONFLAGS_AIRABSORPTIONE">
+<span id="_CPPv3N24IPLDirectSimulationFlags39IPL_DIRECTSIMULATIONFLAGS_AIRABSORPTIONE"></span><span id="_CPPv2N24IPLDirectSimulationFlags39IPL_DIRECTSIMULATIONFLAGS_AIRABSORPTIONE"></span><span class="target" id="group__simulation_1gga16bfd3085cac9b4c7e5f8099169f8c4eae5c2c61b19150ff3b4d2c4e81ac7cf90"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_DIRECTSIMULATIONFLAGS_AIRABSORPTION</span></span></span><a class="headerlink" href="#_CPPv4N24IPLDirectSimulationFlags39IPL_DIRECTSIMULATIONFLAGS_AIRABSORPTIONE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Enable air absorption calculations. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N24IPLDirectSimulationFlags37IPL_DIRECTSIMULATIONFLAGS_DIRECTIVITYE">
+<span id="_CPPv3N24IPLDirectSimulationFlags37IPL_DIRECTSIMULATIONFLAGS_DIRECTIVITYE"></span><span id="_CPPv2N24IPLDirectSimulationFlags37IPL_DIRECTSIMULATIONFLAGS_DIRECTIVITYE"></span><span class="target" id="group__simulation_1gga16bfd3085cac9b4c7e5f8099169f8c4ea1932e9cfce754c3faf391a3b684b180a"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_DIRECTSIMULATIONFLAGS_DIRECTIVITY</span></span></span><a class="headerlink" href="#_CPPv4N24IPLDirectSimulationFlags37IPL_DIRECTSIMULATIONFLAGS_DIRECTIVITYE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Enable directivity calculations. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N24IPLDirectSimulationFlags35IPL_DIRECTSIMULATIONFLAGS_OCCLUSIONE">
+<span id="_CPPv3N24IPLDirectSimulationFlags35IPL_DIRECTSIMULATIONFLAGS_OCCLUSIONE"></span><span id="_CPPv2N24IPLDirectSimulationFlags35IPL_DIRECTSIMULATIONFLAGS_OCCLUSIONE"></span><span class="target" id="group__simulation_1gga16bfd3085cac9b4c7e5f8099169f8c4eaa64ee6dceca6164db6f82da347b5fb0f"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_DIRECTSIMULATIONFLAGS_OCCLUSION</span></span></span><a class="headerlink" href="#_CPPv4N24IPLDirectSimulationFlags35IPL_DIRECTSIMULATIONFLAGS_OCCLUSIONE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Enable occlusion simulation. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N24IPLDirectSimulationFlags38IPL_DIRECTSIMULATIONFLAGS_TRANSMISSIONE">
+<span id="_CPPv3N24IPLDirectSimulationFlags38IPL_DIRECTSIMULATIONFLAGS_TRANSMISSIONE"></span><span id="_CPPv2N24IPLDirectSimulationFlags38IPL_DIRECTSIMULATIONFLAGS_TRANSMISSIONE"></span><span class="target" id="group__simulation_1gga16bfd3085cac9b4c7e5f8099169f8c4eac7ff83fa0141c6052c1f47b199c918ed"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_DIRECTSIMULATIONFLAGS_TRANSMISSION</span></span></span><a class="headerlink" href="#_CPPv4N24IPLDirectSimulationFlags38IPL_DIRECTSIMULATIONFLAGS_TRANSMISSIONE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Enable transmission simulation. </p>
+<p>Requires occlusion to also be enabled. </p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="cpp enum">
+<dt class="sig sig-object cpp" id="_CPPv431IPLDistanceAttenuationModelType">
+<span id="_CPPv331IPLDistanceAttenuationModelType"></span><span id="_CPPv231IPLDistanceAttenuationModelType"></span><span class="target" id="group__simulation_1gaa1f27469bc2961926cfecc6244894ac0"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLDistanceAttenuationModelType</span></span></span><a class="headerlink" href="#_CPPv431IPLDistanceAttenuationModelType" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The types of distance attenuation that can be used. </p>
+<p><em>Values:</em></p>
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N31IPLDistanceAttenuationModelType35IPL_DISTANCEATTENUATIONTYPE_DEFAULTE">
+<span id="_CPPv3N31IPLDistanceAttenuationModelType35IPL_DISTANCEATTENUATIONTYPE_DEFAULTE"></span><span id="_CPPv2N31IPLDistanceAttenuationModelType35IPL_DISTANCEATTENUATIONTYPE_DEFAULTE"></span><span class="target" id="group__simulation_1ggaa1f27469bc2961926cfecc6244894ac0a6d7cdcdb9ecd8446942d4e47c979651b"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_DISTANCEATTENUATIONTYPE_DEFAULT</span></span></span><a class="headerlink" href="#_CPPv4N31IPLDistanceAttenuationModelType35IPL_DISTANCEATTENUATIONTYPE_DEFAULTE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The default distance attenuation model. </p>
+<p>This is an inverse distance falloff, with all sounds within 1 meter of the listener rendered without distance attenuation. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N31IPLDistanceAttenuationModelType43IPL_DISTANCEATTENUATIONTYPE_INVERSEDISTANCEE">
+<span id="_CPPv3N31IPLDistanceAttenuationModelType43IPL_DISTANCEATTENUATIONTYPE_INVERSEDISTANCEE"></span><span id="_CPPv2N31IPLDistanceAttenuationModelType43IPL_DISTANCEATTENUATIONTYPE_INVERSEDISTANCEE"></span><span class="target" id="group__simulation_1ggaa1f27469bc2961926cfecc6244894ac0a3b348b8970d55547b03f0040d563ccc5"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_DISTANCEATTENUATIONTYPE_INVERSEDISTANCE</span></span></span><a class="headerlink" href="#_CPPv4N31IPLDistanceAttenuationModelType43IPL_DISTANCEATTENUATIONTYPE_INVERSEDISTANCEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>An inverse distance falloff. </p>
+<p>You can configure the minimum distance, within which distance attenuation is not applied. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N31IPLDistanceAttenuationModelType36IPL_DISTANCEATTENUATIONTYPE_CALLBACKE">
+<span id="_CPPv3N31IPLDistanceAttenuationModelType36IPL_DISTANCEATTENUATIONTYPE_CALLBACKE"></span><span id="_CPPv2N31IPLDistanceAttenuationModelType36IPL_DISTANCEATTENUATIONTYPE_CALLBACKE"></span><span class="target" id="group__simulation_1ggaa1f27469bc2961926cfecc6244894ac0ab2a0a8a2c6747ab5719b5ac60363bfab"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_DISTANCEATTENUATIONTYPE_CALLBACK</span></span></span><a class="headerlink" href="#_CPPv4N31IPLDistanceAttenuationModelType36IPL_DISTANCEATTENUATIONTYPE_CALLBACKE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>An arbitrary distance falloff function, defined by a callback function. </p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="cpp enum">
+<dt class="sig sig-object cpp" id="_CPPv425IPLAirAbsorptionModelType">
+<span id="_CPPv325IPLAirAbsorptionModelType"></span><span id="_CPPv225IPLAirAbsorptionModelType"></span><span class="target" id="group__simulation_1ga03cf1cff243114f1b3f75a6d241c3697"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLAirAbsorptionModelType</span></span></span><a class="headerlink" href="#_CPPv425IPLAirAbsorptionModelType" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The types of air absorption that can be used. </p>
+<p><em>Values:</em></p>
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N25IPLAirAbsorptionModelType29IPL_AIRABSORPTIONTYPE_DEFAULTE">
+<span id="_CPPv3N25IPLAirAbsorptionModelType29IPL_AIRABSORPTIONTYPE_DEFAULTE"></span><span id="_CPPv2N25IPLAirAbsorptionModelType29IPL_AIRABSORPTIONTYPE_DEFAULTE"></span><span class="target" id="group__simulation_1gga03cf1cff243114f1b3f75a6d241c3697a3324420492b17df295ce876852784e82"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_AIRABSORPTIONTYPE_DEFAULT</span></span></span><a class="headerlink" href="#_CPPv4N25IPLAirAbsorptionModelType29IPL_AIRABSORPTIONTYPE_DEFAULTE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The default air absorption model. </p>
+<p>This is an exponential falloff, with decay rates derived from physical properties of air. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N25IPLAirAbsorptionModelType33IPL_AIRABSORPTIONTYPE_EXPONENTIALE">
+<span id="_CPPv3N25IPLAirAbsorptionModelType33IPL_AIRABSORPTIONTYPE_EXPONENTIALE"></span><span id="_CPPv2N25IPLAirAbsorptionModelType33IPL_AIRABSORPTIONTYPE_EXPONENTIALE"></span><span class="target" id="group__simulation_1gga03cf1cff243114f1b3f75a6d241c3697acb24763986c8a330722643307a20bfca"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_AIRABSORPTIONTYPE_EXPONENTIAL</span></span></span><a class="headerlink" href="#_CPPv4N25IPLAirAbsorptionModelType33IPL_AIRABSORPTIONTYPE_EXPONENTIALE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>An exponential falloff. </p>
+<p>You can configure the decay rates for each frequency band. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N25IPLAirAbsorptionModelType30IPL_AIRABSORPTIONTYPE_CALLBACKE">
+<span id="_CPPv3N25IPLAirAbsorptionModelType30IPL_AIRABSORPTIONTYPE_CALLBACKE"></span><span id="_CPPv2N25IPLAirAbsorptionModelType30IPL_AIRABSORPTIONTYPE_CALLBACKE"></span><span class="target" id="group__simulation_1gga03cf1cff243114f1b3f75a6d241c3697a8c543f384bc53f80dfd010d5a0f950be"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_AIRABSORPTIONTYPE_CALLBACK</span></span></span><a class="headerlink" href="#_CPPv4N25IPLAirAbsorptionModelType30IPL_AIRABSORPTIONTYPE_CALLBACKE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>An arbitrary air absorption model, defined by a callback function. </p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="cpp enum">
+<dt class="sig sig-object cpp" id="_CPPv416IPLOcclusionType">
+<span id="_CPPv316IPLOcclusionType"></span><span id="_CPPv216IPLOcclusionType"></span><span class="target" id="group__simulation_1ga35cb13df3169fab87b55cde8d00f318d"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLOcclusionType</span></span></span><a class="headerlink" href="#_CPPv416IPLOcclusionType" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The different algorithms for simulating occlusion. </p>
+<p><em>Values:</em></p>
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N16IPLOcclusionType25IPL_OCCLUSIONTYPE_RAYCASTE">
+<span id="_CPPv3N16IPLOcclusionType25IPL_OCCLUSIONTYPE_RAYCASTE"></span><span id="_CPPv2N16IPLOcclusionType25IPL_OCCLUSIONTYPE_RAYCASTE"></span><span class="target" id="group__simulation_1gga35cb13df3169fab87b55cde8d00f318dab7e569042b4aeb837be329a8849643fe"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_OCCLUSIONTYPE_RAYCAST</span></span></span><a class="headerlink" href="#_CPPv4N16IPLOcclusionType25IPL_OCCLUSIONTYPE_RAYCASTE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Raycast occlusion. </p>
+<p>A single ray is traced from the listener to the source. If the ray hits a solid object before it reaches the source, the source is considered occluded. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N16IPLOcclusionType28IPL_OCCLUSIONTYPE_VOLUMETRICE">
+<span id="_CPPv3N16IPLOcclusionType28IPL_OCCLUSIONTYPE_VOLUMETRICE"></span><span id="_CPPv2N16IPLOcclusionType28IPL_OCCLUSIONTYPE_VOLUMETRICE"></span><span class="target" id="group__simulation_1gga35cb13df3169fab87b55cde8d00f318da6f0c4ffeb083281e9d123d9a97a6d103"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_OCCLUSIONTYPE_VOLUMETRIC</span></span></span><a class="headerlink" href="#_CPPv4N16IPLOcclusionType28IPL_OCCLUSIONTYPE_VOLUMETRICE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>A volumetric occlusion algorithm that can model partial occlusion. </p>
+<p>The source is modeled as a sphere with a configurable radius. Multiple points are sampled within the volume of this sphere. Rays are then traced from each sample point to both the source and the listener. A sample point is considered occluded if either of these two rays is occluded. The occlusion value for the source is calculated as the fraction of sample points that are unoccluded. This algorithm allows for smoother transitions in and out of occlusion. </p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="callbacks">
+<h2>Callbacks<a class="headerlink" href="#callbacks" title="Permalink to this headline">¶</a></h2>
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv430IPLDistanceAttenuationCallback">
+<span id="_CPPv330IPLDistanceAttenuationCallback"></span><span id="_CPPv230IPLDistanceAttenuationCallback"></span><span id="IPLDistanceAttenuationCallback"></span><span class="target" id="group__simulation_1ga2a6640c0951d7458593a64f26c56c96b"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">IPLDistanceAttenuationCallback</span></span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">(</span></span><a class="reference internal" href="types.html#_CPPv410IPLfloat32" title="IPLfloat32"><span class="n"><span class="pre">IPLfloat32</span></span></a><span class="w"> </span><span class="n"><span class="pre">distance</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">userData</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#_CPPv430IPLDistanceAttenuationCallback" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Callback for calculating how much attenuation should be applied to a sound based on its distance from the listener. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>distance</strong> – The distance (in meters) between the source and the listener. </p></li>
+<li><p><strong>userData</strong> – Pointer to the arbitrary data specified in the <code class="docutils literal notranslate"><a class="reference internal" href="#struct_i_p_l_distance_attenuation_model"><span class="std std-ref"><span class="pre">IPLDistanceAttenuationModel</span></span></a></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The distance attenuation to apply, between <code class="docutils literal notranslate"><span class="pre">0</span></code> and <code class="docutils literal notranslate"><span class="pre">1</span></code>. <code class="docutils literal notranslate"><span class="pre">0</span></code> = the sound is not audible, <code class="docutils literal notranslate"><span class="pre">1</span></code> = the sound is as loud as it would be if it were emitted from the listener’s position. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv424IPLAirAbsorptionCallback">
+<span id="_CPPv324IPLAirAbsorptionCallback"></span><span id="_CPPv224IPLAirAbsorptionCallback"></span><span id="IPLAirAbsorptionCallback"></span><span class="target" id="group__simulation_1ga772f0a63c69b9956abc6a35ac340f902"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">IPLAirAbsorptionCallback</span></span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">(</span></span><a class="reference internal" href="types.html#_CPPv410IPLfloat32" title="IPLfloat32"><span class="n"><span class="pre">IPLfloat32</span></span></a><span class="w"> </span><span class="n"><span class="pre">distance</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="types.html#_CPPv48IPLint32" title="IPLint32"><span class="n"><span class="pre">IPLint32</span></span></a><span class="w"> </span><span class="n"><span class="pre">band</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">userData</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#_CPPv424IPLAirAbsorptionCallback" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Callback for calculating how much air absorption should be applied to a sound based on its distance from the listener. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>distance</strong> – The distance (in meters) between the source and the listener. </p></li>
+<li><p><strong>band</strong> – Index of the frequency band for which to calculate air absorption. <code class="docutils literal notranslate"><span class="pre">0</span></code> = low frequencies, <code class="docutils literal notranslate"><span class="pre">1</span></code> = middle frequencies, <code class="docutils literal notranslate"><span class="pre">2</span></code> = high frequencies. </p></li>
+<li><p><strong>userData</strong> – Pointer to the arbitrary data specified in the <code class="docutils literal notranslate"><a class="reference internal" href="#struct_i_p_l_air_absorption_model"><span class="std std-ref"><span class="pre">IPLAirAbsorptionModel</span></span></a></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The air absorption to apply, between <code class="docutils literal notranslate"><span class="pre">0</span></code> and <code class="docutils literal notranslate"><span class="pre">1</span></code>. <code class="docutils literal notranslate"><span class="pre">0</span></code> = sound in the frequency band <code class="docutils literal notranslate"><span class="pre">band</span></code> is not audible, <code class="docutils literal notranslate"><span class="pre">1</span></code> = sound in the frequency band <code class="docutils literal notranslate"><span class="pre">band</span></code> is not attenuated. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv422IPLDirectivityCallback">
+<span id="_CPPv322IPLDirectivityCallback"></span><span id="_CPPv222IPLDirectivityCallback"></span><span id="IPLDirectivityCallback"></span><span class="target" id="group__simulation_1ga033bd293c9eda8ce71774ff65ec2061e"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">IPLDirectivityCallback</span></span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">(</span></span><a class="reference internal" href="geometry.html#_CPPv410IPLVector3" title="IPLVector3"><span class="n"><span class="pre">IPLVector3</span></span></a><span class="w"> </span><span class="n"><span class="pre">direction</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">userData</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#_CPPv422IPLDirectivityCallback" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Callback for calculating how much to attenuate a sound based on its directivity pattern and orientation in world space. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>direction</strong> – Unit vector (in world space) pointing forwards from the source. This is the direction that the source is “pointing towards”. </p></li>
+<li><p><strong>userData</strong> – Pointer to the arbitrary data specified in the <code class="docutils literal notranslate"><a class="reference internal" href="#struct_i_p_l_directivity"><span class="std std-ref"><span class="pre">IPLDirectivity</span></span></a></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The directivity value to apply, between <code class="docutils literal notranslate"><span class="pre">0</span></code> and <code class="docutils literal notranslate"><span class="pre">1</span></code>. <code class="docutils literal notranslate"><span class="pre">0</span></code> = the sound is not audible, <code class="docutils literal notranslate"><span class="pre">1</span></code> = the sound is as loud as it would be if it had a uniform (omnidirectional) directivity pattern. </p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="baking.html" class="btn btn-neutral float-left" title="Baking" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Valve Corporation.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,265 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Integrating Steam Audio &mdash; Steam Audio C API  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/steamaudio.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="API Reference" href="reference.html" />
+    <link rel="prev" title="Programmer’s Guide" href="guide.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html">
+          
+
+          
+            
+            <img src="_static/steam-audio-logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                4.0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Steam Audio SDK</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guide.html">Programmer’s Guide</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Integrating Steam Audio</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#game-engine-integration">Game engine integration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#game-engine-editor-integration">Game engine editor integration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#audio-engine-integration">Audio engine integration</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="reference.html">API Reference</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Steam Audio C API</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Integrating Steam Audio</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="integrating-steam-audio">
+<h1>Integrating Steam Audio<a class="headerlink" href="#integrating-steam-audio" title="Permalink to this headline">¶</a></h1>
+<p>This section outlines the main steps required to integrate Steam Audio with a new game engine or audio middleware, and the key decisions you will have to make along the way.</p>
+<div class="section" id="game-engine-integration">
+<h2>Game engine integration<a class="headerlink" href="#game-engine-integration" title="Permalink to this headline">¶</a></h2>
+<p>When integrating Steam Audio with your game engine, consider the following:</p>
+<ul class="simple">
+<li><p>Initialize Steam Audio objects like the context and simulator at app startup.</p></li>
+<li><p>Create Steam Audio scene objects whenever your game engine loads a scene at run-time. Destroy the Steam Audio scene object when the game engine unloads a scene.</p></li>
+<li><p>Load one or more HRTFs at app startup.</p></li>
+<li><p>If you are using a Steam Audio feature that requires OpenCL (i.e., Radeon Rays or TrueAudio Next), initialize OpenCL at app startup. If your game engine already uses OpenCL for some other functionality, you can instruct Steam Audio to use an existing OpenCL context and command queues.</p></li>
+<li><p>Consider whether and/or how games built with the game engine intend to provide user-facing options to configure Steam Audio. For example, developers may want to provide an option to the user for switching between convolution reverb and parametric reverb.</p></li>
+<li><p>If you have a high performance ray tracer available in your game engine (most game engines do have some ray tracing functionality, though performance varies), you can consider configuring Steam Audio to use it. This can simplify the process of marking up scenes for Steam Audio.</p></li>
+<li><p>Consider what kinds of sound propagation simulation should run on which threads. For example, you may want occlusion to be simulated on the main update thread, to prevent noticeable lag between a source moving on-screen and it occlusion state audibly changing. On the other hand, you may want reflections or pathing simulaiton to run in one or more separate threads, to prevent them from unpredictably affecting the frame rate.</p></li>
+<li><p>Create a Steam Audio source object whenever a sound-emitting in-game object is created, and destroy it when the object is destroyed.</p></li>
+</ul>
+</div>
+<div class="section" id="game-engine-editor-integration">
+<h2>Game engine editor integration<a class="headerlink" href="#game-engine-editor-integration" title="Permalink to this headline">¶</a></h2>
+<p>If you are using Steam Audio functionality that requires geometry information, you will also need to integrate with your game engine’s editor tools. Consider the following:</p>
+<ul class="simple">
+<li><p>Consider how developers can specify which geometry should be sent to Steam Audio. You can do this by attaching components, setting flags, or any other appropriate means.</p></li>
+<li><p>Consider how developers can specify the acoustic material properties of geometry. It may be possible to extend any existing material system in the game engine for this purpose.</p></li>
+<li><p>If you intend to bake reflections or pathing data, consider how developers should create and place probes in scenes.</p></li>
+<li><p>Consider how and when bakes are run, and how progress feedback is provided to the user.</p></li>
+<li><p>If the game engine includes command line tools for running preprocessing work in batches, you may consider integrating Steam Audio baking with the command line tooling.</p></li>
+</ul>
+</div>
+<div class="section" id="audio-engine-integration">
+<h2>Audio engine integration<a class="headerlink" href="#audio-engine-integration" title="Permalink to this headline">¶</a></h2>
+<p>When integrating Steam Audio with a game engine’s built-in audio engine, or with third-party audio middleware, consider the following:</p>
+<ul class="simple">
+<li><p>The audio engine will need access to a Steam Audio context before creating any other Steam Audio objects during initialization. This will typically have been created by the game engine during app startup.</p></li>
+<li><p>When integrating with audio middleware that includes a standalone editor tool, the context will also have to be created when the editor tool starts up.</p></li>
+<li><p>Create one or more Steam Audio effects when a source/effect/processor instance is created by the audio engine, and destroy them when the instance is destroyed.</p></li>
+<li><p>Consider which effects you want to implement, and how direct and indirect sound propagation are mixed. For example, you can allow developers to create a separate audio effect for spatializing the direct path, and a separate effect for rendering reflections, and use existing audio graph mixing tools to control how the direct and indirect audio is combined.</p></li>
+<li><p>Consider which effects you want to implement on submixes (or buses). This is most commonly used for implement listener-centric reverb.</p></li>
+<li><p>If the audio engine supports Ambisonic outputs from effects, and Ambisonic buses, you can consider encoding audio sources into Ambisonics, mixing multiple Ambisonic sources into a submix, and applying spatialization towards the end of the audio pipeline, to reduce CPU usage.</p></li>
+<li><p>Most crucially, you will need to implement a way of sending simulation results from the game engine’s update thread (or some other thread you use for simulation) to the audio mixer thread. You can use existing functionality in your audio engine for sending parameters to effects, or implement your own approach.</p></li>
+</ul>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="reference.html" class="btn btn-neutral float-right" title="API Reference" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="guide.html" class="btn btn-neutral float-left" title="Programmer’s Guide" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Valve Corporation.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
