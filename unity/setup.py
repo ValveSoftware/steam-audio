@@ -7,7 +7,7 @@ import shutil
 import urllib2
 import zipfile
 
-version = "2.0-beta.15"
+version = "4.0.0"
 
 def download_file(url):
     remote_file = urllib2.urlopen(url)
@@ -18,70 +18,48 @@ def download_file(url):
                 break
             local_file.write(data)
 
-print "Downloading steamaudio_api_" + version + ".zip..."
-url = "https://github.com/ValveSoftware/steam-audio/releases/download/v" + version + "/steamaudio_api_" + version + ".zip"
+print "Downloading steamaudio_" + version + ".zip..."
+url = "https://github.com/ValveSoftware/steam-audio/releases/download/v" + version + "/steamaudio_" + version + ".zip"
 download_file(url)
 
-print "Extracting steamaudio_api_" + version + ".zip..."
+print "Extracting steamaudio_" + version + ".zip..."
 with zipfile.ZipFile(os.path.basename(url), "r") as zip:
 	zip.extractall()
 
+print "Creating directories..."
+if not os.path.exists("src/project/SteamAudioUnity/Assets/Plugins/SteamAudio/Binaries/Windows/x86"):
+    os.makedirs("src/project/SteamAudioUnity/Assets/Plugins/SteamAudio/Binaries/Windows/x86")
+if not os.path.exists("src/project/SteamAudioUnity/Assets/Plugins/SteamAudio/Binaries/Windows/x86_64"):
+    os.makedirs("src/project/SteamAudioUnity/Assets/Plugins/SteamAudio/Binaries/Windows/x86_64")
+if not os.path.exists("src/project/SteamAudioUnity/Assets/Plugins/SteamAudio/Binaries/Linux/x86"):
+    os.makedirs("src/project/SteamAudioUnity/Assets/Plugins/SteamAudio/Binaries/Linux/x86")
+if not os.path.exists("src/project/SteamAudioUnity/Assets/Plugins/SteamAudio/Binaries/Linux/x86_64"):
+    os.makedirs("src/project/SteamAudioUnity/Assets/Plugins/SteamAudio/Binaries/Linux/x86_64")
+if not os.path.exists("src/project/SteamAudioUnity/Assets/Plugins/SteamAudio/Binaries/macOS"):
+    os.makedirs("src/project/SteamAudioUnity/Assets/Plugins/SteamAudio/Binaries/macOS")
+if not os.path.exists("src/project/SteamAudioUnity/Assets/Plugins/SteamAudio/Binaries/Android/armv7"):
+    os.makedirs("src/project/SteamAudioUnity/Assets/Plugins/SteamAudio/Binaries/Android/armv7")
+if not os.path.exists("src/project/SteamAudioUnity/Assets/Plugins/SteamAudio/Binaries/Android/arm64"):
+    os.makedirs("src/project/SteamAudioUnity/Assets/Plugins/SteamAudio/Binaries/Android/arm64")
+if not os.path.exists("src/project/SteamAudioUnity/Assets/Plugins/SteamAudio/Binaries/Android/x86"):
+    os.makedirs("src/project/SteamAudioUnity/Assets/Plugins/SteamAudio/Binaries/Android/x86")
+
 print "Copying files..."
-shutil.copy("steamaudio_api/bin/Windows/x86/phonon.dll", "src/project/SteamAudioUnity/Assets/Plugins/x86")
-shutil.copy("steamaudio_api/bin/Windows/x64/phonon.dll", "src/project/SteamAudioUnity/Assets/Plugins/x86_64")
-shutil.copy("steamaudio_api/lib/Linux/x86/libphonon.so", "src/project/SteamAudioUnity/Assets/Plugins/x86")
-shutil.copy("steamaudio_api/lib/Linux/x64/libphonon.so", "src/project/SteamAudioUnity/Assets/Plugins/x86_64")
+shutil.copy("steamaudio/lib/windows-x86/phonon.dll", "src/project/SteamAudioUnity/Assets/Plugins/SteamAudio/Binaries/Windows/x86")
+shutil.copy("steamaudio/lib/windows-x64/phonon.dll", "src/project/SteamAudioUnity/Assets/Plugins/SteamAudio/Binaries/Windows/x86_64")
+shutil.copy("steamaudio/lib/linux-x86/libphonon.so", "src/project/SteamAudioUnity/Assets/Plugins/SteamAudio/Binaries/Linux/x86")
+shutil.copy("steamaudio/lib/linux-x64/libphonon.so", "src/project/SteamAudioUnity/Assets/Plugins/SteamAudio/Binaries/Linux/x86_64")
 try:
-	shutil.rmtree("src/project/SteamAudioUnity/Assets/Plugins/phonon.bundle")
+	shutil.rmtree("src/project/SteamAudioUnity/Assets/Plugins/SteamAudio/Binaries/macOS/phonon.bundle")
 except:
 	pass
-shutil.copytree("steamaudio_api/bin/OSX/phonon.bundle",  "src/project/SteamAudioUnity/Assets/Plugins/phonon.bundle")
-shutil.copy("steamaudio_api/lib/Android/libphonon.so",   "src/project/SteamAudioUnity/Assets/Plugins/android")
+shutil.copytree("steamaudio/lib/osx/phonon.bundle", "src/project/SteamAudioUnity/Assets/Plugins/SteamAudio/Binaries/macOS/phonon.bundle")
+shutil.copy("steamaudio/lib/android-armv7/libphonon.so", "src/project/SteamAudioUnity/Assets/Plugins/SteamAudio/Binaries/Android/armv7")
+shutil.copy("steamaudio/lib/android-armv8/libphonon.so", "src/project/SteamAudioUnity/Assets/Plugins/SteamAudio/Binaries/Android/arm64")
+shutil.copy("steamaudio/lib/android-x86/libphonon.so", "src/project/SteamAudioUnity/Assets/Plugins/SteamAudio/Binaries/Android/x86")
 
-print "Downloading steamaudio_tan_" + version + ".zip..."
-url = "https://github.com/ValveSoftware/steam-audio/releases/download/v" + version + "/steamaudio_tan_" + version + ".zip"
-download_file(url)
-
-print "Extracting steamaudio_tan_" + version + ".zip..."
-with zipfile.ZipFile(os.path.basename(url), "r") as zip:
-    zip.extractall()
-
-print "Copying files..."
-shutil.copy("steamaudio_tan/bin/windows/x64/tanrt64.dll",      "src/project/SteamAudioUnity/Assets/Plugins/x86_64")
-shutil.copy("steamaudio_tan/bin/windows/x64/GPUUtilities.dll", "src/project/SteamAudioUnity/Assets/Plugins/x86_64")
-
-print "Downloading steamaudio_embree_" + version + ".zip..."
-url = "https://github.com/ValveSoftware/steam-audio/releases/download/v" + version + "/steamaudio_embree_" + version + ".zip"
-download_file(url)
-
-print "Extracting steamaudio_embree_" + version + ".zip..."
-with zipfile.ZipFile(os.path.basename(url), "r") as zip:
-    zip.extractall()
-
-print "Copying files..."
-shutil.copy("steamaudio_embree/bin/windows/x64/embree.dll",         "src/project/SteamAudioUnity/Assets/Plugins/x86_64")
-shutil.copy("steamaudio_embree/bin/windows/x64/tbb.dll",            "src/project/SteamAudioUnity/Assets/Plugins/x86_64")
-shutil.copy("steamaudio_embree/bin/windows/x64/tbbmalloc.dll",      "src/project/SteamAudioUnity/Assets/Plugins/x86_64")
-shutil.copy("steamaudio_embree/bin/linux/x64/libembree.so",         "src/project/SteamAudioUnity/Assets/Plugins/x86_64")
-shutil.copy("steamaudio_embree/bin/linux/x64/libtbb.so.2",          "src/project/SteamAudioUnity/Assets/Plugins/x86_64")
-shutil.copy("steamaudio_embree/bin/linux/x64/libtbbmalloc.so.2",    "src/project/SteamAudioUnity/Assets/Plugins/x86_64")
-shutil.copy("steamaudio_embree/bin/osx/libembree.dylib",            "src/project/SteamAudioUnity/Assets/Plugins")
-shutil.copy("steamaudio_embree/bin/osx/libtbb.dylib",               "src/project/SteamAudioUnity/Assets/Plugins")
-shutil.copy("steamaudio_embree/bin/osx/libtbbmalloc.dylib",         "src/project/SteamAudioUnity/Assets/Plugins")
-
-print "Downloading steamaudio_radeonrays_" + version + ".zip..."
-url = "https://github.com/ValveSoftware/steam-audio/releases/download/v" + version + "/steamaudio_radeonrays_" + version + ".zip"
-download_file(url)
-
-print "Extracting steamaudio_radeonrays_" + version + ".zip..."
-with zipfile.ZipFile(os.path.basename(url), "r") as zip:
-    zip.extractall()
-
-print "Copying files..."
-shutil.copy("steamaudio_radeonrays/bin/windows/x64/RadeonRays.dll",     "src/project/SteamAudioUnity/Assets/Plugins/x86_64")
+shutil.copy("steamaudio/lib/windows-x64/TrueAudioNext.dll", "src/project/SteamAudioUnity/Assets/Plugins/SteamAudio/Binaries/Windows/x86_64")
+shutil.copy("steamaudio/lib/windows-x64/GPUUtilities.dll", "src/project/SteamAudioUnity/Assets/Plugins/SteamAudio/Binaries/Windows/x86_64")
 
 print "Cleaning up..."
-shutil.rmtree("steamaudio_api")
-shutil.rmtree("steamaudio_tan")
-shutil.rmtree("steamaudio_embree")
-shutil.rmtree("steamaudio_radeonrays")
+shutil.rmtree("steamaudio")

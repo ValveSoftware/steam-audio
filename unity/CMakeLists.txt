@@ -1,163 +1,194 @@
 # Copyright 2017 Valve Corporation. All rights reserved. Subject to the following license:
 # https://valvesoftware.github.io/steam-audio/license.html
 
-###############################################################################
-# GLOBAL SETTINGS
-###############################################################################
+cmake_minimum_required(VERSION 3.17)
 
-cmake_minimum_required(VERSION 3.9)
+project(Phonon VERSION 4.0.0)
+
 set(CMAKE_CXX_STANDARD 14)
-project(Phonon VERSION 2.0.20)
-
 set(CMAKE_MODULE_PATH "${CMAKE_HOME_DIRECTORY}/build")
-include(cotire)
-
-include_directories(include include/phonon)
-
-if (CMAKE_SIZEOF_VOID_P EQUAL 8)
-  set(BUILDING_64BIT TRUE)
-else()
-  set(BUILDING_64BIT FALSE)
-endif()
-
-if (UNIX AND NOT APPLE AND NOT ANDROID)
-  set(LINUX TRUE)
-else()
-  set(LINUX FALSE)
-endif()
-
-if (MSVC OR XCODE)
-    set (CMAKE_ARCHIVE_OUTPUT_DIRECTORY_DEBUG         ${CMAKE_ARCHIVE_OUTPUT_DIRECTORY}-debug)
-    set (CMAKE_LIBRARY_OUTPUT_DIRECTORY_DEBUG         ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}-debug)
-    set (CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG         ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}-debug)
-    set (CMAKE_PDB_OUTPUT_DIRECTORY_DEBUG             ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}-debug)
-    set (CMAKE_ARCHIVE_OUTPUT_DIRECTORY_RELEASE       ${CMAKE_ARCHIVE_OUTPUT_DIRECTORY}-release)
-    set (CMAKE_LIBRARY_OUTPUT_DIRECTORY_RELEASE       ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}-release)
-    set (CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE       ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}-release)
-    set (CMAKE_PDB_OUTPUT_DIRECTORY_RELEASE           ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}-release)
-endif ()
-
-if (MSVC)
-    set (CMAKE_CONFIGURATION_TYPES                      "Debug;Development;Release")
-    set (CMAKE_ARCHIVE_OUTPUT_DIRECTORY_DEVELOPMENT     ${CMAKE_ARCHIVE_OUTPUT_DIRECTORY}-development)
-    set (CMAKE_LIBRARY_OUTPUT_DIRECTORY_DEVELOPMENT     ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}-development)
-    set (CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEVELOPMENT     ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}-development)
-    set (CMAKE_PDB_OUTPUT_DIRECTORY_DEVELOPMENT         ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}-development)
-    set_property (GLOBAL PROPERTY DEBUG_CONFIGURATIONS  "Debug;Development")
-endif()
 
 
-###############################################################################
-# WINDOWS-SPECIFIC SETTINGS
-###############################################################################
+#
+# SYSTEM INTROSPECTION
+#
 
-if (MSVC)
-  add_definitions(                          -DWIN32 -D_WINDOWS -DUNICODE -D_UNICODE -D_CRT_SECURE_NO_WARNINGS -DNOMINMAX)
-  add_compile_options(                      -EHsc -MP -W3 -Zi)
-  set(CMAKE_CXX_FLAGS_DEBUG                 "/D_DEBUG /Od /RTC1 /MTd")
-  set(CMAKE_CXX_FLAGS_DEVELOPMENT           "/DNDEBUG /Ox /MT")
-  set(CMAKE_CXX_FLAGS_RELEASE               "/DNDEBUG /Ox /MT /GL")
-  set(CMAKE_SHARED_LINKER_FLAGS_DEVELOPMENT "/DEBUG /INCREMENTAL")
-  set(CMAKE_MODULE_LINKER_FLAGS_DEVELOPMENT "/DEBUG /INCREMENTAL")
-  set(CMAKE_EXE_LINKER_FLAGS_DEVELOPMENT    "/DEBUG /INCREMENTAL")
-  set(CMAKE_STATIC_LINKER_FLAGS_RELEASE     "/LTCG:OFF")
-  set(CMAKE_SHARED_LINKER_FLAGS_RELEASE     "/DEBUG /INCREMENTAL:NO /OPT:REF /OPT:ICF /LTCG /MANIFEST:NO")
-  set(CMAKE_MODULE_LINKER_FLAGS_RELEASE     "/DEBUG /INCREMENTAL:NO /OPT:REF /OPT:ICF /LTCG /MANIFEST:NO")
-  set(CMAKE_EXE_LINKER_FLAGS_RELEASE        "/DEBUG /INCREMENTAL:NO /OPT:REF /OPT:ICF /LTCG /MANIFEST:NO")
-endif()
-
+# OS detection
 if (WIN32)
-  add_library(delayimp STATIC IMPORTED)
-  set_target_properties(delayimp PROPERTIES IMPORTED_LOCATION "delayimp.lib")
-endif()
-
-
-###############################################################################
-# LINUX-SPECIFIC SETTINGS
-###############################################################################
-
-if (LINUX)
-  if (BUILDING_64BIT)
-    set(CMAKE_C_FLAGS     "${CMAKE_C_FLAGS} -fPIC")
-    set(CMAKE_CXX_FLAGS   "${CMAKE_CXX_FLAGS} -fPIC -Wl,--no-undefined")
-  else()
-    set(CMAKE_C_FLAGS     "-fPIC -m32")
-    set(CMAKE_CXX_FLAGS   "-fPIC -Wl,--no-undefined -m32 -mfpmath=sse -march=native")
-  endif()
-endif()
-
-
-###############################################################################
-# MACOS-SPECIFIC SETTINGS
-###############################################################################
-
-set(CMAKE_OSX_ARCHITECTURES "x86_64")
-
-function (add_bundle name)
-  if (APPLE)
-    add_library(${name} MODULE ${ARGN})
-    set_target_properties(${name} PROPERTIES BUNDLE TRUE)
-  endif()
-endfunction()
-
-
-###############################################################################
-# ANDROID-SPECIFIC SETTINGS
-###############################################################################
-
-if (ANDROID)
-  set(CMAKE_CXX_FLAGS_RELEASE   "-O3")
-  set(CMAKE_SHARED_LINKER_FLAGS "-static-libstdc++")
-endif()
-
-
-###############################################################################
-# PLATFORM FLAGS
-###############################################################################
-
-if (WIN32)
-  add_definitions(-DIPL_OS_WINDOWS)
-elseif (LINUX)
-  add_definitions(-DIPL_OS_LINUX)
-elseif (APPLE)
-  add_definitions(-DIPL_OS_MACOSX)
+    set(IPL_OS_WINDOWS TRUE)
+elseif (UNIX AND CMAKE_SYSTEM_NAME STREQUAL "Linux")
+    set(IPL_OS_LINUX TRUE)
+elseif (APPLE AND CMAKE_SYSTEM_NAME STREQUAL "Darwin")
+    set(IPL_OS_MACOS TRUE)
 elseif (ANDROID)
-  add_definitions(-DIPL_OS_ANDROID)
+    set(IPL_OS_ANDROID TRUE)
 endif()
 
-if (ANDROID_ARM)
-  add_definitions(-DIPL_CPU_ARMV7)
-elseif (ANDROID_X86)
-  add_definitions(-DIPL_CPU_X86)
-elseif (ANDROID_X64)
-  add_definitions(-DIPL_CPU_X64)
-elseif (ANDROID_ARM64)
-  add_definitions(-DIPL_CPU_ARM64)
-elseif (APPLE)
-  add_definitions(-DIPL_CPU_X64)
-elseif (BUILDING_64BIT)
-  add_definitions(-DIPL_CPU_X64)
-else()
-  add_definitions(-DIPL_CPU_X86)
-endif()
-
-
-###############################################################################
-# VERSION STAMPING
-###############################################################################
-
-if (UPDATE_VERSION_STAMPS)
-  message("Updating version stamps to v${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH}...")
-  configure_file(${CMAKE_HOME_DIRECTORY}/src/native/steamaudio_unity_version.h.in ${CMAKE_HOME_DIRECTORY}/src/native/steamaudio_unity_version.h)
-  configure_file(${CMAKE_HOME_DIRECTORY}/src/native/audioplugin_phonon.rc.in ${CMAKE_HOME_DIRECTORY}/src/native/audioplugin_phonon.rc)
-  configure_file(${CMAKE_HOME_DIRECTORY}/src/project/SteamAudioUnity/Assets/SteamAudio/Version.cs.in ${CMAKE_HOME_DIRECTORY}/src/project/SteamAudioUnity/Assets/SteamAudio/Version.cs)
-  configure_file(${CMAKE_HOME_DIRECTORY}/doc/phonon_unity.md.in ${CMAKE_HOME_DIRECTORY}/doc/phonon_unity.md)
+# CPU architecture detection
+if (IPL_OS_WINDOWS OR IPL_OS_LINUX)
+    if (CMAKE_SIZEOF_VOID_P EQUAL 8)
+        set(IPL_CPU_X64 TRUE)
+    else()
+        set(IPL_CPU_X86 TRUE)
+    endif()
+elseif (IPL_OS_MACOS)
+    set(IPL_CPU_X64 TRUE)
+elseif (IPL_OS_ANDROID)
+    if (CMAKE_ANDROID_ARCH STREQUAL "arm")
+        set(IPL_CPU_ARMV7 TRUE)
+    elseif (CMAKE_ANDROID_ARCH STREQUAL "arm64")
+        set(IPL_CPU_ARMV8 TRUE)
+    elseif (CMAKE_ANDROID_ARCH STREQUAL "x86")
+        set(IPL_CPU_X86 TRUE)
+    elseif (CMAKE_ANDROID_ARCH STREQUAL "x86_64")
+        set(IPL_CPU_X64 TRUE)
+    endif()
 endif()
 
 
-###############################################################################
+#
+# OPTIONS
+#
+
+# Whether to compile a static or dynamic library
+option(BUILD_SHARED_LIBS "Build shared libraries instead of static." ON)
+
+# Options for all platforms
+option(STEAMAUDIOUNITY_BUILD_DOCS "Build documentation." OFF)
+
+# Paths for find_package
+set(Sphinx_EXECUTABLE_DIR "" CACHE PATH "Directory containing the Sphinx binary.")
+set(Unity_EXECUTABLE_DIR "" CACHE PATH "Directory containing the Unity binary.")
+mark_as_advanced(Sphinx_EXECUTABLE_DIR Unity_EXECUTABLE_DIR)
+
+
+#
+# COMPILER FLAGS
+#
+
+# Flags determined by system introspection
+if (IPL_OS_WINDOWS)
+    add_definitions(-DIPL_OS_WINDOWS)
+endif()
+if (IPL_OS_LINUX)
+    add_definitions(-DIPL_OS_LINUX)
+endif()
+if (IPL_OS_MACOS)
+    add_definitions(-DIPL_OS_MACOSX)
+endif()
+if (IPL_OS_ANDROID)
+    add_definitions(-DIPL_OS_ANDROID)
+endif()
+
+if (IPL_CPU_X86)
+    add_definitions(-DIPL_CPU_X86)
+endif()
+if (IPL_CPU_X64)
+    add_definitions(-DIPL_CPU_X64)
+endif()
+if (IPL_CPU_ARMV7)
+    add_definitions(-DIPL_CPU_ARMV7)
+endif()
+if (IPL_CPU_ARMV8)
+    add_definitions(-DIPL_CPU_ARM64)
+endif()
+
+# Windows flags
+if (IPL_OS_WINDOWS)
+    add_compile_definitions(
+        WIN32
+        WINDOWS
+        UNICODE
+        _UNICODE
+        _CRT_SECURE_NO_WARNINGS
+        WIN32_LEAN_AND_MEAN
+        NOMINMAX
+        _DISABLE_EXTENDED_ALIGNED_STORAGE
+        $<IF:$<CONFIG:Debug>,_DEBUG,NDEBUG>
+    )
+    add_compile_options(
+        /EHsc /MP /W3 /Zi
+        $<IF:$<CONFIG:Debug>,/MTd,/MT>
+        $<$<CONFIG:Debug>:/RTC1>
+        $<$<NOT:$<CONFIG:Debug>>:/Ox>
+        $<$<CONFIG:Release>:/GL>
+    )
+    add_link_options(
+        /DEBUG
+        $<$<CONFIG:Release>:/OPT:REF>
+        $<$<CONFIG:Release>:/OPT:ICF>
+        $<$<CONFIG:Release>:/LTCG>
+        $<$<CONFIG:Release>:/MANIFEST:NO>
+        $<IF:$<CONFIG:Release>,/INCREMENTAL:NO,/INCREMENTAL>
+    )
+endif()
+
+# Linux flags
+if (IPL_OS_LINUX)
+    add_compile_options(-fPIC -g -Wl,--no-undefined)
+    if (IPL_CPU_X86)
+        add_compile_options(-m32 -mfpmath=sse -march=native)
+    endif()
+endif()
+
+# macOS flags
+if (IPL_OS_MACOS)
+    set(CMAKE_OSX_ARCHITECTURES "x86_64")
+    add_compile_options(-Wno-extern-c-compat) # Suppress warning about empty API structs.
+endif()
+
+# Android flags
+if (IPL_OS_ANDROID)
+    add_compile_options(-fPIC -g -std=c++14 $<$<CONFIG:Release>:-O3>)
+    if (IPL_CPU_ARMV7)
+        add_compile_options(-I${CMAKE_ANDROID_NDK}/sysroot/usr/include/arm-linux-androideabi)
+    elseif (IPL_CPU_ARMV8)
+        add_compile_options(-I${CMAKE_ANDROID_NDK}/sysroot/usr/include/aarch64-linux-android)
+    elseif (IPL_CPU_X86)
+        add_compile_options(-I${CMAKE_ANDROID_NDK}/sysroot/usr/include/i686-linux-android)
+    elseif (IPL_CPU_X64)
+        add_compile_options(-I${CMAKE_ANDROID_NDK}/sysroot/usr/include/x86_64-linux-android)
+    endif()
+    add_link_options(-static-libstdc++)
+endif()
+
+
+#
+# DEPENDENCIES
+#
+
+find_package(Unity REQUIRED)
+
+find_package(SteamAudio REQUIRED)
+
+if (STEAMAUDIOUNITY_BUILD_DOCS)
+    find_package(Sphinx REQUIRED)
+endif()
+
+
+#
 # TARGETS
-###############################################################################
+#
 
-add_subdirectory (src/native)
-add_subdirectory (doc)
+add_subdirectory(src/native)
+
+if (STEAMAUDIOUNITY_BUILD_DOCS)
+    add_subdirectory(doc)
+endif()
+
+
+#
+# PACKAGING
+#
+
+set(CPACK_PACKAGE_VENDOR "Valve Corporation")
+set(CPACK_PACKAGE_FILE_NAME steamaudio_unity)
+set(CPACK_PACKAGE_DIRECTORY ${CMAKE_HOME_DIRECTORY}/dist)
+set(CPACK_INSTALL_CMAKE_PROJECTS "")
+set(CPACK_EXTERNAL_PACKAGE_SCRIPT ${CMAKE_HOME_DIRECTORY}/build/package_unity.cmake)
+set(CPACK_INSTALLED_DIRECTORIES
+    ${CMAKE_INSTALL_PREFIX}/unity unity
+    ${CMAKE_INSTALL_PREFIX}/doc doc
+)
+
+include(CPack)

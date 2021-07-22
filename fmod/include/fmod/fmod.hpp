@@ -1,19 +1,18 @@
-/* ========================================================================================== */
-/* FMOD Studio - C++ header file. Copyright (c), Firelight Technologies Pty, Ltd. 2004-2017.  */
-/*                                                                                            */
-/* Use this header in conjunction with fmod_common.h (which contains all the constants /      */
-/* callbacks) to develop using C++ classes.                                                   */
-/* ========================================================================================== */
-
+/* ======================================================================================== */
+/* FMOD Core API - C++ header file.                                                         */
+/* Copyright (c), Firelight Technologies Pty, Ltd. 2004-2019.                               */
+/*                                                                                          */
+/* Use this header in conjunction with fmod_common.h (which contains all the constants /    */
+/* callbacks) to develop using the C++ language.                                            */
+/*                                                                                          */
+/* For more detail visit:                                                                   */
+/* https://fmod.com/resources/documentation-api?version=2.0&page=core-api.html              */
+/* ======================================================================================== */
 #ifndef _FMOD_HPP
 #define _FMOD_HPP
 
 #include "fmod_common.h"
 #include "fmod.h"
-
-/*
-    Constant and defines
-*/
 
 /*
     FMOD Namespace
@@ -125,7 +124,6 @@ namespace FMOD
         FMOD_RESULT F_API getChannelsPlaying      (int *channels, int *realchannels = 0);
         FMOD_RESULT F_API getCPUUsage             (float *dsp, float *stream, float *geometry, float *update, float *total);
         FMOD_RESULT F_API getFileUsage            (long long *sampleBytesRead, long long *streamBytesRead, long long *otherBytesRead);
-        FMOD_RESULT F_API getSoundRAM             (int *currentalloced, int *maxalloced, int *total);
 
         // Sound/DSP/Channel/FX creation and retrieval.
         FMOD_RESULT F_API createSound             (const char *name_or_data, FMOD_MODE mode, FMOD_CREATESOUNDEXINFO *exinfo, Sound **sound);
@@ -313,8 +311,8 @@ namespace FMOD
         FMOD_RESULT F_API getDSPIndex            (DSP *dsp, int *index);
 
         // 3D functionality.
-        FMOD_RESULT F_API set3DAttributes        (const FMOD_VECTOR *pos, const FMOD_VECTOR *vel, const FMOD_VECTOR *alt_pan_pos = 0);
-        FMOD_RESULT F_API get3DAttributes        (FMOD_VECTOR *pos, FMOD_VECTOR *vel, FMOD_VECTOR *alt_pan_pos = 0);
+        FMOD_RESULT F_API set3DAttributes        (const FMOD_VECTOR *pos, const FMOD_VECTOR *vel);
+        FMOD_RESULT F_API get3DAttributes        (FMOD_VECTOR *pos, FMOD_VECTOR *vel);
         FMOD_RESULT F_API set3DMinMaxDistance    (float mindistance, float maxdistance);
         FMOD_RESULT F_API get3DMinMaxDistance    (float *mindistance, float *maxdistance);
         FMOD_RESULT F_API set3DConeSettings      (float insideconeangle, float outsideconeangle, float outsidevolume);
@@ -501,6 +499,7 @@ namespace FMOD
         FMOD_RESULT F_API setMeteringEnabled     (bool inputEnabled, bool outputEnabled);
         FMOD_RESULT F_API getMeteringEnabled     (bool *inputEnabled, bool *outputEnabled);
         FMOD_RESULT F_API getMeteringInfo        (FMOD_DSP_METERING_INFO *inputInfo, FMOD_DSP_METERING_INFO *outputInfo);
+        FMOD_RESULT F_API getCPUUsage            (unsigned int *exclusive, unsigned int *inclusive);
     };
 
 

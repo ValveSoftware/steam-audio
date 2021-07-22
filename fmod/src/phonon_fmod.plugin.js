@@ -7,149 +7,292 @@ studio.plugins.registerPluginDescription("Steam Audio Spatializer", {
 	companyName: "Valve",
 	productName: "Steam Audio Spatializer",
 	parameters: {
-		"DirectBinaural":  {displayName: "Direct Binaural"},
-		"Interpolation":   {displayName: "HRTF Interpolation"},
-		"Distance":        {displayName: "Physics-Based Attenuation"},
-		"AirAbsorption":   {displayName: "Air Absorption"},
-		"OcclusionMode":   {displayName: "Occlusion Mode"},
-		"OcclusionMethod": {displayName: "Occlusion Method"},
-		"SourceRadius":    {displayName: "Source Radius"},
-		"DirectLevel":     {displayName: "Direct Mix Level"},
-		"Indirect":        {displayName: "Indirect"},
-		"IndirBinaural":   {displayName: "Indirect Binaural"},
-		"IndirLevel":      {displayName: "Indirect Mix Level"},
-		"IndirType":       {displayName: "Simulation Type"},
-		"StaticListener":  {displayName: "Static Listener"},
-		"DipoleWeight":    {displayName: "Dipole Weight"},
-		"DipolePower":     {displayName: "Dipole Power"},
+		"ApplyDA": {displayName: "Distance Attenuation"},
+		"ApplyAA": {displayName: "Air Absorption"},
+		"ApplyDir": {displayName: "Directivity"},
+		"ApplyOccl": {displayName: "Occlusion"},
+		"ApplyTrans": {displayName: "Transmission"},
+		"ApplyRefl": {displayName: "Reflections"},
+		"ApplyPath": {displayName: "Pathing"},
+		"Interpolation": {displayName: "HRTF Interpolation"},
+		"DistAtt": {displayName: "Value"},
+		"AirAbsLow": {displayName: "AA Low"},
+		"AirAbsMid": {displayName: "AA Mid"},
+		"AirAbsHigh": {displayName: "AA High"},
+		"Directivity": {displayName: "Dir. Value"},
+		"DipoleWeight": {displayName: "Weight"},
+		"DipolePower": {displayName: "Power"},
+		"Occlusion": {displayName: "Occl. Value"},
+		"TransType": {displayName: "Transmission Type"},
+		"TransLow": {displayName: "Trans. Low"},
+		"TransMid": {displayName: "Trans. Mid"},
+		"TransHigh": {displayName: "Trans. High"},
+		"DirMixLevel": {displayName: "Direct Mix Level"},
+		"ReflBinaural": {displayName: "Apply HRTF To Reflections"},
+		"ReflMixLevel": {displayName: "Reflections Mix Level"},
+		"PathBinaural": {displayName: "Apply HRTF To Pathing"},
+		"PathMixLevel": {displayName: "Pathing Mix Level"},
 	},
 	deckUi: {
-
 		deckWidgetType: studio.ui.deckWidgetType.Layout,
 		layout: studio.ui.layoutType.HBoxLayout,
-		minimumWidth: 700,
+		spacing: 8,
 		items: [
+			{
+				deckWidgetType: studio.ui.deckWidgetType.InputMeter
+			},
 			{
 				deckWidgetType: studio.ui.deckWidgetType.Layout,
 				layout: studio.ui.layoutType.VBoxLayout,
-				spacing: 6,
-				maximumWidth: 160,
+				minimumWidth: 128,
+				maximumWidth: 150,
+				spacing: 8,
 				contentsMargins: {left: 4, right: 4},
+				alignment: studio.ui.alignment.AlignTop,
+				isFramed: true,
 				items: [
-					{
-						deckWidgetType: studio.ui.deckWidgetType.Button,
-						binding: "DirectBinaural",
-						text: "Enable",
-						buttonWidth: 64
-					},
 					{
 						deckWidgetType: studio.ui.deckWidgetType.Dropdown,
 						binding: "Interpolation"
 					},
 					{
-						deckWidgetType: studio.ui.deckWidgetType.Button,
-						binding: "Distance",
-						text: "Enable",
-						buttonWidth: 64
+						deckWidgetType: studio.ui.deckWidgetType.Dropdown,
+						binding: "ApplyDA"
 					},
 					{
-						deckWidgetType: studio.ui.deckWidgetType.Button,
-						binding: "AirAbsorption",
-						text: "Enable",
-						buttonWidth: 64
-					}
+						deckWidgetType: studio.ui.deckWidgetType.Dropdown,
+						binding: "ApplyAA"
+					},
+					{
+						deckWidgetType: studio.ui.deckWidgetType.Dropdown,
+						binding: "ApplyDir"
+					},
 				]
 			},
 			{
 				deckWidgetType: studio.ui.deckWidgetType.Layout,
 				layout: studio.ui.layoutType.VBoxLayout,
-				spacing: 6,
-				maximumWidth: 224,
+				minimumWidth: 128,
+				maximumWidth: 250,
+				spacing: 8,
+				contentsMargins: {left: 4, right: 4},
 				alignment: studio.ui.alignment.AlignTop,
+				isFramed: true,
 				items: [
 					{
-						deckWidgetType: studio.ui.deckWidgetType.Dropdown,
-						binding: "OcclusionMode"
+						deckWidgetType: studio.ui.deckWidgetType.DistanceRolloffGraph,
+						rolloffTypeBinding: "DAType",
+						minimumDistanceBinding: "DAMinDist",
+						maximumDistanceBinding: "DAMaxDist",
+						rolloffTypes: {
+							0: studio.project.distanceRolloffType.LinearSquared,
+							1: studio.project.distanceRolloffType.Linear,
+							2: studio.project.distanceRolloffType.Inverse,
+							3: studio.project.distanceRolloffType.InverseSquared,
+							4: studio.project.distanceRolloffType.Custom,
+						}
 					},
 					{
-						deckWidgetType: studio.ui.deckWidgetType.Dropdown,
-						binding: "OcclusionMethod"
-					},
-					{
-						deckWidgetType: studio.ui.deckWidgetType.Dial,
-						binding: "SourceRadius"
+						deckWidgetType: studio.ui.deckWidgetType.MinMaxFader,
+						text: "Min & Max Distances",
+						minimumBinding: "DAMinDist",
+						maximumBinding: "DAMaxDist"
 					}
 				]
 			},
 			{
-				deckWidgetType: studio.ui.deckWidgetType.Fader,
-				binding: "DirectLevel",
-				maximumWidth: 64,
-			},
-			{
 				deckWidgetType: studio.ui.deckWidgetType.Layout,
 				layout: studio.ui.layoutType.VBoxLayout,
-				spacing: 6,
-				maximumWidth: 160,
+				minimumWidth: 128,
+				maximumWidth: 150,
+				spacing: 8,
+				contentsMargins: {left: 4, right: 4},
 				alignment: studio.ui.alignment.AlignTop,
+				isFramed: true,
 				items: [
 					{
-						deckWidgetType: studio.ui.deckWidgetType.Button,
-						binding: "Indirect",
-						text: "Enable",
-						buttonWidth: 64
+						deckWidgetType: studio.ui.deckWidgetType.Label,
+						text: "Directivity"
 					},
-					{
-						deckWidgetType: studio.ui.deckWidgetType.Button,
-						binding: "IndirBinaural",
-						text: "Enable",
-						buttonWidth: 64
-					},
-					{
-						deckWidgetType: studio.ui.deckWidgetType.Dropdown,
-						binding: "IndirType"
-					},
-					{
-						deckWidgetType: studio.ui.deckWidgetType.Button,
-						binding: "StaticListener",
-						text: "Enable",
-						buttonWidth: 64
-					}
-				]
-			},
-			{
-				deckWidgetType: studio.ui.deckWidgetType.Fader,
-				binding: "IndirLevel",
-				maximumWidth: 64,
-			},
-			{
-				deckWidgetType: studio.ui.deckWidgetType.Spacer,
-			},
-			{
-				deckWidgetType: studio.ui.deckWidgetType.Layout,
-				layout: studio.ui.layoutType.VBoxLayout,
-				items: [
 					{
 						deckWidgetType: studio.ui.deckWidgetType.PolarDirectivityGraph,
-						directivityBinding: 'DipoleWeight',
-						sharpnessBinding: 'DipolePower',
+						directivityBinding: "DipoleWeight",
+						sharpnessBinding: "DipolePower"
 					},
 					{
 						deckWidgetType: studio.ui.deckWidgetType.Layout,
 						layout: studio.ui.layoutType.HBoxLayout,
-						spacing: 10,
 						items: [
-						{
-							deckWidgetType: studio.ui.deckWidgetType.NumberBox,
-							binding: 'DipoleWeight',
-						},
-						{
-							deckWidgetType: studio.ui.deckWidgetType.NumberBox,
-							binding: 'DipolePower',
-						},
-					]
+							{
+								deckWidgetType: studio.ui.deckWidgetType.Dial,
+								binding: "DipoleWeight"
+							},
+							{
+								deckWidgetType: studio.ui.deckWidgetType.Dial,
+								binding: "DipolePower"
+							}
+						]
 					}
 				]
+			},
+			{
+				deckWidgetType: studio.ui.deckWidgetType.Layout,
+				layout: studio.ui.layoutType.VBoxLayout,
+				minimumWidth: 128,
+				maximumWidth: 150,
+				spacing: 8,
+				contentsMargins: {left: 4, right: 4},
+				alignment: studio.ui.alignment.AlignTop,
+				isFramed: true,
+				items: [
+					{
+						deckWidgetType: studio.ui.deckWidgetType.Dropdown,
+						binding: "ApplyOccl"
+					},
+					{
+						deckWidgetType: studio.ui.deckWidgetType.Dropdown,
+						binding: "ApplyTrans"
+					},
+					{
+						deckWidgetType: studio.ui.deckWidgetType.Dropdown,
+						binding: "TransType"
+					}
+				]
+			},
+			{
+				deckWidgetType: studio.ui.deckWidgetType.Layout,
+				layout: studio.ui.layoutType.VBoxLayout,
+				minimumWidth: 128,
+				maximumWidth: 250,
+				spacing: 8,
+				contentsMargins: {left: 4, right: 4},
+				alignment: studio.ui.alignment.AlignTop,
+				isFramed: true,
+				items: [
+					{
+						deckWidgetType: studio.ui.deckWidgetType.Layout,
+						layout: studio.ui.layoutType.HBoxLayout,
+						spacing: 8,
+						items: [
+							{
+								deckWidgetType: studio.ui.deckWidgetType.Dial,
+								binding: "AirAbsLow"
+							},
+							{
+								deckWidgetType: studio.ui.deckWidgetType.Dial,
+								binding: "AirAbsMid"
+							},
+							{
+								deckWidgetType: studio.ui.deckWidgetType.Dial,
+								binding: "AirAbsHigh"
+							},
+							{
+								deckWidgetType: studio.ui.deckWidgetType.Dial,
+								binding: "Directivity"
+							}
+						]
+					},
+					{
+						deckWidgetType: studio.ui.deckWidgetType.Layout,
+						layout: studio.ui.layoutType.HBoxLayout,
+						spacing: 8,
+						items: [
+							{
+								deckWidgetType: studio.ui.deckWidgetType.Dial,
+								binding: "Occlusion"
+							},
+							{
+								deckWidgetType: studio.ui.deckWidgetType.Dial,
+								binding: "TransLow"
+							},
+							{
+								deckWidgetType: studio.ui.deckWidgetType.Dial,
+								binding: "TransMid"
+							},
+							{
+								deckWidgetType: studio.ui.deckWidgetType.Dial,
+								binding: "TransHigh"
+							}
+						]
+					}
+				]
+			},
+			{
+				deckWidgetType: studio.ui.deckWidgetType.Layout,
+				layout: studio.ui.layoutType.VBoxLayout,
+				minimumWidth: 128,
+				maximumWidth: 150,
+				spacing: 8,
+				contentsMargins: {left: 4, right: 4},
+				alignment: studio.ui.alignment.AlignTop,
+				isFramed: true,
+				items: [
+					{
+						deckWidgetType: studio.ui.deckWidgetType.Button,
+						binding: "ApplyRefl",
+						text: "On"
+					},
+					{
+						deckWidgetType: studio.ui.deckWidgetType.Button,
+						binding: "ReflBinaural",
+						text: "On"
+					}
+				]
+			},
+			{
+				deckWidgetType: studio.ui.deckWidgetType.Layout,
+				layout: studio.ui.layoutType.VBoxLayout,
+				minimumWidth: 128,
+				maximumWidth: 150,
+				spacing: 8,
+				contentsMargins: {left: 4, right: 4},
+				alignment: studio.ui.alignment.AlignTop,
+				isFramed: true,
+				items: [
+					{
+						deckWidgetType: studio.ui.deckWidgetType.Button,
+						binding: "ApplyPath",
+						text: "On"
+					},
+					{
+						deckWidgetType: studio.ui.deckWidgetType.Button,
+						binding: "PathBinaural",
+						text: "On"
+					}
+				]
+			},
+			{
+				deckWidgetType: studio.ui.deckWidgetType.Layout,
+				layout: studio.ui.layoutType.VBoxLayout,
+				minimumWidth: 225,
+				maximumWidth: 350,
+				spacing: 8,
+				contentsMargins: {left: 4, right: 4},
+				alignment: studio.ui.alignment.AlignTop,
+				isFramed: true,
+				items: [
+					{
+						deckWidgetType: studio.ui.deckWidgetType.Dial,
+						binding: "DirMixLevel",
+					},
+					{
+						deckWidgetType: studio.ui.deckWidgetType.Layout,
+						layout: studio.ui.layoutType.HBoxLayout,
+						items: [
+							{
+								deckWidgetType: studio.ui.deckWidgetType.Dial,
+								binding: "ReflMixLevel",
+							},
+							{
+								deckWidgetType: studio.ui.deckWidgetType.Dial,
+								binding: "PathMixLevel",
+							}
+						]
+					}
+				]
+			},
+			{
+				deckWidgetType:  studio.ui.deckWidgetType.OutputMeter
 			}
 		]
 	}
@@ -159,37 +302,7 @@ studio.plugins.registerPluginDescription("Steam Audio Mixer Return", {
 	companyName: "Valve",
 	productName: "Steam Audio Mixer Return",
 	parameters: {
-		"IndirBinaural": {displayName: "Indirect Binaural"}
-	},
-	deckUi: {
-		deckWidgetType: studio.ui.deckWidgetType.Layout,
-		layout: studio.ui.layoutType.HBoxLayout,
-		minimumWidth: 150,
-		items: [
-			{
-				deckWidgetType: studio.ui.deckWidgetType.Layout,
-				layout: studio.ui.layoutType.VBoxLayout,
-				spacing: 6,
-				contentsMargins: {left: 4, right: 4},
-				items: [
-					{
-						deckWidgetType: studio.ui.deckWidgetType.Button,
-						binding: "IndirBinaural",
-						text: "Enable",
-						buttonWidth: 64
-					}
-				]
-			}
-		]
-	}
-});
-
-studio.plugins.registerPluginDescription("Steam Audio Reverb", {
-	companyName: "Valve",
-	productName: "Steam Audio Reverb",
-	parameters: {
-		"IndirBinaural": {displayName: "Indirect Binaural"},
-		"IndirType":     {displayName: "Simulation Type"},
+		"Binaural": {displayName: "Apply HRTF"}
 	},
 	deckUi: {
 		deckWidgetType: studio.ui.deckWidgetType.Layout,
@@ -204,15 +317,40 @@ studio.plugins.registerPluginDescription("Steam Audio Reverb", {
 				items: [
 					{
 						deckWidgetType: studio.ui.deckWidgetType.Button,
-						binding: "IndirBinaural",
+						binding: "Binaural",
+						text: "On",
+						buttonWidth: 64
+					}
+				]
+			}
+		]
+	}
+});
+
+studio.plugins.registerPluginDescription("Steam Audio Reverb", {
+	companyName: "Valve",
+	productName: "Steam Audio Reverb",
+	parameters: {
+		"Binaural": {displayName: "Apply HRTF"},
+	},
+	deckUi: {
+		deckWidgetType: studio.ui.deckWidgetType.Layout,
+		layout: studio.ui.layoutType.HBoxLayout,
+		minimumWidth: 256,
+		items: [
+			{
+				deckWidgetType: studio.ui.deckWidgetType.Layout,
+				layout: studio.ui.layoutType.VBoxLayout,
+				spacing: 6,
+				contentsMargins: {left: 4, right: 4},
+				items: [
+					{
+						deckWidgetType: studio.ui.deckWidgetType.Button,
+						binding: "Binaural",
 						text: "Enable",
 						buttonWidth: 64
-					},
-					{
-						deckWidgetType: studio.ui.deckWidgetType.Dropdown,
-						binding: "IndirType"
-					},
-			]
+					}
+				]
 			}
 		]
 	}

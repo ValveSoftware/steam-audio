@@ -13,9 +13,9 @@ BEGIN
         BEGIN
             VALUE "CompanyName",        "Valve Corporation"
             VALUE "ProductName",        "Steam Audio"
-            VALUE "ProductVersion",     "@PROJECT_VERSION_MAJOR@.@PROJECT_VERSION_MINOR@-beta.@PROJECT_VERSION_PATCH@"
+            VALUE "ProductVersion",     "@PROJECT_VERSION_MAJOR@.@PROJECT_VERSION_MINOR@.@PROJECT_VERSION_PATCH@"
             VALUE "FileDescription",    "Steam Audio Unity Plugin"
-            VALUE "FileVersion",        "@PROJECT_VERSION_MAJOR@.@PROJECT_VERSION_MINOR@-beta.@PROJECT_VERSION_PATCH@"
+            VALUE "FileVersion",        "@PROJECT_VERSION_MAJOR@.@PROJECT_VERSION_MINOR@.@PROJECT_VERSION_PATCH@"
             VALUE "InternalName",       "Steam Audio Unity Plugin"
             VALUE "OriginalFilename",   "audioplugin_phonon.dll"
             VALUE "LegalCopyright",     "https://github.com/ValveSoftware/steam-audio/blob/master/LICENSE.md"

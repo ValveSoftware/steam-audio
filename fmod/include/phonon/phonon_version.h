@@ -6,11 +6,11 @@
 #ifndef IPL_PHONON_VERSION_H
 #define IPL_PHONON_VERSION_H
 
-#define STEAMAUDIO_VERSION_MAJOR 2
+#define STEAMAUDIO_VERSION_MAJOR 4
 #define STEAMAUDIO_VERSION_MINOR 0
-#define STEAMAUDIO_VERSION_PATCH 20
-#define STEAMAUDIO_VERSION       ((unsigned int(STEAMAUDIO_VERSION_MAJOR) << 16) | \
-                                  (unsigned int(STEAMAUDIO_VERSION_MINOR) << 8) |  \
-                                  (unsigned int(STEAMAUDIO_VERSION_PATCH)))
+#define STEAMAUDIO_VERSION_PATCH 0
+#define STEAMAUDIO_VERSION       (((uint32_t)(STEAMAUDIO_VERSION_MAJOR) << 16) | \
+                                  ((uint32_t)(STEAMAUDIO_VERSION_MINOR) << 8) |  \
+                                  ((uint32_t)(STEAMAUDIO_VERSION_PATCH)))
 
 #endif

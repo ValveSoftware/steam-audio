@@ -3,403 +3,228 @@
 // https://valvesoftware.github.io/steam-audio/license.html
 //
 
-#include <vector>
-#include "environment_proxy.h"
-#include "auto_load_library.h"
+#include "steamaudio_fmod.h"
 
-/** Parameters that can be set by the user on a Reverb effect.
+namespace ReverbEffect {
+
+/**
+ *  DSP parameters for the "Steam Audio Reverb" effect.
  */
-enum ReverbEffectParams
+enum Params
 {
-    SA_REVERB_PARAM_BINAURAL,
-    SA_REVERB_PARAM_SIMTYPE,
-    SA_REVERB_NUM_PARAMS
+    /**
+     *  **Type**: `FMOD_DSP_PARAMETER_TYPE_BOOL`
+     * 
+     *  If true, applies HRTF-based 3D audio rendering to reverb. Results in an improvement in spatialization quality 
+     *  when using convolution or hybrid reverb, at the cost of slightly increased CPU usage.
+     */
+    BINAURAL,
+
+    /** The number of parameters in this effect. */
+    NUM_PARAMS
 };
 
-FMOD_DSP_PARAMETER_DESC gReverbParamIndirectBinaural = { FMOD_DSP_PARAMETER_TYPE_BOOL, "IndirBinaural", "", "Spatialize reverb using HRTF." };
-FMOD_DSP_PARAMETER_DESC gReverbParamSimulationType = { FMOD_DSP_PARAMETER_TYPE_INT, "IndirType", "", "Real-time or baked." };
-
-FMOD_DSP_PARAMETER_DESC* gReverbEffectParams[] =
-{
-    &gReverbParamIndirectBinaural,
-    &gReverbParamSimulationType
+FMOD_DSP_PARAMETER_DESC gParams[] = {
+    { FMOD_DSP_PARAMETER_TYPE_BOOL, "Binaural", "", "Spatialize reflected sound using HRTF." }
 };
 
-char* gSimulationTypeValues[] = { "Real-time", "Baked" };
+FMOD_DSP_PARAMETER_DESC* gParamsArray[NUM_PARAMS];
 
-void initReverbParamDescs()
+void initParamDescs()
 {
-    gReverbParamIndirectBinaural.booldesc = { false, nullptr };
-    gReverbParamSimulationType.intdesc = { 0, 1, 0, false, gSimulationTypeValues };
+    for (auto i = 0; i < NUM_PARAMS; ++i)
+    {
+        gParamsArray[i] = &gParams[i];
+    }
+
+    gParams[BINAURAL].booldesc = {false};
 }
 
-/** A native audio mixer effect that applies listener-centric reverb to its input. This effect can be added to any
- *  Mixer Group, and it will add reverb to the input flowing through that Mixer Group.
- */
-class ReverbEffectState
+struct State
 {
-public:
-
-    /** User-facing parameters.
-     */
-
-    /** Whether or not the reverb is rendered using binaural rendering. */
     bool binaural;
 
-    /** Whether to use real-time simulation or baked data for reverb. */
-    IPLSimulationType type;
+    IPLAudioBuffer inBuffer;
+    IPLAudioBuffer monoBuffer;
+    IPLAudioBuffer reflectionsBuffer;
+    IPLAudioBuffer outBuffer;
 
-    /** The default constructor initializes parameters to default values.
-     */
-    ReverbEffectState() :
-        binaural{ false },
-        type{ IPL_SIMTYPE_REALTIME },
-        mInputFormat{},
-        mOutputFormat{},
-        mBinauralRenderer{ nullptr },
-        mGlobalState{ nullptr },
-        mSceneState{ nullptr },
-        mConvolutionEffect{ nullptr },
-        mAmbisonicsPanningEffect{ nullptr },
-        mAmbisonicsBinauralEffect{ nullptr },
-        mIndirectEffectOutputBuffer{},
-        mIndirectSpatializedOutputBuffer{},
-        mUsedAmbisonicsPanningEffect{ false },
-        mUsedAmbisonicsBinauralEffect{ false }
-    {}
-
-    /** The destructor ensures that audio processing state is destroyed.
-     */
-    ~ReverbEffectState()
-    {
-        terminate();
-    }
-
-    /** Retrieves a parameter value and passes it to Unity. Returns true if the parameter index is valid.
-     */
-    bool getParameter(ReverbEffectParams index, 
-                      bool& value)
-    {
-        switch (index)
-        {
-        case SA_REVERB_PARAM_BINAURAL:
-            value = binaural;
-            return true;
-        default:
-            return false;
-        }
-    }
-
-    bool getParameter(ReverbEffectParams index, 
-                      int& value)
-    {
-        switch (index)
-        {
-        case SA_REVERB_PARAM_SIMTYPE:
-            value = type;
-            return true;
-        default:
-            return false;
-        }
-    }
-
-    /** Sets a parameter to a value provided by Unity. Returns true if the parameter index is valid.
-     */
-    bool setParameter(ReverbEffectParams index, 
-                      bool value)
-    {
-        switch (index)
-        {
-        case SA_REVERB_PARAM_BINAURAL:
-            binaural = value;
-            return true;
-        default:
-            return false;
-        }
-    }
-
-    bool setParameter(ReverbEffectParams index, 
-                      int value)
-    {
-        switch (index)
-        {
-        case SA_REVERB_PARAM_SIMTYPE:
-            type = static_cast<IPLSimulationType>(value);
-            return true;
-        default:
-            return false;
-        }
-    }
-
-    /** Attempts to initialize audio processing state. Returns true when it succeeds. Doesn't do anything if
-     *  initialization has already happened once. This function should be called at the start of every frame to
-     *  ensure that all necessary audio processing state has been initialized.
-     */
-    bool initialize(const int samplingRate, 
-                    const int frameSize, 
-                    const IPLAudioFormat inputFormat,
-                    const IPLAudioFormat outputFormat)
-    {
-        mInputFormat = inputFormat;
-        mOutputFormat = outputFormat;
-
-        // Make sure the audio engine global state has been initialized.
-        if (!mGlobalState)
-        {
-            mGlobalState = AudioEngineSettings::get();
-            if (!mGlobalState)
-                return false;
-        }
-
-        mBinauralRenderer = mGlobalState->binauralRenderer();
-        if (!mBinauralRenderer)
-            return false;
-
-        // Check to see if an environmental renderer has just been created.
-        if (!mSceneState)
-            mSceneState = SceneState::get();
-
-        // Make sure the temporary buffer for storing the reverb has been created.
-        if (mSceneState && mIndirectEffectOutputBufferData.empty())
-        {
-            auto ambisonicsOrder = mSceneState->simulationSettings().ambisonicsOrder;
-            auto numChannels = (ambisonicsOrder + 1) * (ambisonicsOrder + 1);
-
-            mIndirectEffectOutputBufferData.resize(numChannels * frameSize);
-
-            mIndirectEffectOutputBufferChannels.resize(numChannels);
-            for (auto i = 0; i < numChannels; ++i)
-                mIndirectEffectOutputBufferChannels[i] = &mIndirectEffectOutputBufferData[i * frameSize];
-
-            mIndirectEffectOutputBuffer.format.channelLayoutType = IPL_CHANNELLAYOUTTYPE_AMBISONICS;
-            mIndirectEffectOutputBuffer.format.ambisonicsOrder = ambisonicsOrder;
-            mIndirectEffectOutputBuffer.format.ambisonicsOrdering = IPL_AMBISONICSORDERING_ACN;
-            mIndirectEffectOutputBuffer.format.ambisonicsNormalization = IPL_AMBISONICSNORMALIZATION_N3D;
-            mIndirectEffectOutputBuffer.format.channelOrder = IPL_CHANNELORDER_DEINTERLEAVED;
-            mIndirectEffectOutputBuffer.numSamples = frameSize;
-            mIndirectEffectOutputBuffer.deinterleavedBuffer = mIndirectEffectOutputBufferChannels.data();
-        }
-
-        // Make sure the temporary buffer for storing the spatialized reverb has been created.
-        if (mIndirectSpatializedOutputBufferData.empty())
-        {
-            auto numChannels = mOutputFormat.numSpeakers;
-
-            mIndirectSpatializedOutputBufferData.resize(numChannels * frameSize);
-
-            mIndirectSpatializedOutputBuffer.format = mOutputFormat;
-            mIndirectSpatializedOutputBuffer.numSamples = frameSize;
-            mIndirectSpatializedOutputBuffer.interleavedBuffer = mIndirectSpatializedOutputBufferData.data();
-        }
-
-        // Make sure the convolution effect has been created.
-        if (mSceneState && !mConvolutionEffect)
-        {
-            auto identifier = IPLBakedDataIdentifier{ 0, IPL_BAKEDDATATYPE_REVERB };
-            if (gApi.iplCreateConvolutionEffect(mSceneState->environmentalRenderer(), identifier, type,
-                mInputFormat, mIndirectEffectOutputBuffer.format, &mConvolutionEffect) != IPL_STATUS_SUCCESS)
-            {
-                return false;
-            }
-        }
-
-        // Make sure the Ambisonics panning effect has been created.
-        if (mBinauralRenderer && !mAmbisonicsPanningEffect)
-        {
-            if (gApi.iplCreateAmbisonicsPanningEffect(mBinauralRenderer, mIndirectEffectOutputBuffer.format, mOutputFormat,
-                &mAmbisonicsPanningEffect) != IPL_STATUS_SUCCESS)
-            {
-                return false;
-            }
-        }
-
-        // Make sure the Ambisonics binaural effect has been created.
-        if (mBinauralRenderer && !mAmbisonicsBinauralEffect)
-        {
-            if (gApi.iplCreateAmbisonicsBinauralEffect(mBinauralRenderer, mIndirectEffectOutputBuffer.format, mOutputFormat,
-                &mAmbisonicsBinauralEffect) != IPL_STATUS_SUCCESS)
-            {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    /** Destroys all audio processing state. Doesn't do anything if all audio processing state has already been
-     *  destroyed. Should be called as soon as the audio processing state is no longer needed.
-     */
-    void terminate()
-    {
-        gApi.iplDestroyAmbisonicsBinauralEffect(&mAmbisonicsBinauralEffect);
-        gApi.iplDestroyAmbisonicsPanningEffect(&mAmbisonicsPanningEffect);
-        gApi.iplDestroyConvolutionEffect(&mConvolutionEffect);
-
-        mIndirectEffectOutputBufferChannels.clear();
-        mIndirectEffectOutputBufferData.clear();
-        mIndirectSpatializedOutputBufferData.clear();
-
-        mBinauralRenderer = nullptr;
-        mGlobalState = nullptr;
-        mSceneState = nullptr;
-    }
-
-    /** Applies the Reverb effect to audio flowing through a Mixer Group.
-     */
-    void process(float* inBuffer, 
-                 float* outBuffer, 
-                 unsigned int numSamples, 
-                 int inChannels, 
-                 int outChannels,
-                 int samplingRate, 
-                 int frameSize,
-                 IPLVector3 listenerPosition,
-                 IPLVector3 listenerAhead,
-                 IPLVector3 listenerUp)
-    {
-        // Start by clearing the output buffer.
-        memset(outBuffer, 0, outChannels * numSamples * sizeof(float));
-        
-        // Prepare the input and output buffers.
-        auto inputFormat = audioFormatForNumChannels(inChannels);
-        auto outputFormat = audioFormatForNumChannels(outChannels);
-        auto inputAudio = IPLAudioBuffer{ inputFormat, static_cast<IPLint32>(numSamples), inBuffer, nullptr };
-        auto outputAudio = IPLAudioBuffer{ outputFormat, static_cast<IPLint32>(numSamples), outBuffer, nullptr };
-
-        // Make sure that audio processing state has been initialized. If initialization fails, stop and emit silence.
-        if (!initialize(samplingRate, frameSize, inputFormat, outputFormat) ||
-            !mSceneState || !mSceneState->environmentalRenderer() ||
-            !mConvolutionEffect || !mAmbisonicsPanningEffect || !mAmbisonicsBinauralEffect)
-        {
-            return;
-        }
-
-        // Apply reverb to the input audio, resulting in an Ambisonics buffer containing the unspatialized reverb.
-		IPLSource reverbSource = {};
-		reverbSource.position = listenerPosition;
-		reverbSource.ahead = listenerAhead;
-		reverbSource.up = listenerAhead;
-		reverbSource.directivity = IPLDirectivity{ 0.0f, 0.0f, nullptr, nullptr };
-		gApi.iplSetDryAudioForConvolutionEffect(mConvolutionEffect, reverbSource, inputAudio);
-        gApi.iplGetWetAudioForConvolutionEffect(mConvolutionEffect, listenerPosition, listenerAhead, listenerUp, 
-                                                mIndirectEffectOutputBuffer);
-
-        // Spatialize the reverb.
-        if (binaural)
-        {
-            if (mAmbisonicsPanningEffect && mUsedAmbisonicsPanningEffect)
-            {
-                gApi.iplFlushAmbisonicsPanningEffect(mAmbisonicsPanningEffect);
-                mUsedAmbisonicsPanningEffect = false;
-            }
-
-            gApi.iplApplyAmbisonicsBinauralEffect(mAmbisonicsBinauralEffect, mBinauralRenderer, mIndirectEffectOutputBuffer,
-                mIndirectSpatializedOutputBuffer);
-
-            mUsedAmbisonicsBinauralEffect = true;
-        }
-        else
-        {
-            if (mAmbisonicsBinauralEffect && mUsedAmbisonicsBinauralEffect)
-            {
-                gApi.iplFlushAmbisonicsBinauralEffect(mAmbisonicsBinauralEffect);
-                mUsedAmbisonicsBinauralEffect = false;
-            }
-
-            gApi.iplApplyAmbisonicsPanningEffect(mAmbisonicsPanningEffect, mAmbisonicsBinauralEffect, 
-				mIndirectEffectOutputBuffer, mIndirectSpatializedOutputBuffer);
-
-            mUsedAmbisonicsPanningEffect = true;
-        }
-
-        // Add the spatialized reverb to the input audio, and place the result in the output buffer.
-        for (auto i = 0u; i < outChannels * numSamples; ++i)
-        {
-            outputAudio.interleavedBuffer[i] = mIndirectSpatializedOutputBuffer.interleavedBuffer[i];
-        }
-    }
-
-private:
-
-    /** Audio processing state.
-     */
-
-    /** Format of the audio buffer provided as input to this effect. */
-    IPLAudioFormat mInputFormat;
-    
-    /** Format of the audio buffer generated as output by this effect. */
-    IPLAudioFormat mOutputFormat;
-
-    /** Handle to the binaural renderer used by the audio engine. */
-    IPLhandle mBinauralRenderer;
-    
-    /** An object that contains the rendering settings and binaural renderer used globally. */
-    std::shared_ptr<AudioEngineSettings> mGlobalState;
-
-    /** An object that contains the environmental renderer for the current scene. */
-    std::shared_ptr<SceneState> mSceneState;
-    
-    /** Handle to the convolution effect used by this effect. */
-    IPLhandle mConvolutionEffect;
-    
-    /** Handle to the Ambisonics panning effect used by this effect. */
-    IPLhandle mAmbisonicsPanningEffect;
-    
-    /** Handle to the Ambisonics binaural effect used by this effect. */
-    IPLhandle mAmbisonicsBinauralEffect;
-
-    /** Contiguous, deinterleaved buffer for storing the reverb, before spatialization. */
-    std::vector<float> mIndirectEffectOutputBufferData;
-    
-    /** Array of pointers to per-channel data in the above buffer. */
-    std::vector<float*> mIndirectEffectOutputBufferChannels;
-    
-    /** Steam Audio buffer descriptor for the above buffer. */
-    IPLAudioBuffer mIndirectEffectOutputBuffer;
-
-    /** Interleaved buffer for storing the reverb, after spatialization. */
-    std::vector<float> mIndirectSpatializedOutputBufferData;
-    
-    /** Steam Audio buffer descriptor for the above buffer. */
-    IPLAudioBuffer mIndirectSpatializedOutputBuffer;
-
-    /** Have we used the Ambisonics panning effect in the previous frame? */
-    bool mUsedAmbisonicsPanningEffect;
-
-    /** Have we used the Ambisonics binaural effect in the previous frame? */
-    bool mUsedAmbisonicsBinauralEffect;
+    IPLReflectionEffect reflectionEffect;
+    IPLAmbisonicsDecodeEffect ambisonicsEffect;
 };
 
-/** Callback that is called by Unity when the Reverb effect is created. This may be called in the editor when
- *  a Reverb effect is added to a Mixer Group, or when entering play mode. Therefore, it should only initialize
- *  user-controlled parameters.
- */
-FMOD_RESULT F_CALL createReverbEffect(FMOD_DSP_STATE* state)
+enum InitFlags
 {
-    state->plugindata = new ReverbEffectState{};
+    INIT_NONE = 0,
+    INIT_AUDIOBUFFERS = 1 << 0,
+    INIT_REFLECTIONEFFECT = 1 << 1,
+    INIT_AMBISONICSEFFECT = 1 << 2
+};
+
+InitFlags lazyInit(FMOD_DSP_STATE* state,
+                   int numChannelsIn,
+                   int numChannelsOut)
+{
+    auto initFlags = INIT_NONE;
+
+    IPLAudioSettings audioSettings;
+    state->functions->getsamplerate(state, &audioSettings.samplingRate);
+    state->functions->getblocksize(state, reinterpret_cast<unsigned int*>(&audioSettings.frameSize));
+
+    if (!gContext && isRunningInEditor())
+    {
+        initContextAndDefaultHRTF(audioSettings);
+    }
+
+    if (!gContext)
+        return initFlags;
+
+    if (!gHRTF[1])
+        return initFlags;
+
+    auto effect = reinterpret_cast<State*>(state->plugindata);
+
+    auto status = IPL_STATUS_SUCCESS;
+
+    if (gIsSimulationSettingsValid)
+    {
+        status = IPL_STATUS_SUCCESS;
+
+        if (!effect->reflectionEffect)
+        {
+            IPLReflectionEffectSettings effectSettings;
+            effectSettings.type = gSimulationSettings.reflectionType;
+            effectSettings.irSize = numSamplesForDuration(gSimulationSettings.maxDuration, audioSettings.samplingRate);
+            effectSettings.numChannels = numChannelsForOrder(gSimulationSettings.maxOrder);
+
+            status = iplReflectionEffectCreate(gContext, &audioSettings, &effectSettings, &effect->reflectionEffect);
+        }
+
+        if (status == IPL_STATUS_SUCCESS)
+            initFlags = static_cast<InitFlags>(initFlags | INIT_REFLECTIONEFFECT);
+    }
+
+    if (numChannelsOut > 0 && gIsSimulationSettingsValid)
+    {
+        status = IPL_STATUS_SUCCESS;
+
+        if (!effect->ambisonicsEffect)
+        {
+            IPLAmbisonicsDecodeEffectSettings effectSettings;
+            effectSettings.speakerLayout = speakerLayoutForNumChannels(numChannelsOut);
+            effectSettings.hrtf = gHRTF[1];
+            effectSettings.maxOrder = gSimulationSettings.maxOrder;
+
+            status = iplAmbisonicsDecodeEffectCreate(gContext, &audioSettings, &effectSettings, &effect->ambisonicsEffect);
+        }
+
+        if (status == IPL_STATUS_SUCCESS)
+            initFlags = static_cast<InitFlags>(initFlags | INIT_AMBISONICSEFFECT);
+    }
+
+    if (numChannelsIn > 0 && numChannelsOut > 0)
+    {
+        auto numAmbisonicChannels = numChannelsForOrder(gSimulationSettings.maxOrder);
+
+        if (!effect->inBuffer.data)
+            iplAudioBufferAllocate(gContext, numChannelsIn, audioSettings.frameSize, &effect->inBuffer);
+        
+        if (!effect->monoBuffer.data)
+            iplAudioBufferAllocate(gContext, 1, audioSettings.frameSize, &effect->monoBuffer);
+        
+        if (!effect->reflectionsBuffer.data)
+            iplAudioBufferAllocate(gContext, numAmbisonicChannels, audioSettings.frameSize, &effect->reflectionsBuffer);
+        
+        if (!effect->outBuffer.data)
+            iplAudioBufferAllocate(gContext, numChannelsOut, audioSettings.frameSize, &effect->outBuffer);
+
+        initFlags = static_cast<InitFlags>(initFlags | INIT_AUDIOBUFFERS);
+    }
+
+    return initFlags;
+}
+
+void reset(FMOD_DSP_STATE* state)
+{
+    auto effect = reinterpret_cast<State*>(state->plugindata);
+    if (!effect)
+        return;
+
+    effect->binaural = false;
+}
+
+FMOD_RESULT F_CALL create(FMOD_DSP_STATE* state)
+{
+    state->plugindata = new State();
+    reset(state);
+    lazyInit(state, 0, 0);
     return FMOD_OK;
 }
 
-/** Callback that is called by Unity when the Reverb effect is destroyed. This may be called in the editor when
- *  the effect is removed from a Mixer Group, or just before entering play mode. It may not be called on exiting play
- *  mode, so audio processing state must be destroyed elsewhere.
- */
-FMOD_RESULT F_CALL releaseReverbEffect(FMOD_DSP_STATE* state)
+FMOD_RESULT F_CALL release(FMOD_DSP_STATE* state)
 {
-    delete reinterpret_cast<ReverbEffectState*>(state->plugindata);
+    auto effect = reinterpret_cast<State*>(state->plugindata);
+
+    iplAudioBufferFree(gContext, &effect->inBuffer);
+    iplAudioBufferFree(gContext, &effect->monoBuffer);
+    iplAudioBufferFree(gContext, &effect->reflectionsBuffer);
+    iplAudioBufferFree(gContext, &effect->outBuffer);
+
+    iplReflectionEffectRelease(&effect->reflectionEffect);
+    iplAmbisonicsDecodeEffectRelease(&effect->ambisonicsEffect);
+
+    gNewReverbSourceWritten = false;
+    iplSourceRelease(&gReverbSource[0]);
+    iplSourceRelease(&gReverbSource[1]);
+
+    delete state->plugindata;
+
     return FMOD_OK;
 }
 
-/** Callback that is called by Unity to process frames of audio data. Apart from in play mode, this may also be called
- *  in the editor when no sounds are playing, so this condition should be detected, and actual processing or
- *  initialization should be avoided in this case.
- */
-FMOD_RESULT F_CALL processReverbEffect(FMOD_DSP_STATE* state, 
-                                       unsigned int length,
-                                       const FMOD_DSP_BUFFER_ARRAY* inputBuffers, 
-                                       FMOD_DSP_BUFFER_ARRAY* outputBuffers, 
-                                       FMOD_BOOL inputsIdle,
-                                       FMOD_DSP_PROCESS_OPERATION operation)
+FMOD_RESULT F_CALL getBool(FMOD_DSP_STATE* state,
+                           int index,
+                           FMOD_BOOL* value,
+                           char*)
+{
+    auto effect = reinterpret_cast<State*>(state->plugindata);
+
+    switch (index)
+    {
+    case BINAURAL:
+        *value = effect->binaural;
+        break;
+    default:
+        return FMOD_ERR_INVALID_PARAM;
+    }
+
+    return FMOD_OK;
+}
+
+FMOD_RESULT F_CALL setBool(FMOD_DSP_STATE* state,
+                           int index,
+                           FMOD_BOOL value)
+{
+    auto effect = reinterpret_cast<State*>(state->plugindata);
+
+    switch (index)
+    {
+    case BINAURAL:
+        effect->binaural = value;
+        break;
+    default:
+        return FMOD_ERR_INVALID_PARAM;
+    }
+
+    return FMOD_OK;
+}
+
+FMOD_RESULT F_CALL process(FMOD_DSP_STATE* state,
+                           unsigned int length,
+                           const FMOD_DSP_BUFFER_ARRAY* inBuffers,
+                           FMOD_DSP_BUFFER_ARRAY* outBuffers,
+                           FMOD_BOOL inputsIdle,
+                           FMOD_DSP_PROCESS_OPERATION operation)
 {
     if (operation == FMOD_DSP_PROCESS_QUERY)
     {
@@ -408,64 +233,88 @@ FMOD_RESULT F_CALL processReverbEffect(FMOD_DSP_STATE* state,
     }
     else if (operation == FMOD_DSP_PROCESS_PERFORM)
     {
-        auto params = reinterpret_cast<ReverbEffectState*>(state->plugindata);
+        auto effect = reinterpret_cast<State*>(state->plugindata);
 
         auto samplingRate = 0;
         auto frameSize = 0u;
         state->functions->getsamplerate(state, &samplingRate);
         state->functions->getblocksize(state, &frameSize);
 
-        auto numListeners = 1;
-        FMOD_3D_ATTRIBUTES listener;
-        state->functions->getlistenerattributes(state, &numListeners, &listener);
+        auto numChannelsIn = inBuffers->buffernumchannels[0];
+        auto numChannelsOut = outBuffers->buffernumchannels[0];
+        auto in = inBuffers->buffers[0];
+        auto out = outBuffers->buffers[0];
 
-        auto listenerPosition = convertVector(listener.position.x, listener.position.y, listener.position.z);
-        auto listenerAhead = convertVector(listener.forward.x, listener.forward.y, listener.forward.z);
-        auto listenerUp = convertVector(listener.up.x, listener.up.y, listener.up.z);
+        // Start by clearing the output buffer.
+        memset(out, 0, numChannelsOut * frameSize * sizeof(float));
 
-        params->process(inputBuffers->buffers[0], outputBuffers->buffers[0], length,
-                        inputBuffers->buffernumchannels[0], outputBuffers->buffernumchannels[0], samplingRate, 
-                        frameSize, listenerPosition, listenerAhead, listenerUp);
+        // Make sure that audio processing state has been initialized. If initialization fails, stop and emit silence.
+        auto initFlags = lazyInit(state, numChannelsIn, numChannelsOut);
+        if (!(initFlags & INIT_AUDIOBUFFERS) || !(initFlags & INIT_REFLECTIONEFFECT) || !(initFlags & INIT_AMBISONICSEFFECT))
+            return FMOD_OK;
+
+        if (gNewHRTFWritten)
+        {
+            iplHRTFRelease(&gHRTF[0]);
+            gHRTF[0] = iplHRTFRetain(gHRTF[1]);
+
+            gNewHRTFWritten = false;
+        }
+
+        if (gNewReverbSourceWritten)
+        {
+            iplSourceRelease(&gReverbSource[0]);
+            gReverbSource[0] = iplSourceRetain(gReverbSource[1]);
+
+            gNewReverbSourceWritten = false;
+        }
+
+        if (!gReverbSource[0])
+            return FMOD_OK;
+
+        auto listenerCoordinates = calcListenerCoordinates(state);
+
+        iplAudioBufferDeinterleave(gContext, in, &effect->inBuffer);
+        iplAudioBufferDownmix(gContext, &effect->inBuffer, &effect->monoBuffer);
+
+        IPLSimulationOutputs reverbOutputs{};
+        iplSourceGetOutputs(gReverbSource[0], IPL_SIMULATIONFLAGS_REFLECTIONS, &reverbOutputs);
+
+        IPLReflectionEffectParams reflectionParams = reverbOutputs.reflections;
+        reflectionParams.type = gSimulationSettings.reflectionType;
+        reflectionParams.numChannels = numChannelsForOrder(gSimulationSettings.maxOrder);
+        reflectionParams.irSize = numSamplesForDuration(gSimulationSettings.maxDuration, samplingRate);
+        reflectionParams.tanDevice = gSimulationSettings.tanDevice;
+
+        if (gNewReflectionMixerWritten)
+        {
+            iplReflectionMixerRelease(&gReflectionMixer[0]);
+            gReflectionMixer[0] = iplReflectionMixerRetain(gReflectionMixer[1]);
+
+            gNewReflectionMixerWritten = false;
+        }
+
+        iplReflectionEffectApply(effect->reflectionEffect, &reflectionParams, &effect->monoBuffer, &effect->reflectionsBuffer, gReflectionMixer[0]);
+
+        if (gSimulationSettings.reflectionType != IPL_REFLECTIONEFFECTTYPE_TAN && !gReflectionMixer[0])
+        {
+            IPLAmbisonicsDecodeEffectParams ambisonicsParams;
+            ambisonicsParams.order = gSimulationSettings.maxOrder;
+            ambisonicsParams.hrtf = gHRTF[0];
+            ambisonicsParams.orientation = listenerCoordinates;
+            ambisonicsParams.binaural = (effect->binaural) ? IPL_TRUE : IPL_FALSE;
+
+            iplAmbisonicsDecodeEffectApply(effect->ambisonicsEffect, &ambisonicsParams, &effect->reflectionsBuffer, &effect->outBuffer);
+
+            iplAudioBufferInterleave(gContext, &effect->outBuffer, out);
+        }
+
+        return FMOD_OK;
     }
 
     return FMOD_OK;
 }
 
-FMOD_RESULT F_CALL getReverbBool(FMOD_DSP_STATE* state, 
-                                 int index, 
-                                 FMOD_BOOL* value, 
-                                 char*)
-{
-    auto* params = reinterpret_cast<ReverbEffectState*>(state->plugindata);
-    auto boolValue = false;
-    auto status = params->getParameter(static_cast<ReverbEffectParams>(index), boolValue);
-    *value = boolValue;
-    return status ? FMOD_OK : FMOD_ERR_INVALID_PARAM;
-}
-
-FMOD_RESULT F_CALL getReverbInt(FMOD_DSP_STATE* state, 
-                                int index, 
-                                int* value, 
-                                char*)
-{
-    auto* params = reinterpret_cast<ReverbEffectState*>(state->plugindata);
-    return params->getParameter(static_cast<ReverbEffectParams>(index), *value) ? FMOD_OK : FMOD_ERR_INVALID_PARAM;
-}
-
-FMOD_RESULT F_CALL setReverbBool(FMOD_DSP_STATE* state, 
-                                 int index, 
-                                 FMOD_BOOL value)
-{
-    auto* params = reinterpret_cast<ReverbEffectState*>(state->plugindata);
-    return params->setParameter(static_cast<ReverbEffectParams>(index), (value != 0)) ? FMOD_OK : FMOD_ERR_INVALID_PARAM;
-}
-
-FMOD_RESULT F_CALL setReverbInt(FMOD_DSP_STATE* state, 
-                                int index, 
-                                int value)
-{
-    auto* params = reinterpret_cast<ReverbEffectState*>(state->plugindata);
-    return params->setParameter(static_cast<ReverbEffectParams>(index), value) ? FMOD_OK : FMOD_ERR_INVALID_PARAM;
 }
 
 /** Descriptor for the Reverb effect. */
@@ -474,22 +323,23 @@ FMOD_DSP_DESCRIPTION gReverbEffect
     FMOD_PLUGIN_SDK_VERSION,
     "Steam Audio Reverb",
     STEAMAUDIO_FMOD_VERSION,
-    1, 1,
-    createReverbEffect,
-    releaseReverbEffect,
+    1, 
+    1,
+    ReverbEffect::create,
+    ReverbEffect::release,
     nullptr,
     nullptr,
-    processReverbEffect,
+    ReverbEffect::process,
     nullptr,
-    SA_REVERB_NUM_PARAMS,
-    gReverbEffectParams,
-    nullptr,
-    setReverbInt,
-    setReverbBool,
+    ReverbEffect::NUM_PARAMS,
+    ReverbEffect::gParamsArray,
     nullptr,
     nullptr,
-    getReverbInt,
-    getReverbBool,
+    ReverbEffect::setBool,
+    nullptr,
+    nullptr,
+    nullptr,
+    ReverbEffect::getBool,
     nullptr,
     nullptr,
     nullptr,

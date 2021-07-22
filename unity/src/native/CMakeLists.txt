@@ -1,68 +1,119 @@
+# Copyright 2017 Valve Corporation. All rights reserved. Subject to the following license:
+# https://valvesoftware.github.io/steam-audio/license.html
+
+include(SteamAudioHelpers)
+
 #
-# Copyright (c) Valve Corporation. All rights reserved.
+# VERSION STAMPING
 #
 
-if (WIN32)
-    set (SRC_UNITYNATIVE_VERSION audioplugin_phonon.rc.in)
-    set (SRC_UNITYNATIVE_VERSION audioplugin_phonon.rc)
-endif()
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/steamaudio_unity_version.h.in ${CMAKE_CURRENT_BINARY_DIR}/steamaudio_unity_version.h)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/audioplugin_phonon.rc.in ${CMAKE_CURRENT_BINARY_DIR}/audioplugin_phonon.rc)
 
-set (SRC_UNITYNATIVE
-    ${SRC_UNITYNATIVE_VERSION}
-    auto_load_library.h
-    auto_load_library.cpp
-	steamaudio_unity_version.h.in
-	steamaudio_unity_version.h
-	steamaudio_unity_native.h
+
+#
+# NATIVE AUDIO PLUGIN
+#
+
+set(SRC_UNITYNATIVE
+    pch.h
+    steamaudio_unity_version.h.in
+    steamaudio_unity_native.h
     steamaudio_unity_native.cpp
-    audio_engine_settings.h
-    audio_engine_settings.cpp
-    environment_proxy.h
-    environment_proxy.cpp
-	ambisonic_decoder_effect.cpp
     spatialize_effect.cpp
+    ambisonic_decoder_effect.cpp
     reverb_effect.cpp
     mix_return_effect.cpp
 )
 
-if (APPLE)
-    add_bundle (audioplugin_phonon ${SRC_UNITYNATIVE})
-else ()
-    add_library (audioplugin_phonon SHARED ${SRC_UNITYNATIVE})
-endif ()
+if (IPL_OS_WINDOWS)
+    list(APPEND SRC_UNITYNATIVE audioplugin_phonon.rc.in ${CMAKE_CURRENT_BINARY_DIR}/audioplugin_phonon.rc)
+endif()
 
-if (LINUX)
-    target_link_libraries (audioplugin_phonon dl pthread)
-endif ()
-
-if (WIN32)
-    if (BUILDING_64BIT)
-        add_custom_command (TARGET audioplugin_phonon POST_BUILD 
-                            COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:audioplugin_phonon> ${CMAKE_HOME_DIRECTORY}/src/project/SteamAudioUnity/Assets/Plugins/x86_64/)
-    else ()
-        add_custom_command (TARGET audioplugin_phonon POST_BUILD 
-                            COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:audioplugin_phonon> ${CMAKE_HOME_DIRECTORY}/src/project/SteamAudioUnity/Assets/Plugins/x86/)
-    endif ()
-elseif (APPLE)
-    add_custom_command (TARGET audioplugin_phonon POST_BUILD
-                        COMMAND cp -Rv ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}-$<LOWER_CASE:$<CONFIG>>/audioplugin_phonon.bundle ${CMAKE_HOME_DIRECTORY}/src/project/SteamAudioUnity/Assets/Plugins/)
-elseif (ANDROID)
-    if (ANDROID_ARM)
-        add_custom_command (TARGET audioplugin_phonon POST_BUILD
-                            COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:audioplugin_phonon> ${CMAKE_HOME_DIRECTORY}/src/project/SteamAudioUnity/Assets/Plugins/android/libs/armv7)
-    elseif (ANDROID_ARM64)
-        add_custom_command (TARGET audioplugin_phonon POST_BUILD
-                            COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:audioplugin_phonon> ${CMAKE_HOME_DIRECTORY}/src/project/SteamAudioUnity/Assets/Plugins/android/libs/arm64)
-    elseif (ANDROID_X86)
-        add_custom_command (TARGET audioplugin_phonon POST_BUILD
-                            COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:audioplugin_phonon> ${CMAKE_HOME_DIRECTORY}/src/project/SteamAudioUnity/Assets/Plugins/android/libs/x86)
+if (BUILD_SHARED_LIBS)
+    if (IPL_OS_MACOS)
+        add_library(audioplugin_phonon MODULE ${SRC_UNITYNATIVE})
+        set_target_properties(audioplugin_phonon PROPERTIES BUNDLE TRUE)
+    else()
+        add_library(audioplugin_phonon SHARED ${SRC_UNITYNATIVE})
     endif()
-else ()
-    if (BUILDING_64BIT)
-        add_custom_command (TARGET audioplugin_phonon POST_BUILD 
-                            COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:audioplugin_phonon> ${CMAKE_HOME_DIRECTORY}/src/project/SteamAudioUnity/Assets/Plugins/x86_64/)
-    else ()
-        add_custom_command (TARGET audioplugin_phonon POST_BUILD 
-                            COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:audioplugin_phonon> ${CMAKE_HOME_DIRECTORY}/src/project/SteamAudioUnity/Assets/Plugins/x86/)
-    endif ()
-endif ()
+else()
+    add_library(audioplugin_phonon STATIC ${SRC_UNITYNATIVE})
+endif()
+
+# This is needed so we can include headers as <ipp/ipp.h> instead of <ipp.h>
+target_include_directories(audioplugin_phonon PRIVATE ${CMAKE_HOME_DIRECTORY}/include ${CMAKE_CURRENT_SOURCE_DIR})
+
+# This is needed so we can include generated headers
+target_include_directories(audioplugin_phonon PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
+
+if (IPL_OS_WINDOWS)
+    target_link_libraries(audioplugin_phonon PRIVATE delayimp)
+elseif (IPL_OS_LINUX)
+    target_link_libraries(audioplugin_phonon PRIVATE m dl pthread)
+elseif (IPL_OS_ANDROID)
+    target_link_libraries(audioplugin_phonon PRIVATE log android)
+endif()
+
+target_link_libraries(audioplugin_phonon PRIVATE Unity::NativeAudio SteamAudio::SteamAudio)
+
+target_precompile_headers(audioplugin_phonon PRIVATE pch.h)
+
+if (IPL_OS_WINDOWS)
+    if (IPL_CPU_X86)
+        set(PLUGIN_DIR ${CMAKE_HOME_DIRECTORY}/src/project/SteamAudioUnity/Assets/Plugins/SteamAudio/Binaries/Windows/x86/)
+    elseif (IPL_CPU_X64)
+        set(PLUGIN_DIR ${CMAKE_HOME_DIRECTORY}/src/project/SteamAudioUnity/Assets/Plugins/SteamAudio/Binaries/Windows/x86_64/)
+    endif()
+elseif (IPL_OS_LINUX)
+    if (IPL_CPU_X86)
+        set(PLUGIN_DIR ${CMAKE_HOME_DIRECTORY}/src/project/SteamAudioUnity/Assets/Plugins/SteamAudio/Binaries/Linux/x86/)
+    elseif (IPL_CPU_X64)
+        set(PLUGIN_DIR ${CMAKE_HOME_DIRECTORY}/src/project/SteamAudioUnity/Assets/Plugins/SteamAudio/Binaries/Linux/x86_64/)
+    endif()
+elseif (IPL_OS_MACOS)
+    set(PLUGIN_DIR ${CMAKE_HOME_DIRECTORY}/src/project/SteamAudioUnity/Assets/Plugins/SteamAudio/Binaries/macOS/)
+elseif(IPL_OS_ANDROID)
+    if (IPL_CPU_ARMV7)
+        set(PLUGIN_DIR ${CMAKE_HOME_DIRECTORY}/src/project/SteamAudioUnity/Assets/Plugins/SteamAudio/Binaries/Android/armv7/)
+    elseif (IPL_CPU_ARMV8)
+        set(PLUGIN_DIR ${CMAKE_HOME_DIRECTORY}/src/project/SteamAudioUnity/Assets/Plugins/SteamAudio/Binaries/Android/arm64/)
+    elseif(IPL_CPU_X86)
+        set(PLUGIN_DIR ${CMAKE_HOME_DIRECTORY}/src/project/SteamAudioUnity/Assets/Plugins/SteamAudio/Binaries/Android/x86/)
+    endif()
+endif()
+
+if (IPL_OS_MACOS)
+    add_custom_command(
+        TARGET      audioplugin_phonon
+        POST_BUILD
+        COMMAND     ${CMAKE_COMMAND} -E copy_directory $<TARGET_BUNDLE_DIR:audioplugin_phonon> ${PLUGIN_DIR}audioplugin_phonon.bundle
+    )
+else()
+    add_custom_command(
+        TARGET      audioplugin_phonon 
+        POST_BUILD
+        COMMAND     ${CMAKE_COMMAND} -E copy $<TARGET_FILE:audioplugin_phonon> ${PLUGIN_DIR}
+    )
+endif()
+
+
+#
+# INSTALL
+#
+
+get_bin_subdir(IPL_BIN_SUBDIR)
+
+install(
+    TARGETS             audioplugin_phonon
+    ARCHIVE DESTINATION lib/${IPL_BIN_SUBDIR} 
+    LIBRARY DESTINATION lib/${IPL_BIN_SUBDIR} 
+    RUNTIME DESTINATION lib/${IPL_BIN_SUBDIR}
+)
+
+if (IPL_OS_WINDOWS)
+    install(
+        FILES       ${CMAKE_CURRENT_BINARY_DIR}/$<CONFIG>/audioplugin_phonon.pdb 
+        DESTINATION symbols/${IPL_BIN_SUBDIR}
+    )
+endif()

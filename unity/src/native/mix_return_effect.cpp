@@ -3,468 +3,278 @@
 // https://valvesoftware.github.io/steam-audio/license.html
 //
 
-#include <vector>
-#include "environment_proxy.h"
-#include "auto_load_library.h"
+#include "steamaudio_unity_native.h"
 
-/** Parameters that can be set by the user on a Mixer Return effect.
- */
-enum MixEffectParams
+namespace MixerReturnEffect {
+
+enum Params
 {
-    SA_MIX_PARAM_BINAURAL,
-    SA_MIX_PARAM_BYPASSDURINGINIT,
-    SA_MIX_NUM_PARAMS
+    BINAURAL,
+    NUM_PARAMS
 };
 
-/** A native audio mixer effect that inserts the output of accelerated mixing into the audio pipeline. This effect can
- *  be added on any Mixer Group, and it will add mixed indirect sound to the input flowing through that Mixer Group.
- */
-class MixEffectState
+UnityAudioParameterDefinition gParamDefinitions[] =
 {
-public:
+    { "Binaural", "", "Apply HRTF.", 0.0f, 1.0f, 0.0f, 1.0f, 1.0f },
+};
 
-    /** User-facing parameters.
-     */
-
-    /** Whether or not the indirect sound (which is in Ambisonics format) is decoded using binaural rendering. */
+struct State
+{
     bool binaural;
 
-    /** Whether the effect should emit silence or dry audio while initialization is underway. */
-    bool bypassDuringInitialization;
+    IPLAudioBuffer reflectionsBuffer;
+    IPLAudioBuffer inBuffer;
+    IPLAudioBuffer outBuffer;
 
-    /** The default constructor initializes parameters to default values.
-     */
-    MixEffectState() :
-        binaural{ false },
-        bypassDuringInitialization{ false },
-        mInputFormat{},
-        mOutputFormat{},
-        mBinauralRenderer{ nullptr },
-        mAudioEngineSettings{ nullptr },
-        mEnvironmentalRenderer{ nullptr },
-        mAmbisonicsPanningEffect{ nullptr },
-        mAmbisonicsBinauralEffect{ nullptr },
-        mIndirectEffectOutputBuffer{},
-        mIndirectSpatializedOutputBuffer{},
-        mUsedAmbisonicsPanningEffect{ false },
-        mUsedAmbisonicsBinauralEffect{ false },
-        mBypassedInPreviousFrame{ false }
-    {}
-
-    /** The destructor ensures that audio processing state is destroyed.
-     */
-    ~MixEffectState()
-    {
-        terminate();
-    }
-
-    /** Retrieves a parameter value and passes it to Unity. Returns true if the parameter index is valid.
-     */
-    bool getParameter(MixEffectParams index, float& value)
-    {
-        switch (index)
-        {
-        case SA_MIX_PARAM_BINAURAL:
-            value = (binaural) ? 1.0f : 0.0f;
-            return true;
-        case SA_MIX_PARAM_BYPASSDURINGINIT:
-            value = (bypassDuringInitialization) ? 1.0f : 0.0f;
-            return true;
-        default:
-            return false;
-        }
-    }
-
-    /** Sets a parameter to a value provided by Unity. Returns true if the parameter index is valid.
-     */
-    bool setParameter(MixEffectParams index, float value)
-    {
-        switch (index)
-        {
-        case SA_MIX_PARAM_BINAURAL:
-            binaural = (value == 1.0f);
-            return true;
-        case SA_MIX_PARAM_BYPASSDURINGINIT:
-            bypassDuringInitialization = (value == 1.0f);
-            return true;
-        default:
-            return false;
-        }
-    }
-
-    /** Attempts to initialize audio processing state. Returns true when it succeeds. Doesn't do anything if
-     *  initialization has already happened once. This function should be called at the start of every frame to
-     *  ensure that all necessary audio processing state has been initialized.
-     */
-    bool initialize(const int samplingRate, const int frameSize, const IPLAudioFormat inputFormat,
-        const IPLAudioFormat outputFormat)
-    {
-        mInputFormat = inputFormat;
-        mOutputFormat = outputFormat;
-
-        // If the environment has recently been reset, release all everything that relates
-        // to the environmental renderer.
-        if (EnvironmentProxy::hasEnvironmentReset())
-        {
-            terminate();
-            EnvironmentProxy::acknowledgeEnvironmentReset();
-        }
-
-        // Make sure the audio engine global state has been initialized.
-        if (!mAudioEngineSettings)
-        {
-            mAudioEngineSettings = AudioEngineSettings::get();
-            if (!mAudioEngineSettings)
-            {
-                try
-                {
-                    IPLRenderingSettings renderingSettings{ samplingRate, frameSize, IPL_CONVOLUTIONTYPE_PHONON };
-                    AudioEngineSettings::create(renderingSettings, outputFormat);
-                }
-                catch (std::exception)
-                {
-                    return false;
-                }
-
-                mAudioEngineSettings = AudioEngineSettings::get();
-                if (!mAudioEngineSettings)
-                    return false;
-            }
-        }
-
-        mBinauralRenderer = mAudioEngineSettings->binauralRenderer();
-        if (!mBinauralRenderer)
-            return false;
-
-        // Check to see if an environmental renderer has just been created.
-        if (!mEnvironmentalRenderer)
-            mEnvironmentalRenderer = EnvironmentProxy::get();
-
-        // Adding a Mixer Return effect to any Mixer Group indicates that all Steam Audio Sources will be using
-        // accelerated mixing.
-        if (mEnvironmentalRenderer && !mEnvironmentalRenderer->isUsingAcceleratedMixing())
-            mEnvironmentalRenderer->setUsingAcceleratedMixing(true);
-
-        // Make sure the temporary buffer for storing the mixed indirect sound has been created.
-        if (mEnvironmentalRenderer && mIndirectEffectOutputBufferData.empty())
-        {
-            auto ambisonicsOrder = mEnvironmentalRenderer->simulationSettings().ambisonicsOrder;
-            auto numChannels = (ambisonicsOrder + 1) * (ambisonicsOrder + 1);
-
-            mIndirectEffectOutputBufferData.resize(numChannels * frameSize);
-
-            mIndirectEffectOutputBufferChannels.resize(numChannels);
-            for (auto i = 0; i < numChannels; ++i)
-                mIndirectEffectOutputBufferChannels[i] = &mIndirectEffectOutputBufferData[i * frameSize];
-
-            mIndirectEffectOutputBuffer.format.channelLayoutType = IPL_CHANNELLAYOUTTYPE_AMBISONICS;
-            mIndirectEffectOutputBuffer.format.ambisonicsOrder = ambisonicsOrder;
-            mIndirectEffectOutputBuffer.format.ambisonicsOrdering = IPL_AMBISONICSORDERING_ACN;
-            mIndirectEffectOutputBuffer.format.ambisonicsNormalization = IPL_AMBISONICSNORMALIZATION_N3D;
-            mIndirectEffectOutputBuffer.format.channelOrder = IPL_CHANNELORDER_DEINTERLEAVED;
-            mIndirectEffectOutputBuffer.numSamples = frameSize;
-            mIndirectEffectOutputBuffer.deinterleavedBuffer = mIndirectEffectOutputBufferChannels.data();
-        }
-
-        // Make sure the temporary buffer for storing the spatialized indirect sound has been created.
-        if (mIndirectSpatializedOutputBufferData.empty())
-        {
-            auto numChannels = mOutputFormat.numSpeakers;
-
-            mIndirectSpatializedOutputBufferData.resize(numChannels * frameSize);
-
-            mIndirectSpatializedOutputBuffer.format = mOutputFormat;
-            mIndirectSpatializedOutputBuffer.numSamples = frameSize;
-            mIndirectSpatializedOutputBuffer.interleavedBuffer = mIndirectSpatializedOutputBufferData.data();
-        }
-
-        // Make sure the Ambisonics panning effect has been created.
-        if (mBinauralRenderer && mEnvironmentalRenderer && !mAmbisonicsPanningEffect)
-        {
-            if (gApi.iplCreateAmbisonicsPanningEffect(mBinauralRenderer, mIndirectEffectOutputBuffer.format, mOutputFormat,
-                &mAmbisonicsPanningEffect) != IPL_STATUS_SUCCESS)
-            {
-                return false;
-            }
-        }
-
-        // Make sure the Ambisonics binaural effect has been created.
-        if (mBinauralRenderer && mEnvironmentalRenderer && !mAmbisonicsBinauralEffect)
-        {
-            if (gApi.iplCreateAmbisonicsBinauralEffect(mBinauralRenderer, mIndirectEffectOutputBuffer.format, mOutputFormat,
-                &mAmbisonicsBinauralEffect) != IPL_STATUS_SUCCESS)
-            {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    /** Destroys all audio processing state. Doesn't do anything if all audio processing state has already been
-     *  destroyed. Should be called as soon as the audio processing state is no longer needed.
-     */
-    void terminate()
-    {
-        if (mEnvironmentalRenderer)
-            mEnvironmentalRenderer->setUsingAcceleratedMixing(false);
-
-        gApi.iplDestroyAmbisonicsBinauralEffect(&mAmbisonicsBinauralEffect);
-        gApi.iplDestroyAmbisonicsPanningEffect(&mAmbisonicsPanningEffect);
-
-        mIndirectSpatializedOutputBufferData.clear();
-        mIndirectEffectOutputBufferChannels.clear();
-        mIndirectEffectOutputBufferData.clear();
-
-        mBinauralRenderer = nullptr;
-        mAudioEngineSettings = nullptr;
-        mEnvironmentalRenderer = nullptr;
-    }
-
-    /** Applies the Mixer Return effect to audio flowing through a Mixer Group.
-     */
-    void process(float* inBuffer, float* outBuffer, unsigned int numSamples, int inChannels, int outChannels,
-        int samplingRate, int frameSize, unsigned int flags, UnityAudioSpatializerData* spatializerData)
-    {
-        // Assume that the number of input and output channels are the same.
-        assert(inChannels == outChannels);
-
-        // Start by clearing the output buffer.
-        memset(outBuffer, 0, outChannels * numSamples * sizeof(float));
-
-        // Unity can call the process callback even when not in play mode. In this case, destroy any audio processing
-        // state that may exist, and emit silence.
-        if (!(flags & UnityAudioEffectStateFlags_IsPlaying))
-        {
-            terminate();
-            return;
-        }
-
-        // Prepare the input and output buffers.
-        auto inputFormat = audioFormatForNumChannels(inChannels);
-        auto outputFormat = audioFormatForNumChannels(outChannels);
-        auto inputAudio = IPLAudioBuffer{ inputFormat, static_cast<IPLint32>(numSamples), inBuffer, nullptr };
-        auto outputAudio = IPLAudioBuffer{ outputFormat, static_cast<IPLint32>(numSamples), outBuffer, nullptr };
-
-        auto nothingToOutput = false;
-
-        // Make sure that audio processing state has been initialized. If initialization fails, stop and emit silence.
-        if (!initialize(samplingRate, frameSize, inputFormat, outputFormat) ||
-            !mEnvironmentalRenderer || !mEnvironmentalRenderer->environmentalRenderer() || 
-            !mAmbisonicsPanningEffect || !mAmbisonicsBinauralEffect)
-        {
-            nothingToOutput = true;
-        }
-
-        if (nothingToOutput)
-        {
-            if (bypassDuringInitialization)
-            {
-                memcpy(outBuffer, inBuffer, outChannels * numSamples * sizeof(float));
-                mBypassedInPreviousFrame = true;
-            }
-
-            return;
-        }
-
-        IPLVector3 listenerPosition, listenerUp, listenerAhead;
-        if (spatializerData)
-        {
-            auto L = spatializerData->listenermatrix;
-
-            auto listenerScaleSquared = 1.0f / (L[1] * L[1] + L[5] * L[5] + L[9] * L[9]);
-
-            auto Lx = -listenerScaleSquared * (L[0] * L[12] + L[1] * L[13] + L[2] * L[14]);
-            auto Ly = -listenerScaleSquared * (L[4] * L[12] + L[5] * L[13] + L[6] * L[14]);
-            auto Lz = -listenerScaleSquared * (L[8] * L[12] + L[9] * L[13] + L[10] * L[14]);
-
-            listenerPosition = convertVector(Lx, Ly, Lz);
-            listenerUp = unitVector(convertVector(L[1], L[5], L[9]));
-            listenerAhead = unitVector(convertVector(L[2], L[6], L[10]));
-        }
-        else
-        {
-            listenerPosition = mEnvironmentalRenderer->listenerPosition();
-            listenerUp = mEnvironmentalRenderer->listenerUp();
-            listenerAhead = mEnvironmentalRenderer->listenerAhead();
-        }
-
-        // Retrieve an Ambisonics buffer containing mixed indirect audio.
-        gApi.iplGetMixedEnvironmentalAudio(mEnvironmentalRenderer->environmentalRenderer(),
-            listenerPosition, listenerAhead, listenerUp, mIndirectEffectOutputBuffer);
-
-        // Spatialize the mixed indirect audio.
-        if (binaural)
-        {
-            if (mAmbisonicsPanningEffect && mUsedAmbisonicsPanningEffect)
-            {
-                gApi.iplFlushAmbisonicsPanningEffect(mAmbisonicsPanningEffect);
-                mUsedAmbisonicsPanningEffect = false;
-            }
-
-            gApi.iplApplyAmbisonicsBinauralEffect(mAmbisonicsBinauralEffect, mBinauralRenderer, mIndirectEffectOutputBuffer,
-                mIndirectSpatializedOutputBuffer);
-
-            mUsedAmbisonicsBinauralEffect = true;
-        }
-        else
-        {
-            if (mAmbisonicsBinauralEffect && mUsedAmbisonicsBinauralEffect)
-            {
-                gApi.iplFlushAmbisonicsBinauralEffect(mAmbisonicsBinauralEffect);
-                mUsedAmbisonicsBinauralEffect = false;
-            }
-
-            gApi.iplApplyAmbisonicsPanningEffect(mAmbisonicsPanningEffect, mBinauralRenderer, mIndirectEffectOutputBuffer,
-                mIndirectSpatializedOutputBuffer);
-
-            mUsedAmbisonicsPanningEffect = true;
-        }
-
-        // Add the spatialized indirect audio to the input audio, and place the result in the output buffer.
-        for (auto i = 0u; i < outChannels * numSamples; ++i)
-        {
-            outputAudio.interleavedBuffer[i] = inputAudio.interleavedBuffer[i] +
-                mIndirectSpatializedOutputBuffer.interleavedBuffer[i];
-        }
-
-        if (mBypassedInPreviousFrame)
-        {
-            crossfadeInputAndOutput(inBuffer, outChannels, numSamples, outBuffer);
-            mBypassedInPreviousFrame = false;
-        }
-    }
-
-private:
-
-    /** Audio processing state.
-     */
-
-    /** Format of the audio buffer provided as input to this effect. */
-    IPLAudioFormat mInputFormat;
-
-    /** Format of the audio buffer generated as output by this effect. */
-    IPLAudioFormat mOutputFormat;
-
-    /** Handle to the binaural renderer used by the audio engine. */
-    IPLhandle mBinauralRenderer;
-
-    /** An object that contains the rendering settings and binaural renderer used globally. */
-    std::shared_ptr<AudioEngineSettings> mAudioEngineSettings;
-
-    /** An object that contains the environmental renderer for the current scene. */
-    std::shared_ptr<EnvironmentProxy> mEnvironmentalRenderer;
-
-    /** Handle to the Ambisonics panning effect used by this effect. */
-    IPLhandle mAmbisonicsPanningEffect;
-
-    /** Handle to the Ambisonics binaural effect used by this effect. */
-    IPLhandle mAmbisonicsBinauralEffect;
-
-    /** Contiguous, deinterleaved buffer for storing the mixed indirect audio, before spatialization. */
-    std::vector<float> mIndirectEffectOutputBufferData;
-
-    /** Array of pointers to per-channel data in the above buffer. */
-    std::vector<float*> mIndirectEffectOutputBufferChannels;
-
-    /** Steam Audio buffer descriptor for the above buffer. */
-    IPLAudioBuffer mIndirectEffectOutputBuffer;
-
-    /** Interleaved buffer for storing the mixed indirect audio, after spatialization. */
-    std::vector<float> mIndirectSpatializedOutputBufferData;
-
-    /** Steam Audio buffer descriptor for the above buffer. */
-    IPLAudioBuffer mIndirectSpatializedOutputBuffer;
-
-    /** Have we used the Ambisonics panning effect in the previous frame? */
-    bool mUsedAmbisonicsPanningEffect;
-
-    /** Have we used the Ambisonics binaural effect in the previous frame? */
-    bool mUsedAmbisonicsBinauralEffect;
-
-    /** Did we emit dry audio in the previous frame? */
-    bool mBypassedInPreviousFrame;
+    IPLReflectionMixer reflectionMixer;
+    IPLAmbisonicsDecodeEffect ambisonicsEffect;
 };
 
-/** Callback that is called by Unity when the Mixer Return effect is created. This may be called in the editor when
- *  a Mixer Return effect is added to a Mixer Group, or when entering play mode. Therefore, it should only initialize
- *  user-controlled parameters.
- */
-UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK createMixEffect(UnityAudioEffectState* state)
+enum InitFlags
 {
-    state->effectdata = new MixEffectState{};
-    return UNITY_AUDIODSP_OK;
-}
-
-/** Callback that is called by Unity when the Mixer Return effect is destroyed. This may be called in the editor when
- *  the effect is removed from a Mixer Group, or just before entering play mode. It may not be called on exiting play
- *  mode, so audio processing state must be destroyed elsewhere.
- */
-UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK releaseMixEffect(UnityAudioEffectState* state)
-{
-    delete state->GetEffectData<MixEffectState>();
-    return UNITY_AUDIODSP_OK;
-}
-
-/** Callback that is called by Unity to process frames of audio data. Apart from in play mode, this may also be called
- *  in the editor when no sounds are playing, so this condition should be detected, and actual processing or
- *  initialization should be avoided in this case.
- */
-UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK processMixEffect(UnityAudioEffectState* state, float* inBuffer,
-    float* outBuffer, unsigned int numSamples, int inChannels, int outChannels)
-{
-    auto params = state->GetEffectData<MixEffectState>();
-    params->process(inBuffer, outBuffer, numSamples, inChannels, outChannels, state->samplerate, state->dspbuffersize,
-        state->flags, state->spatializerdata);
-    return UNITY_AUDIODSP_OK;
-}
-
-/** Callback that is called by Unity when the Mixer Group inspector needs to update the value of some user-facing
- *  parameter.
- */
-UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK setMixEffectParam(UnityAudioEffectState* state, int index, float value)
-{
-    auto params = state->GetEffectData<MixEffectState>();
-    return params->setParameter(static_cast<MixEffectParams>(index), value) ?
-        UNITY_AUDIODSP_OK : UNITY_AUDIODSP_ERR_UNSUPPORTED;
-}
-
-/** Callback that is called by Unity when the Mixer Group inspector needs to query the value of some user-facing
- *  parameter.
- */
-UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK getMixEffectParam(UnityAudioEffectState* state, int index, float* value,
-    char*)
-{
-    auto params = state->GetEffectData<MixEffectState>();
-    return params->getParameter(static_cast<MixEffectParams>(index), *value) ? 
-        UNITY_AUDIODSP_OK : UNITY_AUDIODSP_ERR_UNSUPPORTED;
-}
-
-/** Descriptors for each user-facing parameter of the Mixer Return effect. */
-UnityAudioParameterDefinition gMixEffectParams[] = 
-{
-    { "Binaural", "", "Spatialize mixed audio using HRTF.", 0.0f, 1.0f, 0.0f, 1.0f, 1.0f },
-    { "BypassAtInit", "", "Bypass the effect during initialization.", 0.0f, 1.0f, 0.0f, 1.0f, 1.0f }
+    INIT_NONE = 0,
+    INIT_AUDIOBUFFERS = 1 << 0,
+    INIT_REFLECTIONEFFECT = 1 << 1,
+    INIT_AMBISONICSEFFECT = 1 << 2
 };
 
-/** Descriptor for the Mixer Return effect. */
-UnityAudioEffectDefinition gMixEffect 
+void reset(UnityAudioEffectState* state)
 {
-    sizeof(UnityAudioEffectDefinition), 
+    auto effect = state->GetEffectData<State>();
+    if (!effect)
+        return;
+
+    effect->binaural = false;
+}
+
+InitFlags lazyInit(UnityAudioEffectState* state,
+                   int numChannelsIn,
+                   int numChannelsOut)
+{
+    auto initFlags = INIT_NONE;
+
+    if (!gContext)
+        return initFlags;
+
+    if (!gHRTF[1])
+        return initFlags;
+
+    if (!state->effectdata)
+    {
+        state->effectdata = new State();
+        reset(state);
+    }
+
+    auto effect = state->GetEffectData<State>();
+
+    IPLAudioSettings audioSettings;
+    audioSettings.samplingRate = state->samplerate;
+    audioSettings.frameSize = state->dspbuffersize;
+
+    auto status = IPL_STATUS_SUCCESS;
+
+    if (gIsSimulationSettingsValid)
+    {
+        status = IPL_STATUS_SUCCESS;
+
+        if (!effect->reflectionMixer)
+        {
+            IPLReflectionEffectSettings effectSettings;
+            effectSettings.type = gSimulationSettings.reflectionType;
+            effectSettings.numChannels = numChannelsForOrder(gSimulationSettings.maxOrder);
+
+            status = iplReflectionMixerCreate(gContext, &audioSettings, &effectSettings, &effect->reflectionMixer);
+
+            if (!gNewReflectionMixerWritten)
+            {
+                iplReflectionMixerRelease(&gReflectionMixer[1]);
+                gReflectionMixer[1] = iplReflectionMixerRetain(effect->reflectionMixer);
+
+                gNewReflectionMixerWritten = true;
+            }
+        }
+
+        if (status == IPL_STATUS_SUCCESS)
+            initFlags = static_cast<InitFlags>(initFlags | INIT_REFLECTIONEFFECT);
+    }
+
+    if (numChannelsOut > 0 && gIsSimulationSettingsValid)
+    {
+        status = IPL_STATUS_SUCCESS;
+
+        if (!effect->ambisonicsEffect)
+        {
+            IPLAmbisonicsDecodeEffectSettings effectSettings;
+            effectSettings.speakerLayout = speakerLayoutForNumChannels(numChannelsOut);
+            effectSettings.hrtf = gHRTF[1];
+            effectSettings.maxOrder = gSimulationSettings.maxOrder;
+
+            status = iplAmbisonicsDecodeEffectCreate(gContext, &audioSettings, &effectSettings, &effect->ambisonicsEffect);
+        }
+
+        if (status == IPL_STATUS_SUCCESS)
+            initFlags = static_cast<InitFlags>(initFlags | INIT_AMBISONICSEFFECT);
+    }
+
+    if (numChannelsIn > 0 && numChannelsOut > 0)
+    {
+        auto numAmbisonicChannels = numChannelsForOrder(gSimulationSettings.maxOrder);
+
+        if (!effect->reflectionsBuffer.data)
+            iplAudioBufferAllocate(gContext, numAmbisonicChannels, audioSettings.frameSize, &effect->reflectionsBuffer);
+
+        if (!effect->inBuffer.data)
+            iplAudioBufferAllocate(gContext, numChannelsIn, audioSettings.frameSize, &effect->inBuffer);
+
+        if (!effect->outBuffer.data)
+            iplAudioBufferAllocate(gContext, numChannelsOut, audioSettings.frameSize, &effect->outBuffer);
+
+        initFlags = static_cast<InitFlags>(initFlags | INIT_AUDIOBUFFERS);
+    }
+
+    return initFlags;
+}
+
+UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK create(UnityAudioEffectState* state)
+{
+    state->effectdata = new State();
+    reset(state);
+    lazyInit(state, 0, 0);
+    return UNITY_AUDIODSP_OK;
+}
+
+UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK release(UnityAudioEffectState* state)
+{
+    if (!state->effectdata)
+        return UNITY_AUDIODSP_OK;
+    
+    auto effect = state->GetEffectData<State>();
+
+    iplAudioBufferFree(gContext, &effect->reflectionsBuffer);
+    iplAudioBufferFree(gContext, &effect->inBuffer);
+    iplAudioBufferFree(gContext, &effect->outBuffer);
+
+    iplReflectionMixerRelease(&effect->reflectionMixer);
+    iplAmbisonicsDecodeEffectRelease(&effect->ambisonicsEffect);
+
+    delete state->effectdata;
+    state->effectdata = nullptr;
+
+    return UNITY_AUDIODSP_OK;
+}
+
+UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK getParam(UnityAudioEffectState* state,
+                                                       int index,
+                                                       float* value,
+                                                       char* valueStr)
+{
+    auto effect = state->GetEffectData<State>();
+
+    switch (index)
+    {
+    case BINAURAL:
+        *value = (effect->binaural) ? 1.0f : 0.0f;
+        break;
+    }
+
+    return UNITY_AUDIODSP_OK;
+}
+
+UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK setParam(UnityAudioEffectState* state,
+                                                       int index,
+                                                       float value)
+{
+    auto effect = state->GetEffectData<State>();
+
+    switch (index)
+    {
+    case BINAURAL:
+        effect->binaural = (value == 1.0f);
+        break;
+    }
+
+    return UNITY_AUDIODSP_OK;
+}
+
+UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK process(UnityAudioEffectState* state,
+                                                      float* in,
+                                                      float* out,
+                                                      unsigned int numSamples,
+                                                      int numChannelsIn,
+                                                      int numChannelsOut)
+{
+    // Assume that the number of input and output channels are the same.
+    assert(numChannelsIn == numChannelsOut);
+
+    // Start by clearing the output buffer.
+    memset(out, 0, numChannelsOut * numSamples * sizeof(float));
+
+    // Unity can call the process callback even when not in play mode. In this case, emit silence.
+    if (!(state->flags & UnityAudioEffectStateFlags_IsPlaying))
+    {
+        release(state);
+        return UNITY_AUDIODSP_OK;
+    }
+
+    // Make sure that audio processing state has been initialized. If initialization fails, stop and emit silence.
+    auto initFlags = lazyInit(state, numChannelsIn, numChannelsOut);
+    if (!(initFlags & INIT_AUDIOBUFFERS) || !(initFlags & INIT_REFLECTIONEFFECT) || !(initFlags & INIT_AMBISONICSEFFECT))
+        return UNITY_AUDIODSP_OK;
+
+    getLatestHRTF();
+
+    auto effect = state->GetEffectData<State>();
+
+    // TODO: Need to deprecate Unity versions that don't support spatializerdata on mixer effects!
+    if (!state->spatializerdata)
+        return UNITY_AUDIODSP_OK;
+
+    // World-to-local transform matrix for the listener.
+    auto L = state->spatializerdata->listenermatrix;
+
+    auto listenerCoordinates = calcListenerCoordinates(L);
+
+    IPLReflectionEffectParams reflectionParams;
+    reflectionParams.numChannels = numChannelsForOrder(gSimulationSettings.maxOrder);
+    reflectionParams.tanDevice = gSimulationSettings.tanDevice;
+
+    iplReflectionMixerApply(effect->reflectionMixer, &reflectionParams, &effect->reflectionsBuffer);
+
+    IPLAmbisonicsDecodeEffectParams ambisonicsParams;
+    ambisonicsParams.order = gSimulationSettings.maxOrder;
+    ambisonicsParams.hrtf = gHRTF[0];
+    ambisonicsParams.orientation = listenerCoordinates;
+    ambisonicsParams.binaural = (effect->binaural) ? IPL_TRUE : IPL_FALSE;
+
+    iplAmbisonicsDecodeEffectApply(effect->ambisonicsEffect, &ambisonicsParams, &effect->reflectionsBuffer, &effect->outBuffer);
+
+    iplAudioBufferDeinterleave(gContext, in, &effect->inBuffer);
+    iplAudioBufferMix(gContext, &effect->inBuffer, &effect->outBuffer);
+
+    iplAudioBufferInterleave(gContext, &effect->outBuffer, out);
+
+    return UNITY_AUDIODSP_OK;
+}
+
+}
+
+UnityAudioEffectDefinition gMixerReturnEffectDefinition
+{
+    sizeof(UnityAudioEffectDefinition),
     sizeof(UnityAudioParameterDefinition),
-    UNITY_AUDIO_PLUGIN_API_VERSION, 
+    UNITY_AUDIO_PLUGIN_API_VERSION,
     STEAMAUDIO_UNITY_VERSION,
-    0, 
-    SA_MIX_NUM_PARAMS, 
+    0,
+    MixerReturnEffect::NUM_PARAMS,
     UnityAudioEffectDefinitionFlags_NeedsSpatializerData,
     "Steam Audio Mixer Return",
-    createMixEffect, 
-    releaseMixEffect, 
-    nullptr, 
-    processMixEffect, 
+    MixerReturnEffect::create,
+    MixerReturnEffect::release,
     nullptr,
-    gMixEffectParams,
-    setMixEffectParam, 
-    getMixEffectParam, 
+    MixerReturnEffect::process,
+    nullptr,
+    MixerReturnEffect::gParamDefinitions,
+    MixerReturnEffect::setParam,
+    MixerReturnEffect::getParam,
     nullptr
 };
