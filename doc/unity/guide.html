@@ -338,7 +338,7 @@
 <li><p>On the Steam Audio Dynamic Object component, click <strong>Export Dynamic Object</strong>.</p></li>
 </ol>
 <img alt="_images/dynamic_object.png" src="_images/dynamic_object.png" />
-<p>At run-time, any changes made to the Transform of the Steam Audio Dynamic Object component has been attached will automatically be passed to Steam Audio.</p>
+<p>At run-time, any changes made to the Transform of the GameObject to which the Steam Audio Dynamic Object component has been attached will automatically be passed to Steam Audio.</p>
 <p>You can attach a Steam Audio Dynamic Object component in a prefab as well. After exporting it, the prefab can be freely instantiated in any scene and moved around; Steam Audio will automatically update acoustic effects accordingly. For example, this can be used to create a door prefab that automatically occludes sound when added to any scene, or large walls that a player can build, which automatically reflect sound.</p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
@@ -518,7 +518,7 @@
 <p>To enable GPU acceleration for convolution reverb:</p>
 <ol class="arabic simple">
 <li><p>In the main menu, click <strong>Steam Audio</strong> &gt; <strong>Settings</strong>.</p></li>
-<li><p>Set <strong>Indirect Effect Type</strong> to <strong>TrueAudio Next</strong>.</p></li>
+<li><p>Set <strong>Reflection Effect Type</strong> to <strong>TrueAudio Next</strong>.</p></li>
 </ol>
 <p><a class="reference external" href="https://gpuopen.com/true-audio-next">TrueAudio Next</a> is an OpenCL-based GPU convolution tool that requires supported AMD GPUs. TrueAudio Next support in Steam Audio is available on Windows 64-bit only.</p>
 <p>You can configure many aspects of GPU acceleration. In particular, on supported AMD GPUs, you can restrict Steam Audio to use only a portion of the GPU’s compute resources, ensuring that visual rendering and physics simulations can continue to run at a steady rate. For more information, see <a class="reference internal" href="settings.html"><span class="doc">Steam Audio Settings</span></a>.</p>

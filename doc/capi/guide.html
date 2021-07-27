@@ -428,7 +428,7 @@
 <h3>HRTF interpolation<a class="headerlink" href="#hrtf-interpolation" title="Permalink to this headline">¶</a></h3>
 <p>When the direction from the listener to the source is <em>not</em> one of the directions for which HRTF filters are available, Steam Audio must estimate the HRTF filter using available data. This is controlled using the <code class="docutils literal notranslate"><span class="pre">interpolation</span></code> field of the <code class="docutils literal notranslate"><span class="pre">IPLBinauralEffectParams</span></code> structure.</p>
 <p><em>Nearest-neighbor</em> interpolation (specified by <code class="docutils literal notranslate"><span class="pre">IPL_HRTFINTERPOLATION_NEAREST</span></code>) means selecting the closest direction to the actual source direction for which HRTF data is available. This is the fastest approach. However, for moving sources, you may hear audible transitions as the HRTF switches abruptly from one pair of filters to another. This is most noticeable with wide-band audio, such as white noise, or engine noise.</p>
-<p><em>Bilinear</em> interpolation (specified by <code class="docutils literal notranslate"><span class="pre">IPL_HRTFINTERPOLATION_BILINEAR</span></code>) means blending between the 4 closest direction to the actual source direction. This is slower than nearest-neighbor filtering, but results in significantly smooth rendering of moving sources.</p>
+<p><em>Bilinear</em> interpolation (specified by <code class="docutils literal notranslate"><span class="pre">IPL_HRTFINTERPOLATION_BILINEAR</span></code>) means blending between the 4 closest directions to the actual source direction. This is slower than nearest-neighbor filtering, but results in significantly smoother rendering of moving sources.</p>
 </div>
 <div class="section" id="spatial-blend">
 <h3>Spatial blend<a class="headerlink" href="#spatial-blend" title="Permalink to this headline">¶</a></h3>
@@ -444,7 +444,7 @@
 <h2>Ambisonics<a class="headerlink" href="#ambisonics" title="Permalink to this headline">¶</a></h2>
 <p>Ambisonics is a surround sound format that is especially well-suited to spatial audio applications. Ambisonic audio differs from traditional surround sound formats (5.1, 7.1, etc.) in a few important ways.</p>
 <p>Ambisonic audio can describe sound reaching the listener from a full sphere of directions, including sounds that are vertically above or below the listener. On the other hand, traditional surround sound formats can only describe sounds in a horizontal plane around the listener.</p>
-<p>Traditional surround sound formats represent the directional variation of sound using discrete channels, each of which is intended to played back from a specific speaker. For example, a 5.1 surround sound system includes front-left, front-right, center, rear-left, and rear-right speakers. A sound source that is between the front-left and center speakers is then approximated by panning the audio signal between those two speakers.</p>
+<p>Traditional surround sound formats represent the directional variation of sound using discrete channels, each of which is intended to be played back from a specific speaker. For example, a 5.1 surround sound system includes front-left, front-right, center, rear-left, and rear-right speakers. A sound source that is between the front-left and center speakers is then approximated by panning the audio signal between those two speakers.</p>
 <p>In contrast, Ambisonic audio expresses any directional variation as a weighted sum of <em>basis functions</em> defined over the sphere of directions around the listener. (This is analogous to how the Fourier transform represents any time-varying function as a weighted sum of sinusoids.) For more information, click <a class="reference external" href="https://en.wikipedia.org/wiki/Ambisonics">here</a>.</p>
 <p>Ambisonic audio has an <em>order</em>, which essentially defines the number of channels. Ambisonic order N requires (N + 1)^2 channels. Order 0 has 1 channel, order 1 has 4 channels, order 2 has 9 channels, and so on. The higher the order, the more precisely a given directional variation can be represented.</p>
 <p>You can use Ambisonic audio to represent <em>sound fields</em>. These are sounds that arrive from a variety of directions around the listener, all represented in a single audio clip. These are often useful for ambient sounds, or spatialized music.</p>
@@ -559,7 +559,7 @@
 <span class="n">distanceAttenuationModel</span><span class="p">.</span><span class="n">type</span> <span class="o">=</span> <span class="n">IPL_DISTANCEATTENUATIONTYPE_DEFAULT</span><span class="p">;</span>
 </pre></div>
 </div>
-<p>This specifies Steam Audio’s default attenuation model. [EQUATION] You can also tweak the default attenuation model, or specify any arbitrary model of your own.</p>
+<p>This specifies Steam Audio’s default attenuation model. You can also tweak the default attenuation model, or specify any arbitrary model of your own.</p>
 <p>You can then use the <code class="docutils literal notranslate"><span class="pre">iplDistanceAttenuationCalculate</span></code> function to calculate distance attenuation for a specific source and listener:</p>
 <div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">IPLVector3</span> <span class="n">sourcePosition</span><span class="p">;</span> <span class="c1">// the world-space position of the source</span>
 <span class="n">IPLVector3</span> <span class="n">listenerPosition</span><span class="p">;</span> <span class="c1">// the world-space position of the listener</span>
@@ -585,7 +585,7 @@
 <span class="n">airAbsorptionModel</span><span class="p">.</span><span class="n">type</span> <span class="o">=</span> <span class="n">IPL_AIRABSORPTIONTYPE_DEFAULT</span><span class="p">;</span>
 </pre></div>
 </div>
-<p>This specifies Steam Audio’s default air absorption model. [EQUATION] You can also tweak the default air absorption model, or specify any arbitrary model of your own.</p>
+<p>This specifies Steam Audio’s default air absorption model. You can also tweak the default air absorption model, or specify any arbitrary model of your own.</p>
 <p>You can then use the <code class="docutils literal notranslate"><span class="pre">iplAirAbsorptionCalculate</span></code> function to calculate air absorption for a specific source and listener:</p>
 <div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">IPLVector3</span> <span class="n">sourcePosition</span><span class="p">;</span> <span class="c1">// the world-space position of the source</span>
 <span class="n">IPLVector3</span> <span class="n">listenerPosition</span><span class="p">;</span> <span class="c1">// the world-space position of the listener</span>
@@ -844,7 +844,7 @@
 </div>
 <div class="section" id="reflections">
 <h2>Reflections<a class="headerlink" href="#reflections" title="Permalink to this headline">¶</a></h2>
-<p>Steam Audio can simulate how sound from a source is reflected off of surround geometry. This can lead to better spatialization and increased immersion, but comes at a significant CPU usage cost. For this reason, Steam Audio provides many options for controlling how and when reflections are simulated, so you can find the right trade-off between simulation quality and performance for your application.</p>
+<p>Steam Audio can simulate how sound from a source is reflected off of surrounding geometry. This can lead to better spatialization and increased immersion, but comes at a significant CPU usage cost. For this reason, Steam Audio provides many options for controlling how and when reflections are simulated, so you can find the right trade-off between simulation quality and performance for your application.</p>
 <p>In this section, we will describe the basic steps required to enable real-time reflection simulation, without focusing too much on performance.</p>
 <div class="section" id="initializing-a-simulator-for-reflections">
 <h3>Initializing a simulator for reflections<a class="headerlink" href="#initializing-a-simulator-for-reflections" title="Permalink to this headline">¶</a></h3>
@@ -1080,7 +1080,7 @@
 </div>
 <div class="section" id="rendering-paths">
 <h3>Rendering paths<a class="headerlink" href="#rendering-paths" title="Permalink to this headline">¶</a></h3>
-<p>Sound arriving at the listener via indirect paths found by pathing simulation is rendered as and Ambisonic sound field. This rendering is performed using an <code class="docutils literal notranslate"><span class="pre">IPLPathEffect</span></code> object:</p>
+<p>Sound arriving at the listener via indirect paths found by pathing simulation is rendered as an Ambisonic sound field. This rendering is performed using an <code class="docutils literal notranslate"><span class="pre">IPLPathEffect</span></code> object:</p>
 <div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">IPLPathEffectSettings</span> <span class="n">effectSettings</span><span class="p">{};</span>
 <span class="n">effectSettings</span><span class="p">.</span><span class="n">maxOrder</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="c1">// render up to 1st order Ambisonic sound fields</span>
 

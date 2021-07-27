@@ -197,7 +197,7 @@
 </dd>
 <dt>Scene Type</dt><dd><p>Specifies the ray tracing implementation to use for simulations.</p>
 <ul class="simple">
-<li><p><em>Phonon</em>. Steam Audio’s built-in ray tracer. Runs on all platforms that Steam Audio supports.</p></li>
+<li><p><em>Default</em>. Steam Audio’s built-in ray tracer. Runs on all platforms that Steam Audio supports.</p></li>
 <li><p><em>Embree</em>. The Intel® Embree ray tracer. Provides improved performance compared to Steam Audio’s built-in ray tracer. Supported only on Windows, Linux, and macOS.</p></li>
 <li><p><em>Radeon Rays</em>. The AMD Radeon™ Rays ray tracer. This is an OpenCL implementation, and can use either the CPU or any GPU that supports OpenCL 1.2 or later. If using the GPU, it is likely to be significantly faster than Steam Audio’s built-in ray tracer. However, with heavy real-time simulation workloads, it may impact your application’s frame rate. On supported AMD GPUs, you can use the Resource Reservation feature to mitigate this issue. Supported only on Windows 64-bit.</p></li>
 <li><p><em>Unity</em>. Unity’s built-in ray tracer. Runs on all platforms that Steam Audio supports. Does not require Steam Audio Geometry components to be attached anywhere, or scene data to be exported. However, this is the slowest of the available options, and is not suitable for modeling reflections, reverb, or pathing.</p></li>
