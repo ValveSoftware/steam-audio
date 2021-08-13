@@ -482,8 +482,10 @@
 <span class="p">{</span>
     <span class="k">auto</span> <span class="n">inputaudio</span> <span class="o">=</span> <span class="n">load_input_audio</span><span class="p">(</span><span class="s">&quot;inputaudio.raw&quot;</span><span class="p">);</span>
 
-    <span class="n">IPLContext</span> <span class="n">context</span><span class="p">{};</span>
     <span class="n">IPLContextSettings</span> <span class="n">contextSettings</span><span class="p">{};</span>
+    <span class="n">contextSettings</span><span class="p">.</span><span class="n">version</span> <span class="o">=</span> <span class="n">STEAMAUDIO_VERSION</span><span class="p">;</span>
+
+    <span class="n">IPLContext</span> <span class="n">context</span><span class="p">{};</span>
     <span class="n">iplContextCreate</span><span class="p">(</span><span class="o">&amp;</span><span class="n">contextSettings</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">context</span><span class="p">);</span>
 
     <span class="k">auto</span> <span class="k">const</span> <span class="n">samplingrate</span> <span class="o">=</span> <span class="mi">44100</span><span class="p">;</span>
