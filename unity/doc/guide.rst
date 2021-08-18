@@ -35,7 +35,7 @@ In Unity, you configure individual audio clips as Ambisonic, instead of audio so
 
 .. note::
     
-    Unity supports up to 2nd order Ambisonic clips. They must use AmbiX (ACN/SN3D) layout. For more information, refer to the `Unity documentation <https://docs.unity3d.com/Manual/AmbisonicAudio.html>`_.
+    Unity supports 1st order Ambisonic clips, only. They must use AmbiX (ACN/SN3D) layout. For more information, refer to the `Unity documentation <https://docs.unity3d.com/Manual/AmbisonicAudio.html>`_.
 
 You can control how an Ambisonic audio clip is spatialized using the :doc:`Steam Audio Ambisonic Source <ambisonic-source>` component.
 
