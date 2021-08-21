@@ -47,6 +47,7 @@ namespace SteamAudio
             mAudioSource.SetSpatializerFloat(index++, source.transmissionLow);
             mAudioSource.SetSpatializerFloat(index++, source.transmissionMid);
             mAudioSource.SetSpatializerFloat(index++, source.transmissionHigh);
+            mAudioSource.SetSpatializerFloat(index++, (source.applyHRTFToDirect) ? 1.0f : 0.0f);
             mAudioSource.SetSpatializerFloat(index++, source.directMixLevel);
             mAudioSource.SetSpatializerFloat(index++, (source.applyHRTFToReflections) ? 1.0f : 0.0f);
             mAudioSource.SetSpatializerFloat(index++, source.reflectionsMixLevel);
