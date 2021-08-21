@@ -104,7 +104,8 @@ namespace SteamAudio
         [Range(0.0f, 1.0f)]
         public float transmissionHigh = 1.0f;
 
-        [Header("Direct Mix Settings")]
+        [Header("Direct Settings")]
+        public bool applyHRTFToDirect = true;
         [Range(0.0f, 1.0f)]
         public float directMixLevel = 1.0f;
 

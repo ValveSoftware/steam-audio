@@ -49,6 +49,7 @@ namespace SteamAudio
         SerializedProperty mFindAlternatePaths;
         SerializedProperty mApplyHRTFToPathing;
         SerializedProperty mPathingMixLevel;
+        SerializedProperty mApplyHRTFToDirect;
 
         Texture2D mDirectivityPreview = null;
         float[] mDirectivitySamples = null;
@@ -81,6 +82,7 @@ namespace SteamAudio
             mTransmissionLow = serializedObject.FindProperty("transmissionLow");
             mTransmissionMid = serializedObject.FindProperty("transmissionMid");
             mTransmissionHigh = serializedObject.FindProperty("transmissionHigh");
+            mApplyHRTFToDirect = serializedObject.FindProperty("applyHRTFToDirect");
             mDirectMixLevel = serializedObject.FindProperty("directMixLevel");
             mReflections = serializedObject.FindProperty("reflections");
             mReflectionsType = serializedObject.FindProperty("reflectionsType");
@@ -200,6 +202,7 @@ namespace SteamAudio
 
             if (audioEngineIsUnity)
             {
+                EditorGUILayout.PropertyField(mApplyHRTFToDirect);
                 EditorGUILayout.PropertyField(mDirectMixLevel);
             }
 
