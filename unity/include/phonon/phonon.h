@@ -336,8 +336,12 @@ IPLAPI IPLbyte* IPLCALL iplSerializedObjectGetData(IPLSerializedObject serialize
 DECLARE_OPAQUE_HANDLE(IPLEmbreeDevice);
 
 /** Settings used to create an Embree device. */
+#if defined(__cplusplus) || defined(__DOXYGEN__)
 typedef struct {
 } IPLEmbreeDeviceSettings;
+#else
+typedef void IPLEmbreeDeviceSettings;
+#endif
 
 /** Creates an Embree device.
 
@@ -568,8 +572,12 @@ IPLAPI void IPLCALL iplOpenCLDeviceRelease(IPLOpenCLDevice* device);
 DECLARE_OPAQUE_HANDLE(IPLRadeonRaysDevice);
 
 /** Settings used to create a Radeon Rays device. */
+#if defined(__cplusplus) || defined(__DOXYGEN__)
 typedef struct {
 } IPLRadeonRaysDeviceSettings;
+#else
+typedef void IPLRadeonRaysDeviceSettings;
+#endif
 
 /** Creates a Radeon Rays device.
 

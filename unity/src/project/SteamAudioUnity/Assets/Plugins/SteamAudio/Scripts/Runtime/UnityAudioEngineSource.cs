@@ -53,6 +53,7 @@ namespace SteamAudio
             mAudioSource.SetSpatializerFloat(index++, (source.applyHRTFToPathing) ? 1.0f : 0.0f);
             mAudioSource.SetSpatializerFloat(index++, source.pathingMixLevel);
             SetSpatializerIntPtr(source.GetSource().Get(), ref index);
+            mAudioSource.SetSpatializerFloat(index++, (source.directBinaural) ? 1.0f : 0.0f);
         }
 
         void SetSpatializerIntPtr(IntPtr ptr, ref int index)

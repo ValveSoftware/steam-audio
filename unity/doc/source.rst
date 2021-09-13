@@ -7,6 +7,9 @@ Must be attached to a GameObject containing an Audio Source (if using Unity's bu
 
 .. image:: media/source.png
 
+Direct Binaural
+    If checked, HRTF-based binaural rendering will be used to spatialize the source. This requires 2-channel (stereo) audio output. If unchecked, panning will be used to the spatialize the source using the user's speaker layout. Binaural rendering provides improved spatialization at the cost of slightly increased CPU usage.
+
 Interpolation
     Controls how HRTFs are interpolated when the source moves relative to the listener.
 
@@ -90,7 +93,7 @@ Directivity Value
 
 Occlusion
     *If using Unity's built-in audio engine*
-        If checked, attenuation based on the occlusion the source by the scene geometry will be applied to the Audio Source.
+        If checked, attenuation based on the occlusion of the source by the scene geometry will be applied to the Audio Source.
 
     *If using FMOD Studio*
         If checked, ray tracing will be used to determine how much of the source is occluded.

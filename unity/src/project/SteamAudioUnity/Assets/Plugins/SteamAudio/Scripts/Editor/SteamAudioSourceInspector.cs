@@ -11,6 +11,7 @@ namespace SteamAudio
     [CustomEditor(typeof(SteamAudioSource))]
     public class SteamAudioSourceInspector : Editor
     {
+        SerializedProperty mDirectBinaural;
         SerializedProperty mInterpolation;
         SerializedProperty mDistanceAttenuation;
         SerializedProperty mDistanceAttenuationInput;
@@ -56,6 +57,7 @@ namespace SteamAudio
 
         private void OnEnable()
         {
+            mDirectBinaural = serializedObject.FindProperty("directBinaural");
             mInterpolation = serializedObject.FindProperty("interpolation");
             mDistanceAttenuation = serializedObject.FindProperty("distanceAttenuation");
             mDistanceAttenuationInput = serializedObject.FindProperty("distanceAttenuationInput");
@@ -104,6 +106,7 @@ namespace SteamAudio
 
             if (audioEngineIsUnity)
             {
+                EditorGUILayout.PropertyField(mDirectBinaural);
                 EditorGUILayout.PropertyField(mInterpolation);
             }
 

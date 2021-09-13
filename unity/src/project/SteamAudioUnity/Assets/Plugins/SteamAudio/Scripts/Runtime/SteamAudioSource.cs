@@ -59,6 +59,7 @@ namespace SteamAudio
     public class SteamAudioSource : MonoBehaviour
     {
         [Header("HRTF Settings")]
+        public bool directBinaural = true;
         public HRTFInterpolation interpolation = HRTFInterpolation.Nearest;
 
         [Header("Attenuation Settings")]

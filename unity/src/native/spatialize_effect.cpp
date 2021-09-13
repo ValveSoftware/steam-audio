@@ -39,6 +39,7 @@ enum Params
     PATHING_MIXLEVEL,
     SIMULATION_OUTPUTS_PTR_LOW,
     SIMULATION_OUTPUTS_PTR_HIGH,
+    DIRECT_BINAURAL,
     NUM_PARAMS
 };
 
@@ -74,10 +75,12 @@ UnityAudioParameterDefinition gParamDefinitions[] =
     { "PathMixLevel", "", "Pathing mix level.", 0.0f, 10.0f, 1.0f, 1.0f, 1.0f },
     { "SimOutLow", "", "Simulation outputs (lower 32 bits).", -std::numeric_limits<float>::max(), std::numeric_limits<float>::max(), 0.0f, 1.0f, 1.0f },
     { "SimOutHigh", "", "Simulation outputs (upper 32 bits).", -std::numeric_limits<float>::max(), std::numeric_limits<float>::max(), 0.0f, 1.0f, 1.0f },
+    { "DirectBinaural", "", "Apply HRTF to direct path.", 0.0f, 1.0f, 1.0f, 1.0f, 1.0f },
 };
 
 struct State
 {
+    bool directBinaural;
     bool applyDistanceAttenuation;
     bool applyAirAbsorption;
     bool applyDirectivity;
@@ -121,6 +124,7 @@ struct State
     IPLAudioBuffer reflectionsBuffer;
     IPLAudioBuffer reflectionsSpatializedBuffer;
 
+    IPLPanningEffect panningEffect;
     IPLBinauralEffect binauralEffect;
     IPLDirectEffect directEffect;
     IPLReflectionEffect reflectionEffect;
@@ -159,16 +163,31 @@ InitFlags lazyInit(UnityAudioEffectState* state,
     audioSettings.frameSize = state->dspbuffersize;
 
     auto status = IPL_STATUS_SUCCESS;
-    if (!effect->binauralEffect)
+
+    if (numChannelsOut > 0)
     {
-        IPLBinauralEffectSettings effectSettings;
-        effectSettings.hrtf = gHRTF[1];
+        if (!effect->panningEffect)
+        {
+            IPLPanningEffectSettings effectSettings{};
+            effectSettings.speakerLayout = speakerLayoutForNumChannels(numChannelsOut);
 
-        status = iplBinauralEffectCreate(gContext, &audioSettings, &effectSettings, &effect->binauralEffect);
+            status = iplPanningEffectCreate(gContext, &audioSettings, &effectSettings, &effect->panningEffect);
+        }
+
+        if (status == IPL_STATUS_SUCCESS)
+        {
+            if (!effect->binauralEffect)
+            {
+                IPLBinauralEffectSettings effectSettings;
+                effectSettings.hrtf = gHRTF[1];
+
+                status = iplBinauralEffectCreate(gContext, &audioSettings, &effectSettings, &effect->binauralEffect);
+            }
+        }
+
+        if (status == IPL_STATUS_SUCCESS)
+            initFlags = static_cast<InitFlags>(initFlags | INIT_BINAURALEFFECT);
     }
-
-    if (status == IPL_STATUS_SUCCESS)
-        initFlags = static_cast<InitFlags>(initFlags | INIT_BINAURALEFFECT);
 
     if (numChannelsIn > 0)
     {
@@ -248,15 +267,15 @@ InitFlags lazyInit(UnityAudioEffectState* state,
         if (!effect->directBuffer.data)
             iplAudioBufferAllocate(gContext, numChannelsIn, audioSettings.frameSize, &effect->directBuffer);
 
+        if (!effect->monoBuffer.data)
+            iplAudioBufferAllocate(gContext, 1, audioSettings.frameSize, &effect->monoBuffer);
+
         initFlags = static_cast<InitFlags>(initFlags | INIT_DIRECTAUDIOBUFFERS);
 
         if ((effect->applyReflections || effect->applyPathing) && gIsSimulationSettingsValid)
         {
             auto numAmbisonicChannels = numChannelsForOrder(gSimulationSettings.maxOrder);
 
-            if (!effect->monoBuffer.data)
-                iplAudioBufferAllocate(gContext, 1, audioSettings.frameSize, &effect->monoBuffer);
-            
             if (!effect->reflectionsBuffer.data)
                 iplAudioBufferAllocate(gContext, numAmbisonicChannels, audioSettings.frameSize, &effect->reflectionsBuffer);
             
@@ -288,6 +307,7 @@ void reset(UnityAudioEffectState* state)
 
     effect->inputStarted = false;
 
+    effect->directBinaural = true;
     effect->applyDistanceAttenuation = true;
     effect->applyAirAbsorption = false;
     effect->applyDirectivity = false;
@@ -348,6 +368,7 @@ UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK release(UnityAudioEffectState* sta
     iplAudioBufferFree(gContext, &effect->reflectionsBuffer);
     iplAudioBufferFree(gContext, &effect->reflectionsSpatializedBuffer);
 
+    iplPanningEffectRelease(&effect->panningEffect);
     iplBinauralEffectRelease(&effect->binauralEffect);
     iplDirectEffectRelease(&effect->directEffect);
     iplReflectionEffectRelease(&effect->reflectionEffect);
@@ -372,6 +393,9 @@ UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK getParam(UnityAudioEffectState* st
 
     switch (index)
     {
+    case DIRECT_BINAURAL:
+        *value = (effect->directBinaural) ? 1.0f : 0.0f;
+        break;
     case APPLY_DISTANCEATTENUATION:
         *value = (effect->applyDistanceAttenuation) ? 1.0f : 0.0f;
         break;
@@ -499,6 +523,9 @@ UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK setParam(UnityAudioEffectState* st
 
     switch (index)
     {
+    case DIRECT_BINAURAL:
+        effect->directBinaural = (value == 1.0f);
+        break;
     case APPLY_DISTANCEATTENUATION:
         effect->applyDistanceAttenuation = (value == 1.0f);
         break;
@@ -738,13 +765,25 @@ UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK process(UnityAudioEffectState* sta
 
     iplDirectEffectApply(effect->directEffect, &directParams, &effect->inBuffer, &effect->directBuffer);
 
-    IPLBinauralEffectParams binauralParams;
-    binauralParams.direction = direction;
-    binauralParams.interpolation = effect->hrtfInterpolation;
-    binauralParams.spatialBlend = _spatialBlend;
-    binauralParams.hrtf = gHRTF[0];
+    if (effect->directBinaural)
+    {
+        IPLBinauralEffectParams binauralParams;
+        binauralParams.direction = direction;
+        binauralParams.interpolation = effect->hrtfInterpolation;
+        binauralParams.spatialBlend = _spatialBlend;
+        binauralParams.hrtf = gHRTF[0];
 
-    iplBinauralEffectApply(effect->binauralEffect, &binauralParams, &effect->directBuffer, &effect->outBuffer);
+        iplBinauralEffectApply(effect->binauralEffect, &binauralParams, &effect->directBuffer, &effect->outBuffer);
+    }
+    else
+    {
+        iplAudioBufferDownmix(gContext, &effect->directBuffer, &effect->monoBuffer);
+
+        IPLPanningEffectParams panningParams{};
+        panningParams.direction = direction;
+
+        iplPanningEffectApply(effect->panningEffect, &panningParams, &effect->monoBuffer, &effect->outBuffer);
+    }
 
     for (auto i = 0; i < numChannelsOut; ++i)
     {
