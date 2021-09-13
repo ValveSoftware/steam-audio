@@ -70,7 +70,7 @@
             
             
               <div class="version">
-                4.0.0
+                4.0.1
               </div>
             
           
@@ -194,6 +194,8 @@
 <p>Must be attached to a GameObject containing an Audio Source (if using Unity’s built-in audio engine) or an FMOD Event Emitter (if using FMOD Studio).</p>
 <img alt="_images/source.png" src="_images/source.png" />
 <dl>
+<dt>Direct Binaural</dt><dd><p>If checked, HRTF-based binaural rendering will be used to spatialize the source. This requires 2-channel (stereo) audio output. If unchecked, panning will be used to the spatialize the source using the user’s speaker layout. Binaural rendering provides improved spatialization at the cost of slightly increased CPU usage.</p>
+</dd>
 <dt>Interpolation</dt><dd><p>Controls how HRTFs are interpolated when the source moves relative to the listener.</p>
 <ul class="simple">
 <li><p><em>Nearest</em>: Uses the HRTF from the direction nearest to the direction of the source for which HRTF data is available. The fastest option, but can result in audible artifacts for certain kinds of audio clips, such as white noise or engine sounds.</p></li>
