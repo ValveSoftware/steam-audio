@@ -668,10 +668,7 @@ UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK process(UnityAudioEffectState* sta
         }
 
         if (!effect->inputStarted)
-        {
-            reset(state);
             return UNITY_AUDIODSP_OK;
-        }
     }
 
     // Make sure that audio processing state has been initialized. If initialization fails, stop and emit silence.
