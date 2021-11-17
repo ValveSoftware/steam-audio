@@ -3,7 +3,7 @@
 
 cmake_minimum_required(VERSION 3.17)
 
-project(Phonon VERSION 4.0.2)
+project(Phonon VERSION 4.0.3)
 
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_MODULE_PATH "${CMAKE_HOME_DIRECTORY}/build")
@@ -139,14 +139,18 @@ endif()
 
 # Android flags
 if (IPL_OS_ANDROID)
-    add_compile_options(-fPIC -g -std=c++14 $<$<CONFIG:Release>:-O3>)
+    add_compile_options(-fPIC -g $<$<CONFIG:Release>:-O3>)
     if (IPL_CPU_ARMV7)
+        add_compile_options(--target=armv7a-linux-androideabi21)
         add_compile_options(-I${CMAKE_ANDROID_NDK}/sysroot/usr/include/arm-linux-androideabi)
     elseif (IPL_CPU_ARMV8)
+        add_compile_options(--target=aarch64-linux-androideabi21)
         add_compile_options(-I${CMAKE_ANDROID_NDK}/sysroot/usr/include/aarch64-linux-android)
     elseif (IPL_CPU_X86)
+        add_compile_options(--target=i686-linux-android21)
         add_compile_options(-I${CMAKE_ANDROID_NDK}/sysroot/usr/include/i686-linux-android)
     elseif (IPL_CPU_X64)
+        add_compile_options(--target=x86_64-linux-android21)
         add_compile_options(-I${CMAKE_ANDROID_NDK}/sysroot/usr/include/x86_64-linux-android)
     endif()
     add_link_options(-static-libstdc++)

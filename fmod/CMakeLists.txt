@@ -3,7 +3,7 @@
 
 cmake_minimum_required(VERSION 3.17)
 
-project(Phonon VERSION 4.0.2)
+project(Phonon VERSION 4.0.3)
 
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_MODULE_PATH "${CMAKE_HOME_DIRECTORY}/build")
@@ -95,21 +95,21 @@ endif()
 # Windows flags
 if (IPL_OS_WINDOWS)
     add_compile_definitions(
-        WIN32 
-        WINDOWS 
-        UNICODE 
-        _UNICODE 
-        _CRT_SECURE_NO_WARNINGS 
-        WIN32_LEAN_AND_MEAN 
-        NOMINMAX 
-        _DISABLE_EXTENDED_ALIGNED_STORAGE 
+        WIN32
+        WINDOWS
+        UNICODE
+        _UNICODE
+        _CRT_SECURE_NO_WARNINGS
+        WIN32_LEAN_AND_MEAN
+        NOMINMAX
+        _DISABLE_EXTENDED_ALIGNED_STORAGE
         $<IF:$<CONFIG:Debug>,_DEBUG,NDEBUG>
     )
     add_compile_options(
-        /EHsc /MP /W3 /Zi 
-        $<IF:$<CONFIG:Debug>,/MTd,/MT> 
-        $<$<CONFIG:Debug>:/RTC1> 
-        $<$<NOT:$<CONFIG:Debug>>:/Ox> 
+        /EHsc /MP /W3 /Zi
+        $<IF:$<CONFIG:Debug>,/MTd,/MT>
+        $<$<CONFIG:Debug>:/RTC1>
+        $<$<NOT:$<CONFIG:Debug>>:/Ox>
         $<$<CONFIG:Release>:/GL>
     )
     add_link_options(
@@ -137,14 +137,18 @@ endif()
 
 # Android flags
 if (IPL_OS_ANDROID)
-    add_compile_options(-fPIC -g -std=c++14 $<$<CONFIG:Release>:-O3>)
+    add_compile_options(-fPIC -g $<$<CONFIG:Release>:-O3>)
     if (IPL_CPU_ARMV7)
+        add_compile_options(--target=armv7a-linux-androideabi21)
         add_compile_options(-I${CMAKE_ANDROID_NDK}/sysroot/usr/include/arm-linux-androideabi)
     elseif (IPL_CPU_ARMV8)
+        add_compile_options(--target=aarch64-linux-androideabi21)
         add_compile_options(-I${CMAKE_ANDROID_NDK}/sysroot/usr/include/aarch64-linux-android)
     elseif (IPL_CPU_X86)
+        add_compile_options(--target=i686-linux-android21)
         add_compile_options(-I${CMAKE_ANDROID_NDK}/sysroot/usr/include/i686-linux-android)
     elseif (IPL_CPU_X64)
+        add_compile_options(--target=x86_64-linux-android21)
         add_compile_options(-I${CMAKE_ANDROID_NDK}/sysroot/usr/include/x86_64-linux-android)
     endif()
     add_link_options(-static-libstdc++)
@@ -184,9 +188,9 @@ set(CPACK_PACKAGE_VENDOR "Valve Corporation")
 set(CPACK_PACKAGE_FILE_NAME steamaudio_fmod)
 set(CPACK_PACKAGE_DIRECTORY ${CMAKE_HOME_DIRECTORY}/dist)
 set(CPACK_INSTALL_CMAKE_PROJECTS "")
-set(CPACK_INSTALLED_DIRECTORIES 
+set(CPACK_INSTALLED_DIRECTORIES
     ${CMAKE_INSTALL_PREFIX}/lib lib
-    ${CMAKE_INSTALL_PREFIX}/src src    
+    ${CMAKE_INSTALL_PREFIX}/src src
     ${CMAKE_INSTALL_PREFIX}/doc doc
 )
 

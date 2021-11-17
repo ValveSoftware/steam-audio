@@ -122,6 +122,11 @@ def cmake_generate(args):
         cmake_args += ['-DCMAKE_CXX_FLAGS=-m32']
         cmake_args += ['-DCMAKE_SHARED_LINKER_FLAGS=-m32']
 
+    # On Android, explitly point to dependencies.
+    if args.platform == 'android':
+        cmake_args += ['-DFMOD_INCLUDE_DIR=' + root_dir() + '/include/fmod']
+        cmake_args += ['-DSteamAudio_INCLUDE_DIR=' + root_dir() + '/include/phonon']
+
     # On Windows x64, build documentation.
     if args.platform == 'windows' and args.architecture == 'x64':
         cmake_args += ['-DSTEAMAUDIOFMOD_BUILD_DOCS=TRUE']
