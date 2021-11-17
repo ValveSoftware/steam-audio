@@ -1,4 +1,4 @@
-% Steam Audio 4.0.2
+% Steam Audio 4.0.3
 % Valve Corporation
 
 Supported Platforms
