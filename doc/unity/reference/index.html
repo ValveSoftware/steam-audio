@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  
+  <link rel="shortcut icon" href="../img/favicon.ico">
+  <title>Reference - Steam Audio Unity Integration</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" />
+
+  <link rel="stylesheet" href="../css/theme.css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" />
+  <link href="../steamaudio.css" rel="stylesheet" />
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Reference";
+    var mkdocs_page_input_path = "reference.md";
+    var mkdocs_page_url = null;
+  </script>
+  
+  <script src="../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+        <a href=".." class="icon icon-home"> Steam Audio Unity Integration</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../getting-started/">Getting Started</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../guide/">User's Guide</a>
+                    </li>
+                </ul>
+                <ul class="current">
+                    <li class="toctree-l1 current"><a class="reference internal current" href="./">Reference</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#components">Components</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#ambisonic-source">Ambisonic Source</a>
+        <ul>
+    <li class="toctree-l4"><a class="reference internal" href="#description">Description</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#properties">Properties</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#baked-listener">Baked Listener</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#baked-source">Baked Source</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#listener">Listener</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#probe-batch">Probe Batch</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#dynamic-object">Dynamic Object</a>
+        <ul>
+    <li class="toctree-l4"><a class="reference internal" href="#description_1">Description</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#properties_1">Properties</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#geometry">Geometry</a>
+        <ul>
+    <li class="toctree-l4"><a class="reference internal" href="#description_2">Description</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#properties_2">Properties</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#source">Source</a>
+        <ul>
+    <li class="toctree-l4"><a class="reference internal" href="#description_3">Description</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#properties_3">Properties</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#static-mesh">Static Mesh</a>
+        <ul>
+    <li class="toctree-l4"><a class="reference internal" href="#description_4">Description</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#properties_4">Properties</a>
+    </li>
+        </ul>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#mixer-effects">Mixer Effects</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#reverb">Reverb</a>
+        <ul>
+    <li class="toctree-l4"><a class="reference internal" href="#description_5">Description</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#properties_5">Properties</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#mixer-return">Mixer Return</a>
+        <ul>
+    <li class="toctree-l4"><a class="reference internal" href="#description_6">Description</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#properties_6">Properties</a>
+    </li>
+        </ul>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#asset-types">Asset Types</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#material_1">Material</a>
+        <ul>
+    <li class="toctree-l4"><a class="reference internal" href="#description_7">Description</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#properties_7">Properties</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#settings">Settings</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#menu-commands">Menu Commands</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#settings_1">Settings</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#export-active-scene">Export Active Scene</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#export-all-open-scenes">Export All Open Scenes</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#export-all-scenes-in-build">Export All Scenes In Build</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#export-active-scene-to-obj">Export Active Scene To OBJ</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#export-dynamic-objects-in-active-scene">Export Dynamic Objects In Active Scene</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#export-dynamic-objects-in-all-open-scenes">Export Dynamic Objects In All Open Scenes</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#export-dynamic-objects-in-all-scenes-in-build">Export Dynamic Objects In All Scenes In Build</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#export-all-dynamic-objects-in-project">Export All Dynamic Objects In Project</a>
+    </li>
+        </ul>
+    </li>
+    </ul>
+                    </li>
+                </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="..">Steam Audio Unity Integration</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="..">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>Reference</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="reference">Reference</h1>
+<h2 id="components">Components</h2>
+<p>All of these components can be attached by clicking Add Component in the Inspector, then choosing Steam Audio.</p>
+<h3 id="ambisonic-source">Ambisonic Source</h3>
+<h4 id="description">Description</h4>
+<p>Provides options for controlling how an Ambisonic audio source is rendered.</p>
+<p>Must be attached to a GameObject containing an Audio Source. The Audio Clip of the Audio Source must be set to an Ambisonic audio clip. See the Unity documentation for details.</p>
+<h4 id="properties">Properties</h4>
+<h5 id="apply-hrtf">Apply HRTF</h5>
+<p>If on, the Ambisonic audio clip is spatialized using HRTF-based binaural rendering. Provides an improvement in spatialization quality at the cost of a slight increase in CPU usage. Default: on.</p>
+<h3 id="baked-listener">Baked Listener</h3>
+<h3 id="baked-source">Baked Source</h3>
+<h3 id="listener">Listener</h3>
+<h3 id="probe-batch">Probe Batch</h3>
+<h3 id="dynamic-object">Dynamic Object</h3>
+<h4 id="description_1">Description</h4>
+<p>Tags the object it's attached to, and all of its descendants in the hierarchy, as dynamic geometry.</p>
+<p>Any Steam Audio Geometry components found in this GameObject, or one of its descendants, are exported as a single dynamic object. However, if one of the descendants contains a Steam Audio Dynamic Object component of its own, then <em>its</em> descendants are treated as a separate dynamic object.</p>
+<p>At run-time, any changes made to the Transform of the GameObject to which the Steam Audio Dynamic Object component has been attached will automatically be passed to Steam Audio.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Changes made to the transforms of descendants of the Steam Audio Dynamic Object will <em>not</em> be passed to Steam Audio. The Dynamic Object and all its descendants must move/animate as a rigid body.</p>
+</div>
+<h4 id="properties_1">Properties</h4>
+<h5 id="asset">Asset</h5>
+<p>Reference to the asset that contains the exported geometry data for this dynamic object. Automatically generated by Steam Audio.</p>
+<h5 id="export-dynamic-object">Export Dynamic Object</h5>
+<p>Exports the dynamic object to an asset. When doing this for the first time, you will be prompted for a file name and directory under which to save the asset.</p>
+<h5 id="export-dynamic-object-as-obj">Export Dynamic Object As OBJ</h5>
+<p>Exports the dynamic object to a .OBJ file. This is intended for debugging purposes.</p>
+<h3 id="geometry">Geometry</h3>
+<h4 id="description_2">Description</h4>
+<p>Tags the object it's attached to as acoustic geometry.</p>
+<p>Must be attached to a GameObject containing a Mesh Filter or Terrain component, or a GameObject with at least one descendent in the hierarchy that contains a Mesh Filter or Terrain component.</p>
+<p>If some ancestor of the GameObject contains a Steam Audio Dynamic Object component, the geometry will exported as part of that dynamic object. Otherwise, it will be exported as part of the static geometry of the scene.</p>
+<h4 id="properties_2">Properties</h4>
+<h5 id="material">Material</h5>
+<p>Reference to the Material asset that defines the acoustic properties of this geometry. If not set, the project-wide default material is used.</p>
+<h5 id="export-all-children">Export All Children</h5>
+<p>If checked, the geometry of all children with a Mesh Filter or Terrain attached to them will be exported as acoustic geometry.</p>
+<h5 id="terrain-simplification-level">Terrain Simplification Level</h5>
+<p>Geometry that is represented by a Terrain can be quite complex. This can slow down the calculation of occlusion and sound propagation. To speed things up, you can adjust this slider. As you increase this value, Steam Audio will reduce the level of detail in the terrain. This will result in faster simulation.</p>
+<h3 id="source">Source</h3>
+<h4 id="description_3">Description</h4>
+<p>Provides options for controlling how an Audio Source is rendered, as well as controlling how occlusion and sound propagation are simulated.</p>
+<p>Must be attached to a GameObject containing an Audio Source.</p>
+<h4 id="properties_3">Properties</h4>
+<h5 id="interpolation">Interpolation</h5>
+<p>Controls how HRTFs are interpolated when the source moves relative to the listener.</p>
+<ul>
+<li>
+<p><em>Nearest</em>: Uses the HRTF from the direction nearest to the direction of the source for which HRTF data is available. The fastest option, but can result in audible artifacts for certain kinds of audio clips, such as white noise or engine sounds.</p>
+</li>
+<li>
+<p><em>Bilinear</em>: Uses an HRTF generated after interpolating from four directions nearest to the direction of the source, for which HRTF data is available. This may result in smoother audio for some kinds of sources when the listener looks around, but has higher CPU usage (up to 2x).</p>
+</li>
+</ul>
+<h5 id="distance-attenuation">Distance Attenuation</h5>
+<p>If checked, distance attenuation will be calculated and applied to the Audio Source. This takes into account the <strong>Spatial Blend</strong> setting on the Audio Source, so if <strong>Spatial Blend</strong> is set to <strong>2D</strong>, distance attenuation is effectively not applied.</p>
+<h5 id="distance-attenuation-input">Distance Attenuation Input</h5>
+<p>Specifies how the distance attenuation value is determined.</p>
+<ul>
+<li>
+<p><em>Curve Driven</em>: Distance attenuation is controlled by the Volume curve on the Audio Source.</p>
+</li>
+<li>
+<p><em>Physics Based</em>: A physics-based distance attenuation model is used. This is an inverse distance falloff. The curves defined on the Audio Source are ignored.</p>
+</li>
+</ul>
+<h5 id="air-absorption">Air Absorption</h5>
+<p>If checked, frequency-dependent distance based air absorption will be calculated and applied to the Audio Source.</p>
+<h5 id="air-absorption-input">Air Absorption Input</h5>
+<p>Specifies how the air absorption values (which are 3-band EQ values) are determined.</p>
+<ul>
+<li>
+<p><em>Simulation Defined</em>: Uses a physics-based air absorption model. This is an exponential falloff, with higher frequencies falling off faster with distance than lower frequencies.</p>
+</li>
+<li>
+<p><em>User Defined</em>: Uses the values specified in the <strong>Air Absorption Low</strong>, <strong>Air Absorption Mid</strong>, and <strong>Air Absorption High</strong> sliders as the EQ values. The air absorption value will not automatically change with distance to the source. You are expected to control the <strong>Air Absorption Low</strong>, <strong>Air Absorption Mid</strong>, and <strong>Air Absorption High</strong> sliders using a custom script to achieve this effect.</p>
+</li>
+</ul>
+<h5 id="air-absorption-low">Air Absorption Low</h5>
+<p>The low frequency (up to 800 Hz) EQ value for air absorption. Only used if <strong>Air Absorption Input</strong> is set to <strong>User Defined</strong>. 0 = low frequencies are completely attenuated, 1 = low frequencies are not attenuated at all.</p>
+<h5 id="air-absorption-mid">Air Absorption Mid</h5>
+<p>The middle frequency (800 Hz - 8 kHz) EQ value for air absorption. Only used if <strong>Air Absorption Input</strong> is set to <strong>User Defined</strong>. 0 = middle frequencies are completely attenuated, 1 = middle frequencies are not attenuated at all.</p>
+<h5 id="air-absorption-high">Air Absorption High</h5>
+<p>The high frequency (8 kHz and above) EQ value for air absorption. Only used if <strong>Air Absorption Input</strong> is set to <strong>User Defined</strong>. 0 = high frequencies are completely attenuated, 1 = high frequencies are not attenuated at all.</p>
+<h5 id="directivity">Directivity</h5>
+<p>If checked, attenuation based on the source's directivity pattern and orientation will be applied to the Audio Source.</p>
+<h5 id="directivity-input">Directivity Input</h5>
+<p>Specifies how the directivity attenuation value is determined.</p>
+<ul>
+<li>
+<p><em>Simulation Defined</em>. Uses a dipole directivity model. You can control the dipole shape using the <strong>Dipole Weight</strong> and <strong>Dipole Power</strong> properties.</p>
+</li>
+<li>
+<p><em>User Defined</em>. Uses the value specified in the <strong>Directivity Value</strong> property. This value will <em>not</em> automatically change as the source rotates. You are expected to control the <strong>Directivity Value</strong> property using a custom script to achieve this effect.</p>
+</li>
+</ul>
+<h5 id="dipole-weight">Dipole Weight</h5>
+<p>Blends between monopole (omnidirectional) and dipole directivity patterns. 0 = pure monopole (sound is emitted in all directions with equal intensity), 1 = pure dipole (sound is focused to the front and back of the source). At 0.5, the source has a cardioid directivity, with most of the sound emitted to the front of the source. Only used if <strong>Directivity Input</strong> is set to <strong>Simulation Defined</strong>.</p>
+<h5 id="dipole-power">Dipole Power</h5>
+<p>Controls how focused the dipole directivity is. Higher values result in sharper directivity patterns. Only used if <strong>Directivity Input</strong> is set to <strong>Simulation Defined</strong>.</p>
+<h5 id="directivity-value">Directivity Value</h5>
+<p>The directivity attenuation value. Only used if <strong>Directivity Input</strong> is set to <strong>User Defined</strong>. 0 = sound is completely attenuated, 1 = sound is not attenuated at all.</p>
+<h5 id="occlusion">Occlusion</h5>
+<p>If checked, attenuation based on the occlusion the source by the scene geometry will be applied to the Audio Source.</p>
+<h5 id="occlusion-input">Occlusion Input</h5>
+<p>Specifies how the occlusion attenuation value is determined.</p>
+<ul>
+<li>
+<p><em>Simulation Defined</em>. Uses ray tracing to determine how much of the source is occluded.</p>
+</li>
+<li>
+<p><em>User Defined</em>. Uses the <strong>Occlusion Value</strong> slider to control occlusion. The occlusion value will <em>not</em> automatically change based on surrounding geometry. You are expected to control the <strong>Occlusion Value</strong> slider using a custom script to achieve this effect. This option is intended for integrating your own occlusion model with Steam Audio.</p>
+</li>
+</ul>
+<h5 id="occlusion-type">Occlusion Type</h5>
+<p>Specifies how rays should be traced to model occlusion.</p>
+<ul>
+<li>
+<p><em>Raycast</em>. Trace a single ray from the listener to the source. If the ray is occluded, the source is considered occluded.</p>
+</li>
+<li>
+<p><em>Volumetric</em>. Trace multiple rays from the listener to the source based on the <strong>Occlusion Radius</strong> setting. The proportion of rays that are occluded determine how much of the direct sound is considered occluded. Transmission calculations, if enabled, are only applied to the occluded portion of the direct sound.</p>
+</li>
+</ul>
+<h5 id="occlusion-radius">Occlusion Radius</h5>
+<p>The apparent size of the sound source. The larger the source radius, the larger an object must be in
+    order to fully occlude sound emitted by the source.</p>
+<h5 id="occlusion-samples">Occlusion Samples</h5>
+<p>The number of rays to trace from the listener to various points in a sphere around the source. Only used if <strong>Occlusion Type</strong> is set to <strong>Volumetric</strong>. Increasing this number results in smoother transitions as the source becomes more (or less) occluded. This comes at the cost of increased CPU usage.</p>
+<h5 id="occlusion-value">Occlusion Value</h5>
+<p>The occlusion attenuation value. Only used if <strong>Occlusion Input</strong> is set to <strong>User Defined</strong>. 0 = sound is completely attenuated, 1 = sound is not attenuated at all.</p>
+<h5 id="transmission">Transmission</h5>
+<p>If checked, a filter based on the transmission of sound through occluding scene geometry will be applied to the Audio Source.</p>
+<h5 id="transmission-type">Transmission Type</h5>
+<p>Specifies how the transmission filter is applied.</p>
+<ul>
+<li>
+<p><em>Frequency Independent</em>. Transmission is modeled as a single attenuation factor.</p>
+</li>
+<li>
+<p><em>Frequency Dependent</em>. Transmission is modeled as a 3-band EQ.</p>
+</li>
+</ul>
+<h5 id="transmission-input">Transmission Input</h5>
+<p>Specifies how the transmission attenuation or EQ values are determined.</p>
+<ul>
+<li>
+<p><em>Simulation Defined</em>. Uses ray tracing to determine how much of the sound is transmitted.</p>
+</li>
+<li>
+<p><em>User Defined</em>. Uses the <strong>Transmission Low</strong>, <strong>Transmission Mid</strong>, and <strong>Transmission High</strong> sliders to control transmission. The transmission values will <em>not</em> automatically change based on surrounding geometry. You are expected to control the sliders using a custom script to achieve this effect. This option is intended for integrating your own occlusion and transmission model with Steam Audio.</p>
+</li>
+</ul>
+<h5 id="transmission-low">Transmission Low</h5>
+<p>The low frequency (up to 800 Hz) EQ value for transmission. Only used if <strong>Transmission Input</strong> is set to <strong>User Defined</strong>. 0 = low frequencies are completely attenuated, 1 = low frequencies are not attenuated at all.</p>
+<h5 id="transmission-mid">Transmission Mid</h5>
+<p>The middle frequency (800 Hz to 8 kHz) EQ value for transmission. Only used if <strong>Transmission Input</strong> is set to <strong>User Defined</strong>. 0 = middle frequencies are completely attenuated, 1 = middle frequencies are not attenuated at all.</p>
+<h5 id="transmission-high">Transmission High</h5>
+<p>The high frequency (8 kHz and above) EQ value for transmission. Only used if <strong>Transmission Input</strong> is set to <strong>User Defined</strong>. 0 = high frequencies are completely attenuated, 1 = high frequencies are not attenuated at all.</p>
+<h5 id="direct-mix-level">Direct Mix Level</h5>
+<p>The contribution of the direct sound path to the overall mix for this Audio Source. Lower values reduce the contribution more.</p>
+<h5 id="reflections">Reflections</h5>
+<h5 id="reflections-type">Reflections Type</h5>
+<h5 id="current-baked-source">Current Baked Source</h5>
+<h5 id="apply-hrtf-to-reflections">Apply HRTF To Reflections</h5>
+<h5 id="indirect-mix-level">Indirect Mix Level</h5>
+<h5 id="pathing-probe-batch">Pathing Probe Batch</h5>
+<h5 id="path-validation">Path Validation</h5>
+<h5 id="find-alternate-paths">Find Alternate Paths</h5>
+<h5 id="simplify-paths">Simplify Paths</h5>
+<h5 id="real-time-visibility">Real Time Visibility</h5>
+<h5 id="apply-hrtf-to-pathing">Apply HRTF To Pathing</h5>
+<h5 id="pathing-mix-level">Pathing Mix Level</h5>
+<h3 id="static-mesh">Static Mesh</h3>
+<h4 id="description_4">Description</h4>
+<p>References the asset containing the exported geometry data for the static geometry of the scene. This component is automatically added to an empty GameObject when you export a scene from the main menu. You shouldn't have to attach this component manually.</p>
+<h4 id="properties_4">Properties</h4>
+<h5 id="asset_1">Asset</h5>
+<p>Reference to the asset that contains the exported geometry data for this scene. Automatically generated by Steam Audio.</p>
+<h2 id="mixer-effects">Mixer Effects</h2>
+<p>All of these effects can be added to any Mixer Group on the Audio Mixer tab.</p>
+<h3 id="reverb">Reverb</h3>
+<h4 id="description_5">Description</h4>
+<p>Applies reverb based on the listener position to any audio flowing through the Mixer Group to which this effect is attached. The type of reverb applied (convolution, parametric, or hybrid) can be configured in the Steam Audio Settings asset.</p>
+<p>Reverb simulation must be configured using a Steam Audio Listener component.</p>
+<h4 id="properties_5">Properties</h4>
+<h5 id="apply-hrtf_1">Apply HRTF</h5>
+<p>If checked, applies HRTF-based 3D audio rendering to reverb. Results in an improvement in spatialization quality when using convolution or hybrid reverb, at the cost of slightly increased CPU usage. Default: off.</p>
+<h3 id="mixer-return">Mixer Return</h3>
+<h4 id="description_6">Description</h4>
+<p>When <strong>Reflections</strong> are enabled for multiple Steam Audio Sources in a scene, this mixer effect can be used to reduce the CPU cost of audio processing. When this mixer effect is added to a mixer group, the indirect portion of every audio source's output is taken out of Unity's audio pipeline, mixed, spatialized, and re-inserted at the mixer group to which this effect is attached. The direct sound path of audio sources is not affected.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Since indirect sound is taken out of Unity's audio pipeline at the Audio Source, any effects applied between the Audio Source and the Steam Audio Mixer Return effect will not apply to the indirect sound.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This effect should only be used if <strong>Indirect Effect Type</strong> is set to <strong>Convolution</strong> or <strong>TrueAudio Next</strong> in the Settings asset. It is <em>required</em> when using <strong>TrueAudio Next</strong>.</p>
+</div>
+<h4 id="properties_6">Properties</h4>
+<h5 id="apply-hrtf_2">Apply HRTF</h5>
+<p>If checked, applies HRTF-based 3D audio rendering to mixed indirect sound. Results in an improvement in spatialization quality, at the cost of slightly increased CPU usage. Default: off.</p>
+<h2 id="asset-types">Asset Types</h2>
+<p>All of these assets can be created in your project by choosing <strong>Create</strong> &gt; <strong>Steam Audio</strong> in the Project tab.</p>
+<h3 id="material_1">Material</h3>
+<h4 id="description_7">Description</h4>
+<p>A collection of properties that define how an object reflects, absorbs, and transmits sound. You can create a separate Material asset for each surface type in your project, then reference it (using the <strong>Material</strong> property of the Steam Audio Geometry components in your scenes and prefabs) from all objects that have the corresponding material type.</p>
+<p>Steam Audio provides a small library of built-in materials to get you started.</p>
+<p>If the <strong>Material</strong> property of a Steam Audio Geometry component is set to <strong>None</strong>, it will use the project-wide default material, which is specified in the Settings asset.</p>
+<p>If you have a Steam Audio Geometry component with <strong>Export All Children</strong> checked, all of its descendants are considered to have the material assigned to the Steam Audio Geometry.</p>
+<h4 id="properties_7">Properties</h4>
+<h5 id="low-freq-absorption">Low Freq Absorption</h5>
+<p>How much sound the material absorbs at low frequencies (up to 800 Hz). 0 = absorbs none of the low frequency sound, 1 = absorbs all of it.</p>
+<h5 id="mid-freq-absorption">Mid Freq Absorption</h5>
+<p>How much sound the material absorbs at middle frequencies (800 Hz - 8 kHz). 0 = absorbs none of the middle frequency sound, 1 = absorbs all of it.</p>
+<h5 id="high-freq-absorption">High Freq Absorption</h5>
+<p>How much sound the material absorbs at high frequencies (8 kHz and above). 0 = absorbs none of the high frequency sound, 1 = absorbs all of it.</p>
+<h5 id="scattering">Scattering</h5>
+<p>How "rough" the surface is when reflecting sound. 0 = sound is reflected in a perfectly mirror-like manner ("pure specular"), 1 = sound is reflected randomly in all directions ("pure diffuse").</p>
+<h5 id="low-freq-transmission">Low Freq Transmission</h5>
+<p>How much sound the material transmits at low frequencies (up to 800 Hz). 0 = no low frequency sound passes through, 1 = all of it passes through.</p>
+<h5 id="mid-freq-transmission">Mid Freq Transmission</h5>
+<p>How much sound the material transmits at middle frequencies (800 Hz - 8 kHz). 0 = no middle frequency sound passes through, 1 = all of it passes through.</p>
+<h5 id="high-freq-transmission">High Freq Transmission</h5>
+<p>How much sound the material transmits at high frequencies (8 kHz and above). 0 = no high frequency sound passes through, 1 = all of it passes through.</p>
+<h3 id="settings">Settings</h3>
+<h2 id="menu-commands">Menu Commands</h2>
+<p>All of these commands are available under the <strong>Steam Audio</strong> menu in Unity's main menu.</p>
+<h5 id="settings_1">Settings</h5>
+<p>Opens the Settings asset in the Inspector.</p>
+<h5 id="export-active-scene">Export Active Scene</h5>
+<p>Exports the static geometry of the currently open and active scene to an asset file. When doing this for the first time, you will be prompted for a file name and directory under which to save the asset.</p>
+<h5 id="export-all-open-scenes">Export All Open Scenes</h5>
+<p>Exports the static geometry of all currently open scenes.</p>
+<h5 id="export-all-scenes-in-build">Export All Scenes In Build</h5>
+<p>Exports the static geometry of all scenes specified in your build settings (<strong>File</strong> &gt; <strong>Build Settings</strong> in the main menu).</p>
+<h5 id="export-active-scene-to-obj">Export Active Scene To OBJ</h5>
+<p>Exports the static geometry of the currently open and active scene to an OBJ file. This is intended for debugging purposes.</p>
+<h5 id="export-dynamic-objects-in-active-scene">Export Dynamic Objects In Active Scene</h5>
+<p>Exports every dynamic object in the currently open and active scene.</p>
+<h5 id="export-dynamic-objects-in-all-open-scenes">Export Dynamic Objects In All Open Scenes</h5>
+<p>Exports every dynamic object in all currently open scenes.</p>
+<h5 id="export-dynamic-objects-in-all-scenes-in-build">Export Dynamic Objects In All Scenes In Build</h5>
+<p>Exports every dynamic object in all scenes specified in your build settings (<strong>File</strong> &gt; <strong>Build Settings</strong> in the main menu).</p>
+<h5 id="export-all-dynamic-objects-in-project">Export All Dynamic Objects In Project</h5>
+<p>Exports every dynamic object in every scene or prefab found in your project's <code>Assets</code> directory.</p>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="../guide/" class="btn btn-neutral" title="User's Guide"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+      
+        <span><a href="../guide/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+    </span>
+</div>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme.js" defer></script>
+      <script src="../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>

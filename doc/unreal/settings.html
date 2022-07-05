@@ -1,0 +1,344 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Settings &mdash; Steam Audio Unreal Engine Integration  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/steamaudio.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Menu Commands" href="menu-commands.html" />
+    <link rel="prev" title="Steam Audio Spatialization Settings" href="spatialization-settings.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html">
+          
+
+          
+            
+            <img src="_static/steam-audio-logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                4.1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Unreal Engine Integration</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guide.html">User’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="build-instructions.html">Build Instructions</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="reference.html">Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="components.html">Components</a></li>
+<li class="toctree-l2"><a class="reference internal" href="actors.html">Actors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="submix-effects.html">Submix Effects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="asset-types.html">Asset Types</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Settings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="menu-commands.html">Menu Commands</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Steam Audio Unreal Engine Integration</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="reference.html">Reference</a> &raquo;</li>
+        
+      <li>Settings</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="settings">
+<h1>Settings<a class="headerlink" href="#settings" title="Permalink to this headline">¶</a></h1>
+<p>The project-wide settings used by Steam Audio can be accessed by clicking <strong>Edit</strong> &gt; <strong>Project Settings</strong> in the main menu, then scrolling down to <strong>Plugins</strong> &gt; <strong>Steam Audio</strong> in the left column of the Project Settings window.</p>
+<img alt="_images/settings_reverbsubmix.png" src="_images/settings_reverbsubmix.png" />
+<dl>
+<dt>Audio Engine</dt><dd><p>Specifies the audio engine that Steam Audio should integrate with.</p>
+<ul class="simple">
+<li><p><em>Unreal</em>. Integrate with Unreal’s built-in audio engine.</p></li>
+<li><p><em>FMOD Studio</em>. Integrate with FMOD Studio. The Steam Audio plugin for FMOD Studio should be installed in your FMOD Studio project. The FMOD Studio plugin for Unreal, as well as the Steam Audio FMOD Studio Support plugin for Unreal should be enabled in your Unreal project.</p></li>
+</ul>
+</dd>
+<dt>Export Landscape Geometry</dt><dd><p>If checked, geometry contained in Landscape actors will be exported to Steam Audio if they also have a Steam Audio Geometry component.</p>
+</dd>
+<dt>Export BSP Geometry</dt><dd><p>If checked, BSP geometry will be exported to Steam Audio as part of the static geometry of a level.</p>
+</dd>
+<dt>Default Mesh Material</dt><dd><p>The material to use for Static Mesh components that have no material specified using a Steam Audio Geometry component.</p>
+</dd>
+<dt>Default Landscape Material</dt><dd><p>The material to use for Landscape actors that have no material specified using a Steam Audio Geometry component.</p>
+</dd>
+<dt>Default BSP Material</dt><dd><p>The material to use for BSP geometry.</p>
+</dd>
+<dt>Scene Type</dt><dd><p>Specifies the ray tracing implementation to use for simulations.</p>
+<ul class="simple">
+<li><p><em>Default</em>. Steam Audio’s built-in ray tracer. Runs on all platforms that Steam Audio supports.</p></li>
+<li><p><em>Embree</em>. The Intel® Embree ray tracer. Provides improved performance compared to Steam Audio’s built-in ray tracer. Supported only on Windows, Linux, and macOS.</p></li>
+<li><p><em>Radeon Rays</em>. The AMD Radeon™ Rays ray tracer. This is an OpenCL implementation, and can use either the CPU or any GPU that supports OpenCL 1.2 or later. If using the GPU, it is likely to be significantly faster than Steam Audio’s built-in ray tracer. However, with heavy real-time simulation workloads, it may impact your application’s frame rate. On supported AMD GPUs, you can use the Resource Reservation feature to mitigate this issue. Supported only on Windows 64-bit.</p></li>
+</ul>
+</dd>
+<dt>Max Occlusion Samples</dt><dd><p>The maximum possible value of <strong>Occlusion Samples</strong> that can be specified on any Source. The number of occlusion samples can be change on the fly for any source, but it cannot exceed the value of this setting.</p>
+</dd>
+<dt>Real Time Rays</dt><dd><p>The number of rays traced from the listener when simulating reflections or reverb in real-time. Increasing this value results in more accurate reflections, at the cost of increased CPU usage.</p>
+</dd>
+<dt>Real Time Bounces</dt><dd><p>The number of times each ray traced from the listener is reflected when simulating reflections or reverb in real-time. Increasing this value results in longer, more accurate reverb tails, at the cost of increased CPU usage during simulation.</p>
+</dd>
+<dt>Real Time Duration</dt><dd><p>The duration (in seconds) of the impulse responses (IRs) generated when simulating reflections or reverb in real-time. Increasing this value results in longer, more accurate reverb tails, at the cost of increased CPU usage during audio processing.</p>
+<p>This is also the duration of the IRs that are interpolated from baked data. If the data was baked with shorter IRs, the IRs used for rendering will be appropriately padded with zeroes. If the data was baked with longer IRs, the IRs used for rendering will be truncated.</p>
+</dd>
+<dt>Real Time Ambisonic Order</dt><dd><p>The Ambisonic order of the IRs generated when simulating reflections or reverb in real-time. Increasing this value results in more accurate directional variation of reflected sound, at the cost of increased CPU usage during audio processing.</p>
+<p>This is also the Ambisonic order of the IRs that are interpolated from baked data. If the data was baked with a lower Ambisonic order, the higher-order terms in the IRs are set to zero. If the data was baked with a higher Ambisonic order, the higher-order terms in the baked data are ignored.</p>
+</dd>
+<dt>Real Time Max Sources</dt><dd><p>The maximum number of sources for which reflections should be simulated in real-time.</p>
+</dd>
+<dt>Real Time CPU Cores Percentage</dt><dd><p>The percentage of available CPU cores that should be used for real-time simulation of reflections or reverb.</p>
+</dd>
+<dt>Real Time Irradiance Min Distance</dt><dd><p>When calculating how much sound energy reaches a surface directly from a source, if simulating reflections in real-time, any source that is closer than this distance (in meters) to the surface is assumed to be at this distance, for the purposes of energy calculations.</p>
+</dd>
+<dt>Bake Convolution</dt><dd><p>If checked, when reflections or reverb is baked, convolution data (IRs) are stored in the baked data.</p>
+</dd>
+<dt>Bake Parametric</dt><dd><p>If checked, when reflections or reverb is baked, parametric reverb data are stored in the baked data.</p>
+</dd>
+<dt>Baking Rays</dt><dd><p>The number of rays traced from the listener when baking reflections or reverb. Increasing this value results in more accurate reflections, at the cost of increased bake times.</p>
+</dd>
+<dt>Baking Bounces</dt><dd><p>The number of times each ray traced from the listener is reflected when baking reflections or reverb. Increasing this value results in longer, more accurate reverb tails, at the cost of increased bake times.</p>
+</dd>
+<dt>Baking Duration</dt><dd><p>The duration (in seconds) of the IRs generated when baking reflections or reverb. Increasing this value results in longer, more accurate reverb tails, at the cost of increased disk space usage.</p>
+</dd>
+<dt>Baking Ambisonic Order</dt><dd><p>The Ambisonic order of the IRs generated when baking reflections or reverb. Increasing this value results in more accurate directional variation of reflected sound, at the cost of increased disk space usage.</p>
+</dd>
+<dt>Baking CPU Cores Percentage</dt><dd><p>The percentage of available CPU cores that should be used for baking reflections or reverb.</p>
+</dd>
+<dt>Baking Irradiance Min Distance</dt><dd><p>When calculating how much sound energy reaches a surface directly from a source, if baking reflections, any source that is closer than this distance (in meters) to the surface is assumed to be at this distance, for the purposes of energy calculations.</p>
+</dd>
+<dt>Reverb Submix</dt><dd><p>The Sound Submix configured with a Steam Audio Reverb submix effect. All source centric reflections will be taken out of Unreal’s audio pipeline at the Audio component and re-inserted at this Submix.</p>
+</dd>
+<dt>Baking Visibility Samples</dt><dd><p>Number of point samples to use around each probe when testing whether one probe can see another. To determine if two probes are mutually visible, rays are traced from each point sample of the first probe, to every other point sample of the second probe. Increasing this value prevents paths from being considered occluded by small objects, at the cost of increased bake times.</p>
+</dd>
+<dt>Baking Visibility Radius</dt><dd><p>When testing for mutual visibility between a pair of probes, each probe is treated as a sphere of this radius (in meters), and point samples are generated within this sphere.</p>
+</dd>
+<dt>Baking Visibility Threshold</dt><dd><p>When tracing rays to test for mutual visibility between a pair of probes, the fraction of rays that are unoccluded must be greater than this threshold for the pair of probes to be considered mutually visible.</p>
+</dd>
+<dt>Baking Visibility Range</dt><dd><p>If the distance between two probes is greater than this value, the probes are not considered mutually visible. Increasing this value can result in simpler paths, at the cost of increased bake times.</p>
+</dd>
+<dt>Baking Path Range</dt><dd><p>If the distance between two probes is greater than this value, the probes are considered to not have any path between them. Increasing this value allows sound to propagate over greater distances, at the cost of increased bake times and memory usage.</p>
+</dd>
+<dt>Baked Pathing CPU Cores Percentage</dt><dd><p>The percentage of available CPU cores that should be used for baking pathing.</p>
+</dd>
+<dt>Simulation Update Interval</dt><dd><p>The minimum interval (in seconds) between successive updates to reflection and pathing simulations.</p>
+</dd>
+<dt>Reflection Effect Type</dt><dd><p>Specifies the algorithm used for rendering reflections and reverb.</p>
+<ul class="simple">
+<li><p><em>Convolution</em>. Multi-channel convolution reverb. Reflections reaching the listener are encoded in an Impulse Response (IR), which is a filter that records each reflection as it arrives. This algorithm renders reflections with the most detail, but may result in significant CPU usage.</p></li>
+<li><p><em>Parametric</em>. Parametric (or artificial) reverb, using feedback delay networks. The reflected sound field is reduced to a few numbers that describe how reflected energy decays over time. This is then used to drive an approximate model of reverberation in an indoor space. This algorithm results in lower CPU usage, but cannot render individual echoes, especially in outdoor spaces.</p></li>
+<li><p><em>Hybrid</em>. A hybrid of convolution and parametric reverb. The initial portion of the IR is rendered using convolution reverb, but the later part is used to estimate a parametric reverb. The point in the IR where this transition occurs can be controlled. This algorithm allows a trade-off between rendering quality and CPU usage.</p></li>
+<li><p><em>TrueAudio Next</em>. Multi-channel convolution reverb, using AMD TrueAudio Next for GPU acceleration. This algorithm is similar to <strong>Convolution</strong>, but uses the GPU instead of the CPU for processing, allowing significantly more sources to be processed.</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>When using Unreal’s built-in audio engine, the <strong>Parametric</strong> or <strong>Hybrid</strong> options are not currently supported when using source-centric reflections. This limitation will be removed in a future release.</p>
+</div>
+</dd>
+<dt>Hybrid Reverb Transition Time</dt><dd><p>If <strong>Reflection Effect Type</strong> is set to <strong>Hybrid</strong>, this is the length (in seconds) of impulse response to use for convolution reverb. The rest of the impulse response will be used for parametric reverb estimation only. Increasing this value results in more accurate reflections, at the cost of increased CPU usage.</p>
+</dd>
+<dt>Hybrid Reverb Overlap Percent</dt><dd><p>If <strong>Reflection Effect Type</strong> is set to <strong>Hybrid</strong>, this is the amount of overlap between the convolution and parametric parts. To ensure smooth transitions from the early convolution part to the late parametric part, the two are cross-faded towards the end of the convolution part. For example, if <strong>Hybrid Reverb Transition Time</strong> is 1.0, and <strong>Hybrid Reverb Overlap Percent</strong> is 0.25, then the first 0.75 seconds are pure convolution, the next 0.25 seconds are a blend between convolution and parametric, and the portion of the tail beyond 1.0 second is pure parametric.</p>
+</dd>
+<dt>Device Type</dt><dd><p>Specifies the type of OpenCL device to use with Radeon™ Rays or TrueAudio Next.</p>
+<ul class="simple">
+<li><p><em>CPU</em>. Runs OpenCL computations on the user’s CPU.</p></li>
+<li><p><em>GPU</em>. Runs OpenCL computations on the user’s GPU. If multiple GPUs are available, this will pick the first one reported by the OpenCL runtime.</p></li>
+<li><p><em>Any</em>. Runs OpenCL computations on any available device. The device selected will be the first one reported by the OpenCL runtime.</p></li>
+</ul>
+<p>Note that if Resource Reservation is enabled (by setting <strong>Max Reserved CUs</strong> to a non-zero value), then OpenCL computations will be restricted to run on supported AMD GPUs only. If no such device is installed on the user’s system, OpenCL initialization will fail.</p>
+</dd>
+<dt>Max Reserved Compute Units</dt><dd><p>The number of GPU compute units (CUs) that should be reserved for use by Steam Audio. If set to a non-zero value, then a GPU will be included in the device list only if it can reserve at least this many CUs. Set to 0 to indicate that Steam Audio can use the entire GPU, in which case all available GPUs will be considered.</p>
+</dd>
+<dt>Fraction Compute Units For IR Update</dt><dd><p>The fraction of reserved CUs that should be used for impulse response (IR) update. IR update includes: a) ray tracing using Radeon Rays to simulate sound propagation, and/or b) pre-transformation of IRs for convolution using TrueAudio Next. Steam Audio will only list GPU devices that are able to subdivide the reserved CUs as per this value. The value must be between 0 and 1.</p>
+</dd>
+<dt>Baking Batch Size</dt><dd><p>If <strong>Scene Type</strong> is set to <strong>Radeon Rays</strong>, this is the number of probes for which data is baked simultaneously.</p>
+</dd>
+<dt>TAN Duration</dt><dd><p>Overrides the value of <strong>Real Time Duration</strong> when <strong>Reflection Effect Type</strong> is set to <strong>TrueAudio Next</strong>.</p>
+</dd>
+<dt>TAN Ambisonic Order</dt><dd><p>Overrides the value of <strong>Real Time Ambisonic Order</strong> when <strong>Reflection Effect Type</strong> is set to <strong>TrueAudio Next</strong>.</p>
+</dd>
+<dt>TAN Max Sources</dt><dd><p>Overrides the value of <strong>Real Time Max Sources</strong> when <strong>Reflection Effect Type</strong> is set to <strong>TrueAudio Next</strong>.</p>
+</dd>
+</dl>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="menu-commands.html" class="btn btn-neutral float-right" title="Menu Commands" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="spatialization-settings.html" class="btn btn-neutral float-left" title="Steam Audio Spatialization Settings" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Valve Corporation.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

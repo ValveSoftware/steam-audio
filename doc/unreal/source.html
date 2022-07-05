@@ -1,0 +1,291 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Steam Audio Source &mdash; Steam Audio Unreal Engine Integration  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/steamaudio.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Actors" href="actors.html" />
+    <link rel="prev" title="Steam Audio Listener" href="listener.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html">
+          
+
+          
+            
+            <img src="_static/steam-audio-logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                4.1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Unreal Engine Integration</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guide.html">User’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="build-instructions.html">Build Instructions</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="reference.html">Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="components.html">Components</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="baked-listener.html">Steam Audio Baked Listener</a></li>
+<li class="toctree-l3"><a class="reference internal" href="baked-source.html">Steam Audio Baked Source</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dynamic-object.html">Steam Audio Dynamic Object</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geometry.html">Steam Audio Geometry</a></li>
+<li class="toctree-l3"><a class="reference internal" href="listener.html">Steam Audio Listener</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Steam Audio Source</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="actors.html">Actors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="submix-effects.html">Submix Effects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="asset-types.html">Asset Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="settings.html">Settings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="menu-commands.html">Menu Commands</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Steam Audio Unreal Engine Integration</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="reference.html">Reference</a> &raquo;</li>
+        
+          <li><a href="components.html">Components</a> &raquo;</li>
+        
+      <li>Steam Audio Source</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="steam-audio-source">
+<h1>Steam Audio Source<a class="headerlink" href="#steam-audio-source" title="Permalink to this headline">¶</a></h1>
+<p>Provides options for controlling how occlusion and sound propagation are simulated for an audio source.</p>
+<p>Must be attached to an actor containing an Audio component (if using Unreal’s built-in audio engine) or an FMOD Audio component (if using FMOD Studio).</p>
+<img alt="_images/sasource_bakedsource.png" src="_images/sasource_bakedsource.png" />
+<dl>
+<dt>Simulate Occlusion</dt><dd><p>If checked, ray tracing will be used to determine how much of the source is occluded.</p>
+</dd>
+<dt>Occlusion Type</dt><dd><p>Specifies how rays should be traced to model occlusion.</p>
+<ul class="simple">
+<li><p><em>Raycast</em>. Trace a single ray from the listener to the source. If the ray is occluded, the source is considered occluded.</p></li>
+<li><p><em>Volumetric</em>. Trace multiple rays from the listener to the source based on the <strong>Occlusion Radius</strong> setting. The proportion of rays that are occluded determine how much of the direct sound is considered occluded. Transmission calculations, if enabled, are only applied to the occluded portion of the direct sound.</p></li>
+</ul>
+</dd>
+<dt>Occlusion Radius</dt><dd><p>The apparent size of the sound source. The larger the source radius, the larger an object must be in order to fully occlude sound emitted by the source.</p>
+</dd>
+<dt>Occlusion Samples</dt><dd><p>The number of rays to trace from the listener to various points in a sphere around the source. Only used if <strong>Occlusion Type</strong> is set to <strong>Volumetric</strong>. Increasing this number results in smoother transitions as the source becomes more (or less) occluded. This comes at the cost of increased CPU usage.</p>
+</dd>
+<dt>Occlusion Value</dt><dd><p>The occlusion attenuation value. Only used if <strong>Simulate Occlusion</strong> is unchecked. 0 = sound is completely attenuated, 1 = sound is not attenuated at all.</p>
+<p><em>Only available if using Unreal’s built-in audio engine.</em></p>
+</dd>
+<dt>Simulate Transmission</dt><dd><p>If checked, ray tracing will be used to determine how much of the sound is transmitted through occluding scene geometry.</p>
+</dd>
+<dt>Transmission Low</dt><dd><p>The low frequency (up to 800 Hz) EQ value for transmission. Only used if <strong>Simulate Transmission</strong> is unchecked. 0 = low frequencies are completely attenuated, 1 = low frequencies are not attenuated at all.</p>
+<p><em>Only available if using Unreal’s built-in audio engine.</em></p>
+</dd>
+<dt>Transmission Mid</dt><dd><p>The middle frequency (800 Hz to 8 kHz) EQ value for transmission. Only used if <strong>Simulate Transmission</strong> is unchecked. 0 = middle frequencies are completely attenuated, 1 = middle frequencies are not attenuated at all.</p>
+<p><em>Only available if using Unreal’s built-in audio engine.</em></p>
+</dd>
+<dt>Transmission High</dt><dd><p>The high frequency (8 kHz and above) EQ value for transmission. Only used if <strong>Simulate Transmission</strong> is unchecked. 0 = high frequencies are completely attenuated, 1 = high frequencies are not attenuated at all.</p>
+<p><em>Only available if using Unreal’s built-in audio engine.</em></p>
+</dd>
+<dt>Simulate Reflections</dt><dd><p>If checked, reflections reaching the listener from the source will be simulated.</p>
+</dd>
+<dt>Reflections Type</dt><dd><p>Specifies how reflections should be simulated for this source.</p>
+<ul class="simple">
+<li><p><em>Realtime</em>. Rays are traced in real-time, and bounced around the scene to simulate sound reflecting from the source and reaching the listener. This allows for smooth variations, and reflections off of dynamic geometry, at the cost of significant CPU usage.</p></li>
+<li><p><em>Baked Static Source</em>. The source is assumed to be static, and the listener position is used to interpolate reflected sound from baked data. This results in relatively low CPU usage, but cannot model reflections off of dynamic geometry, and requires more memory and disk space.</p></li>
+<li><p><em>Baked Static Listener</em>. The listener is assumed to be static, and the source position is used to interpolate reflected sound from baked data. This results in relatively low CPU usage, but cannot model reflections off of dynamic geometry, and requires more memory and disk space.</p></li>
+</ul>
+</dd>
+<dt>Current Baked Source</dt><dd><p>If <strong>Reflections Type</strong> is set to <strong>Baked Static Source</strong>, the position and orientation of the actor specified in this field will be used as the position and orientation of the source.</p>
+</dd>
+<dt>Pathing</dt><dd><p>If checked, shortest paths taken by sound as it propagates from the source to the listener will be simulated.</p>
+</dd>
+<dt>Pathing Probe Batch</dt><dd><p>When simulating pathing, the baked data stored in this probe batch will be used to look up paths from the source to the listener.</p>
+</dd>
+<dt>Path Validation</dt><dd><p>If checked, each baked path from the source to the listener is checked in real-time to see if it is occluded by dynamic geometry. If so, the path is not rendered.</p>
+</dd>
+<dt>Find Alternate Paths</dt><dd><p>If checked, if a baked path from the source to the listener is found to be occluded by dynamic geometry, alternate paths are searched for in real-time, which account for the dynamic geometry.</p>
+</dd>
+</dl>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="actors.html" class="btn btn-neutral float-right" title="Actors" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="listener.html" class="btn btn-neutral float-left" title="Steam Audio Listener" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Valve Corporation.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

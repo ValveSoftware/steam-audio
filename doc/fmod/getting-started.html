@@ -72,7 +72,7 @@
             
             
               <div class="version">
-                4.0.3
+                4.1.0
               </div>
             
           
@@ -182,7 +182,7 @@
 <p>The Steam Audio FMOD Studio integration supports the following platforms:</p>
 <ul class="simple">
 <li><p>Windows 7 or later (32-bit and 64-bit)</p></li>
-<li><p>Linux (32-bit and 64-bit, tested with Ubuntu 16.04 LTS)</p></li>
+<li><p>Linux (32-bit and 64-bit, tested with Ubuntu 18.04 LTS)</p></li>
 <li><p>macOS 10.7 or later (64-bit Intel)</p></li>
 <li><p>Android 5.0 or later (32-bit ARM, 64-bit ARM, 32-bit Intel)</p></li>
 </ul>
@@ -218,9 +218,9 @@
 <div class="section" id="integrate-steam-audio-with-your-game-engine">
 <h2>Integrate Steam Audio with your game engine<a class="headerlink" href="#integrate-steam-audio-with-your-game-engine" title="Permalink to this headline">¶</a></h2>
 <p>Before you can use the Steam Audio FMOD Studio integration in your game, you must configure your game engine to use Steam Audio and load the Steam Audio FMOD Studio integration.</p>
-<p>If you are using Unity as your game engine, see the Unity tab below. Otherwise, see the C++ tab for instructions on how to configure your game engine to load the Steam Audio FMOD Studio integration via C++ code.</p>
+<p>If you are using Unity as your game engine, see the Unity tab below. If you are using Unreal Engine as your game engine, see the Unreal Engine tab below. Otherwise, see the C++ tab for instructions on how to configure your game engine to load the Steam Audio FMOD Studio integration via C++ code.</p>
 <div class="sphinx-tabs docutils container">
-<div aria-label="Tabbed content" class="closeable" role="tablist"><button aria-controls="panel-0-VW5pdHk=" aria-selected="true" class="sphinx-tabs-tab group-tab" id="tab-0-VW5pdHk=" name="VW5pdHk=" role="tab" tabindex="0">Unity</button><button aria-controls="panel-0-Qysr" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-0-Qysr" name="Qysr" role="tab" tabindex="-1">C++</button></div><div aria-labelledby="tab-0-VW5pdHk=" class="sphinx-tabs-panel group-tab" id="panel-0-VW5pdHk=" name="VW5pdHk=" role="tabpanel" tabindex="0"><p>These instructions assume that you have added the FMOD Studio Unity integration and the Steam Audio Unity integration to your Unity project.</p>
+<div aria-label="Tabbed content" class="closeable" role="tablist"><button aria-controls="panel-0-VW5pdHk=" aria-selected="true" class="sphinx-tabs-tab group-tab" id="tab-0-VW5pdHk=" name="VW5pdHk=" role="tab" tabindex="0">Unity</button><button aria-controls="panel-0-VW5yZWFsIEVuZ2luZQ==" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-0-VW5yZWFsIEVuZ2luZQ==" name="VW5yZWFsIEVuZ2luZQ==" role="tab" tabindex="-1">Unreal Engine</button><button aria-controls="panel-0-Qysr" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-0-Qysr" name="Qysr" role="tab" tabindex="-1">C++</button></div><div aria-labelledby="tab-0-VW5pdHk=" class="sphinx-tabs-panel group-tab" id="panel-0-VW5pdHk=" name="VW5pdHk=" role="tabpanel" tabindex="0"><p>These instructions assume that you have added the FMOD Studio Unity integration and the Steam Audio Unity integration to your Unity project.</p>
 <p class="rubric">Configure the FMOD Studio Unity integration to use Steam Audio</p>
 <ol class="arabic simple">
 <li><p>In Unity’s main menu, click <strong>FMOD</strong> &gt; <strong>Edit Settings</strong>.</p></li>
@@ -234,6 +234,26 @@
 <li><p>Set <strong>Audio Engine</strong> to <strong>FMOD Studio</strong>.</p></li>
 </ol>
 <img alt="_images/unity_steamaudiosettings.png" src="_images/unity_steamaudiosettings.png" />
+</div><div aria-labelledby="tab-0-VW5yZWFsIEVuZ2luZQ==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-0-VW5yZWFsIEVuZ2luZQ==" name="VW5yZWFsIEVuZ2luZQ==" role="tabpanel" tabindex="0"><p>These instructions assume that you have enabled the FMOD Studio Unreal Engine plugin and the Steam Audio Unreal Engine plugin for your Unreal Engine project.</p>
+<p class="rubric">Enable the Steam Audio FMOD Studio Support plugin</p>
+<ol class="arabic simple">
+<li><p>In Unreal’s main menu, click <strong>Edit</strong> &gt; <strong>Plugins</strong>.</p></li>
+<li><p>Under <strong>Audio</strong>, check <strong>Enabled</strong> under <strong>Steam Audio FMOD Studio Support</strong>.</p></li>
+</ol>
+<img alt="_images/unreal_fmodplugin.png" src="_images/unreal_fmodplugin.png" />
+<p class="rubric">Configure the FMOD Studio Unreal Engine plugin to use Steam Audio</p>
+<ol class="arabic simple">
+<li><p>In Unreal’s main menu, click <strong>Edit</strong> &gt; <strong>Project Settings</strong>.</p></li>
+<li><p>Under <strong>Plugins</strong> &gt; <strong>FMOD Studio</strong>, expand the <strong>Advanced</strong> section, and click the <strong>+</strong> button next to <strong>Plugin Files</strong>.</p></li>
+<li><p>In the text box that appears, enter <code class="docutils literal notranslate"><span class="pre">phonon_fmod</span></code>.</p></li>
+</ol>
+<img alt="_images/unreal_fmodsettings.png" src="_images/unreal_fmodsettings.png" />
+<p class="rubric">Configure the Steam Audio Unreal Engine plugin to use FMOD Studio</p>
+<ol class="arabic simple">
+<li><p>In Unreal’s main menu, click <strong>Edit</strong> &gt; <strong>Project Settings</strong>.</p></li>
+<li><p>Under <strong>Plugins</strong> &gt; <strong>Steam Audio</strong>, set <strong>Audio Engine</strong> to <strong>FMOD Studio</strong>.</p></li>
+</ol>
+<img alt="_images/unreal_steamaudiosettings.png" src="_images/unreal_steamaudiosettings.png" />
 </div><div aria-labelledby="tab-0-Qysr" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-0-Qysr" name="Qysr" role="tabpanel" tabindex="0"><p>These instructions assume that you have integrated Steam Audio with your game engine via the Steam Audio SDK.</p>
 <p class="rubric">Load the Steam Audio FMOD Studio integration</p>
 <ol class="arabic simple">
@@ -251,7 +271,7 @@
 </li>
 </ol>
 <p class="rubric">Initialize the Steam Audio FMOD Studio integration</p>
-<ol class="arabic simple" start="2">
+<ol class="arabic simple">
 <li><p>Call <code class="docutils literal notranslate"><span class="pre">iplFMODInitialize</span></code> after creating the Steam Audio context.</p></li>
 <li><p>Create an HRTF (typically the default HRTF), and call <code class="docutils literal notranslate"><span class="pre">iplFMODSetHRTF</span></code>.</p></li>
 <li><p>Determine the simulation settings to use for subsequent simulations, and call <code class="docutils literal notranslate"><span class="pre">iplFMODSetSimulationSettings</span></code>.</p></li>

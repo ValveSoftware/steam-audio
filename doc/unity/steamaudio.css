@@ -1,0 +1,24 @@
+h2, h3, h4 {
+	margin-block-start: 1.5em;
+	margin-block-end: 0.25em;
+	font-weight: 300;
+}
+
+h5 {
+	margin-block-start: 1.5em;
+	margin-block-end: 0.25em;
+	font-family: "Lato", "proxima-nova", "Helvetica Neue", Arial, sans-serif;
+	font-size: 16px;
+}
+
+h5 + p, h5 + p + ul + p {
+	margin-left: 32px;
+}
+
+h5 + p + ul {
+	margin-left: 32px;
+}
+
+h5 + p + ul li {
+	margin-bottom: 16px;
+}

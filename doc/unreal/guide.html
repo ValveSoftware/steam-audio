@@ -1,0 +1,539 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>User’s Guide &mdash; Steam Audio Unreal Engine Integration  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/steamaudio.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Build Instructions" href="build-instructions.html" />
+    <link rel="prev" title="Getting Started" href="getting-started.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html">
+          
+
+          
+            
+            <img src="_static/steam-audio-logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                4.1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Unreal Engine Integration</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting Started</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">User’s Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#spatialize-an-audio-source">Spatialize an audio source</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#apply-distance-falloff">Apply distance falloff</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#apply-frequency-dependent-air-absorption">Apply frequency-dependent air absorption</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#specify-a-source-directivity-pattern">Specify a source directivity pattern</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#tag-acoustic-geometry">Tag acoustic geometry</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#set-up-dynamic-movable-geometry">Set up dynamic (movable) geometry</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#associate-an-acoustic-material-with-geometry">Associate an acoustic material with geometry</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#model-occlusion-by-geometry">Model occlusion by geometry</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#model-transmission-through-geometry">Model transmission through geometry</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#model-reflection-by-geometry">Model reflection by geometry</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#simulate-physics-based-reverb-at-the-listener-position">Simulate physics-based reverb at the listener position</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#create-sound-probes-for-baked-sound-propagation">Create sound probes for baked sound propagation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#bake-reflections-from-a-static-source">Bake reflections from a static source</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#bake-reflections-to-a-static-listener">Bake reflections to a static listener</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#bake-physics-based-reverb">Bake physics-based reverb</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#model-sound-paths-from-a-moving-source-to-a-moving-listener">Model sound paths from a moving source to a moving listener</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#enable-gpu-acceleration">Enable GPU acceleration</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="build-instructions.html">Build Instructions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference.html">Reference</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Steam Audio Unreal Engine Integration</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>User’s Guide</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="user-s-guide">
+<h1>User’s Guide<a class="headerlink" href="#user-s-guide" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="spatialize-an-audio-source">
+<h2>Spatialize an audio source<a class="headerlink" href="#spatialize-an-audio-source" title="Permalink to this headline">¶</a></h2>
+<p>To spatialize an Audio component:</p>
+<ol class="arabic simple">
+<li><p>Select the actor containing the Audio component, then select the Audio component in the Details tab.</p></li>
+<li><p>Under <strong>Attenuation</strong>, check <strong>Override Attenuation</strong>.</p></li>
+<li><p>Under <strong>Attenuation (Spatialization)</strong>, set <strong>Spatialization Method</strong> to <strong>Binaural</strong>.</p></li>
+</ol>
+<img alt="_images/audio_spatialize.png" src="_images/audio_spatialize.png" />
+<p>Steam Audio will apply HRTF-based binaural rendering to the Audio Source, using default settings. You can control many properties of the spatialization using the <a class="reference internal" href="source.html"><span class="doc">Steam Audio Source</span></a> component and <a class="reference internal" href="spatialization-settings.html"><span class="doc">Steam Audio Spatialization Settings</span></a> asset.</p>
+</div>
+<div class="section" id="apply-distance-falloff">
+<h2>Apply distance falloff<a class="headerlink" href="#apply-distance-falloff" title="Permalink to this headline">¶</a></h2>
+<p>You can continue to use Unreal’s built-in tools to control how the volume of an audio source falls off with distance. To do so:</p>
+<ol class="arabic simple">
+<li><p>Select the actor containing the Audio component, then select the Audio component in the Details tab.</p></li>
+<li><p>Under <strong>Attenuation (Volume)</strong>, check <strong>Enable Volume Attenuation</strong>.</p></li>
+<li><p>Use the <strong>Attenuation Function</strong>, <strong>Attenuation Shape</strong>, <strong>Inner Radius</strong>, and <strong>Falloff Distance</strong> to control the distance falloff. Refer to the <a class="reference external" href="https://docs.unrealengine.com/4.27/en-US/WorkingWithAudio/DistanceModelAttenuation/">Unreal documentation</a> for more information.</p></li>
+</ol>
+<p>Steam Audio will automatically use this curve to apply distance attenuation.</p>
+</div>
+<div class="section" id="apply-frequency-dependent-air-absorption">
+<h2>Apply frequency-dependent air absorption<a class="headerlink" href="#apply-frequency-dependent-air-absorption" title="Permalink to this headline">¶</a></h2>
+<p>You can control how different sound frequencies fall off with distance. For example, when playing a distant explosion sound, higher frequencies can fall off more than lower frequencies, leading to a more muffled sound. To do this:</p>
+<ol class="arabic simple">
+<li><p>Select the actor containing the Audio component, then select the Audio component in the Details tab.</p></li>
+<li><p>In the Details tab, under <strong>Attenuation (Occlusion)</strong>, check <strong>Occlusion</strong>.</p></li>
+<li><p>Click the <strong>+</strong> icon next to <strong>Occlusion Plugin Settings</strong>, then use the drop-down that appears to select an existing Occlusion Plugin Settings asset, or create a new one. Skip this step if a Occlusion Plugin Settings asset has already been set for this Audio component.</p></li>
+<li><p>Open the Occlusion Plugin Settings asset associated with the Audio component.</p></li>
+<li><p>Under <strong>Air Absorption Settings</strong>, check <strong>Apply Air Absorption</strong>.</p></li>
+</ol>
+<img alt="_images/occlusionsettings_airabsorption.png" src="_images/occlusionsettings_airabsorption.png" />
+<p>Steam Audio will now use its default air absorption model to apply frequency-dependent distance falloff to the Audio component.</p>
+</div>
+<div class="section" id="specify-a-source-directivity-pattern">
+<h2>Specify a source directivity pattern<a class="headerlink" href="#specify-a-source-directivity-pattern" title="Permalink to this headline">¶</a></h2>
+<p>You can configure a source that emits sound with different intensities in different directions. For example, a megaphone that projects sound mostly to the front. To do this:</p>
+<ol class="arabic simple">
+<li><p>Select the actor containing the Audio component, then select the Audio component in the Details tab.</p></li>
+<li><p>In the Details tab, under <strong>Attenuation (Occlusion)</strong>, check <strong>Occlusion</strong>.</p></li>
+<li><p>Click the <strong>+</strong> icon next to <strong>Occlusion Plugin Settings</strong>, then use the drop-down that appears to select an existing Occlusion Plugin Settings asset, or create a new one. Skip this step if a Occlusion Plugin Settings asset has already been set for this Audio component.</p></li>
+<li><p>Open the Occlusion Plugin Settings asset associated with the Audio component.</p></li>
+<li><p>Under <strong>Directivity Settings</strong>, check <strong>Apply Directivity</strong>.</p></li>
+<li><p>Use the <strong>Dipole Weight</strong> and <strong>Dipole Power</strong> sliders to control the directivity pattern.</p></li>
+</ol>
+<img alt="_images/occlusionsettings_directivity.png" src="_images/occlusionsettings_directivity.png" />
+<p>For more information, see <a class="reference internal" href="spatialization-settings.html"><span class="doc">Steam Audio Spatialization Settings</span></a>.</p>
+</div>
+<div class="section" id="tag-acoustic-geometry">
+<h2>Tag acoustic geometry<a class="headerlink" href="#tag-acoustic-geometry" title="Permalink to this headline">¶</a></h2>
+<p>You can use Steam Audio to model how your level geometry causes occlusion, reflection, reverb, and other effects on your audio sources. You start by tagging the actors that you want to use for acoustic calculations:</p>
+<ol class="arabic simple">
+<li><p>Select the actor you want to tag. It must be either an actor containing a Static Mesh component, or a Landscape actor.</p></li>
+<li><p>In the Details tab, click <strong>Add Component</strong> &gt; <strong>Steam Audio Geometry</strong>.</p></li>
+</ol>
+<img alt="_images/geometry.png" src="_images/geometry.png" />
+<p>Not all objects have a noticeable influence on acoustics. For example, in a large hangar, the room itself obviously influences the acoustics. A small tin can on the floor, though, most likely doesn’t. But large amounts of small objects can collectively influence the acoustics. For example, while a single wooden crate might not influence the hangar reverb, large stacks of crates are likely to have some impact.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>You don’t need to create an additional mesh just to tag an object as Steam Audio Geometry. You can directly use the same meshes used for visual rendering.</p>
+</div>
+<p>Once you’ve tagged all the geometry in the level, export it:</p>
+<ol class="arabic simple">
+<li><p>In the toolbar, click <strong>Steam Audio</strong> &gt; <strong>Export Static Geometry</strong>.</p></li>
+</ol>
+<p>By default, all geometry is treated as static. In other words, you can’t move, deform, or otherwise change the geometry at run-time. If you need to do this, set it up as a dynamic object, as discussed in the next section.</p>
+<p>You can simplify geometry before it’s exported, export multiple meshes with a single Steam Audio Geometry component, and more. For more information, see <a class="reference internal" href="geometry.html"><span class="doc">Steam Audio Geometry</span></a>.</p>
+</div>
+<div class="section" id="set-up-dynamic-movable-geometry">
+<h2>Set up dynamic (movable) geometry<a class="headerlink" href="#set-up-dynamic-movable-geometry" title="Permalink to this headline">¶</a></h2>
+<p>You can mark specific actors as <em>dynamic geometry</em>, which tells Steam Audio to update occlusion, reverb, and other acoustic effects as the actor moves. To do this:</p>
+<ol class="arabic simple">
+<li><p>Select the actor you want to tag.</p></li>
+<li><p>In the Details tab, click <strong>Add Component</strong> &gt; <strong>Steam Audio Dynamic Object</strong>.</p></li>
+<li><p>Attach Steam Audio Geometry components to the actor as needed.</p></li>
+<li><p>On the Steam Audio Dynamic Object component, click <strong>Export Dynamic Object</strong>.</p></li>
+</ol>
+<img alt="_images/dynamicobject.png" src="_images/dynamicobject.png" />
+<p>At run-time, any changes made to the transform of the actor to which the Steam Audio Dynamic Object component has been attached will automatically be passed to Steam Audio.</p>
+<p>You can attach a Steam Audio Dynamic Object component in a Blueprint as well. After exporting it, the Blueprint can be freely instantiated in any level and moved around; Steam Audio will automatically update acoustic effects accordingly. For example, this can be used to create a door Blueprint that automatically occludes sound when added to any level, or large walls that a player can build, which automatically reflect sound.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Changes made to the transforms of children of the actor containing the Steam Audio Dynamic Object will <em>not</em> be passed to Steam Audio. The entire object and all its children must move/animate as a rigid body.</p>
+</div>
+<p>For more information, see <a class="reference internal" href="dynamic-object.html"><span class="doc">Steam Audio Dynamic Object</span></a>.</p>
+</div>
+<div class="section" id="associate-an-acoustic-material-with-geometry">
+<h2>Associate an acoustic material with geometry<a class="headerlink" href="#associate-an-acoustic-material-with-geometry" title="Permalink to this headline">¶</a></h2>
+<p>You can specify acoustic material properties for any actor that has a Steam Audio Geometry component. These properties control how the actor reflects, absorbs, and transmits sound, for different frequencies. To specify an acoustic material:</p>
+<ol class="arabic simple">
+<li><p>Select the actor containing the Steam Audio Geometry component, then click the Steam Audio Geometry component in the Details tab.</p></li>
+<li><p>Set <strong>Material</strong> to a new or existing Steam Audio Material asset.</p></li>
+</ol>
+<img alt="_images/geometry.png" src="_images/geometry.png" />
+<p>Steam Audio contains a small library of built-in materials, but you can create your own and reuse them across your project. To create a new material:</p>
+<ol class="arabic simple">
+<li><p>In the Content Browser, navigate to the directory where you want to create your material.</p></li>
+<li><p>Click <strong>Add/Import</strong> &gt; <strong>Sounds</strong> &gt; <strong>Steam Audio</strong> &gt; <strong>Steam Audio Material</strong>.</p></li>
+<li><p>Give your new material a name, and configure its acoustic properties.</p></li>
+</ol>
+<p>For more information on individual material properties, see <a class="reference internal" href="material.html"><span class="doc">Steam Audio Material</span></a>.</p>
+</div>
+<div class="section" id="model-occlusion-by-geometry">
+<h2>Model occlusion by geometry<a class="headerlink" href="#model-occlusion-by-geometry" title="Permalink to this headline">¶</a></h2>
+<p>You can configure an audio source to be occluded by scene geometry. To do this:</p>
+<ol class="arabic simple">
+<li><p>Select the actor containing the Audio component, then select the Audio component in the Details tab.</p></li>
+<li><p>In the Details tab, under <strong>Attenuation (Occlusion)</strong>, check <strong>Enable Occlusion</strong>.</p></li>
+</ol>
+<img alt="_images/audio_occlusion.png" src="_images/audio_occlusion.png" />
+<ol class="arabic simple" start="3">
+<li><p>Click the <strong>+</strong> icon next to <strong>Occlusion Plugin Settings</strong>, then use the drop-down that appears to select an existing Occlusion Plugin Settings asset, or create a new one. Skip this step if a Occlusion Plugin Settings asset has already been set for this Audio component.</p></li>
+<li><p>Open the Occlusion Plugin Settings asset associated with the Audio component.</p></li>
+<li><p>Under <strong>Occlusion Settings</strong>, check <strong>Apply Occlusion</strong>.</p></li>
+</ol>
+<img alt="_images/occlusionsettings_occlusion.png" src="_images/occlusionsettings_occlusion.png" />
+<ol class="arabic simple" start="6">
+<li><p>Click <strong>Add Component</strong> &gt; <strong>Steam Audio Source</strong>. Skip this step if a Steam Audio Source component is already attached to the actor.</p></li>
+<li><p>Under <strong>Occlusion Settings</strong>, check <strong>Simulate Occlusion</strong>.</p></li>
+</ol>
+<img alt="_images/sasource_occlusion.png" src="_images/sasource_occlusion.png" />
+<p>Steam Audio will now use raycast occlusion to check if the source is occluded from the listener by any geometry. This assumes that the source is a single point. You can also model sources with larger spatial extent, or explicitly control occlusion manually or via scripting. For more information, see <a class="reference internal" href="source.html"><span class="doc">Steam Audio Source</span></a>.</p>
+</div>
+<div class="section" id="model-transmission-through-geometry">
+<h2>Model transmission through geometry<a class="headerlink" href="#model-transmission-through-geometry" title="Permalink to this headline">¶</a></h2>
+<p>You can configure an audio source to be transmitted through occluding geometry, with the sound attenuated based on material properties. To do this:</p>
+<ol class="arabic simple">
+<li><p>Select the actor containing the Audio component, then select the Audio component in the Details tab.</p></li>
+<li><p>In the Details tab, under <strong>Attenuation (Occlusion)</strong>, check <strong>Occlusion</strong>.</p></li>
+<li><p>Click the <strong>+</strong> icon next to <strong>Occlusion Plugin Settings</strong>, then use the drop-down that appears to select an existing Occlusion Plugin Settings asset, or create a new one. Skip this step if a Occlusion Plugin Settings asset has already been set for this Audio component.</p></li>
+<li><p>Open the Occlusion Plugin Settings asset associated with the Audio component.</p></li>
+<li><p>Under <strong>Occlusion Settings</strong>, check <strong>Apply Transmission</strong>.</p></li>
+</ol>
+<img alt="_images/occlusionsettings_transmission.png" src="_images/occlusionsettings_transmission.png" />
+<ol class="arabic simple" start="6">
+<li><p>Click <strong>Add Component</strong> &gt; <strong>Steam Audio Source</strong>. Skip this step if a Steam Audio Source component is already attached to the actor.</p></li>
+<li><p>Under <strong>Occlusion Settings</strong>, check <strong>Simulate Occlusion</strong> and <strong>Simulate Transmission</strong>.</p></li>
+</ol>
+<img alt="_images/sasource_transmission.png" src="_images/sasource_transmission.png" />
+<p>Steam Audio will now model how sound travels through occluding geometry, based on the acoustic material properties of the geometry. You can also control whether the transmission effect is frequency-dependent, or explicitly control transmission manually or via scripting. For more information, see <a class="reference internal" href="source.html"><span class="doc">Steam Audio Source</span></a>.</p>
+</div>
+<div class="section" id="model-reflection-by-geometry">
+<h2>Model reflection by geometry<a class="headerlink" href="#model-reflection-by-geometry" title="Permalink to this headline">¶</a></h2>
+<p>You can configure an audio source to be reflected by surrounding geometry, with the reflected sound attenuated based on material properties. Reflections often enhance the sense of presence when used with spatial audio. To do this:</p>
+<ol class="arabic simple">
+<li><p>Select the actor containing the Audio component, then select the Audio component in the Details tab.</p></li>
+<li><p>In the Details tab, under <strong>Attenuation (Reverb)</strong>, check <strong>Enable Reverb Send</strong>.</p></li>
+</ol>
+<img alt="_images/audio_reflections.png" src="_images/audio_reflections.png" />
+<ol class="arabic simple" start="3">
+<li><p>Click the <strong>+</strong> icon next to <strong>Reverb Plugin Settings</strong>, then use the drop-down that appears to select an existing Reverb Plugin Settings asset, or create a new one. Skip this step if a Reverb Plugin Settings asset has already been set for this Audio component.</p></li>
+<li><p>Open the Reverb Plugin Settings asset associated with the Audio component.</p></li>
+<li><p>Under <strong>Reflections Settings</strong>, check <strong>Apply Reflections</strong>.</p></li>
+</ol>
+<img alt="_images/reverbsettings_reflections.png" src="_images/reverbsettings_reflections.png" />
+<ol class="arabic simple" start="6">
+<li><p>Select the actor containing the Audio component.</p></li>
+<li><p>Click <strong>Add Component</strong> &gt; <strong>Steam Audio Source</strong>. Skip this step if a Steam Audio Source component is already attached to the actor.</p></li>
+<li><p>Under <strong>Reflections Settings</strong>, check <strong>Simulate Reflections</strong>.</p></li>
+</ol>
+<img alt="_images/sasource_reflections.png" src="_images/sasource_reflections.png" />
+<p>Steam Audio will now use real-time ray tracing to model how sound is reflected by geometry, based on the acoustic material properties of the geometry. You can control many aspects of this process, including how many rays are traced, how many successive reflections are modeled, how reflected sound is rendered, and much more. Since modeling reflections is CPU-intensive, you can pre-compute reflections for a static sound source, or even offload the work to the GPU. For more information, see <a class="reference internal" href="source.html"><span class="doc">Steam Audio Source</span></a> and <a class="reference internal" href="settings.html"><span class="doc">Steam Audio Settings</span></a>.</p>
+</div>
+<div class="section" id="simulate-physics-based-reverb-at-the-listener-position">
+<h2>Simulate physics-based reverb at the listener position<a class="headerlink" href="#simulate-physics-based-reverb-at-the-listener-position" title="Permalink to this headline">¶</a></h2>
+<p>You can also use ray tracing to automatically calculate physics-based reverb at the listener’s position. Physics-based reverbs are <em>directional</em>, which means they can model the direction from which a distant echo can be heard, and keep it consistent as the player looks around. Physics-based reverbs also model smooth transitions between different spaces in your level, which is crucial for maintaining immersion as the player moves. To set up physics-based reverb:</p>
+<ol class="arabic simple">
+<li><p>In the main menu, click <strong>Edit</strong> &gt; <strong>Project Settings</strong>.</p></li>
+<li><p>Click <strong>Plugins</strong> &gt; <strong>Steam Audio</strong> to open the Steam Audio Settings.</p></li>
+<li><p>Under <strong>Reverb Settings</strong>, set <strong>Reverb Submix</strong> to a new or existing Sound Submix asset, then double-click the asset to open it.</p></li>
+</ol>
+<img alt="_images/settings_reverbsubmix.png" src="_images/settings_reverbsubmix.png" />
+<ol class="arabic simple" start="4">
+<li><p>Under <strong>Sound Submix</strong>, click the <strong>+</strong> icon next to <strong>Submix Effect Chain</strong> to add a new effect to the submix.</p></li>
+<li><p>Use the drop-down that appears to select a new or existing Submix Effect Preset asset, then double-click the asset to open it.</p></li>
+</ol>
+<img alt="_images/submix_reverbpreset.png" src="_images/submix_reverbpreset.png" />
+<ol class="arabic simple" start="6">
+<li><p>Under <strong>Submix Preset</strong>, check <strong>Apply Reverb</strong>.</p></li>
+</ol>
+<img alt="_images/reverbpreset_reverb.png" src="_images/reverbpreset_reverb.png" />
+<ol class="arabic simple" start="7">
+<li><p>Select the actor containing the Audio component to which you want to apply the listener-centric reverb, then select the Audio component in the Details tab.</p></li>
+<li><p>In the Details tab, under <strong>Attenuation (Reverb)</strong>, check <strong>Enable Reverb Send</strong>.</p></li>
+<li><p>Select any actor in your level (a good choice might be the Player Start actor).</p></li>
+<li><p>In the Details tab, click <strong>Add Component</strong> &gt; <strong>Steam Audio Listener</strong>.</p></li>
+<li><p>On the Steam Audio Listener component, under <strong>Reverb Settings</strong>, check <strong>Simulate Reverb</strong>.</p></li>
+</ol>
+<img alt="_images/salistener_reverb.png" src="_images/salistener_reverb.png" />
+<p>Steam Audio will now use real-time ray tracing to simulate physics-based reverb. You can control many aspects of this simulation, including how many rays are traced, the length of the reverb tail, whether the reverb is rendered a convolution reverb, and much more. Since modeling physics-based reverb is CPU-intensive, you can (and typically will) pre-compute reverb throughout your level. You can even offload simulation as well as rendering work to the GPU. For more information, see <a class="reference internal" href="reverb.html"><span class="doc">Steam Audio Reverb</span></a>, <a class="reference internal" href="listener.html"><span class="doc">Steam Audio Listener</span></a>, and <a class="reference internal" href="settings.html"><span class="doc">Steam Audio Settings</span></a>.</p>
+</div>
+<div class="section" id="create-sound-probes-for-baked-sound-propagation">
+<h2>Create sound probes for baked sound propagation<a class="headerlink" href="#create-sound-probes-for-baked-sound-propagation" title="Permalink to this headline">¶</a></h2>
+<p>Modeling reflections and reverb can be very CPU-intensive. For levels with mostly static geometry, you can pre-compute (or <em>bake</em>) these effects in the editor. Before doing so, you must create one or more <em>sound probes</em>, which are the points at which Steam Audio will simulate reflections or reverb when baking. At run-time, the source and listener positions relative to the probes are used to quickly estimate the reflections or reverb. To set up sound probes:</p>
+<ol class="arabic simple">
+<li><p>In the Place Actors tab, click <strong>Volumes</strong>, then drag a <strong>Steam Audio Probe Volume</strong> actor into your level. Adjust the size and shape of the Steam Audio Probe Volume like any other volume actor.</p></li>
+<li><p>In the Details tab, under <strong>Probe Batch Settings</strong>, click <strong>Generate Probes</strong>.</p></li>
+</ol>
+<img alt="_images/saprobevolume.png" src="_images/saprobevolume.png" />
+<p>Steam Audio will generate several probes within the volume contained by the probe batch. You can configure how many probes are created, and how they are placed. For more information, see <a class="reference internal" href="probe-volume.html"><span class="doc">Steam Audio Probe Volume</span></a>.</p>
+</div>
+<div class="section" id="bake-reflections-from-a-static-source">
+<h2>Bake reflections from a static source<a class="headerlink" href="#bake-reflections-from-a-static-source" title="Permalink to this headline">¶</a></h2>
+<p>If an audio source doesn’t move (or only moves within a small distance), you can bake reflections for it. To do this:</p>
+<ol class="arabic simple">
+<li><p>Select the actor that is at the static source’s position.</p></li>
+<li><p>In the Details tab, click <strong>Add Component</strong> &gt; <strong>Steam Audio Baked Source</strong>.</p></li>
+<li><p>Click <strong>Bake Reflections</strong>. Baking may take a while to complete.</p></li>
+</ol>
+<img alt="_images/sabakedsource.png" src="_images/sabakedsource.png" />
+<ol class="arabic simple" start="4">
+<li><p>Select the actor containing the Audio component to which you want to apply reflections.</p></li>
+<li><p>Make sure a Steam Audio Source component is attached to the actor, and <strong>Simulate Reflections</strong> is checked.</p></li>
+<li><p>Set <strong>Reflections Type</strong> to <strong>Baked Static Source</strong>.</p></li>
+<li><p>Set <strong>Current Baked Source</strong> to the actor containing the Steam Audio Baked Source added in step 2.</p></li>
+</ol>
+<img alt="_images/sasource_bakedsource.png" src="_images/sasource_bakedsource.png" />
+<p>You can control many aspects of the baking process. For more information, see <a class="reference internal" href="source.html"><span class="doc">Steam Audio Source</span></a>, <a class="reference internal" href="baked-source.html"><span class="doc">Steam Audio Baked Source</span></a>, and <a class="reference internal" href="settings.html"><span class="doc">Steam Audio Settings</span></a>.</p>
+</div>
+<div class="section" id="bake-reflections-to-a-static-listener">
+<h2>Bake reflections to a static listener<a class="headerlink" href="#bake-reflections-to-a-static-listener" title="Permalink to this headline">¶</a></h2>
+<p>In some applications, the listener may only be able to teleport between a few pre-determined positions. In this case, you can bake reflections for any moving audio source. To do this:</p>
+<ol class="arabic simple">
+<li><p>Select (or create, if needed) an actor at one of the listener positions.</p></li>
+<li><p>In the Details tab, click <strong>Add Component</strong> &gt; <strong>Steam Audio Baked Listener</strong>.</p></li>
+<li><p>Click <strong>Bake Reflections</strong>. Baking may take a while to complete.</p></li>
+</ol>
+<img alt="_images/sabakedlistener.png" src="_images/sabakedlistener.png" />
+<ol class="arabic simple" start="4">
+<li><p>Select the actor containing the Audio component to which you want to apply reflections.</p></li>
+<li><p>Make sure a Steam Audio Source component is attached, and <strong>Simulate Reflections</strong> is checked.</p></li>
+<li><p>Set <strong>Reflections Type</strong> to <strong>Baked Static Listener</strong>.</p></li>
+</ol>
+<img alt="_images/sasource_bakedlistener.png" src="_images/sasource_bakedlistener.png" />
+<ol class="arabic simple" start="7">
+<li><p>Select any actor in your level (a good choice might be the Player Start actor).</p></li>
+<li><p>In the Details tab, click <strong>Add Component</strong> &gt; <strong>Steam Audio Listener</strong>.</p></li>
+<li><p>Set <strong>Current Baked Listener</strong> to the actor containing the Steam Audio Baked Listener added in step 2.</p></li>
+</ol>
+<img alt="_images/salistener_bakedlistener.png" src="_images/salistener_bakedlistener.png" />
+<p>Typically, you would use scripting to control the value of <strong>Current Baked Listener</strong> every time the listener teleports to a new position.</p>
+<p>You can control many aspects of the baking process. For more information, see <a class="reference internal" href="listener.html"><span class="doc">Steam Audio Listener</span></a>, <a class="reference internal" href="baked-listener.html"><span class="doc">Steam Audio Baked Listener</span></a>, and <a class="reference internal" href="settings.html"><span class="doc">Steam Audio Settings</span></a>.</p>
+</div>
+<div class="section" id="bake-physics-based-reverb">
+<h2>Bake physics-based reverb<a class="headerlink" href="#bake-physics-based-reverb" title="Permalink to this headline">¶</a></h2>
+<p>You can bake physics-based reverb throughout a level, if the geometry is mostly static. To do this:</p>
+<ol class="arabic simple">
+<li><p>Select any actor in your level (a good choice might be the Player Start actor).</p></li>
+<li><p>Make sure a Steam Audio Listener component is attached, and <strong>Simulate Reverb</strong> is checked.</p></li>
+<li><p>Set <strong>Reverb Type</strong> to <strong>Baked</strong>.</p></li>
+<li><p>Click <strong>Bake Reverb</strong>.</p></li>
+</ol>
+<img alt="_images/salistener_bakedreverb.png" src="_images/salistener_bakedreverb.png" />
+<p>You can control many aspects of the baking process. For more information, see <a class="reference internal" href="listener.html"><span class="doc">Steam Audio Listener</span></a> and <a class="reference internal" href="settings.html"><span class="doc">Steam Audio Settings</span></a>.</p>
+</div>
+<div class="section" id="model-sound-paths-from-a-moving-source-to-a-moving-listener">
+<h2>Model sound paths from a moving source to a moving listener<a class="headerlink" href="#model-sound-paths-from-a-moving-source-to-a-moving-listener" title="Permalink to this headline">¶</a></h2>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This feature currently requires the use of third-party audio middleware, due to a bug/limitation in Unreal’s
+built-in audio engine. This issue may be resolved in a future release of Unreal Engine.</p>
+</div>
+<p>You may want to model sound propagation from a source to the listener, along a long, complicated path, like a twisting corridor. The main goal is often to ensure that the sound is positioned as if it’s coming from the correct door, window, or other opening. This is known as the <em>pathing</em> or <em>portaling</em> problem.</p>
+<p>While you can solve this by enabling reflections on an audio source, it would require too many rays (and so too much CPU) to simulate accurately. Instead, you can use Steam Audio to bake pathing information in a probe volume, and use it to efficiently find paths from a moving source to a moving listener. To do this:</p>
+<ol class="arabic simple">
+<li><p>Select the Steam Audio Probe Volume actor you want to bake pathing information for.</p></li>
+<li><p>In the Details tab, click <strong>Bake Pathing</strong>.</p></li>
+<li><p>Select the actor containing the Audio component you want to enabling pathing effects for.</p></li>
+<li><p>Make sure a Steam Audio Source component is attached.</p></li>
+<li><p>Check <strong>Simulate Pathing</strong>.</p></li>
+</ol>
+<img alt="_images/sasource_pathing.png" src="_images/sasource_pathing.png" />
+<p>You can control many aspects of the baking process, as well as the run-time path finding algorithm. For more information, see <a class="reference internal" href="source.html"><span class="doc">Steam Audio Source</span></a>, <a class="reference internal" href="probe-volume.html"><span class="doc">Steam Audio Probe Volume</span></a>, and <a class="reference internal" href="settings.html"><span class="doc">Steam Audio Settings</span></a>.</p>
+</div>
+<div class="section" id="enable-gpu-acceleration">
+<h2>Enable GPU acceleration<a class="headerlink" href="#enable-gpu-acceleration" title="Permalink to this headline">¶</a></h2>
+<p>Simulating and rendering complex sound propagation effects is very compute-intensive. For example, rendering long convolution reverbs with high Ambisonic order, or rendering many sources with reflections enabled, can cause the audio thread to use significant CPU time, which may lead to audible artifacts. And while Steam Audio runs real-time simulation in a separate thread, simulating large numbers of sources or tracing many millions of rays may result in a noticeable lag between the player moving and the acoustics updating to match.</p>
+<p>You can choose to offload some or all of the most compute-intensive portions of Steam Audio to the GPU. This can be useful in several ways:</p>
+<ul class="simple">
+<li><p>You can run convolution reverb on the GPU, which lets you run very long convolutions with many channels, without blocking the audio thread.</p></li>
+<li><p>You can run real-time reverb or reflection simulations on the GPU, which results in much more responsive updates.</p></li>
+<li><p>You can use the GPU while baking reverb or reflections, which allows designers to spend much less time waiting for bakes to complete.</p></li>
+</ul>
+<p>To enable GPU acceleration for real-time simulations or baking:</p>
+<ol class="arabic simple">
+<li><p>In the main menu, click <strong>Edit</strong> &gt; <strong>Project Settings</strong>.</p></li>
+<li><p>Click <strong>Plugins</strong> &gt; <strong>Steam Audio</strong> to open the Steam Audio Settings.</p></li>
+<li><p>Under <strong>Ray Tracer Settings</strong>, set <strong>Scene Type</strong> to <strong>Radeon Rays</strong>.</p></li>
+</ol>
+<p><a class="reference external" href="https://gpuopen.com/radeon-rays">Radeon Rays</a> is an OpenCL-based GPU ray tracer that works on a wide range of GPUs, including both NVIDIA and AMD models. Radeon Rays support in Steam Audio is available on Windows 64-bit only.</p>
+<p>To enable GPU acceleration for convolution reverb:</p>
+<ol class="arabic simple">
+<li><p>In the main menu, click <strong>Edit</strong> &gt; <strong>Project Settings</strong>.</p></li>
+<li><p>Click <strong>Plugins</strong> &gt; <strong>Steam Audio</strong> to open the Steam Audio Settings.</p></li>
+<li><p>Under <strong>Reflection Effect Settings</strong>, set <strong>Reflection Effect Type</strong> to <strong>TrueAudio Next</strong>.</p></li>
+</ol>
+<p><a class="reference external" href="https://gpuopen.com/true-audio-next">TrueAudio Next</a> is an OpenCL-based GPU convolution tool that requires supported AMD GPUs. TrueAudio Next support in Steam Audio is available on Windows 64-bit only.</p>
+<p>You can configure many aspects of GPU acceleration. In particular, on supported AMD GPUs, you can restrict Steam Audio to use only a portion of the GPU’s compute resources, ensuring that visual rendering and physics simulations can continue to run at a steady rate. For more information, see <a class="reference internal" href="settings.html"><span class="doc">Steam Audio Settings</span></a>.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="build-instructions.html" class="btn btn-neutral float-right" title="Build Instructions" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="getting-started.html" class="btn btn-neutral float-left" title="Getting Started" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Valve Corporation.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,397 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Build Instructions &mdash; Steam Audio Unreal Engine Integration  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/steamaudio.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Reference" href="reference.html" />
+    <link rel="prev" title="User’s Guide" href="guide.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html">
+          
+
+          
+            
+            <img src="_static/steam-audio-logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                4.1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Unreal Engine Integration</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guide.html">User’s Guide</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Build Instructions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#overview">Overview</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#directory-structure">Directory Structure</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#building-the-plugin">Building the plugin</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#requirements">Requirements</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#preparing-the-repository">Preparing the repository</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#building-using-the-build-script">Building using the build script</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#building-using-cmake-directly">Building using CMake directly</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#generating-the-zip-file">Generating the zip file</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="reference.html">Reference</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Steam Audio Unreal Engine Integration</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Build Instructions</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="build-instructions">
+<h1>Build Instructions<a class="headerlink" href="#build-instructions" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
+<p>Building the Steam Audio Unreal integration involves the following steps:</p>
+<ol class="arabic simple">
+<li><p>Building the plugin. This step involves compiling C++ code, and must be done separately on each supported platform.</p></li>
+<li><p><em>(Optional)</em> Generating the zip file (<code class="docutils literal notranslate"><span class="pre">steamaudio_unreal.zip</span></code>) for distribution.</p></li>
+</ol>
+<div class="section" id="directory-structure">
+<h3>Directory Structure<a class="headerlink" href="#directory-structure" title="Permalink to this headline">¶</a></h3>
+<p>Below is an overview of the directories contained within the source repository for the Steam Audio Unreal plugin:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 15%" />
+<col style="width: 85%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Directory</p></th>
+<th class="head"><p>Contents</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">bin/</span></code></p></td>
+<td><p>Compiled binaries placed by the <code class="docutils literal notranslate"><span class="pre">INSTALL</span></code> target of the build system generated by CMake.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">build/</span></code></p></td>
+<td><p>Build scripts and the build system generated by CMake.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">dist/</span></code></p></td>
+<td><p>The zip file generated by the <code class="docutils literal notranslate"><span class="pre">PACKAGE</span></code> target.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">doc/</span></code></p></td>
+<td><p>Documentation.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">src/</span></code></p></td>
+<td><p>C++ source code for the plugin.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="building-the-plugin">
+<h2>Building the plugin<a class="headerlink" href="#building-the-plugin" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="requirements">
+<h3>Requirements<a class="headerlink" href="#requirements" title="Permalink to this headline">¶</a></h3>
+<p>To build the native plugin on any platform, you need the following software:</p>
+<ul class="simple">
+<li><p>Python (<a class="reference external" href="https://www.python.org">https://www.python.org</a>)</p></li>
+<li><p>CMake 3.17 or later (<a class="reference external" href="https://cmake.org">https://cmake.org</a>)</p></li>
+</ul>
+<p>To build the Windows plugin, you will need:</p>
+<ul class="simple">
+<li><p>Visual Studio 2017 or later (<a class="reference external" href="https://visualstudio.microsoft.com">https://visualstudio.microsoft.com</a>)</p></li>
+</ul>
+<p>To build the Linux plugin, you will need:</p>
+<ul class="simple">
+<li><p>Clang 11.0.1-based cross-compiling toolchain (<a class="reference external" href="https://docs.unrealengine.com/4.27/en-US/SharingAndReleasing/Linux/GettingStarted/">https://docs.unrealengine.com/4.27/en-US/SharingAndReleasing/Linux/GettingStarted/</a>)</p></li>
+</ul>
+<p>To build the macOS plugin, you will need:</p>
+<ul class="simple">
+<li><p>Xcode 11.3 or later (install from the Mac App Store)</p></li>
+</ul>
+<p>To build the Android plugin, you will need:</p>
+<ul class="simple">
+<li><p>Android SDK for platform 25 (Android 7.1 Nougat) or later (<a class="reference external" href="https://developer.android.com/studio">https://developer.android.com/studio</a>)</p></li>
+<li><p>Android NDK (install using the Android SDK Manager)</p></li>
+</ul>
+<p>To build the documentation, you will need:</p>
+<ul class="simple">
+<li><p>Sphinx (<a class="reference external" href="https://www.sphinx-doc.org">https://www.sphinx-doc.org</a>)</p></li>
+<li><p>Sphinx Read The Docs theme (<a class="reference external" href="https://sphinx-rtd-theme.readthedocs.io">https://sphinx-rtd-theme.readthedocs.io</a>)</p></li>
+</ul>
+</div>
+<div class="section" id="preparing-the-repository">
+<h3>Preparing the repository<a class="headerlink" href="#preparing-the-repository" title="Permalink to this headline">¶</a></h3>
+<p>After cloning the Steam Audio Git repository, the first step is to download the Steam Audio API libraries and
+place them in the correct locations in the Git repository. To do this, run the following from a command
+prompt in the <code class="docutils literal notranslate"><span class="pre">unreal</span></code> directory of the repository:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ python setup.py
+</pre></div>
+</div>
+<p>This will download the appropriate release of the Steam Audio API from GitHub, extract it, and place the files
+in the appropriate locations.</p>
+</div>
+<div class="section" id="building-using-the-build-script">
+<h3>Building using the build script<a class="headerlink" href="#building-using-the-build-script" title="Permalink to this headline">¶</a></h3>
+<p>To build the plugin, run the following from a command prompt in the <code class="docutils literal notranslate"><span class="pre">unreal</span></code> directory of the repository:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ cd build
+$ python build.py
+</pre></div>
+</div>
+<p>On Windows, this will build the plugin for the Win64 (Windows 64-bit) platform.</p>
+<p>On macOS, this will build the plugin for the Mac platform.</p>
+<p>If CMake cannot generate the build system due to missing dependencies, you can run CMake directly and adjust settings that control where CMake looks for dependencies, and which targets it builds.</p>
+<p>The Steam Audio build script (<code class="docutils literal notranslate"><span class="pre">build.py</span></code>) lets you specify the following command line parameters to control its behavior:</p>
+<blockquote>
+<div><dl class="option-list">
+<dt><kbd><span class="option">-o</span>, <span class="option">--operation <var>NAME</var></span></kbd></dt>
+<dd><p>Specifies the CMake operation to perform. Valid options are <code class="docutils literal notranslate"><span class="pre">generate</span></code> (generates the build system), <code class="docutils literal notranslate"><span class="pre">build</span></code> (build all targets in the build system), <code class="docutils literal notranslate"><span class="pre">install</span></code> (runs the <code class="docutils literal notranslate"><span class="pre">INSTALL</span></code> target, which copies binaries to the <code class="docutils literal notranslate"><span class="pre">bin/</span></code> folder), <code class="docutils literal notranslate"><span class="pre">package</span></code> (runs the <code class="docutils literal notranslate"><span class="pre">PACKAGE</span></code> target, which generates the zip file and copies it to the <code class="docutils literal notranslate"><span class="pre">dist/</span></code> folder), <code class="docutils literal notranslate"><span class="pre">ci_build</span></code> (which runs <code class="docutils literal notranslate"><span class="pre">generate</span></code>, then <code class="docutils literal notranslate"><span class="pre">build</span></code>, then <code class="docutils literal notranslate"><span class="pre">install</span></code>), and <code class="docutils literal notranslate"><span class="pre">ci_package</span></code> (which runs <code class="docutils literal notranslate"><span class="pre">generate</span></code>, then <code class="docutils literal notranslate"><span class="pre">package</span></code>). Default is <code class="docutils literal notranslate"><span class="pre">generate</span></code> followed by <code class="docutils literal notranslate"><span class="pre">build</span></code>.</p>
+</dd>
+</dl>
+</div></blockquote>
+</div>
+<div class="section" id="building-using-cmake-directly">
+<h3>Building using CMake directly<a class="headerlink" href="#building-using-cmake-directly" title="Permalink to this headline">¶</a></h3>
+<p>You can also directly using CMake to generate the build system. This is useful if you need to specify non-default paths for CMake to search for dependencies. To do this, first create the directory in which you want to generate the build system:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ cd build
+$ mkdir windows-vs2019-x64
+</pre></div>
+</div>
+<p>Now run CMake:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ cmake ../..
+</pre></div>
+</div>
+<p>Alternatively, use <code class="docutils literal notranslate"><span class="pre">cmake-gui</span></code> if you prefer using a GUI to configure various CMake options:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ cmake-gui ../..
+</pre></div>
+</div>
+<p>You will typically want to generate a build system for your host platform’s native toolchain (e.g. Visual Studio on Windows or Xcode on macOS), since Steam Audio’s CMake-based build system is just a thin wrapper around UnrealBuildTool, which will handle toolchain selection and cross-compiling automatically.</p>
+<p>Below are some of the CMake options you may want to configure:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 30%" />
+<col style="width: 70%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Option</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">STEAMAUDIOUNREAL_BUILD_DOCS</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">TRUE</span></code> if you want to build documentation, <code class="docutils literal notranslate"><span class="pre">FALSE</span></code> otherwise.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">STEAMAUDIO_CROSSCOMPILE_WIN32</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">TRUE</span></code> if you want to compile for 32-bit Windows, <code class="docutils literal notranslate"><span class="pre">FALSE</span></code> otherwise.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">STEAMAUDIO_CROSSCOMPILE_LINUX</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">TRUE</span></code> if you want to cross-compile for Linux on Windows, <code class="docutils literal notranslate"><span class="pre">FALSE</span></code> otherwise.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">STEAMAUDIO_CROSSCOMPILE_ANDROID</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">TRUE</span></code> if you want to cross-compile for Android on Windows, <code class="docutils literal notranslate"><span class="pre">FALSE</span></code> otherwise.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">Sphinx_EXECUTABLE_DIR</span></code></p></td>
+<td><p>Absolute path to the directory containing the Sphinx executable.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">Unreal_EXECUTABLE_DIR</span></code></p></td>
+<td><p>Absolute path to the directory containing the UnrealBuildTool executable.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="generating-the-zip-file">
+<h2>Generating the zip file<a class="headerlink" href="#generating-the-zip-file" title="Permalink to this headline">¶</a></h2>
+<p>As an optional step, you can package the plugin, including documentation, into a zip file. To do this, run the following from a command prompt in the <code class="docutils literal notranslate"><span class="pre">unreal</span></code> directory of the repository:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ cd build
+$ python build.py -o install
+$ python build.py -o package
+</pre></div>
+</div>
+<p>This will place the generated zip file in <code class="docutils literal notranslate"><span class="pre">dist/steamaudio_unreal.zip</span></code>.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="reference.html" class="btn btn-neutral float-right" title="Reference" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="guide.html" class="btn btn-neutral float-left" title="User’s Guide" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Valve Corporation.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

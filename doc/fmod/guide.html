@@ -72,7 +72,7 @@
             
             
               <div class="version">
-                4.0.3
+                4.1.0
               </div>
             
           
@@ -232,7 +232,8 @@
 </div>
 <p>Custom HRTFs are loaded and set by the game engine. No special configuration is needed within FMOD Studio.</p>
 <div class="sphinx-tabs docutils container">
-<div aria-label="Tabbed content" class="closeable" role="tablist"><button aria-controls="panel-0-VW5pdHk=" aria-selected="true" class="sphinx-tabs-tab group-tab" id="tab-0-VW5pdHk=" name="VW5pdHk=" role="tab" tabindex="0">Unity</button><button aria-controls="panel-0-Qysr" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-0-Qysr" name="Qysr" role="tab" tabindex="-1">C++</button></div><div aria-labelledby="tab-0-VW5pdHk=" class="sphinx-tabs-panel group-tab" id="panel-0-VW5pdHk=" name="VW5pdHk=" role="tabpanel" tabindex="0"><p>Follow the instructions in the Steam Audio Unity integration documentation to specify custom HRTFs.</p>
+<div aria-label="Tabbed content" class="closeable" role="tablist"><button aria-controls="panel-0-VW5pdHk=" aria-selected="true" class="sphinx-tabs-tab group-tab" id="tab-0-VW5pdHk=" name="VW5pdHk=" role="tab" tabindex="0">Unity</button><button aria-controls="panel-0-VW5yZWFsIEVuZ2luZQ==" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-0-VW5yZWFsIEVuZ2luZQ==" name="VW5yZWFsIEVuZ2luZQ==" role="tab" tabindex="-1">Unreal Engine</button><button aria-controls="panel-0-Qysr" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-0-Qysr" name="Qysr" role="tab" tabindex="-1">C++</button></div><div aria-labelledby="tab-0-VW5pdHk=" class="sphinx-tabs-panel group-tab" id="panel-0-VW5pdHk=" name="VW5pdHk=" role="tabpanel" tabindex="0"><p>Follow the instructions in the Steam Audio Unity integration documentation to specify custom HRTFs.</p>
+</div><div aria-labelledby="tab-0-VW5yZWFsIEVuZ2luZQ==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-0-VW5yZWFsIEVuZ2luZQ==" name="VW5yZWFsIEVuZ2luZQ==" role="tabpanel" tabindex="0"><p>The Steam Audio Unreal Engine plugin does not currently support custom HRTFs.</p>
 </div><div aria-labelledby="tab-0-Qysr" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-0-Qysr" name="Qysr" role="tabpanel" tabindex="0"><ol class="arabic simple">
 <li><p>In the game engine, use <code class="docutils literal notranslate"><span class="pre">iplHRTFCreate</span></code> to load one or more SOFA files.</p></li>
 <li><p>Call <code class="docutils literal notranslate"><span class="pre">iplFMODSetHRTF</span></code> to specify the HRTF to use for spatialization.</p></li>
@@ -264,12 +265,18 @@
 </ol>
 <p>You must now configure your game engine to enable occlusion simulation for this event.</p>
 <div class="sphinx-tabs docutils container">
-<div aria-label="Tabbed content" class="closeable" role="tablist"><button aria-controls="panel-1-VW5pdHk=" aria-selected="true" class="sphinx-tabs-tab group-tab" id="tab-1-VW5pdHk=" name="VW5pdHk=" role="tab" tabindex="0">Unity</button><button aria-controls="panel-1-Qysr" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-1-Qysr" name="Qysr" role="tab" tabindex="-1">C++</button></div><div aria-labelledby="tab-1-VW5pdHk=" class="sphinx-tabs-panel group-tab" id="panel-1-VW5pdHk=" name="VW5pdHk=" role="tabpanel" tabindex="0"><ol class="arabic simple">
+<div aria-label="Tabbed content" class="closeable" role="tablist"><button aria-controls="panel-1-VW5pdHk=" aria-selected="true" class="sphinx-tabs-tab group-tab" id="tab-1-VW5pdHk=" name="VW5pdHk=" role="tab" tabindex="0">Unity</button><button aria-controls="panel-1-VW5yZWFsIEVuZ2luZQ==" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-1-VW5yZWFsIEVuZ2luZQ==" name="VW5yZWFsIEVuZ2luZQ==" role="tab" tabindex="-1">Unreal Engine</button><button aria-controls="panel-1-Qysr" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-1-Qysr" name="Qysr" role="tab" tabindex="-1">C++</button></div><div aria-labelledby="tab-1-VW5pdHk=" class="sphinx-tabs-panel group-tab" id="panel-1-VW5pdHk=" name="VW5pdHk=" role="tabpanel" tabindex="0"><ol class="arabic simple">
 <li><p>Select the FMOD Event Emitter.</p></li>
 <li><p>Make sure a Steam Audio Source component is attached to it.</p></li>
 <li><p>In the Inspector, check <strong>Occlusion</strong>.</p></li>
 </ol>
 <p>Steam Audio will now use raycast occlusion to check if the source is occluded from the listener by any geometry. This assumes that the source is a single point. You can also model sources with larger spatial extent. For more information, refer to the Steam Audio Unity integration documentation.</p>
+</div><div aria-labelledby="tab-1-VW5yZWFsIEVuZ2luZQ==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-1-VW5yZWFsIEVuZ2luZQ==" name="VW5yZWFsIEVuZ2luZQ==" role="tabpanel" tabindex="0"><ol class="arabic simple">
+<li><p>Select the actor containing the FMOD Audio component.</p></li>
+<li><p>Make sure a Steam Audio Source component is attached to it.</p></li>
+<li><p>In the Details tab, check <strong>Simulate Occlusion</strong>.</p></li>
+</ol>
+<p>Steam Audio will now use raycast occlusion to check if the source is occluded from the listener by any geometry. This assumes that the source is a single point. You can also model sources with larger spatial extent. For more information, refer to the Steam Audio Unreal Engine integration documentation.</p>
 </div><div aria-labelledby="tab-1-Qysr" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-1-Qysr" name="Qysr" role="tabpanel" tabindex="0"><ol class="arabic simple">
 <li><p>Call <code class="docutils literal notranslate"><span class="pre">iplSimulatorRunDirect</span></code> to run occlusion simulations.</p></li>
 <li><p>Call <code class="docutils literal notranslate"><span class="pre">iplSourceGetOutputs</span></code> to retrieve the results of the simulation for a given source in an <code class="docutils literal notranslate"><span class="pre">IPLSimulationOutputs</span></code> structure.</p></li>
@@ -293,10 +300,16 @@
 </ol>
 <p>You must now configure your game engine to enable transmission simulation for this event.</p>
 <div class="sphinx-tabs docutils container">
-<div aria-label="Tabbed content" class="closeable" role="tablist"><button aria-controls="panel-2-VW5pdHk=" aria-selected="true" class="sphinx-tabs-tab group-tab" id="tab-2-VW5pdHk=" name="VW5pdHk=" role="tab" tabindex="0">Unity</button><button aria-controls="panel-2-Qysr" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-2-Qysr" name="Qysr" role="tab" tabindex="-1">C++</button></div><div aria-labelledby="tab-2-VW5pdHk=" class="sphinx-tabs-panel group-tab" id="panel-2-VW5pdHk=" name="VW5pdHk=" role="tabpanel" tabindex="0"><ol class="arabic simple">
+<div aria-label="Tabbed content" class="closeable" role="tablist"><button aria-controls="panel-2-VW5pdHk=" aria-selected="true" class="sphinx-tabs-tab group-tab" id="tab-2-VW5pdHk=" name="VW5pdHk=" role="tab" tabindex="0">Unity</button><button aria-controls="panel-2-VW5yZWFsIEVuZ2luZQ==" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-2-VW5yZWFsIEVuZ2luZQ==" name="VW5yZWFsIEVuZ2luZQ==" role="tab" tabindex="-1">Unreal Engine</button><button aria-controls="panel-2-Qysr" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-2-Qysr" name="Qysr" role="tab" tabindex="-1">C++</button></div><div aria-labelledby="tab-2-VW5pdHk=" class="sphinx-tabs-panel group-tab" id="panel-2-VW5pdHk=" name="VW5pdHk=" role="tabpanel" tabindex="0"><ol class="arabic simple">
 <li><p>Select the FMOD Event Emitter.</p></li>
 <li><p>Make sure a Steam Audio Source component is attached to it.</p></li>
 <li><p>In the Inspector, make sure <strong>Occlusion</strong> is checked, then check <strong>Transmission</strong>.</p></li>
+</ol>
+<p>Steam Audio will now model how sound travels through occluding geometry, based on the acoustic material properties of the geometry.</p>
+</div><div aria-labelledby="tab-2-VW5yZWFsIEVuZ2luZQ==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-2-VW5yZWFsIEVuZ2luZQ==" name="VW5yZWFsIEVuZ2luZQ==" role="tabpanel" tabindex="0"><ol class="arabic simple">
+<li><p>Select the actor containing the FMOD Audio component.</p></li>
+<li><p>Make sure a Steam Audio Source component is attached to it.</p></li>
+<li><p>In the Details tab, make sure <strong>Simulate Occlusion</strong> is checked, then check <strong>Simulate Transmission</strong>.</p></li>
 </ol>
 <p>Steam Audio will now model how sound travels through occluding geometry, based on the acoustic material properties of the geometry.</p>
 </div><div aria-labelledby="tab-2-Qysr" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-2-Qysr" name="Qysr" role="tabpanel" tabindex="0"><ol class="arabic simple">
@@ -323,12 +336,18 @@
 </ol>
 <p>You must now configure your game engine to enable reflections simulation for this event.</p>
 <div class="sphinx-tabs docutils container">
-<div aria-label="Tabbed content" class="closeable" role="tablist"><button aria-controls="panel-3-VW5pdHk=" aria-selected="true" class="sphinx-tabs-tab group-tab" id="tab-3-VW5pdHk=" name="VW5pdHk=" role="tab" tabindex="0">Unity</button><button aria-controls="panel-3-Qysr" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-3-Qysr" name="Qysr" role="tab" tabindex="-1">C++</button></div><div aria-labelledby="tab-3-VW5pdHk=" class="sphinx-tabs-panel group-tab" id="panel-3-VW5pdHk=" name="VW5pdHk=" role="tabpanel" tabindex="0"><ol class="arabic simple">
+<div aria-label="Tabbed content" class="closeable" role="tablist"><button aria-controls="panel-3-VW5pdHk=" aria-selected="true" class="sphinx-tabs-tab group-tab" id="tab-3-VW5pdHk=" name="VW5pdHk=" role="tab" tabindex="0">Unity</button><button aria-controls="panel-3-VW5yZWFsIEVuZ2luZQ==" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-3-VW5yZWFsIEVuZ2luZQ==" name="VW5yZWFsIEVuZ2luZQ==" role="tab" tabindex="-1">Unreal Engine</button><button aria-controls="panel-3-Qysr" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-3-Qysr" name="Qysr" role="tab" tabindex="-1">C++</button></div><div aria-labelledby="tab-3-VW5pdHk=" class="sphinx-tabs-panel group-tab" id="panel-3-VW5pdHk=" name="VW5pdHk=" role="tabpanel" tabindex="0"><ol class="arabic simple">
 <li><p>Select the FMOD Event Emitter.</p></li>
 <li><p>Make sure a Steam Audio Source component is attached to it.</p></li>
 <li><p>In the Inspector, check <strong>Reflections</strong>.</p></li>
 </ol>
 <p>Steam Audio will now use real-time ray tracing to model how sound is reflected by geometry, based on the acoustic material properties of the geometry. You can control many aspects of this process, including how many rays are traced, how many successive reflections are modeled, how reflected sound is rendered, and much more. Since modeling reflections is CPU-intensive, you can pre-compute reflections for a static sound source, or even offload the work to the GPU. For more information, refer to the Steam Audio Unity integration documentation.</p>
+</div><div aria-labelledby="tab-3-VW5yZWFsIEVuZ2luZQ==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-3-VW5yZWFsIEVuZ2luZQ==" name="VW5yZWFsIEVuZ2luZQ==" role="tabpanel" tabindex="0"><ol class="arabic simple">
+<li><p>Select the actor containing the FMOD Audio component.</p></li>
+<li><p>Make sure a Steam Audio Source component is attached to it.</p></li>
+<li><p>In the Details tab, check <strong>Simulate Reflections</strong>.</p></li>
+</ol>
+<p>Steam Audio will now use real-time ray tracing to model how sound is reflected by geometry, based on the acoustic material properties of the geometry. You can control many aspects of this process, including how many rays are traced, how many successive reflections are modeled, how reflected sound is rendered, and much more. Since modeling reflections is CPU-intensive, you can pre-compute reflections for a static sound source, or even offload the work to the GPU. For more information, refer to the Steam Audio Unreal Engine integration documentation.</p>
 </div><div aria-labelledby="tab-3-Qysr" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-3-Qysr" name="Qysr" role="tabpanel" tabindex="0"><ol class="arabic">
 <li><p>Call <code class="docutils literal notranslate"><span class="pre">iplSimulatorRunReflections</span></code> to run reflection simulations.</p></li>
 <li><p>Call <code class="docutils literal notranslate"><span class="pre">iplSourceGetOutputs</span></code> to retrieve the results of the simulation for a given source in an <code class="docutils literal notranslate"><span class="pre">IPLSimulationOutputs</span></code> structure.</p></li>
@@ -355,12 +374,17 @@
 </ol>
 <p>You must now configure your game engine to enable reverb simulation.</p>
 <div class="sphinx-tabs docutils container">
-<div aria-label="Tabbed content" class="closeable" role="tablist"><button aria-controls="panel-4-VW5pdHk=" aria-selected="true" class="sphinx-tabs-tab group-tab" id="tab-4-VW5pdHk=" name="VW5pdHk=" role="tab" tabindex="0">Unity</button><button aria-controls="panel-4-Qysr" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-4-Qysr" name="Qysr" role="tab" tabindex="-1">C++</button></div><div aria-labelledby="tab-4-VW5pdHk=" class="sphinx-tabs-panel group-tab" id="panel-4-VW5pdHk=" name="VW5pdHk=" role="tabpanel" tabindex="0"><ol class="arabic simple">
+<div aria-label="Tabbed content" class="closeable" role="tablist"><button aria-controls="panel-4-VW5pdHk=" aria-selected="true" class="sphinx-tabs-tab group-tab" id="tab-4-VW5pdHk=" name="VW5pdHk=" role="tab" tabindex="0">Unity</button><button aria-controls="panel-4-VW5yZWFsIEVuZ2luZQ==" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-4-VW5yZWFsIEVuZ2luZQ==" name="VW5yZWFsIEVuZ2luZQ==" role="tab" tabindex="-1">Unreal Engine</button><button aria-controls="panel-4-Qysr" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-4-Qysr" name="Qysr" role="tab" tabindex="-1">C++</button></div><div aria-labelledby="tab-4-VW5pdHk=" class="sphinx-tabs-panel group-tab" id="panel-4-VW5pdHk=" name="VW5pdHk=" role="tabpanel" tabindex="0"><ol class="arabic simple">
 <li><p>Select the FMOD Listener.</p></li>
 <li><p>Make sure a Steam Audio Listener component is attached to it.</p></li>
 <li><p>In the Inspector, check <strong>Apply Reverb</strong>.</p></li>
 </ol>
 <p>Steam Audio will now use real-time ray tracing to simulate physics-based reverb. You can control many aspects of this simulation, including how many rays are traced, the length of the reverb tail, whether the reverb is rendered a convolution reverb, and much more. Since modeling physics-based reverb is CPU-intensive, you can (and typically will) pre-compute reverb throughout your scene. You can even offload simulation as well as rendering work to the GPU. For more information, refer to the Steam Audio Unity integration documentation.</p>
+</div><div aria-labelledby="tab-4-VW5yZWFsIEVuZ2luZQ==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-4-VW5yZWFsIEVuZ2luZQ==" name="VW5yZWFsIEVuZ2luZQ==" role="tabpanel" tabindex="0"><ol class="arabic simple">
+<li><p>Select the actor containing the Steam Audio Listener component.</p></li>
+<li><p>In the Details tab, check <strong>Simulate Reverb</strong>.</p></li>
+</ol>
+<p>Steam Audio will now use real-time ray tracing to simulate physics-based reverb. You can control many aspects of this simulation, including how many rays are traced, the length of the reverb tail, whether the reverb is rendered a convolution reverb, and much more. Since modeling physics-based reverb is CPU-intensive, you can (and typically will) pre-compute reverb throughout your scene. You can even offload simulation as well as rendering work to the GPU. For more information, refer to the Steam Audio Unreal Engine integration documentation.</p>
 </div><div aria-labelledby="tab-4-Qysr" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-4-Qysr" name="Qysr" role="tabpanel" tabindex="0"><ol class="arabic simple">
 <li><p>Call <code class="docutils literal notranslate"><span class="pre">iplSimulatorRunReflections</span></code> to run reflection simulations for a source located at the listener position.</p></li>
 <li><p>Call <code class="docutils literal notranslate"><span class="pre">iplFMODSetReverbSource</span></code> to specify the <code class="docutils literal notranslate"><span class="pre">IPLSource</span></code> used to simulate reverb.</p></li>
@@ -379,13 +403,20 @@
 </ol>
 <p>You must now configure your game engine to enable reflections simulation for this event.</p>
 <div class="sphinx-tabs docutils container">
-<div aria-label="Tabbed content" class="closeable" role="tablist"><button aria-controls="panel-5-VW5pdHk=" aria-selected="true" class="sphinx-tabs-tab group-tab" id="tab-5-VW5pdHk=" name="VW5pdHk=" role="tab" tabindex="0">Unity</button><button aria-controls="panel-5-Qysr" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-5-Qysr" name="Qysr" role="tab" tabindex="-1">C++</button></div><div aria-labelledby="tab-5-VW5pdHk=" class="sphinx-tabs-panel group-tab" id="panel-5-VW5pdHk=" name="VW5pdHk=" role="tabpanel" tabindex="0"><ol class="arabic simple">
+<div aria-label="Tabbed content" class="closeable" role="tablist"><button aria-controls="panel-5-VW5pdHk=" aria-selected="true" class="sphinx-tabs-tab group-tab" id="tab-5-VW5pdHk=" name="VW5pdHk=" role="tab" tabindex="0">Unity</button><button aria-controls="panel-5-VW5yZWFsIEVuZ2luZQ==" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-5-VW5yZWFsIEVuZ2luZQ==" name="VW5yZWFsIEVuZ2luZQ==" role="tab" tabindex="-1">Unreal Engine</button><button aria-controls="panel-5-Qysr" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-5-Qysr" name="Qysr" role="tab" tabindex="-1">C++</button></div><div aria-labelledby="tab-5-VW5pdHk=" class="sphinx-tabs-panel group-tab" id="panel-5-VW5pdHk=" name="VW5pdHk=" role="tabpanel" tabindex="0"><ol class="arabic simple">
 <li><p>Make sure that pathing information is baked for one or more probe batches in your scene. For more information, refer to the Steam Audio Unity integration documentation.</p></li>
 <li><p>Select the FMOD Event Emitter.</p></li>
 <li><p>Make sure a Steam Audio Source component is attached to it.</p></li>
 <li><p>Check <strong>Pathing</strong>.</p></li>
 </ol>
 <p>You can control many aspects of the baking process, as well as the run-time path finding algorithm. For more information, refer to the Steam Audio Unity integration documentation.</p>
+</div><div aria-labelledby="tab-5-VW5yZWFsIEVuZ2luZQ==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-5-VW5yZWFsIEVuZ2luZQ==" name="VW5yZWFsIEVuZ2luZQ==" role="tabpanel" tabindex="0"><ol class="arabic simple">
+<li><p>Make sure that pathing information is baked for one or more probe batches in your scene. For more information, refer to the Steam Audio Unreal Engine integration documentation.</p></li>
+<li><p>Select the actor containing the FMOD Audio component.</p></li>
+<li><p>Make sure a Steam Audio Source component is attached to it.</p></li>
+<li><p>Check <strong>Simulate Pathing</strong>.</p></li>
+</ol>
+<p>You can control many aspects of the baking process, as well as the run-time path finding algorithm. For more information, refer to the Steam Audio Unreal Engine integration documentation.</p>
 </div><div aria-labelledby="tab-5-Qysr" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-5-Qysr" name="Qysr" role="tabpanel" tabindex="0"><ol class="arabic">
 <li><p>Call <code class="docutils literal notranslate"><span class="pre">iplSimulatorRunPathing</span></code> to run pathing simulations.</p></li>
 <li><p>Call <code class="docutils literal notranslate"><span class="pre">iplSourceGetOutputs</span></code> to retrieve the results of the simulation for a given source in an <code class="docutils literal notranslate"><span class="pre">IPLSimulationOutputs</span></code> structure.</p></li>

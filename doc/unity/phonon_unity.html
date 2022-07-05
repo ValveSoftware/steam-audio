@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang xml:lang>
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Steam Audio Unity Plugin 2.0-beta.18</title>
+  <style type="text/css">
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <style type="text/css">#header {display: none;}header {display: none;}body {font-family: "Open Sans", "Helvetica Neue", Helvetica, "Segoe UI", Arial, sans-serif;font-size: 15px;line-height: 1.7em;max-width: 960px;color: #444;background-color: #f9f9f9;}@media only screen and (min-width: 768px) {body {margin-left: 320px;padding-left: 64px;}}h1, h2, h3, h4, h5, h6 {margin: 0;font-weight: 300;padding-bottom: 8px;}h1:first-of-type {padding-top: 24px;padding-bottom: 16px;font-weight: bold;font-size: 48px;}h1 {padding-top: 64px;padding-bottom: 8px;}h2 {padding-top: 32px;}h3 {padding-top: 16px;font-weight: bold;font-size: 20px;}h4 {padding-top: 8px;padding-bottom: 4px;font-size: 16px;font-weight: normal;}h5 {padding-top: 4px;padding-bottom: 2px;font-weight: normal;font-style: italic;font-size: 15px;}p {margin-top: 0;}h5 + p {padding-left: 32px;}h5 + p + ul {padding-left: 64px;}code {background-color: #fff;border: 1px solid rgba(0, 0, 0, 0.25);border-radius: 4px;padding: 4px;font-family: 'Consolas', 'Courier New', Courier, monospace;}blockquote {background-color: rgba(128, 200, 255, 0.5);border-top: 4px solid rgba(128, 200, 255, 0.9);border-bottom: 2px solid rgba(128, 200, 255, 0.9);padding: 8px;}blockquote p {margin: 0;}blockquote strong:first-child {display: block;}@media only screen and (max-width: 768px) {#TOC {display: none;}}@media only screen and (min-width: 768px) {#TOC {background-color: #eee;position: fixed;display: inline-block;left: 0;bottom: 0;top: 0;max-width: 320px;padding-top: 24px;padding-left: 8px;padding-right: 8px;padding-bottom: 24px;overflow-y: auto;line-height: 1.4em;}}#TOC::before {content: "Table of Contents";font-size: 24px;font-weight: bold;}#TOC > ul > li:first-of-type {display: none;}#TOC a {color: #444;text-decoration: none;}#TOC ul {list-style-type: none;padding-left: 0;}#TOC ul > li {padding-bottom: 32px;text-transform: uppercase;font-weight: bold;}#TOC ul ul > li {padding-top: 3px;padding-bottom: 3px;text-transform: none;font-weight: normal;font-size: 14px;}#TOC ul ul ul > li {padding-top: 1px;padding-bottom: 1px;padding-left: 16px;font-weight: 300;font-size: 13px;}</style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header>
+<h1 class="title">Steam Audio Unity Plugin 2.0-beta.18</h1>
+</header>
+<nav id="TOC">
+<ul>
+<li><a href="#steam-audio-unity-plugin">Steam Audio Unity Plugin</a></li>
+<li><a href="#getting-started">Getting Started</a><ul>
+<li><a href="#requirements">Requirements</a></li>
+<li><a href="#add-steam-audio-to-your-unity-project">Add Steam Audio to your Unity project</a></li>
+<li><a href="#spatialize-an-audio-source">Spatialize an Audio Source</a></li>
+</ul></li>
+<li><a href="#users-guide">User’s Guide</a><ul>
+<li><a href="#spatialize-an-audio-source-1">Spatialize an audio source</a></li>
+<li><a href="#spatialize-an-ambisonic-source">Spatialize an Ambisonic source</a></li>
+<li><a href="#apply-distance-falloff">Apply distance falloff</a></li>
+<li><a href="#blend-between-spatialized-and-unspatialized-audio">Blend between spatialized and unspatialized audio</a></li>
+<li><a href="#apply-frequency-dependent-distance-falloff-air-absorption">Apply frequency-dependent distance falloff (“air absorption”)</a></li>
+<li><a href="#specify-a-source-directivity-pattern">Specify a source directivity pattern</a></li>
+<li><a href="#use-a-custom-hrtf">Use a custom HRTF</a></li>
+<li><a href="#tag-acoustic-geometry">Tag acoustic geometry</a></li>
+<li><a href="#set-up-dynamic-movable-geometry">Set up dynamic (movable) geometry</a></li>
+<li><a href="#associate-an-acoustic-material-with-geometry">Associate an acoustic material with geometry</a></li>
+<li><a href="#model-occlusion-by-geometry">Model occlusion by geometry</a></li>
+<li><a href="#model-transmission-through-geometry">Model transmission through geometry</a></li>
+<li><a href="#model-reflection-by-geometry">Model reflection by geometry</a></li>
+<li><a href="#simulate-physics-based-reverb-at-the-listener-position">Simulate physics-based reverb at the listener position</a></li>
+<li><a href="#create-sound-probes-for-baked-sound-propagation">Create sound probes for baked sound propagation</a></li>
+<li><a href="#bake-reflections-from-a-static-source">Bake reflections from a static source</a></li>
+<li><a href="#bake-reflections-to-a-static-listener">Bake reflections to a static listener</a></li>
+<li><a href="#bake-physics-based-reverb">Bake physics-based reverb</a></li>
+<li><a href="#model-sound-paths-from-a-moving-source-to-a-moving-listener">Model sound paths from a moving source to a moving listener</a></li>
+<li><a href="#enable-gpu-acceleration">Enable GPU acceleration</a></li>
+</ul></li>
+<li><a href="#reference">Reference</a><ul>
+<li><a href="#components">Components</a><ul>
+<li><a href="#ambisonic-source">Ambisonic Source</a></li>
+<li><a href="#baked-listener">Baked Listener</a></li>
+<li><a href="#baked-source">Baked Source</a></li>
+<li><a href="#listener">Listener</a></li>
+<li><a href="#probe-batch">Probe Batch</a></li>
+<li><a href="#dynamic-object">Dynamic Object</a></li>
+<li><a href="#geometry">Geometry</a></li>
+<li><a href="#source">Source</a></li>
+<li><a href="#static-mesh">Static Mesh</a></li>
+</ul></li>
+<li><a href="#mixer-effects">Mixer Effects</a><ul>
+<li><a href="#reverb">Reverb</a></li>
+<li><a href="#mixer-return">Mixer Return</a></li>
+</ul></li>
+<li><a href="#asset-types">Asset Types</a><ul>
+<li><a href="#material-1">Material</a></li>
+<li><a href="#settings">Settings</a></li>
+</ul></li>
+<li><a href="#menu-commands">Menu Commands</a></li>
+</ul></li>
+</ul>
+</nav>
+<h1 id="steam-audio-unity-plugin">Steam Audio Unity Plugin</h1>
+<p>2.0-beta.18</p>
+<p>Copyright 2017 Valve Corporation. All rights reserved. Subject to the following license: <a href="https://valvesoftware.github.io/steam-audio/license.html" class="uri">https://valvesoftware.github.io/steam-audio/license.html</a></p>
+<h1 id="getting-started">Getting Started</h1>
+<h2 id="requirements">Requirements</h2>
+<p>Steam Audio requires <strong>Unity 2017.3</strong> or later.</p>
+<p>The Steam Audio Unity integration supports the following platforms:</p>
+<ul>
+<li>Windows 7 or later (32-bit and 64-bit)</li>
+<li>Linux (32-bit and 64-bit, tested with Ubuntu 16.04 LTS)</li>
+<li>macOS 10.7 or later (64-bit Intel)</li>
+<li>Android 5.0 or later (32-bit ARM, 64-bit ARM, 32-bit Intel)</li>
+</ul>
+<h2 id="add-steam-audio-to-your-unity-project">Add Steam Audio to your Unity project</h2>
+<p>To add Steam Audio to your Unity project:</p>
+<ol type="1">
+<li>Download the latest version of the Steam Audio Unity integration: <a href><code>SteamAudio.unitypackage</code></a></li>
+<li>In Unity’s main menu, choose <strong>Assets</strong> &gt; <strong>Import Package</strong> &gt; <strong>Custom Package</strong>.</li>
+<li>Navigate to the <code>SteamAudio.unitypackage</code> file that you downloaded, and double-click it.</li>
+<li>In the Import dialog box, make sure everything is selected, and click <strong>Import</strong>.</li>
+<li>Once the import finishes, in the main menu, choose <strong>Edit</strong> &gt; <strong>Project Settings</strong> &gt; <strong>Audio</strong>.</li>
+<li>Set <strong>Spatializer Plugin</strong> to <strong>Steam Audio Spatializer</strong>, and <strong>Ambisonic Decoder Plugin</strong> to <strong>Steam Audio Ambisonics</strong>.</li>
+</ol>
+<h2 id="spatialize-an-audio-source">Spatialize an Audio Source</h2>
+<p>Once Steam Audio is added to your project, you can spatialize any Audio Source:</p>
+<ol type="1">
+<li>Select any GameObject that contains an Audio Source component.</li>
+<li>In the Inspector tab, under Audio Source, check <strong>Spatialize</strong>.</li>
+</ol>
+<h1 id="users-guide">User’s Guide</h1>
+<h2 id="spatialize-an-audio-source-1">Spatialize an audio source</h2>
+<p>To spatialize an Audio Source:</p>
+<ol type="1">
+<li>Select the Audio Source.</li>
+<li>In the Audio Source Inspector, check <strong>Spatialize</strong>.</li>
+</ol>
+<p>IMAGE(audiosource_spatialize.png)</p>
+<p>Steam Audio will apply HRTF-based binaural rendering to the Audio Source, using default settings. You can control many properties of the spatialization using the <a href>Steam Audio Source</a> component, including occlusion, reflections, and more.</p>
+<h2 id="spatialize-an-ambisonic-source">Spatialize an Ambisonic source</h2>
+<p>Ambisonic audio is a surround sound format that is well-suited to spatial audio applications. Unlike traditional surround sound formats, it covers a full sphere of directions around the listener, including vertical. Instead of discrete speaker locations, you specify the <em>order</em> of an Ambisonic clip, which determines the spatial resolution of the audio. Higher orders lead to more accurate spatialization. For more details, see <a href>REF</a>.</p>
+<p>You can use Ambisonic audio clips for <em>sound fields</em>: sounds playing from many directions around the listener. Ambient sounds are often a good candidate for Ambisonics.</p>
+<p>In Unity, you configure individual audio clips as Ambisonic, instead of audio sources. To configure an audio clip as Ambisonic:</p>
+<ol type="1">
+<li>Select the audio clip.</li>
+<li>In the Inspector, check <strong>Ambisonic</strong>.</li>
+<li>Click <strong>Apply</strong>.</li>
+</ol>
+<blockquote>
+<p><strong>NOTE</strong> Uncheck <strong>Spatialize</strong> on any Audio Source that will play an Ambisonic audio clip.</p>
+</blockquote>
+<blockquote>
+<p><strong>NOTE</strong> Unity supports up to 2nd order Ambisonic clips. They must use AmbiX (ACN/SN3D) layout. For more information, refer to the <a href>Unity documentation</a>.</p>
+</blockquote>
+<p>You can control how an Ambisonic audio clip is spatialized using the <a href>Steam Audio Ambisonic Source</a> component.</p>
+<h2 id="apply-distance-falloff">Apply distance falloff</h2>
+<p>You can continue to use Unity’s built-in tools to control how the volume of an audio source falls off with distance. To do so:</p>
+<ol type="1">
+<li>Select the audio source.</li>
+<li>In the Inspector, expand <strong>3D Sound Settings</strong>.</li>
+<li>Use the <strong>Volume Rolloff</strong>, <strong>Min Distance</strong>, <strong>Max Distance</strong>, and curve editor to control the distance falloff. See <a href>REF</a> for more information.</li>
+</ol>
+<p>Steam Audio will automatically use this curve to apply distance attenuation.</p>
+<h2 id="blend-between-spatialized-and-unspatialized-audio">Blend between spatialized and unspatialized audio</h2>
+<p>You can dynamically blend between spatialized and unspatialized audio. For example, you may have an in-game radio playing spatialized music at a distance, which smoothly transitions into the unspatialized soundtrack as you approach it. To do this:</p>
+<ol type="1">
+<li>Select the audio source.</li>
+<li>In the Inspector, set <strong>Spatial Blend</strong> to the desired value. (<strong>2D</strong> means unspatialized audio, <strong>3D</strong> means spatialized. Values in between are a blend of spatialized and unspatialized.)</li>
+</ol>
+<p>You can also use the curve editor to control how Spatial Blend changes with distance.</p>
+<h2 id="apply-frequency-dependent-distance-falloff-air-absorption">Apply frequency-dependent distance falloff (“air absorption”)</h2>
+<p>You can control how different sound frequencies fall off with distance. For example, when playing a distant explosion sound, higher frequencies can fall off more than lower frequencies, leading to a more muffled sound. To do this:</p>
+<ol type="1">
+<li>Select the audio source.</li>
+<li>In the Inspector, click <strong>Add Component</strong> &gt; <strong>Steam Audio</strong> &gt; <strong>Steam Audio Source</strong>. (Skip this step if a Steam Audio Source is already attached to the Audio Source.)</li>
+<li>Check <strong>Air Absorption</strong>.</li>
+</ol>
+<p>Steam Audio will now use its default air absorption model to apply frequency-dependent distance falloff to the Audio Source. You can also directly control the filter, either manually or via scripting. For more information, see <a href>REF</a>.</p>
+<h2 id="specify-a-source-directivity-pattern">Specify a source directivity pattern</h2>
+<p>You can configure a source that emits sound with different intensities in different directions. For example, a megaphone that projects sound mostly to the front. To do this:</p>
+<ol type="1">
+<li>Select the audio source.</li>
+<li>In the Inspector, click <strong>Add Component</strong> &gt; <strong>Steam Audio</strong> &gt; <strong>Steam Audio Source</strong>. (Skip this step if a Steam Audio Source is already attached to the Audio Source.)</li>
+<li>Check <strong>Directivity</strong>.</li>
+<li>Use the <strong>Dipole Weight</strong> and <strong>Dipole Power</strong> sliders to control the directivity pattern.</li>
+</ol>
+<p>For more information, see <a href>REF</a>.</p>
+<h2 id="use-a-custom-hrtf">Use a custom HRTF</h2>
+<p>You (or your players) can replace Steam Audio’s built-in HRTF with any HRTF of your choosing. This is useful for comparing different HRTF databases, measurement or simulation techniques, or even allowing players to use a preferred HRTF with your game or app.</p>
+<p>Steam Audio loads custom HRTFs from SOFA files. These files have a <code>.sofa</code> extension.</p>
+<blockquote>
+<p><strong>NOTE</strong> The Spatially-Oriented Format for Acoustics (SOFA) file format is defined by an Audio Engineering Society (AES) standard. For more details, click <a href="https://www.sofaconventions.org/">here</a>.</p>
+</blockquote>
+<p>To tell Steam Audio to load a SOFA file at startup:</p>
+<ol type="1">
+<li>Copy it to the <code>Assets/StreamingAssets</code> folder in your Unity project.</li>
+<li>In the main menu, choose <strong>Steam Audio</strong> &gt; <strong>Settings</strong>.</li>
+<li>In the Inspector, expand <strong>SOFA Files</strong>.</li>
+<li>If there are no empty fields under <strong>SOFA Files</strong>, increase the value of <strong>Size</strong>.</li>
+<li>In one of the empty fields, enter the name of the SOFA file. For example if you have a file called <code>Assets/StreamingAssets/myhrtf.sofa</code>, enter <code>myhrtf.sofa</code> (or even <code>myhrtf</code>, the <code>.sofa</code> extension is optional).</li>
+</ol>
+<p>The current SOFA file can now be changed at run-time:</p>
+<p>(TODO This needs to be done on the Steam Audio Manager)</p>
+<ul>
+<li>Under <strong>Current SOFA File</strong>, select the SOFA file you want to use. Note that <strong>Default</strong> refers to Steam Audio’s built-in HRTF, which does not require a SOFA file.</li>
+</ul>
+<p>HRTFs loaded from SOFA files affect direct and indirect sound generated by audio sources, as well as reverb rendered using the Steam Audio Reverb mixer effect.</p>
+<blockquote>
+<p><strong>SOFA File Restrictions</strong> The SOFA file format allows for very flexible ways of defining HRTFs, but Steam Audio only supports a restricted subset. The following restrictions apply (for more information, including definitions of the terms below, click <a href="https://www.sofaconventions.org/">here</a>):</p>
+<ul>
+<li>SOFA files must use the <code>SimpleFreeFieldHRIR</code> convention.</li>
+<li>The <code>Data.SamplingRate</code> variable may be specified only once, and may contain only a single value. Steam Audio will automatically resample the HRTF data to the user’s output sampling rate at run-time.</li>
+<li>The <code>SourcePosition</code> variable must be specified once for each measurement.</li>
+<li>Each source must have a single emitter, with <code>EmitterPosition</code> set to <code>[0 0 0]</code>.</li>
+<li>The <code>ListenerPosition</code> variable may be specified only once (and not once per measurement). Its value must be <code>[0 0 0]</code>.</li>
+<li>The <code>ListenerView</code> variable is optional. If specified, its value must be <code>[1 0 0]</code> (in Cartesian coordinates) or <code>[0 0 1]</code> (in spherical coordinates).</li>
+<li>The <code>ListenerUp</code> variable is optional. If specified, its value must be <code>[0 0 1]</code> (in Cartesian coordinates) or <code>[0 90 1]</code> (in spherical coordinates).</li>
+<li>The listener must have two receivers. The receiver positions are ignored.</li>
+<li>The <code>Data.Delay</code> variable may be specified only once. Its value must be 0.</li>
+</ul>
+</blockquote>
+<h2 id="tag-acoustic-geometry">Tag acoustic geometry</h2>
+<p>You can use Steam Audio to model how your scene geometry causes occlusion, reflection, reverb, and other effects on your audio sources. You start by tagging the GameObjects that you want to use for acoustic calculations:</p>
+<ol type="1">
+<li>Select the GameObject you want to tag. It (or its children) must have either a Mesh Filter component or a Terrain component.</li>
+<li>In the Inspector, click <strong>Add Component</strong> &gt; <strong>Steam Audio</strong> &gt; <strong>Steam Audio Geometry</strong>.</li>
+</ol>
+<p>Not all objects have a noticeable influence on acoustics. For example, in a large hangar, the room itself obviously influences the acoustics. A small tin can on the floor, though, most likely doesn’t. But large amounts of small objects can collectively influence the acoustics. For example, while a single wooden crate might not influence the hangar reverb, large stacks of crates are likely to have some impact.</p>
+<blockquote>
+<p><strong>NOTE</strong> You don’t need to create an additional mesh just to tag an object as Steam Audio Geometry. You can directly use the same meshes used for visual rendering.</p>
+</blockquote>
+<p>Once you’ve tagged all the geometry in the scene, export it:</p>
+<ol type="1">
+<li>In the menu, click <strong>Steam Audio</strong> &gt; <strong>Export Active Scene</strong>.</li>
+</ol>
+<p>By default, all geometry is treated as static. In other words, you can’t move, deform, or otherwise change the geometry at run-time. If you need to do this, set it up as a dynamic object, as discussed in the next section.</p>
+<p>You can simplify geometry before it’s exported, export multiple meshes with a single Steam Audio Geometry component, and more. For more information, see <a href>REF</a>.</p>
+<h2 id="set-up-dynamic-movable-geometry">Set up dynamic (movable) geometry</h2>
+<p>You can mark specific GameObjects as <em>dynamic geometry</em>, which tells Steam Audio to update occlusion, reverb, and other acoustic effects as the GameObject and its children move. To do this:</p>
+<ol type="1">
+<li>Select the GameObject you want to tag.</li>
+<li>In the Inspector, click <strong>Add Component</strong> &gt; <strong>Steam Audio</strong> &gt; <strong>Steam Audio Dynamic Object</strong>.</li>
+<li>Attach Steam Audio Geometry components to the GameObject or its children as needed.</li>
+<li>On the Steam Audio Dynamic Object component, click <strong>Export Dynamic Object</strong>.</li>
+</ol>
+<p>At run-time, any changes made to the Transform of the Steam Audio Dynamic Object component has been attached will automatically be passed to Steam Audio.</p>
+<p>You can attach a Steam Audio Dynamic Object component in a prefab as well. After exporting it, the prefab can be freely instantiated in any scene and moved around; Steam Audio will automatically update acoustic effects accordingly. For example, this can be used to create a door prefab that automatically occludes sound when added to any scene, or large walls that a player can build, which automatically reflect sound.</p>
+<blockquote>
+<p><strong>NOTE</strong> Changes made to the transforms of children of the Steam Audio Dynamic Object will <em>not</em> be passed to Steam Audio. The entire object and all its children must move/animate as a rigid body.</p>
+</blockquote>
+<h2 id="associate-an-acoustic-material-with-geometry">Associate an acoustic material with geometry</h2>
+<p>You can specify acoustic material properties for any object that has a Steam Audio Geometry component. These properties control how the object reflects, absorbs, and transmits sound, for different frequencies. To specify an acoustic material:</p>
+<ol type="1">
+<li>Select the geometry.</li>
+<li>In the Inspector, click <strong>Add Component</strong> &gt; <strong>Steam Audio</strong> &gt; <strong>Steam Audio Geometry</strong>. (Skip this step if a Steam Audio Geometry is already attached to the object.)</li>
+<li>Click the button to the right of <strong>Material</strong>, and select a Material asset from the list that appears.</li>
+</ol>
+<p>Steam Audio contains a small library of built-in materials, but you can create your own and reuse them across your project. To create a new material:</p>
+<ol type="1">
+<li>In the Project tab, navigate to the directory where you want to create your material.</li>
+<li>Click <strong>Create</strong> &gt; <strong>Steam Audio</strong> &gt; <strong>Steam Audio Material</strong>.</li>
+<li>Give your new material a name, and configure its acoustic properties.</li>
+</ol>
+<p>For more information on individual material properties, see [REF].</p>
+<h2 id="model-occlusion-by-geometry">Model occlusion by geometry</h2>
+<p>You can configure an audio source to be occluded by scene geometry. To do this:</p>
+<ol type="1">
+<li>Select the audio source.</li>
+<li>Make sure a Steam Audio Source component is attached to it.</li>
+<li>In the Inspector, check <strong>Occlusion</strong>.</li>
+</ol>
+<p>Steam Audio will now use raycast occlusion to check if the source is occluded from the listener by any geometry. This assumes that the source is a single point. You can also model sources with larger spatial extent, or explicitly control occlusion manually or via scripting. For more information, see <a href>REF</a>.</p>
+<h2 id="model-transmission-through-geometry">Model transmission through geometry</h2>
+<p>You can configure an audio source to be transmitted through occluding geometry, with the sound attenuated based on material properties. To do this:</p>
+<ol type="1">
+<li>Select the audio source.</li>
+<li>Make sure a Steam Audio Source component is attached to it.</li>
+<li>In the Inspector, make sure <strong>Occlusion</strong> is checked, then check <strong>Transmission</strong>.</li>
+</ol>
+<p>Steam Audio will now model how sound travels through occluding geometry, based on the acoustic material properties of the geometry. You can also control whether the transmission effect is frequency-dependent, or explicitly control transmission manually or via scripting. For more information, see <a href>REF</a>.</p>
+<h2 id="model-reflection-by-geometry">Model reflection by geometry</h2>
+<p>You can configure an audio source to be reflected by surrounding geometry, with the reflected sound attenuated based on material properties. Reflections often enhance the sense of presence when used with spatial audio. To do this:</p>
+<ol type="1">
+<li>Select the audio source.</li>
+<li>Make sure a Steam Audio Source component is attached to it.</li>
+<li>In the Inspector, check <strong>Reflections</strong>.</li>
+</ol>
+<p>Steam Audio will now use real-time ray tracing to model how sound is reflected by geometry, based on the acoustic material properties of the geometry. You can control many aspects of this process, including how many rays are traced, how many successive reflections are modeled, how reflected sound is rendered, and much more. Since modeling reflections is CPU-intensive, you can pre-compute reflections for a static sound source, or even offload the work to the GPU. For more information, see <a href>REF</a>.</p>
+<h2 id="simulate-physics-based-reverb-at-the-listener-position">Simulate physics-based reverb at the listener position</h2>
+<p>You can also use ray tracing to automatically calculate physics-based reverb at the listener’s position. Physics-based reverbs are <em>directional</em>, which means they can model the direction from which a distant echo can be heard, and keep it consistent as the player looks around. Physics-based reverbs also model smooth transitions between different spaces in your scene, which is crucial for maintaining immersion as the player moves. To setup physics-based reverb:</p>
+<ol type="1">
+<li>In the Audio Mixer tab, select a mixer group, or create a new one.</li>
+<li>At the bottom of the mixer group, click <strong>Add</strong> &gt; <strong>Steam Audio Reverb</strong>.</li>
+<li>Configure a <em>send</em> from one or more mixer groups to the mixer group containing the Steam Audio Reverb effect. Refer to <a href>REF</a> for more information on how to do this.</li>
+<li>Select the audio source to which you want to apply the reverb effect.</li>
+<li>In the Inspector, make sure <strong>Output</strong> is set to one of the mixer groups containing a send configured in step 3.</li>
+<li>Select the audio listener.</li>
+<li>In the Inspector, click <strong>Add Component</strong> &gt; <strong>Steam Audio</strong> &gt; <strong>Steam Audio Listener</strong>.</li>
+<li>Check <strong>Apply Reverb</strong>.</li>
+</ol>
+<p>Steam Audio will now use real-time ray tracing to simulate physics-based reverb. You can control many aspects of this simulation, including how many rays are traced, the length of the reverb tail, whether the reverb is rendered a convolution reverb, and much more. Since modeling physics-based reverb is CPU-intensive, you can (and typically will) pre-compute reverb throughout your scene. You can even offload simulation as well as rendering work to the GPU. For more information, see <a href>REF</a>.</p>
+<h2 id="create-sound-probes-for-baked-sound-propagation">Create sound probes for baked sound propagation</h2>
+<p>Modeling reflections and reverb can be very CPU-intensive. For scenes with mostly static geometry, you can pre-compute (or <em>bake</em>) these effects in the editor. Before doing so, you must create one or more <em>sound probes</em>, which are the points at which Steam Audio will simulate reflections or reverb when baking. At run-time, the source and listener positions relative to the probes are used to quickly estimate the reflections or reverb. To set up sound probes:</p>
+<ol type="1">
+<li>In the main menu, click <strong>GameObject</strong> &gt; <strong>Create Empty</strong>. Give the newly-created GameObject any preferred name.</li>
+<li>In the Inspector, click <strong>Add Component</strong> &gt; <strong>Steam Audio</strong> &gt; <strong>Steam Audio Probe Batch</strong>.</li>
+<li>Adjust the position and size of the probe batch using Unity’s built-in translate, rotate, and scale tools.</li>
+<li>Click <strong>Generate Probes</strong>.</li>
+</ol>
+<p>Steam Audio will generate several probes within the volume contained by the probe batch. You can configure how many probes are created, and how they are placed. For more information, see <a href>REF</a>.</p>
+<h2 id="bake-reflections-from-a-static-source">Bake reflections from a static source</h2>
+<p>If an audio source doesn’t move (or only moves within a small distance), you can bake reflections for it. To do this:</p>
+<ol type="1">
+<li>Select the audio source.</li>
+<li>In the Inspector, click <strong>Add Component</strong> &gt; <strong>Steam Audio</strong> &gt; <strong>Steam Audio Baked Source</strong>.</li>
+<li>Click <strong>Bake</strong>. Baking may take a while to complete.</li>
+<li>Make sure a Steam Audio Source component is attached, and <strong>Reflections</strong> is checked.</li>
+<li>Set <strong>Reflections Type</strong> to <strong>Baked Static Source</strong>.</li>
+<li>Set <strong>Current Baked Source</strong> to the GameObject containing the Steam Audio Baked Source added in step 2.</li>
+</ol>
+<p>You can control many aspects of the baking process. For more information, see <a href>REF</a>.</p>
+<h2 id="bake-reflections-to-a-static-listener">Bake reflections to a static listener</h2>
+<p>In some applications, the listener may only be able to teleport between a few pre-determined positions. In this case, you can bake reflections for any moving audio source. To do this:</p>
+<ol type="1">
+<li>Select (or create, if needed) an object at one of the listener positions.</li>
+<li>In the Inspector, click <strong>Add Component</strong> &gt; <strong>Steam Audio</strong> &gt; <strong>Steam Audio Baked Listener</strong>.</li>
+<li>Click <strong>Bake</strong>. Baking may take a while to complete.</li>
+<li>Select the audio source.</li>
+<li>Make sure a Steam Audio Source component is attached, and <strong>Reflections</strong> is checked.</li>
+<li>Set <strong>Reflections Type</strong> to <strong>Baked Static Listener</strong>.</li>
+<li>Select the audio listener.</li>
+<li>In the Inspector, click <strong>Add Component</strong> &gt; <strong>Steam Audio</strong> &gt; <strong>Steam Audio Listener</strong>.</li>
+<li>Set <strong>Current Baked Listener</strong> to the GameObject containing the Steam Audio Baked Listener added in step 2.</li>
+</ol>
+<p>Typically, you would use scripting to control the value of <strong>Current Baked Listener</strong> every time the listener teleports to a new position.</p>
+<p>You can control many aspects of the baking process. For more information, see <a href>REF</a>.</p>
+<h2 id="bake-physics-based-reverb">Bake physics-based reverb</h2>
+<p>You can bake physics-based reverb throughout a scene, if the geometry is mostly static. To do this:</p>
+<ol type="1">
+<li>Select the audio listener.</li>
+<li>Make sure a Steam Audio Listener component is attached, and <strong>Apply Reverb</strong> is checked.</li>
+<li>Set <strong>Reverb Type</strong> to <strong>Baked</strong>.</li>
+<li>Click <strong>Bake</strong>.</li>
+</ol>
+<p>You can control many aspects of the baking process. For more information, see <a href>REF</a>.</p>
+<h2 id="model-sound-paths-from-a-moving-source-to-a-moving-listener">Model sound paths from a moving source to a moving listener</h2>
+<p>You may want to model sound propagation from a source to the listener, along a long, complicated path, like a twisting corridor. The main goal is often to ensure that the sound is positioned as if it’s coming from the correct door, window, or other opening. This is known as the <em>pathing</em> or <em>portaling</em> problem.</p>
+<p>While you can solve this by enabling reflections on an audio source, it would require too many rays (and so too much CPU) to simulate accurately. Instead, you can use Steam Audio to bake pathing information in a probe batch, and use it to efficiently find paths from a moving source to a moving listener. To do this:</p>
+<ol type="1">
+<li>Select the probe batch you want to bake pathing information for.</li>
+<li>Click <strong>Bake</strong>.</li>
+<li>Select the audio source you want to enabling pathing effects for.</li>
+<li>Make sure a Steam Audio Source component is attached.</li>
+<li>Check <strong>Pathing</strong>.</li>
+</ol>
+<p>You can control many aspects of the baking process, as well as the run-time path finding algorithm. For more information, see <a href>REF</a>.</p>
+<h2 id="enable-gpu-acceleration">Enable GPU acceleration</h2>
+<p>Simulating and rendering complex sound propagation effects is very compute-intensive. For example, rendering long convolution reverbs with high Ambisonic order, or rendering many sources with reflections enabled, can cause the audio thread to use significant CPU time, which may lead to audible artifacts. And while Steam Audio runs real-time simulation in a separate thread, simulating large numbers of sources or tracing many millions of rays may result in a noticeable lag between the player moving and the acoustics updating to match.</p>
+<p>You can choose to offload some or all of the most compute-intensive portions of Steam Audio to the GPU. This can be useful in several ways:</p>
+<ul>
+<li>You can run convolution reverb on the GPU, which lets you run very long convolutions with many channels, without blocking the audio thread.</li>
+<li>You can run real-time reverb or reflection simulations on the GPU, which results in much more responsive updates.</li>
+<li>You can use the GPU while baking reverb or reflections, which allows designers to spend much less time waiting for bakes to complete.</li>
+</ul>
+<p>To enable GPU acceleration for real-time simulations or baking:</p>
+<ol type="1">
+<li>In the main menu, click <strong>Steam Audio</strong> &gt; <strong>Settings</strong>.</li>
+<li>Set <strong>Scene Type</strong> to <strong>Radeon Rays</strong>.</li>
+</ol>
+<p><a href="https://gpuopen.com/radeon-rays/">Radeon Rays</a> is an OpenCL-based GPU ray tracer that works on a wide range of GPUs, including both NVIDIA and AMD models.</p>
+<p>To enable GPU acceleration for convolution reverb:</p>
+<ol type="1">
+<li>In the main menu, click <strong>Steam Audio</strong> &gt; <strong>Settings</strong>.</li>
+<li>Set <strong>Indirect Effect Type</strong> to <strong>TrueAudio Next</strong>.</li>
+</ol>
+<p><a href="https://gpuopen.com/true-audio-next/">TrueAudio Next</a> is an OpenCL-based GPU convolution tool that requires supported AMD GPUs. For a full list of supported GPU models, see <a href>REF</a>.</p>
+<p>You can configure many aspects of GPU acceleration. In particular, on supported AMD GPUs, you can restrict Steam Audio to use only a portion of the GPU’s compute resources, ensuring that visual rendering and physics simulations can continue to run at a steady rate. For more information, see <a href>REF</a>.</p>
+<h1 id="reference">Reference</h1>
+<h2 id="components">Components</h2>
+<p>All of these components can be attached by clicking Add Component in the Inspector, then choosing Steam Audio.</p>
+<h3 id="ambisonic-source">Ambisonic Source</h3>
+<h4 id="description">Description</h4>
+<p>Provides options for controlling how an Ambisonic audio source is rendered.</p>
+<p>Must be attached to a GameObject containing an Audio Source. The Audio Clip of the Audio Source must be set to an Ambisonic audio clip. See the Unity documentation for details.</p>
+<h4 id="properties">Properties</h4>
+<h5 id="apply-hrtf">Apply HRTF</h5>
+<p>If on, the Ambisonic audio clip is spatialized using HRTF-based binaural rendering. Provides an improvement in spatialization quality at the cost of a slight increase in CPU usage. Default: on.</p>
+<h3 id="baked-listener">Baked Listener</h3>
+<h3 id="baked-source">Baked Source</h3>
+<h3 id="listener">Listener</h3>
+<h3 id="probe-batch">Probe Batch</h3>
+<h3 id="dynamic-object">Dynamic Object</h3>
+<h4 id="description-1">Description</h4>
+<p>Tags the object it’s attached to, and all of its descendants in the hierarchy, as dynamic geometry.</p>
+<p>Any Steam Audio Geometry components found in this GameObject, or one of its descendants, are exported as a single dynamic object. However, if one of the descendants contains a Steam Audio Dynamic Object component of its own, then <em>its</em> descendants are treated as a separate dynamic object.</p>
+<p>At run-time, any changes made to the Transform of the GameObject to which the Steam Audio Dynamic Object component has been attached will automatically be passed to Steam Audio.</p>
+<blockquote>
+<p><strong>NOTE</strong> Changes made to the transforms of descendants of the Steam Audio Dynamic Object will <em>not</em> be passed to Steam Audio. The Dynamic Object and all its descendants must move/animate as a rigid body.</p>
+</blockquote>
+<h4 id="properties-1">Properties</h4>
+<h5 id="asset">Asset</h5>
+<p>Reference to the asset that contains the exported geometry data for this dynamic object. Automatically generated by Steam Audio.</p>
+<h5 id="export-dynamic-object">Export Dynamic Object</h5>
+<p>Exports the dynamic object to an asset. When doing this for the first time, you will be prompted for a file name and directory under which to save the asset.</p>
+<h5 id="export-dynamic-object-as-obj">Export Dynamic Object As OBJ</h5>
+<p>Exports the dynamic object to a .OBJ file. This is intended for debugging purposes.</p>
+<h3 id="geometry">Geometry</h3>
+<h4 id="description-2">Description</h4>
+<p>Tags the object it’s attached to as acoustic geometry.</p>
+<p>Must be attached to a GameObject containing a Mesh Filter or Terrain component, or a GameObject with at least one descendent in the hierarchy that contains a Mesh Filter or Terrain component.</p>
+<p>If some ancestor of the GameObject contains a Steam Audio Dynamic Object component, the geometry will exported as part of that dynamic object. Otherwise, it will be exported as part of the static geometry of the scene.</p>
+<h4 id="properties-2">Properties</h4>
+<h5 id="material">Material</h5>
+<p>Reference to the Material asset that defines the acoustic properties of this geometry. If not set, the project-wide default material is used.</p>
+<h5 id="export-all-children">Export All Children</h5>
+<p>If checked, the geometry of all children with a Mesh Filter or Terrain attached to them will be exported as acoustic geometry.</p>
+<h5 id="terrain-simplification-level">Terrain Simplification Level</h5>
+<p>Geometry that is represented by a Terrain can be quite complex. This can slow down the calculation of occlusion and sound propagation. To speed things up, you can adjust this slider. As you increase this value, Steam Audio will reduce the level of detail in the terrain. This will result in faster simulation.</p>
+<h3 id="source">Source</h3>
+<h4 id="description-3">Description</h4>
+<p>Provides options for controlling how an Audio Source is rendered, as well as controlling how occlusion and sound propagation are simulated.</p>
+<p>Must be attached to a GameObject containing an Audio Source.</p>
+<h4 id="properties-3">Properties</h4>
+<h5 id="interpolation">Interpolation</h5>
+<p>Controls how HRTFs are interpolated when the source moves relative to the listener.</p>
+<ul>
+<li><p><em>Nearest</em>: Uses the HRTF from the direction nearest to the direction of the source for which HRTF data is available. The fastest option, but can result in audible artifacts for certain kinds of audio clips, such as white noise or engine sounds.</p></li>
+<li><p><em>Bilinear</em>: Uses an HRTF generated after interpolating from four directions nearest to the direction of the source, for which HRTF data is available. This may result in smoother audio for some kinds of sources when the listener looks around, but has higher CPU usage (up to 2x).</p></li>
+</ul>
+<h5 id="distance-attenuation">Distance Attenuation</h5>
+<p>If checked, distance attenuation will be calculated and applied to the Audio Source. This takes into account the <strong>Spatial Blend</strong> setting on the Audio Source, so if <strong>Spatial Blend</strong> is set to <strong>2D</strong>, distance attenuation is effectively not applied.</p>
+<h5 id="distance-attenuation-input">Distance Attenuation Input</h5>
+<p>Specifies how the distance attenuation value is determined.</p>
+<ul>
+<li><p><em>Curve Driven</em>: Distance attenuation is controlled by the Volume curve on the Audio Source.</p></li>
+<li><p><em>Physics Based</em>: A physics-based distance attenuation model is used. This is an inverse distance falloff. The curves defined on the Audio Source are ignored.</p></li>
+</ul>
+<h5 id="air-absorption">Air Absorption</h5>
+<p>If checked, frequency-dependent distance based air absorption will be calculated and applied to the Audio Source.</p>
+<h5 id="air-absorption-input">Air Absorption Input</h5>
+<p>Specifies how the air absorption values (which are 3-band EQ values) are determined.</p>
+<ul>
+<li><p><em>Simulation Defined</em>: Uses a physics-based air absorption model. This is an exponential falloff, with higher frequencies falling off faster with distance than lower frequencies.</p></li>
+<li><p><em>User Defined</em>: Uses the values specified in the <strong>Air Absorption Low</strong>, <strong>Air Absorption Mid</strong>, and <strong>Air Absorption High</strong> sliders as the EQ values. The air absorption value will not automatically change with distance to the source. You are expected to control the <strong>Air Absorption Low</strong>, <strong>Air Absorption Mid</strong>, and <strong>Air Absorption High</strong> sliders using a custom script to achieve this effect.</p></li>
+</ul>
+<h5 id="air-absorption-low">Air Absorption Low</h5>
+<p>The low frequency (up to 800 Hz) EQ value for air absorption. Only used if <strong>Air Absorption Input</strong> is set to <strong>User Defined</strong>. 0 = low frequencies are completely attenuated, 1 = low frequencies are not attenuated at all.</p>
+<h5 id="air-absorption-mid">Air Absorption Mid</h5>
+<p>The middle frequency (800 Hz - 8 kHz) EQ value for air absorption. Only used if <strong>Air Absorption Input</strong> is set to <strong>User Defined</strong>. 0 = middle frequencies are completely attenuated, 1 = middle frequencies are not attenuated at all.</p>
+<h5 id="air-absorption-high">Air Absorption High</h5>
+<p>The high frequency (8 kHz and above) EQ value for air absorption. Only used if <strong>Air Absorption Input</strong> is set to <strong>User Defined</strong>. 0 = high frequencies are completely attenuated, 1 = high frequencies are not attenuated at all.</p>
+<h5 id="directivity">Directivity</h5>
+<p>If checked, attenuation based on the source’s directivity pattern and orientation will be applied to the Audio Source.</p>
+<h5 id="directivity-input">Directivity Input</h5>
+<p>Specifies how the directivity attenuation value is determined.</p>
+<ul>
+<li><p><em>Simulation Defined</em>. Uses a dipole directivity model. You can control the dipole shape using the <strong>Dipole Weight</strong> and <strong>Dipole Power</strong> properties.</p></li>
+<li><p><em>User Defined</em>. Uses the value specified in the <strong>Directivity Value</strong> property. This value will <em>not</em> automatically change as the source rotates. You are expected to control the <strong>Directivity Value</strong> property using a custom script to achieve this effect.</p></li>
+</ul>
+<h5 id="dipole-weight">Dipole Weight</h5>
+<p>Blends between monopole (omnidirectional) and dipole directivity patterns. 0 = pure monopole (sound is emitted in all directions with equal intensity), 1 = pure dipole (sound is focused to the front and back of the source). At 0.5, the source has a cardioid directivity, with most of the sound emitted to the front of the source. Only used if <strong>Directivity Input</strong> is set to <strong>Simulation Defined</strong>.</p>
+<h5 id="dipole-power">Dipole Power</h5>
+<p>Controls how focused the dipole directivity is. Higher values result in sharper directivity patterns. Only used if <strong>Directivity Input</strong> is set to <strong>Simulation Defined</strong>.</p>
+<h5 id="directivity-value">Directivity Value</h5>
+<p>The directivity attenuation value. Only used if <strong>Directivity Input</strong> is set to <strong>User Defined</strong>. 0 = sound is completely attenuated, 1 = sound is not attenuated at all.</p>
+<h5 id="occlusion">Occlusion</h5>
+<p>If checked, attenuation based on the occlusion the source by the scene geometry will be applied to the Audio Source.</p>
+<h5 id="occlusion-input">Occlusion Input</h5>
+<p>Specifies how the occlusion attenuation value is determined.</p>
+<ul>
+<li><p><em>Simulation Defined</em>. Uses ray tracing to determine how much of the source is occluded.</p></li>
+<li><p><em>User Defined</em>. Uses the <strong>Occlusion Value</strong> slider to control occlusion. The occlusion value will <em>not</em> automatically change based on surrounding geometry. You are expected to control the <strong>Occlusion Value</strong> slider using a custom script to achieve this effect. This option is intended for integrating your own occlusion model with Steam Audio.</p></li>
+</ul>
+<h5 id="occlusion-type">Occlusion Type</h5>
+<p>Specifies how rays should be traced to model occlusion.</p>
+<ul>
+<li><p><em>Raycast</em>. Trace a single ray from the listener to the source. If the ray is occluded, the source is considered occluded.</p></li>
+<li><p><em>Volumetric</em>. Trace multiple rays from the listener to the source based on the <strong>Occlusion Radius</strong> setting. The proportion of rays that are occluded determine how much of the direct sound is considered occluded. Transmission calculations, if enabled, are only applied to the occluded portion of the direct sound.</p></li>
+</ul>
+<h5 id="occlusion-radius">Occlusion Radius</h5>
+<p>The apparent size of the sound source. The larger the source radius, the larger an object must be in order to fully occlude sound emitted by the source.</p>
+<h5 id="occlusion-samples">Occlusion Samples</h5>
+<p>The number of rays to trace from the listener to various points in a sphere around the source. Only used if <strong>Occlusion Type</strong> is set to <strong>Volumetric</strong>. Increasing this number results in smoother transitions as the source becomes more (or less) occluded. This comes at the cost of increased CPU usage.</p>
+<h5 id="occlusion-value">Occlusion Value</h5>
+<p>The occlusion attenuation value. Only used if <strong>Occlusion Input</strong> is set to <strong>User Defined</strong>. 0 = sound is completely attenuated, 1 = sound is not attenuated at all.</p>
+<h5 id="transmission">Transmission</h5>
+<p>If checked, a filter based on the transmission of sound through occluding scene geometry will be applied to the Audio Source.</p>
+<h5 id="transmission-type">Transmission Type</h5>
+<p>Specifies how the transmission filter is applied.</p>
+<ul>
+<li><p><em>Frequency Independent</em>. Transmission is modeled as a single attenuation factor.</p></li>
+<li><p><em>Frequency Dependent</em>. Transmission is modeled as a 3-band EQ.</p></li>
+</ul>
+<h5 id="transmission-input">Transmission Input</h5>
+<p>Specifies how the transmission attenuation or EQ values are determined.</p>
+<ul>
+<li><p><em>Simulation Defined</em>. Uses ray tracing to determine how much of the sound is transmitted.</p></li>
+<li><p><em>User Defined</em>. Uses the <strong>Transmission Low</strong>, <strong>Transmission Mid</strong>, and <strong>Transmission High</strong> sliders to control transmission. The transmission values will <em>not</em> automatically change based on surrounding geometry. You are expected to control the sliders using a custom script to achieve this effect. This option is intended for integrating your own occlusion and transmission model with Steam Audio.</p></li>
+</ul>
+<h5 id="transmission-low">Transmission Low</h5>
+<p>The low frequency (up to 800 Hz) EQ value for transmission. Only used if <strong>Transmission Input</strong> is set to <strong>User Defined</strong>. 0 = low frequencies are completely attenuated, 1 = low frequencies are not attenuated at all.</p>
+<h5 id="transmission-mid">Transmission Mid</h5>
+<p>The middle frequency (800 Hz to 8 kHz) EQ value for transmission. Only used if <strong>Transmission Input</strong> is set to <strong>User Defined</strong>. 0 = middle frequencies are completely attenuated, 1 = middle frequencies are not attenuated at all.</p>
+<h5 id="transmission-high">Transmission High</h5>
+<p>The high frequency (8 kHz and above) EQ value for transmission. Only used if <strong>Transmission Input</strong> is set to <strong>User Defined</strong>. 0 = high frequencies are completely attenuated, 1 = high frequencies are not attenuated at all.</p>
+<h5 id="direct-mix-level">Direct Mix Level</h5>
+<p>The contribution of the direct sound path to the overall mix for this Audio Source. Lower values reduce the contribution more.</p>
+<h5 id="reflections">Reflections</h5>
+<h5 id="reflections-type">Reflections Type</h5>
+<h5 id="current-baked-source">Current Baked Source</h5>
+<h5 id="apply-hrtf-to-reflections">Apply HRTF To Reflections</h5>
+<h5 id="indirect-mix-level">Indirect Mix Level</h5>
+<h5 id="pathing-probe-batch">Pathing Probe Batch</h5>
+<h5 id="path-validation">Path Validation</h5>
+<h5 id="find-alternate-paths">Find Alternate Paths</h5>
+<h5 id="simplify-paths">Simplify Paths</h5>
+<h5 id="real-time-visibility">Real Time Visibility</h5>
+<h5 id="apply-hrtf-to-pathing">Apply HRTF To Pathing</h5>
+<h5 id="pathing-mix-level">Pathing Mix Level</h5>
+<h3 id="static-mesh">Static Mesh</h3>
+<h4 id="description-4">Description</h4>
+<p>References the asset containing the exported geometry data for the static geometry of the scene. This component is automatically added to an empty GameObject when you export a scene from the main menu. You shouldn’t have to attach this component manually.</p>
+<h4 id="properties-4">Properties</h4>
+<h5 id="asset-1">Asset</h5>
+<p>Reference to the asset that contains the exported geometry data for this scene. Automatically generated by Steam Audio.</p>
+<h2 id="mixer-effects">Mixer Effects</h2>
+<p>All of these effects can be added to any Mixer Group on the Audio Mixer tab.</p>
+<h3 id="reverb">Reverb</h3>
+<h4 id="description-5">Description</h4>
+<p>Applies reverb based on the listener position to any audio flowing through the Mixer Group to which this effect is attached. The type of reverb applied (convolution, parametric, or hybrid) can be configured in the Steam Audio Settings asset.</p>
+<p>Reverb simulation must be configured using a Steam Audio Listener component.</p>
+<h4 id="properties-5">Properties</h4>
+<h5 id="apply-hrtf-1">Apply HRTF</h5>
+<p>If checked, applies HRTF-based 3D audio rendering to reverb. Results in an improvement in spatialization quality when using convolution or hybrid reverb, at the cost of slightly increased CPU usage. Default: off.</p>
+<h3 id="mixer-return">Mixer Return</h3>
+<h4 id="description-6">Description</h4>
+<p>When <strong>Reflections</strong> are enabled for multiple Steam Audio Sources in a scene, this mixer effect can be used to reduce the CPU cost of audio processing. When this mixer effect is added to a mixer group, the indirect portion of every audio source’s output is taken out of Unity’s audio pipeline, mixed, spatialized, and re-inserted at the mixer group to which this effect is attached. The direct sound path of audio sources is not affected.</p>
+<blockquote>
+<p><strong>NOTE</strong> Since indirect sound is taken out of Unity’s audio pipeline at the Audio Source, any effects applied between the Audio Source and the Steam Audio Mixer Return effect will not apply to the indirect sound.</p>
+</blockquote>
+<blockquote>
+<p><strong>NOTE</strong> This effect should only be used if <strong>Indirect Effect Type</strong> is set to <strong>Convolution</strong> or <strong>TrueAudio Next</strong> in the Settings asset. It is <em>required</em> when using <strong>TrueAudio Next</strong>.</p>
+</blockquote>
+<h4 id="properties-6">Properties</h4>
+<h5 id="apply-hrtf-2">Apply HRTF</h5>
+<p>If checked, applies HRTF-based 3D audio rendering to mixed indirect sound. Results in an improvement in spatialization quality, at the cost of slightly increased CPU usage. Default: off.</p>
+<h2 id="asset-types">Asset Types</h2>
+<p>All of these assets can be created in your project by choosing <strong>Create</strong> &gt; <strong>Steam Audio</strong> in the Project tab.</p>
+<h3 id="material-1">Material</h3>
+<h4 id="description-7">Description</h4>
+<p>A collection of properties that define how an object reflects, absorbs, and transmits sound. You can create a separate Material asset for each surface type in your project, then reference it (using the <strong>Material</strong> property of the Steam Audio Geometry components in your scenes and prefabs) from all objects that have the corresponding material type.</p>
+<p>Steam Audio provides a small library of built-in materials to get you started.</p>
+<p>If the <strong>Material</strong> property of a Steam Audio Geometry component is set to <strong>None</strong>, it will use the project-wide default material, which is specified in the Settings asset.</p>
+<p>If you have a Steam Audio Geometry component with <strong>Export All Children</strong> checked, all of its descendants are considered to have the material assigned to the Steam Audio Geometry.</p>
+<h4 id="properties-7">Properties</h4>
+<h5 id="low-freq-absorption">Low Freq Absorption</h5>
+<p>How much sound the material absorbs at low frequencies (up to 800 Hz). 0 = absorbs none of the low frequency sound, 1 = absorbs all of it.</p>
+<h5 id="mid-freq-absorption">Mid Freq Absorption</h5>
+<p>How much sound the material absorbs at middle frequencies (800 Hz - 8 kHz). 0 = absorbs none of the middle frequency sound, 1 = absorbs all of it.</p>
+<h5 id="high-freq-absorption">High Freq Absorption</h5>
+<p>How much sound the material absorbs at high frequencies (8 kHz and above). 0 = absorbs none of the high frequency sound, 1 = absorbs all of it.</p>
+<h5 id="scattering">Scattering</h5>
+<p>How “rough” the surface is when reflecting sound. 0 = sound is reflected in a perfectly mirror-like manner (“pure specular”), 1 = sound is reflected randomly in all directions (“pure diffuse”).</p>
+<h5 id="low-freq-transmission">Low Freq Transmission</h5>
+<p>How much sound the material transmits at low frequencies (up to 800 Hz). 0 = no low frequency sound passes through, 1 = all of it passes through.</p>
+<h5 id="mid-freq-transmission">Mid Freq Transmission</h5>
+<p>How much sound the material transmits at middle frequencies (800 Hz - 8 kHz). 0 = no middle frequency sound passes through, 1 = all of it passes through.</p>
+<h5 id="high-freq-transmission">High Freq Transmission</h5>
+<p>How much sound the material transmits at high frequencies (8 kHz and above). 0 = no high frequency sound passes through, 1 = all of it passes through.</p>
+<h3 id="settings">Settings</h3>
+<h2 id="menu-commands">Menu Commands</h2>
+<p>All of these commands are available under the <strong>Steam Audio</strong> menu in Unity’s main menu.</p>
+<h5 id="settings-1">Settings</h5>
+<p>Opens the Settings asset in the Inspector.</p>
+<h5 id="export-active-scene">Export Active Scene</h5>
+<p>Exports the static geometry of the currently open and active scene to an asset file. When doing this for the first time, you will be prompted for a file name and directory under which to save the asset.</p>
+<h5 id="export-all-open-scenes">Export All Open Scenes</h5>
+<p>Exports the static geometry of all currently open scenes.</p>
+<h5 id="export-all-scenes-in-build">Export All Scenes In Build</h5>
+<p>Exports the static geometry of all scenes specified in your build settings (<strong>File</strong> &gt; <strong>Build Settings</strong> in the main menu).</p>
+<h5 id="export-active-scene-to-obj">Export Active Scene To OBJ</h5>
+<p>Exports the static geometry of the currently open and active scene to an OBJ file. This is intended for debugging purposes.</p>
+<h5 id="export-dynamic-objects-in-active-scene">Export Dynamic Objects In Active Scene</h5>
+<p>Exports every dynamic object in the currently open and active scene.</p>
+<h5 id="export-dynamic-objects-in-all-open-scenes">Export Dynamic Objects In All Open Scenes</h5>
+<p>Exports every dynamic object in all currently open scenes.</p>
+<h5 id="export-dynamic-objects-in-all-scenes-in-build">Export Dynamic Objects In All Scenes In Build</h5>
+<p>Exports every dynamic object in all scenes specified in your build settings (<strong>File</strong> &gt; <strong>Build Settings</strong> in the main menu).</p>
+<h5 id="export-all-dynamic-objects-in-project">Export All Dynamic Objects In Project</h5>
+<p>Exports every dynamic object in every scene or prefab found in your project’s <code>Assets</code> directory.</p>
+</body>
+</html>

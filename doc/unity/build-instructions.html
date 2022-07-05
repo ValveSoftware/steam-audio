@@ -70,7 +70,7 @@
             
             
               <div class="version">
-                4.0.3
+                4.1.0
               </div>
             
           
@@ -249,8 +249,9 @@
 </ul>
 <p>To build the Linux plugin, you will need:</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">g++</span></code> 5.0 or later (install using your distribution’s package manager)</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">g++-multilib</span></code> 5.0 or later if building the 32-bit binaries on a 64-bit system (install using your distribution’s package manager)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">g++</span></code> 4.8 or later (install using your distribution’s package manager)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">g++-multilib</span></code> 4.8 or later if building the 32-bit binaries on a 64-bit system (install using your distribution’s package manager)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">glibc</span></code> 2.19 or later</p></li>
 </ul>
 <p>To build the macOS plugin, you will need:</p>
 <ul class="simple">
@@ -306,7 +307,7 @@ $ python build.py
 <dd><p>Specifies the build configuration. Valid options are <code class="docutils literal notranslate"><span class="pre">debug</span></code> and <code class="docutils literal notranslate"><span class="pre">release</span></code>. Default is <code class="docutils literal notranslate"><span class="pre">release</span></code>.</p>
 </dd>
 <dt><kbd><span class="option">-o</span>, <span class="option">--operation <var>NAME</var></span></kbd></dt>
-<dd><p>Specifies the CMake operation to perform. Valid options are <code class="docutils literal notranslate"><span class="pre">generate</span></code> (generates the build system), <code class="docutils literal notranslate"><span class="pre">build</span></code> (build all targets in the build system), <code class="docutils literal notranslate"><span class="pre">install</span></code> (runs the <code class="docutils literal notranslate"><span class="pre">INSTALL</span></code> target, which copies binaries to the <code class="docutils literal notranslate"><span class="pre">bin/</span></code> folder), and <code class="docutils literal notranslate"><span class="pre">package</span></code> (runs the <code class="docutils literal notranslate"><span class="pre">PACKAGE</span></code> target, which generates the zip file and copies it to the <code class="docutils literal notranslate"><span class="pre">dist/</span></code> folder). Default is <code class="docutils literal notranslate"><span class="pre">generate</span></code> followed by <code class="docutils literal notranslate"><span class="pre">build</span></code>.</p>
+<dd><p>Specifies the CMake operation to perform. Valid options are <code class="docutils literal notranslate"><span class="pre">generate</span></code> (generates the build system), <code class="docutils literal notranslate"><span class="pre">build</span></code> (build all targets in the build system), <code class="docutils literal notranslate"><span class="pre">install</span></code> (runs the <code class="docutils literal notranslate"><span class="pre">INSTALL</span></code> target, which copies binaries to the <code class="docutils literal notranslate"><span class="pre">bin/</span></code> folder), <code class="docutils literal notranslate"><span class="pre">package</span></code> (runs the <code class="docutils literal notranslate"><span class="pre">PACKAGE</span></code> target, which generates the zip file and copies it to the <code class="docutils literal notranslate"><span class="pre">dist/</span></code> folder), <code class="docutils literal notranslate"><span class="pre">ci_build</span></code> (which runs <code class="docutils literal notranslate"><span class="pre">generate</span></code>, then <code class="docutils literal notranslate"><span class="pre">build</span></code>, then <code class="docutils literal notranslate"><span class="pre">install</span></code>), and <code class="docutils literal notranslate"><span class="pre">ci_package</span></code> (which runs <code class="docutils literal notranslate"><span class="pre">generate</span></code>, then <code class="docutils literal notranslate"><span class="pre">package</span></code>). Default is <code class="docutils literal notranslate"><span class="pre">generate</span></code> followed by <code class="docutils literal notranslate"><span class="pre">build</span></code>.</p>
 </dd>
 </dl>
 </div></blockquote>
