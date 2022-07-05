@@ -26,6 +26,11 @@ namespace SteamAudio
 
         ~Simulator()
         {
+            Release();
+        }
+
+        public void Release()
+        {
             API.iplSimulatorRelease(ref mSimulator);
         }
 
@@ -95,6 +100,11 @@ namespace SteamAudio
         }
 
         ~Source()
+        {
+            Release();
+        }
+
+        public void Release()
         {
             API.iplSourceRelease(ref mSource);
         }

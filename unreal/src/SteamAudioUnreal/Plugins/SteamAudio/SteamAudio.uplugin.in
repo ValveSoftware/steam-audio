@@ -1,0 +1,32 @@
+{
+  "FileVersion" : 3,
+  "Version" : 1,
+  "VersionName" : "@PROJECT_VERSION_MAJOR@.@PROJECT_VERSION_MINOR@.@PROJECT_VERSION_PATCH@",
+  "FriendlyName" : "Steam Audio",
+  "Description" : "Physically-based sound rendering.",
+  "Category" : "Audio",
+  "CreatedBy" : "Valve Corporation",
+  "CreatedByURL" : "https://valvesoftware.github.io/steam-audio",
+  "DocsURL" : "https://valvesoftware.github.io/steam-audio/doc/unreal/index.html",
+  "MarketplaceURL" : "",
+  "SupportURL" : "https://steamcommunity.com/app/596420",
+  "EnabledByDefault" : false,
+  "CanContainContent" : true,
+  "IsBetaVersion" : false,
+  "Installed" : false,
+  "Modules" :
+  [
+    {
+      "Name": "SteamAudio",
+      "Type": "Runtime",
+      "LoadingPhase": "PreDefault",
+      "WhitelistPlatforms": [ "Win32", "Win64", "Linux", "Mac", "Android" ]
+    },
+    {
+      "Name": "SteamAudioEditor",
+      "Type": "Editor",
+      "LoadingPhase": "PostEngineInit",
+      "WhitelistPlatforms": [ "Win64", "Linux", "Mac" ]
+    }
+  ]
+}

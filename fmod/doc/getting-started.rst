@@ -9,7 +9,7 @@ Steam Audio requires **FMOD Studio 2.00** or later.
 The Steam Audio FMOD Studio integration supports the following platforms:
 
 -  Windows 7 or later (32-bit and 64-bit)
--  Linux (32-bit and 64-bit, tested with Ubuntu 16.04 LTS)
+-  Linux (32-bit and 64-bit, tested with Ubuntu 18.04 LTS)
 -  macOS 10.7 or later (64-bit Intel)
 -  Android 5.0 or later (32-bit ARM, 64-bit ARM, 32-bit Intel)
 
@@ -49,7 +49,7 @@ Integrate Steam Audio with your game engine
 
 Before you can use the Steam Audio FMOD Studio integration in your game, you must configure your game engine to use Steam Audio and load the Steam Audio FMOD Studio integration.
 
-If you are using Unity as your game engine, see the Unity tab below. Otherwise, see the C++ tab for instructions on how to configure your game engine to load the Steam Audio FMOD Studio integration via C++ code.
+If you are using Unity as your game engine, see the Unity tab below. If you are using Unreal Engine as your game engine, see the Unreal Engine tab below. Otherwise, see the C++ tab for instructions on how to configure your game engine to load the Steam Audio FMOD Studio integration via C++ code.
 
 .. tabs::
 
@@ -72,6 +72,32 @@ If you are using Unity as your game engine, see the Unity tab below. Otherwise, 
 
         .. image:: media/unity_steamaudiosettings.png
 
+    .. group-tab:: Unreal Engine
+
+        These instructions assume that you have enabled the FMOD Studio Unreal Engine plugin and the Steam Audio Unreal Engine plugin for your Unreal Engine project.
+
+        .. rubric:: Enable the Steam Audio FMOD Studio Support plugin
+
+        1.  In Unreal's main menu, click **Edit** > **Plugins**.
+        2.  Under **Audio**, check **Enabled** under **Steam Audio FMOD Studio Support**.
+
+        .. image:: media/unreal_fmodplugin.png
+
+        .. rubric:: Configure the FMOD Studio Unreal Engine plugin to use Steam Audio
+
+        1.  In Unreal's main menu, click **Edit** > **Project Settings**.
+        2.  Under **Plugins** > **FMOD Studio**, expand the **Advanced** section, and click the **+** button next to **Plugin Files**.
+        3.  In the text box that appears, enter ``phonon_fmod``.
+
+        .. image:: media/unreal_fmodsettings.png
+
+        .. rubric:: Configure the Steam Audio Unreal Engine plugin to use FMOD Studio
+
+        1.  In Unreal's main menu, click **Edit** > **Project Settings**.
+        2.  Under **Plugins** > **Steam Audio**, set **Audio Engine** to **FMOD Studio**.
+
+        .. image:: media/unreal_steamaudiosettings.png
+
     .. group-tab:: C++
 
         These instructions assume that you have integrated Steam Audio with your game engine via the Steam Audio SDK.
@@ -91,6 +117,6 @@ If you are using Unity as your game engine, see the Unity tab below. Otherwise, 
 
         .. rubric:: Initialize the Steam Audio FMOD Studio integration
 
-        2.  Call ``iplFMODInitialize`` after creating the Steam Audio context.
-        3.  Create an HRTF (typically the default HRTF), and call ``iplFMODSetHRTF``.
-        4.  Determine the simulation settings to use for subsequent simulations, and call ``iplFMODSetSimulationSettings``.
+        1.  Call ``iplFMODInitialize`` after creating the Steam Audio context.
+        2.  Create an HRTF (typically the default HRTF), and call ``iplFMODSetHRTF``.
+        3.  Determine the simulation settings to use for subsequent simulations, and call ``iplFMODSetSimulationSettings``.

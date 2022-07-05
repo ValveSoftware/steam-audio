@@ -1,6 +1,6 @@
 /* ============================================================================================================= */
 /* FMOD Core API - Built-in effects header file.                                                                 */
-/* Copyright (c), Firelight Technologies Pty, Ltd. 2004-2019.                                                    */
+/* Copyright (c), Firelight Technologies Pty, Ltd. 2004-2022.                                                    */
 /*                                                                                                               */
 /* In this header you can find parameter structures for FMOD system registered DSP effects                       */
 /* and generators.                                                                                               */
@@ -126,7 +126,7 @@ typedef enum
 typedef enum
 {
     FMOD_DSP_NORMALIZE_FADETIME,
-    FMOD_DSP_NORMALIZE_THRESHHOLD,
+    FMOD_DSP_NORMALIZE_THRESHOLD,
     FMOD_DSP_NORMALIZE_MAXAMP
 } FMOD_DSP_NORMALIZE;
 
@@ -363,6 +363,8 @@ typedef enum
     FMOD_DSP_PAN_OVERALL_GAIN,
     FMOD_DSP_PAN_SURROUND_SPEAKER_MODE,
     FMOD_DSP_PAN_2D_HEIGHT_BLEND,
+    FMOD_DSP_PAN_ATTENUATION_RANGE,
+    FMOD_DSP_PAN_OVERRIDE_RANGE
 } FMOD_DSP_PAN;
 
 
@@ -403,6 +405,42 @@ typedef enum
     FMOD_DSP_FFT_SPECTRUMDATA,
     FMOD_DSP_FFT_DOMINANT_FREQ
 } FMOD_DSP_FFT;
+
+#define FMOD_DSP_LOUDNESS_METER_HISTOGRAM_SAMPLES 66
+
+typedef enum
+{
+    FMOD_DSP_LOUDNESS_METER_STATE,
+    FMOD_DSP_LOUDNESS_METER_WEIGHTING,
+    FMOD_DSP_LOUDNESS_METER_INFO
+} FMOD_DSP_LOUDNESS_METER;
+
+
+typedef enum
+{
+    FMOD_DSP_LOUDNESS_METER_STATE_RESET_INTEGRATED = -3,
+    FMOD_DSP_LOUDNESS_METER_STATE_RESET_MAXPEAK = -2,
+    FMOD_DSP_LOUDNESS_METER_STATE_RESET_ALL = -1,
+    FMOD_DSP_LOUDNESS_METER_STATE_PAUSED = 0,
+    FMOD_DSP_LOUDNESS_METER_STATE_ANALYZING = 1
+} FMOD_DSP_LOUDNESS_METER_STATE_TYPE;
+
+typedef struct FMOD_DSP_LOUDNESS_METER_INFO_TYPE
+{
+    float momentaryloudness;
+    float shorttermloudness;
+    float integratedloudness;
+    float loudness10thpercentile;
+    float loudness95thpercentile;
+    float loudnesshistogram[FMOD_DSP_LOUDNESS_METER_HISTOGRAM_SAMPLES];
+    float maxtruepeak;
+    float maxmomentaryloudness;
+} FMOD_DSP_LOUDNESS_METER_INFO_TYPE;
+
+typedef struct FMOD_DSP_LOUDNESS_METER_WEIGHTING_TYPE
+{
+    float channelweight[32];
+} FMOD_DSP_LOUDNESS_METER_WEIGHTING_TYPE;
 
 
 typedef enum
@@ -530,7 +568,9 @@ typedef enum
     FMOD_DSP_OBJECTPAN_3D_SOUND_SIZE,
     FMOD_DSP_OBJECTPAN_3D_MIN_EXTENT,
     FMOD_DSP_OBJECTPAN_OVERALL_GAIN,
-    FMOD_DSP_OBJECTPAN_OUTPUTGAIN
+    FMOD_DSP_OBJECTPAN_OUTPUTGAIN,
+    FMOD_DSP_OBJECTPAN_ATTENUATION_RANGE,
+    FMOD_DSP_OBJECTPAN_OVERRIDE_RANGE
 } FMOD_DSP_OBJECTPAN;
 
 #endif

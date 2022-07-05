@@ -67,6 +67,11 @@ namespace SteamAudio
 
         ~OpenCLDevice()
         {
+            Release();
+        }
+
+        public void Release()
+        {
             API.iplOpenCLDeviceRelease(ref mOpenCLDevice);
         }
 

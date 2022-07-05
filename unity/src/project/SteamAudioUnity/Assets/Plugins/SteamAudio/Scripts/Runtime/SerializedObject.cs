@@ -47,6 +47,11 @@ namespace SteamAudio
 
         ~SerializedObject()
         {
+            Release();
+        }
+
+        public void Release()
+        {
             if (mDataBuffer != IntPtr.Zero)
             {
                 Marshal.FreeHGlobal(mDataBuffer);

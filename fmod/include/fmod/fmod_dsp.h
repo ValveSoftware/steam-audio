@@ -1,6 +1,6 @@
 /* ======================================================================================== */
 /* FMOD Core API - DSP header file.                                                         */
-/* Copyright (c), Firelight Technologies Pty, Ltd. 2004-2019.                               */
+/* Copyright (c), Firelight Technologies Pty, Ltd. 2004-2022.                               */
 /*                                                                                          */
 /* Use this header if you are wanting to develop your own DSP plugin to use with FMODs      */
 /* dsp system.  With this header you can make your own DSP plugin that FMOD can             */
@@ -66,6 +66,7 @@ typedef enum
     FMOD_DSP_PARAMETER_DATA_TYPE_SIDECHAIN = -3,
     FMOD_DSP_PARAMETER_DATA_TYPE_FFT = -4,
     FMOD_DSP_PARAMETER_DATA_TYPE_3DATTRIBUTES_MULTI = -5,
+    FMOD_DSP_PARAMETER_DATA_TYPE_ATTENUATION_RANGE = -6,
 } FMOD_DSP_PARAMETER_DATA_TYPE;
 
 /*
@@ -115,20 +116,20 @@ typedef FMOD_RESULT (F_CALL *FMOD_DSP_PAN_GETROLLOFFGAIN_FUNC)            (FMOD_
 /*
     DSP Structures
 */
-typedef struct FMOD_DSP_BUFFER_ARRAY
+struct FMOD_DSP_BUFFER_ARRAY
 {
     int                numbuffers;
     int               *buffernumchannels;
     FMOD_CHANNELMASK  *bufferchannelmask;
     float            **buffers;
     FMOD_SPEAKERMODE   speakermode;
-} FMOD_DSP_BUFFER_ARRAY;
+};
 
-typedef struct FMOD_COMPLEX
+struct FMOD_COMPLEX
 {
     float real;
     float imag;
-} FMOD_COMPLEX;
+};
 
 typedef struct FMOD_DSP_PARAMETER_FLOAT_MAPPING_PIECEWISE_LINEAR
 {
@@ -206,6 +207,12 @@ typedef struct FMOD_DSP_PARAMETER_3DATTRIBUTES_MULTI
     float              weight[FMOD_MAX_LISTENERS];
     FMOD_3D_ATTRIBUTES absolute;
 } FMOD_DSP_PARAMETER_3DATTRIBUTES_MULTI;
+
+typedef struct FMOD_DSP_PARAMETER_ATTENUATION_RANGE
+{
+    float min;
+    float max;
+} FMOD_DSP_PARAMETER_ATTENUATION_RANGE;
 
 typedef struct FMOD_DSP_PARAMETER_SIDECHAIN
 {

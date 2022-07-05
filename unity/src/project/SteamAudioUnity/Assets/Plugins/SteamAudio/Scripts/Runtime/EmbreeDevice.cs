@@ -27,6 +27,11 @@ namespace SteamAudio
 
         ~EmbreeDevice()
         {
+            Release();
+        }
+
+        public void Release()
+        {
             API.iplEmbreeDeviceRelease(ref mEmbreeDevice);
         }
 

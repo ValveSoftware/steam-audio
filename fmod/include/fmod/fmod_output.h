@@ -1,6 +1,6 @@
 /* ======================================================================================== */
 /* FMOD Core API - output development header file.                                          */
-/* Copyright (c), Firelight Technologies Pty, Ltd. 2004-2019.                               */
+/* Copyright (c), Firelight Technologies Pty, Ltd. 2004-2022.                               */
 /*                                                                                          */
 /* Use this header if you are wanting to develop your own output plugin to use with         */
 /* FMOD's output system.  With this header you can make your own output plugin that FMOD    */
@@ -19,22 +19,23 @@ typedef struct FMOD_OUTPUT_OBJECT3DINFO FMOD_OUTPUT_OBJECT3DINFO;
 /*
     Output constants
 */
-#define FMOD_OUTPUT_PLUGIN_VERSION 4
+#define FMOD_OUTPUT_PLUGIN_VERSION 5
+
+typedef unsigned int FMOD_OUTPUT_METHOD;
+#define FMOD_OUTPUT_METHOD_MIX_DIRECT    0
+#define FMOD_OUTPUT_METHOD_MIX_BUFFERED  1
 
 /*
     Output callbacks
 */
 typedef FMOD_RESULT (F_CALL *FMOD_OUTPUT_GETNUMDRIVERS_CALLBACK)    (FMOD_OUTPUT_STATE *output_state, int *numdrivers);
 typedef FMOD_RESULT (F_CALL *FMOD_OUTPUT_GETDRIVERINFO_CALLBACK)    (FMOD_OUTPUT_STATE *output_state, int id, char *name, int namelen, FMOD_GUID *guid, int *systemrate, FMOD_SPEAKERMODE *speakermode, int *speakermodechannels);
-typedef FMOD_RESULT (F_CALL *FMOD_OUTPUT_INIT_CALLBACK)             (FMOD_OUTPUT_STATE *output_state, int selecteddriver, FMOD_INITFLAGS flags, int *outputrate, FMOD_SPEAKERMODE *speakermode, int *speakermodechannels, FMOD_SOUND_FORMAT *outputformat, int dspbufferlength, int dspnumbuffers, void *extradriverdata);
+typedef FMOD_RESULT (F_CALL *FMOD_OUTPUT_INIT_CALLBACK)             (FMOD_OUTPUT_STATE *output_state, int selecteddriver, FMOD_INITFLAGS flags, int *outputrate, FMOD_SPEAKERMODE *speakermode, int *speakermodechannels, FMOD_SOUND_FORMAT *outputformat, int dspbufferlength, int *dspnumbuffers, int *dspnumadditionalbuffers, void *extradriverdata);
 typedef FMOD_RESULT (F_CALL *FMOD_OUTPUT_START_CALLBACK)            (FMOD_OUTPUT_STATE *output_state);
 typedef FMOD_RESULT (F_CALL *FMOD_OUTPUT_STOP_CALLBACK)             (FMOD_OUTPUT_STATE *output_state);
 typedef FMOD_RESULT (F_CALL *FMOD_OUTPUT_CLOSE_CALLBACK)            (FMOD_OUTPUT_STATE *output_state);
 typedef FMOD_RESULT (F_CALL *FMOD_OUTPUT_UPDATE_CALLBACK)           (FMOD_OUTPUT_STATE *output_state);
 typedef FMOD_RESULT (F_CALL *FMOD_OUTPUT_GETHANDLE_CALLBACK)        (FMOD_OUTPUT_STATE *output_state, void **handle);
-typedef FMOD_RESULT (F_CALL *FMOD_OUTPUT_GETPOSITION_CALLBACK)      (FMOD_OUTPUT_STATE *output_state, unsigned int *pcm);
-typedef FMOD_RESULT (F_CALL *FMOD_OUTPUT_LOCK_CALLBACK)             (FMOD_OUTPUT_STATE *output_state, unsigned int offset, unsigned int length, void **ptr1, void **ptr2, unsigned int *len1, unsigned int *len2);
-typedef FMOD_RESULT (F_CALL *FMOD_OUTPUT_UNLOCK_CALLBACK)           (FMOD_OUTPUT_STATE *output_state, void *ptr1, void *ptr2, unsigned int len1, unsigned int len2);
 typedef FMOD_RESULT (F_CALL *FMOD_OUTPUT_MIXER_CALLBACK)            (FMOD_OUTPUT_STATE *output_state);
 typedef FMOD_RESULT (F_CALL *FMOD_OUTPUT_OBJECT3DGETINFO_CALLBACK)  (FMOD_OUTPUT_STATE *output_state, int *maxhardwareobjects);
 typedef FMOD_RESULT (F_CALL *FMOD_OUTPUT_OBJECT3DALLOC_CALLBACK)    (FMOD_OUTPUT_STATE *output_state, void **object3d);
@@ -62,7 +63,7 @@ typedef struct FMOD_OUTPUT_DESCRIPTION
     unsigned int                            apiversion;
     const char                             *name;
     unsigned int                            version;
-    int                                     polling;
+    FMOD_OUTPUT_METHOD                      method;
     FMOD_OUTPUT_GETNUMDRIVERS_CALLBACK      getnumdrivers;
     FMOD_OUTPUT_GETDRIVERINFO_CALLBACK      getdriverinfo;
     FMOD_OUTPUT_INIT_CALLBACK               init;
@@ -71,9 +72,6 @@ typedef struct FMOD_OUTPUT_DESCRIPTION
     FMOD_OUTPUT_CLOSE_CALLBACK              close;
     FMOD_OUTPUT_UPDATE_CALLBACK             update;
     FMOD_OUTPUT_GETHANDLE_CALLBACK          gethandle;
-    FMOD_OUTPUT_GETPOSITION_CALLBACK        getposition;
-    FMOD_OUTPUT_LOCK_CALLBACK               lock;
-    FMOD_OUTPUT_UNLOCK_CALLBACK             unlock;
     FMOD_OUTPUT_MIXER_CALLBACK              mixer;
     FMOD_OUTPUT_OBJECT3DGETINFO_CALLBACK    object3dgetinfo;
     FMOD_OUTPUT_OBJECT3DALLOC_CALLBACK      object3dalloc;
@@ -115,7 +113,7 @@ struct FMOD_OUTPUT_OBJECT3DINFO
 #define FMOD_OUTPUT_FREE(_state, _ptr) \
     (_state)->free(_ptr, __FILE__, __LINE__)
 #define FMOD_OUTPUT_LOG(_state, _level, _location, _format, ...) \
-    (_state)->log(_level, __FILE__, __LINE__, _location, _format, __VA_ARGS__)
+    (_state)->log(_level, __FILE__, __LINE__, _location, _format, ##__VA_ARGS__)
 #define FMOD_OUTPUT_COPYPORT(_state, _id, _buffer, _length) \
     (_state)->copyport(_state, _id, _buffer, _length)
 #define FMOD_OUTPUT_REQUESTRESET(_state) \

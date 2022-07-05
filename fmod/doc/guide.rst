@@ -68,13 +68,17 @@ Custom HRTFs are loaded and set by the game engine. No special configuration is 
 
         Follow the instructions in the Steam Audio Unity integration documentation to specify custom HRTFs.
 
+    .. group-tab:: Unreal Engine
+
+        The Steam Audio Unreal Engine plugin does not currently support custom HRTFs.
+
     .. group-tab:: C++
 
         1.  In the game engine, use ``iplHRTFCreate`` to load one or more SOFA files.
         2.  Call ``iplFMODSetHRTF`` to specify the HRTF to use for spatialization.
 
 .. warning::
-    
+
     The SOFA file format allows for very flexible ways of defining HRTFs, but Steam Audio only supports a restricted subset. The following restrictions apply (for more information, including definitions of the terms below, click `here <https://www.sofaconventions.org>`_:
 
     -   SOFA files must use the ``SimpleFreeFieldHRIR`` convention.
@@ -109,6 +113,14 @@ You must now configure your game engine to enable occlusion simulation for this 
 
         Steam Audio will now use raycast occlusion to check if the source is occluded from the listener by any geometry. This assumes that the source is a single point. You can also model sources with larger spatial extent. For more information, refer to the Steam Audio Unity integration documentation.
 
+    .. group-tab:: Unreal Engine
+
+        1.  Select the actor containing the FMOD Audio component.
+        2.  Make sure a Steam Audio Source component is attached to it.
+        3.  In the Details tab, check **Simulate Occlusion**.
+
+        Steam Audio will now use raycast occlusion to check if the source is occluded from the listener by any geometry. This assumes that the source is a single point. You can also model sources with larger spatial extent. For more information, refer to the Steam Audio Unreal Engine integration documentation.
+
     .. group-tab:: C++
 
         1.  Call ``iplSimulatorRunDirect`` to run occlusion simulations.
@@ -139,6 +151,14 @@ You must now configure your game engine to enable transmission simulation for th
         1.  Select the FMOD Event Emitter.
         2.  Make sure a Steam Audio Source component is attached to it.
         3.  In the Inspector, make sure **Occlusion** is checked, then check **Transmission**.
+
+        Steam Audio will now model how sound travels through occluding geometry, based on the acoustic material properties of the geometry.
+
+    .. group-tab:: Unreal Engine
+
+        1.  Select the actor containing the FMOD Audio component.
+        2.  Make sure a Steam Audio Source component is attached to it.
+        3.  In the Details tab, make sure **Simulate Occlusion** is checked, then check **Simulate Transmission**.
 
         Steam Audio will now model how sound travels through occluding geometry, based on the acoustic material properties of the geometry.
 
@@ -176,6 +196,14 @@ You must now configure your game engine to enable reflections simulation for thi
 
         Steam Audio will now use real-time ray tracing to model how sound is reflected by geometry, based on the acoustic material properties of the geometry. You can control many aspects of this process, including how many rays are traced, how many successive reflections are modeled, how reflected sound is rendered, and much more. Since modeling reflections is CPU-intensive, you can pre-compute reflections for a static sound source, or even offload the work to the GPU. For more information, refer to the Steam Audio Unity integration documentation.
 
+    .. group-tab:: Unreal Engine
+
+        1.  Select the actor containing the FMOD Audio component.
+        2.  Make sure a Steam Audio Source component is attached to it.
+        3.  In the Details tab, check **Simulate Reflections**.
+
+        Steam Audio will now use real-time ray tracing to model how sound is reflected by geometry, based on the acoustic material properties of the geometry. You can control many aspects of this process, including how many rays are traced, how many successive reflections are modeled, how reflected sound is rendered, and much more. Since modeling reflections is CPU-intensive, you can pre-compute reflections for a static sound source, or even offload the work to the GPU. For more information, refer to the Steam Audio Unreal Engine integration documentation.
+
     .. group-tab:: C++
 
        1.  Call ``iplSimulatorRunReflections`` to run reflection simulations.
@@ -210,6 +238,13 @@ You must now configure your game engine to enable reverb simulation.
 
         Steam Audio will now use real-time ray tracing to simulate physics-based reverb. You can control many aspects of this simulation, including how many rays are traced, the length of the reverb tail, whether the reverb is rendered a convolution reverb, and much more. Since modeling physics-based reverb is CPU-intensive, you can (and typically will) pre-compute reverb throughout your scene. You can even offload simulation as well as rendering work to the GPU. For more information, refer to the Steam Audio Unity integration documentation.
 
+    .. group-tab:: Unreal Engine
+
+        1.  Select the actor containing the Steam Audio Listener component.
+        2.  In the Details tab, check **Simulate Reverb**.
+
+        Steam Audio will now use real-time ray tracing to simulate physics-based reverb. You can control many aspects of this simulation, including how many rays are traced, the length of the reverb tail, whether the reverb is rendered a convolution reverb, and much more. Since modeling physics-based reverb is CPU-intensive, you can (and typically will) pre-compute reverb throughout your scene. You can even offload simulation as well as rendering work to the GPU. For more information, refer to the Steam Audio Unreal Engine integration documentation.
+
     .. group-tab:: C++
 
         1.  Call ``iplSimulatorRunReflections`` to run reflection simulations for a source located at the listener position.
@@ -241,6 +276,15 @@ You must now configure your game engine to enable reflections simulation for thi
         4.  Check **Pathing**.
 
         You can control many aspects of the baking process, as well as the run-time path finding algorithm. For more information, refer to the Steam Audio Unity integration documentation.
+
+    .. group-tab:: Unreal Engine
+
+        1.  Make sure that pathing information is baked for one or more probe batches in your scene. For more information, refer to the Steam Audio Unreal Engine integration documentation.
+        2.  Select the actor containing the FMOD Audio component.
+        3.  Make sure a Steam Audio Source component is attached to it.
+        4.  Check **Simulate Pathing**.
+
+        You can control many aspects of the baking process, as well as the run-time path finding algorithm. For more information, refer to the Steam Audio Unreal Engine integration documentation.
 
     .. group-tab:: C++
 

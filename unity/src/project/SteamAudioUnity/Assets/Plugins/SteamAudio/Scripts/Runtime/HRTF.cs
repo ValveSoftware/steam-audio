@@ -37,6 +37,11 @@ namespace SteamAudio
 
         ~HRTF()
         {
+            Release();
+        }
+
+        public void Release()
+        {
             API.iplHRTFRelease(ref mHRTF);
         }
 

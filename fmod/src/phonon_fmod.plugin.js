@@ -7,6 +7,7 @@ studio.plugins.registerPluginDescription("Steam Audio Spatializer", {
 	companyName: "Valve",
 	productName: "Steam Audio Spatializer",
 	parameters: {
+		"DirectBinaural": {displayName: "Apply HRTF To Direct"},
 		"ApplyDA": {displayName: "Distance Attenuation"},
 		"ApplyAA": {displayName: "Air Absorption"},
 		"ApplyDir": {displayName: "Directivity"},
@@ -227,6 +228,11 @@ studio.plugins.registerPluginDescription("Steam Audio Spatializer", {
 				alignment: studio.ui.alignment.AlignTop,
 				isFramed: true,
 				items: [
+					{
+						deckWidgetType: studio.ui.deckWidgetType.Button,
+						binding: "DirectBinaural",
+						text: "On"
+                    },
 					{
 						deckWidgetType: studio.ui.deckWidgetType.Button,
 						binding: "ApplyRefl",

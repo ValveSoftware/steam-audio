@@ -19,6 +19,11 @@ namespace SteamAudio
         private void OnDestroy()
         {
             SteamAudioManager.UnloadDynamicObject(this);
+
+            if (mInstancedMesh != null)
+            {
+                mInstancedMesh.Release();
+            }
         }
 
         private void OnEnable()

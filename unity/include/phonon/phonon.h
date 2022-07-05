@@ -338,6 +338,7 @@ DECLARE_OPAQUE_HANDLE(IPLEmbreeDevice);
 /** Settings used to create an Embree device. */
 #if defined(__cplusplus) || defined(__DOXYGEN__)
 typedef struct {
+    IPLbyte reserved;
 } IPLEmbreeDeviceSettings;
 #else
 typedef void IPLEmbreeDeviceSettings;
@@ -574,6 +575,7 @@ DECLARE_OPAQUE_HANDLE(IPLRadeonRaysDevice);
 /** Settings used to create a Radeon Rays device. */
 #if defined(__cplusplus) || defined(__DOXYGEN__)
 typedef struct {
+    IPLbyte reserved;
 } IPLRadeonRaysDeviceSettings;
 #else
 typedef void IPLRadeonRaysDeviceSettings;
@@ -1502,6 +1504,11 @@ typedef struct {
 
     /** The HRTF to use. */
     IPLHRTF hrtf;
+
+    /** Base address of an array into which to write the left- and right-ear peak delays for the HRTF used
+        to spatialize the input audio. Memory for this array must be allocated and managed by the caller.
+        Can be NULL, in which case peak delays will not be written. */
+    IPLfloat32* peakDelays;
 } IPLBinauralEffectParams;
 
 /** Creates a binaural effect.

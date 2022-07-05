@@ -71,6 +71,8 @@ namespace SteamAudio
             var status = API.iplStaticMeshLoad(scene.Get(), serializedObject.Get(), null, IntPtr.Zero, out mStaticMesh);
             if (status != Error.Success)
                 throw new Exception(string.Format("Unable to load static mesh ({0}). [{1}]", dataAsset.name, status));
+
+            serializedObject.Release();
         }
 
         public StaticMesh(StaticMesh staticMesh)
@@ -81,6 +83,11 @@ namespace SteamAudio
         }
 
         ~StaticMesh()
+        {
+            Release();
+        }
+
+        public void Release()
         {
             API.iplStaticMeshRelease(ref mStaticMesh);
 
@@ -97,6 +104,7 @@ namespace SteamAudio
             var serializedObject = new SerializedObject(mContext);
             API.iplStaticMeshSave(mStaticMesh, serializedObject.Get());
             serializedObject.WriteToFile(dataAsset);
+            serializedObject.Release();
         }
 
         public void AddToScene(Scene scene)

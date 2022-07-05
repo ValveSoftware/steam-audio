@@ -1,0 +1,132 @@
+//
+// Copyright (C) Valve Corporation. All rights reserved.
+//
+
+#include "SteamAudioSettings.h"
+#include "SteamAudioMaterial.h"
+
+// ---------------------------------------------------------------------------------------------------------------------
+// USteamAudioSettings
+// ---------------------------------------------------------------------------------------------------------------------
+
+USteamAudioSettings::USteamAudioSettings()
+    : AudioEngine(EAudioEngineType::UNREAL)
+    , bExportLandscapeGeometry(true)
+    , bExportBSPGeometry(true)
+    , DefaultMeshMaterial(nullptr)
+    , DefaultLandscapeMaterial(nullptr)
+    , DefaultBSPMaterial(nullptr)
+    , SceneType(ESceneType::DEFAULT)
+    , MaxOcclusionSamples(16)
+    , RealTimeRays(4096)
+    , RealTimeBounces(4)
+    , RealTimeDuration(1.0f)
+    , RealTimeAmbisonicOrder(1)
+    , RealTimeMaxSources(32)
+    , RealTimeCPUCoresPercentage(5)
+    , RealTimeIrradianceMinDistance(1.0f)
+    , bBakeConvolution(true)
+    , bBakeParametric(false)
+    , BakingRays(16384)
+    , BakingBounces(16)
+    , BakingDuration(1.0f)
+    , BakingAmbisonicOrder(1)
+    , BakingCPUCoresPercentage(50)
+    , BakingIrradianceMinDistance(1.0f)
+    , ReverbSubmix(nullptr)
+    , BakingVisibilitySamples(4)
+    , BakingVisibilityRadius(1.0f)
+    , BakingVisibilityThreshold(0.1f)
+    , BakingVisibilityRange(1000.0f)
+    , BakingPathRange(1000.0f)
+    , BakedPathingCPUCoresPercentage(50)
+    , SimulationUpdateInterval(0.1f)
+    , ReflectionEffectType(EReflectionEffectType::CONVOLUTION)
+    , HybridReverbTransitionTime(1.0f)
+    , HybridReverbOverlapPercent(25)
+    , DeviceType(EOpenCLDeviceType::ANY)
+    , MaxReservedComputeUnits(8)
+    , FractionComputeUnitsForIRUpdate(0.5f)
+    , BakingBatchSize(8)
+    , TANDuration(1.0f)
+    , TANAmbisonicOrder(1)
+    , TANMaxSources(32)
+{}
+
+FSteamAudioSettings USteamAudioSettings::GetSettings() const
+{
+    FSteamAudioSettings Settings{};
+    Settings.AudioEngine = AudioEngine;
+    Settings.bExportLandscapeGeometry = bExportLandscapeGeometry;
+    Settings.bExportBSPGeometry = bExportBSPGeometry;
+    Settings.DefaultMeshMaterial = GetMaterialForAsset(DefaultMeshMaterial);
+    Settings.DefaultLandscapeMaterial = GetMaterialForAsset(DefaultLandscapeMaterial);
+    Settings.DefaultBSPMaterial = GetMaterialForAsset(DefaultBSPMaterial);
+    Settings.SceneType = static_cast<IPLSceneType>(SceneType);
+    Settings.MaxOcclusionSamples = MaxOcclusionSamples;
+    Settings.RealTimeRays = RealTimeRays;
+    Settings.RealTimeBounces = RealTimeBounces;
+    Settings.RealTimeDuration = RealTimeDuration;
+    Settings.RealTimeAmbisonicOrder = RealTimeAmbisonicOrder;
+    Settings.RealTimeMaxSources = RealTimeMaxSources;
+    Settings.RealTimeCPUCoresPercentage = RealTimeCPUCoresPercentage;
+    Settings.RealTimeIrradianceMinDistance = RealTimeIrradianceMinDistance;
+    Settings.bBakeConvolution = bBakeConvolution;
+    Settings.bBakeParametric = bBakeParametric;
+    Settings.BakingRays = BakingRays;
+    Settings.BakingBounces = BakingBounces;
+    Settings.BakingDuration = BakingDuration;
+    Settings.BakingAmbisonicOrder = BakingAmbisonicOrder;
+    Settings.BakingCPUCoresPercentage = BakingCPUCoresPercentage;
+    Settings.BakedPathingCPUCoresPercentage = BakedPathingCPUCoresPercentage;
+    Settings.ReverbSubmix = nullptr;
+    Settings.BakingVisibilitySamples = BakingVisibilitySamples;
+    Settings.BakingVisibilityRadius = BakingVisibilityRadius;
+    Settings.BakingVisibilityThreshold = BakingVisibilityThreshold;
+    Settings.BakingVisibilityRange = BakingVisibilityRange;
+    Settings.BakingPathRange = BakingPathRange;
+    Settings.BakedPathingCPUCoresPercentage = BakedPathingCPUCoresPercentage;
+    Settings.SimulationUpdateInterval = SimulationUpdateInterval;
+    Settings.ReflectionEffectType = static_cast<IPLReflectionEffectType>(ReflectionEffectType);
+    Settings.HybridReverbTransitionTime = HybridReverbTransitionTime;
+    Settings.HybridReverbOverlapPercent = HybridReverbOverlapPercent;
+    Settings.OpenCLDeviceType = static_cast<IPLOpenCLDeviceType>(DeviceType);
+    Settings.MaxReservedComputeUnits = MaxReservedComputeUnits;
+    Settings.FractionComputeUnitsForIRUpdate = FractionComputeUnitsForIRUpdate;
+    Settings.BakingBatchSize = BakingBatchSize;
+    Settings.TANDuration = TANDuration;
+    Settings.TANAmbisonicOrder = TANAmbisonicOrder;
+    Settings.TANMaxSources = TANMaxSources;
+    return Settings;
+}
+
+IPLMaterial USteamAudioSettings::GetMaterialForAsset(FSoftObjectPath Asset) const
+{
+    IPLMaterial SteamAudioMaterial{};
+    SteamAudioMaterial.absorption[0] = 0.1f;
+    SteamAudioMaterial.absorption[1] = 0.1f;
+    SteamAudioMaterial.absorption[2] = 0.1f;
+    SteamAudioMaterial.scattering = 0.5f;
+    SteamAudioMaterial.transmission[0] = 0.1f;
+    SteamAudioMaterial.transmission[1] = 0.1f;
+    SteamAudioMaterial.transmission[2] = 0.1f;
+
+    USteamAudioMaterial* Material = Cast<USteamAudioMaterial>(Asset.TryLoad());
+    if (Material)
+    {
+        SteamAudioMaterial.absorption[0] = Material->AbsorptionLow;
+        SteamAudioMaterial.absorption[1] = Material->AbsorptionMid;
+        SteamAudioMaterial.absorption[2] = Material->AbsorptionHigh;
+        SteamAudioMaterial.scattering = Material->Scattering;
+        SteamAudioMaterial.transmission[0] = Material->TransmissionLow;
+        SteamAudioMaterial.transmission[1] = Material->TransmissionMid;
+        SteamAudioMaterial.transmission[2] = Material->TransmissionHigh;
+    }
+
+    return SteamAudioMaterial;
+}
+
+UObject* USteamAudioSettings::GetObjectForAsset(FSoftObjectPath Asset) const
+{
+    return Asset.TryLoad();
+}

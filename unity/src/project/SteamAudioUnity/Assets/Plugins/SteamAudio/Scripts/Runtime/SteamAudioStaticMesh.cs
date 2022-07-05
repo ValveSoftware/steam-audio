@@ -24,6 +24,14 @@ namespace SteamAudio
             }
         }
 
+        void OnDestroy()
+        {
+            if (mStaticMesh != null)
+            {
+                mStaticMesh.Release();
+            }
+        }
+
         void OnEnable()
         {
             if (mStaticMesh != null)

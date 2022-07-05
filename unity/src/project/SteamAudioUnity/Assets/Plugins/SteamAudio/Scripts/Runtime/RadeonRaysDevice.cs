@@ -27,6 +27,11 @@ namespace SteamAudio
 
         ~RadeonRaysDevice()
         {
+            Release();
+        }
+
+        public void Release()
+        {
             API.iplRadeonRaysDeviceRelease(ref mRadeonRaysDevice);
         }
 

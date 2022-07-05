@@ -47,8 +47,9 @@ To build the Windows plugin, you will need:
 
 To build the Linux plugin, you will need:
 
--   ``g++`` 5.0 or later (install using your distribution's package manager)
--   ``g++-multilib`` 5.0 or later if building the 32-bit binaries on a 64-bit system (install using your distribution's package manager)
+-   ``g++`` 4.8 or later (install using your distribution's package manager)
+-   ``g++-multilib`` 4.8 or later if building the 32-bit binaries on a 64-bit system (install using your distribution's package manager)
+-   ``glibc`` 2.19 or later
 
 To build the macOS plugin, you will need:
 
@@ -109,7 +110,7 @@ The Steam Audio build script (``build.py``) lets you specify the following comma
         Specifies the build configuration. Valid options are ``debug`` and ``release``. Default is ``release``.
 
     -o, --operation NAME
-        Specifies the CMake operation to perform. Valid options are ``generate`` (generates the build system), ``build`` (build all targets in the build system), ``install`` (runs the ``INSTALL`` target, which copies binaries to the ``bin/`` folder), and ``package`` (runs the ``PACKAGE`` target, which generates the zip file and copies it to the ``dist/`` folder). Default is ``generate`` followed by ``build``.
+        Specifies the CMake operation to perform. Valid options are ``generate`` (generates the build system), ``build`` (build all targets in the build system), ``install`` (runs the ``INSTALL`` target, which copies binaries to the ``bin/`` folder), ``package`` (runs the ``PACKAGE`` target, which generates the zip file and copies it to the ``dist/`` folder), ``ci_build`` (which runs ``generate``, then ``build``, then ``install``), and ``ci_package`` (which runs ``generate``, then ``package``). Default is ``generate`` followed by ``build``.
 
 Building using CMake directly
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

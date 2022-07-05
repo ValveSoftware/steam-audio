@@ -74,6 +74,14 @@ namespace SteamAudio
             SteamAudioManager.GetAudioEngineState().SetReverbSource(mSource);
         }
 
+        private void OnDestroy()
+        {
+            if (mSource != null)
+            {
+                mSource.Release();
+            }
+        }
+
         private void Start()
         {
             SteamAudioManager.GetAudioEngineState().SetReverbSource(mSource);

@@ -3,6 +3,7 @@
 
 import argparse
 import os
+import re
 import subprocess
 import sys
 import shutil
@@ -25,7 +26,7 @@ def parse_command_line(host_system):
     parser.add_argument('-t', '--toolchain', help = "Compiler toolchain. (Windows only)", choices = ['vs2013', 'vs2015', 'vs2017', 'vs2019'], type = str.lower, default = 'vs2015')
     parser.add_argument('-a', '--architecture', help = "CPU architecture.", choices = ['x86', 'x64', 'armv7', 'arm64'], type = str.lower, default = 'x64')
     parser.add_argument('-c', '--configuration', help = "Build configuration.", choices = ['debug', 'release'], type = str.lower, default = 'release')
-    parser.add_argument('-o', '--operation', help = "CMake operation.", choices = ['generate', 'build', 'install', 'package', 'default'], type = str.lower, default = 'default')
+    parser.add_argument('-o', '--operation', help = "CMake operation.", choices = ['generate', 'build', 'install', 'package', 'default', 'ci_build', 'ci_package'], type = str.lower, default = 'default')
     args = parser.parse_args()
     return args
 
@@ -169,6 +170,72 @@ def cmake_package(args):
 
     run_cmake('cpack', cmake_args)
 
+# Finds a build tool (e.g. cmake, ispc).
+def find_tool(name, dir_regex, min_version):
+    matches = {}
+
+    tools_dirs = [os.path.normpath(root_dir() + '/../../tools'), os.path.normpath(root_dir() + '/../tools')]
+    for tools_dir in tools_dirs:
+        if not os.path.exists(tools_dir):
+            continue
+
+        dir_contents = os.listdir(tools_dir)
+        for item in dir_contents:
+            dir_path = os.path.join(tools_dir, item)
+            if not os.path.isdir(dir_path):
+                continue
+
+            dir_name = os.path.basename(dir_path)
+
+            match = re.match(dir_regex, dir_name)
+            if match is None:
+                continue
+
+            matches[dir_path] = match
+
+    num_version_components = len(min_version)
+
+    latest_version = []
+    for i in range(1, num_version_components + 1):
+        latest_version.append(0)
+
+    latest_version_path = None
+
+    for path in matches.keys():
+        match = matches[path]
+
+        version = []
+        for i in range(1, num_version_components + 1):
+            version.append(int(match.group(i)))
+
+        newer_version_found = False
+
+        for i in range(1, num_version_components + 1):
+            if version[i-1] < min_version[i-1]:
+                break
+            if version[i-1] < latest_version[i-1]:
+                break
+            newer_version_found = True
+
+        if newer_version_found:
+            latest_version = version
+            latest_version_path = path
+
+    if latest_version_path is not None:
+        host_platform = detect_host_system()
+        subdirectory = None
+        if host_platform == 'windows':
+            subdirectory = 'windows-x64'
+        elif host_platform == 'linux':
+            subdirectory = 'linux-x64'
+        elif host_platform == 'osx':
+            subdirectory = 'osx'
+
+        if subdirectory is not None:
+            latest_version_path = os.path.join(latest_version_path, subdirectory)
+
+    return latest_version_path
+
 # Main script.
 
 host_system = detect_host_system()
@@ -182,6 +249,10 @@ except Exception as e:
 olddir = os.getcwd()
 os.chdir(build_subdir(args))
 
+cmake_path = find_tool('cmake', r'cmake-(\d+)\.(\d+)\.?(\d+)?', [3, 17])
+if cmake_path is not None:
+    os.environ['PATH'] = os.path.normpath(os.path.join(cmake_path, 'bin')) + os.pathsep + os.environ['PATH']
+
 if args.operation == 'generate':
     cmake_generate(args)
 elif args.operation == 'build':
@@ -193,5 +264,12 @@ elif args.operation == 'package':
 elif args.operation == 'default':
     cmake_generate(args)
     cmake_build(args)
+elif args.operation == 'ci_build':
+    cmake_generate(args)
+    cmake_build(args)
+    cmake_install(args)
+elif args.operation == 'ci_package':
+    cmake_generate(args)
+    cmake_package(args)
 
 os.chdir(olddir)

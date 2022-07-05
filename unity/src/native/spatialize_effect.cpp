@@ -130,6 +130,11 @@ struct State
     IPLReflectionEffect reflectionEffect;
     IPLPathEffect pathEffect;
     IPLAmbisonicsDecodeEffect ambisonicsEffect;
+
+    // This flag is set to true when the lower 32-bits of the IPLSource pointer is written via setParam. It is reset to
+    // false when the upper 32-bits are written. The upper 32-bits are only written if this flag is true, to ensure that
+    // we don't end up with an invalid pointer value.
+    std::atomic<bool> ptrLowWritten;
 };
 
 enum InitFlags
@@ -148,6 +153,8 @@ InitFlags lazyInit(UnityAudioEffectState* state,
                    int numChannelsIn,
                    int numChannelsOut)
 {
+    assert(state);
+
     auto initFlags = INIT_NONE;
 
     if (!gContext)
@@ -157,6 +164,8 @@ InitFlags lazyInit(UnityAudioEffectState* state,
         return initFlags;
 
     auto effect = state->GetEffectData<State>();
+    if (!effect)
+        return initFlags;
 
     IPLAudioSettings audioSettings;
     audioSettings.samplingRate = state->samplerate;
@@ -294,13 +303,26 @@ UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK recordDistanceAttenuation(UnityAud
                                                                         float attenuationIn,
                                                                         float* attenuationOut)
 {
-    *attenuationOut = 1.0f;
-    state->GetEffectData<State>()->distanceAttenuationCurveValue = attenuationIn;
+    assert(state);
+
+    if (attenuationOut)
+    {
+        *attenuationOut = 1.0f;
+    }
+
+    auto effect = state->GetEffectData<State>();
+    if (effect)
+    {
+        effect->distanceAttenuationCurveValue = attenuationIn;
+    }
+    
     return UNITY_AUDIODSP_OK;
 }
 
 void reset(UnityAudioEffectState* state)
 {
+    assert(state);
+
     auto effect = state->GetEffectData<State>();
     if (!effect)
         return;
@@ -346,12 +368,21 @@ void reset(UnityAudioEffectState* state)
     effect->prevDirectMixLevel = 0.0f;
     effect->prevReflectionsMixLevel = 0.0f;
     effect->prevPathingMixLevel = 0.0f;
+
+    effect->ptrLowWritten = false;
 }
 
 UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK create(UnityAudioEffectState* state)
 {
+    assert(state);
+
     state->effectdata = new State();
-    state->spatializerdata->distanceattenuationcallback = recordDistanceAttenuation;
+
+    if (state->spatializerdata)
+    {
+        state->spatializerdata->distanceattenuationcallback = recordDistanceAttenuation;
+    }
+
     reset(state);
     lazyInit(state, 0, 0);
     return UNITY_AUDIODSP_OK;
@@ -359,7 +390,11 @@ UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK create(UnityAudioEffectState* stat
 
 UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK release(UnityAudioEffectState* state)
 {
+    assert(state);
+
     auto effect = state->GetEffectData<State>();
+    if (!effect)
+        return UNITY_AUDIODSP_OK;
 
     iplAudioBufferFree(gContext, &effect->inBuffer);
     iplAudioBufferFree(gContext, &effect->outBuffer);
@@ -389,7 +424,12 @@ UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK getParam(UnityAudioEffectState* st
                                                        float* value,
                                                        char* valueStr)
 {
+    assert(state);
+    assert(value);
+
     auto effect = state->GetEffectData<State>();
+    if (!effect)
+        return UNITY_AUDIODSP_OK;
 
     switch (index)
     {
@@ -488,7 +528,11 @@ UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK getParam(UnityAudioEffectState* st
 void setSource(UnityAudioEffectState* state,
                IPLSource source)
 {
+    assert(state);
+
     auto effect = state->GetEffectData<State>();
+    if (!effect)
+        return;
 
     if (source == effect->simulationSource[1])
         return;
@@ -504,7 +548,11 @@ void setSource(UnityAudioEffectState* state,
 
 void getLatestSource(UnityAudioEffectState* state)
 {
+    assert(state);
+
     auto effect = state->GetEffectData<State>();
+    if (!effect)
+        return;
     
     if (effect->newSimulationSourceWritten)
     {
@@ -519,7 +567,11 @@ UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK setParam(UnityAudioEffectState* st
                                                        int index,
                                                        float value)
 {
+    assert(state);
+
     auto effect = state->GetEffectData<State>();
+    if (!effect)
+        return UNITY_AUDIODSP_OK;
 
     switch (index)
     {
@@ -615,12 +667,17 @@ UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK setParam(UnityAudioEffectState* st
         setSource(state, reinterpret_cast<IPLSource>(*reinterpret_cast<uint32_t*>(&value)));
 #else
         effect->simulationSourceTemp = static_cast<uint64_t>(*reinterpret_cast<uint32_t*>(&value));
+        effect->ptrLowWritten = true;
 #endif
         break;
     case SIMULATION_OUTPUTS_PTR_HIGH:
 #if defined(IPL_CPU_X64) || defined(IPL_CPU_ARMV8)
-        effect->simulationSourceTemp = (static_cast<uint64_t>(*reinterpret_cast<uint32_t*>(&value)) << 32) | effect->simulationSourceTemp;
-        setSource(state, reinterpret_cast<IPLSource>(effect->simulationSourceTemp));
+        if (effect->ptrLowWritten)
+        {
+            effect->simulationSourceTemp = (static_cast<uint64_t>(*reinterpret_cast<uint32_t*>(&value)) << 32) | effect->simulationSourceTemp;
+            setSource(state, reinterpret_cast<IPLSource>(effect->simulationSourceTemp));
+            effect->ptrLowWritten = false;
+        }
 #endif
         break;
     }
@@ -635,6 +692,10 @@ UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK process(UnityAudioEffectState* sta
                                                       int numChannelsIn,
                                                       int numChannelsOut)
 {
+    assert(state);
+    assert(in);
+    assert(out);
+
     // Assume that the number of input and output channels are the same.
     assert(numChannelsIn == numChannelsOut);
 
@@ -644,11 +705,12 @@ UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK process(UnityAudioEffectState* sta
     // Unity can call the process callback even when not in play mode. In this case, emit silence.
     if (!(state->flags & UnityAudioEffectStateFlags_IsPlaying))
     {
-        reset(state);
         return UNITY_AUDIODSP_OK;
     }
 
     auto effect = state->GetEffectData<State>();
+    if (!effect)
+        return UNITY_AUDIODSP_OK;
 
     // Unity can call the process callback even when the audio source is not actually playing. When it does so, it
     // sends incorrect values for spatial blend, distance attenuation, and all the other parameters. Because the
@@ -764,7 +826,7 @@ UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK process(UnityAudioEffectState* sta
 
     if (effect->directBinaural)
     {
-        IPLBinauralEffectParams binauralParams;
+        IPLBinauralEffectParams binauralParams{};
         binauralParams.direction = direction;
         binauralParams.interpolation = effect->hrtfInterpolation;
         binauralParams.spatialBlend = _spatialBlend;

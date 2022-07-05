@@ -24,6 +24,11 @@ namespace SteamAudio
 
         ~ProbeArray()
         {
+            Release();
+        }
+
+        public void Release()
+        {
             API.iplProbeArrayRelease(ref mProbeArray);
         }
 
@@ -72,6 +77,8 @@ namespace SteamAudio
                 Debug.LogError(string.Format("Unable to load Probe Batch from {0}.", dataAsset.name));
                 mProbeBatch = IntPtr.Zero;
             }
+
+            serializedObject.Release();
         }
 
         public ProbeBatch(ProbeBatch probeBatch)
@@ -82,6 +89,11 @@ namespace SteamAudio
         }
 
         ~ProbeBatch()
+        {
+            Release();
+        }
+
+        public void Release()
         {
             API.iplProbeBatchRelease(ref mProbeBatch);
 
@@ -99,6 +111,7 @@ namespace SteamAudio
             API.iplProbeBatchSave(mProbeBatch, serializedObject.Get());
             var size = (int) serializedObject.GetSize();
             serializedObject.WriteToFile(dataAsset, flush);
+            serializedObject.Release();
             return size;
         }
 

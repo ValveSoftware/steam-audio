@@ -31,6 +31,11 @@ namespace SteamAudio
 
         ~TrueAudioNextDevice()
         {
+            Release();
+        }
+
+        public void Release()
+        {
             API.iplTrueAudioNextDeviceRelease(ref mTrueAudioNextDevice);
         }
 

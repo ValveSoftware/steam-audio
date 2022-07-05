@@ -200,6 +200,11 @@ namespace SteamAudio
                 mAudioEngineSource.Destroy();
             }
 
+            if (mSource != null)
+            {
+                mSource.Release();
+            }
+
             mThis.Free();
         }
 

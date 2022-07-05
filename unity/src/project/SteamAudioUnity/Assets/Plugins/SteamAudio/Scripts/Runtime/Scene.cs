@@ -37,6 +37,8 @@ namespace SteamAudio
             var status = API.iplSceneLoad(context.Get(), ref sceneSettings, serializedObject.Get(), null, IntPtr.Zero, out mScene);
             if (status != Error.Success)
                 throw new Exception(string.Format("Unable to load scene [{0}]", status.ToString()));
+
+            serializedObject.Release();
         }
 
         public Scene(Scene scene)
@@ -47,6 +49,11 @@ namespace SteamAudio
         }
 
         ~Scene()
+        {
+            Release();
+        }
+
+        public void Release()
         {
             API.iplSceneRelease(ref mScene);
 
@@ -63,6 +70,7 @@ namespace SteamAudio
             var serializedObject = new SerializedObject(mContext);
             API.iplSceneSave(mScene, serializedObject.Get());
             serializedObject.WriteToFile(dataAsset);
+            serializedObject.Release();
         }
 
         public void SaveOBJ(string fileBaseName)

@@ -574,21 +574,46 @@ namespace SteamAudio
                 sSingleton.mAudioEngineState.Destroy();
             }
 
-            sSingleton.mSimulator = null;
+            if (sSingleton.mSimulator != null)
+            {
+                sSingleton.mSimulator.Release();
+                sSingleton.mSimulator = null;
+            }
 
-            sSingleton.mTrueAudioNextDevice = null;
-            sSingleton.mRadeonRaysDevice = null;
-            sSingleton.mOpenCLDevice = null;
-            sSingleton.mEmbreeDevice = null;
+            if (sSingleton.mTrueAudioNextDevice != null)
+            {
+                sSingleton.mTrueAudioNextDevice.Release();
+                sSingleton.mTrueAudioNextDevice = null;
+            }
+
+            if (sSingleton.mRadeonRaysDevice != null)
+            {
+                sSingleton.mRadeonRaysDevice.Release();
+                sSingleton.mRadeonRaysDevice = null;
+            }
+
+            if (sSingleton.mOpenCLDevice != null)
+            {
+                sSingleton.mOpenCLDevice.Release();
+                sSingleton.mOpenCLDevice = null;
+            }
+
+            if (sSingleton.mEmbreeDevice != null)
+            {
+                sSingleton.mEmbreeDevice.Release();
+                sSingleton.mEmbreeDevice = null;
+            }
 
             if (sSingleton.mHRTFs != null)
             {
                 for (var i = 0; i < sSingleton.mHRTFs.Length; ++i)
                 {
+                    sSingleton.mHRTFs[i].Release();
                     sSingleton.mHRTFs[i] = null;
                 }
             }
 
+            sSingleton.mContext.Release();
             sSingleton.mContext = null;
         }
 
@@ -1003,6 +1028,7 @@ namespace SteamAudio
                     subScene = CreateScene(context);
                     var subStaticMesh = Load(dataAsset, context, subScene);
                     subStaticMesh.AddToScene(subScene);
+                    subStaticMesh.Release();
 
                     sSingleton.mDynamicObjects.Add(assetName, subScene);
                     sSingleton.mDynamicObjectRefCounts.Add(assetName, 1);
@@ -1276,6 +1302,9 @@ namespace SteamAudio
             }
 
             Debug.Log(string.Format("Steam Audio {0} [{1}]: Exported to {2}.", type, name, (exportOBJ) ? objFileName : dataAsset.name));
+
+            staticMesh.Release();
+            scene.Release();
         }
 
         static Scene CreateScene(Context context)
@@ -1318,6 +1347,7 @@ namespace SteamAudio
 
             foreach (var scene in unreferencedDynamicObjects)
             {
+                sSingleton.mDynamicObjects[scene].Release();
                 sSingleton.mDynamicObjects.Remove(scene);
                 sSingleton.mDynamicObjectRefCounts.Remove(scene);
             }
@@ -1328,7 +1358,11 @@ namespace SteamAudio
         {
             Marshal.FreeHGlobal(sSingleton.mMaterialBuffer);
 
-            sSingleton.mCurrentScene = null;
+            if (sSingleton.mCurrentScene != null)
+            {
+                sSingleton.mCurrentScene.Release();
+                sSingleton.mCurrentScene = null;
+            }
         }
 
         static IntPtr GetMaterialBufferForTransform(Transform obj)

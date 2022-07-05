@@ -40,6 +40,8 @@ enum InitFlags
 
 void reset(UnityAudioEffectState* state)
 {
+    assert(state);
+
     auto effect = state->GetEffectData<State>();
     if (!effect)
         return;
@@ -51,6 +53,8 @@ InitFlags lazyInit(UnityAudioEffectState* state,
                    int numChannelsIn,
                    int numChannelsOut)
 {
+    assert(state);
+
     auto initFlags = INIT_NONE;
 
     if (!gContext)
@@ -66,6 +70,8 @@ InitFlags lazyInit(UnityAudioEffectState* state,
     }
 
     auto effect = state->GetEffectData<State>();
+    if (!effect)
+        return initFlags;
 
     IPLAudioSettings audioSettings;
     audioSettings.samplingRate = state->samplerate;
@@ -137,6 +143,8 @@ InitFlags lazyInit(UnityAudioEffectState* state,
 
 UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK create(UnityAudioEffectState* state)
 {
+    assert(state);
+
     state->effectdata = new State();
     reset(state);
     lazyInit(state, 0, 0);
@@ -145,10 +153,14 @@ UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK create(UnityAudioEffectState* stat
 
 UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK release(UnityAudioEffectState* state)
 {
+    assert(state);
+
     if (!state->effectdata)
         return UNITY_AUDIODSP_OK;
     
     auto effect = state->GetEffectData<State>();
+    if (!effect)
+        return UNITY_AUDIODSP_OK;
 
     iplAudioBufferFree(gContext, &effect->reflectionsBuffer);
     iplAudioBufferFree(gContext, &effect->inBuffer);
@@ -168,7 +180,11 @@ UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK getParam(UnityAudioEffectState* st
                                                        float* value,
                                                        char* valueStr)
 {
+    assert(state);
+
     auto effect = state->GetEffectData<State>();
+    if (!effect)
+        return UNITY_AUDIODSP_OK;
 
     switch (index)
     {
@@ -184,7 +200,11 @@ UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK setParam(UnityAudioEffectState* st
                                                        int index,
                                                        float value)
 {
+    assert(state);
+
     auto effect = state->GetEffectData<State>();
+    if (!effect)
+        return UNITY_AUDIODSP_OK;
 
     switch (index)
     {
@@ -203,6 +223,10 @@ UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK process(UnityAudioEffectState* sta
                                                       int numChannelsIn,
                                                       int numChannelsOut)
 {
+    assert(state);
+    assert(in);
+    assert(out);
+
     // Assume that the number of input and output channels are the same.
     assert(numChannelsIn == numChannelsOut);
 
@@ -224,6 +248,8 @@ UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK process(UnityAudioEffectState* sta
     getLatestHRTF();
 
     auto effect = state->GetEffectData<State>();
+    if (!effect)
+        return UNITY_AUDIODSP_OK;
 
     // TODO: Need to deprecate Unity versions that don't support spatializerdata on mixer effects!
     if (!state->spatializerdata)

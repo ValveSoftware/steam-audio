@@ -77,6 +77,8 @@ namespace SteamAudio
 
             SteamAudioManager.CurrentScene.Commit();
 
+            staticMesh.Release();
+
             sTasks = tasks;
             sStatus = BakeStatus.InProgress;
 

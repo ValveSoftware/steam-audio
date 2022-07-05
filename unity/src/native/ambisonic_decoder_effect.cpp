@@ -40,6 +40,8 @@ InitFlags lazyInit(UnityAudioEffectState* state,
                    int numChannelsIn,
                    int numChannelsOut)
 {
+    assert(state);
+
     auto initFlags = INIT_NONE;
 
     if (!gContext)
@@ -49,6 +51,8 @@ InitFlags lazyInit(UnityAudioEffectState* state,
         return initFlags;
 
     auto effect = state->GetEffectData<State>();
+    if (!effect)
+        return initFlags;
 
     IPLAudioSettings audioSettings;
     audioSettings.samplingRate = state->samplerate;
@@ -92,6 +96,8 @@ InitFlags lazyInit(UnityAudioEffectState* state,
 
 void reset(UnityAudioEffectState* state)
 {
+    assert(state);
+
     auto effect = state->GetEffectData<State>();
     if (!effect)
         return;
@@ -101,6 +107,8 @@ void reset(UnityAudioEffectState* state)
 
 UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK create(UnityAudioEffectState* state)
 {
+    assert(state);
+
     state->effectdata = new State();
     reset(state);
     lazyInit(state, 0, 0);
@@ -109,7 +117,11 @@ UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK create(UnityAudioEffectState* stat
 
 UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK release(UnityAudioEffectState* state)
 {
+    assert(state);
+
     auto effect = state->GetEffectData<State>();
+    if (!effect)
+        return UNITY_AUDIODSP_OK;
 
     iplAudioBufferFree(gContext, &effect->inBuffer);
     iplAudioBufferFree(gContext, &effect->n3dInBuffer);
@@ -127,7 +139,11 @@ UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK getParam(UnityAudioEffectState* st
                                                        float* value,
                                                        char* valueStr)
 {
+    assert(state);
+
     auto effect = state->GetEffectData<State>();
+    if (!effect)
+        return UNITY_AUDIODSP_OK;
 
     switch (index)
     {
@@ -143,7 +159,11 @@ UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK setParam(UnityAudioEffectState* st
                                                        int index,
                                                        float value)
 {
+    assert(state);
+
     auto effect = state->GetEffectData<State>();
+    if (!effect)
+        return UNITY_AUDIODSP_OK;
 
     switch (index)
     {
@@ -190,6 +210,10 @@ UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK process(UnityAudioEffectState* sta
                                                       int numChannelsIn,
                                                       int numChannelsOut)
 {
+    assert(state);
+    assert(in);
+    assert(out);
+
     // Assume that the number of input and output channels are the same.
     assert(numChannelsIn == numChannelsOut);
 
@@ -211,6 +235,8 @@ UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK process(UnityAudioEffectState* sta
     getLatestHRTF();
 
     auto effect = state->GetEffectData<State>();
+    if (!effect)
+        return UNITY_AUDIODSP_OK;
 
     // Local-to-world transform matrix for the source.
     auto S = state->ambisonicdata->sourcematrix;

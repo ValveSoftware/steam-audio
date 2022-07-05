@@ -76,6 +76,14 @@ namespace SteamAudio
             mProbeBatch.Commit();
         }
 
+        private void OnDestroy()
+        {
+            if (mProbeBatch != null)
+            {
+                mProbeBatch.Release();
+            }
+        }
+
         private void OnEnable()
         {
             SteamAudioManager.Simulator.AddProbeBatch(mProbeBatch);
@@ -121,7 +129,7 @@ namespace SteamAudio
             var rootObjects = SceneManager.GetActiveScene().GetRootGameObjects();
             foreach (var rootObject in rootObjects)
             {
-                staticMeshComponent = rootObject.GetComponent<SteamAudioStaticMesh>();
+                staticMeshComponent = rootObject.GetComponentInChildren<SteamAudioStaticMesh>();
                 if (staticMeshComponent)
                     break;
             }
@@ -159,6 +167,10 @@ namespace SteamAudio
 
             probeDataSize = probeBatch.Save(GetAsset());
 
+            probeBatch.Release();
+            probeArray.Release();
+            staticMesh.Release();
+
             SteamAudioManager.ShutDown();
             DestroyImmediate(SteamAudioManager.Singleton.gameObject);
 
@@ -182,6 +194,7 @@ namespace SteamAudio
             var probeBatch = new ProbeBatch(SteamAudioManager.Context, asset);
             probeBatch.RemoveData(identifier);
             probeDataSize = probeBatch.Save(asset);
+            probeBatch.Release();
 
             SteamAudioManager.ShutDown();
             DestroyImmediate(SteamAudioManager.Singleton.gameObject);

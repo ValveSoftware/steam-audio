@@ -32,6 +32,11 @@ namespace SteamAudio
 
         ~Context()
         {
+            Release();
+        }
+
+        public void Release()
+        {
             API.iplContextRelease(ref mContext);
         }
 

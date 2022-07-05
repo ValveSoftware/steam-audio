@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Steam Audio plugin additions-->
+<root xmlns:android="http://schemas.android.com/apk/res/android">
+	<!-- init section is always evaluated once per architecture -->
+	<init>
+		<log text="Steam Audio init"/>
+		<setBool result="bSupported" value="false"/>
+		<isArch arch="armeabi-v7a">
+			<setBool result="bSupported" value="true"/>
+		</isArch>
+    <isArch arch="arm64-v8a">
+      <setBool result="bSupported" value="true"/>
+    </isArch>
+    <isArch arch="x86">
+      <setBool result="bSupported" value="true"/>
+    </isArch>
+    <isArch arch="x86_64">
+      <setBool result="bSupported" value="true"/>
+    </isArch>
+  </init>
+
+	<!-- optional files or directories to copy to Intermediate/Android/APK -->
+	<resourceCopies>
+		<isArch arch="armeabi-v7a">
+			<copyFile src="$S(PluginDir)/lib/android/armeabi-v7a/libphonon.so"	dst="$S(BuildDir)/libs/armeabi-v7a/libphonon.so" />
+      <log text="Copying libphonon.so (armv7)"/>
+		</isArch>
+    <isArch arch="arm64-v8a">
+      <copyFile src="$S(PluginDir)/lib/android/arm64-v8a/libphonon.so"	dst="$S(BuildDir)/libs/arm64-v8a/libphonon.so" />
+      <log text="Copying libphonon.so (armv8)"/>
+    </isArch>
+    <isArch arch="x86">
+      <copyFile src="$S(PluginDir)/lib/android/x86/libphonon.so"	dst="$S(BuildDir)/libs/x86/libphonon.so" />
+      <log text="Copying libphonon.so (x86)"/>
+    </isArch>
+    <isArch arch="x86_64">
+      <copyFile src="$S(PluginDir)/lib/android/x86_64/libphonon.so"	dst="$S(BuildDir)/libs/x86_64/libphonon.so" />
+      <log text="Copying libphonon.so (x64)"/>
+    </isArch>
+  </resourceCopies>
+
+	<!-- optional libraries to load in GameActivity.java before libUE4.so -->
+	<soLoadLibrary>
+		<if condition="bSupported">
+			<true>
+				<loadLibrary name="phonon" failmsg="Steam Audio library not loaded and required!" />
+			</true>
+		</if>
+	</soLoadLibrary>
+</root>

@@ -335,6 +335,21 @@ enum Params
      */
     SIMULATION_OUTPUTS,
 
+    /**
+     *  **Type**: `FMOD_DSP_PARAMETER_TYPE_BOOL`
+     * 
+     *  If true, applies HRTF-based 3D audio rendering to the direct sound path. Otherwise, sound is panned based on
+     *  the speaker configuration.
+     */
+    DIRECT_BINAURAL,
+
+    /**
+     *  **Type**: `FMOD_DSP_PARAMETER_TYPE_DATA`
+     *  
+     *  (FMOD Studio 2.02+) The event's min/max distance range. Automatically set by FMOD Studio.
+     */
+    DISTANCE_ATTENUATION_RANGE,
+
     /** The number of parameters in this effect. */
     NUM_PARAMS
 };
@@ -371,6 +386,8 @@ FMOD_DSP_PARAMETER_DESC gParams[] = {
     { FMOD_DSP_PARAMETER_TYPE_BOOL, "PathBinaural", "", "Apply HRTF to pathing." },
     { FMOD_DSP_PARAMETER_TYPE_FLOAT, "PathMixLevel", "", "Pathing mix level." },
     { FMOD_DSP_PARAMETER_TYPE_DATA, "SimOutputs", "", "Simulation outputs." },
+    { FMOD_DSP_PARAMETER_TYPE_BOOL, "DirectBinaural", "", "Apply HRTF to direct path." },
+    { FMOD_DSP_PARAMETER_TYPE_DATA, "DistRange", "", "Distance attenuation range." },
 };
 
 FMOD_DSP_PARAMETER_DESC* gParamsArray[NUM_PARAMS];
@@ -419,6 +436,8 @@ void initParamDescs()
     gParams[PATHING_BINAURAL].booldesc = {false};
     gParams[PATHING_MIXLEVEL].floatdesc = {0.0f, 10.0f, 1.0f};
     gParams[SIMULATION_OUTPUTS].datadesc = {FMOD_DSP_PARAMETER_DATA_TYPE_USER};
+    gParams[DIRECT_BINAURAL].booldesc = {true};
+    gParams[DISTANCE_ATTENUATION_RANGE].datadesc = {FMOD_DSP_PARAMETER_DATA_TYPE_ATTENUATION_RANGE};
 }
 
 struct State
@@ -432,6 +451,7 @@ struct State
     ParameterApplyType applyTransmission;
     bool applyReflections;
     bool applyPathing;
+    bool directBinaural;
     IPLHRTFInterpolation hrtfInterpolation;
     float distanceAttenuation;
     FMOD_DSP_PAN_3D_ROLLOFF_TYPE distanceAttenuationRolloffType;
@@ -449,6 +469,8 @@ struct State
     float reflectionsMixLevel;
     bool pathingBinaural;
     float pathingMixLevel;
+    FMOD_DSP_PARAMETER_ATTENUATION_RANGE attenuationRange;
+    std::atomic<bool> attenuationRangeSet;
 
     IPLSource simulationSource[2];
     std::atomic<bool> newSimulationSourceWritten;
@@ -464,6 +486,7 @@ struct State
     IPLAudioBuffer reflectionsBuffer;
     IPLAudioBuffer reflectionsSpatializedBuffer;
 
+    IPLPanningEffect panningEffect;
     IPLBinauralEffect binauralEffect;
     IPLDirectEffect directEffect;
     IPLReflectionEffect reflectionEffect;
@@ -507,16 +530,31 @@ InitFlags lazyInit(FMOD_DSP_STATE* state,
     auto effect = reinterpret_cast<State*>(state->plugindata);
 
     auto status = IPL_STATUS_SUCCESS;
-    if (!effect->binauralEffect)
+
+    if (numChannelsOut > 0)
     {
-        IPLBinauralEffectSettings effectSettings;
-        effectSettings.hrtf = gHRTF[1];
+        if (!effect->panningEffect)
+        {
+            IPLPanningEffectSettings effectSettings{};
+            effectSettings.speakerLayout = speakerLayoutForNumChannels(numChannelsOut);
 
-        status = iplBinauralEffectCreate(gContext, &audioSettings, &effectSettings, &effect->binauralEffect);
+            status = iplPanningEffectCreate(gContext, &audioSettings, &effectSettings, &effect->panningEffect);
+        }
+
+        if (status == IPL_STATUS_SUCCESS)
+        {
+            if (!effect->binauralEffect)
+            {
+                IPLBinauralEffectSettings effectSettings;
+                effectSettings.hrtf = gHRTF[1];
+
+                status = iplBinauralEffectCreate(gContext, &audioSettings, &effectSettings, &effect->binauralEffect);
+            }
+        }
+
+        if (status == IPL_STATUS_SUCCESS)
+            initFlags = static_cast<InitFlags>(initFlags | INIT_BINAURALEFFECT);
     }
-
-    if (status == IPL_STATUS_SUCCESS)
-        initFlags = static_cast<InitFlags>(initFlags | INIT_BINAURALEFFECT);
 
     if (numChannelsIn > 0)
     {
@@ -596,15 +634,15 @@ InitFlags lazyInit(FMOD_DSP_STATE* state,
         if (!effect->directBuffer.data)
             iplAudioBufferAllocate(gContext, numChannelsIn, audioSettings.frameSize, &effect->directBuffer);
 
+        if (!effect->monoBuffer.data)
+            iplAudioBufferAllocate(gContext, 1, audioSettings.frameSize, &effect->monoBuffer);
+
         initFlags = static_cast<InitFlags>(initFlags | INIT_DIRECTAUDIOBUFFERS);
 
         if ((effect->applyReflections || effect->applyPathing) && gIsSimulationSettingsValid)
         {
             auto numAmbisonicChannels = numChannelsForOrder(gSimulationSettings.maxOrder);
 
-            if (!effect->monoBuffer.data)
-                iplAudioBufferAllocate(gContext, 1, audioSettings.frameSize, &effect->monoBuffer);
-            
             if (!effect->reflectionsBuffer.data)
                 iplAudioBufferAllocate(gContext, numAmbisonicChannels, audioSettings.frameSize, &effect->reflectionsBuffer);
 
@@ -631,6 +669,7 @@ void reset(FMOD_DSP_STATE* state)
     effect->applyTransmission = PARAMETER_DISABLE;
     effect->applyReflections = false;
     effect->applyPathing = false;
+    effect->directBinaural = true;
     effect->hrtfInterpolation = IPL_HRTFINTERPOLATION_NEAREST;
     effect->distanceAttenuation = 1.0f;
     effect->distanceAttenuationRolloffType = FMOD_DSP_PAN_3D_ROLLOFF_INVERSE;
@@ -651,6 +690,9 @@ void reset(FMOD_DSP_STATE* state)
     effect->reflectionsMixLevel = 1.0f;
     effect->pathingBinaural = false;
     effect->pathingMixLevel = 1.0f;
+    effect->attenuationRange.min = 1.0f;
+    effect->attenuationRange.max = 20.0f;
+    effect->attenuationRangeSet = false;
 
     effect->simulationSource[0] = nullptr;
     effect->simulationSource[1] = nullptr;
@@ -680,6 +722,7 @@ FMOD_RESULT F_CALL release(FMOD_DSP_STATE* state)
     iplAudioBufferFree(gContext, &effect->reflectionsBuffer);
     iplAudioBufferFree(gContext, &effect->reflectionsSpatializedBuffer);
 
+    iplPanningEffectRelease(&effect->panningEffect);
     iplBinauralEffectRelease(&effect->binauralEffect);
     iplDirectEffectRelease(&effect->directEffect);
     iplReflectionEffectRelease(&effect->reflectionEffect);
@@ -704,6 +747,9 @@ FMOD_RESULT F_CALL getBool(FMOD_DSP_STATE* state,
 
     switch (index)
     {
+    case DIRECT_BINAURAL:
+        *value = effect->directBinaural;
+        break;
     case APPLY_REFLECTIONS:
         *value = effect->applyReflections;
         break;
@@ -856,6 +902,9 @@ FMOD_RESULT F_CALL setBool(FMOD_DSP_STATE* state,
 
     switch (index)
     {
+    case DIRECT_BINAURAL:
+        effect->directBinaural = value;
+        break;
     case APPLY_REFLECTIONS:
         effect->applyReflections = value;
         break;
@@ -1012,6 +1061,10 @@ FMOD_RESULT F_CALL setData(FMOD_DSP_STATE* state,
         memcpy(&simulationSource, value, length);
         setSource(state, simulationSource);
         break;
+    case DISTANCE_ATTENUATION_RANGE:
+        memcpy(&effect->attenuationRange, value, length);
+        effect->attenuationRangeSet = true;
+        break;
     default:
         return FMOD_ERR_INVALID_PARAM;
     }
@@ -1047,11 +1100,12 @@ IPLDirectEffectParams getDirectParams(FMOD_DSP_STATE* state,
         params.flags = static_cast<IPLDirectEffectFlags>(params.flags | IPL_DIRECTEFFECTFLAGS_APPLYDISTANCEATTENUATION);
         if (effect->applyDistanceAttenuation == PARAMETER_USERDEFINED)
         {
+            auto minDistance = effect->attenuationRangeSet ? effect->attenuationRange.min : effect->distanceAttenuationMinDistance;
+            auto maxDistance = effect->attenuationRangeSet ? effect->attenuationRange.max : effect->distanceAttenuationMaxDistance;
+
             state->functions->pan->getrolloffgain(state, effect->distanceAttenuationRolloffType,
                                                   distance(source.origin, listener.origin),
-                                                  effect->distanceAttenuationMinDistance,
-                                                  effect->distanceAttenuationMaxDistance,
-                                                  &params.distanceAttenuation);
+                                                  minDistance, maxDistance, &params.distanceAttenuation);
         }
         else
         {
@@ -1257,13 +1311,25 @@ FMOD_RESULT F_CALL process(FMOD_DSP_STATE* state,
 
         iplDirectEffectApply(effect->directEffect, &directParams, &effect->inBuffer, &effect->directBuffer);
 
-        IPLBinauralEffectParams binauralParams;
-        binauralParams.direction = direction;
-        binauralParams.interpolation = effect->hrtfInterpolation;
-        binauralParams.spatialBlend = 1.0f;
-        binauralParams.hrtf = gHRTF[0];
+        if (effect->directBinaural)
+        {
+            IPLBinauralEffectParams binauralParams{};
+            binauralParams.direction = direction;
+            binauralParams.interpolation = effect->hrtfInterpolation;
+            binauralParams.spatialBlend = 1.0f;
+            binauralParams.hrtf = gHRTF[0];
 
-        iplBinauralEffectApply(effect->binauralEffect, &binauralParams, &effect->directBuffer, &effect->outBuffer);
+            iplBinauralEffectApply(effect->binauralEffect, &binauralParams, &effect->directBuffer, &effect->outBuffer);
+        }
+        else
+        {
+            iplAudioBufferDownmix(gContext, &effect->directBuffer, &effect->monoBuffer);
+
+            IPLPanningEffectParams panningParams{};
+            panningParams.direction = direction;
+
+            iplPanningEffectApply(effect->panningEffect, &panningParams, &effect->monoBuffer, &effect->outBuffer);
+        }
 
         for (auto i = 0; i < numChannelsOut; ++i)
         {

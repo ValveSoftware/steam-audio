@@ -30,6 +30,11 @@ namespace SteamAudio
 
         ~InstancedMesh()
         {
+            Release();
+        }
+
+        public void Release()
+        {
             API.iplInstancedMeshRelease(ref mInstancedMesh);
         }
 
