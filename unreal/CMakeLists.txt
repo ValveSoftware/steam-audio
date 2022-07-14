@@ -3,7 +3,7 @@
 
 cmake_minimum_required(VERSION 3.17)
 
-project(Phonon VERSION 4.1.0)
+project(Phonon VERSION 4.1.1)
 
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_MODULE_PATH "${CMAKE_HOME_DIRECTORY}/build")

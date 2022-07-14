@@ -18,6 +18,12 @@ namespace SteamAudio
             mAudioSource = gameObject.GetComponent<AudioSource>();
         }
 
+        public override void Destroy()
+        {
+            var index = 28;
+            SetSpatializerIntPtr(IntPtr.Zero, ref index);
+        }
+
         public override void UpdateParameters(SteamAudioSource source)
         {
             if (!mAudioSource)

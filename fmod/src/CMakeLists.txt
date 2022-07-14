@@ -75,6 +75,88 @@ endif()
 
 
 #
+# POST-BUILD STEP FOR COPYING fmod -> unity
+#
+
+set(UNITY_FMOD_PLUGIN_DIR "")
+if (IPL_OS_WINDOWS)
+    if (IPL_CPU_X86)
+        set(UNITY_FMOD_PLUGIN_DIR ${CMAKE_HOME_DIRECTORY}/../unity/src/project/SteamAudioUnity/Assets/Plugins/FMOD/lib/win/x86)
+    elseif (IPL_CPU_X64)
+        set(UNITY_FMOD_PLUGIN_DIR ${CMAKE_HOME_DIRECTORY}/../unity/src/project/SteamAudioUnity/Assets/Plugins/FMOD/lib/win/x86_64)
+    endif()
+elseif (IPL_OS_LINUX)
+    if (IPL_CPU_X86)
+        set(UNITY_FMOD_PLUGIN_DIR ${CMAKE_HOME_DIRECTORY}/../unity/src/project/SteamAudioUnity/Assets/Plugins/FMOD/lib/linux/x86)
+    elseif (IPL_CPU_X64)
+        set(UNITY_FMOD_PLUGIN_DIR ${CMAKE_HOME_DIRECTORY}/../unity/src/project/SteamAudioUnity/Assets/Plugins/FMOD/lib/linux/x86_64)
+    endif()
+elseif (IPL_OS_MACOS)
+    set(UNITY_FMOD_PLUGIN_DIR ${CMAKE_HOME_DIRECTORY}/../unity/src/project/SteamAudioUnity/Assets/Plugins/FMOD/lib/mac)
+elseif (IPL_OS_ANDROID)
+    if (IPL_CPU_ARMV7)
+        set(UNITY_FMOD_PLUGIN_DIR ${CMAKE_HOME_DIRECTORY}/../unity/src/project/SteamAudioUnity/Assets/Plugins/FMOD/lib/android/armeabi-v7a)
+    elseif (IPL_CPU_ARMV8)
+        set(UNITY_FMOD_PLUGIN_DIR ${CMAKE_HOME_DIRECTORY}/../unity/src/project/SteamAudioUnity/Assets/Plugins/FMOD/lib/android/arm64-v8a)
+    elseif (IPL_CPU_X86)
+        set(UNITY_FMOD_PLUGIN_DIR ${CMAKE_HOME_DIRECTORY}/../unity/src/project/SteamAudioUnity/Assets/Plugins/FMOD/lib/android/x86)
+    endif()
+endif()
+
+if (NOT UNITY_FMOD_PLUGIN_DIR STREQUAL "")
+    if (IPL_OS_MACOS)
+        add_custom_command(
+            TARGET      phonon_fmod_bundle
+            POST_BUILD
+            COMMAND     ${CMAKE_COMMAND} -E copy_directory $<TARGET_BUNDLE_DIR:phonon_fmod_bundle> ${UNITY_FMOD_PLUGIN_DIR}/phonon_fmod.bundle
+        )
+    else()
+        add_custom_command(
+            TARGET      phonon_fmod
+            POST_BUILD
+            COMMAND     ${CMAKE_COMMAND} -E copy $<TARGET_FILE:phonon_fmod> ${UNITY_FMOD_PLUGIN_DIR}
+        )
+    endif()
+endif()
+
+
+#
+# POST-BUILD STEP FOR COPYING fmod -> unreal
+#
+
+set(UNREAL_FMOD_PLUGIN_DIR "")
+if (IPL_OS_WINDOWS)
+    if (IPL_CPU_X86)
+        set(UNREAL_FMOD_PLUGIN_DIR ${CMAKE_HOME_DIRECTORY}/../unreal/src/SteamAudioUnreal/Plugins/FMODStudio/Binaries/Win32)
+    elseif (IPL_CPU_X64)
+        set(UNREAL_FMOD_PLUGIN_DIR ${CMAKE_HOME_DIRECTORY}/../unreal/src/SteamAudioUnreal/Plugins/FMODStudio/Binaries/Win64)
+    endif()
+elseif (IPL_OS_LINUX)
+    if (IPL_CPU_X64)
+        set(UNREAL_FMOD_PLUGIN_DIR ${CMAKE_HOME_DIRECTORY}/../unreal/src/SteamAudioUnreal/Plugins/FMODStudio/Binaries/Linux)
+    endif()
+elseif (IPL_OS_MACOS)
+    set(UNREAL_FMOD_PLUGIN_DIR ${CMAKE_HOME_DIRECTORY}/../unreal/src/SteamAudioUnreal/Plugins/FMODStudio/Binaries/Mac)
+elseif (IPL_OS_ANDROID)
+    if (IPL_CPU_ARMV7)
+        set(UNREAL_FMOD_PLUGIN_DIR ${CMAKE_HOME_DIRECTORY}/../unreal/src/SteamAudioUnreal/Plugins/FMODStudio/Binaries/Android/armeabi-v7a)
+    elseif (IPL_CPU_ARMV8)
+        set(UNREAL_FMOD_PLUGIN_DIR ${CMAKE_HOME_DIRECTORY}/../unreal/src/SteamAudioUnreal/Plugins/FMODStudio/Binaries/Android/arm64-v8a)
+    elseif (IPL_CPU_X86)
+        set(UNREAL_FMOD_PLUGIN_DIR ${CMAKE_HOME_DIRECTORY}/../unreal/src/SteamAudioUnreal/Plugins/FMODStudio/Binaries/Android/x86)
+    endif()
+endif()
+
+if (NOT UNREAL_FMOD_PLUGIN_DIR STREQUAL "")
+    add_custom_command(
+        TARGET      phonon_fmod
+        POST_BUILD
+        COMMAND     ${CMAKE_COMMAND} -E copy $<TARGET_FILE:phonon_fmod> ${UNREAL_FMOD_PLUGIN_DIR}
+    )
+endif()
+
+
+#
 # INSTALL
 #
 
@@ -82,23 +164,23 @@ get_bin_subdir(IPL_BIN_SUBDIR)
 
 install(
     TARGETS             phonon_fmod
-    ARCHIVE DESTINATION lib/${IPL_BIN_SUBDIR} 
-    LIBRARY DESTINATION lib/${IPL_BIN_SUBDIR} 
+    ARCHIVE DESTINATION lib/${IPL_BIN_SUBDIR}
+    LIBRARY DESTINATION lib/${IPL_BIN_SUBDIR}
     RUNTIME DESTINATION lib/${IPL_BIN_SUBDIR}
 )
 
 if (BUILD_SHARED_LIBS AND IPL_OS_MACOS)
     install(
         TARGETS             phonon_fmod_bundle
-        ARCHIVE DESTINATION lib/${IPL_BIN_SUBDIR} 
-        LIBRARY DESTINATION lib/${IPL_BIN_SUBDIR} 
+        ARCHIVE DESTINATION lib/${IPL_BIN_SUBDIR}
+        LIBRARY DESTINATION lib/${IPL_BIN_SUBDIR}
         RUNTIME DESTINATION lib/${IPL_BIN_SUBDIR}
     )
 endif()
 
 if (IPL_OS_WINDOWS)
     install(
-        FILES       ${CMAKE_CURRENT_BINARY_DIR}/$<CONFIG>/phonon_fmod.pdb 
+        FILES       ${CMAKE_CURRENT_BINARY_DIR}/$<CONFIG>/phonon_fmod.pdb
         DESTINATION symbols/${IPL_BIN_SUBDIR}
     )
 endif()

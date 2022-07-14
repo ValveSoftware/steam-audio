@@ -198,11 +198,13 @@ namespace SteamAudio
             if (mAudioEngineSource != null)
             {
                 mAudioEngineSource.Destroy();
+                mAudioEngineSource = null;
             }
 
             if (mSource != null)
             {
                 mSource.Release();
+                mSource = null;
             }
 
             mThis.Free();
@@ -223,11 +225,6 @@ namespace SteamAudio
         {
             SteamAudioManager.RemoveSource(this);
             mSource.RemoveFromSimulator(mSimulator);
-
-            if (mAudioEngineSource != null)
-            {
-                mAudioEngineSource.UpdateParameters(this);
-            }
         }
 
         private void Update()
