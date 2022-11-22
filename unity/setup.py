@@ -7,7 +7,7 @@ import shutil
 import urllib2
 import zipfile
 
-version = "4.1.1"
+version = "4.1.2"
 
 def download_file(url):
     remote_file = urllib2.urlopen(url)

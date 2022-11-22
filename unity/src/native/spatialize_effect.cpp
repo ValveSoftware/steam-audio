@@ -5,6 +5,8 @@
 
 #include "steamaudio_unity_native.h"
 
+extern std::shared_ptr<SourceManager> gSourceManager;
+
 namespace SpatializeEffect {
 
 enum Params
@@ -37,9 +39,10 @@ enum Params
     REFLECTIONS_MIXLEVEL,
     PATHING_BINAURAL,
     PATHING_MIXLEVEL,
-    SIMULATION_OUTPUTS_PTR_LOW,
-    SIMULATION_OUTPUTS_PTR_HIGH,
+    SIMULATION_OUTPUTS_PTR_LOW, // DEPRECATED
+    SIMULATION_OUTPUTS_PTR_HIGH, // DEPRECATED
     DIRECT_BINAURAL,
+    SIMULATION_OUTPUTS_HANDLE,
     NUM_PARAMS
 };
 
@@ -76,6 +79,7 @@ UnityAudioParameterDefinition gParamDefinitions[] =
     { "SimOutLow", "", "Simulation outputs (lower 32 bits).", -std::numeric_limits<float>::max(), std::numeric_limits<float>::max(), 0.0f, 1.0f, 1.0f },
     { "SimOutHigh", "", "Simulation outputs (upper 32 bits).", -std::numeric_limits<float>::max(), std::numeric_limits<float>::max(), 0.0f, 1.0f, 1.0f },
     { "DirectBinaural", "", "Apply HRTF to direct path.", 0.0f, 1.0f, 1.0f, 1.0f, 1.0f },
+    { "SimOutHandle", "", "Simulation outputs handle.", std::numeric_limits<float>::min(), std::numeric_limits<float>::max(), -1.0f, 1.0f, 1.0f },
 };
 
 struct State
@@ -110,7 +114,6 @@ struct State
     bool inputStarted;
 
     IPLSource simulationSource[2];
-    uint64_t simulationSourceTemp;
     std::atomic<bool> newSimulationSourceWritten;
 
     float prevDirectMixLevel;
@@ -130,11 +133,6 @@ struct State
     IPLReflectionEffect reflectionEffect;
     IPLPathEffect pathEffect;
     IPLAmbisonicsDecodeEffect ambisonicsEffect;
-
-    // This flag is set to true when the lower 32-bits of the IPLSource pointer is written via setParam. It is reset to
-    // false when the upper 32-bits are written. The upper 32-bits are only written if this flag is true, to ensure that
-    // we don't end up with an invalid pointer value.
-    std::atomic<bool> ptrLowWritten;
 };
 
 enum InitFlags
@@ -362,14 +360,11 @@ void reset(UnityAudioEffectState* state)
 
     iplSourceRelease(&effect->simulationSource[0]);
     iplSourceRelease(&effect->simulationSource[1]);
-    effect->simulationSourceTemp = 0;
     effect->newSimulationSourceWritten = false;
 
     effect->prevDirectMixLevel = 0.0f;
     effect->prevReflectionsMixLevel = 0.0f;
     effect->prevPathingMixLevel = 0.0f;
-
-    effect->ptrLowWritten = false;
 }
 
 UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK create(UnityAudioEffectState* state)
@@ -662,23 +657,11 @@ UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK setParam(UnityAudioEffectState* st
     case PATHING_MIXLEVEL:
         effect->pathingMixLevel = value;
         break;
-    case SIMULATION_OUTPUTS_PTR_LOW:
-#if defined(IPL_CPU_X86) || defined(IPL_CPU_ARMV7)
-        setSource(state, reinterpret_cast<IPLSource>(*reinterpret_cast<uint32_t*>(&value)));
-#else
-        effect->simulationSourceTemp = static_cast<uint64_t>(*reinterpret_cast<uint32_t*>(&value));
-        effect->ptrLowWritten = true;
-#endif
-        break;
-    case SIMULATION_OUTPUTS_PTR_HIGH:
-#if defined(IPL_CPU_X64) || defined(IPL_CPU_ARMV8)
-        if (effect->ptrLowWritten)
+    case SIMULATION_OUTPUTS_HANDLE:
+        if (gSourceManager)
         {
-            effect->simulationSourceTemp = (static_cast<uint64_t>(*reinterpret_cast<uint32_t*>(&value)) << 32) | effect->simulationSourceTemp;
-            setSource(state, reinterpret_cast<IPLSource>(effect->simulationSourceTemp));
-            effect->ptrLowWritten = false;
+            setSource(state, gSourceManager->getSource(static_cast<int>(value)));
         }
-#endif
         break;
     }
 
@@ -710,6 +693,10 @@ UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK process(UnityAudioEffectState* sta
 
     auto effect = state->GetEffectData<State>();
     if (!effect)
+        return UNITY_AUDIODSP_OK;
+
+    // If Unity is passing us a mono output buffer, do nothing.
+    if (numChannelsOut < 2)
         return UNITY_AUDIODSP_OK;
 
     // Unity can call the process callback even when the audio source is not actually playing. When it does so, it

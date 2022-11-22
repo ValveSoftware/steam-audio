@@ -923,6 +923,12 @@ namespace SteamAudio
         public static extern void iplUnitySetReverbSource(IntPtr reverbSource);
 
         [DllImport("audioplugin_phonon")]
+        public static extern int iplUnityAddSource(IntPtr source);
+
+        [DllImport("audioplugin_phonon")]
+        public static extern void iplUnityRemoveSource(int handle);
+
+        [DllImport("audioplugin_phonon")]
         public static extern void iplUnityTerminate();
 
         // FMOD STUDIO PLUGIN

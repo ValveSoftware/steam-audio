@@ -13,6 +13,7 @@ using UnityEngine.SceneManagement;
 #if UNITY_EDITOR
 using UnityEditor;
 using UnityEditor.SceneManagement;
+using System.IO;
 #if UNITY_2019_2_OR_NEWER
 using UnityEditor.PackageManager;
 #endif
@@ -743,6 +744,15 @@ namespace SteamAudio
             if (sSingleton.mAudioEngineState != null)
             {
                 sSingleton.mAudioEngineState.Initialize(sSingleton.mContext.Get(), sSingleton.mHRTFs[0].Get(), simulationSettings);
+
+                var listeners = new SteamAudioListener[sSingleton.mListeners.Count];
+                sSingleton.mListeners.CopyTo(listeners);
+                foreach (var listener in listeners)
+                {
+                    listener.enabled = false;
+                    listener.Reinitialize();
+                    listener.enabled = true;
+                }
             }
         }
 
@@ -954,6 +964,182 @@ namespace SteamAudio
 
             EditorUtility.DisplayProgressBar("Steam Audio", "", 1.0f);
             EditorUtility.ClearProgressBar();
+        }
+
+        [MenuItem("Steam Audio/Install FMOD Studio Plugin Files", false, 50)]
+        public static void InstallFMODStudioPluginFiles()
+        {
+            // Make sure the FMOD Studio Unity integration is installed.
+            var assemblySuffix = ",FMODUnity";
+            var FMODUnity_Settings = Type.GetType("FMODUnity.Settings" + assemblySuffix);
+            if (FMODUnity_Settings == null)
+            {
+                EditorUtility.DisplayDialog("Steam Audio",
+                    "The FMOD Studio Unity integration does not seem to be installed to your Unity project. Install " +
+                    "it and try again.",
+                    "OK");
+                return;
+            }
+
+            // Make sure we're using at least FMOD Studio v2.0.
+            var FMODUnity_Settings_Instance = FMODUnity_Settings.GetProperty("Instance");
+            var FMODUnity_Settings_CurrentVersion = FMODUnity_Settings.GetField("CurrentVersion");
+            var fmodSettings = FMODUnity_Settings_Instance.GetValue(null, null);
+            var fmodVersion = (int) FMODUnity_Settings_CurrentVersion.GetValue(fmodSettings);
+            var fmodVersionMajor = (fmodVersion & 0x00ff0000) >> 16;
+            var fmodVersionMinor = (fmodVersion & 0x0000ff00) >> 8;
+            var fmodVersionPatch = (fmodVersion & 0x000000ff);
+            if (fmodVersionMajor < 2)
+            {
+                EditorUtility.DisplayDialog("Steam Audio",
+                    "Steam Audio requires FMOD Studio 2.0 or later.",
+                    "OK");
+                return;
+            }
+
+            var moveRequired = false;
+            var moveSucceeded = false;
+
+            // Look for the FMOD Studio plugin files. The files are in the right place for FMOD Studio 2.0 through 2.1
+            // out of the box, but will need to be copied for 2.2.
+            // 2.0 through 2.1 expect plugin files in Assets/Plugins/FMOD/lib/(platform)
+            // 2.2 expects plugin files in Assets/Plugins/FMOD/platforms/(platform)/lib
+            if (AssetExists("Assets/Plugins/FMOD/lib/win/x86_64/phonon_fmod.dll"))
+            {
+                // Files are in the location corresponding to 2.1 or earlier.
+                if (fmodVersionMinor >= 2)
+                {
+                    // We're using 2.2 or later, so we need to move files.
+                    moveRequired = true;
+
+                    var moves = new Dictionary<string, string>();
+                    moves.Add("Assets/Plugins/FMOD/lib/win/x86/phonon_fmod.dll", "Assets/Plugins/FMOD/platforms/win/lib/x86/phonon_fmod.dll");
+                    moves.Add("Assets/Plugins/FMOD/lib/win/x86_64/phonon_fmod.dll", "Assets/Plugins/FMOD/platforms/win/lib/x86_64/phonon_fmod.dll");
+                    moves.Add("Assets/Plugins/FMOD/lib/linux/x86/libphonon_fmod.so", "Assets/Plugins/FMOD/platforms/linux/lib/x86/libphonon_fmod.so");
+                    moves.Add("Assets/Plugins/FMOD/lib/linux/x86_64/libphonon_fmod.so", "Assets/Plugins/FMOD/platforms/linux/lib/x86_64/libphonon_fmod.so");
+                    moves.Add("Assets/Plugins/FMOD/lib/mac/phonon_fmod.bundle", "Assets/Plugins/FMOD/platforms/mac/lib/phonon_fmod.bundle");
+                    moves.Add("Assets/Plugins/FMOD/lib/android/armeabi-v7a/libphonon_fmod.so", "Assets/Plugins/FMOD/platforms/android/lib/armeabi-v7a/libphonon_fmod.so");
+                    moves.Add("Assets/Plugins/FMOD/lib/android/arm64-v8a/libphonon_fmod.so", "Assets/Plugins/FMOD/platforms/android/lib/arm64-v8a/libphonon_fmod.so");
+                    moves.Add("Assets/Plugins/FMOD/lib/android/x86/libphonon_fmod.so", "Assets/Plugins/FMOD/platforms/android/lib/x86/libphonon_fmod.so");
+
+                    moveSucceeded = MoveAssets(moves);
+                }
+            }
+            else if (AssetExists("Assets/Plugins/FMOD/platforms/win/lib/x86_64/phonon_fmod.dll"))
+            {
+                // Files are in the location corresponding to 2.2 or later.
+                if (fmodVersionMinor <= 1)
+                {
+                    // We're using 2.1 or earlier, so we need to move files.
+                    moveRequired = true;
+
+                    var moves = new Dictionary<string, string>();
+                    moves.Add("Assets/Plugins/FMOD/platforms/win/lib/x86/phonon_fmod.dll", "Assets/Plugins/FMOD/lib/win/x86/phonon_fmod.dll");
+                    moves.Add("Assets/Plugins/FMOD/platforms/win/lib/x86_64/phonon_fmod.dll", "Assets/Plugins/FMOD/lib/win/x86_64/phonon_fmod.dll");
+                    moves.Add("Assets/Plugins/FMOD/platforms/linux/lib/x86/libphonon_fmod.so", "Assets/Plugins/FMOD/lib/linux/x86/libphonon_fmod.so");
+                    moves.Add("Assets/Plugins/FMOD/platforms/linux/lib/x86_64/libphonon_fmod.so", "Assets/Plugins/FMOD/lib/linux/x86_64/libphonon_fmod.so");
+                    moves.Add("Assets/Plugins/FMOD/platforms/mac/lib/phonon_fmod.bundle", "Assets/Plugins/FMOD/lib/mac/phonon_fmod.bundle");
+                    moves.Add("Assets/Plugins/FMOD/platforms/android/lib/armeabi-v7a/libphonon_fmod.so", "Assets/Plugins/FMOD/lib/android/armeabi-v7a/libphonon_fmod.so");
+                    moves.Add("Assets/Plugins/FMOD/platforms/android/lib/arm64-v8a/libphonon_fmod.so", "Assets/Plugins/FMOD/lib/android/arm64-v8a/libphonon_fmod.so");
+                    moves.Add("Assets/Plugins/FMOD/platforms/android/lib/x86/libphonon_fmod.so", "Assets/Plugins/FMOD/lib/android/x86/libphonon_fmod.so");
+
+                    moveSucceeded = MoveAssets(moves);
+                }
+            } 
+            else
+            {
+                EditorUtility.DisplayDialog("Steam Audio",
+                    "Unable to find Steam Audio FMOD Studio plugin files. Try reinstalling the Steam Audio Unity " +
+                    "integration.",
+                    "OK");
+                return;
+            }
+
+            if (!moveRequired)
+            {
+                EditorUtility.DisplayDialog("Steam Audio",
+                    "Steam Audio FMOD Studio plugin files are already in the correct place.",
+                    "OK");
+            }
+            else if (!moveSucceeded)
+            {
+                EditorUtility.DisplayDialog("Steam Audio",
+                    "Failed to copy Steam Audio FMOD Studio plugin files to the correct place. See the console for " +
+                    "details.",
+                    "OK");
+            }
+            else
+            {
+                EditorUtility.DisplayDialog("Steam Audio",
+                    "Steam Audio FMOD Studio plugin files moved to the correct place.",
+                    "OK");
+            }
+        }
+
+        [MenuItem("Steam Audio/Install FMOD Studio Plugin Files", true)]
+        public static bool ValidateInstallFMODStudioPluginFiles()
+        {
+            return (SteamAudioSettings.Singleton.audioEngine == AudioEngineType.FMODStudio);
+        }
+
+        private static bool AssetExists(string assetPath)
+        {
+            return !string.IsNullOrEmpty(AssetDatabase.AssetPathToGUID(assetPath)) &&
+                (File.Exists(Environment.CurrentDirectory + "/" + assetPath) || Directory.Exists(Environment.CurrentDirectory + "/" + assetPath));
+        }
+
+        private static bool EnsureAssetDirectoryExists(string directory)
+        {
+            if (AssetDatabase.IsValidFolder(directory))
+                return true;
+
+            var parent = Path.GetDirectoryName(directory);
+            var baseName = Path.GetFileName(directory);
+
+            if (!EnsureAssetDirectoryExists(parent))
+                return false;
+
+            var result = AssetDatabase.CreateFolder(parent, baseName);
+            if (string.IsNullOrEmpty(result))
+            {
+                Debug.LogErrorFormat("Unable to create asset directory {0} in {1}: {2}", baseName, parent, result);
+                return false;
+            }
+
+            return true;
+        }
+
+        private static bool MoveAssets(Dictionary<string, string> moves)
+        {
+            foreach (var source in moves.Keys)
+            {
+                if (!AssetExists(source))
+                {
+                    Debug.LogErrorFormat("Unable to find plugin file: {0}", source);
+                    return false;
+                }
+
+                var destination = moves[source];
+                var directory = Path.GetDirectoryName(destination);
+
+                if (!EnsureAssetDirectoryExists(directory))
+                {
+                    Debug.LogErrorFormat("Unable to create directory: {0}", directory);
+                    return false;
+                }
+
+                var result = AssetDatabase.MoveAsset(source, destination);
+
+                if (!string.IsNullOrEmpty(result))
+                {
+                    Debug.LogErrorFormat("Unable to move {0} to {1}: {2}", source, destination, result);
+                    return false;
+                }
+
+                Debug.LogFormat("Moved {0} to {1}.", source, destination);
+            }
+
+            return true;
         }
 #endif
 

@@ -66,6 +66,11 @@ namespace SteamAudio
 
         private void Awake()
         {
+            Reinitialize();
+        }
+
+        public void Reinitialize()
+        {
             mSimulator = SteamAudioManager.Simulator;
 
             var settings = SteamAudioManager.GetSimulationSettings(false);

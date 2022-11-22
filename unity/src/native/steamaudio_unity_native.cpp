@@ -22,6 +22,8 @@ std::atomic<bool> gIsSimulationSettingsValid{ false };
 std::atomic<bool> gNewReverbSourceWritten{ false };
 std::atomic<bool> gNewReflectionMixerWritten{ false };
 
+std::shared_ptr<SourceManager> gSourceManager;
+
 
 // --------------------------------------------------------------------------------------------------------------------
 // API Functions
@@ -60,6 +62,8 @@ void UNITY_AUDIODSP_CALLBACK iplUnityInitialize(IPLContext context)
     assert(gContext == nullptr);
 
     gContext = iplContextRetain(context);
+
+    gSourceManager = std::make_shared<SourceManager>();
 }
 
 void UNITY_AUDIODSP_CALLBACK iplUnityTerminate()
@@ -79,6 +83,8 @@ void UNITY_AUDIODSP_CALLBACK iplUnityTerminate()
     iplHRTFRelease(&gHRTF[1]);
 
     iplContextRelease(&gContext);
+
+    gSourceManager = nullptr;
 }
 
 void UNITY_AUDIODSP_CALLBACK iplUnitySetHRTF(IPLHRTF hrtf)
@@ -108,6 +114,22 @@ void UNITY_AUDIODSP_CALLBACK iplUnitySetReverbSource(IPLSource reverbSource)
 
         gNewReverbSourceWritten = true;
     }
+}
+
+IPLint32 UNITY_AUDIODSP_CALLBACK iplUnityAddSource(IPLSource source)
+{
+    if (!gSourceManager)
+        return -1;
+
+    return gSourceManager->addSource(source);
+}
+
+void UNITY_AUDIODSP_CALLBACK iplUnityRemoveSource(IPLint32 handle)
+{
+    if (!gSourceManager)
+        return;
+
+    gSourceManager->removeSource(handle);
 }
 
 
@@ -259,4 +281,82 @@ void setHRTF(IPLHRTF hrtf)
 
         gNewHRTFWritten = true;
     }
+}
+
+
+// --------------------------------------------------------------------------------------------------------------------
+// SourceManager
+// --------------------------------------------------------------------------------------------------------------------
+
+SourceManager::SourceManager()
+    : mNextHandle(0)
+{}
+
+int32_t SourceManager::addSource(IPLSource source)
+{
+    // Retain a reference to this source.
+    auto sourceRetained = iplSourceRetain(source);
+
+    auto handle = -1;
+
+    // First, figure out the handle we want to use.
+    {
+        std::lock_guard<std::mutex> lock(mHandleMutex);
+
+        if (mFreeHandles.empty())
+        {
+            // No free handles, use the next-available unused handle.
+            handle = mNextHandle++;
+        }
+        else
+        {
+            // Use one of the free handles.
+            handle = mFreeHandles.top();
+            mFreeHandles.pop();
+        }
+    }
+
+    assert(handle >= 0);
+
+    // Now store the mapping from the handle to this source.
+    {
+        std::lock_guard<std::mutex> lock(mSourceMutex);
+
+        assert(mSources.find(handle) == mSources.end());
+
+        mSources[handle] = sourceRetained;
+    }
+
+    return handle;
+}
+
+void SourceManager::removeSource(int32_t handle)
+{
+    // Remove the source from the handle-to-source map.
+    {
+        std::lock_guard<std::mutex> lock(mSourceMutex);
+
+        if (mSources.find(handle) != mSources.end())
+        {
+            iplSourceRelease(&mSources[handle]);
+            mSources.erase(handle);
+        }
+    }
+
+    // Mark the handle as free.
+    {
+        std::lock_guard<std::mutex> lock(mHandleMutex);
+
+        mFreeHandles.push(handle);
+    }
+}
+
+IPLSource SourceManager::getSource(int32_t handle)
+{
+    std::lock_guard<std::mutex> lock(mSourceMutex);
+
+    if (mSources.find(handle) != mSources.end())
+        return mSources[handle];
+    else
+        return nullptr;
 }

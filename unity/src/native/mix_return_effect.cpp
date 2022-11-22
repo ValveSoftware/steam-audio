@@ -26,7 +26,6 @@ struct State
     IPLAudioBuffer inBuffer;
     IPLAudioBuffer outBuffer;
 
-    IPLReflectionMixer reflectionMixer;
     IPLAmbisonicsDecodeEffect ambisonicsEffect;
 };
 
@@ -79,25 +78,21 @@ InitFlags lazyInit(UnityAudioEffectState* state,
 
     auto status = IPL_STATUS_SUCCESS;
 
-    if (gIsSimulationSettingsValid)
+    if (gIsSimulationSettingsValid && !gNewReflectionMixerWritten)
     {
         status = IPL_STATUS_SUCCESS;
 
-        if (!effect->reflectionMixer)
+        if (!gReflectionMixer[1])
         {
+            iplReflectionMixerRelease(&gReflectionMixer[1]);
+
             IPLReflectionEffectSettings effectSettings;
             effectSettings.type = gSimulationSettings.reflectionType;
             effectSettings.numChannels = numChannelsForOrder(gSimulationSettings.maxOrder);
 
-            status = iplReflectionMixerCreate(gContext, &audioSettings, &effectSettings, &effect->reflectionMixer);
+            status = iplReflectionMixerCreate(gContext, &audioSettings, &effectSettings, &gReflectionMixer[1]);
 
-            if (!gNewReflectionMixerWritten)
-            {
-                iplReflectionMixerRelease(&gReflectionMixer[1]);
-                gReflectionMixer[1] = iplReflectionMixerRetain(effect->reflectionMixer);
-
-                gNewReflectionMixerWritten = true;
-            }
+            gNewReflectionMixerWritten = true;
         }
 
         if (status == IPL_STATUS_SUCCESS)
@@ -127,13 +122,31 @@ InitFlags lazyInit(UnityAudioEffectState* state,
         auto numAmbisonicChannels = numChannelsForOrder(gSimulationSettings.maxOrder);
 
         if (!effect->reflectionsBuffer.data)
+        {
             iplAudioBufferAllocate(gContext, numAmbisonicChannels, audioSettings.frameSize, &effect->reflectionsBuffer);
+            for (auto i = 0; i < numAmbisonicChannels; ++i)
+            {
+                memset(effect->reflectionsBuffer.data[i], 0, audioSettings.frameSize * sizeof(float));
+            }
+        }
 
         if (!effect->inBuffer.data)
+        {
             iplAudioBufferAllocate(gContext, numChannelsIn, audioSettings.frameSize, &effect->inBuffer);
+            for (auto i = 0; i < numChannelsIn; ++i)
+            {
+                memset(effect->reflectionsBuffer.data[i], 0, audioSettings.frameSize * sizeof(float));
+            }
+        }
 
         if (!effect->outBuffer.data)
+        {
             iplAudioBufferAllocate(gContext, numChannelsOut, audioSettings.frameSize, &effect->outBuffer);
+            for (auto i = 0; i < numChannelsOut; ++i)
+            {
+                memset(effect->reflectionsBuffer.data[i], 0, audioSettings.frameSize * sizeof(float));
+            }
+        }
 
         initFlags = static_cast<InitFlags>(initFlags | INIT_AUDIOBUFFERS);
     }
@@ -166,7 +179,6 @@ UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK release(UnityAudioEffectState* sta
     iplAudioBufferFree(gContext, &effect->inBuffer);
     iplAudioBufferFree(gContext, &effect->outBuffer);
 
-    iplReflectionMixerRelease(&effect->reflectionMixer);
     iplAmbisonicsDecodeEffectRelease(&effect->ambisonicsEffect);
 
     delete state->effectdata;
@@ -261,10 +273,11 @@ UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK process(UnityAudioEffectState* sta
     auto listenerCoordinates = calcListenerCoordinates(L);
 
     IPLReflectionEffectParams reflectionParams;
+    reflectionParams.type = gSimulationSettings.reflectionType;
     reflectionParams.numChannels = numChannelsForOrder(gSimulationSettings.maxOrder);
     reflectionParams.tanDevice = gSimulationSettings.tanDevice;
 
-    iplReflectionMixerApply(effect->reflectionMixer, &reflectionParams, &effect->reflectionsBuffer);
+    iplReflectionMixerApply(gReflectionMixer[0], &reflectionParams, &effect->reflectionsBuffer);
 
     IPLAmbisonicsDecodeEffectParams ambisonicsParams;
     ambisonicsParams.order = gSimulationSettings.maxOrder;

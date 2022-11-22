@@ -29,3 +29,10 @@ Export Dynamic Objects In All Scenes In Build
 
 Export All Dynamic Objects In Project
     Exports every dynamic object in every scene or prefab found in your project’s ``Assets`` directory.
+
+Install FMOD Studio Plugin Files
+    Copies the Steam Audio FMOD Studio plugin files to appropriate directory based on the version of FMOD Studio being used by your project.
+
+    FMOD Studio versions 2.0 through 2.1 expect plugin files to be under ``Assets/Plugins/FMOD/lib/(platform)``, whereas FMOD Studio 2.2 and later expect plugin files to be under ``Assets/Plugins/FMOD/platforms/(platform)/lib``. Use this menu command to move the files to the appropriate place.
+
+    This is not necessary unless you are using FMOD Studio as your audio engine.

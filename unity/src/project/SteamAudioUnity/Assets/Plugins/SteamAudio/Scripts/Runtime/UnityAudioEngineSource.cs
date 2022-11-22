@@ -11,17 +11,29 @@ namespace SteamAudio
     public sealed class UnityAudioEngineSource : AudioEngineSource
     {
         AudioSource mAudioSource = null;
-        byte[] mSimulationOutputsBuffer = new byte[sizeof(Int64)];
+        SteamAudioSource mSteamAudioSource = null;
+        int mHandle = -1;
 
         public override void Initialize(GameObject gameObject)
         {
             mAudioSource = gameObject.GetComponent<AudioSource>();
+
+            mSteamAudioSource = gameObject.GetComponent<SteamAudioSource>();
+            if (mSteamAudioSource)
+            {
+                mHandle = API.iplUnityAddSource(mSteamAudioSource.GetSource().Get());
+            }
         }
 
         public override void Destroy()
         {
             var index = 28;
-            SetSpatializerIntPtr(IntPtr.Zero, ref index);
+            mAudioSource.SetSpatializerFloat(index, -1);
+
+            if (mSteamAudioSource)
+            {
+                API.iplUnityRemoveSource(mHandle);
+            }
         }
 
         public override void UpdateParameters(SteamAudioSource source)
@@ -58,45 +70,10 @@ namespace SteamAudio
             mAudioSource.SetSpatializerFloat(index++, source.reflectionsMixLevel);
             mAudioSource.SetSpatializerFloat(index++, (source.applyHRTFToPathing) ? 1.0f : 0.0f);
             mAudioSource.SetSpatializerFloat(index++, source.pathingMixLevel);
-            SetSpatializerIntPtr(source.GetSource().Get(), ref index);
+            index++; // Skip 2 deprecated params.
+            index++;
             mAudioSource.SetSpatializerFloat(index++, (source.directBinaural) ? 1.0f : 0.0f);
-        }
-
-        void SetSpatializerIntPtr(IntPtr ptr, ref int index)
-        {
-            if (IntPtr.Size == sizeof(Int64))
-            {
-                var ptrValue = ptr.ToInt64();
-
-                mSimulationOutputsBuffer[0] = (byte) (ptrValue >> 0);
-                mSimulationOutputsBuffer[1] = (byte) (ptrValue >> 8);
-                mSimulationOutputsBuffer[2] = (byte) (ptrValue >> 16);
-                mSimulationOutputsBuffer[3] = (byte) (ptrValue >> 24);
-                mSimulationOutputsBuffer[4] = (byte) (ptrValue >> 32);
-                mSimulationOutputsBuffer[5] = (byte) (ptrValue >> 40);
-                mSimulationOutputsBuffer[6] = (byte) (ptrValue >> 48);
-                mSimulationOutputsBuffer[7] = (byte) (ptrValue >> 56);
-
-                var valueLow = BitConverter.ToSingle(mSimulationOutputsBuffer, 0);
-                var valueHigh = BitConverter.ToSingle(mSimulationOutputsBuffer, 4);
-
-                mAudioSource.SetSpatializerFloat(index++, valueLow);
-                mAudioSource.SetSpatializerFloat(index++, valueHigh);
-            }
-            else
-            {
-                var ptrValue = ptr.ToInt32();
-
-                mSimulationOutputsBuffer[0] = (byte) (ptrValue >> 0);
-                mSimulationOutputsBuffer[1] = (byte) (ptrValue >> 8);
-                mSimulationOutputsBuffer[2] = (byte) (ptrValue >> 16);
-                mSimulationOutputsBuffer[3] = (byte) (ptrValue >> 24);
-
-                var value = BitConverter.ToSingle(mSimulationOutputsBuffer, 0);
-
-                mAudioSource.SetSpatializerFloat(index++, value);
-                mAudioSource.SetSpatializerFloat(index++, 0.0f);
-            }
+            mAudioSource.SetSpatializerFloat(index++, mHandle);
         }
     }
 }
