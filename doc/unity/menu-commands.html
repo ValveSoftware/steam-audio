@@ -69,7 +69,7 @@
             
             
               <div class="version">
-                4.1.1
+                4.1.2
               </div>
             
           
@@ -176,7 +176,7 @@
   <div class="section" id="menu-commands">
 <h1>Menu Commands<a class="headerlink" href="#menu-commands" title="Permalink to this headline">¶</a></h1>
 <p>All of these commands are available under the <strong>Steam Audio</strong> menu in Unity’s main menu.</p>
-<dl class="simple">
+<dl>
 <dt>Settings</dt><dd><p>Opens the Settings asset in the Inspector.</p>
 </dd>
 <dt>Export Active Scene</dt><dd><p>Exports the static geometry of the currently open and active scene to an asset file. When doing this for the first time, you will be prompted for a file name and directory under which to save the asset.</p>
@@ -194,6 +194,10 @@
 <dt>Export Dynamic Objects In All Scenes In Build</dt><dd><p>Exports every dynamic object in all scenes specified in your build settings (<strong>File</strong> &gt; <strong>Build Settings</strong> in the main menu).</p>
 </dd>
 <dt>Export All Dynamic Objects In Project</dt><dd><p>Exports every dynamic object in every scene or prefab found in your project’s <code class="docutils literal notranslate"><span class="pre">Assets</span></code> directory.</p>
+</dd>
+<dt>Install FMOD Studio Plugin Files</dt><dd><p>Copies the Steam Audio FMOD Studio plugin files to appropriate directory based on the version of FMOD Studio being used by your project.</p>
+<p>FMOD Studio versions 2.0 through 2.1 expect plugin files to be under <code class="docutils literal notranslate"><span class="pre">Assets/Plugins/FMOD/lib/(platform)</span></code>, whereas FMOD Studio 2.2 and later expect plugin files to be under <code class="docutils literal notranslate"><span class="pre">Assets/Plugins/FMOD/platforms/(platform)/lib</span></code>. Use this menu command to move the files to the appropriate place.</p>
+<p>This is not necessary unless you are using FMOD Studio as your audio engine.</p>
 </dd>
 </dl>
 </div>

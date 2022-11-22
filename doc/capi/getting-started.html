@@ -70,7 +70,7 @@
             
             
               <div class="version">
-                4.1.1
+                4.1.2
               </div>
             
           
@@ -411,6 +411,7 @@
 <span class="n">effectParams</span><span class="p">.</span><span class="n">interpolation</span> <span class="o">=</span> <span class="n">IPL_HRTFINTERPOLATION_NEAREST</span><span class="p">;</span>
 <span class="n">effectParams</span><span class="p">.</span><span class="n">spatialBlend</span> <span class="o">=</span> <span class="mf">1.0f</span><span class="p">;</span>
 <span class="n">effectParams</span><span class="p">.</span><span class="n">hrtf</span> <span class="o">=</span> <span class="n">hrtf</span><span class="p">;</span>
+<span class="n">effectParams</span><span class="p">.</span><span class="n">peakDelays</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
 
 <span class="n">iplBinauralEffectApply</span><span class="p">(</span><span class="n">effect</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">effectParams</span><span class="p">,</span> <span class="n">inBuffer</span><span class="p">,</span> <span class="n">outBuffer</span><span class="p">);</span>
 </pre></div>
@@ -522,6 +523,7 @@
         <span class="n">params</span><span class="p">.</span><span class="n">interpolation</span> <span class="o">=</span> <span class="n">IPL_HRTFINTERPOLATION_NEAREST</span><span class="p">;</span>
         <span class="n">params</span><span class="p">.</span><span class="n">spatialBlend</span> <span class="o">=</span> <span class="mf">1.0f</span><span class="p">;</span>
         <span class="n">params</span><span class="p">.</span><span class="n">hrtf</span> <span class="o">=</span> <span class="n">hrtf</span><span class="p">;</span>
+        <span class="n">params</span><span class="p">.</span><span class="n">peakDelays</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
 
         <span class="n">iplBinauralEffectApply</span><span class="p">(</span><span class="n">effect</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">params</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">inBuffer</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">outBuffer</span><span class="p">);</span>
 
