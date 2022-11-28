@@ -383,6 +383,14 @@ namespace SteamAudio
                 {
                     mAudioEngineState.Initialize(mContext.Get(), mHRTFs[0].Get(), simulationSettings);
                 }
+
+#if UNITY_EDITOR
+                // If the developer has disabled scene reload, SceneManager.sceneLoaded won't fire during initial load
+                if (EditorSettings.enterPlayModeOptions.HasFlag(EnterPlayModeOptions.DisableSceneReload))
+                {
+                    OnSceneLoaded(SceneManager.GetActiveScene(), LoadSceneMode.Single);
+                }
+#endif
             }
         }
 
@@ -613,6 +621,9 @@ namespace SteamAudio
                     sSingleton.mHRTFs[i] = null;
                 }
             }
+
+            SceneManager.sceneLoaded -= sSingleton.OnSceneLoaded;
+            SceneManager.sceneUnloaded -= sSingleton.OnSceneUnloaded;
 
             sSingleton.mContext.Release();
             sSingleton.mContext = null;
