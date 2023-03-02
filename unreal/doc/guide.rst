@@ -118,7 +118,7 @@ You can specify acoustic material properties for any actor that has a Steam Audi
 
 .. image:: media/geometry.png
 
-Steam Audio contains a small library of built-in materials, but you can create your own and reuse them across your project. To create a new material:
+Steam Audio contains a small library of built-in materials (**Plugins/SteamAudio/Content/**), but you can create your own and reuse them across your project. To create a new material:
 
 1. In the Content Browser, navigate to the directory where you want to create your material.
 2. Click **Add/Import** > **Sounds** > **Steam Audio** > **Steam Audio Material**.

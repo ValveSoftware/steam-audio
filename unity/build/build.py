@@ -201,7 +201,7 @@ def find_tool(name, dir_regex, min_version):
 
     latest_version_path = None
 
-    for path in matches.keys():
+    for path in list(matches.keys()):
         match = matches[path]
 
         version = []
@@ -251,7 +251,10 @@ os.chdir(build_subdir(args))
 
 cmake_path = find_tool('cmake', r'cmake-(\d+)\.(\d+)\.?(\d+)?', [3, 17])
 if cmake_path is not None:
-    os.environ['PATH'] = os.path.normpath(os.path.join(cmake_path, 'bin')) + os.pathsep + os.environ['PATH']
+    if host_system == 'osx':
+        os.environ['PATH'] = os.path.normpath(os.path.join(cmake_path, 'CMake.app', 'Contents', 'bin')) + os.pathsep + os.environ['PATH']
+    else:
+        os.environ['PATH'] = os.path.normpath(os.path.join(cmake_path, 'bin')) + os.pathsep + os.environ['PATH']
 
 if args.operation == 'generate':
     cmake_generate(args)

@@ -3,7 +3,7 @@ Steam Audio Material
 
 A collection of properties that define how an object reflects, absorbs, and transmits sound. You can create a separate Material asset for each surface type in your project, then reference it (using the **Material** property of the Steam Audio Geometry component) from all actors that have the corresponding material type.
 
-Steam Audio provides a small library of built-in materials to get you started.
+Steam Audio provides a small library of built-in materials to get you started (see **Plugins/SteamAudio/Content/**)
 
 If the **Material** property of a Steam Audio Geometry component is set to **None**, it will use the project-wide default material, which is specified in the Settings.
 

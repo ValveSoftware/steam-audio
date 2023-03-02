@@ -8,7 +8,7 @@
 
 #define STEAMAUDIO_VERSION_MAJOR 4
 #define STEAMAUDIO_VERSION_MINOR 1
-#define STEAMAUDIO_VERSION_PATCH 2
+#define STEAMAUDIO_VERSION_PATCH 3
 #define STEAMAUDIO_VERSION       (((uint32_t)(STEAMAUDIO_VERSION_MAJOR) << 16) | \
                                   ((uint32_t)(STEAMAUDIO_VERSION_MINOR) << 8) |  \
                                   ((uint32_t)(STEAMAUDIO_VERSION_PATCH)))

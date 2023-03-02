@@ -8,6 +8,10 @@
 
 #include <phonon.h>
 
+#include "Runtime/Launch/Resources/Version.h"
+#if ((ENGINE_MAJOR_VERSION == 5 && ENGINE_MINOR_VERSION >= 0) || (ENGINE_MAJOR_VERSION > 5))
+#include "CoreFwd.h"
+#endif
 #include "CoreMinimal.h"
 #include "IAudioExtensionPlugin.h"
 
@@ -71,7 +75,7 @@ public:
 
     /** Returns the module singleton object. */
     static FSteamAudioModule& Get() { return FModuleManager::GetModuleChecked<FSteamAudioModule>("SteamAudio"); }
-    
+
     /** Returns the manager singleton object, which is in turn owned by the module singleton. */
     static FSteamAudioManager& GetManager() { return *Get().Manager; }
 
@@ -87,16 +91,16 @@ public:
 private:
     /** Handle to the Steam Audio dynamic library (phonon.dll or similar). */
     void* Library;
-    
+
     /** Manager object that maintains global Steam Audio state. */
     TSharedPtr<FSteamAudioManager> Manager;
 
     /** Audio devices being used for rendering. */
     TArray<FAudioDevice*> AudioDevices;
-    
+
     /** Factory object used to instantiate the spatialization plugin. */
     TUniquePtr<FSteamAudioSpatializationPluginFactory> SpatializationPluginFactory;
-    
+
     /** Factory object used to instantiate the occlusion plugin. */
     TUniquePtr<FSteamAudioOcclusionPluginFactory> OcclusionPluginFactory;
 

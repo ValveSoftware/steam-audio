@@ -132,7 +132,11 @@ void FSteamAudioEditorModule::StartupModule()
         TSharedPtr<FUICommandList> Actions = MakeShared<FUICommandList>();
 
         TSharedPtr<FExtender> Extender = MakeShared<FExtender>();
+#if ((ENGINE_MAJOR_VERSION == 5 && ENGINE_MINOR_VERSION >= 0) || (ENGINE_MAJOR_VERSION > 5))
+        Extender->AddToolBarExtension("Content", EExtensionHook::After, Actions, FToolBarExtensionDelegate::CreateLambda([&](FToolBarBuilder& Builder)
+#else
         Extender->AddToolBarExtension("Misc", EExtensionHook::After, Actions, FToolBarExtensionDelegate::CreateLambda([&](FToolBarBuilder& Builder)
+#endif
         {
             Builder.AddComboButton(
                 FUIAction(),

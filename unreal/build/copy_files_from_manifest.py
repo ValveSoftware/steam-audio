@@ -28,31 +28,31 @@ dstRoot = os.path.normpath(args.dstroot)
 
 dom = xml.dom.minidom.parse(args.manifest)
 if dom.documentElement.tagName != 'BuildManifest':
-    print('Invalid manifest file: ', args.manifest)
+    print('Invalid manifest file: ' + args.manifest)
     exit(1)
 
 buildProductsElements = dom.documentElement.getElementsByTagName('BuildProducts')
 if buildProductsElements is None or len(buildProductsElements) <= 0:
-    print('Invalid manifest file: ', args.manifest)
+    print('Invalid manifest file: ' + args.manifest)
     exit(1)
 
 buildProducts = buildProductsElements[0]
 
 fileNameElements = buildProducts.getElementsByTagName('string')
 if fileNameElements is None or len(fileNameElements) <= 0:
-    print('Invalid manifest file: ', args.manifest)
+    print('Invalid manifest file: ' + args.manifest)
     exit(1)
 
 for fileNameNode in fileNameElements:
     sourceFileName = fileNameNode.childNodes[0].data
     if not sourceFileName.startswith(srcRoot):
-        print('WARNING: Build product not in srcroot, skipping: ', sourceFileName)
+        print('WARNING: Build product not in srcroot, skipping: ' + sourceFileName)
         continue
 
     relativeFileName = RemovePrefix(sourceFileName, srcRoot).lstrip('/\\')
 
     destFileName = os.path.join(dstRoot, relativeFileName)
-    print '-- Installing from Unreal manifest:' + destFileName
+    print('-- Installing from Unreal manifest:' + destFileName)
     try:
         os.makedirs(os.path.dirname(destFileName))
     except:

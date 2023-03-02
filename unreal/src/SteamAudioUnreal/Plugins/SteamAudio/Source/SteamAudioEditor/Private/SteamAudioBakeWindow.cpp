@@ -6,6 +6,7 @@
 #include "ContentBrowserModule.h"
 #include "DetailLayoutBuilder.h"
 #include "Editor.h"
+#include "EditorStyleSet.h"
 #include "EngineUtils.h"
 #include "IContentBrowserSingleton.h"
 #include "ISettingsModule.h"
@@ -17,6 +18,9 @@
 #include "Editor/UnrealEdEngine.h"
 #include "Interfaces/IPluginManager.h"
 #include "Kismet/GameplayStatics.h"
+#if ((ENGINE_MAJOR_VERSION > 5) || (ENGINE_MAJOR_VERSION == 5 && ENGINE_MINOR_VERSION >= 1))
+#include "Styling/AppStyle.h"
+#endif
 #include "Styling/SlateStyle.h"
 #include "Styling/SlateStyleRegistry.h"
 #include "SteamAudioBakedListenerComponent.h"
@@ -86,7 +90,11 @@ TSharedRef<SDockTab> FBakeWindow::SpawnTab(const FSpawnTabArgs& SpawnTabArgs)
             + SVerticalBox::Slot()
         [
             SNew(SBorder)
+#if ((ENGINE_MAJOR_VERSION == 5 && ENGINE_MINOR_VERSION >= 1) || (ENGINE_MAJOR_VERSION > 5))
+            .BorderImage(FAppStyle::GetBrush("ToolPanel.GroupBorder"))
+#else
             .BorderImage(FEditorStyle::GetBrush("ToolPanel.GroupBorder"))
+#endif
         [
             ListView.ToSharedRef()
         ]
@@ -120,7 +128,7 @@ TSharedRef<ITableRow> FBakeWindow::OnGenerateRow(TSharedPtr<FBakeWindowRow> Item
     FString Type;
     switch (Item->Type)
     {
-    case EBakeTaskType::STATIC_SOURCE_REFLECTIONS: 
+    case EBakeTaskType::STATIC_SOURCE_REFLECTIONS:
         Type = "Static Source";
         break;
     case EBakeTaskType::STATIC_LISTENER_REFLECTIONS:

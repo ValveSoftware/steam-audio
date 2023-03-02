@@ -4,6 +4,9 @@
 
 #include "SteamAudioSerializedObject.h"
 #include "AssetRegistry/AssetRegistryModule.h"
+#if ((ENGINE_MAJOR_VERSION == 5 && ENGINE_MINOR_VERSION >= 0) || (ENGINE_MAJOR_VERSION > 5))
+#include "UObject/SavePackage.h"
+#endif
 #include "UObject/UObjectGlobals.h"
 
 // ---------------------------------------------------------------------------------------------------------------------
@@ -40,8 +43,15 @@ USteamAudioSerializedObject* USteamAudioSerializedObject::SerializeObjectToPacka
     Package->MarkPackageDirty();
     FAssetRegistryModule::AssetCreated(Object);
     FString PackageFileName = FPackageName::LongPackageNameToFilename(PackageName, FPackageName::GetAssetPackageExtension());
+#if ((ENGINE_MAJOR_VERSION == 5 && ENGINE_MINOR_VERSION >= 0) || (ENGINE_MAJOR_VERSION > 5))
+    FSavePackageArgs SavePackageArgs;
+    SavePackageArgs.SaveFlags = RF_Public | RF_Standalone;
+    if (!UPackage::SavePackage(Package, Object, *PackageFileName, SavePackageArgs))
+        return nullptr;
+#else
     if (!UPackage::SavePackage(Package, Object, RF_Public | RF_Standalone, *PackageFileName))
         return nullptr;
+#endif
 
     return Object;
 }

@@ -104,7 +104,15 @@ static bool ExportStaticMeshComponent(UStaticMeshComponent* StaticMeshComponent,
     const FPositionVertexBuffer& VertexBuffer = LODModel.VertexBuffers.PositionVertexBuffer;
     for (int i = 0; i < LODModel.GetNumVertices(); ++i)
     {
+#if ((ENGINE_MAJOR_VERSION == 5 && ENGINE_MINOR_VERSION >= 0) || (ENGINE_MAJOR_VERSION > 5))
+        FVector Vertex{};
+        Vertex.X = VertexBuffer.VertexPosition(i).X;
+        Vertex.Y = VertexBuffer.VertexPosition(i).Y;
+        Vertex.Z = VertexBuffer.VertexPosition(i).Z;
+#else
         FVector Vertex = VertexBuffer.VertexPosition(i);
+#endif
+
         if (bRelativePositions)
         {
             Vertex = StaticMeshComponent->GetComponentTransform().TransformPosition(Vertex);
@@ -151,7 +159,7 @@ static bool ExportStaticMeshComponent(UStaticMeshComponent* StaticMeshComponent,
 
 /**
  * Exports a single Static Mesh actor.
- * 
+ *
  * todo: what if there is a tree of static mesh components?
  * todo: what if static mesh components are attached to arbitrary actors (instead of static mesh actors)?
  */
@@ -169,13 +177,13 @@ static bool ExportStaticMeshComponentsForActor(AStaticMeshActor* StaticMeshActor
     if (!StaticMesh || !StaticMesh->HasValidRenderData())
         return false;
 
-    return ExportStaticMeshComponent(StaticMeshComponent, Vertices, Triangles, MaterialIndices, Materials, 
+    return ExportStaticMeshComponent(StaticMeshComponent, Vertices, Triangles, MaterialIndices, Materials,
         MaterialIndexForAsset, bRelativePositions);
 }
 
 /**
  * Exports a single Landscape (terrain) actor.
- * 
+ *
  * todo: non-default materials for terrain
  */
 static bool ExportLandscapeActor(ALandscape* LandscapeActor, TArray<IPLVector3>& Vertices,
@@ -240,8 +248,8 @@ static bool ExportLandscapeActor(ALandscape* LandscapeActor, TArray<IPLVector3>&
 
 /**
  * Exports every actor in the given list of actors.
- * 
- * todo: is it safe to assume that only static mesh actors and landscape actors will be exported? what about random 
+ *
+ * todo: is it safe to assume that only static mesh actors and landscape actors will be exported? what about random
  *       actors with static mesh components?
  */
 static bool ExportActors(const TArray<AActor*>& Actors, TArray<IPLVector3>& Vertices,
@@ -273,7 +281,7 @@ static bool ExportActors(const TArray<AActor*>& Actors, TArray<IPLVector3>& Vert
 
 /**
  * Exports all BSP geometry in the given world.
- * 
+ *
  * todo: does not understand sublevels?
  */
 static bool ExportBSPGeometry(UWorld* World, ULevel* Level, TArray<IPLVector3>& Vertices,
@@ -288,10 +296,22 @@ static bool ExportBSPGeometry(UWorld* World, ULevel* Level, TArray<IPLVector3>& 
     int InitialNumTriangles = Triangles.Num();
 
     // Gather and convert all world vertices to Steam Audio coords
+#if ((ENGINE_MAJOR_VERSION == 5 && ENGINE_MINOR_VERSION >= 0) || (ENGINE_MAJOR_VERSION > 5))
+    for (const FVector3f& WorldVertexf : World->GetModel()->Points)
+    {
+        FVector WorldVertex{};
+        WorldVertex.X = WorldVertexf.X;
+        WorldVertex.Y = WorldVertexf.Y;
+        WorldVertex.Z = WorldVertexf.Z;
+
+        Vertices.Add(SteamAudio::ConvertVector(WorldVertex));
+    }
+#else
     for (const FVector& WorldVertex : World->GetModel()->Points)
     {
         Vertices.Add(SteamAudio::ConvertVector(WorldVertex));
     }
+#endif
 
     // Gather vertex indices for all faces ("nodes" are faces)
     for (const FBspNode& WorldNode : World->GetModel()->Nodes)
@@ -581,7 +601,7 @@ bool ExportStaticGeometryForLevel(UWorld* World, ULevel* Level, FString FileName
 
         if (bExportOBJ)
         {
-            // We're exporting to a .obj file, so just treat the provided file name as the name of the actual on-disk 
+            // We're exporting to a .obj file, so just treat the provided file name as the name of the actual on-disk
             // file we want to save to.
             iplStaticMeshAdd(StaticMesh, Scene);
             iplSceneCommit(Scene);
@@ -735,7 +755,7 @@ bool ExportDynamicObject(USteamAudioDynamicObjectComponent* DynamicObject, FStri
 
         if (bExportOBJ)
         {
-            // We're exporting to a .obj file, so just treat the provided file name as the name of the actual on-disk 
+            // We're exporting to a .obj file, so just treat the provided file name as the name of the actual on-disk
             // file we want to save to.
             iplStaticMeshAdd(StaticMesh, Scene);
             iplSceneCommit(Scene);

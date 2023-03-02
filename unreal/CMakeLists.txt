@@ -3,7 +3,7 @@
 
 cmake_minimum_required(VERSION 3.17)
 
-project(Phonon VERSION 4.1.2)
+project(Phonon VERSION 4.1.3)
 
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_MODULE_PATH "${CMAKE_HOME_DIRECTORY}/build")
@@ -52,6 +52,9 @@ endif()
 
 # Whether to compile a static or dynamic library
 # option(BUILD_SHARED_LIBS "Build shared libraries instead of static." ON)
+
+# Options for Unreal Engine version
+option(STEAMAUDIOUNREAL_TARGET_UE4 "Compile using target names for Unreal Engine 4.x." ON)
 
 # Cross-compiling options
 option(STEAMAUDIOUNREAL_CROSSCOMPILE_WIN32 "Cross-compile for Win32 on Win64." OFF)

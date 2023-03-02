@@ -14,6 +14,14 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/SteamAudioUnreal/Plugins/SteamAudioFM
 
 set(UBT_ARGS "-iwyu -noubtmakefiles -nohotreload")
 
+if (STEAMAUDIOUNREAL_TARGET_UE4)
+    set(UE_TARGET_GAME UE4Game)
+    set(UE_TARGET_EDITOR UE4Editor)
+else()
+    set(UE_TARGET_GAME UnrealGame)
+    set(UE_TARGET_EDITOR UnrealEditor)
+endif()
+
 file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/HostProject.uproject "{ \"FileVersion\": 3, \"Plugins\": [ { \"Name\": \"SteamAudio\", \"Enabled\": true } ] }")
 
 add_custom_target(phonon_unreal_setup
@@ -27,34 +35,34 @@ add_custom_target(phonon_unreal_setup
 )
 
 add_custom_target(phonon_unreal_win32
-    COMMAND     ${Unreal_EXECUTABLE} UE4Game Win32 Development -project=${CMAKE_CURRENT_BINARY_DIR}/HostProject/HostProject.uproject -plugin=${CMAKE_CURRENT_BINARY_DIR}/HostProject/Plugins/SteamAudio/SteamAudio.uplugin -manifest=${CMAKE_CURRENT_BINARY_DIR}/Manifest-SteamAudio-UE4Game-Win32-Development.xml ${UBT_ARGS}
-    COMMAND     ${Unreal_EXECUTABLE} UE4Game Win32 Shipping -project=${CMAKE_CURRENT_BINARY_DIR}/HostProject/HostProject.uproject -plugin=${CMAKE_CURRENT_BINARY_DIR}/HostProject/Plugins/SteamAudio/SteamAudio.uplugin -manifest=${CMAKE_CURRENT_BINARY_DIR}/Manifest-SteamAudio-UE4Game-Win32-Shipping.xml ${UBT_ARGS}
+    COMMAND     ${Unreal_EXECUTABLE} ${UE_TARGET_GAME} Win32 Development -project=${CMAKE_CURRENT_BINARY_DIR}/HostProject/HostProject.uproject -plugin=${CMAKE_CURRENT_BINARY_DIR}/HostProject/Plugins/SteamAudio/SteamAudio.uplugin -manifest=${CMAKE_CURRENT_BINARY_DIR}/Manifest-SteamAudio-${UE_TARGET_GAME}-Win32-Development.xml ${UBT_ARGS}
+    COMMAND     ${Unreal_EXECUTABLE} ${UE_TARGET_GAME} Win32 Shipping -project=${CMAKE_CURRENT_BINARY_DIR}/HostProject/HostProject.uproject -plugin=${CMAKE_CURRENT_BINARY_DIR}/HostProject/Plugins/SteamAudio/SteamAudio.uplugin -manifest=${CMAKE_CURRENT_BINARY_DIR}/Manifest-SteamAudio-${UE_TARGET_GAME}-Win32-Shipping.xml ${UBT_ARGS}
     VERBATIM
 )
 
 add_custom_target(phonon_unreal_win64
-    COMMAND     ${Unreal_EXECUTABLE} UE4Editor Win64 Development -project=${CMAKE_CURRENT_BINARY_DIR}/HostProject/HostProject.uproject -plugin=${CMAKE_CURRENT_BINARY_DIR}/HostProject/Plugins/SteamAudio/SteamAudio.uplugin -manifest=${CMAKE_CURRENT_BINARY_DIR}/Manifest-SteamAudio-UE4Editor-Win64-Development.xml ${UBT_ARGS}
-    COMMAND     ${Unreal_EXECUTABLE} UE4Game Win64 Development -project=${CMAKE_CURRENT_BINARY_DIR}/HostProject/HostProject.uproject -plugin=${CMAKE_CURRENT_BINARY_DIR}/HostProject/Plugins/SteamAudio/SteamAudio.uplugin -manifest=${CMAKE_CURRENT_BINARY_DIR}/Manifest-SteamAudio-UE4Game-Win64-Development.xml ${UBT_ARGS}
-    COMMAND     ${Unreal_EXECUTABLE} UE4Game Win64 Shipping -project=${CMAKE_CURRENT_BINARY_DIR}/HostProject/HostProject.uproject -plugin=${CMAKE_CURRENT_BINARY_DIR}/HostProject/Plugins/SteamAudio/SteamAudio.uplugin -manifest=${CMAKE_CURRENT_BINARY_DIR}/Manifest-SteamAudio-UE4Game-Win64-Shipping.xml ${UBT_ARGS}
+    COMMAND     ${Unreal_EXECUTABLE} ${UE_TARGET_EDITOR} Win64 Development -project=${CMAKE_CURRENT_BINARY_DIR}/HostProject/HostProject.uproject -plugin=${CMAKE_CURRENT_BINARY_DIR}/HostProject/Plugins/SteamAudio/SteamAudio.uplugin -manifest=${CMAKE_CURRENT_BINARY_DIR}/Manifest-SteamAudio-${UE_TARGET_EDITOR}-Win64-Development.xml ${UBT_ARGS}
+    COMMAND     ${Unreal_EXECUTABLE} ${UE_TARGET_GAME} Win64 Development -project=${CMAKE_CURRENT_BINARY_DIR}/HostProject/HostProject.uproject -plugin=${CMAKE_CURRENT_BINARY_DIR}/HostProject/Plugins/SteamAudio/SteamAudio.uplugin -manifest=${CMAKE_CURRENT_BINARY_DIR}/Manifest-SteamAudio-${UE_TARGET_GAME}-Win64-Development.xml ${UBT_ARGS}
+    COMMAND     ${Unreal_EXECUTABLE} ${UE_TARGET_GAME} Win64 Shipping -project=${CMAKE_CURRENT_BINARY_DIR}/HostProject/HostProject.uproject -plugin=${CMAKE_CURRENT_BINARY_DIR}/HostProject/Plugins/SteamAudio/SteamAudio.uplugin -manifest=${CMAKE_CURRENT_BINARY_DIR}/Manifest-SteamAudio-${UE_TARGET_GAME}-Win64-Shipping.xml ${UBT_ARGS}
     VERBATIM
 )
 
 add_custom_target(phonon_unreal_linux
-    COMMAND     ${Unreal_EXECUTABLE} UE4Game Linux Development -project=${CMAKE_CURRENT_BINARY_DIR}/HostProject/HostProject.uproject -plugin=${CMAKE_CURRENT_BINARY_DIR}/HostProject/Plugins/SteamAudio/SteamAudio.uplugin -manifest=${CMAKE_CURRENT_BINARY_DIR}/Manifest-SteamAudio-UE4Game-Linux-Development.xml ${UBT_ARGS}
-    COMMAND     ${Unreal_EXECUTABLE} UE4Game Linux Shipping -project=${CMAKE_CURRENT_BINARY_DIR}/HostProject/HostProject.uproject -plugin=${CMAKE_CURRENT_BINARY_DIR}/HostProject/Plugins/SteamAudio/SteamAudio.uplugin -manifest=${CMAKE_CURRENT_BINARY_DIR}/Manifest-SteamAudio-UE4Game-Linux-Shipping.xml ${UBT_ARGS}
+    COMMAND     ${Unreal_EXECUTABLE} ${UE_TARGET_GAME} Linux Development -project=${CMAKE_CURRENT_BINARY_DIR}/HostProject/HostProject.uproject -plugin=${CMAKE_CURRENT_BINARY_DIR}/HostProject/Plugins/SteamAudio/SteamAudio.uplugin -manifest=${CMAKE_CURRENT_BINARY_DIR}/Manifest-SteamAudio-${UE_TARGET_GAME}-Linux-Development.xml ${UBT_ARGS}
+    COMMAND     ${Unreal_EXECUTABLE} ${UE_TARGET_GAME} Linux Shipping -project=${CMAKE_CURRENT_BINARY_DIR}/HostProject/HostProject.uproject -plugin=${CMAKE_CURRENT_BINARY_DIR}/HostProject/Plugins/SteamAudio/SteamAudio.uplugin -manifest=${CMAKE_CURRENT_BINARY_DIR}/Manifest-SteamAudio-${UE_TARGET_GAME}-Linux-Shipping.xml ${UBT_ARGS}
     VERBATIM
 )
 
 add_custom_target(phonon_unreal_mac
-    COMMAND     ${Unreal_EXECUTABLE} UE4Editor Mac Development -project=${CMAKE_CURRENT_BINARY_DIR}/HostProject/HostProject.uproject -plugin=${CMAKE_CURRENT_BINARY_DIR}/HostProject/Plugins/SteamAudio/SteamAudio.uplugin -manifest=${CMAKE_CURRENT_BINARY_DIR}/Manifest-SteamAudio-UE4Editor-Mac-Development.xml ${UBT_ARGS}
-    COMMAND     ${Unreal_EXECUTABLE} UE4Game Mac Development -project=${CMAKE_CURRENT_BINARY_DIR}/HostProject/HostProject.uproject -plugin=${CMAKE_CURRENT_BINARY_DIR}/HostProject/Plugins/SteamAudio/SteamAudio.uplugin -manifest=${CMAKE_CURRENT_BINARY_DIR}/Manifest-SteamAudio-UE4Game-Mac-Development.xml ${UBT_ARGS}
-    COMMAND     ${Unreal_EXECUTABLE} UE4Game Mac Shipping -project=${CMAKE_CURRENT_BINARY_DIR}/HostProject/HostProject.uproject -plugin=${CMAKE_CURRENT_BINARY_DIR}/HostProject/Plugins/SteamAudio/SteamAudio.uplugin -manifest=${CMAKE_CURRENT_BINARY_DIR}/Manifest-SteamAudio-UE4Game-Mac-Shipping.xml ${UBT_ARGS}
+    COMMAND     ${Unreal_EXECUTABLE} ${UE_TARGET_EDITOR} Mac Development -project=${CMAKE_CURRENT_BINARY_DIR}/HostProject/HostProject.uproject -plugin=${CMAKE_CURRENT_BINARY_DIR}/HostProject/Plugins/SteamAudio/SteamAudio.uplugin -manifest=${CMAKE_CURRENT_BINARY_DIR}/Manifest-SteamAudio-${UE_TARGET_EDITOR}-Mac-Development.xml ${UBT_ARGS}
+    COMMAND     ${Unreal_EXECUTABLE} ${UE_TARGET_GAME} Mac Development -project=${CMAKE_CURRENT_BINARY_DIR}/HostProject/HostProject.uproject -plugin=${CMAKE_CURRENT_BINARY_DIR}/HostProject/Plugins/SteamAudio/SteamAudio.uplugin -manifest=${CMAKE_CURRENT_BINARY_DIR}/Manifest-SteamAudio-${UE_TARGET_GAME}-Mac-Development.xml ${UBT_ARGS}
+    COMMAND     ${Unreal_EXECUTABLE} ${UE_TARGET_GAME} Mac Shipping -project=${CMAKE_CURRENT_BINARY_DIR}/HostProject/HostProject.uproject -plugin=${CMAKE_CURRENT_BINARY_DIR}/HostProject/Plugins/SteamAudio/SteamAudio.uplugin -manifest=${CMAKE_CURRENT_BINARY_DIR}/Manifest-SteamAudio-${UE_TARGET_GAME}-Mac-Shipping.xml ${UBT_ARGS}
     VERBATIM
 )
 
 add_custom_target(phonon_unreal_android
-    COMMAND     ${Unreal_EXECUTABLE} UE4Game Android Development -project=${CMAKE_CURRENT_BINARY_DIR}/HostProject/HostProject.uproject -plugin=${CMAKE_CURRENT_BINARY_DIR}/HostProject/Plugins/SteamAudio/SteamAudio.uplugin -manifest=${CMAKE_CURRENT_BINARY_DIR}/Manifest-SteamAudio-UE4Game-Android-Development.xml ${UBT_ARGS} -architectures=armv7+arm64
-    COMMAND     ${Unreal_EXECUTABLE} UE4Game Android Shipping -project=${CMAKE_CURRENT_BINARY_DIR}/HostProject/HostProject.uproject -plugin=${CMAKE_CURRENT_BINARY_DIR}/HostProject/Plugins/SteamAudio/SteamAudio.uplugin -manifest=${CMAKE_CURRENT_BINARY_DIR}/Manifest-SteamAudio-UE4Game-Android-Shipping.xml ${UBT_ARGS} -architectures=armv7+arm64
+    COMMAND     ${Unreal_EXECUTABLE} ${UE_TARGET_GAME} Android Development -project=${CMAKE_CURRENT_BINARY_DIR}/HostProject/HostProject.uproject -plugin=${CMAKE_CURRENT_BINARY_DIR}/HostProject/Plugins/SteamAudio/SteamAudio.uplugin -manifest=${CMAKE_CURRENT_BINARY_DIR}/Manifest-SteamAudio-${UE_TARGET_GAME}-Android-Development.xml ${UBT_ARGS} -architectures=armv7+arm64
+    COMMAND     ${Unreal_EXECUTABLE} ${UE_TARGET_GAME} Android Shipping -project=${CMAKE_CURRENT_BINARY_DIR}/HostProject/HostProject.uproject -plugin=${CMAKE_CURRENT_BINARY_DIR}/HostProject/Plugins/SteamAudio/SteamAudio.uplugin -manifest=${CMAKE_CURRENT_BINARY_DIR}/Manifest-SteamAudio-${UE_TARGET_GAME}-Android-Shipping.xml ${UBT_ARGS} -architectures=armv7+arm64
     VERBATIM
 )
 
@@ -101,43 +109,43 @@ add_custom_target(phonon_unreal_fmod_setup
     COMMAND     cmake -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/SteamAudioUnreal/Plugins/FMODStudio ${CMAKE_CURRENT_BINARY_DIR}/HostProjectFMOD/Plugins/FMODStudio
     COMMAND     cmake -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/SteamAudioUnreal/Plugins/SteamAudioFMODStudio ${CMAKE_CURRENT_BINARY_DIR}/HostProjectFMOD/Plugins/SteamAudioFMODStudio
     COMMAND     cmake -E rm -rf ${CMAKE_CURRENT_BINARY_DIR}/HostProjectFMOD/Plugins/SteamAudioFMODStudio/Intermediate
-    COMMAND     cmake -E rm -f ${CMAKE_CURRENT_BINARY_DIR}/HostProjectFMOD/Plugins/FMODStudio/Binaries/Win64/UE4Editor.modules
-    COMMAND     cmake -E rm -f ${CMAKE_CURRENT_BINARY_DIR}/HostProjectFMOD/Plugins/FMODStudio/Binaries/Win64/UE4Editor-FMODStudio.dll
-    COMMAND     cmake -E rm -f ${CMAKE_CURRENT_BINARY_DIR}/HostProjectFMOD/Plugins/FMODStudio/Binaries/Win64/UE4Editor-FMODStudio.pdb
-    COMMAND     cmake -E rm -f ${CMAKE_CURRENT_BINARY_DIR}/HostProjectFMOD/Plugins/FMODStudio/Binaries/Win64/UE4Editor-FMODStudioEditor.dll
-    COMMAND     cmake -E rm -f ${CMAKE_CURRENT_BINARY_DIR}/HostProjectFMOD/Plugins/FMODStudio/Binaries/Win64/UE4Editor-FMODStudioEditor.pdb
+    COMMAND     cmake -E rm -f ${CMAKE_CURRENT_BINARY_DIR}/HostProjectFMOD/Plugins/FMODStudio/Binaries/Win64/${UE_TARGET_EDITOR}.modules
+    COMMAND     cmake -E rm -f ${CMAKE_CURRENT_BINARY_DIR}/HostProjectFMOD/Plugins/FMODStudio/Binaries/Win64/${UE_TARGET_EDITOR}-FMODStudio.dll
+    COMMAND     cmake -E rm -f ${CMAKE_CURRENT_BINARY_DIR}/HostProjectFMOD/Plugins/FMODStudio/Binaries/Win64/${UE_TARGET_EDITOR}-FMODStudio.pdb
+    COMMAND     cmake -E rm -f ${CMAKE_CURRENT_BINARY_DIR}/HostProjectFMOD/Plugins/FMODStudio/Binaries/Win64/${UE_TARGET_EDITOR}-FMODStudioEditor.dll
+    COMMAND     cmake -E rm -f ${CMAKE_CURRENT_BINARY_DIR}/HostProjectFMOD/Plugins/FMODStudio/Binaries/Win64/${UE_TARGET_EDITOR}-FMODStudioEditor.pdb
     VERBATIM
 )
 
 add_custom_target(phonon_unreal_fmod_win32
-    COMMAND     ${Unreal_EXECUTABLE} UE4Game Win32 Development -project=${CMAKE_CURRENT_BINARY_DIR}/HostProjectFMOD/HostProjectFMOD.uproject -plugin=${CMAKE_CURRENT_BINARY_DIR}/HostProjectFMOD/Plugins/SteamAudioFMODStudio/SteamAudioFMODStudio.uplugin -manifest=${CMAKE_CURRENT_BINARY_DIR}/Manifest-SteamAudioFMODStudio-UE4Game-Win32-Development.xml ${UBT_ARGS}
-    COMMAND     ${Unreal_EXECUTABLE} UE4Game Win32 Shipping -project=${CMAKE_CURRENT_BINARY_DIR}/HostProjectFMOD/HostProjectFMOD.uproject -plugin=${CMAKE_CURRENT_BINARY_DIR}/HostProjectFMOD/Plugins/SteamAudioFMODStudio/SteamAudioFMODStudio.uplugin -manifest=${CMAKE_CURRENT_BINARY_DIR}/Manifest-SteamAudioFMODStudio-UE4Game-Win32-Shipping.xml ${UBT_ARGS}
+    COMMAND     ${Unreal_EXECUTABLE} ${UE_TARGET_GAME} Win32 Development -project=${CMAKE_CURRENT_BINARY_DIR}/HostProjectFMOD/HostProjectFMOD.uproject -plugin=${CMAKE_CURRENT_BINARY_DIR}/HostProjectFMOD/Plugins/SteamAudioFMODStudio/SteamAudioFMODStudio.uplugin -manifest=${CMAKE_CURRENT_BINARY_DIR}/Manifest-SteamAudioFMODStudio-${UE_TARGET_GAME}-Win32-Development.xml ${UBT_ARGS}
+    COMMAND     ${Unreal_EXECUTABLE} ${UE_TARGET_GAME} Win32 Shipping -project=${CMAKE_CURRENT_BINARY_DIR}/HostProjectFMOD/HostProjectFMOD.uproject -plugin=${CMAKE_CURRENT_BINARY_DIR}/HostProjectFMOD/Plugins/SteamAudioFMODStudio/SteamAudioFMODStudio.uplugin -manifest=${CMAKE_CURRENT_BINARY_DIR}/Manifest-SteamAudioFMODStudio-${UE_TARGET_GAME}-Win32-Shipping.xml ${UBT_ARGS}
     VERBATIM
 )
 
 add_custom_target(phonon_unreal_fmod_win64
-    COMMAND     ${Unreal_EXECUTABLE} UE4Editor Win64 Development -project=${CMAKE_CURRENT_BINARY_DIR}/HostProjectFMOD/HostProjectFMOD.uproject -plugin=${CMAKE_CURRENT_BINARY_DIR}/HostProjectFMOD/Plugins/SteamAudioFMODStudio/SteamAudioFMODStudio.uplugin -manifest=${CMAKE_CURRENT_BINARY_DIR}/Manifest-SteamAudioFMODStudio-UE4Editor-Win64-Development.xml ${UBT_ARGS}
-    COMMAND     ${Unreal_EXECUTABLE} UE4Game Win64 Development -project=${CMAKE_CURRENT_BINARY_DIR}/HostProjectFMOD/HostProjectFMOD.uproject -plugin=${CMAKE_CURRENT_BINARY_DIR}/HostProjectFMOD/Plugins/SteamAudioFMODStudio/SteamAudioFMODStudio.uplugin -manifest=${CMAKE_CURRENT_BINARY_DIR}/Manifest-SteamAudioFMODStudio-UE4Game-Win64-Development.xml ${UBT_ARGS}
-    COMMAND     ${Unreal_EXECUTABLE} UE4Game Win64 Shipping -project=${CMAKE_CURRENT_BINARY_DIR}/HostProjectFMOD/HostProjectFMOD.uproject -plugin=${CMAKE_CURRENT_BINARY_DIR}/HostProjectFMOD/Plugins/SteamAudioFMODStudio/SteamAudioFMODStudio.uplugin -manifest=${CMAKE_CURRENT_BINARY_DIR}/Manifest-SteamAudioFMODStudio-UE4Game-Win64-Shipping.xml ${UBT_ARGS}
+    COMMAND     ${Unreal_EXECUTABLE} ${UE_TARGET_EDITOR} Win64 Development -project=${CMAKE_CURRENT_BINARY_DIR}/HostProjectFMOD/HostProjectFMOD.uproject -plugin=${CMAKE_CURRENT_BINARY_DIR}/HostProjectFMOD/Plugins/SteamAudioFMODStudio/SteamAudioFMODStudio.uplugin -manifest=${CMAKE_CURRENT_BINARY_DIR}/Manifest-SteamAudioFMODStudio-${UE_TARGET_EDITOR}-Win64-Development.xml ${UBT_ARGS}
+    COMMAND     ${Unreal_EXECUTABLE} ${UE_TARGET_GAME} Win64 Development -project=${CMAKE_CURRENT_BINARY_DIR}/HostProjectFMOD/HostProjectFMOD.uproject -plugin=${CMAKE_CURRENT_BINARY_DIR}/HostProjectFMOD/Plugins/SteamAudioFMODStudio/SteamAudioFMODStudio.uplugin -manifest=${CMAKE_CURRENT_BINARY_DIR}/Manifest-SteamAudioFMODStudio-${UE_TARGET_GAME}-Win64-Development.xml ${UBT_ARGS}
+    COMMAND     ${Unreal_EXECUTABLE} ${UE_TARGET_GAME} Win64 Shipping -project=${CMAKE_CURRENT_BINARY_DIR}/HostProjectFMOD/HostProjectFMOD.uproject -plugin=${CMAKE_CURRENT_BINARY_DIR}/HostProjectFMOD/Plugins/SteamAudioFMODStudio/SteamAudioFMODStudio.uplugin -manifest=${CMAKE_CURRENT_BINARY_DIR}/Manifest-SteamAudioFMODStudio-${UE_TARGET_GAME}-Win64-Shipping.xml ${UBT_ARGS}
     VERBATIM
 )
 
 add_custom_target(phonon_unreal_fmod_linux
-    COMMAND     ${Unreal_EXECUTABLE} UE4Game Linux Development -project=${CMAKE_CURRENT_BINARY_DIR}/HostProjectFMOD/HostProjectFMOD.uproject -plugin=${CMAKE_CURRENT_BINARY_DIR}/HostProjectFMOD/Plugins/SteamAudioFMODStudio/SteamAudioFMODStudio.uplugin -manifest=${CMAKE_CURRENT_BINARY_DIR}/Manifest-SteamAudioFMODStudio-UE4Game-Linux-Development.xml ${UBT_ARGS}
-    COMMAND     ${Unreal_EXECUTABLE} UE4Game Linux Shipping -project=${CMAKE_CURRENT_BINARY_DIR}/HostProjectFMOD/HostProjectFMOD.uproject -plugin=${CMAKE_CURRENT_BINARY_DIR}/HostProjectFMOD/Plugins/SteamAudioFMODStudio/SteamAudioFMODStudio.uplugin -manifest=${CMAKE_CURRENT_BINARY_DIR}/Manifest-SteamAudioFMODStudio-UE4Game-Linux-Shipping.xml ${UBT_ARGS}
+    COMMAND     ${Unreal_EXECUTABLE} ${UE_TARGET_GAME} Linux Development -project=${CMAKE_CURRENT_BINARY_DIR}/HostProjectFMOD/HostProjectFMOD.uproject -plugin=${CMAKE_CURRENT_BINARY_DIR}/HostProjectFMOD/Plugins/SteamAudioFMODStudio/SteamAudioFMODStudio.uplugin -manifest=${CMAKE_CURRENT_BINARY_DIR}/Manifest-SteamAudioFMODStudio-${UE_TARGET_GAME}-Linux-Development.xml ${UBT_ARGS}
+    COMMAND     ${Unreal_EXECUTABLE} ${UE_TARGET_GAME} Linux Shipping -project=${CMAKE_CURRENT_BINARY_DIR}/HostProjectFMOD/HostProjectFMOD.uproject -plugin=${CMAKE_CURRENT_BINARY_DIR}/HostProjectFMOD/Plugins/SteamAudioFMODStudio/SteamAudioFMODStudio.uplugin -manifest=${CMAKE_CURRENT_BINARY_DIR}/Manifest-SteamAudioFMODStudio-${UE_TARGET_GAME}-Linux-Shipping.xml ${UBT_ARGS}
     VERBATIM
 )
 
 add_custom_target(phonon_unreal_fmod_mac
-    COMMAND     ${Unreal_EXECUTABLE} UE4Editor Mac Development -project=${CMAKE_CURRENT_BINARY_DIR}/HostProjectFMOD/HostProjectFMOD.uproject -plugin=${CMAKE_CURRENT_BINARY_DIR}/HostProjectFMOD/Plugins/SteamAudioFMODStudio/SteamAudioFMODStudio.uplugin -manifest=${CMAKE_CURRENT_BINARY_DIR}/Manifest-SteamAudioFMODStudio-UE4Editor-Mac-Development.xml ${UBT_ARGS}
-    COMMAND     ${Unreal_EXECUTABLE} UE4Game Mac Development -project=${CMAKE_CURRENT_BINARY_DIR}/HostProjectFMOD/HostProjectFMOD.uproject -plugin=${CMAKE_CURRENT_BINARY_DIR}/HostProjectFMOD/Plugins/SteamAudioFMODStudio/SteamAudioFMODStudio.uplugin -manifest=${CMAKE_CURRENT_BINARY_DIR}/Manifest-SteamAudioFMODStudio-UE4Game-Mac-Development.xml ${UBT_ARGS}
-    COMMAND     ${Unreal_EXECUTABLE} UE4Game Mac Shipping -project=${CMAKE_CURRENT_BINARY_DIR}/HostProjectFMOD/HostProjectFMOD.uproject -plugin=${CMAKE_CURRENT_BINARY_DIR}/HostProjectFMOD/Plugins/SteamAudioFMODStudio/SteamAudioFMODStudio.uplugin -manifest=${CMAKE_CURRENT_BINARY_DIR}/Manifest-SteamAudioFMODStudio-UE4Game-Mac-Shipping.xml ${UBT_ARGS}
+    COMMAND     ${Unreal_EXECUTABLE} ${UE_TARGET_EDITOR} Mac Development -project=${CMAKE_CURRENT_BINARY_DIR}/HostProjectFMOD/HostProjectFMOD.uproject -plugin=${CMAKE_CURRENT_BINARY_DIR}/HostProjectFMOD/Plugins/SteamAudioFMODStudio/SteamAudioFMODStudio.uplugin -manifest=${CMAKE_CURRENT_BINARY_DIR}/Manifest-SteamAudioFMODStudio-${UE_TARGET_EDITOR}-Mac-Development.xml ${UBT_ARGS}
+    COMMAND     ${Unreal_EXECUTABLE} ${UE_TARGET_GAME} Mac Development -project=${CMAKE_CURRENT_BINARY_DIR}/HostProjectFMOD/HostProjectFMOD.uproject -plugin=${CMAKE_CURRENT_BINARY_DIR}/HostProjectFMOD/Plugins/SteamAudioFMODStudio/SteamAudioFMODStudio.uplugin -manifest=${CMAKE_CURRENT_BINARY_DIR}/Manifest-SteamAudioFMODStudio-${UE_TARGET_GAME}-Mac-Development.xml ${UBT_ARGS}
+    COMMAND     ${Unreal_EXECUTABLE} ${UE_TARGET_GAME} Mac Shipping -project=${CMAKE_CURRENT_BINARY_DIR}/HostProjectFMOD/HostProjectFMOD.uproject -plugin=${CMAKE_CURRENT_BINARY_DIR}/HostProjectFMOD/Plugins/SteamAudioFMODStudio/SteamAudioFMODStudio.uplugin -manifest=${CMAKE_CURRENT_BINARY_DIR}/Manifest-SteamAudioFMODStudio-${UE_TARGET_GAME}-Mac-Shipping.xml ${UBT_ARGS}
     VERBATIM
 )
 
 add_custom_target(phonon_unreal_fmod_android
-    COMMAND     ${Unreal_EXECUTABLE} UE4Game Android Development -project=${CMAKE_CURRENT_BINARY_DIR}/HostProjectFMOD/HostProjectFMOD.uproject -plugin=${CMAKE_CURRENT_BINARY_DIR}/HostProjectFMOD/Plugins/SteamAudioFMODStudio/SteamAudioFMODStudio.uplugin -manifest=${CMAKE_CURRENT_BINARY_DIR}/Manifest-SteamAudioFMODStudio-UE4Game-Android-Development.xml ${UBT_ARGS} -architectures=armv7+arm64
-    COMMAND     ${Unreal_EXECUTABLE} UE4Game Android Shipping -project=${CMAKE_CURRENT_BINARY_DIR}/HostProjectFMOD/HostProjectFMOD.uproject -plugin=${CMAKE_CURRENT_BINARY_DIR}/HostProjectFMOD/Plugins/SteamAudioFMODStudio/SteamAudioFMODStudio.uplugin -manifest=${CMAKE_CURRENT_BINARY_DIR}/Manifest-SteamAudioFMODStudio-UE4Game-Android-Shipping.xml ${UBT_ARGS} -architectures=armv7+arm64
+    COMMAND     ${Unreal_EXECUTABLE} ${UE_TARGET_GAME} Android Development -project=${CMAKE_CURRENT_BINARY_DIR}/HostProjectFMOD/HostProjectFMOD.uproject -plugin=${CMAKE_CURRENT_BINARY_DIR}/HostProjectFMOD/Plugins/SteamAudioFMODStudio/SteamAudioFMODStudio.uplugin -manifest=${CMAKE_CURRENT_BINARY_DIR}/Manifest-SteamAudioFMODStudio-${UE_TARGET_GAME}-Android-Development.xml ${UBT_ARGS} -architectures=armv7+arm64
+    COMMAND     ${Unreal_EXECUTABLE} ${UE_TARGET_GAME} Android Shipping -project=${CMAKE_CURRENT_BINARY_DIR}/HostProjectFMOD/HostProjectFMOD.uproject -plugin=${CMAKE_CURRENT_BINARY_DIR}/HostProjectFMOD/Plugins/SteamAudioFMODStudio/SteamAudioFMODStudio.uplugin -manifest=${CMAKE_CURRENT_BINARY_DIR}/Manifest-SteamAudioFMODStudio-${UE_TARGET_GAME}-Android-Shipping.xml ${UBT_ARGS} -architectures=armv7+arm64
     VERBATIM
 )
 
@@ -179,20 +187,20 @@ if (IPL_OS_WINDOWS AND IPL_CPU_X64)
     install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/SteamAudioUnreal/Plugins/SteamAudio/Source DESTINATION unreal/SteamAudio)
     install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/SteamAudioUnreal/Plugins/SteamAudio/Content DESTINATION unreal/SteamAudio)
     install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/SteamAudioUnreal/Plugins/SteamAudio/Resources DESTINATION unreal/SteamAudio)
-    install(CODE "execute_process(COMMAND python copy_files_from_manifest.py -s ${CMAKE_CURRENT_BINARY_DIR}/HostProject/Plugins -d ${CMAKE_HOME_DIRECTORY}/bin/unreal -m ${CMAKE_CURRENT_BINARY_DIR}/Manifest-SteamAudio-UE4Editor-Win64-Development.xml WORKING_DIRECTORY ${CMAKE_HOME_DIRECTORY}/build)")
-    install(CODE "execute_process(COMMAND python copy_files_from_manifest.py -s ${CMAKE_CURRENT_BINARY_DIR}/HostProject/Plugins -d ${CMAKE_HOME_DIRECTORY}/bin/unreal -m ${CMAKE_CURRENT_BINARY_DIR}/Manifest-SteamAudio-UE4Game-Win64-Development.xml WORKING_DIRECTORY ${CMAKE_HOME_DIRECTORY}/build)")
-    install(CODE "execute_process(COMMAND python copy_files_from_manifest.py -s ${CMAKE_CURRENT_BINARY_DIR}/HostProject/Plugins -d ${CMAKE_HOME_DIRECTORY}/bin/unreal -m ${CMAKE_CURRENT_BINARY_DIR}/Manifest-SteamAudio-UE4Game-Win64-Shipping.xml WORKING_DIRECTORY ${CMAKE_HOME_DIRECTORY}/build)")
+    install(CODE "execute_process(COMMAND python copy_files_from_manifest.py -s ${CMAKE_CURRENT_BINARY_DIR}/HostProject/Plugins -d ${CMAKE_HOME_DIRECTORY}/bin/unreal -m ${CMAKE_CURRENT_BINARY_DIR}/Manifest-SteamAudio-${UE_TARGET_EDITOR}-Win64-Development.xml WORKING_DIRECTORY ${CMAKE_HOME_DIRECTORY}/build)")
+    install(CODE "execute_process(COMMAND python copy_files_from_manifest.py -s ${CMAKE_CURRENT_BINARY_DIR}/HostProject/Plugins -d ${CMAKE_HOME_DIRECTORY}/bin/unreal -m ${CMAKE_CURRENT_BINARY_DIR}/Manifest-SteamAudio-${UE_TARGET_GAME}-Win64-Development.xml WORKING_DIRECTORY ${CMAKE_HOME_DIRECTORY}/build)")
+    install(CODE "execute_process(COMMAND python copy_files_from_manifest.py -s ${CMAKE_CURRENT_BINARY_DIR}/HostProject/Plugins -d ${CMAKE_HOME_DIRECTORY}/bin/unreal -m ${CMAKE_CURRENT_BINARY_DIR}/Manifest-SteamAudio-${UE_TARGET_GAME}-Win64-Shipping.xml WORKING_DIRECTORY ${CMAKE_HOME_DIRECTORY}/build)")
     if (STEAMAUDIOUNREAL_CROSSCOMPILE_WIN32)
-        install(CODE "execute_process(COMMAND python copy_files_from_manifest.py -s ${CMAKE_CURRENT_BINARY_DIR}/HostProject/Plugins -d ${CMAKE_HOME_DIRECTORY}/bin/unreal -m ${CMAKE_CURRENT_BINARY_DIR}/Manifest-SteamAudio-UE4Game-Win32-Development.xml WORKING_DIRECTORY ${CMAKE_HOME_DIRECTORY}/build)")
-        install(CODE "execute_process(COMMAND python copy_files_from_manifest.py -s ${CMAKE_CURRENT_BINARY_DIR}/HostProject/Plugins -d ${CMAKE_HOME_DIRECTORY}/bin/unreal -m ${CMAKE_CURRENT_BINARY_DIR}/Manifest-SteamAudio-UE4Game-Win32-Shipping.xml WORKING_DIRECTORY ${CMAKE_HOME_DIRECTORY}/build)")
+        install(CODE "execute_process(COMMAND python copy_files_from_manifest.py -s ${CMAKE_CURRENT_BINARY_DIR}/HostProject/Plugins -d ${CMAKE_HOME_DIRECTORY}/bin/unreal -m ${CMAKE_CURRENT_BINARY_DIR}/Manifest-SteamAudio-${UE_TARGET_GAME}-Win32-Development.xml WORKING_DIRECTORY ${CMAKE_HOME_DIRECTORY}/build)")
+        install(CODE "execute_process(COMMAND python copy_files_from_manifest.py -s ${CMAKE_CURRENT_BINARY_DIR}/HostProject/Plugins -d ${CMAKE_HOME_DIRECTORY}/bin/unreal -m ${CMAKE_CURRENT_BINARY_DIR}/Manifest-SteamAudio-${UE_TARGET_GAME}-Win32-Shipping.xml WORKING_DIRECTORY ${CMAKE_HOME_DIRECTORY}/build)")
     endif()
     if (STEAMAUDIOUNREAL_CROSSCOMPILE_LINUX)
-        install(CODE "execute_process(COMMAND python copy_files_from_manifest.py -s ${CMAKE_CURRENT_BINARY_DIR}/HostProject/Plugins -d ${CMAKE_HOME_DIRECTORY}/bin/unreal -m ${CMAKE_CURRENT_BINARY_DIR}/Manifest-SteamAudio-UE4Game-Linux-Development.xml WORKING_DIRECTORY ${CMAKE_HOME_DIRECTORY}/build)")
-        install(CODE "execute_process(COMMAND python copy_files_from_manifest.py -s ${CMAKE_CURRENT_BINARY_DIR}/HostProject/Plugins -d ${CMAKE_HOME_DIRECTORY}/bin/unreal -m ${CMAKE_CURRENT_BINARY_DIR}/Manifest-SteamAudio-UE4Game-Linux-Shipping.xml WORKING_DIRECTORY ${CMAKE_HOME_DIRECTORY}/build)")
+        install(CODE "execute_process(COMMAND python copy_files_from_manifest.py -s ${CMAKE_CURRENT_BINARY_DIR}/HostProject/Plugins -d ${CMAKE_HOME_DIRECTORY}/bin/unreal -m ${CMAKE_CURRENT_BINARY_DIR}/Manifest-SteamAudio-${UE_TARGET_GAME}-Linux-Development.xml WORKING_DIRECTORY ${CMAKE_HOME_DIRECTORY}/build)")
+        install(CODE "execute_process(COMMAND python copy_files_from_manifest.py -s ${CMAKE_CURRENT_BINARY_DIR}/HostProject/Plugins -d ${CMAKE_HOME_DIRECTORY}/bin/unreal -m ${CMAKE_CURRENT_BINARY_DIR}/Manifest-SteamAudio-${UE_TARGET_GAME}-Linux-Shipping.xml WORKING_DIRECTORY ${CMAKE_HOME_DIRECTORY}/build)")
     endif()
     if (STEAMAUDIOUNREAL_CROSSCOMPILE_ANDROID)
-        install(CODE "execute_process(COMMAND python copy_files_from_manifest.py -s ${CMAKE_CURRENT_BINARY_DIR}/HostProject/Plugins -d ${CMAKE_HOME_DIRECTORY}/bin/unreal -m ${CMAKE_CURRENT_BINARY_DIR}/Manifest-SteamAudio-UE4Game-Android-Development.xml WORKING_DIRECTORY ${CMAKE_HOME_DIRECTORY}/build)")
-        install(CODE "execute_process(COMMAND python copy_files_from_manifest.py -s ${CMAKE_CURRENT_BINARY_DIR}/HostProject/Plugins -d ${CMAKE_HOME_DIRECTORY}/bin/unreal -m ${CMAKE_CURRENT_BINARY_DIR}/Manifest-SteamAudio-UE4Game-Android-Shipping.xml WORKING_DIRECTORY ${CMAKE_HOME_DIRECTORY}/build)")
+        install(CODE "execute_process(COMMAND python copy_files_from_manifest.py -s ${CMAKE_CURRENT_BINARY_DIR}/HostProject/Plugins -d ${CMAKE_HOME_DIRECTORY}/bin/unreal -m ${CMAKE_CURRENT_BINARY_DIR}/Manifest-SteamAudio-${UE_TARGET_GAME}-Android-Development.xml WORKING_DIRECTORY ${CMAKE_HOME_DIRECTORY}/build)")
+        install(CODE "execute_process(COMMAND python copy_files_from_manifest.py -s ${CMAKE_CURRENT_BINARY_DIR}/HostProject/Plugins -d ${CMAKE_HOME_DIRECTORY}/bin/unreal -m ${CMAKE_CURRENT_BINARY_DIR}/Manifest-SteamAudio-${UE_TARGET_GAME}-Android-Shipping.xml WORKING_DIRECTORY ${CMAKE_HOME_DIRECTORY}/build)")
     endif()
 
     install(CODE "execute_process(COMMAND cmake -E rm -rf ${CMAKE_HOME_DIRECTORY}/bin/unreal/FMODStudio)")
@@ -213,20 +221,20 @@ if (IPL_OS_WINDOWS AND IPL_CPU_X64)
     install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/SteamAudioUnreal/Plugins/SteamAudioFMODStudio/SteamAudioFMODStudio.uplugin DESTINATION unreal/SteamAudioFMODStudio)
     install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/SteamAudioUnreal/Plugins/SteamAudioFMODStudio/Source DESTINATION unreal/SteamAudioFMODStudio)
     install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/SteamAudioUnreal/Plugins/SteamAudioFMODStudio/Resources DESTINATION unreal/SteamAudioFMODStudio)
-    install(CODE "execute_process(COMMAND python copy_files_from_manifest.py -s ${CMAKE_CURRENT_BINARY_DIR}/HostProjectFMOD/Plugins -d ${CMAKE_HOME_DIRECTORY}/bin/unreal -m ${CMAKE_CURRENT_BINARY_DIR}/Manifest-SteamAudioFMODStudio-UE4Editor-Win64-Development.xml WORKING_DIRECTORY ${CMAKE_HOME_DIRECTORY}/build)")
-    install(CODE "execute_process(COMMAND python copy_files_from_manifest.py -s ${CMAKE_CURRENT_BINARY_DIR}/HostProjectFMOD/Plugins -d ${CMAKE_HOME_DIRECTORY}/bin/unreal -m ${CMAKE_CURRENT_BINARY_DIR}/Manifest-SteamAudioFMODStudio-UE4Game-Win64-Development.xml WORKING_DIRECTORY ${CMAKE_HOME_DIRECTORY}/build)")
-    install(CODE "execute_process(COMMAND python copy_files_from_manifest.py -s ${CMAKE_CURRENT_BINARY_DIR}/HostProjectFMOD/Plugins -d ${CMAKE_HOME_DIRECTORY}/bin/unreal -m ${CMAKE_CURRENT_BINARY_DIR}/Manifest-SteamAudioFMODStudio-UE4Game-Win64-Shipping.xml WORKING_DIRECTORY ${CMAKE_HOME_DIRECTORY}/build)")
+    install(CODE "execute_process(COMMAND python copy_files_from_manifest.py -s ${CMAKE_CURRENT_BINARY_DIR}/HostProjectFMOD/Plugins -d ${CMAKE_HOME_DIRECTORY}/bin/unreal -m ${CMAKE_CURRENT_BINARY_DIR}/Manifest-SteamAudioFMODStudio-${UE_TARGET_EDITOR}-Win64-Development.xml WORKING_DIRECTORY ${CMAKE_HOME_DIRECTORY}/build)")
+    install(CODE "execute_process(COMMAND python copy_files_from_manifest.py -s ${CMAKE_CURRENT_BINARY_DIR}/HostProjectFMOD/Plugins -d ${CMAKE_HOME_DIRECTORY}/bin/unreal -m ${CMAKE_CURRENT_BINARY_DIR}/Manifest-SteamAudioFMODStudio-${UE_TARGET_GAME}-Win64-Development.xml WORKING_DIRECTORY ${CMAKE_HOME_DIRECTORY}/build)")
+    install(CODE "execute_process(COMMAND python copy_files_from_manifest.py -s ${CMAKE_CURRENT_BINARY_DIR}/HostProjectFMOD/Plugins -d ${CMAKE_HOME_DIRECTORY}/bin/unreal -m ${CMAKE_CURRENT_BINARY_DIR}/Manifest-SteamAudioFMODStudio-${UE_TARGET_GAME}-Win64-Shipping.xml WORKING_DIRECTORY ${CMAKE_HOME_DIRECTORY}/build)")
     if (STEAMAUDIOUNREAL_CROSSCOMPILE_WIN32)
-        install(CODE "execute_process(COMMAND python copy_files_from_manifest.py -s ${CMAKE_CURRENT_BINARY_DIR}/HostProjectFMOD/Plugins -d ${CMAKE_HOME_DIRECTORY}/bin/unreal -m ${CMAKE_CURRENT_BINARY_DIR}/Manifest-SteamAudioFMODStudio-UE4Game-Win32-Development.xml WORKING_DIRECTORY ${CMAKE_HOME_DIRECTORY}/build)")
-        install(CODE "execute_process(COMMAND python copy_files_from_manifest.py -s ${CMAKE_CURRENT_BINARY_DIR}/HostProjectFMOD/Plugins -d ${CMAKE_HOME_DIRECTORY}/bin/unreal -m ${CMAKE_CURRENT_BINARY_DIR}/Manifest-SteamAudioFMODStudio-UE4Game-Win32-Shipping.xml WORKING_DIRECTORY ${CMAKE_HOME_DIRECTORY}/build)")
+        install(CODE "execute_process(COMMAND python copy_files_from_manifest.py -s ${CMAKE_CURRENT_BINARY_DIR}/HostProjectFMOD/Plugins -d ${CMAKE_HOME_DIRECTORY}/bin/unreal -m ${CMAKE_CURRENT_BINARY_DIR}/Manifest-SteamAudioFMODStudio-${UE_TARGET_GAME}-Win32-Development.xml WORKING_DIRECTORY ${CMAKE_HOME_DIRECTORY}/build)")
+        install(CODE "execute_process(COMMAND python copy_files_from_manifest.py -s ${CMAKE_CURRENT_BINARY_DIR}/HostProjectFMOD/Plugins -d ${CMAKE_HOME_DIRECTORY}/bin/unreal -m ${CMAKE_CURRENT_BINARY_DIR}/Manifest-SteamAudioFMODStudio-${UE_TARGET_GAME}-Win32-Shipping.xml WORKING_DIRECTORY ${CMAKE_HOME_DIRECTORY}/build)")
     endif()
     if (STEAMAUDIOUNREAL_CROSSCOMPILE_LINUX)
-        install(CODE "execute_process(COMMAND python copy_files_from_manifest.py -s ${CMAKE_CURRENT_BINARY_DIR}/HostProjectFMOD/Plugins -d ${CMAKE_HOME_DIRECTORY}/bin/unreal -m ${CMAKE_CURRENT_BINARY_DIR}/Manifest-SteamAudioFMODStudio-UE4Game-Linux-Development.xml WORKING_DIRECTORY ${CMAKE_HOME_DIRECTORY}/build)")
-        install(CODE "execute_process(COMMAND python copy_files_from_manifest.py -s ${CMAKE_CURRENT_BINARY_DIR}/HostProjectFMOD/Plugins -d ${CMAKE_HOME_DIRECTORY}/bin/unreal -m ${CMAKE_CURRENT_BINARY_DIR}/Manifest-SteamAudioFMODStudio-UE4Game-Linux-Shipping.xml WORKING_DIRECTORY ${CMAKE_HOME_DIRECTORY}/build)")
+        install(CODE "execute_process(COMMAND python copy_files_from_manifest.py -s ${CMAKE_CURRENT_BINARY_DIR}/HostProjectFMOD/Plugins -d ${CMAKE_HOME_DIRECTORY}/bin/unreal -m ${CMAKE_CURRENT_BINARY_DIR}/Manifest-SteamAudioFMODStudio-${UE_TARGET_GAME}-Linux-Development.xml WORKING_DIRECTORY ${CMAKE_HOME_DIRECTORY}/build)")
+        install(CODE "execute_process(COMMAND python copy_files_from_manifest.py -s ${CMAKE_CURRENT_BINARY_DIR}/HostProjectFMOD/Plugins -d ${CMAKE_HOME_DIRECTORY}/bin/unreal -m ${CMAKE_CURRENT_BINARY_DIR}/Manifest-SteamAudioFMODStudio-${UE_TARGET_GAME}-Linux-Shipping.xml WORKING_DIRECTORY ${CMAKE_HOME_DIRECTORY}/build)")
     endif()
     if (STEAMAUDIOUNREAL_CROSSCOMPILE_ANDROID)
-        install(CODE "execute_process(COMMAND python copy_files_from_manifest.py -s ${CMAKE_CURRENT_BINARY_DIR}/HostProjectFMOD/Plugins -d ${CMAKE_HOME_DIRECTORY}/bin/unreal -m ${CMAKE_CURRENT_BINARY_DIR}/Manifest-SteamAudioFMODStudio-UE4Game-Android-Development.xml WORKING_DIRECTORY ${CMAKE_HOME_DIRECTORY}/build)")
-        install(CODE "execute_process(COMMAND python copy_files_from_manifest.py -s ${CMAKE_CURRENT_BINARY_DIR}/HostProjectFMOD/Plugins -d ${CMAKE_HOME_DIRECTORY}/bin/unreal -m ${CMAKE_CURRENT_BINARY_DIR}/Manifest-SteamAudioFMODStudio-UE4Game-Android-Shipping.xml WORKING_DIRECTORY ${CMAKE_HOME_DIRECTORY}/build)")
+        install(CODE "execute_process(COMMAND python copy_files_from_manifest.py -s ${CMAKE_CURRENT_BINARY_DIR}/HostProjectFMOD/Plugins -d ${CMAKE_HOME_DIRECTORY}/bin/unreal -m ${CMAKE_CURRENT_BINARY_DIR}/Manifest-SteamAudioFMODStudio-${UE_TARGET_GAME}-Android-Development.xml WORKING_DIRECTORY ${CMAKE_HOME_DIRECTORY}/build)")
+        install(CODE "execute_process(COMMAND python copy_files_from_manifest.py -s ${CMAKE_CURRENT_BINARY_DIR}/HostProjectFMOD/Plugins -d ${CMAKE_HOME_DIRECTORY}/bin/unreal -m ${CMAKE_CURRENT_BINARY_DIR}/Manifest-SteamAudioFMODStudio-${UE_TARGET_GAME}-Android-Shipping.xml WORKING_DIRECTORY ${CMAKE_HOME_DIRECTORY}/build)")
     endif()
 elseif (IPL_OS_MACOS)
     install(CODE "execute_process(COMMAND cmake -E rm -rf ${CMAKE_HOME_DIRECTORY}/bin/unreal/SteamAudio)")
@@ -234,9 +242,9 @@ elseif (IPL_OS_MACOS)
     install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/SteamAudioUnreal/Plugins/SteamAudio/Source DESTINATION unreal/SteamAudio)
     install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/SteamAudioUnreal/Plugins/SteamAudio/Content DESTINATION unreal/SteamAudio)
     install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/SteamAudioUnreal/Plugins/SteamAudio/Resources DESTINATION unreal/SteamAudio)
-    install(CODE "execute_process(COMMAND python copy_files_from_manifest.py -s ${CMAKE_CURRENT_BINARY_DIR}/HostProject/Plugins -d ${CMAKE_HOME_DIRECTORY}/bin/unreal -m ${CMAKE_CURRENT_BINARY_DIR}/Manifest-SteamAudio-UE4Editor-Mac-Development.xml WORKING_DIRECTORY ${CMAKE_HOME_DIRECTORY}/build)")
-    install(CODE "execute_process(COMMAND python copy_files_from_manifest.py -s ${CMAKE_CURRENT_BINARY_DIR}/HostProject/Plugins -d ${CMAKE_HOME_DIRECTORY}/bin/unreal -m ${CMAKE_CURRENT_BINARY_DIR}/Manifest-SteamAudio-UE4Game-Mac-Development.xml WORKING_DIRECTORY ${CMAKE_HOME_DIRECTORY}/build)")
-    install(CODE "execute_process(COMMAND python copy_files_from_manifest.py -s ${CMAKE_CURRENT_BINARY_DIR}/HostProject/Plugins -d ${CMAKE_HOME_DIRECTORY}/bin/unreal -m ${CMAKE_CURRENT_BINARY_DIR}/Manifest-SteamAudio-UE4Game-Mac-Shipping.xml WORKING_DIRECTORY ${CMAKE_HOME_DIRECTORY}/build)")
+    install(CODE "execute_process(COMMAND python copy_files_from_manifest.py -s ${CMAKE_CURRENT_BINARY_DIR}/HostProject/Plugins -d ${CMAKE_HOME_DIRECTORY}/bin/unreal -m ${CMAKE_CURRENT_BINARY_DIR}/Manifest-SteamAudio-${UE_TARGET_EDITOR}-Mac-Development.xml WORKING_DIRECTORY ${CMAKE_HOME_DIRECTORY}/build)")
+    install(CODE "execute_process(COMMAND python copy_files_from_manifest.py -s ${CMAKE_CURRENT_BINARY_DIR}/HostProject/Plugins -d ${CMAKE_HOME_DIRECTORY}/bin/unreal -m ${CMAKE_CURRENT_BINARY_DIR}/Manifest-SteamAudio-${UE_TARGET_GAME}-Mac-Development.xml WORKING_DIRECTORY ${CMAKE_HOME_DIRECTORY}/build)")
+    install(CODE "execute_process(COMMAND python copy_files_from_manifest.py -s ${CMAKE_CURRENT_BINARY_DIR}/HostProject/Plugins -d ${CMAKE_HOME_DIRECTORY}/bin/unreal -m ${CMAKE_CURRENT_BINARY_DIR}/Manifest-SteamAudio-${UE_TARGET_GAME}-Mac-Shipping.xml WORKING_DIRECTORY ${CMAKE_HOME_DIRECTORY}/build)")
 
     install(CODE "execute_process(COMMAND cmake -E rm -rf ${CMAKE_HOME_DIRECTORY}/bin/unreal/FMODStudio)")
     install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/SteamAudioUnreal/Plugins/FMODStudio/Binaries/Mac/phonon_fmod.bundle DESTINATION unreal/FMODStudio/Binaries/Mac)
@@ -246,7 +254,7 @@ elseif (IPL_OS_MACOS)
     install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/SteamAudioUnreal/Plugins/SteamAudioFMODStudio/Source DESTINATION unreal/SteamAudioFMODStudio)
     install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/SteamAudioUnreal/Plugins/SteamAudioFMODStudio/Content DESTINATION unreal/SteamAudioFMODStudio)
     install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/SteamAudioUnreal/Plugins/SteamAudioFMODStudio/Resources DESTINATION unreal/SteamAudioFMODStudio)
-    install(CODE "execute_process(COMMAND python copy_files_from_manifest.py -s ${CMAKE_CURRENT_BINARY_DIR}/HostProjectFMOD/Plugins -d ${CMAKE_HOME_DIRECTORY}/bin/unreal -m ${CMAKE_CURRENT_BINARY_DIR}/Manifest-SteamAudioFMODStudio-UE4Editor-Mac-Development.xml WORKING_DIRECTORY ${CMAKE_HOME_DIRECTORY}/build)")
-    install(CODE "execute_process(COMMAND python copy_files_from_manifest.py -s ${CMAKE_CURRENT_BINARY_DIR}/HostProjectFMOD/Plugins -d ${CMAKE_HOME_DIRECTORY}/bin/unreal -m ${CMAKE_CURRENT_BINARY_DIR}/Manifest-SteamAudioFMODStudio-UE4Game-Mac-Development.xml WORKING_DIRECTORY ${CMAKE_HOME_DIRECTORY}/build)")
-    install(CODE "execute_process(COMMAND python copy_files_from_manifest.py -s ${CMAKE_CURRENT_BINARY_DIR}/HostProjectFMOD/Plugins -d ${CMAKE_HOME_DIRECTORY}/bin/unreal -m ${CMAKE_CURRENT_BINARY_DIR}/Manifest-SteamAudioFMODStudio-UE4Game-Mac-Shipping.xml WORKING_DIRECTORY ${CMAKE_HOME_DIRECTORY}/build)")
+    install(CODE "execute_process(COMMAND python copy_files_from_manifest.py -s ${CMAKE_CURRENT_BINARY_DIR}/HostProjectFMOD/Plugins -d ${CMAKE_HOME_DIRECTORY}/bin/unreal -m ${CMAKE_CURRENT_BINARY_DIR}/Manifest-SteamAudioFMODStudio-${UE_TARGET_EDITOR}-Mac-Development.xml WORKING_DIRECTORY ${CMAKE_HOME_DIRECTORY}/build)")
+    install(CODE "execute_process(COMMAND python copy_files_from_manifest.py -s ${CMAKE_CURRENT_BINARY_DIR}/HostProjectFMOD/Plugins -d ${CMAKE_HOME_DIRECTORY}/bin/unreal -m ${CMAKE_CURRENT_BINARY_DIR}/Manifest-SteamAudioFMODStudio-${UE_TARGET_GAME}-Mac-Development.xml WORKING_DIRECTORY ${CMAKE_HOME_DIRECTORY}/build)")
+    install(CODE "execute_process(COMMAND python copy_files_from_manifest.py -s ${CMAKE_CURRENT_BINARY_DIR}/HostProjectFMOD/Plugins -d ${CMAKE_HOME_DIRECTORY}/bin/unreal -m ${CMAKE_CURRENT_BINARY_DIR}/Manifest-SteamAudioFMODStudio-${UE_TARGET_GAME}-Mac-Shipping.xml WORKING_DIRECTORY ${CMAKE_HOME_DIRECTORY}/build)")
 endif()

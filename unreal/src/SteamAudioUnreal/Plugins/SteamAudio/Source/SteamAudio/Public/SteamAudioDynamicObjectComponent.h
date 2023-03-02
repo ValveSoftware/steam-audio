@@ -24,7 +24,7 @@ class STEAMAUDIO_API USteamAudioDynamicObjectComponent : public UActorComponent
 
 public:
     /** Reference to the .uasset containing this dynamic object's geometry data. */
-    UPROPERTY(VisibleAnywhere, Category = ExportSettings, meta = (AllowedClasses = "SteamAudioSerializedObject"))
+    UPROPERTY(VisibleAnywhere, Category = ExportSettings, meta = (AllowedClasses = "/Script/SteamAudio.SteamAudioSerializedObject"))
     FSoftObjectPath Asset;
 
     USteamAudioDynamicObjectComponent();

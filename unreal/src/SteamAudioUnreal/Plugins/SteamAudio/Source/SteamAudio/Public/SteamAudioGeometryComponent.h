@@ -25,7 +25,7 @@ class STEAMAUDIO_API USteamAudioGeometryComponent : public UActorComponent
 
 public:
     /** Reference to the material asset that should be applied to all triangles exported as part of this component. */
-    UPROPERTY(EditAnywhere, Category = MaterialSettings, meta = (AllowedClasses = "SteamAudioMaterial"))
+    UPROPERTY(EditAnywhere, Category = MaterialSettings, meta = (AllowedClasses = "/Script/SteamAudio.SteamAudioMaterial"))
     FSoftObjectPath Material;
 
     /** Whether or not to export all actors attached to this actor. */

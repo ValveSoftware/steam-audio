@@ -59,6 +59,17 @@ target_link_libraries(audioplugin_phonon PRIVATE Unity::NativeAudio SteamAudio::
 
 target_precompile_headers(audioplugin_phonon PRIVATE pch.h)
 
+if (IPL_OS_LINUX AND BUILD_SHARED_LIBS AND (NOT IPL_CPU_ARMV8))
+    add_custom_command(
+        TARGET      audioplugin_phonon
+        POST_BUILD
+        COMMAND     objcopy --only-keep-debug $<TARGET_FILE_NAME:audioplugin_phonon> $<TARGET_FILE_NAME:audioplugin_phonon>.dbg
+        COMMAND     strip --strip-debug --strip-unneeded $<TARGET_FILE_NAME:audioplugin_phonon>
+        COMMAND     objcopy --add-gnu-debuglink=$<TARGET_FILE_NAME:audioplugin_phonon>.dbg $<TARGET_FILE_NAME:audioplugin_phonon>
+        COMMENT     "Extracting debug symbols..."
+    )
+endif()
+
 if (IPL_OS_WINDOWS)
     if (IPL_CPU_X86)
         set(PLUGIN_DIR ${CMAKE_HOME_DIRECTORY}/src/project/SteamAudioUnity/Assets/Plugins/SteamAudio/Binaries/Windows/x86/)
@@ -91,7 +102,7 @@ if (IPL_OS_MACOS)
     )
 else()
     add_custom_command(
-        TARGET      audioplugin_phonon 
+        TARGET      audioplugin_phonon
         POST_BUILD
         COMMAND     ${CMAKE_COMMAND} -E copy $<TARGET_FILE:audioplugin_phonon> ${PLUGIN_DIR}
     )
@@ -106,14 +117,19 @@ get_bin_subdir(IPL_BIN_SUBDIR)
 
 install(
     TARGETS             audioplugin_phonon
-    ARCHIVE DESTINATION lib/${IPL_BIN_SUBDIR} 
-    LIBRARY DESTINATION lib/${IPL_BIN_SUBDIR} 
+    ARCHIVE DESTINATION lib/${IPL_BIN_SUBDIR}
+    LIBRARY DESTINATION lib/${IPL_BIN_SUBDIR}
     RUNTIME DESTINATION lib/${IPL_BIN_SUBDIR}
 )
 
 if (IPL_OS_WINDOWS)
     install(
-        FILES       ${CMAKE_CURRENT_BINARY_DIR}/$<CONFIG>/audioplugin_phonon.pdb 
+        FILES       ${CMAKE_CURRENT_BINARY_DIR}/$<CONFIG>/audioplugin_phonon.pdb
+        DESTINATION symbols/${IPL_BIN_SUBDIR}
+    )
+elseif (IPL_OS_LINUX AND NOT IPL_CPU_ARMV8)
+    install(
+        FILES       ${CMAKE_CURRENT_BINARY_DIR}/libaudioplugin_phonon.so.dbg
         DESTINATION symbols/${IPL_BIN_SUBDIR}
     )
 endif()

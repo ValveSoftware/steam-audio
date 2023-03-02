@@ -44,23 +44,23 @@ struct FSteamAudioBakedDataInfo
 
     /** See IPLBakedDataIdentifier. */
     UPROPERTY()
-    int Type;
+    int Type = static_cast<int>(IPL_BAKEDDATATYPE_REFLECTIONS);
 
     /** See IPLBakedDataIdentifier. */
     UPROPERTY()
-    int Variation;
+    int Variation = static_cast<int>(IPL_BAKEDDATAVARIATION_REVERB);
 
     /** See IPLBakedDataIdentifier. */
     UPROPERTY()
-    FVector EndpointCenter;
+    FVector EndpointCenter{0.0f, 0.0f, 0.0f};
 
     /** See IPLBakedDataIdentifier. */
     UPROPERTY()
-    float EndpointRadius;
+    float EndpointRadius = 0.0f;
 
     /** Size (in bytes) of the baked data in this layer. */
     UPROPERTY()
-    int Size;
+    int Size = 0;
 };
 
 
@@ -78,7 +78,7 @@ class STEAMAUDIO_API ASteamAudioProbeVolume : public AVolume
 
 public:
     /** Reference to the Steam Audio Serialized Object asset containing probe data. */
-    UPROPERTY(VisibleAnywhere, Category = ProbeBatchSettings, meta = (AllowedClasses = "SteamAudioSerializedObject"))
+    UPROPERTY(VisibleAnywhere, Category = ProbeBatchSettings, meta = (AllowedClasses = "/Script/SteamAudio.SteamAudioSerializedObject"))
     FSoftObjectPath Asset;
 
     /** How to place probes within the volume, */

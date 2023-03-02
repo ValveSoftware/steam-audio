@@ -73,6 +73,17 @@ if (BUILD_SHARED_LIBS AND IPL_OS_MACOS)
     target_precompile_headers(phonon_fmod_bundle PRIVATE pch.h)
 endif()
 
+if (IPL_OS_LINUX AND BUILD_SHARED_LIBS AND (NOT IPL_CPU_ARMV8))
+    add_custom_command(
+        TARGET      phonon_fmod
+        POST_BUILD
+        COMMAND     objcopy --only-keep-debug $<TARGET_FILE_NAME:phonon_fmod> $<TARGET_FILE_NAME:phonon_fmod>.dbg
+        COMMAND     strip --strip-debug --strip-unneeded $<TARGET_FILE_NAME:phonon_fmod>
+        COMMAND     objcopy --add-gnu-debuglink=$<TARGET_FILE_NAME:phonon_fmod>.dbg $<TARGET_FILE_NAME:phonon_fmod>
+        COMMENT     "Extracting debug symbols..."
+    )
+endif()
+
 
 #
 # POST-BUILD STEP FOR COPYING fmod -> unity
@@ -181,6 +192,11 @@ endif()
 if (IPL_OS_WINDOWS)
     install(
         FILES       ${CMAKE_CURRENT_BINARY_DIR}/$<CONFIG>/phonon_fmod.pdb
+        DESTINATION symbols/${IPL_BIN_SUBDIR}
+    )
+elseif (IPL_OS_LINUX AND NOT IPL_CPU_ARMV8)
+    install(
+        FILES       ${CMAKE_CURRENT_BINARY_DIR}/libphonon_fmod.so.dbg
         DESTINATION symbols/${IPL_BIN_SUBDIR}
     )
 endif()

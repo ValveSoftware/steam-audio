@@ -22,7 +22,7 @@ class STEAMAUDIO_API ASteamAudioStaticMeshActor : public AActor
 
 public:
     /** Reference to the Steam Audio Serialized Object asset containing static geometry data. */
-    UPROPERTY(VisibleAnywhere, Category = ExportSettings, meta = (AllowedClasses = "SteamAudioSerializedObject"))
+    UPROPERTY(VisibleAnywhere, Category = ExportSettings, meta = (AllowedClasses = "/Script/SteamAudio.SteamAudioSerializedObject"))
     FSoftObjectPath Asset;
 
     ASteamAudioStaticMeshActor();

@@ -22,17 +22,13 @@ Add Steam Audio to your Unreal Engine project
 To add Steam Audio to your Unreal project:
 
 1. Download the latest version of the Steam Audio Unreal Engine integration: ``steamaudio_unreal.zip``. Extract the contents of this file to any directory of your choosing.
-2. Copy the ``unreal/SteamAudio`` folder into the ``Engine/Plugins/Runtime/Steam`` subfolder of the folder where Unreal Engine has been installed. This will replace the version of Steam Audio bundled with Unreal Engine, and update it to the latest version.
+2. Copy the ``unreal/Plugins/SteamAudio`` into the ``Plugins`` subfolder of your project, in order to install Steam Audio for your project. Delete the Steam Audio plugin bundled with Unreal Engine. It is located at ``Engine/Plugins/Runtime/Steam/SteamAudio`` inside the folder where Unreal Engine has been installed.
 3. In Unreal's main menu, choose **Edit** > **Plugins**.
 4. In the Plugins window, under **Audio**, check **Enabled** in the entry for Steam Audio.
 5. In the main menu, choose **Edit** > **Project Settings**.
 6. Under **Platforms** > **Windows**, set **Spatialization Plugin** to **Steam Audio Spatialization**, **Occlusion Plugin** to **Steam Audio Occlusion**, and **Reverb Plugin** to **Steam Audio Reverb**. Repeat this for every platform you intend to use Steam Audio on.
 
 .. image:: media/plugins.png
-
-.. note::
-    You can copy ``unreal/Plugins/SteamAudio`` into the ``Plugins`` subfolder of your project, in order to install Steam Audio specifically for your project. If you do this, you should to delete the ``Engine/Plugins/Runtime/Steam/SteamAudio`` subfolder of the folder where Unreal Engine has been installed, or else you may encounter errors when packaging your project.
-
 
 Spatialize an Audio Cue
 -----------------------

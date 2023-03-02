@@ -3,7 +3,7 @@
 
 cmake_minimum_required(VERSION 3.17)
 
-project(Phonon VERSION 4.1.2)
+project(Phonon VERSION 4.1.3)
 
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_MODULE_PATH "${CMAKE_HOME_DIRECTORY}/build")
@@ -190,6 +190,7 @@ set(CPACK_PACKAGE_DIRECTORY ${CMAKE_HOME_DIRECTORY}/dist)
 set(CPACK_INSTALL_CMAKE_PROJECTS "")
 set(CPACK_INSTALLED_DIRECTORIES
     ${CMAKE_INSTALL_PREFIX}/lib lib
+    ${CMAKE_INSTALL_PREFIX}/symbols symbols
     ${CMAKE_INSTALL_PREFIX}/src src
     ${CMAKE_INSTALL_PREFIX}/doc doc
 )

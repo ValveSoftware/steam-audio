@@ -13,6 +13,7 @@ public class SteamAudioSDK : ModuleRules
 
         PublicIncludePaths.Add("$(PluginDir)/Source/SteamAudioSDK/include");
 
+#if !UE_5_0_OR_LATER
         if (Target.Platform == UnrealTargetPlatform.Win32)
         {
             PublicAdditionalLibraries.Add("$(PluginDir)/Source/SteamAudioSDK/lib/windows-x86/phonon.lib");
@@ -20,8 +21,9 @@ public class SteamAudioSDK : ModuleRules
             PublicDelayLoadDLLs.Add("phonon.dll");
 
             RuntimeDependencies.Add("$(PluginDir)/Source/SteamAudioSDK/lib/windows-x86/phonon.dll");
-        } 
-        else if (Target.Platform == UnrealTargetPlatform.Win64)
+        }
+#endif
+        if (Target.Platform == UnrealTargetPlatform.Win64)
         {
             PublicAdditionalLibraries.Add("$(PluginDir)/Source/SteamAudioSDK/lib/windows-x64/phonon.lib");
 
@@ -33,7 +35,7 @@ public class SteamAudioSDK : ModuleRules
             RuntimeDependencies.Add("$(PluginDir)/Source/SteamAudioSDK/lib/windows-x64/TrueAudioNext.dll");
             RuntimeDependencies.Add("$(PluginDir)/Source/SteamAudioSDK/lib/windows-x64/GPUUtilities.dll");
         }
-        else if (Target.Platform == UnrealTargetPlatform.Linux)
+        if (Target.Platform == UnrealTargetPlatform.Linux)
         {
             PublicAdditionalLibraries.Add("$(PluginDir)/Source/SteamAudioSDK/lib/linux-x64/libphonon.so");
 
@@ -41,7 +43,7 @@ public class SteamAudioSDK : ModuleRules
 
             RuntimeDependencies.Add("$(PluginDir)/Source/SteamAudioSDK/lib/linux-x64/libphonon.so");
         }
-        else if (Target.Platform == UnrealTargetPlatform.Mac)
+        if (Target.Platform == UnrealTargetPlatform.Mac)
         {
             PublicAdditionalLibraries.Add("$(PluginDir)/Source/SteamAudioSDK/lib/osx/libphonon.dylib");
 
@@ -49,7 +51,7 @@ public class SteamAudioSDK : ModuleRules
 
             RuntimeDependencies.Add("$(PluginDir)/Source/SteamAudioSDK/lib/osx/libphonon.dylib");
         }
-        else if (Target.Platform == UnrealTargetPlatform.Android)
+        if (Target.Platform == UnrealTargetPlatform.Android)
         {
             PublicAdditionalLibraries.Add("$(PluginDir)/Source/SteamAudioSDK/lib/android/armeabi-v7a/libphonon.so");
             PublicAdditionalLibraries.Add("$(PluginDir)/Source/SteamAudioSDK/lib/android/arm64-v8a/libphonon.so");

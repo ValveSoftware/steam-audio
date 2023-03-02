@@ -4,13 +4,13 @@
 
 import os
 import shutil
-import urllib2
+import urllib.request, urllib.error, urllib.parse
 import zipfile
 
-version = "4.1.2"
+version = "4.1.3"
 
 def download_file(url):
-    remote_file = urllib2.urlopen(url)
+    remote_file = urllib.request.urlopen(url)
     with open(os.path.basename(url), "wb") as local_file:
         while True:
             data = remote_file.read(1024)
@@ -18,15 +18,15 @@ def download_file(url):
                 break
             local_file.write(data)
 
-print "Downloading steamaudio_" + version + ".zip..."
+print("Downloading steamaudio_" + version + ".zip...")
 url = "https://github.com/ValveSoftware/steam-audio/releases/download/v" + version + "/steamaudio_" + version + ".zip"
 download_file(url)
 
-print "Extracting steamaudio_" + version + ".zip..."
+print("Extracting steamaudio_" + version + ".zip...")
 with zipfile.ZipFile(os.path.basename(url), "r") as zip:
 	zip.extractall()
 
-print "Creating directories..."
+print("Creating directories...")
 if not os.path.exists("lib/windows-x86"):
     os.makedirs("lib/windows-x86")
 if not os.path.exists("lib/windows-x64"):
@@ -44,7 +44,7 @@ if not os.path.exists("lib/android-armv8"):
 if not os.path.exists("lib/android-x86"):
     os.makedirs("lib/android-x86")
 
-print "Copying files..."
+print("Copying files...")
 shutil.copy("steamaudio/lib/windows-x86/phonon.dll", "lib/windows-x86")
 shutil.copy("steamaudio/lib/windows-x64/phonon.dll", "lib/windows-x64")
 shutil.copy("steamaudio/lib/linux-x86/libphonon.so", "lib/linux-x86")
@@ -58,5 +58,5 @@ shutil.copy("steamaudio/lib/android-armv7/libphonon.so", "lib/android-armv7")
 shutil.copy("steamaudio/lib/android-armv8/libphonon.so", "lib/android-armv8")
 shutil.copy("steamaudio/lib/android-x86/libphonon.so", "lib/android-x86")
 
-print "Cleaning up..."
+print("Cleaning up...")
 shutil.rmtree("steamaudio")

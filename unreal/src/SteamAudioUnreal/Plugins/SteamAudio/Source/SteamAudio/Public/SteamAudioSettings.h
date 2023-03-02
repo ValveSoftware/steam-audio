@@ -137,15 +137,15 @@ public:
 	bool bExportBSPGeometry;
 
     /** Reference to the Steam Audio Material asset to use as the default material for Static Mesh actors. */
-	UPROPERTY(GlobalConfig, EditAnywhere, Category = SceneExportSettings, meta = (AllowedClasses = "SteamAudioMaterial"))
+	UPROPERTY(GlobalConfig, EditAnywhere, Category = SceneExportSettings, meta = (AllowedClasses = "/Script/SteamAudio.SteamAudioMaterial"))
 	FSoftObjectPath DefaultMeshMaterial;
 
     /** Reference to the Steam Audio Material asset to use as the default material for Landscape actors. */
-    UPROPERTY(GlobalConfig, EditAnywhere, Category = SceneExportSettings, meta = (AllowedClasses = "SteamAudioMaterial"))
+    UPROPERTY(GlobalConfig, EditAnywhere, Category = SceneExportSettings, meta = (AllowedClasses = "/Script/SteamAudio.SteamAudioMaterial"))
     FSoftObjectPath DefaultLandscapeMaterial;
 
     /** Reference to the Steam Audio Material asset to use as the default material for BSP geometry. */
-    UPROPERTY(GlobalConfig, EditAnywhere, Category = SceneExportSettings, meta = (AllowedClasses = "SteamAudioMaterial", DisplayName = "Default BSP Material"))
+    UPROPERTY(GlobalConfig, EditAnywhere, Category = SceneExportSettings, meta = (AllowedClasses = "/Script/SteamAudio.SteamAudioMaterial", DisplayName = "Default BSP Material"))
     FSoftObjectPath DefaultBSPMaterial;
 
     UPROPERTY(GlobalConfig, EditAnywhere, Category = RayTracerSettings)
@@ -200,7 +200,7 @@ public:
     UPROPERTY(GlobalConfig, EditAnywhere, Category = ReflectionsSettings, meta = (UIMin = 0.1f, UIMax = 10.0f))
     float BakingIrradianceMinDistance;
 
-    UPROPERTY(GlobalConfig, EditAnywhere, Category = ReverbSettings, meta = (AllowedClasses = "SoundSubmix"))
+    UPROPERTY(GlobalConfig, EditAnywhere, Category = ReverbSettings, meta = (AllowedClasses = "/Script/Engine.SoundSubmix"))
     FSoftObjectPath ReverbSubmix;
 
     UPROPERTY(GlobalConfig, EditAnywhere, Category = PathingSettings, meta = (UIMin = 1, UIMax = 32))

@@ -131,6 +131,9 @@ def cmake_generate(args):
     # On Windows x64, build documentation.
     if args.platform == 'windows' and args.architecture == 'x64':
         cmake_args += ['-DSTEAMAUDIOFMOD_BUILD_DOCS=TRUE']
+        doxygen_path = find_tool('doxygen', r'doxygen-(\d+)\.(\d+)\.?(\d+)?', [1, 9])
+        if doxygen_path is not None:
+            cmake_args += ['-DDOXYGEN_EXECUTABLE=' + os.path.normpath(os.path.join(doxygen_path, 'doxygen.exe'))]
 
     cmake_args += ['../..']
 
@@ -194,7 +197,7 @@ def find_tool(name, dir_regex, min_version):
 
     latest_version_path = None
 
-    for path in matches.keys():
+    for path in list(matches.keys()):
         match = matches[path]
 
         version = []
@@ -244,7 +247,10 @@ os.chdir(build_subdir(args))
 
 cmake_path = find_tool('cmake', r'cmake-(\d+)\.(\d+)\.?(\d+)?', [3, 17])
 if cmake_path is not None:
-    os.environ['PATH'] = os.path.normpath(os.path.join(cmake_path, 'bin')) + os.pathsep + os.environ['PATH']
+    if host_system == 'osx':
+        os.environ['PATH'] = os.path.normpath(os.path.join(cmake_path, 'CMake.app', 'Contents', 'bin')) + os.pathsep + os.environ['PATH']
+    else:
+        os.environ['PATH'] = os.path.normpath(os.path.join(cmake_path, 'bin')) + os.pathsep + os.environ['PATH']
 
 if args.operation == 'generate':
     cmake_generate(args)
