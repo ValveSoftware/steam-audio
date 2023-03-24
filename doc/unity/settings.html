@@ -70,7 +70,7 @@
             
             
               <div class="version">
-                4.1.3
+                4.1.4
               </div>
             
           
@@ -190,6 +190,17 @@
 <li><p><em>Unity</em>. Integrate with Unity’s built-in audio engine.</p></li>
 <li><p><em>FMOD Studio</em>. Integrate with FMOD Studio. The Steam Audio plugin for FMOD Studio should be installed in your FMOD Studio project, and the FMOD Studio plugin for Unity should be installed in your Unity project.</p></li>
 </ul>
+</dd>
+<dt>Enable Perspective Correction</dt><dd><p>If checked, enables <em>perspective correction</em> for spatialized sound sources. When perspective correction is enabled, instead of spatializing sounds from their world-space position relative to the listener, sounds are spatialized from their <em>on-screen position</em> relative to the <em>user</em>. This can improve perceived localization accuracy in 3D non-VR applications.</p>
+<p>To apply perspective correction, you must also check <strong>Perspective Correction</strong> on each <strong>Steam Audio Source</strong> to which you want to apply perspective correction. Some sounds, e.g. spatialized UI sounds, may not need perspective correction.</p>
+<p>Perspective correction works by using the main camera’s projection matrix to adjust source positions before applying spatialization. In addition to the projection matrix, Steam Audio also needs a measure of the screen/viewport size as seen at the user’s position. This is controlled by adjusting the <strong>Perspective Correction Factor</strong>.</p>
+<p>This setting should not be checked for VR applications.</p>
+<p><em>Only available if using Unity’s built-in audio engine.</em></p>
+</dd>
+<dt>Perspective Correction Factor</dt><dd><p>When <strong>Enable Perspective Correction</strong> is checked, this value is used as a measure of the size of the screen/viewport at the user’s position. This is used to determine the perceived position of sounds emitted by a source, based on its on-screen position.</p>
+<p>The default value of 1 is calibrated for a full-screen application displayed on a 30-32 inch desktop monitor with the user seated at the desk. Lower values should be used for smaller screens, or if the user is further away from the screen. Higher values should be used for larger screens, or if the user is closer to the screen.</p>
+<p>Since this value is dependent on the user’s display and viewing configuration, you will most likely need to allow the user to calibrate this value in your in-game settings UI.</p>
+<p><em>Only available if using Unity’s built-in audio engine.</em></p>
 </dd>
 <dt>SOFA Files</dt><dd><p>List of SOFA files containing custom HRTFs. Each of these SOFA files will be loaded at app startup. The SOFA files should be placed in your project’s <code class="docutils literal notranslate"><span class="pre">StreamingAssets</span></code> folder. Entries in this list should be the names of the SOFA files, with or without the <code class="docutils literal notranslate"><span class="pre">.sofa</span></code> extension.</p>
 </dd>
