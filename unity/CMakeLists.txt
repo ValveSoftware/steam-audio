@@ -3,7 +3,7 @@
 
 cmake_minimum_required(VERSION 3.17)
 
-project(Phonon VERSION 4.1.3)
+project(Phonon VERSION 4.1.4)
 
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_MODULE_PATH "${CMAKE_HOME_DIRECTORY}/build")
@@ -32,7 +32,6 @@ if (IPL_OS_WINDOWS OR IPL_OS_LINUX)
         set(IPL_CPU_X86 TRUE)
     endif()
 elseif (IPL_OS_MACOS)
-    set(IPL_CPU_X64 TRUE)
 elseif (IPL_OS_ANDROID)
     if (CMAKE_ANDROID_ARCH STREQUAL "arm")
         set(IPL_CPU_ARMV7 TRUE)
@@ -133,26 +132,13 @@ endif()
 
 # macOS flags
 if (IPL_OS_MACOS)
-    set(CMAKE_OSX_ARCHITECTURES "x86_64")
+    set(CMAKE_OSX_ARCHITECTURES "x86_64;arm64")
     add_compile_options(-Wno-extern-c-compat) # Suppress warning about empty API structs.
 endif()
 
 # Android flags
 if (IPL_OS_ANDROID)
     add_compile_options(-fPIC -g $<$<CONFIG:Release>:-O3>)
-    if (IPL_CPU_ARMV7)
-        add_compile_options(--target=armv7a-linux-androideabi21)
-        add_compile_options(-I${CMAKE_ANDROID_NDK}/sysroot/usr/include/arm-linux-androideabi)
-    elseif (IPL_CPU_ARMV8)
-        add_compile_options(--target=aarch64-linux-androideabi21)
-        add_compile_options(-I${CMAKE_ANDROID_NDK}/sysroot/usr/include/aarch64-linux-android)
-    elseif (IPL_CPU_X86)
-        add_compile_options(--target=i686-linux-android21)
-        add_compile_options(-I${CMAKE_ANDROID_NDK}/sysroot/usr/include/i686-linux-android)
-    elseif (IPL_CPU_X64)
-        add_compile_options(--target=x86_64-linux-android21)
-        add_compile_options(-I${CMAKE_ANDROID_NDK}/sysroot/usr/include/x86_64-linux-android)
-    endif()
     add_link_options(-static-libstdc++)
 endif()
 

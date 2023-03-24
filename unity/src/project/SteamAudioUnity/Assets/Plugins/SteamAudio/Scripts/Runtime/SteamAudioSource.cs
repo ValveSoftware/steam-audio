@@ -61,6 +61,7 @@ namespace SteamAudio
         [Header("HRTF Settings")]
         public bool directBinaural = true;
         public HRTFInterpolation interpolation = HRTFInterpolation.Nearest;
+        public bool perspectiveCorrection = false;
 
         [Header("Attenuation Settings")]
         public bool distanceAttenuation = false;

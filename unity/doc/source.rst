@@ -19,6 +19,13 @@ Interpolation
 
     *Only available if using Unity's built-in audio engine.*
 
+Perspective Correction
+    If checked, perspective correction (based on the projection matrix of the current main camera) is applied to this source during spatialization. This can improve the perceived positional accuracy in non-VR applications. See :doc:`Steam Audio Settings <settings>` for more details.
+    
+    Requires **Enable Perspective Correction** to be checked in **Steam Audio Settings**.
+
+    *Only available if using Unity's built-in audio engine.*
+
 Distance Attenuation
     If checked, distance attenuation will be calculated and applied to the Audio Source. This takes into account the **Spatial Blend** setting on the Audio Source, so if **Spatial Blend** is set to **2D**, distance attenuation is effectively not applied.
 

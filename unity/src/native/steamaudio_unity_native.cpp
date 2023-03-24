@@ -13,11 +13,13 @@
 
 IPLContext gContext = nullptr;
 IPLHRTF gHRTF[2] = { nullptr, nullptr };
+IPLUnityPerspectiveCorrection gPerspectiveCorrection[2];
 IPLSimulationSettings gSimulationSettings;
 IPLSource gReverbSource[2] = { nullptr, nullptr };
 IPLReflectionMixer gReflectionMixer[2] = { nullptr, nullptr };
 
 std::atomic<bool> gNewHRTFWritten{ false };
+std::atomic<bool> gNewPerspectiveCorrectionWritten{ false };
 std::atomic<bool> gIsSimulationSettingsValid{ false };
 std::atomic<bool> gNewReverbSourceWritten{ false };
 std::atomic<bool> gNewReflectionMixerWritten{ false };
@@ -82,9 +84,26 @@ void UNITY_AUDIODSP_CALLBACK iplUnityTerminate()
     iplHRTFRelease(&gHRTF[0]);
     iplHRTFRelease(&gHRTF[1]);
 
+    gNewPerspectiveCorrectionWritten = false;
+
     iplContextRelease(&gContext);
 
     gSourceManager = nullptr;
+}
+
+void UNITY_AUDIODSP_CALLBACK iplUnitySetPerspectiveCorrection(IPLUnityPerspectiveCorrection correction)
+{
+    // Nothing to do if the perspective correction is disabled and has not changed.
+    if (correction.enabled == IPL_FALSE && gPerspectiveCorrection[1].enabled == IPL_FALSE)
+        return;
+
+    if (gPerspectiveCorrection[1].enabled == correction.enabled &&
+        gPerspectiveCorrection[1].xfactor == correction.xfactor &&
+        gPerspectiveCorrection[1].yfactor == correction.yfactor &&
+        memcmp(gPerspectiveCorrection[1].transform.elements, correction.transform.elements, 16 * sizeof(float)) == 0 )
+        return;
+
+    setPerspectiveCorrection(correction);
 }
 
 void UNITY_AUDIODSP_CALLBACK iplUnitySetHRTF(IPLHRTF hrtf)
@@ -283,6 +302,29 @@ void setHRTF(IPLHRTF hrtf)
     }
 }
 
+void getLatestPerspectiveCorrection()
+{
+    if (gNewPerspectiveCorrectionWritten)
+    {
+        gPerspectiveCorrection[0].enabled = gPerspectiveCorrection[1].enabled;
+        gPerspectiveCorrection[0].xfactor = gPerspectiveCorrection[1].xfactor;
+        gPerspectiveCorrection[0].yfactor = gPerspectiveCorrection[1].yfactor;
+        memcpy(gPerspectiveCorrection[0].transform.elements, gPerspectiveCorrection[1].transform.elements, 16 * sizeof(float));
+        gNewPerspectiveCorrectionWritten = false;
+    }
+}
+
+void setPerspectiveCorrection(IPLUnityPerspectiveCorrection& correction)
+{
+    if (!gNewPerspectiveCorrectionWritten)
+    {
+        gPerspectiveCorrection[1].enabled = correction.enabled;
+        gPerspectiveCorrection[1].xfactor = correction.xfactor;
+        gPerspectiveCorrection[1].yfactor = correction.yfactor;
+        memcpy(gPerspectiveCorrection[1].transform.elements, correction.transform.elements, 16 * sizeof(float));
+        gNewPerspectiveCorrectionWritten = true;
+    }
+}
 
 // --------------------------------------------------------------------------------------------------------------------
 // SourceManager

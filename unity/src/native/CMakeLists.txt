@@ -95,11 +95,13 @@ elseif(IPL_OS_ANDROID)
 endif()
 
 if (IPL_OS_MACOS)
-    add_custom_command(
-        TARGET      audioplugin_phonon
-        POST_BUILD
+    # CMake's Xcode generator runs post-build steps before code signing, so the copied files don't have the signature applied.
+    # This causes issues in newer versions of macOS, which refuse to load .bundles that don't have a signature.
+    add_custom_target(audioplugin_phonon_copy ALL
         COMMAND     ${CMAKE_COMMAND} -E copy_directory $<TARGET_BUNDLE_DIR:audioplugin_phonon> ${PLUGIN_DIR}audioplugin_phonon.bundle
+        VERBATIM
     )
+    add_dependencies(audioplugin_phonon_copy audioplugin_phonon)
 else()
     add_custom_command(
         TARGET      audioplugin_phonon

@@ -11,13 +11,16 @@ namespace SteamAudio
 {
     public abstract class AudioEngineState
     {
-        public virtual void Initialize(IntPtr context, IntPtr defaultHRTF, SimulationSettings simulationSettings)
+        public virtual void Initialize(IntPtr context, IntPtr defaultHRTF, SimulationSettings simulationSettings, PerspectiveCorrection correction)
         { }
 
         public virtual void Destroy()
         { }
 
         public virtual void SetHRTF(IntPtr hrtf)
+        { }
+
+        public virtual void SetPerspectiveCorrection(PerspectiveCorrection correction)
         { }
 
         public virtual void SetReverbSource(Source reverbSource)

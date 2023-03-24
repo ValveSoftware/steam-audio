@@ -74,6 +74,7 @@ namespace SteamAudio
             index++;
             mAudioSource.SetSpatializerFloat(index++, (source.directBinaural) ? 1.0f : 0.0f);
             mAudioSource.SetSpatializerFloat(index++, mHandle);
+            mAudioSource.SetSpatializerFloat(index++, (source.perspectiveCorrection) ? 1.0f : 0.0f);
         }
     }
 }

@@ -26,26 +26,18 @@
 
 
 // --------------------------------------------------------------------------------------------------------------------
-// Global State
-// --------------------------------------------------------------------------------------------------------------------
-
-extern IPLContext gContext;
-extern IPLHRTF gHRTF[2];
-extern IPLSimulationSettings gSimulationSettings;
-extern IPLSource gReverbSource[2];
-extern IPLReflectionMixer gReflectionMixer[2];
-
-extern std::atomic<bool> gNewHRTFWritten;
-extern std::atomic<bool> gIsSimulationSettingsValid;
-extern std::atomic<bool> gNewReverbSourceWritten;
-extern std::atomic<bool> gNewReflectionMixerWritten;
-
-
-// --------------------------------------------------------------------------------------------------------------------
 // API Functions
 // --------------------------------------------------------------------------------------------------------------------
 
 extern "C" {
+
+/** Settings for perspective correction. */
+typedef struct {
+    IPLbool enabled;
+    IPLfloat32 xfactor;
+    IPLfloat32 yfactor;
+    IPLMatrix4x4 transform;
+} IPLUnityPerspectiveCorrection;
 
 // This function is called by Unity when it loads native audio plugins. It returns metadata that describes all of the
 // effects implemented in this DLL.
@@ -56,6 +48,8 @@ UNITY_AUDIODSP_EXPORT_API void UNITY_AUDIODSP_CALLBACK iplUnityGetVersion(unsign
 UNITY_AUDIODSP_EXPORT_API void UNITY_AUDIODSP_CALLBACK iplUnityInitialize(IPLContext context);
 
 UNITY_AUDIODSP_EXPORT_API void UNITY_AUDIODSP_CALLBACK iplUnityTerminate();
+
+UNITY_AUDIODSP_EXPORT_API void UNITY_AUDIODSP_CALLBACK iplUnitySetPerspectiveCorrection(IPLUnityPerspectiveCorrection correction);
 
 UNITY_AUDIODSP_EXPORT_API void UNITY_AUDIODSP_CALLBACK iplUnitySetHRTF(IPLHRTF hrtf);
 
@@ -68,6 +62,23 @@ UNITY_AUDIODSP_EXPORT_API IPLint32 UNITY_AUDIODSP_CALLBACK iplUnityAddSource(IPL
 UNITY_AUDIODSP_EXPORT_API void UNITY_AUDIODSP_CALLBACK iplUnityRemoveSource(IPLint32 handle);
 
 }
+
+// --------------------------------------------------------------------------------------------------------------------
+// Global State
+// --------------------------------------------------------------------------------------------------------------------
+
+extern IPLContext gContext;
+extern IPLHRTF gHRTF[2];
+extern IPLUnityPerspectiveCorrection gPerspectiveCorrection[2];
+extern IPLSimulationSettings gSimulationSettings;
+extern IPLSource gReverbSource[2];
+extern IPLReflectionMixer gReflectionMixer[2];
+
+extern std::atomic<bool> gNewHRTFWritten;
+extern std::atomic<bool> gNewPerspectiveCorrectionWritten;
+extern std::atomic<bool> gIsSimulationSettingsValid;
+extern std::atomic<bool> gNewReverbSourceWritten;
+extern std::atomic<bool> gNewReflectionMixerWritten;
 
 
 // --------------------------------------------------------------------------------------------------------------------
@@ -119,9 +130,10 @@ IPLCoordinateSpace3 calcSourceCoordinates(const float* sourceMatrix);
 IPLCoordinateSpace3 calcListenerCoordinates(const float* listenerMatrix);
 
 void getLatestHRTF();
-
 void setHRTF(IPLHRTF hrtf);
 
+void getLatestPerspectiveCorrection();
+void setPerspectiveCorrection(IPLUnityPerspectiveCorrection& correction);
 
 // --------------------------------------------------------------------------------------------------------------------
 // SourceManager

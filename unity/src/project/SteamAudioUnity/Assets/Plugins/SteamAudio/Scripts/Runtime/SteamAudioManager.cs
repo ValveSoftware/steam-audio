@@ -189,6 +189,29 @@ namespace SteamAudio
             return reflectionEffectType;
         }
 
+        public static PerspectiveCorrection GetPerspectiveCorrection()
+        {
+            PerspectiveCorrection correction;
+            if (Camera.main != null && Camera.main.aspect > .0f)
+            {
+                correction.enabled = SteamAudioSettings.Singleton.perspectiveCorrection ? Bool.True : Bool.False;
+                correction.xfactor = 1.0f * SteamAudioSettings.Singleton.perspectiveCorrectionFactor;
+                correction.yfactor = correction.xfactor / Camera.main.aspect;
+
+                // Camera space matches OpenGL convention. No need to transform matrix to ConvertTransform.
+                correction.transform = Common.TransformMatrix(Camera.main.projectionMatrix * Camera.main.worldToCameraMatrix);
+            }
+            else
+            {
+                correction.enabled = Bool.False;
+                correction.xfactor = 1.0f;
+                correction.yfactor = 1.0f;
+                correction.transform = Common.TransformMatrix(UnityEngine.Matrix4x4.identity);
+            }
+
+            return correction;
+        }
+
         public static SimulationSettings GetSimulationSettings(bool baking)
         {
             var simulationSettings = new SimulationSettings { };
@@ -372,6 +395,7 @@ namespace SteamAudio
             if (reason == ManagerInitReason.Playing)
             {
                 var simulationSettings = GetSimulationSettings(false);
+                var perspectiveCorrection = GetPerspectiveCorrection();
 
                 mSimulator = new Simulator(mContext, simulationSettings);
 
@@ -381,7 +405,7 @@ namespace SteamAudio
                 mAudioEngineState = AudioEngineState.Create(SteamAudioSettings.Singleton.audioEngine);
                 if (mAudioEngineState != null)
                 {
-                    mAudioEngineState.Initialize(mContext.Get(), mHRTFs[0].Get(), simulationSettings);
+                    mAudioEngineState.Initialize(mContext.Get(), mHRTFs[0].Get(), simulationSettings, perspectiveCorrection);
                 }
             }
         }
@@ -411,6 +435,9 @@ namespace SteamAudio
         {
             if (mAudioEngineState == null)
                 return;
+
+            var perspectiveCorrection = GetPerspectiveCorrection();
+            mAudioEngineState.SetPerspectiveCorrection(perspectiveCorrection);
 
             mAudioEngineState.SetHRTF(CurrentHRTF.Get());
 
@@ -733,6 +760,7 @@ namespace SteamAudio
             }
 
             var simulationSettings = GetSimulationSettings(false);
+            var persPectiveCorrection = GetPerspectiveCorrection();
 
             sSingleton.mSimulator = new Simulator(sSingleton.mContext, simulationSettings);
 
@@ -743,7 +771,7 @@ namespace SteamAudio
             sSingleton.mAudioEngineState = AudioEngineState.Create(SteamAudioSettings.Singleton.audioEngine);
             if (sSingleton.mAudioEngineState != null)
             {
-                sSingleton.mAudioEngineState.Initialize(sSingleton.mContext.Get(), sSingleton.mHRTFs[0].Get(), simulationSettings);
+                sSingleton.mAudioEngineState.Initialize(sSingleton.mContext.Get(), sSingleton.mHRTFs[0].Get(), simulationSettings, persPectiveCorrection);
 
                 var listeners = new SteamAudioListener[sSingleton.mListeners.Count];
                 sSingleton.mListeners.CopyTo(listeners);
@@ -1419,11 +1447,7 @@ namespace SteamAudio
         // This method is called as soon as scripts are loaded, which happens whenever play mode is started
         // (in the editor), or whenever the game is launched. We then create a Steam Audio Manager object
         // and move it to the Don't Destroy On Load list.
-#if UNITY_2018_1_OR_NEWER
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
-#else
-        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
-#endif
         static void AutoInitialize()
         {
             Initialize(ManagerInitReason.Playing);

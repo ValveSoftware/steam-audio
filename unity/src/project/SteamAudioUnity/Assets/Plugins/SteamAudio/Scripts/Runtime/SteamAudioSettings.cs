@@ -23,6 +23,9 @@ namespace SteamAudio
         public AudioEngineType audioEngine = AudioEngineType.Unity;
 
         [Header("HRTF Settings")]
+        public bool perspectiveCorrection = false;
+        [Range(.25f, 4.0f)]
+        public float perspectiveCorrectionFactor = 1.0f;
         public string[] SOFAFiles = null;
 
         [Header("Material Settings")]

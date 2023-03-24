@@ -12,6 +12,26 @@ Audio Engine
 
     -   *FMOD Studio*. Integrate with FMOD Studio. The Steam Audio plugin for FMOD Studio should be installed in your FMOD Studio project, and the FMOD Studio plugin for Unity should be installed in your Unity project.
 
+Enable Perspective Correction
+    If checked, enables *perspective correction* for spatialized sound sources. When perspective correction is enabled, instead of spatializing sounds from their world-space position relative to the listener, sounds are spatialized from their *on-screen position* relative to the *user*. This can improve perceived localization accuracy in 3D non-VR applications.
+    
+    To apply perspective correction, you must also check **Perspective Correction** on each **Steam Audio Source** to which you want to apply perspective correction. Some sounds, e.g. spatialized UI sounds, may not need perspective correction.
+    
+    Perspective correction works by using the main camera's projection matrix to adjust source positions before applying spatialization. In addition to the projection matrix, Steam Audio also needs a measure of the screen/viewport size as seen at the user's position. This is controlled by adjusting the **Perspective Correction Factor**.
+
+    This setting should not be checked for VR applications.
+
+    *Only available if using Unity's built-in audio engine.*
+
+Perspective Correction Factor
+    When **Enable Perspective Correction** is checked, this value is used as a measure of the size of the screen/viewport at the user's position. This is used to determine the perceived position of sounds emitted by a source, based on its on-screen position.
+
+    The default value of 1 is calibrated for a full-screen application displayed on a 30-32 inch desktop monitor with the user seated at the desk. Lower values should be used for smaller screens, or if the user is further away from the screen. Higher values should be used for larger screens, or if the user is closer to the screen.
+
+    Since this value is dependent on the user's display and viewing configuration, you will most likely need to allow the user to calibrate this value in your in-game settings UI.
+
+    *Only available if using Unity's built-in audio engine.*
+
 SOFA Files
     List of SOFA files containing custom HRTFs. Each of these SOFA files will be loaded at app startup. The SOFA files should be placed in your project's ``StreamingAssets`` folder. Entries in this list should be the names of the SOFA files, with or without the ``.sofa`` extension.
 

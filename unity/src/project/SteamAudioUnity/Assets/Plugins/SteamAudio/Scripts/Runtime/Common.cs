@@ -82,6 +82,30 @@ namespace SteamAudio
             return outMatrix;
         }
 
+        public static Matrix4x4 TransformMatrix(UnityEngine.Matrix4x4 inMatrix)
+        {
+            var outMatrix = new Matrix4x4();
+
+            outMatrix.m00 = inMatrix.m00;
+            outMatrix.m01 = inMatrix.m01;
+            outMatrix.m02 = inMatrix.m02;
+            outMatrix.m03 = inMatrix.m03;
+            outMatrix.m10 = inMatrix.m10;
+            outMatrix.m11 = inMatrix.m11;
+            outMatrix.m12 = inMatrix.m12;
+            outMatrix.m13 = inMatrix.m13;
+            outMatrix.m20 = inMatrix.m20;
+            outMatrix.m21 = inMatrix.m21;
+            outMatrix.m22 = inMatrix.m22;
+            outMatrix.m23 = inMatrix.m23;
+            outMatrix.m30 = inMatrix.m30;
+            outMatrix.m31 = inMatrix.m31;
+            outMatrix.m32 = inMatrix.m32;
+            outMatrix.m33 = inMatrix.m33;
+
+            return outMatrix;
+        }
+
         public static byte[] ConvertString(string s)
         {
             return Encoding.UTF8.GetBytes(s + Char.MinValue);

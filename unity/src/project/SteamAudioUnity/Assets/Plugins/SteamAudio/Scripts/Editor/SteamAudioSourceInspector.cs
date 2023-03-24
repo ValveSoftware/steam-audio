@@ -13,6 +13,7 @@ namespace SteamAudio
     {
         SerializedProperty mDirectBinaural;
         SerializedProperty mInterpolation;
+        SerializedProperty mPerspectiveCorrection;
         SerializedProperty mDistanceAttenuation;
         SerializedProperty mDistanceAttenuationInput;
         SerializedProperty mAirAbsorption;
@@ -59,6 +60,7 @@ namespace SteamAudio
         {
             mDirectBinaural = serializedObject.FindProperty("directBinaural");
             mInterpolation = serializedObject.FindProperty("interpolation");
+            mPerspectiveCorrection = serializedObject.FindProperty("perspectiveCorrection");
             mDistanceAttenuation = serializedObject.FindProperty("distanceAttenuation");
             mDistanceAttenuationInput = serializedObject.FindProperty("distanceAttenuationInput");
             mAirAbsorption = serializedObject.FindProperty("airAbsorption");
@@ -108,6 +110,11 @@ namespace SteamAudio
             {
                 EditorGUILayout.PropertyField(mDirectBinaural);
                 EditorGUILayout.PropertyField(mInterpolation);
+            }
+
+            if (audioEngineIsUnity && SteamAudioSettings.Singleton.perspectiveCorrection)
+            {
+                EditorGUILayout.PropertyField(mPerspectiveCorrection);
             }
 
             if (audioEngineIsUnity)

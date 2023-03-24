@@ -10,11 +10,12 @@ namespace SteamAudio
 {
     public sealed class UnityAudioEngineState : AudioEngineState
     {
-        public override void Initialize(IntPtr context, IntPtr defaultHRTF, SimulationSettings simulationSettings)
+        public override void Initialize(IntPtr context, IntPtr defaultHRTF, SimulationSettings simulationSettings, PerspectiveCorrection correction)
         {
             API.iplUnityInitialize(context);
             API.iplUnitySetHRTF(defaultHRTF);
             API.iplUnitySetSimulationSettings(simulationSettings);
+            API.iplUnitySetPerspectiveCorrection(correction);
         }
 
         public override void Destroy()
@@ -25,6 +26,11 @@ namespace SteamAudio
         public override void SetHRTF(IntPtr hrtf)
         {
             API.iplUnitySetHRTF(hrtf);
+        }
+
+        public override void SetPerspectiveCorrection(PerspectiveCorrection correction)
+        {
+            API.iplUnitySetPerspectiveCorrection(correction);
         }
 
         public override void SetReverbSource(Source reverbSource)

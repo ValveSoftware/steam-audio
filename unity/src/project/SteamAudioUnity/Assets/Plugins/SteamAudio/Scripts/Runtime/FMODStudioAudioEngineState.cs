@@ -11,7 +11,7 @@ namespace SteamAudio
 {
     public sealed class FMODStudioAudioEngineState : AudioEngineState
     {
-        public override void Initialize(IntPtr context, IntPtr defaultHRTF, SimulationSettings simulationSettings)
+        public override void Initialize(IntPtr context, IntPtr defaultHRTF, SimulationSettings simulationSettings, PerspectiveCorrection correction)
         {
             API.iplFMODInitialize(context);
             API.iplFMODSetHRTF(defaultHRTF);

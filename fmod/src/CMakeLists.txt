@@ -116,11 +116,13 @@ endif()
 
 if (NOT UNITY_FMOD_PLUGIN_DIR STREQUAL "")
     if (IPL_OS_MACOS)
-        add_custom_command(
-            TARGET      phonon_fmod_bundle
-            POST_BUILD
+        # CMake's Xcode generator runs post-build steps before code signing, so the copied files don't have the signature applied.
+        # This causes issues in newer versions of macOS, which refuse to load .bundles that don't have a signature.
+        add_custom_target(phonon_fmod_bundle_copy_unity ALL
             COMMAND     ${CMAKE_COMMAND} -E copy_directory $<TARGET_BUNDLE_DIR:phonon_fmod_bundle> ${UNITY_FMOD_PLUGIN_DIR}/phonon_fmod.bundle
+            VERBATIM
         )
+        add_dependencies(phonon_fmod_bundle_copy_unity phonon_fmod_bundle)
     else()
         add_custom_command(
             TARGET      phonon_fmod

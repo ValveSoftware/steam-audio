@@ -613,6 +613,15 @@ namespace SteamAudio
         public PathEffectParams pathing;
     }
 
+    [StructLayout(LayoutKind.Sequential)]
+    public struct PerspectiveCorrection
+    {
+        public Bool enabled;
+        public float xfactor;
+        public float yfactor;
+        public Matrix4x4 transform;
+    }
+
     // FUNCTIONS
 
     public static class API
@@ -914,7 +923,10 @@ namespace SteamAudio
         public static extern void iplUnityInitialize(IntPtr context);
 
         [DllImport("audioplugin_phonon")]
-        public static extern void iplUnitySetHRTF(IntPtr hrtf);
+        public static extern void iplUnitySetPerspectiveCorrection(PerspectiveCorrection correction);
+
+        [DllImport("audioplugin_phonon")]
+        public static extern void  iplUnitySetHRTF(IntPtr hrtf);
 
         [DllImport("audioplugin_phonon")]
         public static extern void iplUnitySetSimulationSettings(SimulationSettings simulationSettings);

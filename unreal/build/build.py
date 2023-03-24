@@ -108,8 +108,9 @@ def cmake_generate(args):
         elif args.architecture == 'x64':
             cmake_args += ['-DCMAKE_TOOLCHAIN_FILE=' + root_dir() + '/build/toolchain_android_x64.cmake']
 
-        cmake_args += ['-DCMAKE_ANDROID_NDK=C:/Android/sdk/ndk-bundle']
-        cmake_args += ['-DCMAKE_MAKE_PROGRAM=C:/Android/sdk/ndk-bundle/prebuilt/windows-x86_64/bin/make.exe']
+        if os.environ.get('ANDROID_NDK') is not None:
+            cmake_args += ['-DCMAKE_ANDROID_NDK=' + os.environ.get('ANDROID_NDK')]
+            cmake_args += ['-DCMAKE_MAKE_PROGRAM=' + os.environ.get('ANDROID_NDK') + '/prebuilt/windows-x86_64/bin/make.exe']
 
     # On Linux and Android, specify the build configuration at generate-time.
     if args.platform in ['linux', 'android']:
@@ -126,6 +127,10 @@ def cmake_generate(args):
     # On Windows x64, build documentation.
     if args.platform == 'windows' and args.architecture == 'x64':
         cmake_args += ['-DSTEAMAUDIOUNREAL_BUILD_DOCS=TRUE']
+
+    # Point to the location of UnrealBuildTool.
+    if os.environ.get('STEAMAUDIOUNREAL_UBT_DIR') is not None:
+        cmake_args += ['-DUnreal_EXECUTABLE_DIR=' + os.environ.get('STEAMAUDIOUNREAL_UBT_DIR')]
 
     # Set up cross-compiling flags.
     if os.getenv('STEAMAUDIOUNREAL_CROSSCOMPILE_WIN32') == '1':

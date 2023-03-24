@@ -43,6 +43,7 @@ enum Params
     SIMULATION_OUTPUTS_PTR_HIGH, // DEPRECATED
     DIRECT_BINAURAL,
     SIMULATION_OUTPUTS_HANDLE,
+    PERSPECTIVE_CORRECTION,
     NUM_PARAMS
 };
 
@@ -80,11 +81,13 @@ UnityAudioParameterDefinition gParamDefinitions[] =
     { "SimOutHigh", "", "Simulation outputs (upper 32 bits).", -std::numeric_limits<float>::max(), std::numeric_limits<float>::max(), 0.0f, 1.0f, 1.0f },
     { "DirectBinaural", "", "Apply HRTF to direct path.", 0.0f, 1.0f, 1.0f, 1.0f, 1.0f },
     { "SimOutHandle", "", "Simulation outputs handle.", std::numeric_limits<float>::min(), std::numeric_limits<float>::max(), -1.0f, 1.0f, 1.0f },
+    { "PerspectiveCorr", "", "Apply perspective correction to direct path.", 0.0f, 1.0f, 0.0f, 1.0f, 1.0f }, 
 };
 
 struct State
 {
     bool directBinaural;
+    bool perspectiveCorrection;
     bool applyDistanceAttenuation;
     bool applyAirAbsorption;
     bool applyDirectivity;
@@ -328,6 +331,7 @@ void reset(UnityAudioEffectState* state)
     effect->inputStarted = false;
 
     effect->directBinaural = true;
+    effect->perspectiveCorrection = false;
     effect->applyDistanceAttenuation = true;
     effect->applyAirAbsorption = false;
     effect->applyDirectivity = false;
@@ -430,6 +434,9 @@ UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK getParam(UnityAudioEffectState* st
     {
     case DIRECT_BINAURAL:
         *value = (effect->directBinaural) ? 1.0f : 0.0f;
+        break;
+    case PERSPECTIVE_CORRECTION:
+        *value = (effect->perspectiveCorrection) ? 1.0f : 0.0f;
         break;
     case APPLY_DISTANCEATTENUATION:
         *value = (effect->applyDistanceAttenuation) ? 1.0f : 0.0f;
@@ -572,6 +579,9 @@ UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK setParam(UnityAudioEffectState* st
     {
     case DIRECT_BINAURAL:
         effect->directBinaural = (value == 1.0f);
+        break;
+    case PERSPECTIVE_CORRECTION:
+        effect->perspectiveCorrection = (value == 1.0f);
         break;
     case APPLY_DISTANCEATTENUATION:
         effect->applyDistanceAttenuation = (value == 1.0f);
@@ -726,6 +736,7 @@ UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK process(UnityAudioEffectState* sta
     if (!(initFlags & INIT_DIRECTAUDIOBUFFERS) || !(initFlags & INIT_BINAURALEFFECT) || !(initFlags & INIT_DIRECTEFFECT))
         return UNITY_AUDIODSP_OK;
 
+    getLatestPerspectiveCorrection();
     getLatestHRTF();
     getLatestSource(state);
 
@@ -734,14 +745,6 @@ UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK process(UnityAudioEffectState* sta
 
     // World-to-local transform matrix for the listener.
     auto L = state->spatializerdata->listenermatrix;
-
-    // Calculate the direction of the source relative to the listener.
-    auto directionX = L[0] * S[12] + L[4] * S[13] + L[8] * S[14] + L[12];
-    auto directionY = L[1] * S[12] + L[5] * S[13] + L[9] * S[14] + L[13];
-    auto directionZ = L[2] * S[12] + L[6] * S[13] + L[10] * S[14] + L[14];
-    auto direction = convertVector(directionX, directionY, directionZ);
-    if (dot(direction, direction) < 1e-4f)
-        direction = IPLVector3{ 0.0f, 1.0f, 0.0f };
 
     auto listenerCoordinates = calcListenerCoordinates(L);
     auto sourceCoordinates = calcSourceCoordinates(S);
@@ -810,6 +813,35 @@ UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK process(UnityAudioEffectState* sta
         directParams.flags = static_cast<IPLDirectEffectFlags>(directParams.flags | IPL_DIRECTEFFECTFLAGS_APPLYTRANSMISSION);
 
     iplDirectEffectApply(effect->directEffect, &directParams, &effect->inBuffer, &effect->directBuffer);
+
+    IPLVector3 direction{ 0.0f, 1.0f, 0.0f };
+    if (gPerspectiveCorrection[0].enabled && effect->perspectiveCorrection)
+    {
+        auto M = gPerspectiveCorrection[0].transform.elements[0];
+        auto directionX = M[0] * S[12] + M[1] * S[13] + M[2] * S[14] + M[3];
+        auto directionY = M[4] * S[12] + M[5] * S[13] + M[6] * S[14] + M[7];
+        auto directionZ = M[8] * S[12] + M[9] * S[13] + M[10] * S[14] + M[11];
+        auto directionW = M[12] * S[12] + M[13] * S[13] + M[14] * S[14] + M[15];
+
+        float xfactor = gPerspectiveCorrection[0].xfactor;
+        float yfactor = gPerspectiveCorrection[0].yfactor;
+
+        if (fabs(directionW) > 1e-6f)
+        {
+            // Should always hit this. Zero check just to be safe.
+            direction = convertVector(.5f * directionX * xfactor / fabsf(directionW), .5f * directionY * yfactor / fabsf(directionW), directionZ / fabsf(directionW));
+        }
+    }
+    else
+    {
+        auto directionX = L[0] * S[12] + L[4] * S[13] + L[8] * S[14] + L[12];
+        auto directionY = L[1] * S[12] + L[5] * S[13] + L[9] * S[14] + L[13];
+        auto directionZ = L[2] * S[12] + L[6] * S[13] + L[10] * S[14] + L[14];
+        direction = convertVector(directionX, directionY, directionZ);
+    }
+
+    if (dot(direction, direction) < 1e-6f)
+        direction = IPLVector3{ 0.0f, 1.0f, 0.0f };
 
     if (effect->directBinaural)
     {

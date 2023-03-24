@@ -12,6 +12,8 @@ namespace SteamAudio
     public class SteamAudioSettingsInspector : Editor
     {
         SerializedProperty mAudioEngine;
+        SerializedProperty mPerspectiveCorrection;
+        SerializedProperty mPerspectiveCorrectionFactor;
         SerializedProperty mSOFAFiles;
         SerializedProperty mDefaultMaterial;
         SerializedProperty mSceneType;
@@ -61,6 +63,8 @@ namespace SteamAudio
         private void OnEnable()
         {
             mAudioEngine = serializedObject.FindProperty("audioEngine");
+            mPerspectiveCorrection = serializedObject.FindProperty("perspectiveCorrection");
+            mPerspectiveCorrectionFactor = serializedObject.FindProperty("perspectiveCorrectionFactor");
             mSOFAFiles = serializedObject.FindProperty("SOFAFiles");
             mDefaultMaterial = serializedObject.FindProperty("defaultMaterial");
             mSceneType = serializedObject.FindProperty("sceneType");
@@ -105,6 +109,11 @@ namespace SteamAudio
             serializedObject.Update();
 
             EditorGUILayout.PropertyField(mAudioEngine);
+            EditorGUILayout.PropertyField(mPerspectiveCorrection, new UnityEngine.GUIContent("Enable Perspective Correction"));
+
+            if (mPerspectiveCorrection.boolValue)
+                EditorGUILayout.PropertyField(mPerspectiveCorrectionFactor);
+
             EditorGUILayout.PropertyField(mSOFAFiles, true);
             EditorGUILayout.PropertyField(mDefaultMaterial);
 #if UNITY_2019_2_OR_NEWER

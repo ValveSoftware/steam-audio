@@ -9,10 +9,10 @@ find_path(Unity_INCLUDE_DIR
 	PATH_SUFFIXES 	unity5
 )
 
-# find_program(Unity_EXECUTABLE
-# 	NAMES unity
-# 	PATHS ${Unity_EXECUTABLE_DIR}
-# )
+find_program(Unity_EXECUTABLE
+	NAMES Unity.exe
+	PATHS ${Unity_EXECUTABLE_DIR}
+)
 
 find_package_handle_standard_args(Unity 
 	FOUND_VAR 		Unity_FOUND 
