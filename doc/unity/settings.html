@@ -42,7 +42,7 @@
     
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Menu Commands" href="menu-commands.html" />
+    <link rel="next" title="SOFA File" href="sofafile.html" />
     <link rel="prev" title="Steam Audio Material" href="material.html" /> 
 </head>
 
@@ -70,7 +70,7 @@
             
             
               <div class="version">
-                4.1.4
+                4.2.0
               </div>
             
           
@@ -106,6 +106,7 @@
 <li class="toctree-l2 current"><a class="reference internal" href="asset-types.html">Asset Types</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="material.html">Steam Audio Material</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">Steam Audio Settings</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sofafile.html">SOFA File</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="menu-commands.html">Menu Commands</a></li>
@@ -202,7 +203,7 @@
 <p>Since this value is dependent on the user’s display and viewing configuration, you will most likely need to allow the user to calibrate this value in your in-game settings UI.</p>
 <p><em>Only available if using Unity’s built-in audio engine.</em></p>
 </dd>
-<dt>SOFA Files</dt><dd><p>List of SOFA files containing custom HRTFs. Each of these SOFA files will be loaded at app startup. The SOFA files should be placed in your project’s <code class="docutils literal notranslate"><span class="pre">StreamingAssets</span></code> folder. Entries in this list should be the names of the SOFA files, with or without the <code class="docutils literal notranslate"><span class="pre">.sofa</span></code> extension.</p>
+<dt>SOFA Files</dt><dd><p>List of SOFA files containing custom HRTFs. Each of these SOFA files will be loaded at app startup. The SOFA files should be imported into your project’s <code class="docutils literal notranslate"><span class="pre">Assets</span></code> folder, and will automatically be packaged along with your project’s assets.</p>
 </dd>
 <dt>Default Material</dt><dd><p>Reference to a Material asset that defines the acoustic properties of any geometry for which a material is not specified.</p>
 </dd>
@@ -305,7 +306,7 @@
           </div>
           <footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="menu-commands.html" class="btn btn-neutral float-right" title="Menu Commands" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="sofafile.html" class="btn btn-neutral float-right" title="SOFA File" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
         <a href="material.html" class="btn btn-neutral float-left" title="Steam Audio Material" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 

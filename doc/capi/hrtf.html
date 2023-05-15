@@ -70,7 +70,7 @@
             
             
               <div class="version">
-                4.1.4
+                4.2.0
               </div>
             
           
@@ -280,7 +280,28 @@
 <dt class="sig sig-object cpp" id="_CPPv4N15IPLHRTFSettings12sofaFileNameE">
 <span id="_CPPv3N15IPLHRTFSettings12sofaFileNameE"></span><span id="_CPPv2N15IPLHRTFSettings12sofaFileNameE"></span><span id="IPLHRTFSettings::sofaFileName__cCP"></span><span class="target" id="struct_i_p_l_h_r_t_f_settings_1a84e20a1b782c5de682b81056e631605e"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">sofaFileName</span></span></span><a class="headerlink" href="#_CPPv4N15IPLHRTFSettings12sofaFileNameE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>SOFA file from which to load HRTF data. </p>
+<p>Either <code class="docutils literal notranslate"><span class="pre">sofaFileName</span></code> or <code class="docutils literal notranslate"><span class="pre">sofaData</span></code> should be non-NULL. Only for <code class="docutils literal notranslate"><span class="pre">IPL_HRTFTYPE_SOFA</span></code>. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N15IPLHRTFSettings8sofaDataE">
+<span id="_CPPv3N15IPLHRTFSettings8sofaDataE"></span><span id="_CPPv2N15IPLHRTFSettings8sofaDataE"></span><span id="IPLHRTFSettings::sofaData__uint8_tCP"></span><span class="target" id="struct_i_p_l_h_r_t_f_settings_1a83fda79beda9c44942b4f63b84149696"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">uint8_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">sofaData</span></span></span><a class="headerlink" href="#_CPPv4N15IPLHRTFSettings8sofaDataE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Pointer to a buffer containing SOFA file data from which to load HRTF data. </p>
+<p>Either <code class="docutils literal notranslate"><span class="pre">sofaFileName</span></code> or <code class="docutils literal notranslate"><span class="pre">sofaData</span></code> should be non-NULL. Only for <code class="docutils literal notranslate"><span class="pre">IPL_HRTFTYPE_SOFA</span></code>. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N15IPLHRTFSettings12sofaDataSizeE">
+<span id="_CPPv3N15IPLHRTFSettings12sofaDataSizeE"></span><span id="_CPPv2N15IPLHRTFSettings12sofaDataSizeE"></span><span id="IPLHRTFSettings::sofaDataSize__i"></span><span class="target" id="struct_i_p_l_h_r_t_f_settings_1a45c9d12bcd4f553ab18dbd5d9d1ff5dd"></span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">sofaDataSize</span></span></span><a class="headerlink" href="#_CPPv4N15IPLHRTFSettings12sofaDataSizeE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Size (in bytes) of the buffer pointed to by <code class="docutils literal notranslate"><span class="pre">sofaData</span></code>. </p>
 <p>Only for <code class="docutils literal notranslate"><span class="pre">IPL_HRTFTYPE_SOFA</span></code>. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N15IPLHRTFSettings6volumeE">
+<span id="_CPPv3N15IPLHRTFSettings6volumeE"></span><span id="_CPPv2N15IPLHRTFSettings6volumeE"></span><span id="IPLHRTFSettings::volume__float"></span><span class="target" id="struct_i_p_l_h_r_t_f_settings_1a016abda2855c77dcc1630f9d2f9f8d18"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">volume</span></span></span><a class="headerlink" href="#_CPPv4N15IPLHRTFSettings6volumeE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Volume correction factor to apply to the loaded HRTF data. </p>
+<p>A value of 1.0 means the HRTF data will be used without any change. </p>
 </dd></dl>
 
 </div>
