@@ -26,7 +26,7 @@ namespace SteamAudio
         public bool perspectiveCorrection = false;
         [Range(.25f, 4.0f)]
         public float perspectiveCorrectionFactor = 1.0f;
-        public string[] SOFAFiles = null;
+        public SOFAFile[] SOFAFiles = null;
 
         [Header("Material Settings")]
         public SteamAudioMaterial defaultMaterial = null;

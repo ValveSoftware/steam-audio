@@ -13,6 +13,7 @@
 #include "SteamAudioScene.h"
 #include "SteamAudioSettings.h"
 #include "SteamAudioSourceComponent.h"
+#include "SOFAFile.h"
 
 namespace SteamAudio {
 
@@ -104,22 +105,49 @@ IPLCoordinateSpace3 FSteamAudioManager::GetListenerCoordinates()
 
 bool FSteamAudioManager::InitHRTF(IPLAudioSettings& AudioSettings)
 {
-    // If we're using the Unreal's built-in audio engine, we may have already initialized the HRTF when the
+    // If we're using Unreal's built-in audio engine, we may have already initialized the HRTF when the
     // spatialization plugin was initialized. In that case, do nothing.
     if (HRTF)
         return true;
 
     IPLHRTFSettings HRTFSettings{};
     HRTFSettings.type = IPL_HRTFTYPE_DEFAULT;
+    HRTFSettings.volume = 1.0f;
+
+    const USteamAudioSettings* Settings = GetDefault<USteamAudioSettings>();
+    if (Settings && Settings->SOFAFile.IsValid())
+    {
+        USOFAFile* SOFAFile = Cast<USOFAFile>(Settings->SOFAFile.TryLoad());
+        if (SOFAFile)
+        {
+            HRTFSettings.type = IPL_HRTFTYPE_SOFA;
+            HRTFSettings.sofaData = SOFAFile->Data.GetData();
+            HRTFSettings.sofaDataSize = SOFAFile->Data.Num();
+            HRTFSettings.volume = SOFAFile->Volume;
+        }
+    }
 
     IPLerror Status = iplHRTFCreate(Context, &AudioSettings, &HRTFSettings, &HRTF);
-    if (Status != IPL_STATUS_SUCCESS)
+    if (Status == IPL_STATUS_SUCCESS)
     {
+        return true;
+    }
+    else
+    {
+        if (HRTFSettings.type == IPL_HRTFTYPE_SOFA)
+        {
+            UE_LOG(LogSteamAudio, Error, TEXT("Unable to create HRTF from SOFA file %s, reverting to default HRTF. [%d]"), *Settings->SOFAFile.GetAssetPathString(), Status);
+
+            HRTFSettings.type = IPL_HRTFTYPE_DEFAULT;
+            
+            Status = iplHRTFCreate(Context, &AudioSettings, &HRTFSettings, &HRTF);
+            if (Status == IPL_STATUS_SUCCESS)
+                return true;
+        }
+
         UE_LOG(LogSteamAudio, Error, TEXT("Unable to create HRTF. [%d]"), Status);
         return false;
     }
-
-    return true;
 }
 
 bool FSteamAudioManager::InitializeSteamAudio(EManagerInitReason Reason)

@@ -4,6 +4,7 @@
 //
 
 using System;
+using System.Runtime.InteropServices;
 using UnityEngine;
 
 namespace SteamAudio
@@ -12,21 +13,47 @@ namespace SteamAudio
     {
         IntPtr mHRTF = IntPtr.Zero;
 
-        public HRTF(Context context, AudioSettings audioSettings, string sofaFileName)
+        public HRTF(Context context, AudioSettings audioSettings, string sofaFileName, byte[] sofaFileData, float volume)
         {
+            IntPtr sofaData = IntPtr.Zero;
+
             var hrtfSettings = new HRTFSettings { };
-            hrtfSettings.type = (sofaFileName != null) ? HRTFType.SOFA : HRTFType.Default;
-            hrtfSettings.sofaFileName = sofaFileName;
+            if (sofaFileData != null && sofaFileData.Length > 0)
+            {
+                hrtfSettings.type = HRTFType.SOFA;
+
+                sofaData = Marshal.AllocHGlobal(sofaFileData.Length);
+                Marshal.Copy(sofaFileData, 0, sofaData, sofaFileData.Length);
+
+                hrtfSettings.sofaFileData = sofaData;
+                hrtfSettings.sofaFileDataSize = sofaFileData.Length;
+            }
+            else if (sofaFileName != null)
+            {
+                hrtfSettings.type = HRTFType.SOFA;
+                hrtfSettings.sofaFileName = sofaFileName;
+            } 
+            else
+            {
+                hrtfSettings.type = HRTFType.Default;
+            }
+
+            hrtfSettings.volume = volume;
 
             var status = API.iplHRTFCreate(context.Get(), ref audioSettings, ref hrtfSettings, out mHRTF);
             if (status != Error.Success)
             {
-                Debug.LogError(string.Format("Unable to load HRTF: {0}.", hrtfSettings.sofaFileName));
+                Debug.LogError(string.Format("Unable to load HRTF: {0}. [{1}]", (sofaFileName != null) ? sofaFileName : "default", status));
                 mHRTF = IntPtr.Zero;
             }
             else
             {
-                Debug.Log(string.Format("Loaded HRTF: {0}.", (sofaFileName != null) ? hrtfSettings.sofaFileName : "default"));
+                Debug.Log(string.Format("Loaded HRTF: {0}.", (sofaFileName != null) ? sofaFileName : "default"));
+            }
+
+            if (sofaData != IntPtr.Zero)
+            {
+                Marshal.FreeHGlobal(sofaData);
             }
         }
 

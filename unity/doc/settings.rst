@@ -33,7 +33,7 @@ Perspective Correction Factor
     *Only available if using Unity's built-in audio engine.*
 
 SOFA Files
-    List of SOFA files containing custom HRTFs. Each of these SOFA files will be loaded at app startup. The SOFA files should be placed in your project's ``StreamingAssets`` folder. Entries in this list should be the names of the SOFA files, with or without the ``.sofa`` extension.
+    List of SOFA files containing custom HRTFs. Each of these SOFA files will be loaded at app startup. The SOFA files should be imported into your project's ``Assets`` folder, and will automatically be packaged along with your project's assets.
 
 Default Material
     Reference to a Material asset that defines the acoustic properties of any geometry for which a material is not specified.

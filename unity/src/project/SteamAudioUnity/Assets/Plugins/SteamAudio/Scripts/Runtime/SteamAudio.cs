@@ -14,7 +14,7 @@ namespace SteamAudio
     public static class Constants
     {
         public const uint kVersionMajor = 4;
-        public const uint kVersionMinor = 0;
+        public const uint kVersionMinor = 2;
         public const uint kVersionPatch = 0;
         public const uint kVersion = (kVersionMajor << 16) | (kVersionMinor << 8) | kVersionPatch;
     }
@@ -407,6 +407,9 @@ namespace SteamAudio
     {
         public HRTFType type;
         public string sofaFileName;
+        public IntPtr sofaFileData;
+        public int sofaFileDataSize;
+        public float volume;
     }
 
     [StructLayout(LayoutKind.Sequential)]

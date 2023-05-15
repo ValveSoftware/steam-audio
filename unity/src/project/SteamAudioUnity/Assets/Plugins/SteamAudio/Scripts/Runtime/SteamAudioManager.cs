@@ -282,20 +282,28 @@ namespace SteamAudio
                 hrtfNames[0] = "Default";
                 for (var i = 0; i < SteamAudioSettings.Singleton.SOFAFiles.Length; ++i)
                 {
-                    hrtfNames[i + 1] = SteamAudioSettings.Singleton.SOFAFiles[i];
+                    if (SteamAudioSettings.Singleton.SOFAFiles[i])
+                        hrtfNames[i + 1] = SteamAudioSettings.Singleton.SOFAFiles[i].sofaName;
+                    else
+                        hrtfNames[i + 1] = null;
                 }
 
-                mHRTFs[0] = new HRTF(mContext, mAudioSettings, null);
+                mHRTFs[0] = new HRTF(mContext, mAudioSettings, null, null, 1.0f);
 
                 for (var i = 0; i < SteamAudioSettings.Singleton.SOFAFiles.Length; ++i)
                 {
-                    var sofaFileName = SteamAudioSettings.Singleton.SOFAFiles[i];
-                    if (!sofaFileName.EndsWith(".sofa"))
+                    if (SteamAudioSettings.Singleton.SOFAFiles[i])
                     {
-                        sofaFileName += ".sofa";
+                        mHRTFs[i + 1] = new HRTF(mContext, mAudioSettings, 
+                            SteamAudioSettings.Singleton.SOFAFiles[i].sofaName, 
+                            SteamAudioSettings.Singleton.SOFAFiles[i].data,
+                            SteamAudioSettings.Singleton.SOFAFiles[i].volume);
                     }
-
-                    mHRTFs[i + 1] = new HRTF(mContext, mAudioSettings, Common.GetStreamingAssetsFileName(sofaFileName));
+                    else
+                    {
+                        Debug.LogWarning("SOFA Asset File Missing. Assigning default HRTF.");
+                        mHRTFs[i + 1] = mHRTFs[0];
+                    }
                 }
             }
 
@@ -1028,8 +1036,8 @@ namespace SteamAudio
             var moveRequired = false;
             var moveSucceeded = false;
 
-            // Look for the FMOD Studio plugin files. The files are in the right place for FMOD Studio 2.0 through 2.1
-            // out of the box, but will need to be copied for 2.2.
+            // Look for the FMOD Studio plugin files. The files are in the right place for FMOD Studio 2.2
+            // out of the box, but will need to be copied for 2.1 or earlier.
             // 2.0 through 2.1 expect plugin files in Assets/Plugins/FMOD/lib/(platform)
             // 2.2 expects plugin files in Assets/Plugins/FMOD/platforms/(platform)/lib
             if (AssetExists("Assets/Plugins/FMOD/lib/win/x86_64/phonon_fmod.dll"))
