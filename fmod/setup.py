@@ -1,62 +1,29 @@
 #
 # Copyright (c) Valve Corporation. All rights reserved.
 #
-
 import os
+import sys
 import shutil
-import urllib.request, urllib.error, urllib.parse
-import zipfile
+sys.path.insert(1, "../")
 
-version = "4.2.0"
+import commons
 
-def download_file(url):
-    remote_file = urllib.request.urlopen(url)
-    with open(os.path.basename(url), "wb") as local_file:
-        while True:
-            data = remote_file.read(1024)
-            if not data:
-                break
-            local_file.write(data)
+TargetDirectories = {
+    "Win32" : "lib/windows-x86",
+    "Win64" : "lib/windows-x64",
+    "Linux32" : "lib/linux-x86",
+    "Linux64" : "lib/linux-x64",
+    "macOS" : "lib/osx",
+    "AndroidArmv7" : "lib/android-armv7",
+    "AndroidArm64" : "lib/android-armv8",
+    "Androidx86" : "lib/android-x86"
+    };
 
-print("Downloading steamaudio_" + version + ".zip...")
-url = "https://github.com/ValveSoftware/steam-audio/releases/download/v" + version + "/steamaudio_" + version + ".zip"
-download_file(url)
+argParsed = commons.getDefaultParser("FMOD","").parse_args()
 
-print("Extracting steamaudio_" + version + ".zip...")
-with zipfile.ZipFile(os.path.basename(url), "r") as zip:
-	zip.extractall()
+rootPath = commons.download_steamaudioblobs(argParsed.force)
 
-print("Creating directories...")
-if not os.path.exists("lib/windows-x86"):
-    os.makedirs("lib/windows-x86")
-if not os.path.exists("lib/windows-x64"):
-    os.makedirs("lib/windows-x64")
-if not os.path.exists("lib/linux-x86"):
-    os.makedirs("lib/linux-x86")
-if not os.path.exists("lib/linux-x64"):
-    os.makedirs("lib/linux-x64")
-if not os.path.exists("lib/osx"):
-    os.makedirs("lib/osx")
-if not os.path.exists("lib/android-armv7"):
-    os.makedirs("lib/android-armv7")
-if not os.path.exists("lib/android-armv8"):
-    os.makedirs("lib/android-armv8")
-if not os.path.exists("lib/android-x86"):
-    os.makedirs("lib/android-x86")
-
-print("Copying files...")
-shutil.copy("steamaudio/lib/windows-x86/phonon.dll", "lib/windows-x86")
-shutil.copy("steamaudio/lib/windows-x64/phonon.dll", "lib/windows-x64")
-shutil.copy("steamaudio/lib/linux-x86/libphonon.so", "lib/linux-x86")
-shutil.copy("steamaudio/lib/linux-x64/libphonon.so", "lib/linux-x64")
-try:
-	shutil.rmtree("lib/osx/phonon.bundle")
-except:
-	pass
-shutil.copytree("steamaudio/lib/osx/phonon.bundle", "lib/osx/phonon.bundle")
-shutil.copy("steamaudio/lib/android-armv7/libphonon.so", "lib/android-armv7")
-shutil.copy("steamaudio/lib/android-armv8/libphonon.so", "lib/android-armv8")
-shutil.copy("steamaudio/lib/android-x86/libphonon.so", "lib/android-x86")
+commons.CopyFiles(rootPath, TargetDirectories)
 
 print("Cleaning up...")
-shutil.rmtree("steamaudio")
+shutil.rmtree(rootPath)
