@@ -4,6 +4,7 @@
 
 #include "SteamAudioSettings.h"
 #include "SteamAudioMaterial.h"
+#include "SOFAFile.h"
 
 // ---------------------------------------------------------------------------------------------------------------------
 // USteamAudioSettings
@@ -51,6 +52,7 @@ USteamAudioSettings::USteamAudioSettings()
     , TANDuration(1.0f)
     , TANAmbisonicOrder(1)
     , TANMaxSources(32)
+    , SOFAFile(nullptr)
 {}
 
 FSteamAudioSettings USteamAudioSettings::GetSettings() const
@@ -97,6 +99,7 @@ FSteamAudioSettings USteamAudioSettings::GetSettings() const
     Settings.TANDuration = TANDuration;
     Settings.TANAmbisonicOrder = TANAmbisonicOrder;
     Settings.TANMaxSources = TANMaxSources;
+    Settings.SOFAFile = Cast<USOFAFile>(SOFAFile.TryLoad());
     return Settings;
 }
 

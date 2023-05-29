@@ -1353,8 +1353,20 @@ typedef struct {
     /** The type of HRTF to create. */
     IPLHRTFType type;
     
-    /** SOFA file from which to load HRTF data. Only for \c IPL_HRTFTYPE_SOFA. */
+    /** SOFA file from which to load HRTF data. Either \c sofaFileName or \c sofaData should be non-NULL. 
+        Only for \c IPL_HRTFTYPE_SOFA. */
     const char* sofaFileName;
+
+    /** Pointer to a buffer containing SOFA file data from which to load HRTF data. Either \c sofaFileName 
+        or \c sofaData should be non-NULL. Only for \c IPL_HRTFTYPE_SOFA. */
+    const uint8_t* sofaData;
+
+    /** Size (in bytes) of the buffer pointed to by \c sofaData. Only for \c IPL_HRTFTYPE_SOFA. */
+    int sofaDataSize;
+
+    /** Volume correction factor to apply to the loaded HRTF data. A value of 1.0 means the HRTF data will be used
+        without any change. */
+    float volume;
 } IPLHRTFSettings;
 
 /** Creates an HRTF. 

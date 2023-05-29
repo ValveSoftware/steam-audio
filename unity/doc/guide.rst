@@ -109,11 +109,11 @@ Steam Audio loads custom HRTFs from SOFA files. These files have a ``.sofa`` ext
 
 To tell Steam Audio to load a SOFA file at startup:
 
-1. Copy it to the ``Assets/StreamingAssets`` folder in your Unity project.
+1. In the main menu, choose **Assets** > **Import New Asset**, then navigate to the SOFA file you want to import, and click **Import**. You can import this asset to any folder under your project's ``Assets`` folder.
 2. In the main menu, choose **Steam Audio** > **Settings**.
 3. In the Inspector, expand **SOFA Files**.
-4. If there are no empty fields under **SOFA Files**, increase the value of **Size**.
-5. In one of the empty fields, enter the name of the SOFA file. For example if you have a file called ``Assets/StreamingAssets/myhrtf.sofa``, enter ``myhrtf.sofa`` (or even ``myhrtf``, the ``.sofa`` extension is optional).
+4. If there are no empty fields under **SOFA Files**, click the **+** button.
+5. Double-click one of the empty fields, and select the SOFA file.
 
 .. image:: media/settings_sofafiles.png
 

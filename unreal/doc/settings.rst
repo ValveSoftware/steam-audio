@@ -158,5 +158,8 @@ TAN Ambisonic Order
 TAN Max Sources
     Overrides the value of **Real Time Max Sources** when **Reflection Effect Type** is set to **TrueAudio Next**.
 
+SOFA File
+    An imported SOFA file to use as a custom HRTF. The SOFA file be loaded at app startup. If the load fails, Steam Audio will revert to using its built-in HRTF.
+
 .. |reg|    unicode:: U+000AE .. REGISTERED SIGN
 .. |tm|     unicode:: U+2122  .. TRADE MARK SIGN

@@ -7,3 +7,4 @@ All of these assets can be created in your project by choosing **Create** > **St
 
     material
     settings
+    sofafile

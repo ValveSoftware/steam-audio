@@ -60,6 +60,8 @@ enum class EOpenCLDeviceType : uint8
 // FSteamAudioSettings
 // ---------------------------------------------------------------------------------------------------------------------
 
+class USOFAFile;
+
 /**
  * Used to store a copy of the current Steam Audio settings upon initialization, with Unreal plugin types replaced by
  * their corresponding Steam Audio API types.
@@ -107,6 +109,7 @@ struct FSteamAudioSettings
     float TANDuration;
     int TANAmbisonicOrder;
     int TANMaxSources;
+    USOFAFile* SOFAFile;
 };
 
 
@@ -253,6 +256,9 @@ public:
 
 	UPROPERTY(GlobalConfig, EditAnywhere, Category = "TrueAudio Next Settings", meta = (UIMin = 1, UIMax = 128, DisplayName = "TAN Max Sources"))
 	int TANMaxSources;
+
+    UPROPERTY(Config, EditAnywhere, Category = "Custom HRTF Settings", meta = (DisplayName = "SOFA File", AllowedClasses = "/Script/SteamAudio.SOFAFile"))
+    FSoftObjectPath SOFAFile;
 
     USteamAudioSettings();
 

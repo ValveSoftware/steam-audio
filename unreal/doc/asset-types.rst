@@ -7,4 +7,5 @@ All of these assets can be created in your project by choosing **Add/Import** > 
     material
     occlusion-settings
     reverb-settings
+    sofa-file
     spatialization-settings
