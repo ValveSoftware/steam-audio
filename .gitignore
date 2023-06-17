@@ -1,0 +1,11 @@
+## Avoid Unreal TempFiles
+**/Intermediate
+**/Binaries
+
+## Avoid Binaries
+**/phonon.bundle
+*.zip
+*.lib
+*.so
+*.dll
+*.pyc
