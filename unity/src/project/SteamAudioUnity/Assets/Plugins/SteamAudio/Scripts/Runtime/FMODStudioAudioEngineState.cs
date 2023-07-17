@@ -50,7 +50,8 @@ namespace SteamAudio
         {
             BindToFMODStudioPlugin();
 
-            return ((MonoBehaviour) GameObject.FindObjectOfType(FMODUnity_StudioListener)).transform;
+            var fmodStudioListener = (MonoBehaviour) GameObject.FindObjectOfType(FMODUnity_StudioListener);
+            return (fmodStudioListener != null) ? fmodStudioListener.transform : null;
         }
 
         public override AudioSettings GetAudioSettings()

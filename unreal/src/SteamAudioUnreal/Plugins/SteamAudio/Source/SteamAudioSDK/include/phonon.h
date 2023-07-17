@@ -1348,6 +1348,16 @@ typedef enum {
     IPL_HRTFTYPE_SOFA
 } IPLHRTFType;
 
+/** Volume normalization types to use. */
+typedef enum {
+    /** No normalization. */
+    IPL_HRTFNORMTYPE_NONE,
+
+    /** Root-mean squared normalization. Normalize HRTF volume to ensure similar volume from all directions
+        based on root-mean-square value of each HRTF. */
+    IPL_HRTFNORMTYPE_RMS
+} IPLHRTFNormType;
+
 /** Settings used to create an HRTF object. */
 typedef struct {
     /** The type of HRTF to create. */
@@ -1367,6 +1377,9 @@ typedef struct {
     /** Volume correction factor to apply to the loaded HRTF data. A value of 1.0 means the HRTF data will be used
         without any change. */
     float volume;
+
+    /** Normalization setting. No normalization will be applied when choosing \c IPL_HRTFNORMTYPE_NONE. */
+    IPLHRTFNormType normType;
 } IPLHRTFSettings;
 
 /** Creates an HRTF. 
@@ -1669,7 +1682,8 @@ typedef struct {
 
 /** Parameters for applying an Ambisonics encode effect to an audio buffer. */
 typedef struct {
-    /** Unit vector pointing from the listener towards the source. */
+    /** Vector pointing from the listener towards the source. Need not be normalized; Steam Audio will automatically
+        normalize this vector. If a zero-length vector is passed, the output will be order 0 (omnidirectional). */
     IPLVector3 direction;
 
     /** Ambisonic order of the output buffer. May be less than the \c maxOrder specified when creating the effect,
@@ -2739,7 +2753,8 @@ typedef struct {
         \c irradianceMinDistance, for the purposes of energy calculations. */
     IPLfloat32 irradianceMinDistance;
 
-    /** If using Radeon Rays, this is the number of probes for which data is baked simultaneously. */
+    /** If using Radeon Rays or if \c identifier.variation is \c IPL_BAKEDDATAVARIATION_STATICLISTENER, this is the 
+        number of probes for which data is baked simultaneously. */
     IPLint32 bakeBatchSize;
 
     /** The OpenCL device, if using Radeon Rays. */
@@ -3190,7 +3205,26 @@ typedef struct {
         geometry, path finding is re-run in real-time to find alternate paths that take into account the
         dynamic geometry. */
     IPLbool findAlternatePaths;
+
+    /** If simulating transmission, this is the maximum number of surfaces, starting from the closest
+        surface to the listener, whose transmission coefficients will be considered when calculating
+        the total amount of sound transmitted. Increasing this value will result in more accurate
+        results when multiple surfaces lie between the source and the listener, at the cost of
+        increased CPU usage. */
+    IPLint32 numTransmissionRays;
 } IPLSimulationInputs;
+
+/** Callback for visualizing valid path segments during call to \c iplSimulatorRunPathing.
+
+    You can use this to provide the user with visual feedback, like drawing each segment of a path.
+
+    \param  from        Position of starting probe.
+    \param  to          Position of ending probe.
+    \param  occluded    Occlusion status of ray segment between \c from to \c to.
+    \param  userData    Pointer to arbitrary user-specified data provided when calling the function that will
+                        call this callback.
+*/
+typedef void (IPLCALL* IPLPathingVisualizationCallback)(IPLVector3 from, IPLVector3 to, IPLbool occluded, void* userData);
 
 /** Simulation parameters that are not specific to any source. */
 typedef struct {
@@ -3220,6 +3254,13 @@ typedef struct {
         closer than \c irradianceMinDistance to the surface is assumed to be at a distance of
         \c irradianceMinDistance, for the purposes of energy calculations. */
     IPLfloat32 irradianceMinDistance;
+
+    /** Callback for visualizing valid path segments during call to \c iplSimulatorRunPathing.*/
+    IPLPathingVisualizationCallback pathingVisCallback;
+
+    /** Pointer to arbitrary user-specified data provided when calling the function that will
+        call this callback.*/
+    void* pathingUserData;
 } IPLSimulationSharedInputs;
 
 /** Simulation results for a source. */
@@ -3340,7 +3381,7 @@ IPLAPI void IPLCALL iplSimulatorRunReflections(IPLSimulator simulator);
     This function can be CPU intensive, and should be called from a separate thread in order to not
     block either the audio processing thread or the game's main update thread.
 
-    \param  simulator   The simulator being used.
+    \param  simulator       The simulator being used.
 */
 IPLAPI void IPLCALL iplSimulatorRunPathing(IPLSimulator simulator);
 

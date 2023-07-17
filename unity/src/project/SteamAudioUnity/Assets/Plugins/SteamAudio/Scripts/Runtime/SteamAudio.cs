@@ -14,7 +14,7 @@ namespace SteamAudio
     public static class Constants
     {
         public const uint kVersionMajor = 4;
-        public const uint kVersionMinor = 2;
+        public const uint kVersionMinor = 3;
         public const uint kVersionPatch = 0;
         public const uint kVersion = (kVersionMajor << 16) | (kVersionMinor << 8) | kVersionPatch;
     }
@@ -75,6 +75,12 @@ namespace SteamAudio
     {
         Default,
         SOFA
+    }
+
+    public enum HRTFNormType
+    {
+        None,
+        RMS
     }
 
     public enum ProbeGenerationType
@@ -209,6 +215,9 @@ namespace SteamAudio
 
     [UnmanagedFunctionPointer(CallingConvention.Winapi)]
     public delegate float DirectivityCallback(Vector3 direction, IntPtr userData);
+
+    [UnmanagedFunctionPointer(CallingConvention.Winapi)]
+    public delegate void PathingVisualizationCallback(Vector3 from, Vector3 to, Bool occluded, IntPtr userData);
 
     // STRUCTURES
 
@@ -410,6 +419,7 @@ namespace SteamAudio
         public IntPtr sofaFileData;
         public int sofaFileDataSize;
         public float volume;
+        public HRTFNormType normType;
     }
 
     [StructLayout(LayoutKind.Sequential)]
@@ -551,6 +561,7 @@ namespace SteamAudio
         public int pathingOrder;
         public Bool enableValidation;
         public Bool findAlternatePaths;
+        public int numTransmissionRays;
     }
 
     [StructLayout(LayoutKind.Sequential)]
@@ -562,6 +573,8 @@ namespace SteamAudio
         public float duration;
         public int order;
         public float irradianceMinDistance;
+        public PathingVisualizationCallback pathingVisualizationCallback;
+        public IntPtr pathingUserData;
     }
 
     [StructLayout(LayoutKind.Sequential)]

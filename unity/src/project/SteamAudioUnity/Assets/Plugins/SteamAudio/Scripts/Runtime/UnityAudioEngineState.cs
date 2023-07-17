@@ -43,7 +43,8 @@ namespace SteamAudio
     {
         public override Transform GetListenerTransform()
         {
-            return GameObject.FindObjectOfType<AudioListener>().transform;
+            var audioListener = GameObject.FindObjectOfType<AudioListener>();
+            return (audioListener != null) ? audioListener.transform : null;
         }
 
         public override AudioSettings GetAudioSettings()

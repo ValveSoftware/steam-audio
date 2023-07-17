@@ -5,7 +5,7 @@ Provides options for controlling how occlusion and sound propagation are simulat
 
 Must be attached to an actor containing an Audio component (if using Unreal's built-in audio engine) or an FMOD Audio component (if using FMOD Studio).
 
-.. image:: media/sasource_bakedsource.png
+.. image:: media/sasource_transmission.png
 
 Simulate Occlusion
     If checked, ray tracing will be used to determine how much of the source is occluded.
@@ -45,6 +45,9 @@ Transmission High
     The high frequency (8 kHz and above) EQ value for transmission. Only used if **Simulate Transmission** is unchecked. 0 = high frequencies are completely attenuated, 1 = high frequencies are not attenuated at all.
 
     *Only available if using Unreal's built-in audio engine.*
+
+Max Transmission Surfaces
+    The maximum number of surfaces, starting from the closest surface to the listener, whose transmission coefficients will be considered when calculating the total amount of sound transmitted. Increasing this value will result in more accurate results when multiple surfaces lie between the source and the listener, at the cost of increased CPU usage.
 
 Simulate Reflections
     If checked, reflections reaching the listener from the source will be simulated.

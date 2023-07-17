@@ -105,6 +105,8 @@ namespace SteamAudio
         public float transmissionMid = 1.0f;
         [Range(0.0f, 1.0f)]
         public float transmissionHigh = 1.0f;
+        [Range(1, 8)]
+        public int maxTransmissionSurfaces = 1;
 
         [Header("Direct Mix Settings")]
         [Range(0.0f, 1.0f)]
@@ -283,6 +285,7 @@ namespace SteamAudio
             inputs.occlusionType = occlusionType;
             inputs.occlusionRadius = occlusionRadius;
             inputs.numOcclusionSamples = occlusionSamples;
+            inputs.numTransmissionRays = maxTransmissionSurfaces;
             inputs.reverbScaleLow = 1.0f;
             inputs.reverbScaleMid = 1.0f;
             inputs.reverbScaleHigh = 1.0f;

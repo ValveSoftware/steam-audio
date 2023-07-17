@@ -16,11 +16,12 @@ namespace SteamAudio
     /*
      * Imports .sofa files as SOFAFile asset objects.
      */
-    [ScriptedImporter(1, "sofa")]
+    [ScriptedImporter(2, "sofa")]
     public class SOFAFileImporter : ScriptedImporter
     {
-        [Range(0.0f, 2.0f)]
-        public float volume = 1.0f;
+        [Range(-12.0f, 12.0f)]
+        public float hrtfVolumeGainDB = 0.0f;
+        public HRTFNormType hrtfNormalizationType = HRTFNormType.None;
 
         public override void OnImportAsset(AssetImportContext ctx)
         {
@@ -28,7 +29,8 @@ namespace SteamAudio
 
             sofaFile.sofaName = Path.GetFileName(ctx.assetPath);
             sofaFile.data = File.ReadAllBytes(ctx.assetPath);
-            sofaFile.volume = volume;
+            sofaFile.volume = hrtfVolumeGainDB;
+            sofaFile.normType = hrtfNormalizationType;
 
             ctx.AddObjectToAsset("sofa file", sofaFile);
             ctx.SetMainObject(sofaFile);

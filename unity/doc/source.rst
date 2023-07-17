@@ -172,6 +172,9 @@ Transmission High
 
     *Only available if using Unity's built-in audio engine.*
 
+Max Transmission Surfaces
+    The maximum number of surfaces, starting from the closest surface to the listener, whose transmission coefficients will be considered when calculating the total amount of sound transmitted. Increasing this value will result in more accurate results when multiple surfaces lie between the source and the listener, at the cost of increased CPU usage.
+
 Direct Mix Level
     The contribution of the direct sound path to the overall mix for this Audio Source. Lower values reduce the contribution more.
 

@@ -18,7 +18,10 @@ namespace SteamAudio
         // The imported data.
         public byte[] data = null;
 
-        // The volume correction factor.
-        public float volume = 1.0f;
+        // The volume correction factor in dB.
+        public float volume = 0.0f;
+
+        // Volume normalization type.
+        public HRTFNormType normType = HRTFNormType.None;
     }
 }

@@ -158,6 +158,15 @@ TAN Ambisonic Order
 TAN Max Sources
     Overrides the value of **Real Time Max Sources** when **Reflection Effect Type** is set to **TrueAudio Next**.
 
+HRTF Volume Gain (dB)
+    Adjusts the volume of the HRTF filters contained in the default HRTF. This parameter can be used to ensure that the volume of Steam Audio's default HRTF works well within your overall mix.
+
+HRTF Normalization Type
+    Specifies the algorithm to use (if any) to normalize the volumes of the default HRTF filters across all directions.
+
+    -   *None*. No normalization is applied, and the default HRTF is used as-is. This is identical to the behavior prior to v4.3.0. Sources in some directions may sound slightly louder than others.
+    -   *RMS*. Root-Mean Squared normalization. HRTF volumes are normalized based on their root-mean-square value. Sources in any direction will have a similar volume.
+
 SOFA File
     An imported SOFA file to use as a custom HRTF. The SOFA file be loaded at app startup. If the load fails, Steam Audio will revert to using its built-in HRTF.
 

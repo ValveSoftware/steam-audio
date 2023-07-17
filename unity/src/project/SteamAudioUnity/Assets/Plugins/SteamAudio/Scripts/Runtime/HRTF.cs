@@ -13,7 +13,7 @@ namespace SteamAudio
     {
         IntPtr mHRTF = IntPtr.Zero;
 
-        public HRTF(Context context, AudioSettings audioSettings, string sofaFileName, byte[] sofaFileData, float volume)
+        public HRTF(Context context, AudioSettings audioSettings, string sofaFileName, byte[] sofaFileData, float gaindB, HRTFNormType normType)
         {
             IntPtr sofaData = IntPtr.Zero;
 
@@ -38,7 +38,8 @@ namespace SteamAudio
                 hrtfSettings.type = HRTFType.Default;
             }
 
-            hrtfSettings.volume = volume;
+            hrtfSettings.volume = dBToGain(gaindB);
+            hrtfSettings.normType = normType;
 
             var status = API.iplHRTFCreate(context.Get(), ref audioSettings, ref hrtfSettings, out mHRTF);
             if (status != Error.Success)
@@ -75,6 +76,16 @@ namespace SteamAudio
         public IntPtr Get()
         {
             return mHRTF;
+        }
+
+        private float dBToGain(float gaindB)
+        {
+            const float kMinDBLevel = -90.0f;
+
+            if (gaindB <= kMinDBLevel)
+                return 0.0f;
+
+            return  (float) Math.Pow(10.0, (double) gaindB * (1.0 / 20.0));
         }
     }
 }

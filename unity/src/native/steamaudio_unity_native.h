@@ -145,6 +145,7 @@ class SourceManager
 {
 public:
     SourceManager();
+    ~SourceManager();
 
     // Registers a source that has already been created, and returns the corresponding handle. A reference to the
     // IPLSource will be retained by this object.

@@ -12,6 +12,16 @@ namespace SteamAudio {
 
 const float SCALEFACTOR = 0.01f;
 
+float ConvertDbToLinear(float dbGain)
+{
+    const float MIN_DB_LEVEL = -90.0f;
+
+    if (dbGain <= MIN_DB_LEVEL)
+        return 0.0f;
+
+    return FPlatformMath::Pow(10.0f, dbGain / 20.0f);
+}
+
 float ConvertSteamAudioDistanceToUnreal(float Distance)
 {
     return Distance / SCALEFACTOR;

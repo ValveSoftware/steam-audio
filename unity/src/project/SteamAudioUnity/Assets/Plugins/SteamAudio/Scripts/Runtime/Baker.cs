@@ -55,6 +55,13 @@ namespace SteamAudio
         public static void BeginBake(BakedDataTask[] tasks)
         {
             SteamAudioManager.Initialize(ManagerInitReason.Baking);
+
+            if (SteamAudioManager.GetSceneType() == SceneType.Custom)
+            {
+                Debug.LogError("Baking is not supported when using Unity's built-in ray tracer. Click Steam Audio > Settings and switch to a different ray tracer.");
+                return;
+            }
+
             SteamAudioManager.LoadScene(SceneManager.GetActiveScene(), SteamAudioManager.Context, false);
 
             SteamAudioStaticMesh staticMeshComponent = null;

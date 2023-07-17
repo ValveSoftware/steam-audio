@@ -6,6 +6,7 @@
 
 #include "CoreMinimal.h"
 #include "UObject/NoExportTypes.h"
+#include "SteamAudioSettings.h"
 #include "SOFAFile.generated.h"
 
 
@@ -31,6 +32,10 @@ public:
 	TArray<uint8> Data;
 
 	/** Volume correction factor. */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = HRTFSettings, meta = (UIMin = "0.0", UIMax = "2.0"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = HRTFSettings, meta = (DisplayName = "Volume Gain (dB)", UIMin = "-12.0", UIMax = "12.0"))
 	float Volume;
+    
+    /** HRTF normalization algorithm. */
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = HRTFSettings)
+    EHRTFNormType NormalizationType;
 };

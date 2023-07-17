@@ -14,6 +14,8 @@ namespace SteamAudio
         SerializedProperty mAudioEngine;
         SerializedProperty mPerspectiveCorrection;
         SerializedProperty mPerspectiveCorrectionFactor;
+        SerializedProperty mHRTFVolumeNormalizationType;
+        SerializedProperty mHRTFVolumeGainDB;
         SerializedProperty mSOFAFiles;
         SerializedProperty mDefaultMaterial;
         SerializedProperty mSceneType;
@@ -65,6 +67,8 @@ namespace SteamAudio
             mAudioEngine = serializedObject.FindProperty("audioEngine");
             mPerspectiveCorrection = serializedObject.FindProperty("perspectiveCorrection");
             mPerspectiveCorrectionFactor = serializedObject.FindProperty("perspectiveCorrectionFactor");
+            mHRTFVolumeGainDB = serializedObject.FindProperty("hrtfVolumeGainDB");
+            mHRTFVolumeNormalizationType = serializedObject.FindProperty("hrtfNormalizationType");
             mSOFAFiles = serializedObject.FindProperty("SOFAFiles");
             mDefaultMaterial = serializedObject.FindProperty("defaultMaterial");
             mSceneType = serializedObject.FindProperty("sceneType");
@@ -113,6 +117,9 @@ namespace SteamAudio
 
             if (mPerspectiveCorrection.boolValue)
                 EditorGUILayout.PropertyField(mPerspectiveCorrectionFactor);
+
+            EditorGUILayout.PropertyField(mHRTFVolumeGainDB, new UnityEngine.GUIContent("HRTF Volume Gain (dB)"));
+            EditorGUILayout.PropertyField(mHRTFVolumeNormalizationType, new UnityEngine.GUIContent("HRTF Normalization Type"));
 
             EditorGUILayout.PropertyField(mSOFAFiles, true);
             EditorGUILayout.PropertyField(mDefaultMaterial);

@@ -13,6 +13,9 @@
 
 namespace SteamAudio {
 
+/** Converts from dB to linear gain. */
+float STEAMAUDIO_API ConvertDbToLinear(float dBGain);
+
 /** Converts a distance from Steam Audio units to Unreal units. */
 float STEAMAUDIO_API ConvertSteamAudioDistanceToUnreal(float Distance);
 

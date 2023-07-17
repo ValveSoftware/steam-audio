@@ -36,7 +36,8 @@ UObject* USOFAFileFactory::FactoryCreateBinary(UClass* InClass, UObject* InParen
         SOFAFile->Data.AddUninitialized(BufferEnd - Buffer);
         FMemory::Memcpy(SOFAFile->Data.GetData(), Buffer, SOFAFile->Data.Num());
 
-        SOFAFile->Volume = 1.0f;
+        SOFAFile->Volume = 0.0f;
+        SOFAFile->NormalizationType = EHRTFNormType::NONE;
     }
     else
     {

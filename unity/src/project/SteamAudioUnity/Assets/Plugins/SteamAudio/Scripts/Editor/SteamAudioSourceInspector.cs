@@ -38,6 +38,7 @@ namespace SteamAudio
         SerializedProperty mTransmissionLow;
         SerializedProperty mTransmissionMid;
         SerializedProperty mTransmissionHigh;
+        SerializedProperty mTransmissionRays;
         SerializedProperty mDirectMixLevel;
         SerializedProperty mReflections;
         SerializedProperty mReflectionsType;
@@ -85,6 +86,7 @@ namespace SteamAudio
             mTransmissionLow = serializedObject.FindProperty("transmissionLow");
             mTransmissionMid = serializedObject.FindProperty("transmissionMid");
             mTransmissionHigh = serializedObject.FindProperty("transmissionHigh");
+            mTransmissionRays = serializedObject.FindProperty("maxTransmissionSurfaces");
             mDirectMixLevel = serializedObject.FindProperty("directMixLevel");
             mReflections = serializedObject.FindProperty("reflections");
             mReflectionsType = serializedObject.FindProperty("reflectionsType");
@@ -203,6 +205,10 @@ namespace SteamAudio
                             {
                                 EditorGUILayout.PropertyField(mTransmissionMid);
                             }
+                        }
+                        else if ((TransmissionInput) mTransmissionInput.enumValueIndex == TransmissionInput.SimulationDefined)
+                        {
+                            EditorGUILayout.PropertyField(mTransmissionRays);
                         }
                     }
                 }

@@ -60,6 +60,7 @@ namespace SteamAudio
         RaycastHit[] mRayHits = new RaycastHit[1];
         IntPtr mMaterialBuffer = IntPtr.Zero;
         Thread mSimulationThread = null;
+        EventWaitHandle mSimulationThreadWaitHandle = null;
         bool mStopSimulationThread = false;
         bool mSimulationCompleted = false;
         float mSimulationUpdateTimeElapsed = 0.0f;
@@ -288,7 +289,7 @@ namespace SteamAudio
                         hrtfNames[i + 1] = null;
                 }
 
-                mHRTFs[0] = new HRTF(mContext, mAudioSettings, null, null, 1.0f);
+                mHRTFs[0] = new HRTF(mContext, mAudioSettings, null, null, SteamAudioSettings.Singleton.hrtfVolumeGainDB, SteamAudioSettings.Singleton.hrtfNormalizationType);
 
                 for (var i = 0; i < SteamAudioSettings.Singleton.SOFAFiles.Length; ++i)
                 {
@@ -297,7 +298,8 @@ namespace SteamAudio
                         mHRTFs[i + 1] = new HRTF(mContext, mAudioSettings, 
                             SteamAudioSettings.Singleton.SOFAFiles[i].sofaName, 
                             SteamAudioSettings.Singleton.SOFAFiles[i].data,
-                            SteamAudioSettings.Singleton.SOFAFiles[i].volume);
+                            SteamAudioSettings.Singleton.SOFAFiles[i].volume,
+                            SteamAudioSettings.Singleton.SOFAFiles[i].normType);
                     }
                     else
                     {
@@ -407,6 +409,8 @@ namespace SteamAudio
 
                 mSimulator = new Simulator(mContext, simulationSettings);
 
+                mSimulationThreadWaitHandle = new EventWaitHandle(false, EventResetMode.AutoReset);
+
                 mSimulationThread = new Thread(RunSimulation);
                 mSimulationThread.Start();
 
@@ -416,7 +420,7 @@ namespace SteamAudio
                     mAudioEngineState.Initialize(mContext.Get(), mHRTFs[0].Get(), simulationSettings, perspectiveCorrection);
                 }
 
-#if UNITY_EDITOR
+#if UNITY_EDITOR && UNITY_2019_3_OR_NEWER
                 // If the developer has disabled scene reload, SceneManager.sceneLoaded won't fire during initial load
                 if (EditorSettings.enterPlayModeOptions.HasFlag(EnterPlayModeOptions.DisableSceneReload))
                 {
@@ -437,14 +441,24 @@ namespace SteamAudio
         {
             LoadScene(scene, mContext, additive: (loadSceneMode == LoadSceneMode.Additive));
 
-            mListener = AudioEngineStateHelpers.Create(SteamAudioSettings.Singleton.audioEngine).GetListenerTransform();
-            mListenerComponent = mListener.GetComponent<SteamAudioListener>();
+            NotifyAudioListenerChanged();
         }
 
         // This method is called when a scene is unloaded.
         void OnSceneUnloaded(UnityEngine.SceneManagement.Scene scene)
         {
             RemoveAllDynamicObjects();
+        }
+
+        // Call this function when you create a new AudioListener component (or its equivalent, if you are using
+        // third-party audio middleware).
+        public static void NotifyAudioListenerChanged()
+        {
+            sSingleton.mListener = AudioEngineStateHelpers.Create(SteamAudioSettings.Singleton.audioEngine).GetListenerTransform();
+            if (sSingleton.mListener)
+            {
+                sSingleton.mListenerComponent = sSingleton.mListener.GetComponent<SteamAudioListener>();
+            }
         }
 
         private void LateUpdate()
@@ -483,6 +497,8 @@ namespace SteamAudio
             sharedInputs.duration = SteamAudioSettings.Singleton.realTimeDuration;
             sharedInputs.order = SteamAudioSettings.Singleton.realTimeAmbisonicOrder;
             sharedInputs.irradianceMinDistance = SteamAudioSettings.Singleton.realTimeIrradianceMinDistance;
+            sharedInputs.pathingVisualizationCallback = null;
+            sharedInputs.pathingUserData = IntPtr.Zero;
 
             mSimulator.SetSharedInputs(SimulationFlags.Direct, sharedInputs);
 
@@ -552,7 +568,7 @@ namespace SteamAudio
                 }
                 else
                 {
-                    mSimulationThread.Interrupt();
+                    mSimulationThreadWaitHandle.Set();
                 }
             }
         }
@@ -572,12 +588,7 @@ namespace SteamAudio
         {
             while (!mStopSimulationThread)
             {
-                try
-                {
-                    Thread.Sleep(Timeout.Infinite);
-                }
-                catch (ThreadInterruptedException)
-                { }
+                mSimulationThreadWaitHandle.WaitOne();
 
                 if (mStopSimulationThread)
                     break;
@@ -606,7 +617,7 @@ namespace SteamAudio
             if (sSingleton.mSimulationThread != null)
             {
                 sSingleton.mStopSimulationThread = true;
-                sSingleton.mSimulationThread.Interrupt();
+                sSingleton.mSimulationThreadWaitHandle.Set();
                 sSingleton.mSimulationThread.Join();
             }
 
@@ -669,7 +680,7 @@ namespace SteamAudio
             if (sSingleton.mSimulationThread != null)
             {
                 sSingleton.mStopSimulationThread = true;
-                sSingleton.mSimulationThread.Interrupt();
+                sSingleton.mSimulationThreadWaitHandle.Set();
                 sSingleton.mSimulationThread.Join();
             }
 

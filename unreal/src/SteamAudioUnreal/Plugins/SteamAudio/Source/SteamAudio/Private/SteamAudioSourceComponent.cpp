@@ -26,6 +26,7 @@ USteamAudioSourceComponent::USteamAudioSourceComponent()
     , TransmissionLowValue(1.0f)
     , TransmissionMidValue(1.0f)
     , TransmissionHighValue(1.0f)
+    , MaxTransmissionSurfaces(1)
     , bSimulateReflections(false)
     , ReflectionsType(EReflectionSimulationType::REALTIME)
     , CurrentBakedSource(nullptr)
@@ -77,6 +78,7 @@ void USteamAudioSourceComponent::SetInputs(IPLSimulationFlags Flags)
     Inputs.occlusionType = static_cast<IPLOcclusionType>(OcclusionType);
     Inputs.occlusionRadius = OcclusionRadius;
     Inputs.numOcclusionSamples = OcclusionSamples;
+    Inputs.numTransmissionRays = MaxTransmissionSurfaces;
     Inputs.reverbScale[0] = 1.0f;
     Inputs.reverbScale[1] = 1.0f;
     Inputs.reverbScale[2] = 1.0f;

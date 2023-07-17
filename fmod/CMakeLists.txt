@@ -3,7 +3,7 @@
 
 cmake_minimum_required(VERSION 3.17)
 
-project(Phonon VERSION 4.2.0)
+project(Phonon VERSION 4.3.0)
 
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_MODULE_PATH "${CMAKE_HOME_DIRECTORY}/build")
@@ -170,6 +170,8 @@ endif()
 # PACKAGING
 #
 
+install(FILES ${CMAKE_HOME_DIRECTORY}/../core/THIRDPARTY.md DESTINATION root)
+
 set(CPACK_PACKAGE_VENDOR "Valve Corporation")
 set(CPACK_PACKAGE_FILE_NAME steamaudio_fmod)
 set(CPACK_PACKAGE_DIRECTORY ${CMAKE_HOME_DIRECTORY}/dist)
@@ -179,6 +181,7 @@ set(CPACK_INSTALLED_DIRECTORIES
     ${CMAKE_INSTALL_PREFIX}/symbols symbols
     ${CMAKE_INSTALL_PREFIX}/src src
     ${CMAKE_INSTALL_PREFIX}/doc doc
+    ${CMAKE_INSTALL_PREFIX}/root .
 )
 
 include(CPack)

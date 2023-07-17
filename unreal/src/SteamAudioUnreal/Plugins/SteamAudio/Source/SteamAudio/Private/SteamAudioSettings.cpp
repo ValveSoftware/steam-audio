@@ -52,6 +52,8 @@ USteamAudioSettings::USteamAudioSettings()
     , TANDuration(1.0f)
     , TANAmbisonicOrder(1)
     , TANMaxSources(32)
+    , HRTFVolume(0.0f)
+    , HRTFNormalizationType(EHRTFNormType::NONE)
     , SOFAFile(nullptr)
 {}
 
@@ -100,6 +102,8 @@ FSteamAudioSettings USteamAudioSettings::GetSettings() const
     Settings.TANAmbisonicOrder = TANAmbisonicOrder;
     Settings.TANMaxSources = TANMaxSources;
     Settings.SOFAFile = Cast<USOFAFile>(SOFAFile.TryLoad());
+    Settings.HRTFVolume = (Settings.SOFAFile) ? Settings.SOFAFile->Volume : HRTFVolume;
+    Settings.HRTFNormType = (Settings.SOFAFile) ? static_cast<IPLHRTFNormType>(Settings.SOFAFile->NormalizationType) : static_cast<IPLHRTFNormType>(HRTFNormalizationType);
     return Settings;
 }
 

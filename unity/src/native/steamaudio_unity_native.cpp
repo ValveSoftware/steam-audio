@@ -334,6 +334,17 @@ SourceManager::SourceManager()
     : mNextHandle(0)
 {}
 
+SourceManager::~SourceManager()
+{
+    {
+        std::lock_guard<std::mutex> lock(mSourceMutex);
+        for (auto& it : mSources)
+        {
+            iplSourceRelease(&mSources[it.first]);
+        }
+    }
+}
+
 int32_t SourceManager::addSource(IPLSource source)
 {
     // Retain a reference to this source.

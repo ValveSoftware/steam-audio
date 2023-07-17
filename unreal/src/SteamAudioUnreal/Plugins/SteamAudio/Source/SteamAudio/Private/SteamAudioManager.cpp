@@ -113,17 +113,25 @@ bool FSteamAudioManager::InitHRTF(IPLAudioSettings& AudioSettings)
     IPLHRTFSettings HRTFSettings{};
     HRTFSettings.type = IPL_HRTFTYPE_DEFAULT;
     HRTFSettings.volume = 1.0f;
+    HRTFSettings.normType = IPL_HRTFNORMTYPE_NONE;
 
     const USteamAudioSettings* Settings = GetDefault<USteamAudioSettings>();
-    if (Settings && Settings->SOFAFile.IsValid())
+    if (Settings)
     {
-        USOFAFile* SOFAFile = Cast<USOFAFile>(Settings->SOFAFile.TryLoad());
-        if (SOFAFile)
+        HRTFSettings.volume = SteamAudio::ConvertDbToLinear(Settings->HRTFVolume);
+        HRTFSettings.normType = static_cast<IPLHRTFNormType>(Settings->HRTFNormalizationType);
+        
+        if (Settings->SOFAFile.IsValid())
         {
-            HRTFSettings.type = IPL_HRTFTYPE_SOFA;
-            HRTFSettings.sofaData = SOFAFile->Data.GetData();
-            HRTFSettings.sofaDataSize = SOFAFile->Data.Num();
-            HRTFSettings.volume = SOFAFile->Volume;
+            USOFAFile* SOFAFile = Cast<USOFAFile>(Settings->SOFAFile.TryLoad());
+            if (SOFAFile)
+            {
+                HRTFSettings.type = IPL_HRTFTYPE_SOFA;
+                HRTFSettings.sofaData = SOFAFile->Data.GetData();
+                HRTFSettings.sofaDataSize = SOFAFile->Data.Num();
+                HRTFSettings.volume = SteamAudio::ConvertDbToLinear(SOFAFile->Volume);
+                HRTFSettings.normType = static_cast<IPLHRTFNormType>(SOFAFile->NormalizationType);
+            }
         }
     }
 

@@ -55,6 +55,16 @@ enum class EOpenCLDeviceType : uint8
     GPU UMETA(DisplayName = "GPU"),
 };
 
+/**
+ * Equivalent to IPLHRTFNormType.
+ */
+UENUM(BlueprintType)
+enum class EHRTFNormType : uint8
+{
+    NONE    UMETA(DisplayName = "None"),
+    RMS     UMETA(DisplayName = "RMS"),
+};
+
 
 // ---------------------------------------------------------------------------------------------------------------------
 // FSteamAudioSettings
@@ -110,6 +120,8 @@ struct FSteamAudioSettings
     int TANAmbisonicOrder;
     int TANMaxSources;
     USOFAFile* SOFAFile;
+    float HRTFVolume;
+    IPLHRTFNormType HRTFNormType;
 };
 
 
@@ -257,9 +269,15 @@ public:
 	UPROPERTY(GlobalConfig, EditAnywhere, Category = "TrueAudio Next Settings", meta = (UIMin = 1, UIMax = 128, DisplayName = "TAN Max Sources"))
 	int TANMaxSources;
 
+    UPROPERTY(Config, EditAnywhere, Category = "Default HRTF Settings", meta = (DisplayName = "HRTF Volume Gain (dB)", UIMin = "-12.0", UIMax = "12.0"))
+    float HRTFVolume;
+    
+    UPROPERTY(Config, EditAnywhere, Category = "Default HRTF Settings", meta = (DisplayName = "HRTF Normalization Type"))
+    EHRTFNormType HRTFNormalizationType;
+
     UPROPERTY(Config, EditAnywhere, Category = "Custom HRTF Settings", meta = (DisplayName = "SOFA File", AllowedClasses = "/Script/SteamAudio.SOFAFile"))
     FSoftObjectPath SOFAFile;
-
+    
     USteamAudioSettings();
 
     /** Returns a copy of the settings in a raw struct. */
