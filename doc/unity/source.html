@@ -70,7 +70,7 @@
             
             
               <div class="version">
-                4.2.0
+                4.3.0
               </div>
             
           
@@ -311,6 +311,8 @@
 </dd>
 <dt>Transmission High</dt><dd><p>The high frequency (8 kHz and above) EQ value for transmission. Only used if <strong>Transmission Input</strong> is set to <strong>User Defined</strong>. 0 = high frequencies are completely attenuated, 1 = high frequencies are not attenuated at all.</p>
 <p><em>Only available if using Unity’s built-in audio engine.</em></p>
+</dd>
+<dt>Max Transmission Surfaces</dt><dd><p>The maximum number of surfaces, starting from the closest surface to the listener, whose transmission coefficients will be considered when calculating the total amount of sound transmitted. Increasing this value will result in more accurate results when multiple surfaces lie between the source and the listener, at the cost of increased CPU usage.</p>
 </dd>
 <dt>Direct Mix Level</dt><dd><p>The contribution of the direct sound path to the overall mix for this Audio Source. Lower values reduce the contribution more.</p>
 <p><em>Only available if using Unity’s built-in audio engine.</em></p>

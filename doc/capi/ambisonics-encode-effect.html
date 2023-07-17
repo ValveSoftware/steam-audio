@@ -70,7 +70,7 @@
             
             
               <div class="version">
-                4.2.0
+                4.3.0
               </div>
             
           
@@ -316,7 +316,8 @@
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N31IPLAmbisonicsEncodeEffectParams9directionE">
 <span id="_CPPv3N31IPLAmbisonicsEncodeEffectParams9directionE"></span><span id="_CPPv2N31IPLAmbisonicsEncodeEffectParams9directionE"></span><span id="IPLAmbisonicsEncodeEffectParams::direction__IPLVector3"></span><span class="target" id="struct_i_p_l_ambisonics_encode_effect_params_1a6d6d43ed60cddbbc9a71b9e83b073db5"></span><a class="reference internal" href="geometry.html#_CPPv410IPLVector3" title="IPLVector3"><span class="n"><span class="pre">IPLVector3</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">direction</span></span></span><a class="headerlink" href="#_CPPv4N31IPLAmbisonicsEncodeEffectParams9directionE" title="Permalink to this definition">¶</a><br /></dt>
-<dd><p>Unit vector pointing from the listener towards the source. </p>
+<dd><p>Vector pointing from the listener towards the source. </p>
+<p>Need not be normalized; Steam Audio will automatically normalize this vector. If a zero-length vector is passed, the output will be order 0 (omnidirectional). </p>
 </dd></dl>
 
 <dl class="cpp var">

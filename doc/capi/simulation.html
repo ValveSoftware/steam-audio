@@ -69,7 +69,7 @@
             
             
               <div class="version">
-                4.2.0
+                4.3.0
               </div>
             
           
@@ -936,6 +936,13 @@
 <dd><p>If <code class="docutils literal notranslate"><span class="pre">IPL_TRUE</span></code>, and <code class="docutils literal notranslate"><span class="pre">enableValidation</span></code> is <code class="docutils literal notranslate"><span class="pre">IPL_TRUE</span></code>, then if a baked path is occluded by dynamic geometry, path finding is re-run in real-time to find alternate paths that take into account the dynamic geometry. </p>
 </dd></dl>
 
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N19IPLSimulationInputs19numTransmissionRaysE">
+<span id="_CPPv3N19IPLSimulationInputs19numTransmissionRaysE"></span><span id="_CPPv2N19IPLSimulationInputs19numTransmissionRaysE"></span><span id="IPLSimulationInputs::numTransmissionRays__IPLint32"></span><span class="target" id="struct_i_p_l_simulation_inputs_1a318a49a292723ea6cbc8936006fd9527"></span><a class="reference internal" href="types.html#_CPPv48IPLint32" title="IPLint32"><span class="n"><span class="pre">IPLint32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">numTransmissionRays</span></span></span><a class="headerlink" href="#_CPPv4N19IPLSimulationInputs19numTransmissionRaysE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>If simulating transmission, this is the maximum number of surfaces, starting from the closest surface to the listener, whose transmission coefficients will be considered when calculating the total amount of sound transmitted. </p>
+<p>Increasing this value will result in more accurate results when multiple surfaces lie between the source and the listener, at the cost of increased CPU usage. </p>
+</dd></dl>
+
 </div>
 </dd></dl>
 
@@ -983,6 +990,18 @@
 <dt class="sig sig-object cpp" id="_CPPv4N25IPLSimulationSharedInputs21irradianceMinDistanceE">
 <span id="_CPPv3N25IPLSimulationSharedInputs21irradianceMinDistanceE"></span><span id="_CPPv2N25IPLSimulationSharedInputs21irradianceMinDistanceE"></span><span id="IPLSimulationSharedInputs::irradianceMinDistance__IPLfloat32"></span><span class="target" id="struct_i_p_l_simulation_shared_inputs_1a56bf18dbfbf2e9b69465971ea3a14df8"></span><a class="reference internal" href="types.html#_CPPv410IPLfloat32" title="IPLfloat32"><span class="n"><span class="pre">IPLfloat32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">irradianceMinDistance</span></span></span><a class="headerlink" href="#_CPPv4N25IPLSimulationSharedInputs21irradianceMinDistanceE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>When calculating how much sound energy reaches a surface directly from a source, any source that is closer than <code class="docutils literal notranslate"><span class="pre">irradianceMinDistance</span></code> to the surface is assumed to be at a distance of <code class="docutils literal notranslate"><span class="pre">irradianceMinDistance</span></code>, for the purposes of energy calculations. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N25IPLSimulationSharedInputs18pathingVisCallbackE">
+<span id="_CPPv3N25IPLSimulationSharedInputs18pathingVisCallbackE"></span><span id="_CPPv2N25IPLSimulationSharedInputs18pathingVisCallbackE"></span><span id="IPLSimulationSharedInputs::pathingVisCallback__IPLPathingVisualizationCallback"></span><span class="target" id="struct_i_p_l_simulation_shared_inputs_1a65c7f54f8aa632b61f4aa243a6b46cf2"></span><a class="reference internal" href="#_CPPv431IPLPathingVisualizationCallback" title="IPLPathingVisualizationCallback"><span class="n"><span class="pre">IPLPathingVisualizationCallback</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">pathingVisCallback</span></span></span><a class="headerlink" href="#_CPPv4N25IPLSimulationSharedInputs18pathingVisCallbackE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Callback for visualizing valid path segments during call to <code class="docutils literal notranslate"><span class="pre">iplSimulatorRunPathing</span></code>. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N25IPLSimulationSharedInputs15pathingUserDataE">
+<span id="_CPPv3N25IPLSimulationSharedInputs15pathingUserDataE"></span><span id="_CPPv2N25IPLSimulationSharedInputs15pathingUserDataE"></span><span id="IPLSimulationSharedInputs::pathingUserData__voidP"></span><span class="target" id="struct_i_p_l_simulation_shared_inputs_1a85dbd5d8799f5761f9c97d92d2559534"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">pathingUserData</span></span></span><a class="headerlink" href="#_CPPv4N25IPLSimulationSharedInputs15pathingUserDataE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Pointer to arbitrary user-specified data provided when calling the function that will call this callback. </p>
 </dd></dl>
 
 </div>
@@ -1209,6 +1228,23 @@
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>The directivity value to apply, between <code class="docutils literal notranslate"><span class="pre">0</span></code> and <code class="docutils literal notranslate"><span class="pre">1</span></code>. <code class="docutils literal notranslate"><span class="pre">0</span></code> = the sound is not audible, <code class="docutils literal notranslate"><span class="pre">1</span></code> = the sound is as loud as it would be if it had a uniform (omnidirectional) directivity pattern. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv431IPLPathingVisualizationCallback">
+<span id="_CPPv331IPLPathingVisualizationCallback"></span><span id="_CPPv231IPLPathingVisualizationCallback"></span><span id="IPLPathingVisualizationCallback"></span><span class="target" id="group__simulation_1gad27b369b2970c133f715fc17daa9c830"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">IPLPathingVisualizationCallback</span></span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">(</span></span><a class="reference internal" href="geometry.html#_CPPv410IPLVector3" title="IPLVector3"><span class="n"><span class="pre">IPLVector3</span></span></a><span class="w"> </span><span class="n"><span class="pre">from</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="geometry.html#_CPPv410IPLVector3" title="IPLVector3"><span class="n"><span class="pre">IPLVector3</span></span></a><span class="w"> </span><span class="n"><span class="pre">to</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="types.html#_CPPv47IPLbool" title="IPLbool"><span class="n"><span class="pre">IPLbool</span></span></a><span class="w"> </span><span class="n"><span class="pre">occluded</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">userData</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#_CPPv431IPLPathingVisualizationCallback" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Callback for visualizing valid path segments during call to <code class="docutils literal notranslate"><span class="pre">iplSimulatorRunPathing</span></code>. </p>
+<p>You can use this to provide the user with visual feedback, like drawing each segment of a path.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>from</strong> – Position of starting probe. </p></li>
+<li><p><strong>to</strong> – Position of ending probe. </p></li>
+<li><p><strong>occluded</strong> – Occlusion status of ray segment between <code class="docutils literal notranslate"><span class="pre">from</span></code> to <code class="docutils literal notranslate"><span class="pre">to</span></code>. </p></li>
+<li><p><strong>userData</strong> – Pointer to arbitrary user-specified data provided when calling the function that will call this callback. </p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>

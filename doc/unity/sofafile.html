@@ -70,7 +70,7 @@
             
             
               <div class="version">
-                4.2.0
+                4.3.0
               </div>
             
           
@@ -187,7 +187,9 @@
 <p>To use a SOFA file, first add it to the <strong>SOFA Files</strong> list under <a class="reference internal" href="settings.html"><span class="doc">Steam Audio Settings</span></a>. Then, make sure that the <strong>Current HRTF</strong> property of the global <a class="reference internal" href="manager.html"><span class="doc">Steam Audio Manager</span></a> instance is set to this SOFA file.</p>
 <img alt="_images/sofa_file.png" src="_images/sofa_file.png" />
 <dl class="simple">
-<dt>Volume</dt><dd><p>Adjusts the volume of the HRTF filters contained in the SOFA file. Different SOFA files may be normalized to different average volumes, and this parameter can be used to ensure that a given SOFA file works well within your overall mix.</p>
+<dt>HRTF Volume Gain (dB)</dt><dd><p>Adjusts the volume of the HRTF filters contained in the SOFA file. Different SOFA files may be normalized to different average volumes, and this parameter can be used to ensure that a given SOFA file works well within your overall mix.</p>
+</dd>
+<dt>HRTF Normalization Type</dt><dd><p>Specifies the algorithm to use (if any) to normalize the volumes of the SOFA file’s HRTF filters across all directions. See <a class="reference internal" href="settings.html"><span class="doc">Steam Audio Settings</span></a> for more details.</p>
 </dd>
 </dl>
 </div>
