@@ -11,6 +11,8 @@
 
 #include "steamaudio_fmod.h"
 
+extern std::shared_ptr<SourceManager> gSourceManager;
+
 namespace SpatializeEffect {
 
 /**
@@ -331,6 +333,8 @@ enum Params
     /**
      *  **Type**: `FMOD_DSP_PARAMETER_TYPE_DATA`
      * 
+     *  **DEPRECATED**
+     * 
      *  Pointer to the `IPLSimulationOutputs` structure containing simulation results.
      */
     SIMULATION_OUTPUTS,
@@ -349,6 +353,14 @@ enum Params
      *  (FMOD Studio 2.02+) The event's min/max distance range. Automatically set by FMOD Studio.
      */
     DISTANCE_ATTENUATION_RANGE,
+
+    /**
+     *  **Type**: `FMOD_DSP_PARAMETER_TYPE_INT`
+     * 
+     *  Handle of the `IPLSource` object to use for obtaining simulation results. The handle can
+     *  be obtained by calling `iplFMODAddSource`.
+     */
+    SIMULATION_OUTPUTS_HANDLE,
 
     /** The number of parameters in this effect. */
     NUM_PARAMS
@@ -388,6 +400,7 @@ FMOD_DSP_PARAMETER_DESC gParams[] = {
     { FMOD_DSP_PARAMETER_TYPE_DATA, "SimOutputs", "", "Simulation outputs." },
     { FMOD_DSP_PARAMETER_TYPE_BOOL, "DirectBinaural", "", "Apply HRTF to direct path." },
     { FMOD_DSP_PARAMETER_TYPE_DATA, "DistRange", "", "Distance attenuation range." },
+    { FMOD_DSP_PARAMETER_TYPE_INT, "SimOutHandle", "", "Simulation outputs handle." },
 };
 
 FMOD_DSP_PARAMETER_DESC* gParamsArray[NUM_PARAMS];
@@ -438,6 +451,7 @@ void initParamDescs()
     gParams[SIMULATION_OUTPUTS].datadesc = {FMOD_DSP_PARAMETER_DATA_TYPE_USER};
     gParams[DIRECT_BINAURAL].booldesc = {true};
     gParams[DISTANCE_ATTENUATION_RANGE].datadesc = {FMOD_DSP_PARAMETER_DATA_TYPE_ATTENUATION_RANGE};
+    gParams[SIMULATION_OUTPUTS_HANDLE].intdesc = {-1, 10000, -1};
 }
 
 struct State
@@ -595,7 +609,7 @@ InitFlags lazyInit(FMOD_DSP_STATE* state,
 
         if (!effect->pathEffect)
         {
-            IPLPathEffectSettings effectSettings;
+            IPLPathEffectSettings effectSettings{};
             effectSettings.maxOrder = gSimulationSettings.maxOrder;
 
             status = iplPathEffectCreate(gContext, &audioSettings, &effectSettings, &effect->pathEffect);
@@ -802,6 +816,9 @@ FMOD_RESULT F_CALL getInt(FMOD_DSP_STATE* state,
     case TRANSMISSION_TYPE:
         *value = static_cast<int>(effect->transmissionType);
         break;
+    case SIMULATION_OUTPUTS_HANDLE:
+        *value = -1;
+        break;
     default:
         return FMOD_ERR_INVALID_PARAM;
     }
@@ -924,6 +941,23 @@ FMOD_RESULT F_CALL setBool(FMOD_DSP_STATE* state,
     return FMOD_OK;
 }
 
+void setSource(FMOD_DSP_STATE* state,
+               IPLSource source)
+{
+    auto effect = reinterpret_cast<State*>(state->plugindata);
+
+    if (source == effect->simulationSource[1])
+        return;
+
+    if (!effect->newSimulationSourceWritten)
+    {
+        iplSourceRelease(&effect->simulationSource[1]);
+        effect->simulationSource[1] = iplSourceRetain(source);
+
+        effect->newSimulationSourceWritten = true;
+    }
+}
+
 FMOD_RESULT F_CALL setInt(FMOD_DSP_STATE* state,
                           int index,
                           int value)
@@ -955,6 +989,12 @@ FMOD_RESULT F_CALL setInt(FMOD_DSP_STATE* state,
         break;
     case TRANSMISSION_TYPE:
         effect->transmissionType = static_cast<IPLTransmissionType>(value);
+        break;
+    case SIMULATION_OUTPUTS_HANDLE:
+        if (gSourceManager)
+        {
+            setSource(state, gSourceManager->getSource(value));
+        }
         break;
     default:
         return FMOD_ERR_INVALID_PARAM;
@@ -1026,23 +1066,6 @@ FMOD_RESULT F_CALL setFloat(FMOD_DSP_STATE* state,
     return FMOD_OK;
 }
 
-void setSource(FMOD_DSP_STATE* state,
-               IPLSource source)
-{
-    auto effect = reinterpret_cast<State*>(state->plugindata);
-
-    if (source == effect->simulationSource[1])
-        return;
-
-    if (!effect->newSimulationSourceWritten)
-    {
-        iplSourceRelease(&effect->simulationSource[1]);
-        effect->simulationSource[1] = iplSourceRetain(source);
-
-        effect->newSimulationSourceWritten = true;
-    }
-}
-
 FMOD_RESULT F_CALL setData(FMOD_DSP_STATE* state,
                            int index,
                            void* value,
@@ -1058,8 +1081,6 @@ FMOD_RESULT F_CALL setData(FMOD_DSP_STATE* state,
         memcpy(&effect->source, value, length);
         break;
     case SIMULATION_OUTPUTS:
-        memcpy(&simulationSource, value, length);
-        setSource(state, simulationSource);
         break;
     case DISTANCE_ATTENUATION_RANGE:
         memcpy(&effect->attenuationRange, value, length);

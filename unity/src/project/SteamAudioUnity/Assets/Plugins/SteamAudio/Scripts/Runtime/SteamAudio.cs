@@ -14,7 +14,7 @@ namespace SteamAudio
     public static class Constants
     {
         public const uint kVersionMajor = 4;
-        public const uint kVersionMinor = 3;
+        public const uint kVersionMinor = 4;
         public const uint kVersionPatch = 0;
         public const uint kVersion = (kVersionMajor << 16) | (kVersionMinor << 8) | kVersionPatch;
     }
@@ -619,6 +619,9 @@ namespace SteamAudio
         public float eqCoeffsHigh;
         public IntPtr shCoeffs;
         public int order;
+        public Bool binaural;
+        public IntPtr hrtf;
+        public CoordinateSpace3 listener;
     }
 
     [StructLayout(LayoutKind.Sequential)]
@@ -975,5 +978,11 @@ namespace SteamAudio
 
         [DllImport("phonon_fmod")]
         public static extern void iplFMODTerminate();
+
+        [DllImport("phonon_fmod")]
+        public static extern int iplFMODAddSource(IntPtr source);
+
+        [DllImport("phonon_fmod")]
+        public static extern void iplFMODRemoveSource(int handle);
     }
 }

@@ -19,9 +19,31 @@ namespace SteamAudio {
 // FSteamAudioFMODStudioModule
 // ---------------------------------------------------------------------------------------------------------------------
 
+typedef void (F_CALL* iplFMODGetVersion_t)(unsigned int* Major, unsigned int* Minor, unsigned int* Patch);
+typedef void (F_CALL* iplFMODInitialize_t)(IPLContext Context);
+typedef void (F_CALL* iplFMODTerminate_t)();
+typedef void (F_CALL* iplFMODSetHRTF_t)(IPLHRTF HRTF);
+typedef void (F_CALL* iplFMODSetSimulationSettings_t)(IPLSimulationSettings SimulationSettings);
+typedef void (F_CALL* iplFMODSetReverbSource_t)(IPLSource ReverbSource);
+typedef IPLint32 (F_CALL* iplFMODAddSource_t)(IPLSource Source);
+typedef void (F_CALL* iplFMODRemoveSource_t)(IPLint32 Handle);
+
 class FSteamAudioFMODStudioModule : public IAudioEngineStateFactory
 {
 public:
+    /** Handle to the Steam Audio FMOD Studio plugin (phonon_fmod.dll or similar). */
+    void* Library;
+
+    /** Function pointers for the game engine / audio engine communication API. */
+    iplFMODGetVersion_t iplFMODGetVersion;
+    iplFMODInitialize_t iplFMODInitialize;
+    iplFMODTerminate_t iplFMODTerminate;
+    iplFMODSetHRTF_t iplFMODSetHRTF;
+    iplFMODSetSimulationSettings_t iplFMODSetSimulationSettings;
+    iplFMODSetReverbSource_t iplFMODSetReverbSource;
+    iplFMODAddSource_t iplFMODAddSource;
+    iplFMODRemoveSource_t iplFMODRemoveSource;
+
     /**
      * Inherited from IModuleInterface
      */
@@ -34,19 +56,15 @@ public:
 
     /** Create an object that we can use to communicate with FMOD Studio. */
     virtual TSharedPtr<IAudioEngineState> CreateAudioEngineState() override;
+
+    /** Returns the module singleton object. */
+    static FSteamAudioFMODStudioModule& Get() { return FModuleManager::GetModuleChecked<FSteamAudioFMODStudioModule>("SteamAudioFMODStudio"); }
 };
 
 
 // ---------------------------------------------------------------------------------------------------------------------
 // FFMODStudioAudioEngineState
 // ---------------------------------------------------------------------------------------------------------------------
-
-typedef void (F_CALL* iplFMODGetVersion_t)(unsigned int* Major, unsigned int* Minor, unsigned int* Patch);
-typedef void (F_CALL* iplFMODInitialize_t)(IPLContext Context);
-typedef void (F_CALL* iplFMODTerminate_t)();
-typedef void (F_CALL* iplFMODSetHRTF_t)(IPLHRTF HRTF);
-typedef void (F_CALL* iplFMODSetSimulationSettings_t)(IPLSimulationSettings SimulationSettings);
-typedef void (F_CALL* iplFMODSetReverbSource_t)(IPLSource ReverbSource);
 
 /**
  * Communicates between the game engine plugin and FMOD Studio's audio engine.
@@ -91,17 +109,6 @@ private:
     /** The FMOD core system. */
     FMOD::System* CoreSystem;
 
-    /** Handle to the Steam Audio FMOD Studio plugin (phonon_fmod.dll or similar). */
-    void* Library;
-
-    /** Function pointers for the game engine / audio engine communication API. */
-    iplFMODGetVersion_t iplFMODGetVersion;
-    iplFMODInitialize_t iplFMODInitialize;
-    iplFMODTerminate_t iplFMODTerminate;
-    iplFMODSetHRTF_t iplFMODSetHRTF;
-    iplFMODSetSimulationSettings_t iplFMODSetSimulationSettings;
-    iplFMODSetReverbSource_t iplFMODSetReverbSource;
-    
     /** Converts a vector from FMOD Studio's coordinate system to Unreal's coordinate system. */
     FVector ConvertVectorFromFMODStudio(const FMOD_VECTOR& FMODStudioVector);
 };
@@ -130,7 +137,7 @@ public:
     virtual void Destroy() override;
 
     /** Sends simulation parameters from the given source component to the spatializer effect instance. */
-    virtual void UpdateParameters(USteamAudioSourceComponent* Source) override;
+    virtual void UpdateParameters(USteamAudioSourceComponent* SteamAudioSourceComponent) override;
 
     /** Returns the FMOD DSP corresponding to the spatializer effect with which we're communicating. */
     FMOD::DSP* GetDSP();
@@ -141,6 +148,12 @@ private:
 
     /** The DSP effect we want to communicate with. */
     FMOD::DSP* DSP;
+
+    /** The Steam Audio Source component corresponding to this source. */
+    USteamAudioSourceComponent* SourceComponent;
+
+    /** The handle of the Steam Audio Source, obtained via iplFMODAddSource. */
+    int Handle;
 };
 
 }

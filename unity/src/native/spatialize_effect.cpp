@@ -238,7 +238,7 @@ InitFlags lazyInit(UnityAudioEffectState* state,
 
         if (!effect->pathEffect)
         {
-            IPLPathEffectSettings effectSettings;
+            IPLPathEffectSettings effectSettings{};
             effectSettings.maxOrder = gSimulationSettings.maxOrder;
 
             status = iplPathEffectCreate(gContext, &audioSettings, &effectSettings, &effect->pathEffect);

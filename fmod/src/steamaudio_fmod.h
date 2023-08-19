@@ -10,6 +10,10 @@
 #include <string.h>
 
 #include <atomic>
+#include <memory>
+#include <mutex>
+#include <queue>
+#include <unordered_map>
 
 #if defined(IPL_OS_WINDOWS)
 #include <Windows.h>
@@ -110,6 +114,10 @@ F_EXPORT void F_CALL iplFMODSetSimulationSettings(IPLSimulationSettings simulati
  */
 F_EXPORT void F_CALL iplFMODSetReverbSource(IPLSource reverbSource);
 
+F_EXPORT IPLint32 F_CALL iplFMODAddSource(IPLSource source);
+
+F_EXPORT void F_CALL iplFMODRemoveSource(IPLint32 handle);
+
 }
 
 
@@ -167,3 +175,45 @@ bool isRunningInEditor();
 
 // Creates a context and default HRTF. Should only be called if isRunningInEditor returns true.
 void initContextAndDefaultHRTF(IPLAudioSettings audioSettings);
+
+
+// --------------------------------------------------------------------------------------------------------------------
+// SourceManager
+// --------------------------------------------------------------------------------------------------------------------
+
+// Manages assigning a 32-bit integer handle to IPLSource objects, so the C# scripts can reference a specific IPLSource
+// in a single call to AudioSource.SetSpatializerFloat or similar.
+class SourceManager
+{
+public:
+    SourceManager();
+    ~SourceManager();
+
+    // Registers a source that has already been created, and returns the corresponding handle. A reference to the
+    // IPLSource will be retained by this object.
+    int32_t addSource(IPLSource source);
+
+    // Unregisters a source (by handle), and releases the reference.
+    void removeSource(int32_t handle);
+
+    // Returns the IPLSource corresponding to a given handle. If the handle is invalid or the IPLSource has been
+    // released, returns nullptr. Does not retain an additional reference.
+    IPLSource getSource(int32_t handle);
+
+private:
+    // The next available integer that hasn't yet been assigned as the handle for any source.
+    int32_t mNextHandle;
+
+    // Handles for sources that have been unregistered, and which can now be reused. We will prefer reusing free
+    // handle values over using a new handle value.
+    std::priority_queue<int32_t> mFreeHandles;
+
+    // The mapping from handle values to IPLSource objects.
+    std::unordered_map<int32_t, IPLSource> mSources;
+
+    // Synchronizes access to the handle priority queue and related values.
+    std::mutex mHandleMutex;
+
+    // Synchronizes access to the handle-to-source map.
+    std::mutex mSourceMutex;
+};

@@ -2380,6 +2380,19 @@ DECLARE_OPAQUE_HANDLE(IPLPathEffect);
 typedef struct {
     /** The maximum Ambisonics order that will be used by output audio buffers. */
     IPLint32 maxOrder;
+
+    /** If \c IPL_TRUE, then this effect will render spatialized audio into the output buffer. If \c IPL_FALSE,
+        this effect will render un-spatialized (and un-rotated) Ambisonic audio. Setting this to \c IPL_FALSE is
+        mainly useful only if you plan to mix multiple Ambisonic buffers and/or apply additional processing to
+        the Ambisonic audio before spatialization. If you plan to immediately spatialize the output of the path
+        effect, setting this value to \c IPL_TRUE can result in significant performance improvements. */
+    IPLbool spatialize;
+
+    /** The speaker layout to use when spatializing. Only used if \c spatialize is \c IPL_TRUE. */
+    IPLSpeakerLayout speakerLayout;
+
+    /** The HRTF to use when spatializing. Only used if \c spatialize is \c IPL_TRUE. */
+    IPLHRTF hrtf;
 } IPLPathEffectSettings;
 
 /** Parameters for applying a path effect to an audio buffer. */
@@ -2396,6 +2409,18 @@ typedef struct {
     /** Ambisonic order of the output buffer. May be less than the maximum order specified when creating the effect,
         in which case higher-order \c shCoeffs will be ignored, and CPU usage will be reduced. */
     IPLint32 order;
+
+    /** If \c IPL_TRUE, spatialize using HRTF-based binaural rendering. Only used if \c spatialize was set to
+        \c IPL_TRUE in \c IPLPathEffectSettings. */
+    IPLbool binaural;
+
+    /** The HRTF to use when spatializing. Only used if \c spatialize was set to \c IPL_TRUE in 
+        \c IPLPathEffectSettings and \c binaural is set to \c IPL_TRUE. */
+    IPLHRTF hrtf;
+
+    /** The position and orientation of the listener. Only used if \c spatialize was set to \c IPL_TRUE in
+        \c IPLPathEffectSettings and \c binaural is set to \c IPL_TRUE. */
+    IPLCoordinateSpace3 listener;
 } IPLPathEffectParams;
 
 /** Creates a path effect.
@@ -2794,7 +2819,7 @@ typedef struct {
         visible. Increasing this value can result in simpler paths, at the cost of increased bake times. */
     IPLfloat32              visRange;
 
-    /** If the distance between two probes is greater than this value, the probes are considered to
+    /** If the length of the path between two probes is greater than this value, the probes are considered to
         not have any path between them. Increasing this value allows sound to propagate over greater
         distances, at the cost of increased bake times and memory usage. */
     IPLfloat32              pathRange;

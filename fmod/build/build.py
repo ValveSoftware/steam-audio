@@ -23,7 +23,7 @@ def detect_host_system():
 def parse_command_line(host_system):
     parser = argparse.ArgumentParser()
     parser.add_argument('-p', '--platform', help = "Target operating system.", choices = ['windows', 'osx', 'linux', 'android'], type = str.lower, default = host_system)
-    parser.add_argument('-t', '--toolchain', help = "Compiler toolchain. (Windows only)", choices = ['vs2013', 'vs2015', 'vs2017', 'vs2019'], type = str.lower, default = 'vs2019')
+    parser.add_argument('-t', '--toolchain', help = "Compiler toolchain. (Windows only)", choices = ['vs2013', 'vs2015', 'vs2017', 'vs2019', 'vs2022'], type = str.lower, default = 'vs2019')
     parser.add_argument('-a', '--architecture', help = "CPU architecture.", choices = ['x86', 'x64', 'armv7', 'arm64'], type = str.lower, default = 'x64')
     parser.add_argument('-c', '--configuration', help = "Build configuration.", choices = ['debug', 'release'], type = str.lower, default = 'release')
     parser.add_argument('-o', '--operation', help = "CMake operation.", choices = ['generate', 'build', 'install', 'package', 'default', 'ci_build', 'ci_package'], type = str.lower, default = 'default')
@@ -54,7 +54,7 @@ def root_dir():
 def generator_name(args):
     if args.platform == 'windows':
         suffix = '';
-        if args.architecture == 'x64' and args.toolchain != 'vs2019':
+        if args.architecture == 'x64' and args.toolchain in ['vs2013', 'vs2015', 'vs2017']:
             suffix = ' Win64';
         generator = '';
         if args.toolchain == 'vs2013':
@@ -65,6 +65,8 @@ def generator_name(args):
             generator = 'Visual Studio 15 2017'
         elif args.toolchain == 'vs2019':
             generator = 'Visual Studio 16 2019'
+        elif args.toolchain == 'vs2022':
+            generator = 'Visual Studio 17 2022'
         return generator + suffix
     elif args.platform == 'osx':
         return 'Xcode'
@@ -91,7 +93,7 @@ def cmake_generate(args):
     cmake_args = ['-G', generator_name(args)]
 
     # If using Visual Studio 2019 on Windows, specify architecture as a parameter.
-    if args.platform == 'windows' and args.toolchain == 'vs2019':
+    if args.platform == 'windows' and args.toolchain not in ['vs2013', 'vs2015', 'vs2017']:
         if args.architecture == 'x86':
             cmake_args += ['-A', 'Win32']
         elif args.architecture == 'x64':

@@ -18,28 +18,6 @@ namespace SteamAudio {
 // ---------------------------------------------------------------------------------------------------------------------
 
 void FSteamAudioFMODStudioModule::StartupModule()
-{}
-
-void FSteamAudioFMODStudioModule::ShutdownModule()
-{}
-
-TSharedPtr<IAudioEngineState> FSteamAudioFMODStudioModule::CreateAudioEngineState()
-{
-	return MakeShared<FFMODStudioAudioEngineState>();
-}
-
-
-// ---------------------------------------------------------------------------------------------------------------------
-// FFMODStudioAudioEngineState
-// ---------------------------------------------------------------------------------------------------------------------
-
-FFMODStudioAudioEngineState::FFMODStudioAudioEngineState()
-	: StudioSystem(nullptr)
-	, CoreSystem(nullptr)
-	, Library(nullptr)
-{}
-
-void FFMODStudioAudioEngineState::Initialize(IPLContext Context, IPLHRTF HRTF, const IPLSimulationSettings& SimulationSettings)
 {
 	FString BaseDir = IPluginManager::Get().FindPlugin("FMODStudio")->GetBaseDir();
 #if PLATFORM_WINDOWS
@@ -73,17 +51,40 @@ void FFMODStudioAudioEngineState::Initialize(IPLContext Context, IPLHRTF HRTF, c
 	iplFMODSetHRTF = (iplFMODSetHRTF_t) FPlatformProcess::GetDllExport(Library, TEXT("iplFMODSetHRTF"));
 	iplFMODSetSimulationSettings = (iplFMODSetSimulationSettings_t) FPlatformProcess::GetDllExport(Library, TEXT("iplFMODSetSimulationSettings"));
 	iplFMODSetReverbSource = (iplFMODSetReverbSource_t) FPlatformProcess::GetDllExport(Library, TEXT("iplFMODSetReverbSource"));
+	iplFMODAddSource = (iplFMODAddSource_t) FPlatformProcess::GetDllExport(Library, TEXT("iplFMODAddSource"));
+	iplFMODRemoveSource = (iplFMODRemoveSource_t) FPlatformProcess::GetDllExport(Library, TEXT("iplFMODRemoveSource"));
+}
 
-	iplFMODInitialize(Context);
-	iplFMODSetHRTF(HRTF);
-	iplFMODSetSimulationSettings(SimulationSettings);
+void FSteamAudioFMODStudioModule::ShutdownModule()
+{}
+
+TSharedPtr<IAudioEngineState> FSteamAudioFMODStudioModule::CreateAudioEngineState()
+{
+	return MakeShared<FFMODStudioAudioEngineState>();
+}
+
+
+// ---------------------------------------------------------------------------------------------------------------------
+// FFMODStudioAudioEngineState
+// ---------------------------------------------------------------------------------------------------------------------
+
+FFMODStudioAudioEngineState::FFMODStudioAudioEngineState()
+	: StudioSystem(nullptr)
+	, CoreSystem(nullptr)
+{}
+
+void FFMODStudioAudioEngineState::Initialize(IPLContext Context, IPLHRTF HRTF, const IPLSimulationSettings& SimulationSettings)
+{
+	FSteamAudioFMODStudioModule::Get().iplFMODInitialize(Context);
+	FSteamAudioFMODStudioModule::Get().iplFMODSetHRTF(HRTF);
+	FSteamAudioFMODStudioModule::Get().iplFMODSetSimulationSettings(SimulationSettings);
 }
 
 void FFMODStudioAudioEngineState::Destroy()
 {
-	if (Library)
+	if (FSteamAudioFMODStudioModule::Get().Library)
 	{
-		iplFMODTerminate();
+		FSteamAudioFMODStudioModule::Get().iplFMODTerminate();
 	}
 }
 
@@ -92,7 +93,7 @@ void FFMODStudioAudioEngineState::SetHRTF(IPLHRTF HRTF)
 
 void FFMODStudioAudioEngineState::SetReverbSource(IPLSource Source)
 {
-	iplFMODSetReverbSource(Source);
+	FSteamAudioFMODStudioModule::Get().iplFMODSetReverbSource(Source);
 }
 
 FVector FFMODStudioAudioEngineState::ConvertVectorFromFMODStudio(const FMOD_VECTOR& FMODStudioVector)
@@ -183,28 +184,40 @@ FMOD::System* FFMODStudioAudioEngineState::GetSystem()
 FFMODStudioAudioEngineSource::FFMODStudioAudioEngineSource()
 	: FMODAudioComponent(nullptr)
 	, DSP(nullptr)
+	, SourceComponent(nullptr)
+	, Handle(-1)
 {}
 
 void FFMODStudioAudioEngineSource::Initialize(AActor* Actor)
 {
 	FMODAudioComponent = Actor->FindComponentByClass<UFMODAudioComponent>();
+
+	SourceComponent = Actor->FindComponentByClass<USteamAudioSourceComponent>();
+	if (SourceComponent)
+	{
+		Handle = FSteamAudioFMODStudioModule::Get().iplFMODAddSource(SourceComponent->GetSource());
+	}
 }
 
 void FFMODStudioAudioEngineSource::Destroy()
-{}
-
-void FFMODStudioAudioEngineSource::UpdateParameters(USteamAudioSourceComponent* SourceComponent)
 {
-	check(SourceComponent);
+	if (SourceComponent)
+	{
+		FSteamAudioFMODStudioModule::Get().iplFMODRemoveSource(Handle);
+	}
+}
 
-	const int kSimulationOutputsParamIndex = 30;
+void FFMODStudioAudioEngineSource::UpdateParameters(USteamAudioSourceComponent* SteamAudioSourceComponent)
+{
+	check(SteamAudioSourceComponent);
+
+	const int kSimulationOutputsParamIndex = 33;
 
 	FMOD::DSP* MyDSP = GetDSP();
 
 	if (MyDSP)
 	{
-		IPLSource Source = SourceComponent->GetSource();
-		MyDSP->setParameterData(kSimulationOutputsParamIndex, &Source, sizeof(IPLSource));
+		MyDSP->setParameterInt(kSimulationOutputsParamIndex, Handle);
 	}
 }
 
