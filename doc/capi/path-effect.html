@@ -70,7 +70,7 @@
             
             
               <div class="version">
-                4.3.0
+                4.4.0
               </div>
             
           
@@ -304,6 +304,27 @@
 <dd><p>The maximum Ambisonics order that will be used by output audio buffers. </p>
 </dd></dl>
 
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N21IPLPathEffectSettings10spatializeE">
+<span id="_CPPv3N21IPLPathEffectSettings10spatializeE"></span><span id="_CPPv2N21IPLPathEffectSettings10spatializeE"></span><span id="IPLPathEffectSettings::spatialize__IPLbool"></span><span class="target" id="struct_i_p_l_path_effect_settings_1a209ceba6ba7e057ab649c4d720a427ee"></span><a class="reference internal" href="types.html#_CPPv47IPLbool" title="IPLbool"><span class="n"><span class="pre">IPLbool</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">spatialize</span></span></span><a class="headerlink" href="#_CPPv4N21IPLPathEffectSettings10spatializeE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>If <code class="docutils literal notranslate"><span class="pre">IPL_TRUE</span></code>, then this effect will render spatialized audio into the output buffer. </p>
+<p>If <code class="docutils literal notranslate"><span class="pre">IPL_FALSE</span></code>, this effect will render un-spatialized (and un-rotated) Ambisonic audio. Setting this to <code class="docutils literal notranslate"><span class="pre">IPL_FALSE</span></code> is mainly useful only if you plan to mix multiple Ambisonic buffers and/or apply additional processing to the Ambisonic audio before spatialization. If you plan to immediately spatialize the output of the path effect, setting this value to <code class="docutils literal notranslate"><span class="pre">IPL_TRUE</span></code> can result in significant performance improvements. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N21IPLPathEffectSettings13speakerLayoutE">
+<span id="_CPPv3N21IPLPathEffectSettings13speakerLayoutE"></span><span id="_CPPv2N21IPLPathEffectSettings13speakerLayoutE"></span><span id="IPLPathEffectSettings::speakerLayout__IPLSpeakerLayout"></span><span class="target" id="struct_i_p_l_path_effect_settings_1ae2881f808b7ed510cf1be3a24c2f0ac5"></span><a class="reference internal" href="audio-buffers.html#_CPPv416IPLSpeakerLayout" title="IPLSpeakerLayout"><span class="n"><span class="pre">IPLSpeakerLayout</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">speakerLayout</span></span></span><a class="headerlink" href="#_CPPv4N21IPLPathEffectSettings13speakerLayoutE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The speaker layout to use when spatializing. </p>
+<p>Only used if <code class="docutils literal notranslate"><span class="pre">spatialize</span></code> is <code class="docutils literal notranslate"><span class="pre">IPL_TRUE</span></code>. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N21IPLPathEffectSettings4hrtfE">
+<span id="_CPPv3N21IPLPathEffectSettings4hrtfE"></span><span id="_CPPv2N21IPLPathEffectSettings4hrtfE"></span><span id="IPLPathEffectSettings::hrtf__IPLHRTF"></span><span class="target" id="struct_i_p_l_path_effect_settings_1afdfe641bbcb9a02f2350ea7b4a997482"></span><a class="reference internal" href="hrtf.html#_CPPv47IPLHRTF" title="IPLHRTF"><span class="n"><span class="pre">IPLHRTF</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">hrtf</span></span></span><a class="headerlink" href="#_CPPv4N21IPLPathEffectSettings4hrtfE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The HRTF to use when spatializing. </p>
+<p>Only used if <code class="docutils literal notranslate"><span class="pre">spatialize</span></code> is <code class="docutils literal notranslate"><span class="pre">IPL_TRUE</span></code>. </p>
+</dd></dl>
+
 </div>
 </dd></dl>
 
@@ -331,6 +352,27 @@
 <span id="_CPPv3N19IPLPathEffectParams5orderE"></span><span id="_CPPv2N19IPLPathEffectParams5orderE"></span><span id="IPLPathEffectParams::order__IPLint32"></span><span class="target" id="struct_i_p_l_path_effect_params_1a8f0bc3d342c8bf145d3f4fc741f84df9"></span><a class="reference internal" href="types.html#_CPPv48IPLint32" title="IPLint32"><span class="n"><span class="pre">IPLint32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">order</span></span></span><a class="headerlink" href="#_CPPv4N19IPLPathEffectParams5orderE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Ambisonic order of the output buffer. </p>
 <p>May be less than the maximum order specified when creating the effect, in which case higher-order <code class="docutils literal notranslate"><span class="pre">shCoeffs</span></code> will be ignored, and CPU usage will be reduced. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N19IPLPathEffectParams8binauralE">
+<span id="_CPPv3N19IPLPathEffectParams8binauralE"></span><span id="_CPPv2N19IPLPathEffectParams8binauralE"></span><span id="IPLPathEffectParams::binaural__IPLbool"></span><span class="target" id="struct_i_p_l_path_effect_params_1a71666c5e41edbcebeb4a9235c4da0120"></span><a class="reference internal" href="types.html#_CPPv47IPLbool" title="IPLbool"><span class="n"><span class="pre">IPLbool</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">binaural</span></span></span><a class="headerlink" href="#_CPPv4N19IPLPathEffectParams8binauralE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>If <code class="docutils literal notranslate"><span class="pre">IPL_TRUE</span></code>, spatialize using HRTF-based binaural rendering. </p>
+<p>Only used if <code class="docutils literal notranslate"><span class="pre">spatialize</span></code> was set to <code class="docutils literal notranslate"><span class="pre">IPL_TRUE</span></code> in <code class="docutils literal notranslate"><a class="reference internal" href="#struct_i_p_l_path_effect_settings"><span class="std std-ref"><span class="pre">IPLPathEffectSettings</span></span></a></code>. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N19IPLPathEffectParams4hrtfE">
+<span id="_CPPv3N19IPLPathEffectParams4hrtfE"></span><span id="_CPPv2N19IPLPathEffectParams4hrtfE"></span><span id="IPLPathEffectParams::hrtf__IPLHRTF"></span><span class="target" id="struct_i_p_l_path_effect_params_1afdfe641bbcb9a02f2350ea7b4a997482"></span><a class="reference internal" href="hrtf.html#_CPPv47IPLHRTF" title="IPLHRTF"><span class="n"><span class="pre">IPLHRTF</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">hrtf</span></span></span><a class="headerlink" href="#_CPPv4N19IPLPathEffectParams4hrtfE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The HRTF to use when spatializing. </p>
+<p>Only used if <code class="docutils literal notranslate"><span class="pre">spatialize</span></code> was set to <code class="docutils literal notranslate"><span class="pre">IPL_TRUE</span></code> in <code class="docutils literal notranslate"><a class="reference internal" href="#struct_i_p_l_path_effect_settings"><span class="std std-ref"><span class="pre">IPLPathEffectSettings</span></span></a></code> and <code class="docutils literal notranslate"><span class="pre">binaural</span></code> is set to <code class="docutils literal notranslate"><span class="pre">IPL_TRUE</span></code>. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N19IPLPathEffectParams8listenerE">
+<span id="_CPPv3N19IPLPathEffectParams8listenerE"></span><span id="_CPPv2N19IPLPathEffectParams8listenerE"></span><span id="IPLPathEffectParams::listener__IPLCoordinateSpace3"></span><span class="target" id="struct_i_p_l_path_effect_params_1aa748549a6aa4a6f9e2f151371816021e"></span><a class="reference internal" href="geometry.html#_CPPv419IPLCoordinateSpace3" title="IPLCoordinateSpace3"><span class="n"><span class="pre">IPLCoordinateSpace3</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">listener</span></span></span><a class="headerlink" href="#_CPPv4N19IPLPathEffectParams8listenerE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The position and orientation of the listener. </p>
+<p>Only used if <code class="docutils literal notranslate"><span class="pre">spatialize</span></code> was set to <code class="docutils literal notranslate"><span class="pre">IPL_TRUE</span></code> in <code class="docutils literal notranslate"><a class="reference internal" href="#struct_i_p_l_path_effect_settings"><span class="std std-ref"><span class="pre">IPLPathEffectSettings</span></span></a></code> and <code class="docutils literal notranslate"><span class="pre">binaural</span></code> is set to <code class="docutils literal notranslate"><span class="pre">IPL_TRUE</span></code>. </p>
 </dd></dl>
 
 </div>
