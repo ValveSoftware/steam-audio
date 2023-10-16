@@ -1775,7 +1775,6 @@ namespace SteamAudio
                 w = ((w - 1) / s) + 1;
                 h = ((h - 1) / s) + 1;
 
-                var position = terrain.transform.position;
                 var heights = terrain.terrainData.GetHeights(0, 0, terrain.terrainData.heightmapResolution,
                     terrain.terrainData.heightmapResolution);
 
@@ -1786,9 +1785,9 @@ namespace SteamAudio
                     {
                         var height = heights[v, u];
 
-                        var x = position.x + (((float) u / terrain.terrainData.heightmapResolution) * terrain.terrainData.size.x);
-                        var y = position.y + (height * terrain.terrainData.size.y);
-                        var z = position.z + (((float) v / terrain.terrainData.heightmapResolution) * terrain.terrainData.size.z);
+                        var x = ((float) u / terrain.terrainData.heightmapResolution) * terrain.terrainData.size.x;
+                        var y = height * terrain.terrainData.size.y;
+                        var z = ((float) v / terrain.terrainData.heightmapResolution) * terrain.terrainData.size.z;
 
                         var vertex = new UnityEngine.Vector3 { x = x, y = y, z = z };
                         var transformedVertex = terrain.transform.TransformPoint(vertex);
