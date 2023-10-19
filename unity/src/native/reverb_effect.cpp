@@ -18,6 +18,8 @@ UnityAudioParameterDefinition gParamDefinitions[] =
     { "Binaural", "", "Apply HRTF.", 0.0f, 1.0f, 0.0f, 1.0f, 1.0f },
 };
 
+#if !defined(IPL_OS_UNSUPPORTED)
+
 struct State
 {
     bool binaural;
@@ -313,6 +315,37 @@ UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK process(UnityAudioEffectState* sta
 
     return UNITY_AUDIODSP_OK;
 }
+
+#else
+
+UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK create(UnityAudioEffectState* state)
+{
+    return UNITY_AUDIODSP_OK;
+}
+
+UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK release(UnityAudioEffectState* state)
+{
+    return UNITY_AUDIODSP_OK;
+}
+
+UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK getParam(UnityAudioEffectState* state, int index, float* value, char* valueStr)
+{
+    *value = 0.0f;
+    return UNITY_AUDIODSP_OK;
+}
+
+UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK setParam(UnityAudioEffectState* state, int index, float value)
+{
+    return UNITY_AUDIODSP_OK;
+}
+
+UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK process(UnityAudioEffectState* state, float* in, float* out, unsigned int numSamples, int numChannelsIn, int numChannelsOut)
+{
+    memset(out, 0, numChannelsOut * numSamples * sizeof(float));
+    return UNITY_AUDIODSP_OK;
+}
+
+#endif
 
 }
 

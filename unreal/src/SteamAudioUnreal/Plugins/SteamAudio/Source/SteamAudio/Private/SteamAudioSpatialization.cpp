@@ -130,6 +130,12 @@ bool FSteamAudioSpatializationPlugin::IsSpatializationEffectInitialized() const
 
 void FSteamAudioSpatializationPlugin::OnInitSource(const uint32 SourceId, const FName& AudioComponentUserId, USpatializationPluginSourceSettingsBase* InSettings)
 {
+    // Make sure we're initialized, so real-time audio can work.
+    SteamAudio::RunInGameThread<void>([&]()
+    {
+        FSteamAudioModule::GetManager().InitializeSteamAudio(EManagerInitReason::PLAYING);
+    });
+
     FSteamAudioSpatializationSource& Source = Sources[SourceId];
 
     // If a settings asset was provided, use that to configure the source. Otherwise, use defaults.
@@ -185,6 +191,9 @@ void FSteamAudioSpatializationPlugin::OnInitSource(const uint32 SourceId, const 
 
         IPLPathEffectSettings PathingSettings{};
         PathingSettings.maxOrder = SimulationSettings.maxOrder;
+        PathingSettings.spatialize = IPL_TRUE;
+        PathingSettings.speakerLayout.type = IPL_SPEAKERLAYOUTTYPE_STEREO;
+        PathingSettings.hrtf = Source.HRTF;
 
         IPLerror Status = iplPathEffectCreate(Context, &AudioSettings, &PathingSettings, &Source.PathEffect);
         if (Status != IPL_STATUS_SUCCESS)
@@ -332,16 +341,12 @@ void FSteamAudioSpatializationPlugin::ProcessAudio(const FAudioPluginSourceInput
             }
 
             IPLPathEffectParams PathingParams = Outputs.pathing;
+            PathingParams.order = SimulationSettings.maxOrder;
+            PathingParams.binaural = Source.bApplyHRTFToPathing ? IPL_TRUE : IPL_FALSE;
+            PathingParams.hrtf = Source.HRTF;
+            PathingParams.listener = FSteamAudioModule::GetManager().GetListenerCoordinates();
 
-            iplPathEffectApply(Source.PathEffect, &PathingParams, &Source.PathingInputBuffer, &Source.PathingBuffer);
-
-            IPLAmbisonicsDecodeEffectParams AmbisonicsDecodeParams{};
-            AmbisonicsDecodeParams.order = SimulationSettings.maxOrder;
-            AmbisonicsDecodeParams.hrtf = Source.HRTF;
-            AmbisonicsDecodeParams.orientation = FSteamAudioModule::GetManager().GetListenerCoordinates();
-            AmbisonicsDecodeParams.binaural = Source.bApplyHRTFToPathing ? IPL_TRUE : IPL_FALSE;
-
-            iplAmbisonicsDecodeEffectApply(Source.AmbisonicsDecodeEffect, &AmbisonicsDecodeParams, &Source.PathingBuffer, &Source.SpatializedPathingBuffer);
+            iplPathEffectApply(Source.PathEffect, &PathingParams, &Source.PathingInputBuffer, &Source.SpatializedPathingBuffer);
 
             iplAudioBufferMix(Context, &Source.SpatializedPathingBuffer, &Source.OutBuffer);
         }

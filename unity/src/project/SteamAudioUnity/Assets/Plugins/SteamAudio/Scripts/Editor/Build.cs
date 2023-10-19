@@ -5,6 +5,9 @@
 
 using System;
 using UnityEditor;
+#if UNITY_2021_2_OR_NEWER
+using UnityEditor.Build;
+#endif
 
 namespace SteamAudio
 {
@@ -24,6 +27,28 @@ namespace SteamAudio
             var assets = new string[] { "Assets/Plugins" };
 
             AssetDatabase.ExportPackage(assets, fileName, ExportPackageOptions.Recurse);
+        }
+    }
+
+    [InitializeOnLoad]
+    public static class Defines
+    {
+        // Define the constant STEAMAUDIO_ENABLED for all platforms that are supported by
+        // Steam Audio. User scripts should check if this constant is defined
+        // (using #if STEAMAUDIO_ENABLED) before using any of the Steam Audio C# classes.
+        static Defines()
+        {
+#if UNITY_2021_2_OR_NEWER
+            NamedBuildTarget[] supportedPlatforms = {
+                NamedBuildTarget.Standalone,
+                NamedBuildTarget.Android,
+            };
+
+            foreach (var supportedPlatform in supportedPlatforms)
+            {
+                PlayerSettings.SetScriptingDefineSymbols(supportedPlatform, "STEAMAUDIO_ENABLED");
+            }
+#endif
         }
     }
 }

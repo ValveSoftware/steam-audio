@@ -5,7 +5,9 @@
 
 #include "steamaudio_unity_native.h"
 
+#if !defined(IPL_OS_UNSUPPORTED)
 extern std::shared_ptr<SourceManager> gSourceManager;
+#endif
 
 namespace SpatializeEffect {
 
@@ -83,6 +85,8 @@ UnityAudioParameterDefinition gParamDefinitions[] =
     { "SimOutHandle", "", "Simulation outputs handle.", std::numeric_limits<float>::min(), std::numeric_limits<float>::max(), -1.0f, 1.0f, 1.0f },
     { "PerspectiveCorr", "", "Apply perspective correction to direct path.", 0.0f, 1.0f, 0.0f, 1.0f, 1.0f }, 
 };
+
+#if !defined(IPL_OS_UNSUPPORTED)
 
 struct State
 {
@@ -240,6 +244,9 @@ InitFlags lazyInit(UnityAudioEffectState* state,
         {
             IPLPathEffectSettings effectSettings{};
             effectSettings.maxOrder = gSimulationSettings.maxOrder;
+            effectSettings.spatialize = IPL_TRUE;
+            effectSettings.speakerLayout = speakerLayoutForNumChannels(numChannelsOut);
+            effectSettings.hrtf = gHRTF[1];
 
             status = iplPathEffectCreate(gContext, &audioSettings, &effectSettings, &effect->pathEffect);
         }
@@ -922,16 +929,11 @@ UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK process(UnityAudioEffectState* sta
 
             IPLPathEffectParams pathParams = simulationOutputs.pathing;
             pathParams.order = gSimulationSettings.maxOrder;
+            pathParams.binaural = (effect->pathingBinaural) ? IPL_TRUE : IPL_FALSE;
+            pathParams.hrtf = gHRTF[0];
+            pathParams.listener = listenerCoordinates;
 
-            iplPathEffectApply(effect->pathEffect, &pathParams, &effect->monoBuffer, &effect->reflectionsBuffer);
-
-            IPLAmbisonicsDecodeEffectParams ambisonicsParams;
-            ambisonicsParams.order = gSimulationSettings.maxOrder;
-            ambisonicsParams.hrtf = gHRTF[0];
-            ambisonicsParams.orientation = listenerCoordinates;
-            ambisonicsParams.binaural = (effect->pathingBinaural) ? IPL_TRUE : IPL_FALSE;
-
-            iplAmbisonicsDecodeEffectApply(effect->ambisonicsEffect, &ambisonicsParams, &effect->reflectionsBuffer, &effect->reflectionsSpatializedBuffer);
+            iplPathEffectApply(effect->pathEffect, &pathParams, &effect->monoBuffer, &effect->reflectionsSpatializedBuffer);
 
             iplAudioBufferMix(gContext, &effect->reflectionsSpatializedBuffer, &effect->outBuffer);
         }
@@ -941,6 +943,55 @@ UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK process(UnityAudioEffectState* sta
 
     return UNITY_AUDIODSP_OK;
 }
+
+#else
+
+UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK create(UnityAudioEffectState* state)
+{
+    return UNITY_AUDIODSP_OK;
+}
+
+UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK release(UnityAudioEffectState* state)
+{
+    return UNITY_AUDIODSP_OK;
+}
+
+UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK getParam(UnityAudioEffectState* state,
+                                                       int index,
+                                                       float* value,
+                                                       char* valueStr)
+{
+    *value = 0.0f;
+    return UNITY_AUDIODSP_OK;
+}
+
+UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK setParam(UnityAudioEffectState* state,
+                                                       int index,
+                                                       float value)
+{
+    return UNITY_AUDIODSP_OK;
+}
+
+UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK process(UnityAudioEffectState* state,
+                                                      float* in,
+                                                      float* out,
+                                                      unsigned int numSamples,
+                                                      int numChannelsIn,
+                                                      int numChannelsOut)
+{
+    assert(numChannelsIn == numChannelsOut);
+
+    memset(out, 0, numChannelsOut * numSamples * sizeof(float));
+
+    if (state->flags & UnityAudioEffectStateFlags_IsPlaying)
+    {
+        memcpy(out, in, numChannelsOut * numSamples * sizeof(float));
+    }
+
+    return UNITY_AUDIODSP_OK;
+}
+
+#endif
 
 }
 

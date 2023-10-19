@@ -31,6 +31,8 @@
 
 extern "C" {
 
+#if !defined(IPL_OS_UNSUPPORTED)
+
 /** Settings for perspective correction. */
 typedef struct {
     IPLbool enabled;
@@ -39,9 +41,13 @@ typedef struct {
     IPLMatrix4x4 transform;
 } IPLUnityPerspectiveCorrection;
 
+#endif
+
 // This function is called by Unity when it loads native audio plugins. It returns metadata that describes all of the
 // effects implemented in this DLL.
 UNITY_AUDIODSP_EXPORT_API int UnityGetAudioEffectDefinitions(UnityAudioEffectDefinition*** definitions);
+
+#if !defined(IPL_OS_UNSUPPORTED)
 
 UNITY_AUDIODSP_EXPORT_API void UNITY_AUDIODSP_CALLBACK iplUnityGetVersion(unsigned int* major, unsigned int* minor, unsigned int* patch);
 
@@ -61,7 +67,11 @@ UNITY_AUDIODSP_EXPORT_API IPLint32 UNITY_AUDIODSP_CALLBACK iplUnityAddSource(IPL
 
 UNITY_AUDIODSP_EXPORT_API void UNITY_AUDIODSP_CALLBACK iplUnityRemoveSource(IPLint32 handle);
 
+#endif
+
 }
+
+#if !defined(IPL_OS_UNSUPPORTED)
 
 // --------------------------------------------------------------------------------------------------------------------
 // Global State
@@ -175,3 +185,5 @@ private:
     // Synchronizes access to the handle-to-source map.
     std::mutex mSourceMutex;
 };
+
+#endif

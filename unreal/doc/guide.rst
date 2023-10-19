@@ -55,9 +55,13 @@ You can configure a source that emits sound with different intensities in differ
 5. Under **Directivity Settings**, check **Apply Directivity**.
 6. Use the **Dipole Weight** and **Dipole Power** sliders to control the directivity pattern.
 
+.. note::
+
+    If a :doc:`Steam Audio Source <source>` component is attached to the actor, then selecting the actor will cause a visualization of the directivity pattern to be displayed in the viewport.
+
 .. image:: media/occlusionsettings_directivity.png
 
-For more information, see :doc:`Steam Audio Spatialization Settings <spatialization-settings>`.
+For more information, see :doc:`Steam Audio Occlusion Settings <occlusion-settings>`.
 
 
 Use a custom HRTF

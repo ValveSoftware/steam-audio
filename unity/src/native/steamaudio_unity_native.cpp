@@ -5,6 +5,12 @@
 
 #include "steamaudio_unity_native.h"
 
+#if defined(IPL_OS_UNSUPPORTED)
+#pragma message("WARNING: Compiling for an unsupported platform!")
+#endif
+
+#if !defined(IPL_OS_UNSUPPORTED)
+
 #include <phonon_interfaces.h>
 
 // --------------------------------------------------------------------------------------------------------------------
@@ -25,6 +31,8 @@ std::atomic<bool> gNewReverbSourceWritten{ false };
 std::atomic<bool> gNewReflectionMixerWritten{ false };
 
 std::shared_ptr<SourceManager> gSourceManager;
+
+#endif
 
 
 // --------------------------------------------------------------------------------------------------------------------
@@ -48,6 +56,8 @@ int UnityGetAudioEffectDefinitions(UnityAudioEffectDefinition*** definitions)
     *definitions = effects;
     return (sizeof(effects) / sizeof(effects[0]));
 }
+
+#if !defined(IPL_OS_UNSUPPORTED)
 
 void UNITY_AUDIODSP_CALLBACK iplUnityGetVersion(unsigned int* major, unsigned int* minor, unsigned int* patch)
 {
@@ -413,3 +423,5 @@ IPLSource SourceManager::getSource(int32_t handle)
     else
         return nullptr;
 }
+
+#endif

@@ -3,7 +3,7 @@
 
 cmake_minimum_required(VERSION 3.17)
 
-project(Phonon VERSION 4.4.0)
+project(Phonon VERSION 4.4.1)
 
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_MODULE_PATH "${CMAKE_HOME_DIRECTORY}/build")
@@ -22,6 +22,8 @@ elseif (APPLE AND CMAKE_SYSTEM_NAME STREQUAL "Darwin")
     set(IPL_OS_MACOS TRUE)
 elseif (ANDROID)
     set(IPL_OS_ANDROID TRUE)
+else()
+    set(IPL_OS_UNSUPPORTED TRUE)
 endif()
 
 # CPU architecture detection
@@ -77,6 +79,9 @@ if (IPL_OS_MACOS)
 endif()
 if (IPL_OS_ANDROID)
     add_definitions(-DIPL_OS_ANDROID)
+endif()
+if (IPL_OS_UNSUPPORTED)
+    add_definitions(-DIPL_OS_UNSUPPORTED)
 endif()
 
 if (IPL_CPU_X86)

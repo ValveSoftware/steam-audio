@@ -84,6 +84,12 @@ void FSteamAudioOcclusionPlugin::Initialize(const FAudioPluginInitializationPara
 
 void FSteamAudioOcclusionPlugin::OnInitSource(const uint32 SourceId, const FName& AudioComponentUserId, const uint32 NumChannels, UOcclusionPluginSourceSettingsBase* InSettings)
 {
+    // Make sure we're initialized, so real-time audio can work.
+    SteamAudio::RunInGameThread<void>([&]()
+    {
+        FSteamAudioModule::GetManager().InitializeSteamAudio(EManagerInitReason::PLAYING);
+    });
+
     FSteamAudioOcclusionSource& Source = Sources[SourceId];
 
     // If a settings asset was provided, use that to configure the source. Otherwise, use defaults.

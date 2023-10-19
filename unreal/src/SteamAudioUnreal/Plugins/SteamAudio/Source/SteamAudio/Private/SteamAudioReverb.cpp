@@ -164,6 +164,12 @@ void FSteamAudioReverbPlugin::ShutDownMixer()
 
 void FSteamAudioReverbPlugin::OnInitSource(const uint32 SourceId, const FName& AudioComponentUserId, const uint32 NumChannels, UReverbPluginSourceSettingsBase* InSettings) 
 {
+    // Make sure we're initialized, so real-time audio can work.
+    SteamAudio::RunInGameThread<void>([&]()
+    {
+        FSteamAudioModule::GetManager().InitializeSteamAudio(EManagerInitReason::PLAYING);
+    });
+
 	FSteamAudioReverbSource& Source = Sources[SourceId];
 
     // If a settings asset was provided, use that to configure the source. Otherwise, use defaults.
@@ -369,7 +375,6 @@ void FSteamAudioReverbPlugin::ProcessSourceAudio(const FAudioPluginSourceInputDa
     IPLContext Context = FSteamAudioModule::GetManager().GetContext();
     IPLSimulationSettings SimulationSettings = FSteamAudioModule::GetManager().GetRealTimeSettings(static_cast<IPLSimulationFlags>(IPL_SIMULATIONFLAGS_REFLECTIONS | IPL_SIMULATIONFLAGS_PATHING));
 
-
     // Apply reflections if requested.
     if (Source.bApplyReflections && Source.HRTF && Source.ReflectionEffect && Source.AmbisonicsDecodeEffect &&
         Source.InBuffer.data && Source.MonoBuffer.data && Source.IndirectBuffer.data && Source.OutBuffer.data)
@@ -383,6 +388,12 @@ void FSteamAudioReverbPlugin::ProcessSourceAudio(const FAudioPluginSourceInputDa
 
         if (SteamAudioSourceComponent)
         {
+            // Apply reflection mix level to mono buffer.
+            for (int i = 0; i < Source.MonoBuffer.numSamples; ++i)
+            {
+                Source.MonoBuffer.data[0][i] *= Source.ReflectionsMixLevel;
+            }
+
             LazyInitMixer();
 
             IPLSimulationOutputs Outputs = SteamAudioSourceComponent->GetOutputs(static_cast<IPLSimulationFlags>(IPL_SIMULATIONFLAGS_REFLECTIONS | IPL_SIMULATIONFLAGS_PATHING));

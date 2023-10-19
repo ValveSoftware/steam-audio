@@ -611,6 +611,9 @@ InitFlags lazyInit(FMOD_DSP_STATE* state,
         {
             IPLPathEffectSettings effectSettings{};
             effectSettings.maxOrder = gSimulationSettings.maxOrder;
+            effectSettings.spatialize = IPL_TRUE;
+            effectSettings.speakerLayout = speakerLayoutForNumChannels(numChannelsOut);
+            effectSettings.hrtf = gHRTF[1];
 
             status = iplPathEffectCreate(gContext, &audioSettings, &effectSettings, &effect->pathEffect);
         }
@@ -1411,16 +1414,11 @@ FMOD_RESULT F_CALL process(FMOD_DSP_STATE* state,
 
                 IPLPathEffectParams pathParams = simulationOutputs.pathing;
                 pathParams.order = gSimulationSettings.maxOrder;
+                pathParams.binaural = (effect->pathingBinaural) ? IPL_TRUE : IPL_FALSE;
+                pathParams.hrtf = gHRTF[0];
+                pathParams.listener = listenerCoordinates;
 
-                iplPathEffectApply(effect->pathEffect, &pathParams, &effect->monoBuffer, &effect->reflectionsBuffer);
-
-                IPLAmbisonicsDecodeEffectParams ambisonicsParams;
-                ambisonicsParams.order = gSimulationSettings.maxOrder;
-                ambisonicsParams.hrtf = gHRTF[0];
-                ambisonicsParams.orientation = listenerCoordinates;
-                ambisonicsParams.binaural = (effect->pathingBinaural) ? IPL_TRUE : IPL_FALSE;
-
-                iplAmbisonicsDecodeEffectApply(effect->ambisonicsEffect, &ambisonicsParams, &effect->reflectionsBuffer, &effect->reflectionsSpatializedBuffer);
+                iplPathEffectApply(effect->pathEffect, &pathParams, &effect->monoBuffer, &effect->reflectionsSpatializedBuffer);
 
                 iplAudioBufferMix(gContext, &effect->reflectionsSpatializedBuffer, &effect->outBuffer);
             }

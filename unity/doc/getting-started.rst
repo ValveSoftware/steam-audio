@@ -13,6 +13,10 @@ The Steam Audio Unity integration supports the following platforms:
 -  macOS 10.7 or later (64-bit Intel)
 -  Android 5.0 or later (32-bit ARM, 64-bit ARM, 32-bit Intel)
 
+.. note::
+
+    If using Unity 2021.2 or later, Steam Audio will add ``STEAMAUDIO_ENABLED`` to the **Scripting Define Symbols** for your project for the above platforms. If you are referencing Steam Audio C# classes or functions in your own scripts, you can check for the existence of this symbol (using ``#if STEAMAUDIO_ENABLED``) to prevent compiler errors when building for platforms that are not supported by Steam Audio.
+
 Add Steam Audio to your Unity project
 -------------------------------------
 
@@ -26,7 +30,7 @@ To add Steam Audio to your Unity project:
 
 .. image:: media/audio_settings.png
 
-6. Set **Spatializer Plugin** to **Steam Audio Spatializer**, and **Ambisonic Decoder Plugin** to **Steam Audio Ambisonics**.
+6. Set **Spatializer Plugin** to **Steam Audio Spatializer**, and **Ambisonic Decoder Plugin** to **Steam Audio Ambisonic Decoder**.
 
 Spatialize an Audio Source
 --------------------------
