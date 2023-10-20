@@ -31,6 +31,7 @@ namespace SteamAudio
             if (mInstancedMesh != null)
             {
                 mInstancedMesh.AddToScene(SteamAudioManager.CurrentScene);
+                SteamAudioManager.CommitScene();
             }
         }
 
@@ -39,6 +40,7 @@ namespace SteamAudio
             if (mInstancedMesh != null && SteamAudioManager.CurrentScene != null)
             {
                 mInstancedMesh.RemoveFromScene(SteamAudioManager.CurrentScene);
+                SteamAudioManager.CommitScene();
             }
         }
 
@@ -51,10 +53,15 @@ namespace SteamAudio
                 if (enabled)
                 {
                     mInstancedMesh.AddToScene(SteamAudioManager.CurrentScene);
+                    SteamAudioManager.CommitScene();
                 }
             }
-
-            mInstancedMesh.UpdateTransform(SteamAudioManager.CurrentScene, transform);
+            if (transform.hasChanged) // Only update the dynamic object if it has actually move this frame
+            {
+                mInstancedMesh.UpdateTransform(SteamAudioManager.CurrentScene, transform);
+                SteamAudioManager.CommitScene();
+                transform.hasChanged = false;
+            }
         }
     }
 }

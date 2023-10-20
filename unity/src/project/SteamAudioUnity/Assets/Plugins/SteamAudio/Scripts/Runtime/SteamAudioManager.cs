@@ -461,6 +461,12 @@ namespace SteamAudio
             }
         }
 
+        //Call this function to commit changes to a scene only when changes have happened 
+        public static void CommitScene()
+        {
+            sSingleton.mCurrentScene.Commit();
+        }
+
         private void LateUpdate()
         {
             if (mAudioEngineState == null)
@@ -476,7 +482,7 @@ namespace SteamAudio
 
             if (mSimulationThread.ThreadState == ThreadState.WaitSleepJoin)
             {
-                mCurrentScene.Commit();
+               // mCurrentScene.Commit(); // This was causing lag spikes of up to 55ms
 
                 mSimulator.SetScene(mCurrentScene);
                 mSimulator.Commit();
