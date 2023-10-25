@@ -68,7 +68,7 @@ namespace SteamAudio
             var rootObjects = SceneManager.GetActiveScene().GetRootGameObjects();
             foreach (var rootObject in rootObjects)
             {
-                staticMeshComponent = rootObject.GetComponent<SteamAudioStaticMesh>();
+                staticMeshComponent = rootObject.GetComponentInChildren<SteamAudioStaticMesh>();
                 if (staticMeshComponent)
                     break;
             }
