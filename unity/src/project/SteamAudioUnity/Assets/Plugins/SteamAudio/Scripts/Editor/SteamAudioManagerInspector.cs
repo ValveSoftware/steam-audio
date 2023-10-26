@@ -11,6 +11,7 @@ namespace SteamAudio
     [CanEditMultipleObjects]
     public class SteamAudioManagerInspector : Editor
     {
+#if STEAMAUDIO_ENABLED
         SerializedProperty mCurrentHRTF;
 
         private void OnEnable()
@@ -35,5 +36,11 @@ namespace SteamAudio
 
             serializedObject.ApplyModifiedProperties();
         }
+#else
+        public override void OnInspectorGUI()
+        {
+            EditorGUILayout.HelpBox("Steam Audio is not supported for the target platform or STEAMAUDIO_ENABLED define symbol is missing.", MessageType.Warning);
+        }
+#endif
     }
 }

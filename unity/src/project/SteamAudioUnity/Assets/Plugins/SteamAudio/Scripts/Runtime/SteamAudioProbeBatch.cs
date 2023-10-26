@@ -38,6 +38,7 @@ namespace SteamAudio
         [SerializeField] Sphere[] mProbeSpheres = null;
         [SerializeField] List<BakedDataLayerInfo> mBakedDataLayerInfo = new List<BakedDataLayerInfo>();
 
+#if STEAMAUDIO_ENABLED
         ProbeBatch mProbeBatch = null;
 
         const float kProbeDrawSize = 0.1f;
@@ -327,5 +328,6 @@ namespace SteamAudio
 
             Baker.BeginBake(tasks);
         }
+#endif
     }
 }
