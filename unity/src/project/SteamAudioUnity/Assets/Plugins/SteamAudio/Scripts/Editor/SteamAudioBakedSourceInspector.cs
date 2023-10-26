@@ -11,6 +11,7 @@ namespace SteamAudio
     [CustomEditor(typeof(SteamAudioBakedSource))]
     public class SteamAudioBakedSourceInspector : Editor
     {
+#if STEAMAUDIO_ENABLED
         SerializedProperty mInfluenceRadius;
         SerializedProperty mUseAllProbeBatches;
         SerializedProperty mProbeBatches;
@@ -75,5 +76,11 @@ namespace SteamAudio
 
             serializedObject.ApplyModifiedProperties();
         }
+#else
+        public override void OnInspectorGUI()
+        {
+            EditorGUILayout.HelpBox("Steam Audio is not supported for the target platform or STEAMAUDIO_ENABLED define symbol is missing.", MessageType.Warning);
+        }
+#endif
     }
 }

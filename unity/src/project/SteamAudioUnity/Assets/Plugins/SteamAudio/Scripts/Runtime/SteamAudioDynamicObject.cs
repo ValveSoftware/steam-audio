@@ -14,6 +14,7 @@ namespace SteamAudio
         [Header("Export Settings")]
         public SerializedData asset = null;
 
+#if STEAMAUDIO_ENABLED
         InstancedMesh mInstancedMesh = null;
 
         private void OnDestroy()
@@ -56,5 +57,6 @@ namespace SteamAudio
 
             mInstancedMesh.UpdateTransform(SteamAudioManager.CurrentScene, transform);
         }
+#endif
     }
 }

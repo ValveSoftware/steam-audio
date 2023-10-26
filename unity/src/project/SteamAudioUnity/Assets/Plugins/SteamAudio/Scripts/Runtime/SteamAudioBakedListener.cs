@@ -26,6 +26,7 @@ namespace SteamAudio
         [SerializeField]
         SteamAudioProbeBatch[] mProbeBatchesUsed = null;
 
+#if STEAMAUDIO_ENABLED
         public int GetTotalDataSize()
         {
             return mTotalDataSize;
@@ -133,5 +134,6 @@ namespace SteamAudio
         {
             mProbeBatchesUsed = (useAllProbeBatches) ? FindObjectsOfType<SteamAudioProbeBatch>() : probeBatches;
         }
+#endif
     }
 }

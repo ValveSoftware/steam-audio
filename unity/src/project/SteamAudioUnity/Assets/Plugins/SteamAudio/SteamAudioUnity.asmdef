@@ -2,14 +2,7 @@
     "name": "SteamAudioUnity",
     "rootNamespace": "",
     "references": [],
-    "includePlatforms": [
-        "Android",
-        "Editor",
-        "LinuxStandalone64",
-        "macOSStandalone",
-        "WindowsStandalone32",
-        "WindowsStandalone64"
-    ],
+    "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": false,

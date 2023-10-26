@@ -36,6 +36,8 @@ namespace SteamAudio
         BakedDataIdentifier mIdentifier = new BakedDataIdentifier { };
         [SerializeField]
         SteamAudioProbeBatch[] mProbeBatchesUsed = null;
+
+#if STEAMAUDIO_ENABLED
         Simulator mSimulator = null;
         Source mSource = null;
 
@@ -229,5 +231,6 @@ namespace SteamAudio
         {
             mProbeBatchesUsed = (useAllProbeBatches) ? FindObjectsOfType<SteamAudioProbeBatch>() : probeBatches;
         }
+#endif
     }
 }

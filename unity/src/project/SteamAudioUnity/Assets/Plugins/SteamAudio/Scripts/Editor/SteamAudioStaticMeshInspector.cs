@@ -11,6 +11,7 @@ namespace SteamAudio
     [CustomEditor(typeof(SteamAudioStaticMesh))]
     public class SteamAudioStaticMeshInspector : Editor
     {
+#if STEAMAUDIO_ENABLED
         SerializedProperty mAsset;
         SerializedProperty mSceneNameWhenExported;
 
@@ -53,5 +54,11 @@ namespace SteamAudio
 
             serializedObject.ApplyModifiedProperties();
         }
+#else
+        public override void OnInspectorGUI()
+        {
+            EditorGUILayout.HelpBox("Steam Audio is not supported for the target platform or STEAMAUDIO_ENABLED define symbol is missing.", MessageType.Warning);
+        }
+#endif
     }
 }
