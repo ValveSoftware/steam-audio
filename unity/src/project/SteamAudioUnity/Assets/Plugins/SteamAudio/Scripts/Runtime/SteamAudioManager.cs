@@ -35,7 +35,7 @@ namespace SteamAudio
         [Header("HRTF Settings")]
         public int currentHRTF = 0;
 
-#if STEAMAUDIO_ENABLED
+#if UNITY_EDITOR || !STEAMAUDIO_DISABLED
         public string[] hrtfNames = null;
 
         int mNumCPUCores = 0;
@@ -463,7 +463,7 @@ namespace SteamAudio
             }
         }
 
-#if STEAMAUDIO_ENABLED
+#if !STEAMAUDIO_DISABLED
         private void LateUpdate()
         {
             if (mAudioEngineState == null)
@@ -1478,6 +1478,7 @@ namespace SteamAudio
             occluded = (byte)((numHits > 0) ? 1 : 0);
         }
 
+#if !STEAMAUDIO_DISABLED
         // This method is called as soon as scripts are loaded, which happens whenever play mode is started
         // (in the editor), or whenever the game is launched. We then create a Steam Audio Manager object
         // and move it to the Don't Destroy On Load list.
@@ -1486,6 +1487,7 @@ namespace SteamAudio
         {
             Initialize(ManagerInitReason.Playing);
         }
+#endif
 
         // Exports the static geometry in a scene.
         public static void ExportScene(UnityEngine.SceneManagement.Scene unityScene, bool exportOBJ)

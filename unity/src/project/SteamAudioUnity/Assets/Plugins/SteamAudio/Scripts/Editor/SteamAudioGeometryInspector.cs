@@ -10,9 +10,8 @@ namespace SteamAudio
 {
     [CustomEditor(typeof(SteamAudioGeometry))]
     [CanEditMultipleObjects]
-    public class SteamAudioGeometryInspector : Editor
+    public class SteamAudioGeometryInspector : SteamAudioEditor
     {
-#if STEAMAUDIO_ENABLED
         SerializedProperty mMaterial;
         SerializedProperty mExportAllChildren;
         SerializedProperty mTerrainSimplificationLevel;
@@ -24,7 +23,7 @@ namespace SteamAudio
             mTerrainSimplificationLevel = serializedObject.FindProperty("terrainSimplificationLevel");
         }
 
-        public override void OnInspectorGUI()
+        protected override void OnSteamAudioGUI()
         {
             serializedObject.Update();
 
@@ -49,11 +48,5 @@ namespace SteamAudio
 
             serializedObject.ApplyModifiedProperties();
         }
-#else
-        public override void OnInspectorGUI()
-        {
-            EditorGUILayout.HelpBox("Steam Audio is not supported for the target platform or STEAMAUDIO_ENABLED define symbol is missing.", MessageType.Warning);
-        }
-#endif
     }
 }

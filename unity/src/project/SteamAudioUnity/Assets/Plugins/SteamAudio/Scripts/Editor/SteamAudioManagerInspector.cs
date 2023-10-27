@@ -9,9 +9,8 @@ namespace SteamAudio
 {
     [CustomEditor(typeof(SteamAudioManager))]
     [CanEditMultipleObjects]
-    public class SteamAudioManagerInspector : Editor
+    public class SteamAudioManagerInspector : SteamAudioEditor
     {
-#if STEAMAUDIO_ENABLED
         SerializedProperty mCurrentHRTF;
 
         private void OnEnable()
@@ -19,7 +18,7 @@ namespace SteamAudio
             mCurrentHRTF = serializedObject.FindProperty("currentHRTF");
         }
 
-        public override void OnInspectorGUI()
+        protected override void OnSteamAudioGUI()
         {
             serializedObject.Update();
 
@@ -36,11 +35,5 @@ namespace SteamAudio
 
             serializedObject.ApplyModifiedProperties();
         }
-#else
-        public override void OnInspectorGUI()
-        {
-            EditorGUILayout.HelpBox("Steam Audio is not supported for the target platform or STEAMAUDIO_ENABLED define symbol is missing.", MessageType.Warning);
-        }
-#endif
     }
 }

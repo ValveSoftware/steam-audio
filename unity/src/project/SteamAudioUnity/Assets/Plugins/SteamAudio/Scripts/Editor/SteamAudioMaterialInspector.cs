@@ -9,7 +9,7 @@ namespace SteamAudio
 {
     [CustomEditor(typeof(SteamAudioMaterial))]
     [CanEditMultipleObjects]
-    public class SteamAudioMaterialInspector : Editor
+    public class SteamAudioMaterialInspector : SteamAudioEditor
     {
         SerializedProperty lowFreqAbsorption;
         SerializedProperty midFreqAbsorption;
@@ -30,7 +30,7 @@ namespace SteamAudio
             highFreqTransmission = serializedObject.FindProperty("highFreqTransmission");
         }
 
-        public override void OnInspectorGUI()
+        protected override void OnSteamAudioGUI()
         {
             serializedObject.Update();
 

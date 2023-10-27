@@ -9,7 +9,7 @@ using UnityEditor;
 namespace SteamAudio
 {
     [CustomEditor(typeof(SteamAudioSource))]
-    public class SteamAudioSourceInspector : Editor
+    public class SteamAudioSourceInspector : SteamAudioEditor
     {
         SerializedProperty mDirectBinaural;
         SerializedProperty mInterpolation;
@@ -102,7 +102,7 @@ namespace SteamAudio
             mPathingMixLevel = serializedObject.FindProperty("pathingMixLevel");
         }
 
-        public override void OnInspectorGUI()
+        protected override void OnSteamAudioGUI()
         {
             var audioEngineIsUnity = (SteamAudioSettings.Singleton.audioEngine == AudioEngineType.Unity);
 

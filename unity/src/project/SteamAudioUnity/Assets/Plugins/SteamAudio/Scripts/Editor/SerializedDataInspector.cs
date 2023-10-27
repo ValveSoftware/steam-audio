@@ -8,7 +8,7 @@ using UnityEditor;
 namespace SteamAudio
 {
     [CustomEditor(typeof(SerializedData))]
-    public class SerializedDataInspector : Editor
+    public class SerializedDataInspector : SteamAudioEditor
     {
         SerializedProperty mData;
 
@@ -17,7 +17,7 @@ namespace SteamAudio
             mData = serializedObject.FindProperty("data");
         }
 
-        public override void OnInspectorGUI()
+        protected override void OnSteamAudioGUI()
         {
             serializedObject.Update();
 

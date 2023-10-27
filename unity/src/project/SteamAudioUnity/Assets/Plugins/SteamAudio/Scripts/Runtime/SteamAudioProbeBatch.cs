@@ -38,36 +38,12 @@ namespace SteamAudio
         [SerializeField] Sphere[] mProbeSpheres = null;
         [SerializeField] List<BakedDataLayerInfo> mBakedDataLayerInfo = new List<BakedDataLayerInfo>();
 
-#if STEAMAUDIO_ENABLED
+#if UNITY_EDITOR || !STEAMAUDIO_DISABLED
         ProbeBatch mProbeBatch = null;
 
         const float kProbeDrawSize = 0.1f;
-
-        public SerializedData GetAsset()
-        {
-            if (asset == null)
-            {
-                asset = SerializedData.PromptForNewAsset(gameObject.scene.name + "_" + name);
-            }
-
-            return asset;
-        }
-
-        public int GetNumProbes()
-        { 
-            return (mProbeSpheres == null) ? 0 : mProbeSpheres.Length; 
-        }
-
-        public int GetNumLayers()
-        {
-            return mBakedDataLayerInfo.Count;
-        }
-
-        public IntPtr GetProbeBatch()
-        {
-            return mProbeBatch.Get();
-        }
-
+        
+#if !STEAMAUDIO_DISABLED
         private void Awake()
         {
             if (asset == null)
@@ -96,6 +72,32 @@ namespace SteamAudio
             {
                 SteamAudioManager.Simulator.RemoveProbeBatch(mProbeBatch);
             }
+        }
+#endif
+
+        public SerializedData GetAsset()
+        {
+            if (asset == null)
+            {
+                asset = SerializedData.PromptForNewAsset(gameObject.scene.name + "_" + name);
+            }
+
+            return asset;
+        }
+
+        public int GetNumProbes()
+        { 
+            return (mProbeSpheres == null) ? 0 : mProbeSpheres.Length; 
+        }
+
+        public int GetNumLayers()
+        {
+            return mBakedDataLayerInfo.Count;
+        }
+
+        public IntPtr GetProbeBatch()
+        {
+            return mProbeBatch.Get();
         }
 
         void OnDrawGizmosSelected()

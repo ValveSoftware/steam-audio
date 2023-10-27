@@ -37,50 +37,16 @@ namespace SteamAudio
         [SerializeField]
         SteamAudioProbeBatch[] mProbeBatchesUsed = null;
 
-#if STEAMAUDIO_ENABLED
+#if UNITY_EDITOR || !STEAMAUDIO_DISABLED
         Simulator mSimulator = null;
         Source mSource = null;
 
-        public int GetTotalDataSize()
-        {
-            return mTotalDataSize;
-        }
-
-        public int[] GetProbeDataSizes()
-        {
-            return mProbeDataSizes;
-        }
-
-        public int GetSizeForProbeBatch(int index)
-        {
-            return mProbeDataSizes[index];
-        }
-
-        public SteamAudioProbeBatch[] GetProbeBatchesUsed()
-        {
-            if (mProbeBatchesUsed == null)
-            {
-                CacheProbeBatchesUsed();
-            }
-
-            return mProbeBatchesUsed;
-        }
-
+#if !STEAMAUDIO_DISABLED
         private void Awake()
         {
             Reinitialize();
         }
-
-        public void Reinitialize()
-        {
-            mSimulator = SteamAudioManager.Simulator;
-
-            var settings = SteamAudioManager.GetSimulationSettings(false);
-            mSource = new Source(SteamAudioManager.Simulator, settings);
-
-            SteamAudioManager.GetAudioEngineState().SetReverbSource(mSource);
-        }
-
+        
         private void OnDestroy()
         {
             if (mSource != null)
@@ -116,6 +82,42 @@ namespace SteamAudio
 
         private void Update()
         {
+            SteamAudioManager.GetAudioEngineState().SetReverbSource(mSource);
+        }
+#endif
+
+        public int GetTotalDataSize()
+        {
+            return mTotalDataSize;
+        }
+
+        public int[] GetProbeDataSizes()
+        {
+            return mProbeDataSizes;
+        }
+
+        public int GetSizeForProbeBatch(int index)
+        {
+            return mProbeDataSizes[index];
+        }
+
+        public SteamAudioProbeBatch[] GetProbeBatchesUsed()
+        {
+            if (mProbeBatchesUsed == null)
+            {
+                CacheProbeBatchesUsed();
+            }
+
+            return mProbeBatchesUsed;
+        }
+
+        public void Reinitialize()
+        {
+            mSimulator = SteamAudioManager.Simulator;
+
+            var settings = SteamAudioManager.GetSimulationSettings(false);
+            mSource = new Source(SteamAudioManager.Simulator, settings);
+
             SteamAudioManager.GetAudioEngineState().SetReverbSource(mSource);
         }
 

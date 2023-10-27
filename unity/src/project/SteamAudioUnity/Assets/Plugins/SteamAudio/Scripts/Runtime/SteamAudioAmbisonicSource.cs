@@ -17,6 +17,7 @@ namespace SteamAudio
 
         AudioEngineAmbisonicSource mAudioEngineAmbisonicSource = null;
 
+#if !STEAMAUDIO_DISABLED
         private void Awake()
         {
             mAudioEngineAmbisonicSource = AudioEngineAmbisonicSource.Create(SteamAudioSettings.Singleton.audioEngine);
@@ -58,6 +59,6 @@ namespace SteamAudio
                 mAudioEngineAmbisonicSource.UpdateParameters(this);
             }
         }
-
+#endif
     }
 }

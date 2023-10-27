@@ -13,9 +13,10 @@ namespace SteamAudio
         public SerializedData asset = null;
         public string sceneNameWhenExported = "";
 
-#if STEAMAUDIO_ENABLED
+#if UNITY_EDITOR || !STEAMAUDIO_DISABLED
         StaticMesh mStaticMesh = null;
 
+#if !STEAMAUDIO_DISABLED
         void Start()
         {
             if (asset == null)
@@ -61,6 +62,8 @@ namespace SteamAudio
                 }
             }
         }
+#endif
+
 #endif
     }
 }
