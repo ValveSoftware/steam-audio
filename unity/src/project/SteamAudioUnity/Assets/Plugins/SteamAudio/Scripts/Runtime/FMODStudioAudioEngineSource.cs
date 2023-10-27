@@ -2,6 +2,7 @@
 // Copyright 2017 Valve Corporation. All rights reserved. Subject to the following license:
 // https://valvesoftware.github.io/steam-audio/license.html
 //
+#if STEAMAUDIO_ENABLED
 
 using System;
 using System.Reflection;
@@ -170,3 +171,5 @@ namespace SteamAudio
         }
     }
 }
+
+#endif

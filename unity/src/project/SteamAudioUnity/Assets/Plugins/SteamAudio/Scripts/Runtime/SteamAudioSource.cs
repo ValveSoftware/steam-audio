@@ -140,6 +140,7 @@ namespace SteamAudio
         [Range(0.0f, 10.0f)]
         public float pathingMixLevel = 1.0f;
 
+#if STEAMAUDIO_ENABLED
         Simulator mSimulator = null;
         Source mSource = null;
         AudioEngineSource mAudioEngineSource = null;
@@ -522,5 +523,6 @@ namespace SteamAudio
                     return 0.0f;
             }
         }
+#endif
     }
 }

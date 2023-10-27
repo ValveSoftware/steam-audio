@@ -2,6 +2,7 @@
 // Copyright 2017 Valve Corporation. All rights reserved. Subject to the following license:
 // https://valvesoftware.github.io/steam-audio/license.html
 //
+#if STEAMAUDIO_ENABLED
 
 using System;
 
@@ -32,7 +33,7 @@ namespace SteamAudio
         public Scene(Context context, SceneSettings sceneSettings, SerializedData dataAsset)
         {
             mContext = context;
-
+            
             var serializedObject = new SerializedObject(context, dataAsset);
             var status = API.iplSceneLoad(context.Get(), ref sceneSettings, serializedObject.Get(), null, IntPtr.Zero, out mScene);
             if (status != Error.Success)
@@ -99,3 +100,4 @@ namespace SteamAudio
         }
     }
 }
+#endif

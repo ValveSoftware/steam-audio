@@ -18,6 +18,7 @@ namespace SteamAudio
         [Range(0, 10)]
         public int terrainSimplificationLevel = 0;
 
+#if STEAMAUDIO_ENABLED
         public int GetNumVertices()
         {
             if (exportAllChildren)
@@ -57,5 +58,6 @@ namespace SteamAudio
                 return SteamAudioManager.GetNumTriangles(gameObject);
             }
         }
+#endif
     }
 }

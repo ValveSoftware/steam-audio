@@ -13,6 +13,7 @@ namespace SteamAudio
         public SerializedData asset = null;
         public string sceneNameWhenExported = "";
 
+#if STEAMAUDIO_ENABLED
         StaticMesh mStaticMesh = null;
 
         void Start()
@@ -63,5 +64,6 @@ namespace SteamAudio
                 }
             }
         }
+#endif
     }
 }
