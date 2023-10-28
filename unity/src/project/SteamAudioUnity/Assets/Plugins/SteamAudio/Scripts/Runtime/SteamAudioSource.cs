@@ -152,6 +152,7 @@ namespace SteamAudio
         AudioSourceAttenuationData mAttenuationData = new AudioSourceAttenuationData { };
         DistanceAttenuationModel mCurveAttenuationModel = new DistanceAttenuationModel { };
         GCHandle mThis;
+        SteamAudioSettings mSettings = null;
 
         private void Awake()
         {
@@ -159,8 +160,9 @@ namespace SteamAudio
 
             var settings = SteamAudioManager.GetSimulationSettings(false);
             mSource = new Source(SteamAudioManager.Simulator, settings);
+            mSettings = SteamAudioSettings.Singleton;
 
-            mAudioEngineSource = AudioEngineSource.Create(SteamAudioSettings.Singleton.audioEngine);
+            mAudioEngineSource = AudioEngineSource.Create(mSettings.audioEngine);
             if (mAudioEngineSource != null)
             {
                 mAudioEngineSource.Initialize(gameObject);
@@ -171,7 +173,7 @@ namespace SteamAudio
 
             mThis = GCHandle.Alloc(this);
 
-            if (SteamAudioSettings.Singleton.audioEngine == AudioEngineType.Unity &&
+            if (mSettings.audioEngine == AudioEngineType.Unity &&
                 distanceAttenuation &&
                 distanceAttenuationInput == DistanceAttenuationInput.CurveDriven &&
                 reflections &&
@@ -267,7 +269,7 @@ namespace SteamAudio
             inputs.source.up = Common.ConvertVector(transform.up);
             inputs.source.right = Common.ConvertVector(transform.right);
 
-            if (SteamAudioSettings.Singleton.audioEngine == AudioEngineType.Unity &&
+            if (mSettings.audioEngine == AudioEngineType.Unity &&
                 distanceAttenuation &&
                 distanceAttenuationInput == DistanceAttenuationInput.CurveDriven &&
                 reflections &&
@@ -290,14 +292,14 @@ namespace SteamAudio
             inputs.reverbScaleLow = 1.0f;
             inputs.reverbScaleMid = 1.0f;
             inputs.reverbScaleHigh = 1.0f;
-            inputs.hybridReverbTransitionTime = SteamAudioSettings.Singleton.hybridReverbTransitionTime;
-            inputs.hybridReverbOverlapPercent = SteamAudioSettings.Singleton.hybridReverbOverlapPercent / 100.0f;
+            inputs.hybridReverbTransitionTime = mSettings.hybridReverbTransitionTime;
+            inputs.hybridReverbOverlapPercent = mSettings.hybridReverbOverlapPercent / 100.0f;
             inputs.baked = (reflectionsType != ReflectionsType.Realtime) ? Bool.True : Bool.False;
             inputs.pathingProbes = (pathingProbeBatch != null) ? pathingProbeBatch.GetProbeBatch() : IntPtr.Zero;
-            inputs.visRadius = SteamAudioSettings.Singleton.bakingVisibilityRadius;
-            inputs.visThreshold = SteamAudioSettings.Singleton.bakingVisibilityThreshold;
-            inputs.visRange = SteamAudioSettings.Singleton.bakingVisibilityRange;
-            inputs.pathingOrder = SteamAudioSettings.Singleton.bakingAmbisonicOrder;
+            inputs.visRadius = mSettings.bakingVisibilityRadius;
+            inputs.visThreshold = mSettings.bakingVisibilityThreshold;
+            inputs.visRange = mSettings.bakingVisibilityRange;
+            inputs.pathingOrder = mSettings.bakingAmbisonicOrder;
             inputs.enableValidation = pathValidation ? Bool.True : Bool.False;
             inputs.findAlternatePaths = findAlternatePaths ? Bool.True : Bool.False;
 
