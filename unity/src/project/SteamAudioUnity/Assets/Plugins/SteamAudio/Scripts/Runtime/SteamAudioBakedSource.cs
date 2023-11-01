@@ -26,7 +26,7 @@ namespace SteamAudio
         [SerializeField]
         SteamAudioProbeBatch[] mProbeBatchesUsed = null;
 
-#if STEAMAUDIO_ENABLED
+#if UNITY_EDITOR || !STEAMAUDIO_DISABLED
         public int GetTotalDataSize()
         {
             return mTotalDataSize;

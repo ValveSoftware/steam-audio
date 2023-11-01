@@ -9,7 +9,7 @@ namespace SteamAudio
 {
     [CustomEditor(typeof(SteamAudioAmbisonicSource))]
     [CanEditMultipleObjects]
-    public class SteamAudioAmbisonicSourceInspector : Editor
+    public class SteamAudioAmbisonicSourceInspector : SteamAudioEditor
     {
         SerializedProperty mApplyHRTF;
 
@@ -18,7 +18,7 @@ namespace SteamAudio
             mApplyHRTF = serializedObject.FindProperty("applyHRTF");
         }
 
-        public override void OnInspectorGUI()
+        protected override void OnSteamAudioGUI()
         {
             if (SteamAudioSettings.Singleton.audioEngine != AudioEngineType.Unity)
             {

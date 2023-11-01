@@ -18,7 +18,7 @@ namespace SteamAudio
         [Range(0, 10)]
         public int terrainSimplificationLevel = 0;
 
-#if STEAMAUDIO_ENABLED
+#if UNITY_EDITOR || !STEAMAUDIO_DISABLED
         public int GetNumVertices()
         {
             if (exportAllChildren)

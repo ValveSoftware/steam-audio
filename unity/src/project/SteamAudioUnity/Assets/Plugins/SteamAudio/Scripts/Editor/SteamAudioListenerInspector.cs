@@ -9,9 +9,8 @@ using UnityEditor;
 namespace SteamAudio
 {
     [CustomEditor(typeof(SteamAudioListener))]
-    public class SteamAudioListenerInspector : Editor
+    public class SteamAudioListenerInspector : SteamAudioEditor
     {
-#if STEAMAUDIO_ENABLED
         SerializedProperty mCurrentBakedListener;
         SerializedProperty mApplyReverb;
         SerializedProperty mReverbType;
@@ -30,7 +29,7 @@ namespace SteamAudio
             mProbeBatches = serializedObject.FindProperty("probeBatches");
         }
 
-        public override void OnInspectorGUI()
+        protected override void OnSteamAudioGUI()
         {
             serializedObject.Update();
 
@@ -87,11 +86,5 @@ namespace SteamAudio
 
             serializedObject.ApplyModifiedProperties();
         }
-#else
-        public override void OnInspectorGUI()
-        {
-            EditorGUILayout.HelpBox("Steam Audio is not supported for the target platform or STEAMAUDIO_ENABLED define symbol is missing.", MessageType.Warning);
-        }
-#endif
     }
 }

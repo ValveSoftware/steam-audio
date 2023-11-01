@@ -9,7 +9,7 @@ namespace SteamAudio
 {
     [CustomEditor(typeof(SteamAudioSettings))]
     [CanEditMultipleObjects]
-    public class SteamAudioSettingsInspector : Editor
+    public class SteamAudioSettingsInspector : SteamAudioEditor
     {
         SerializedProperty mAudioEngine;
         SerializedProperty mPerspectiveCorrection;
@@ -106,9 +106,11 @@ namespace SteamAudio
             mTANDuration = serializedObject.FindProperty("TANDuration");
             mTANAmbisonicOrder = serializedObject.FindProperty("TANAmbisonicOrder");
             mTANMaxSources = serializedObject.FindProperty("TANMaxSources");
+
+            AlwaysShowSteamAudioToggle = true;
         }
 
-        public override void OnInspectorGUI()
+        protected override void OnSteamAudioGUI()
         {
             serializedObject.Update();
 

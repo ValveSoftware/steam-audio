@@ -9,9 +9,8 @@ using UnityEditor;
 namespace SteamAudio
 {
     [CustomEditor(typeof(SteamAudioStaticMesh))]
-    public class SteamAudioStaticMeshInspector : Editor
+    public class SteamAudioStaticMeshInspector : SteamAudioEditor
     {
-#if STEAMAUDIO_ENABLED
         SerializedProperty mAsset;
         SerializedProperty mSceneNameWhenExported;
 
@@ -21,7 +20,7 @@ namespace SteamAudio
             mSceneNameWhenExported = serializedObject.FindProperty("sceneNameWhenExported");
         }
 
-        public override void OnInspectorGUI()
+        protected override void OnSteamAudioGUI()
         {
             serializedObject.Update();
 
@@ -54,11 +53,5 @@ namespace SteamAudio
 
             serializedObject.ApplyModifiedProperties();
         }
-#else
-        public override void OnInspectorGUI()
-        {
-            EditorGUILayout.HelpBox("Steam Audio is not supported for the target platform or STEAMAUDIO_ENABLED define symbol is missing.", MessageType.Warning);
-        }
-#endif
     }
 }

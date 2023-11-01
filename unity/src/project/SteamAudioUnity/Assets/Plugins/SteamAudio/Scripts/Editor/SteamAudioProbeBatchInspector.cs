@@ -11,9 +11,8 @@ using UnityEditor.SceneManagement;
 namespace SteamAudio
 {
     [CustomEditor(typeof(SteamAudioProbeBatch))]
-    public class SteamAudioProbeBatchInspector : Editor
+    public class SteamAudioProbeBatchInspector : SteamAudioEditor
     {
-#if STEAMAUDIO_ENABLED
         SerializedProperty mPlacementStrategy;
         SerializedProperty mHorizontalSpacing;
         SerializedProperty mHeightAboveFloor;
@@ -29,7 +28,7 @@ namespace SteamAudio
             mAsset = serializedObject.FindProperty("asset");
         }
 
-        public override void OnInspectorGUI()
+        protected override void OnSteamAudioGUI()
         {
             serializedObject.Update();
 
@@ -122,11 +121,5 @@ namespace SteamAudio
 
             serializedObject.ApplyModifiedProperties();
         }
-#else
-        public override void OnInspectorGUI()
-        {
-            EditorGUILayout.HelpBox("Steam Audio is not supported for the target platform or STEAMAUDIO_ENABLED define symbol is missing.", MessageType.Warning);
-        }
-#endif
     }
 }

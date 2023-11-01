@@ -140,7 +140,7 @@ namespace SteamAudio
         [Range(0.0f, 10.0f)]
         public float pathingMixLevel = 1.0f;
 
-#if STEAMAUDIO_ENABLED
+#if UNITY_EDITOR || !STEAMAUDIO_DISABLED
         Simulator mSimulator = null;
         Source mSource = null;
         AudioEngineSource mAudioEngineSource = null;
@@ -154,6 +154,7 @@ namespace SteamAudio
         GCHandle mThis;
         SteamAudioSettings mSettings = null;
 
+#if !STEAMAUDIO_DISABLED
         private void Awake()
         {
             mSimulator = SteamAudioManager.Simulator;
@@ -240,6 +241,7 @@ namespace SteamAudio
                 mAudioEngineSource.UpdateParameters(this);
             }
         }
+#endif
 
         private void OnDrawGizmosSelected()
         {
