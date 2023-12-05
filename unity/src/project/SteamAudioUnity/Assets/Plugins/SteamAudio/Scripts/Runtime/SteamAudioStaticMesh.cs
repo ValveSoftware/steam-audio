@@ -38,7 +38,7 @@ namespace SteamAudio
             if (mStaticMesh != null)
             {
                 mStaticMesh.AddToScene(SteamAudioManager.CurrentScene);
-                SteamAudioManager.CommitScene();
+                SteamAudioManager.ScheduleCommitScene();
             }
         }
 
@@ -47,7 +47,7 @@ namespace SteamAudio
             if (mStaticMesh != null && SteamAudioManager.CurrentScene != null)
             {
                 mStaticMesh.RemoveFromScene(SteamAudioManager.CurrentScene);
-                SteamAudioManager.CommitScene();
+                SteamAudioManager.ScheduleCommitScene();
             }
         }
 
@@ -60,7 +60,7 @@ namespace SteamAudio
                 if (enabled)
                 {
                     mStaticMesh.AddToScene(SteamAudioManager.CurrentScene);
-                    SteamAudioManager.CommitScene();
+                    SteamAudioManager.ScheduleCommitScene();
                 }
             }
         }

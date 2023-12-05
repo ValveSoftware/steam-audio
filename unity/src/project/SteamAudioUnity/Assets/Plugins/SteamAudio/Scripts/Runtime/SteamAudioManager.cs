@@ -66,6 +66,7 @@ namespace SteamAudio
         bool mStopSimulationThread = false;
         bool mSimulationCompleted = false;
         float mSimulationUpdateTimeElapsed = 0.0f;
+        bool mSceneCommitRequired = false;
 
         static SteamAudioManager sSingleton = null;
 
@@ -463,10 +464,10 @@ namespace SteamAudio
             }
         }
 
-        //Call this function to commit changes to a scene only when changes have happened 
-        public static void CommitScene()
+        // Call this function to request that changes to a scene be committed. Call only when changes have happened.
+        public static void ScheduleCommitScene()
         {
-            sSingleton.mCurrentScene.Commit();
+            sSingleton.mSceneCommitRequired = true;
         }
 
 #if STEAMAUDIO_ENABLED
@@ -485,7 +486,11 @@ namespace SteamAudio
 
             if (mSimulationThread.ThreadState == ThreadState.WaitSleepJoin)
             {
-               // mCurrentScene.Commit(); // This was causing lag spikes of up to 55ms
+                if (mSceneCommitRequired)
+                {
+                    mCurrentScene.Commit();
+                    mSceneCommitRequired = false;
+                }
 
                 mSimulator.SetScene(mCurrentScene);
                 mSimulator.Commit();
@@ -582,7 +587,7 @@ namespace SteamAudio
             }
         }
 #endif
-        
+
         void RunSimulationInternal()
         {
             if (mSimulator == null)
@@ -1261,7 +1266,7 @@ namespace SteamAudio
         }
 
         // Loads a dynamic object as an instanced mesh. Multiple dynamic objects loaded from the same file
-        // will share the underlying geometry and material data (using a reference count). The instanced meshes 
+        // will share the underlying geometry and material data (using a reference count). The instanced meshes
         // allow each dynamic object to have its own transform.
         public static InstancedMesh LoadDynamicObject(SteamAudioDynamicObject dynamicObject, Scene parentScene, Context context)
         {
