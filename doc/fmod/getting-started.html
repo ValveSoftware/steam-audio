@@ -72,7 +72,7 @@
             
             
               <div class="version">
-                4.4.1
+                4.5.0
               </div>
             
           
@@ -185,6 +185,7 @@
 <li><p>Linux (32-bit and 64-bit, tested with Ubuntu 18.04 LTS)</p></li>
 <li><p>macOS 10.7 or later (64-bit Intel)</p></li>
 <li><p>Android 5.0 or later (32-bit ARM, 64-bit ARM, 32-bit Intel)</p></li>
+<li><p>iOS 11.0 or later (64-bit ARM)</p></li>
 </ul>
 </div>
 <div class="section" id="add-steam-audio-to-your-fmod-studio-project">
@@ -228,6 +229,17 @@
 <li><p>In the text box that appears, enter <code class="docutils literal notranslate"><span class="pre">phonon_fmod</span></code>.</p></li>
 </ol>
 <img alt="_images/unity_fmodsettings.png" src="_images/unity_fmodsettings.png" />
+<p>If you are building for iOS, do the following instead:</p>
+<ol class="arabic simple">
+<li><p>In Unity’s main menu, click <strong>FMOD</strong> &gt; <strong>Edit Settings</strong>.</p></li>
+<li><p>Under <strong>Static Plugins</strong>, click <strong>Add Plugin</strong>.</p></li>
+<li><p>In the text box that appears, enter <code class="docutils literal notranslate"><span class="pre">FMOD_SteamAudio_Spatialize_GetDSPDescription</span></code>.</p></li>
+<li><p>Click <strong>Add Plugin</strong> again.</p></li>
+<li><p>In the text box that appears, enter <code class="docutils literal notranslate"><span class="pre">FMOD_SteamAudio_MixerReturn_GetDSPDescription</span></code>.</p></li>
+<li><p>Click <strong>Add Plugin</strong> again.</p></li>
+<li><p>In the text box that appears, enter <code class="docutils literal notranslate"><span class="pre">FMOD_SteamAudio_Reverb_GetDSPDescription</span></code>.</p></li>
+</ol>
+<p>You can configure these static plugins as a platform-specific override for iOS, while using the <code class="docutils literal notranslate"><span class="pre">phonon_fmod</span></code> dynamic plugin on other platforms. For more information on how to do this, refer to the documentation for the FMOD Studio Unity integration.</p>
 <p class="rubric">Configure the Steam Audio Unity integration to use FMOD Studio</p>
 <ol class="arabic simple">
 <li><p>In Unity’s main menu, click <strong>Steam Audio</strong> &gt; <strong>Settings</strong>.</p></li>
@@ -248,6 +260,31 @@
 <li><p>In the text box that appears, enter <code class="docutils literal notranslate"><span class="pre">phonon_fmod</span></code>.</p></li>
 </ol>
 <img alt="_images/unreal_fmodsettings.png" src="_images/unreal_fmodsettings.png" />
+<p>If you are building for iOS, the version of the FMOD Studio Unreal Engine plugin you are using may not correctly initialize static DSP plugins, leading to errors at runtime. As a workaround, you can modify the <code class="docutils literal notranslate"><span class="pre">Source/FMODStudio/Private/FMODStudioModule.cpp</span></code> file in the FMOD Studio plugin’s root directory:</p>
+<ol class="arabic">
+<li><p>Near the top of the file, after all the <code class="docutils literal notranslate"><span class="pre">#include</span></code> directives, add:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="cp">#if PLATFORM_IOS</span>
+<span class="k">extern</span> <span class="s">&quot;C&quot;</span> <span class="p">{</span>
+<span class="n">FMOD_DSP_DESCRIPTION</span><span class="o">*</span> <span class="n">F_CALL</span> <span class="n">FMOD_SteamAudio_Spatialize_GetDSPDescription</span><span class="p">();</span>
+<span class="n">FMOD_DSP_DESCRIPTION</span><span class="o">*</span> <span class="n">F_CALL</span> <span class="n">FMOD_SteamAudio_MixerReturn_GetDSPDescription</span><span class="p">();</span>
+<span class="n">FMOD_DSP_DESCRIPTION</span><span class="o">*</span> <span class="n">F_CALL</span> <span class="n">FMOD_SteamAudio_Reverb_GetDSPDescription</span><span class="p">();</span>
+<span class="p">}</span>
+<span class="cp">#endif</span>
+</pre></div>
+</div>
+</li>
+<li><p>Next, in the <code class="docutils literal notranslate"><span class="pre">FFMODStudioModule::CreateStudioSystem</span></code> function, add the following lines after the code for loading dynamic plugins:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="cp">#if PLATFORM_IOS</span>
+    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">Handle</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">lowLevelSystem</span><span class="o">-&gt;</span><span class="n">registerDSP</span><span class="p">(</span><span class="n">FMOD_SteamAudio_Spatialize_GetDSPDescription</span><span class="p">(),</span> <span class="o">&amp;</span><span class="n">Handle</span><span class="p">);</span>
+    <span class="n">lowLevelSystem</span><span class="o">-&gt;</span><span class="n">registerDSP</span><span class="p">(</span><span class="n">FMOD_SteamAudio_MixerReturn_GetDSPDescription</span><span class="p">(),</span> <span class="o">&amp;</span><span class="n">Handle</span><span class="p">);</span>
+    <span class="n">lowLevelSystem</span><span class="o">-&gt;</span><span class="n">registerDSP</span><span class="p">(</span><span class="n">FMOD_SteamAudio_Reverb_GetDSPDescription</span><span class="p">(),</span> <span class="o">&amp;</span><span class="n">Handle</span><span class="p">);</span>
+<span class="cp">#endif</span>
+</pre></div>
+</div>
+</li>
+</ol>
+<p>This issue may be fixed in a newer version of FMOD Studio.</p>
 <p class="rubric">Configure the Steam Audio Unreal Engine plugin to use FMOD Studio</p>
 <ol class="arabic simple">
 <li><p>In Unreal’s main menu, click <strong>Edit</strong> &gt; <strong>Project Settings</strong>.</p></li>
@@ -256,8 +293,7 @@
 <img alt="_images/unreal_steamaudiosettings.png" src="_images/unreal_steamaudiosettings.png" />
 </div><div aria-labelledby="tab-0-Qysr" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-0-Qysr" name="Qysr" role="tabpanel" tabindex="0"><p>These instructions assume that you have integrated Steam Audio with your game engine via the Steam Audio SDK.</p>
 <p class="rubric">Load the Steam Audio FMOD Studio integration</p>
-<ol class="arabic simple">
-<li><p>When initializing FMOD Studio in your game engine, call <code class="docutils literal notranslate"><span class="pre">FMOD::System::loadPlugin</span></code> to load the Steam Audio FMOD Studio integration. The plugin files can be found in the <code class="docutils literal notranslate"><span class="pre">steamaudio_fmod.zip</span></code> file you downloaded earlier. The file name of the plugin depends on the platform:</p>
+<p>When initializing FMOD Studio in your game engine, call <code class="docutils literal notranslate"><span class="pre">FMOD::System::loadPlugin</span></code> to load the Steam Audio FMOD Studio integration. The plugin files can be found in the <code class="docutils literal notranslate"><span class="pre">steamaudio_fmod.zip</span></code> file you downloaded earlier. The file name of the plugin depends on the platform:</p>
 <ul class="simple">
 <li><p>Windows 32-bit: <code class="docutils literal notranslate"><span class="pre">lib/windows-x86/phonon_fmod.dll</span></code></p></li>
 <li><p>Windows 64-bit: <code class="docutils literal notranslate"><span class="pre">lib/windows-x64/phonon_fmod.dll</span></code></p></li>
@@ -268,8 +304,21 @@
 <li><p>Android ARMv8/AArch64 (64-bit): <code class="docutils literal notranslate"><span class="pre">lib/android-armv8/libphonon_fmod.so</span></code></p></li>
 <li><p>Android x86 (32-bit): <code class="docutils literal notranslate"><span class="pre">lib/android-x86/libphonon_fmod.so</span></code></p></li>
 </ul>
-</li>
-</ol>
+<p>On iOS, instead of calling <code class="docutils literal notranslate"><span class="pre">FMOD::System::loadPlugin</span></code>, you will have to statically link to <code class="docutils literal notranslate"><span class="pre">lib/ios/libphonon_fmod.a</span></code> and use <code class="docutils literal notranslate"><span class="pre">FMOD::System::registerDSP</span></code> to register each of the Steam Audio DSP plugins. For example:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="k">extern</span> <span class="s">&quot;C&quot;</span> <span class="p">{</span>
+<span class="n">FMOD_DSP_DESCRIPTION</span><span class="o">*</span> <span class="n">F_CALL</span> <span class="n">FMOD_SteamAudio_Spatialize_GetDSPDescription</span><span class="p">();</span>
+<span class="n">FMOD_DSP_DESCRIPTION</span><span class="o">*</span> <span class="n">F_CALL</span> <span class="n">FMOD_SteamAudio_MixerReturn_GetDSPDescription</span><span class="p">();</span>
+<span class="n">FMOD_DSP_DESCRIPTION</span><span class="o">*</span> <span class="n">F_CALL</span> <span class="n">FMOD_SteamAudio_Reverb_GetDSPDescription</span><span class="p">();</span>
+<span class="p">}</span>
+
+<span class="n">FMOD</span><span class="o">::</span><span class="n">System</span><span class="o">*</span> <span class="n">system</span> <span class="o">=</span> <span class="p">...;</span> <span class="c1">// initialized elsewhere</span>
+
+<span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">handle</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="n">system</span><span class="o">-&gt;</span><span class="n">registerDSP</span><span class="p">(</span><span class="n">FMOD_SteamAudio_Spatialize_GetDSPDescription</span><span class="p">(),</span> <span class="o">&amp;</span><span class="n">handle</span><span class="p">);</span>
+<span class="n">system</span><span class="o">-&gt;</span><span class="n">registerDSP</span><span class="p">(</span><span class="n">FMOD_SteamAudio_MixerReturn_GetDSPDescription</span><span class="p">(),</span> <span class="o">&amp;</span><span class="n">handle</span><span class="p">);</span>
+<span class="n">system</span><span class="o">-&gt;</span><span class="n">registerDSP</span><span class="p">(</span><span class="n">FMOD_SteamAudio_Reverb_GetDSPDescription</span><span class="p">(),</span> <span class="o">&amp;</span><span class="n">handle</span><span class="p">);</span>
+</pre></div>
+</div>
 <p class="rubric">Initialize the Steam Audio FMOD Studio integration</p>
 <ol class="arabic simple">
 <li><p>Call <code class="docutils literal notranslate"><span class="pre">iplFMODInitialize</span></code> after creating the Steam Audio context.</p></li>

@@ -70,7 +70,7 @@
             
             
               <div class="version">
-                4.4.1
+                4.5.0
               </div>
             
           
@@ -248,6 +248,10 @@
 <li><p>Android SDK for platform 25 (Android 7.1 Nougat) or later (<a class="reference external" href="https://developer.android.com/studio">https://developer.android.com/studio</a>)</p></li>
 <li><p>Android NDK (install using the Android SDK Manager)</p></li>
 </ul>
+<p>To build the iOS plugin, you will need:</p>
+<ul class="simple">
+<li><p>Xcode 14.0 or later (install from the Mac App Store)</p></li>
+</ul>
 <p>To build the documentation, you will need:</p>
 <ul class="simple">
 <li><p>Sphinx (<a class="reference external" href="https://www.sphinx-doc.org">https://www.sphinx-doc.org</a>)</p></li>
@@ -324,10 +328,13 @@ $ mkdir windows-vs2019-x64
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">STEAMAUDIO_CROSSCOMPILE_ANDROID</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">TRUE</span></code> if you want to cross-compile for Android on Windows, <code class="docutils literal notranslate"><span class="pre">FALSE</span></code> otherwise.</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">Sphinx_EXECUTABLE_DIR</span></code></p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">STEAMAUDIO_CROSSCOMPILE_IOS</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">TRUE</span></code> if you want to cross-compile for iOS on macOS, <code class="docutils literal notranslate"><span class="pre">FALSE</span></code> otherwise.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">Sphinx_EXECUTABLE_DIR</span></code></p></td>
 <td><p>Absolute path to the directory containing the Sphinx executable.</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">Unreal_EXECUTABLE_DIR</span></code></p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">Unreal_EXECUTABLE_DIR</span></code></p></td>
 <td><p>Absolute path to the directory containing the UnrealBuildTool executable.</p></td>
 </tr>
 </tbody>

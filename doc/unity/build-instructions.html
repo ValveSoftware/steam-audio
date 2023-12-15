@@ -70,7 +70,7 @@
             
             
               <div class="version">
-                4.4.1
+                4.5.0
               </div>
             
           
@@ -262,6 +262,10 @@
 <li><p>Android SDK for platform 25 (Android 7.1 Nougat) or later (<a class="reference external" href="https://developer.android.com/studio">https://developer.android.com/studio</a>)</p></li>
 <li><p>Android NDK (install using the Android SDK Manager)</p></li>
 </ul>
+<p>To build the iOS plugin, you will need:</p>
+<ul class="simple">
+<li><p>Xcode 14.0 or later (install from the Mac App Store)</p></li>
+</ul>
 <p>To build the documentation, you will need:</p>
 <ul class="simple">
 <li><p>Sphinx (<a class="reference external" href="https://www.sphinx-doc.org">https://www.sphinx-doc.org</a>)</p></li>
@@ -290,18 +294,19 @@ $ python build.py
 <p>On Linux, this will generate a Makefile for 64-bit Linux (<code class="docutils literal notranslate"><span class="pre">build/linux-x64-release/Makefile</span></code>) and build it.</p>
 <p>On macOS, this will generate an Xcode project (<code class="docutils literal notranslate"><span class="pre">build/osx/Phonon.xcodeproj</span></code>) and build it in the Release configuration.</p>
 <p>On Android, this will generate a Makefile for 32-bit ARM (<code class="docutils literal notranslate"><span class="pre">build/android-armv7-release/Makefile</span></code>) and build it.</p>
+<p>On iOS, this will generate an Xcode project (<code class="docutils literal notranslate"><span class="pre">build/ios/Phonon.xcodeproj</span></code>) and build it in the Release configuration.</p>
 <p>If CMake cannot generate the build system due to missing dependencies, you can run CMake directly and adjust settings that control where CMake looks for dependencies, and which targets it builds.</p>
 <p>The Steam Audio build script (<code class="docutils literal notranslate"><span class="pre">build.py</span></code>) lets you specify the following command line parameters to control its behavior:</p>
 <blockquote>
 <div><dl class="option-list">
 <dt><kbd><span class="option">-p</span>, <span class="option">--platform <var>NAME</var></span></kbd></dt>
-<dd><p>Specifies the target platform. Valid options are <code class="docutils literal notranslate"><span class="pre">windows</span></code>, <code class="docutils literal notranslate"><span class="pre">linux</span></code>, <code class="docutils literal notranslate"><span class="pre">osx</span></code>, and <code class="docutils literal notranslate"><span class="pre">android</span></code>. Default is the current host platform.</p>
+<dd><p>Specifies the target platform. Valid options are <code class="docutils literal notranslate"><span class="pre">windows</span></code>, <code class="docutils literal notranslate"><span class="pre">linux</span></code>, <code class="docutils literal notranslate"><span class="pre">osx</span></code>, <code class="docutils literal notranslate"><span class="pre">android</span></code>, and <code class="docutils literal notranslate"><span class="pre">ios</span></code>. Default is the current host platform.</p>
 </dd>
 <dt><kbd><span class="option">-t</span>, <span class="option">--toolchain <var>NAME</var></span></kbd></dt>
 <dd><p>Specifies the compiler version (on Windows only). Valid options are <code class="docutils literal notranslate"><span class="pre">vs2013</span></code>, <code class="docutils literal notranslate"><span class="pre">vs2015</span></code>, <code class="docutils literal notranslate"><span class="pre">vs2017</span></code>, <code class="docutils literal notranslate"><span class="pre">vs2019</span></code>. Default is <code class="docutils literal notranslate"><span class="pre">vs2015</span></code>.</p>
 </dd>
 <dt><kbd><span class="option">-a</span>, <span class="option">--architecture <var>NAME</var></span></kbd></dt>
-<dd><p>Specifies the CPU architecture to build for. Valid options are <code class="docutils literal notranslate"><span class="pre">x86</span></code> (32-bit Intel, available on Windows, Linux, and Android), <code class="docutils literal notranslate"><span class="pre">x64</span></code> (64-bit Intel, available on Windows, Linux, macOS, and Android), <code class="docutils literal notranslate"><span class="pre">armv7</span></code> (32-bit ARM, available on Android), and <code class="docutils literal notranslate"><span class="pre">arm64</span></code> (64-bit ARM, available on Android). Default is <code class="docutils literal notranslate"><span class="pre">x64</span></code> for Windows, Linux, and macOS; and <code class="docutils literal notranslate"><span class="pre">armv7</span></code> for Android.</p>
+<dd><p>Specifies the CPU architecture to build for. Valid options are <code class="docutils literal notranslate"><span class="pre">x86</span></code> (32-bit Intel, available on Windows, Linux, and Android), <code class="docutils literal notranslate"><span class="pre">x64</span></code> (64-bit Intel, available on Windows, Linux, macOS, and Android), <code class="docutils literal notranslate"><span class="pre">armv7</span></code> (32-bit ARM, available on Android), and <code class="docutils literal notranslate"><span class="pre">arm64</span></code> (64-bit ARM, available on Android and iOS). Default is <code class="docutils literal notranslate"><span class="pre">x64</span></code> for Windows, Linux, and macOS; <code class="docutils literal notranslate"><span class="pre">armv7</span></code> for Android; and <code class="docutils literal notranslate"><span class="pre">arm64</span></code> for iOS.</p>
 </dd>
 <dt><kbd><span class="option">-c</span>, <span class="option">--configuration <var>NAME</var></span></kbd></dt>
 <dd><p>Specifies the build configuration. Valid options are <code class="docutils literal notranslate"><span class="pre">debug</span></code> and <code class="docutils literal notranslate"><span class="pre">release</span></code>. Default is <code class="docutils literal notranslate"><span class="pre">release</span></code>.</p>
@@ -350,6 +355,23 @@ $ mkdir windows-vs2019-x64
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">build/toolchain_android_x64.cmake</span></code></p></td>
 <td><p>64-bit Intel</p></td>
+</tr>
+</tbody>
+</table>
+<p>When building for iOS, Steam Audio provides the following toolchain files that you can use:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 76%" />
+<col style="width: 24%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Toolchain File</p></th>
+<th class="head"><p>Platform</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">build/toolchain_ios.cmake</span></code></p></td>
+<td><p>64-bit ARM</p></td>
 </tr>
 </tbody>
 </table>

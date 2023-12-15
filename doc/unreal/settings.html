@@ -70,7 +70,7 @@
             
             
               <div class="version">
-                4.4.1
+                4.5.0
               </div>
             
           
@@ -299,6 +299,8 @@
 </ul>
 </dd>
 <dt>SOFA File</dt><dd><p>An imported SOFA file to use as a custom HRTF. The SOFA file be loaded at app startup. If the load fails, Steam Audio will revert to using its built-in HRTF.</p>
+</dd>
+<dt>Enable Validation</dt><dd><p>If checked, Steam Audio will perform several extra validation checks while doing any processing. Note that this will significantly increase CPU usage, since Steam Audio will check all input and output buffers, as well as most function parameters for invalid values. Use this only when trying to diagnose issues.</p>
 </dd>
 </dl>
 </div>

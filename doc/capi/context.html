@@ -70,7 +70,7 @@
             
             
               <div class="version">
-                4.4.1
+                4.5.0
               </div>
             
           
@@ -302,6 +302,12 @@
 <p>Steam Audio automatically chooses the best instruction set to use based on the user’s CPU, but you can prevent it from using certain newer instruction sets using this parameter. For example, with some workloads, AVX512 instructions consume enough power that the CPU clock speed will be throttled, resulting in lower performance than expected. If you observe this in your application, set this parameter to <code class="docutils literal notranslate"><span class="pre">IPL_SIMDLEVEL_AVX2</span></code> or lower. </p>
 </dd></dl>
 
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N18IPLContextSettings5flagsE">
+<span id="_CPPv3N18IPLContextSettings5flagsE"></span><span id="_CPPv2N18IPLContextSettings5flagsE"></span><span id="IPLContextSettings::flags__IPLContextFlags"></span><span class="target" id="struct_i_p_l_context_settings_1ac033215a7cdfcc642def74127de71b03"></span><a class="reference internal" href="#_CPPv415IPLContextFlags" title="IPLContextFlags"><span class="n"><span class="pre">IPLContextFlags</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">flags</span></span></span><a class="headerlink" href="#_CPPv4N18IPLContextSettings5flagsE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Additional flags for modifying the behavior of the created context. </p>
+</dd></dl>
+
 </div>
 </dd></dl>
 
@@ -386,6 +392,26 @@
 <span id="_CPPv3N12IPLSIMDLevel18IPL_SIMDLEVEL_NEONE"></span><span id="_CPPv2N12IPLSIMDLevel18IPL_SIMDLEVEL_NEONE"></span><span class="target" id="group__context_1gga449c0d81bf0ae61e1e2f4c5ef8a540a5a34f4595f28bbcea981c1c6a4cd70c7cc"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_SIMDLEVEL_NEON</span></span></span><a class="headerlink" href="#_CPPv4N12IPLSIMDLevel18IPL_SIMDLEVEL_NEONE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>ARM NEON. </p>
 <p>Up to 4 simultaneous floating-point operations. </p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="cpp enum">
+<dt class="sig sig-object cpp" id="_CPPv415IPLContextFlags">
+<span id="_CPPv315IPLContextFlags"></span><span id="_CPPv215IPLContextFlags"></span><span class="target" id="group__context_1gaefd9fc5e972a64f042fa5dd8bb08bcf3"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLContextFlags</span></span></span><a class="headerlink" href="#_CPPv415IPLContextFlags" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Additional flags for modifying the behavior of a Steam Audio context. </p>
+<p><em>Values:</em></p>
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N15IPLContextFlags27IPL_CONTEXTFLAGS_VALIDATIONE">
+<span id="_CPPv3N15IPLContextFlags27IPL_CONTEXTFLAGS_VALIDATIONE"></span><span id="_CPPv2N15IPLContextFlags27IPL_CONTEXTFLAGS_VALIDATIONE"></span><span class="target" id="group__context_1ggaefd9fc5e972a64f042fa5dd8bb08bcf3abc5fff073d746acba7dbd570d8a31f12"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_CONTEXTFLAGS_VALIDATION</span></span></span><a class="headerlink" href="#_CPPv4N15IPLContextFlags27IPL_CONTEXTFLAGS_VALIDATIONE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>All API functions perform extra validation checks. </p>
+<p>NOTE: This imposes a significant performance penalty. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N15IPLContextFlags28IPL_CONTEXTFLAGS_FORCE_32BITE">
+<span id="_CPPv3N15IPLContextFlags28IPL_CONTEXTFLAGS_FORCE_32BITE"></span><span id="_CPPv2N15IPLContextFlags28IPL_CONTEXTFLAGS_FORCE_32BITE"></span><span class="target" id="group__context_1ggaefd9fc5e972a64f042fa5dd8bb08bcf3abbda8cbc15414558a2e1a97ec0dad865"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_CONTEXTFLAGS_FORCE_32BIT</span></span></span><a class="headerlink" href="#_CPPv4N15IPLContextFlags28IPL_CONTEXTFLAGS_FORCE_32BITE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Force this enum to be 32 bits in size. </p>
 </dd></dl>
 
 </dd></dl>

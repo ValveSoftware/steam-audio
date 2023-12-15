@@ -70,7 +70,7 @@
             
             
               <div class="version">
-                4.4.1
+                4.5.0
               </div>
             
           
@@ -254,7 +254,7 @@
 </div>
 <div class="section" id="memory-allocation">
 <h3>Memory Allocation<a class="headerlink" href="#memory-allocation" title="Permalink to this headline">¶</a></h3>
-<p>By default, Steam Audio uses the OS aligned memory allocation functions (<code class="docutils literal notranslate"><span class="pre">_aligned_malloc</span></code> on Windows, and <code class="docutils literal notranslate"><span class="pre">posix_memalign</span></code> on Linux, macOS, and Android) whenever it needs to allocate memory internally. You can instead specify callbacks that Steam Audio will call whenever it needs to allocate or free memory:</p>
+<p>By default, Steam Audio uses the OS aligned memory allocation functions (<code class="docutils literal notranslate"><span class="pre">_aligned_malloc</span></code> on Windows, and <code class="docutils literal notranslate"><span class="pre">posix_memalign</span></code> on Linux, macOS, Android, and iOS) whenever it needs to allocate memory internally. You can instead specify callbacks that Steam Audio will call whenever it needs to allocate or free memory:</p>
 <div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="o">*</span> <span class="nf">my_malloc</span><span class="p">(</span><span class="kt">size_t</span> <span class="n">size</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">alignment</span><span class="p">)</span>
 <span class="p">{</span>
     <span class="c1">// ...</span>
