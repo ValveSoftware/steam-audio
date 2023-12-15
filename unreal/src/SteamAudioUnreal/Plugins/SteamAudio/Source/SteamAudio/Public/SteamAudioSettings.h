@@ -277,6 +277,9 @@ public:
 
     UPROPERTY(Config, EditAnywhere, Category = "Custom HRTF Settings", meta = (DisplayName = "SOFA File", AllowedClasses = "/Script/SteamAudio.SOFAFile"))
     FSoftObjectPath SOFAFile;
+
+    UPROPERTY(Config, EditAnywhere, Category = "Advanced Settings")
+    bool EnableValidation;
     
     USteamAudioSettings();
 

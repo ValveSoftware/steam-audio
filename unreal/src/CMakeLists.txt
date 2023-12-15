@@ -66,6 +66,12 @@ add_custom_target(phonon_unreal_android
     VERBATIM
 )
 
+add_custom_target(phonon_unreal_ios
+    COMMAND     ${Unreal_EXECUTABLE} ${UE_TARGET_GAME} iOS Development -project=${CMAKE_CURRENT_BINARY_DIR}/HostProject/HostProject.uproject -plugin=${CMAKE_CURRENT_BINARY_DIR}/HostProject/Plugins/SteamAudio/SteamAudio.uplugin -manifest=${CMAKE_CURRENT_BINARY_DIR}/Manifest-SteamAudio-${UE_TARGET_GAME}-iOS-Development.xml ${UBT_ARGS}
+    COMMAND     ${Unreal_EXECUTABLE} ${UE_TARGET_GAME} iOS Shipping -project=${CMAKE_CURRENT_BINARY_DIR}/HostProject/HostProject.uproject -plugin=${CMAKE_CURRENT_BINARY_DIR}/HostProject/Plugins/SteamAudio/SteamAudio.uplugin -manifest=${CMAKE_CURRENT_BINARY_DIR}/Manifest-SteamAudio-${UE_TARGET_GAME}-iOS-Shipping.xml ${UBT_ARGS}
+    VERBATIM
+)
+
 add_custom_target(phonon_unreal ALL
     COMMAND     cmake -E echo Built plugin SteamAudio.
     VERBATIM
@@ -76,6 +82,7 @@ add_dependencies(phonon_unreal_win64 phonon_unreal_setup)
 add_dependencies(phonon_unreal_linux phonon_unreal_setup)
 add_dependencies(phonon_unreal_mac phonon_unreal_setup)
 add_dependencies(phonon_unreal_android phonon_unreal_setup)
+add_dependencies(phonon_unreal_ios phonon_unreal_setup)
 
 if (IPL_OS_WINDOWS AND IPL_CPU_X64)
     add_dependencies(phonon_unreal phonon_unreal_win64)
@@ -90,6 +97,9 @@ if (IPL_OS_WINDOWS AND IPL_CPU_X64)
     endif()
 elseif (IPL_OS_MACOS)
     add_dependencies(phonon_unreal phonon_unreal_mac)
+    if (STEAMAUDIOUNREAL_CROSSCOMPILE_IOS)
+        add_dependencies(phonon_unreal phonon_unreal_ios)
+    endif()
 endif()
 
 #
@@ -149,6 +159,12 @@ add_custom_target(phonon_unreal_fmod_android
     VERBATIM
 )
 
+add_custom_target(phonon_unreal_fmod_ios
+    COMMAND     ${Unreal_EXECUTABLE} ${UE_TARGET_GAME} iOS Development -project=${CMAKE_CURRENT_BINARY_DIR}/HostProjectFMOD/HostProjectFMOD.uproject -plugin=${CMAKE_CURRENT_BINARY_DIR}/HostProjectFMOD/Plugins/SteamAudioFMODStudio/SteamAudioFMODStudio.uplugin -manifest=${CMAKE_CURRENT_BINARY_DIR}/Manifest-SteamAudioFMODStudio-${UE_TARGET_GAME}-iOS-Development.xml ${UBT_ARGS}
+    COMMAND     ${Unreal_EXECUTABLE} ${UE_TARGET_GAME} iOS Shipping -project=${CMAKE_CURRENT_BINARY_DIR}/HostProjectFMOD/HostProjectFMOD.uproject -plugin=${CMAKE_CURRENT_BINARY_DIR}/HostProjectFMOD/Plugins/SteamAudioFMODStudio/SteamAudioFMODStudio.uplugin -manifest=${CMAKE_CURRENT_BINARY_DIR}/Manifest-SteamAudioFMODStudio-${UE_TARGET_GAME}-iOS-Shipping.xml ${UBT_ARGS}
+    VERBATIM
+)
+
 add_custom_target(phonon_unreal_fmod ALL
     COMMAND     cmake -E echo Built plugin SteamAudioFMODStudio.
     VERBATIM
@@ -159,6 +175,7 @@ add_dependencies(phonon_unreal_fmod_win64 phonon_unreal_fmod_setup)
 add_dependencies(phonon_unreal_fmod_linux phonon_unreal_fmod_setup)
 add_dependencies(phonon_unreal_fmod_mac phonon_unreal_fmod_setup)
 add_dependencies(phonon_unreal_fmod_android phonon_unreal_fmod_setup)
+add_dependencies(phonon_unreal_fmod_ios phonon_unreal_fmod_setup)
 
 if (IPL_OS_WINDOWS AND IPL_CPU_X64)
     add_dependencies(phonon_unreal_fmod phonon_unreal_fmod_win64)
@@ -173,6 +190,9 @@ if (IPL_OS_WINDOWS AND IPL_CPU_X64)
     endif()
 elseif (IPL_OS_MACOS)
     add_dependencies(phonon_unreal_fmod phonon_unreal_fmod_mac)
+    if (STEAMAUDIOUNREAL_CROSSCOMPILE_IOS)
+        add_definitions(phonon_unreal_fmod phonon_unreal_fmod_ios)
+    endif()
 endif()
 
 add_dependencies(phonon_unreal_fmod phonon_unreal)
@@ -245,9 +265,16 @@ elseif (IPL_OS_MACOS)
     install(CODE "execute_process(COMMAND python copy_files_from_manifest.py -s ${CMAKE_CURRENT_BINARY_DIR}/HostProject/Plugins -d ${CMAKE_HOME_DIRECTORY}/bin/unreal -m ${CMAKE_CURRENT_BINARY_DIR}/Manifest-SteamAudio-${UE_TARGET_EDITOR}-Mac-Development.xml WORKING_DIRECTORY ${CMAKE_HOME_DIRECTORY}/build)")
     install(CODE "execute_process(COMMAND python copy_files_from_manifest.py -s ${CMAKE_CURRENT_BINARY_DIR}/HostProject/Plugins -d ${CMAKE_HOME_DIRECTORY}/bin/unreal -m ${CMAKE_CURRENT_BINARY_DIR}/Manifest-SteamAudio-${UE_TARGET_GAME}-Mac-Development.xml WORKING_DIRECTORY ${CMAKE_HOME_DIRECTORY}/build)")
     install(CODE "execute_process(COMMAND python copy_files_from_manifest.py -s ${CMAKE_CURRENT_BINARY_DIR}/HostProject/Plugins -d ${CMAKE_HOME_DIRECTORY}/bin/unreal -m ${CMAKE_CURRENT_BINARY_DIR}/Manifest-SteamAudio-${UE_TARGET_GAME}-Mac-Shipping.xml WORKING_DIRECTORY ${CMAKE_HOME_DIRECTORY}/build)")
+    if (STEAMAUDIOUNREAL_CROSSCOMPILE_IOS)
+        install(CODE "execute_process(COMMAND python copy_files_from_manifest.py -s ${CMAKE_CURRENT_BINARY_DIR}/HostProject/Plugins -d ${CMAKE_HOME_DIRECTORY}/bin/unreal -m ${CMAKE_CURRENT_BINARY_DIR}/Manifest-SteamAudio-${UE_TARGET_GAME}-iOS-Development.xml WORKING_DIRECTORY ${CMAKE_HOME_DIRECTORY}/build)")
+        install(CODE "execute_process(COMMAND python copy_files_from_manifest.py -s ${CMAKE_CURRENT_BINARY_DIR}/HostProject/Plugins -d ${CMAKE_HOME_DIRECTORY}/bin/unreal -m ${CMAKE_CURRENT_BINARY_DIR}/Manifest-SteamAudio-${UE_TARGET_GAME}-iOS-Shipping.xml WORKING_DIRECTORY ${CMAKE_HOME_DIRECTORY}/build)")
+    endif()
 
     install(CODE "execute_process(COMMAND cmake -E rm -rf ${CMAKE_HOME_DIRECTORY}/bin/unreal/FMODStudio)")
     install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/SteamAudioUnreal/Plugins/FMODStudio/Binaries/Mac/phonon_fmod.bundle DESTINATION unreal/FMODStudio/Binaries/Mac)
+    if (STEAMAUDIOUNREAL_CROSSCOMPILE_IOS)
+        install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/SteamAudioUnreal/Plugins/FMODStudio/Binaries/IOS/libphonon_fmod.a DESTINATION unreal/FMODStudio/Binaries/IOS)
+    endif()
 
     install(CODE "execute_process(COMMAND cmake -E rm -rf ${CMAKE_HOME_DIRECTORY}/bin/unreal/SteamAudioFMODStudio)")
     install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/SteamAudioUnreal/Plugins/SteamAudioFMODStudio/SteamAudioFMODStudio.uplugin DESTINATION unreal/SteamAudioFMODStudio)
@@ -257,4 +284,8 @@ elseif (IPL_OS_MACOS)
     install(CODE "execute_process(COMMAND python copy_files_from_manifest.py -s ${CMAKE_CURRENT_BINARY_DIR}/HostProjectFMOD/Plugins -d ${CMAKE_HOME_DIRECTORY}/bin/unreal -m ${CMAKE_CURRENT_BINARY_DIR}/Manifest-SteamAudioFMODStudio-${UE_TARGET_EDITOR}-Mac-Development.xml WORKING_DIRECTORY ${CMAKE_HOME_DIRECTORY}/build)")
     install(CODE "execute_process(COMMAND python copy_files_from_manifest.py -s ${CMAKE_CURRENT_BINARY_DIR}/HostProjectFMOD/Plugins -d ${CMAKE_HOME_DIRECTORY}/bin/unreal -m ${CMAKE_CURRENT_BINARY_DIR}/Manifest-SteamAudioFMODStudio-${UE_TARGET_GAME}-Mac-Development.xml WORKING_DIRECTORY ${CMAKE_HOME_DIRECTORY}/build)")
     install(CODE "execute_process(COMMAND python copy_files_from_manifest.py -s ${CMAKE_CURRENT_BINARY_DIR}/HostProjectFMOD/Plugins -d ${CMAKE_HOME_DIRECTORY}/bin/unreal -m ${CMAKE_CURRENT_BINARY_DIR}/Manifest-SteamAudioFMODStudio-${UE_TARGET_GAME}-Mac-Shipping.xml WORKING_DIRECTORY ${CMAKE_HOME_DIRECTORY}/build)")
+    if (STEAMAUDIOUNREAL_CROSSCOMPILE_IOS)
+        install(CODE "execute_process(COMMAND python copy_files_from_manifest.py -s ${CMAKE_CURRENT_BINARY_DIR}/HostProjectFMOD/Plugins -d ${CMAKE_HOME_DIRECTORY}/bin/unreal -m ${CMAKE_CURRENT_BINARY_DIR}/Manifest-SteamAudioFMODStudio-${UE_TARGET_GAME}-iOS-Development.xml WORKING_DIRECTORY ${CMAKE_HOME_DIRECTORY}/build)")
+        install(CODE "execute_process(COMMAND python copy_files_from_manifest.py -s ${CMAKE_CURRENT_BINARY_DIR}/HostProjectFMOD/Plugins -d ${CMAKE_HOME_DIRECTORY}/bin/unreal -m ${CMAKE_CURRENT_BINARY_DIR}/Manifest-SteamAudioFMODStudio-${UE_TARGET_GAME}-iOS-Shipping.xml WORKING_DIRECTORY ${CMAKE_HOME_DIRECTORY}/build)")
+    endif()
 endif()

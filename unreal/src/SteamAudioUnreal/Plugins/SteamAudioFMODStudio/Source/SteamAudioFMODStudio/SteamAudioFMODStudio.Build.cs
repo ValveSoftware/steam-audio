@@ -18,5 +18,10 @@ public class SteamAudioFMODStudio : ModuleRules
 			"FMODStudio",
 			"SteamAudio"
         });
+
+		if (Target.Platform == UnrealTargetPlatform.IOS)
+		{
+			PublicAdditionalLibraries.Add("$(PluginDir)/../FMODStudio/Binaries/IOS/libphonon_fmod.a");
+		}
 	}
 }

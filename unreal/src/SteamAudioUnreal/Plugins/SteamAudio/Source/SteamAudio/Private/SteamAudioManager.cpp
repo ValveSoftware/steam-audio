@@ -58,6 +58,15 @@ FSteamAudioManager::FSteamAudioManager()
     ContextSettings.freeCallback = FreeCallback;
     ContextSettings.simdLevel = IPL_SIMDLEVEL_AVX2;
 
+    const USteamAudioSettings* Settings = GetDefault<USteamAudioSettings>();
+    if (Settings)
+    {
+        if (Settings->EnableValidation)
+        {
+            ContextSettings.flags = static_cast<IPLContextFlags>(ContextSettings.flags | IPL_CONTEXTFLAGS_VALIDATION);
+        }
+    }
+
     IPLerror Status = iplContextCreate(&ContextSettings, &Context);
     if (Status != IPL_STATUS_SUCCESS)
     {

@@ -5,6 +5,8 @@
 
 #include "steamaudio_unity_native.h"
 
+namespace SteamAudioUnity {
+
 namespace MixerReturnEffect {
 
 enum Params
@@ -368,3 +370,5 @@ UnityAudioEffectDefinition gMixerReturnEffectDefinition
     MixerReturnEffect::getParam,
     nullptr
 };
+
+}

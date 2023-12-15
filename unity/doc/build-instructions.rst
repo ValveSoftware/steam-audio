@@ -60,6 +60,10 @@ To build the Android plugin, you will need:
 -   Android SDK for platform 25 (Android 7.1 Nougat) or later (https://developer.android.com/studio)
 -   Android NDK (install using the Android SDK Manager)
 
+To build the iOS plugin, you will need:
+
+-   Xcode 14.0 or later (install from the Mac App Store)
+
 To build the documentation, you will need:
 
 -   Sphinx (https://www.sphinx-doc.org)
@@ -93,18 +97,20 @@ On macOS, this will generate an Xcode project (``build/osx/Phonon.xcodeproj``) a
 
 On Android, this will generate a Makefile for 32-bit ARM (``build/android-armv7-release/Makefile``) and build it.
 
+On iOS, this will generate an Xcode project (``build/ios/Phonon.xcodeproj``) and build it in the Release configuration.
+
 If CMake cannot generate the build system due to missing dependencies, you can run CMake directly and adjust settings that control where CMake looks for dependencies, and which targets it builds.
 
 The Steam Audio build script (``build.py``) lets you specify the following command line parameters to control its behavior:
 
     -p, --platform NAME
-        Specifies the target platform. Valid options are ``windows``, ``linux``, ``osx``, and ``android``. Default is the current host platform.
+        Specifies the target platform. Valid options are ``windows``, ``linux``, ``osx``, ``android``, and ``ios``. Default is the current host platform.
 
     -t, --toolchain NAME
         Specifies the compiler version (on Windows only). Valid options are ``vs2013``, ``vs2015``, ``vs2017``, ``vs2019``. Default is ``vs2015``.
 
     -a, --architecture NAME
-        Specifies the CPU architecture to build for. Valid options are ``x86`` (32-bit Intel, available on Windows, Linux, and Android), ``x64`` (64-bit Intel, available on Windows, Linux, macOS, and Android), ``armv7`` (32-bit ARM, available on Android), and ``arm64`` (64-bit ARM, available on Android). Default is ``x64`` for Windows, Linux, and macOS; and ``armv7`` for Android.
+        Specifies the CPU architecture to build for. Valid options are ``x86`` (32-bit Intel, available on Windows, Linux, and Android), ``x64`` (64-bit Intel, available on Windows, Linux, macOS, and Android), ``armv7`` (32-bit ARM, available on Android), and ``arm64`` (64-bit ARM, available on Android and iOS). Default is ``x64`` for Windows, Linux, and macOS; ``armv7`` for Android; and ``arm64`` for iOS.
 
     -c, --configuration NAME
         Specifies the build configuration. Valid options are ``debug`` and ``release``. Default is ``release``.
@@ -137,6 +143,14 @@ Toolchain File                          Platform
 ``build/toolchain_android_armv8.cmake`` 64-bit ARM
 ``build/toolchain_android_x86.cmake``   32-bit Intel
 ``build/toolchain_android_x64.cmake``   64-bit Intel
+======================================= ============
+
+When building for iOS, Steam Audio provides the following toolchain files that you can use:
+
+======================================= ============
+Toolchain File                          Platform
+======================================= ============
+``build/toolchain_ios.cmake``           64-bit ARM
 ======================================= ============
 
 Below are some of the CMake options you may want to configure:

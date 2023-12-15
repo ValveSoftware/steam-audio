@@ -11,11 +11,16 @@
 
 #if !defined(IPL_OS_UNSUPPORTED)
 
+#if defined(IPL_OS_IOS)
+#define STEAMAUDIO_SKIP_API_FUNCTIONS
+#endif
 #include <phonon_interfaces.h>
 
 // --------------------------------------------------------------------------------------------------------------------
 // Global State
 // --------------------------------------------------------------------------------------------------------------------
+
+namespace SteamAudioUnity {
 
 IPLContext gContext = nullptr;
 IPLHRTF gHRTF[2] = { nullptr, nullptr };
@@ -32,6 +37,8 @@ std::atomic<bool> gNewReflectionMixerWritten{ false };
 
 std::shared_ptr<SourceManager> gSourceManager;
 
+}
+
 #endif
 
 
@@ -39,18 +46,22 @@ std::shared_ptr<SourceManager> gSourceManager;
 // API Functions
 // --------------------------------------------------------------------------------------------------------------------
 
+namespace SteamAudioUnity {
+
 extern UnityAudioEffectDefinition gSpatializeEffectDefinition;
 extern UnityAudioEffectDefinition gAmbisonicDecoderEffectDefinition;
 extern UnityAudioEffectDefinition gMixerReturnEffectDefinition;
 extern UnityAudioEffectDefinition gReverbEffectDefinition;
 
+}
+
 int UnityGetAudioEffectDefinitions(UnityAudioEffectDefinition*** definitions)
 {
     static UnityAudioEffectDefinition* effects[] = { 
-        &gMixerReturnEffectDefinition, 
-        &gReverbEffectDefinition,
-        &gSpatializeEffectDefinition,
-        &gAmbisonicDecoderEffectDefinition 
+        &SteamAudioUnity::gMixerReturnEffectDefinition,
+        &SteamAudioUnity::gReverbEffectDefinition,
+        &SteamAudioUnity::gSpatializeEffectDefinition,
+        &SteamAudioUnity::gAmbisonicDecoderEffectDefinition
     };
 
     *definitions = effects;
@@ -73,94 +84,96 @@ void UNITY_AUDIODSP_CALLBACK iplUnityInitialize(IPLContext context)
 {
     assert(gContext == nullptr);
 
-    gContext = iplContextRetain(context);
+    SteamAudioUnity::gContext = iplContextRetain(context);
 
-    gSourceManager = std::make_shared<SourceManager>();
+    SteamAudioUnity::gSourceManager = std::make_shared<SteamAudioUnity::SourceManager>();
 }
 
 void UNITY_AUDIODSP_CALLBACK iplUnityTerminate()
 {
-    gNewReflectionMixerWritten = false;
-    iplReflectionMixerRelease(&gReflectionMixer[0]);
-    iplReflectionMixerRelease(&gReflectionMixer[1]);
+    SteamAudioUnity::gNewReflectionMixerWritten = false;
+    iplReflectionMixerRelease(&SteamAudioUnity::gReflectionMixer[0]);
+    iplReflectionMixerRelease(&SteamAudioUnity::gReflectionMixer[1]);
 
-    gNewReverbSourceWritten = false;
-    iplSourceRelease(&gReverbSource[0]);
-    iplSourceRelease(&gReverbSource[1]);
+    SteamAudioUnity::gNewReverbSourceWritten = false;
+    iplSourceRelease(&SteamAudioUnity::gReverbSource[0]);
+    iplSourceRelease(&SteamAudioUnity::gReverbSource[1]);
 
-    gIsSimulationSettingsValid = false;
+    SteamAudioUnity::gIsSimulationSettingsValid = false;
 
-    gNewHRTFWritten = false;
-    iplHRTFRelease(&gHRTF[0]);
-    iplHRTFRelease(&gHRTF[1]);
+    SteamAudioUnity::gNewHRTFWritten = false;
+    iplHRTFRelease(&SteamAudioUnity::gHRTF[0]);
+    iplHRTFRelease(&SteamAudioUnity::gHRTF[1]);
 
-    gNewPerspectiveCorrectionWritten = false;
+    SteamAudioUnity::gNewPerspectiveCorrectionWritten = false;
 
-    iplContextRelease(&gContext);
+    iplContextRelease(&SteamAudioUnity::gContext);
 
-    gSourceManager = nullptr;
+    SteamAudioUnity::gSourceManager = nullptr;
 }
 
 void UNITY_AUDIODSP_CALLBACK iplUnitySetPerspectiveCorrection(IPLUnityPerspectiveCorrection correction)
 {
     // Nothing to do if the perspective correction is disabled and has not changed.
-    if (correction.enabled == IPL_FALSE && gPerspectiveCorrection[1].enabled == IPL_FALSE)
+    if (correction.enabled == IPL_FALSE && SteamAudioUnity::gPerspectiveCorrection[1].enabled == IPL_FALSE)
         return;
 
-    if (gPerspectiveCorrection[1].enabled == correction.enabled &&
-        gPerspectiveCorrection[1].xfactor == correction.xfactor &&
-        gPerspectiveCorrection[1].yfactor == correction.yfactor &&
-        memcmp(gPerspectiveCorrection[1].transform.elements, correction.transform.elements, 16 * sizeof(float)) == 0 )
+    if (SteamAudioUnity::gPerspectiveCorrection[1].enabled == correction.enabled &&
+        SteamAudioUnity::gPerspectiveCorrection[1].xfactor == correction.xfactor &&
+        SteamAudioUnity::gPerspectiveCorrection[1].yfactor == correction.yfactor &&
+        memcmp(SteamAudioUnity::gPerspectiveCorrection[1].transform.elements, correction.transform.elements, 16 * sizeof(float)) == 0 )
         return;
 
-    setPerspectiveCorrection(correction);
+    SteamAudioUnity::setPerspectiveCorrection(correction);
 }
 
 void UNITY_AUDIODSP_CALLBACK iplUnitySetHRTF(IPLHRTF hrtf)
 {
-    if (hrtf == gHRTF[1])
+    if (hrtf == SteamAudioUnity::gHRTF[1])
         return;
 
-    setHRTF(hrtf);
+    SteamAudioUnity::setHRTF(hrtf);
 }
 
 void UNITY_AUDIODSP_CALLBACK iplUnitySetSimulationSettings(IPLSimulationSettings simulationSettings)
 {
-    gSimulationSettings = simulationSettings;
+    SteamAudioUnity::gSimulationSettings = simulationSettings;
 
-    gIsSimulationSettingsValid = true;
+    SteamAudioUnity::gIsSimulationSettingsValid = true;
 }
 
 void UNITY_AUDIODSP_CALLBACK iplUnitySetReverbSource(IPLSource reverbSource)
 {
-    if (reverbSource == gReverbSource[1])
+    if (reverbSource == SteamAudioUnity::gReverbSource[1])
         return;
 
-    if (!gNewReverbSourceWritten)
+    if (!SteamAudioUnity::gNewReverbSourceWritten)
     {
-        iplSourceRelease(&gReverbSource[1]);
-        gReverbSource[1] = iplSourceRetain(reverbSource);
+        iplSourceRelease(&SteamAudioUnity::gReverbSource[1]);
+        SteamAudioUnity::gReverbSource[1] = iplSourceRetain(reverbSource);
 
-        gNewReverbSourceWritten = true;
+        SteamAudioUnity::gNewReverbSourceWritten = true;
     }
 }
 
 IPLint32 UNITY_AUDIODSP_CALLBACK iplUnityAddSource(IPLSource source)
 {
-    if (!gSourceManager)
+    if (!SteamAudioUnity::gSourceManager)
         return -1;
 
-    return gSourceManager->addSource(source);
+    return SteamAudioUnity::gSourceManager->addSource(source);
 }
 
 void UNITY_AUDIODSP_CALLBACK iplUnityRemoveSource(IPLint32 handle)
 {
-    if (!gSourceManager)
+    if (!SteamAudioUnity::gSourceManager)
         return;
 
-    gSourceManager->removeSource(handle);
+    SteamAudioUnity::gSourceManager->removeSource(handle);
 }
 
+
+namespace SteamAudioUnity {
 
 // --------------------------------------------------------------------------------------------------------------------
 // Helper Functions
@@ -422,6 +435,8 @@ IPLSource SourceManager::getSource(int32_t handle)
         return mSources[handle];
     else
         return nullptr;
+}
+
 }
 
 #endif

@@ -11,6 +11,19 @@
 
 #define LOCTEXT_NAMESPACE "FSteamAudioFMODStudioModule"
 
+#if PLATFORM_IOS
+extern "C" {
+void F_CALL iplFMODGetVersion(unsigned int* Major, unsigned int* Minor, unsigned int* Patch);
+void F_CALL iplFMODInitialize(IPLContext Context);
+void F_CALL iplFMODTerminate();
+void F_CALL iplFMODSetHRTF(IPLHRTF HRTF);
+void F_CALL iplFMODSetSimulationSettings(IPLSimulationSettings SimulationSettings);
+void F_CALL iplFMODSetReverbSource(IPLSource ReverbSource);
+IPLint32 F_CALL iplFMODAddSource(IPLSource Source);
+void F_CALL iplFMODRemoveSource(IPLint32 Handle);
+}
+#endif
+
 namespace SteamAudio {
 
 // ---------------------------------------------------------------------------------------------------------------------
@@ -42,6 +55,16 @@ void FSteamAudioFMODStudioModule::StartupModule()
 #endif
 #endif
 
+#if PLATFORM_IOS
+	this->iplFMODGetVersion = (iplFMODGetVersion_t) ::iplFMODGetVersion;
+	this->iplFMODInitialize = (iplFMODInitialize_t) ::iplFMODInitialize;
+	this->iplFMODTerminate = (iplFMODTerminate_t) ::iplFMODTerminate;
+	this->iplFMODSetHRTF = (iplFMODSetHRTF_t) ::iplFMODSetHRTF;
+	this->iplFMODSetSimulationSettings = (iplFMODSetSimulationSettings_t) ::iplFMODSetSimulationSettings;
+	this->iplFMODSetReverbSource = (iplFMODSetReverbSource_t) ::iplFMODSetReverbSource;
+	this->iplFMODAddSource = (iplFMODAddSource_t) ::iplFMODAddSource;
+	this->iplFMODRemoveSource = (iplFMODRemoveSource_t) ::iplFMODRemoveSource;
+#else
 	Library = FPlatformProcess::GetDllHandle(*LibraryPath);
 	check(Library);
 
@@ -53,6 +76,7 @@ void FSteamAudioFMODStudioModule::StartupModule()
 	iplFMODSetReverbSource = (iplFMODSetReverbSource_t) FPlatformProcess::GetDllExport(Library, TEXT("iplFMODSetReverbSource"));
 	iplFMODAddSource = (iplFMODAddSource_t) FPlatformProcess::GetDllExport(Library, TEXT("iplFMODAddSource"));
 	iplFMODRemoveSource = (iplFMODRemoveSource_t) FPlatformProcess::GetDllExport(Library, TEXT("iplFMODRemoveSource"));
+#endif
 }
 
 void FSteamAudioFMODStudioModule::ShutdownModule()

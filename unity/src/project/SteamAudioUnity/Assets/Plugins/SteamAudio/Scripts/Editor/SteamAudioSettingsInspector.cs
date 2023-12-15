@@ -53,6 +53,7 @@ namespace SteamAudio
         SerializedProperty mTANDuration;
         SerializedProperty mTANAmbisonicOrder;
         SerializedProperty mTANMaxSources;
+        SerializedProperty mEnableValidation;
 
 #if !UNITY_2019_2_OR_NEWER
         static string[] sSceneTypes = new string[] { "Phonon", "Embree", "Radeon Rays", "Unity" };
@@ -106,6 +107,7 @@ namespace SteamAudio
             mTANDuration = serializedObject.FindProperty("TANDuration");
             mTANAmbisonicOrder = serializedObject.FindProperty("TANAmbisonicOrder");
             mTANMaxSources = serializedObject.FindProperty("TANMaxSources");
+            mEnableValidation = serializedObject.FindProperty("EnableValidation");
         }
 
         public override void OnInspectorGUI()
@@ -193,6 +195,8 @@ namespace SteamAudio
                     EditorGUILayout.PropertyField(mTANMaxSources);
                 }
             }
+
+            EditorGUILayout.PropertyField(mEnableValidation);
 
             serializedObject.ApplyModifiedProperties();
         }

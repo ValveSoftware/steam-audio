@@ -45,7 +45,7 @@ public:
 
     virtual void release() = 0;
 
-    virtual void setTelemetryAPI(void* telemetryAPI) = 0;
+    virtual void setProfilerContext(void* profilerContext) = 0;
 
     virtual IPLVector3 calculateRelativeDirection(IPLVector3 sourcePosition,
                                                   IPLVector3 listenerPosition,

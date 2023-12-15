@@ -5,6 +5,8 @@
 
 #include "steamaudio_fmod.h"
 
+namespace SteamAudioFMOD {
+
 namespace MixerReturnEffect {
 
 /**
@@ -318,3 +320,5 @@ FMOD_DSP_DESCRIPTION gMixerReturnEffect
     nullptr,
     nullptr
 };
+
+}

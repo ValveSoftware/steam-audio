@@ -55,6 +55,7 @@ USteamAudioSettings::USteamAudioSettings()
     , HRTFVolume(0.0f)
     , HRTFNormalizationType(EHRTFNormType::NONE)
     , SOFAFile(nullptr)
+    , EnableValidation(false)
 {}
 
 FSteamAudioSettings USteamAudioSettings::GetSettings() const

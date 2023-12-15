@@ -120,6 +120,9 @@ namespace SteamAudio
         [Range(1, 128)]
         public int TANMaxSources = 32;
 
+        [Header("Advanced Settings")]
+        public bool EnableValidation = false;
+
         static SteamAudioSettings sSingleton = null;
 
         public static SteamAudioSettings Singleton

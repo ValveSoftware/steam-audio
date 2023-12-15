@@ -5,6 +5,8 @@
 
 #include "steamaudio_unity_native.h"
 
+namespace SteamAudioUnity {
+
 #if !defined(IPL_OS_UNSUPPORTED)
 extern std::shared_ptr<SourceManager> gSourceManager;
 #endif
@@ -1015,3 +1017,5 @@ UnityAudioEffectDefinition gSpatializeEffectDefinition
     SpatializeEffect::getParam,
     nullptr
 };
+
+}

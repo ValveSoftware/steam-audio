@@ -32,7 +32,7 @@ if (IPL_OS_WINDOWS)
     list(APPEND SRC_FMOD phonon_fmod.rc.in ${CMAKE_CURRENT_BINARY_DIR}/phonon_fmod.rc)
 endif()
 
-if (BUILD_SHARED_LIBS)
+if (BUILD_SHARED_LIBS AND NOT IPL_OS_IOS)
     add_library(phonon_fmod SHARED ${SRC_FMOD})
     if (IPL_OS_MACOS)
         add_library(phonon_fmod_bundle MODULE ${SRC_FMOD})
@@ -112,6 +112,8 @@ elseif (IPL_OS_ANDROID)
     elseif (IPL_CPU_X86)
         set(UNITY_FMOD_PLUGIN_DIR ${CMAKE_HOME_DIRECTORY}/../unity/src/project/SteamAudioUnity/Assets/Plugins/FMOD/platforms/android/lib/x86)
     endif()
+elseif (IPL_OS_IOS)
+    set(UNITY_FMOD_PLUGIN_DIR ${CMAKE_HOME_DIRECTORY}/../unity/src/project/SteamAudioUnity/Assets/Plugins/FMOD/platforms/ios/lib)
 endif()
 
 if (NOT UNITY_FMOD_PLUGIN_DIR STREQUAL "")
@@ -158,6 +160,8 @@ elseif (IPL_OS_ANDROID)
     elseif (IPL_CPU_X86)
         set(UNREAL_FMOD_PLUGIN_DIR ${CMAKE_HOME_DIRECTORY}/../unreal/src/SteamAudioUnreal/Plugins/FMODStudio/Binaries/Android/x86)
     endif()
+elseif (IPL_OS_IOS)
+    set(UNREAL_FMOD_PLUGIN_DIR ${CMAKE_HOME_DIRECTORY}/../unreal/src/SteamAudioUnreal/Plugins/FMODStudio/Binaries/IOS)
 endif()
 
 if (NOT UNREAL_FMOD_PLUGIN_DIR STREQUAL "")
@@ -227,4 +231,6 @@ elseif (IPL_OS_LINUX OR IPL_OS_ANDROID)
         FILES       ${CMAKE_HOME_DIRECTORY}/lib/${IPL_BIN_SUBDIR}/libphonon.so
         DESTINATION lib/${IPL_BIN_SUBDIR}
     )
+elseif (IPL_OS_IOS)
+    # todo: install libphonon.a?
 endif()

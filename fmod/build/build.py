@@ -22,7 +22,7 @@ def detect_host_system():
 # Parses the command line.
 def parse_command_line(host_system):
     parser = argparse.ArgumentParser()
-    parser.add_argument('-p', '--platform', help = "Target operating system.", choices = ['windows', 'osx', 'linux', 'android'], type = str.lower, default = host_system)
+    parser.add_argument('-p', '--platform', help = "Target operating system.", choices = ['windows', 'osx', 'linux', 'android', 'ios'], type = str.lower, default = host_system)
     parser.add_argument('-t', '--toolchain', help = "Compiler toolchain. (Windows only)", choices = ['vs2013', 'vs2015', 'vs2017', 'vs2019', 'vs2022'], type = str.lower, default = 'vs2019')
     parser.add_argument('-a', '--architecture', help = "CPU architecture.", choices = ['x86', 'x64', 'armv7', 'arm64'], type = str.lower, default = 'x64')
     parser.add_argument('-c', '--configuration', help = "Build configuration.", choices = ['debug', 'release'], type = str.lower, default = 'release')
@@ -34,7 +34,7 @@ def parse_command_line(host_system):
 def build_subdir(args):
     if args.platform == 'windows':
         return "-".join([args.platform, args.toolchain, args.architecture])
-    elif args.platform == 'osx':
+    elif args.platform in ['osx', 'ios']:
         return args.platform
     elif args.platform in ['linux', 'android']:
         return "-".join([args.platform, args.architecture, args.configuration])
@@ -43,7 +43,7 @@ def build_subdir(args):
 def bin_subdir(args):
     if args.platform in ['windows', 'linux', 'android']:
         return "-".join([args.platform, args.architecture])
-    elif args.platform == 'osx':
+    elif args.platform in ['osx', 'ios']:
         return "-".join([args.platform])
 
 # Returns the root directory of the repository.
@@ -68,7 +68,7 @@ def generator_name(args):
         elif args.toolchain == 'vs2022':
             generator = 'Visual Studio 17 2022'
         return generator + suffix
-    elif args.platform == 'osx':
+    elif args.platform in ['osx', 'ios']:
         return 'Xcode'
     elif args.platform in ['linux', 'android']:
         return 'Unix Makefiles'
@@ -114,6 +114,10 @@ def cmake_generate(args):
             cmake_args += ['-DCMAKE_ANDROID_NDK=' + os.environ.get('ANDROID_NDK')]
             cmake_args += ['-DCMAKE_MAKE_PROGRAM=' + os.environ.get('ANDROID_NDK') + '/prebuilt/windows-x86_64/bin/make.exe']
 
+    # On iOS, specify the toolchain file.
+    if args.platform in ['ios']:
+        cmake_args += ['-DCMAKE_TOOLCHAIN_FILE=' + root_dir() + '/build/toolchain_ios.cmake']
+
     # On Linux and Android, specify the build configuration at generate-time.
     if args.platform in ['linux', 'android']:
         cmake_args += ['-DCMAKE_BUILD_TYPE=' + config_name(args)]
@@ -146,7 +150,7 @@ def cmake_generate(args):
 def cmake_build(args):
     cmake_args = ['--build', '.']
 
-    if args.platform in ['windows', 'osx']:
+    if args.platform in ['windows', 'osx', 'ios']:
         cmake_args += ['--config', config_name(args)]
 
     run_cmake('cmake', cmake_args)
@@ -155,7 +159,7 @@ def cmake_build(args):
 def cmake_install(args):
     cmake_args = ['--install', '.']
 
-    if args.platform in ['windows', 'osx']:
+    if args.platform in ['windows', 'osx', 'ios']:
         cmake_args += ['--config', config_name(args)]
 
     run_cmake('cmake', cmake_args)
@@ -164,7 +168,7 @@ def cmake_install(args):
 def cmake_package(args):
     cmake_args = ['-G', 'ZIP']
 
-    if args.platform in ['windows', 'osx']:
+    if args.platform in ['windows', 'osx', 'ios']:
         cmake_args += ['-C', config_name(args)]
 
     run_cmake('cpack', cmake_args)

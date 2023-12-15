@@ -12,6 +12,7 @@ The Steam Audio Unreal Engine integration supports the following platforms:
 -  Linux (64-bit, tested with Ubuntu 18.04 LTS)
 -  macOS 10.7 or later (64-bit Intel)
 -  Android 5.0 or later (32-bit ARM, 64-bit ARM, 32-bit Intel)
+-  iOS 11.0 or later (64-bit ARM)
 
 .. note::
     The Steam Audio Unreal Engine integration currently does not ship with macOS binaries. However, opening a project containing the Steam Audio plugin in the Unreal Editor will automatically trigger a rebuild of the plugin for macOS, after which the plugin should work normally on macOS systems. This issue will be resolved in a future patch release of Steam Audio.

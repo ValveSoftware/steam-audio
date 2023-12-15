@@ -5,6 +5,8 @@
 
 #include "steamaudio_fmod.h"
 
+namespace SteamAudioFMOD {
+
 namespace ReverbEffect {
 
 /**
@@ -347,3 +349,5 @@ FMOD_DSP_DESCRIPTION gReverbEffect
     nullptr,
     nullptr
 };
+
+}

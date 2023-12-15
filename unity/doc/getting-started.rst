@@ -12,6 +12,7 @@ The Steam Audio Unity integration supports the following platforms:
 -  Linux (32-bit and 64-bit, tested with Ubuntu 18.04 LTS)
 -  macOS 10.7 or later (64-bit Intel)
 -  Android 5.0 or later (32-bit ARM, 64-bit ARM, 32-bit Intel)
+-  iOS 11.0 or later (64-bit ARM)
 
 .. note::
 

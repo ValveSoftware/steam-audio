@@ -5,6 +5,7 @@
 #if STEAMAUDIO_ENABLED
 
 using System;
+using System.Reflection;
 using UnityEngine;
 using SteamAudio;
 
@@ -34,10 +35,16 @@ namespace SteamAudio
             case AudioEngineType.Unity:
                 return new UnityAudioEngineState();
             case AudioEngineType.FMODStudio:
-                return new FMODStudioAudioEngineState();
+                return CreateFMODStudioAudioEngineState();
             default:
                 return null;
             }
+        }
+
+        private static AudioEngineState CreateFMODStudioAudioEngineState()
+        {
+            var type = Type.GetType("SteamAudio.FMODStudioAudioEngineState,SteamAudioUnity");
+            return (type != null) ? (AudioEngineState) Activator.CreateInstance(type) : null;
         }
     }
 
@@ -54,10 +61,16 @@ namespace SteamAudio
                 case AudioEngineType.Unity:
                     return new UnityAudioEngineStateHelpers();
                 case AudioEngineType.FMODStudio:
-                    return new FMODStudioAudioEngineStateHelpers();
+                    return CreateFMODStudioAudioEngineStateHelpers();
                 default:
                     return null;
             }
+        }
+
+        private static AudioEngineStateHelpers CreateFMODStudioAudioEngineStateHelpers()
+        {
+            var type = Type.GetType("SteamAudio.FMODStudioAudioEngineStateHelpers,SteamAudioUnity");
+            return (type != null) ? (AudioEngineStateHelpers) Activator.CreateInstance(type) : null;
         }
     }
 }

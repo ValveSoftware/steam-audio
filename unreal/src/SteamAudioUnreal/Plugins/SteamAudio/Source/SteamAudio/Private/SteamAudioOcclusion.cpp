@@ -255,7 +255,8 @@ bool FSteamAudioOcclusionPluginFactory::SupportsPlatform(const FString& Platform
     return PlatformName == FString(TEXT("Windows")) ||
         PlatformName == FString(TEXT("Linux")) ||
         PlatformName == FString(TEXT("Mac")) ||
-        PlatformName == FString(TEXT("Android"));
+        PlatformName == FString(TEXT("Android")) ||
+        PlatformName == FString(TEXT("IOS"));
 }
 
 UClass* FSteamAudioOcclusionPluginFactory::GetCustomOcclusionSettingsClass() const

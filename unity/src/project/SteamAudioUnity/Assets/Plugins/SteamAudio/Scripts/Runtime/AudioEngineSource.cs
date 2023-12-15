@@ -4,6 +4,8 @@
 //
 #if STEAMAUDIO_ENABLED
 
+using System;
+using System.Reflection;
 using UnityEngine;
 
 namespace SteamAudio
@@ -29,10 +31,16 @@ namespace SteamAudio
             case AudioEngineType.Unity:
                 return new UnityAudioEngineSource();
             case AudioEngineType.FMODStudio:
-                return new FMODStudioAudioEngineSource();
+                return CreateFMODStudioAudioEngineSource();
             default:
                 return null;
             }
+        }
+
+        private static AudioEngineSource CreateFMODStudioAudioEngineSource()
+        {
+            var type = Type.GetType("SteamAudio.FMODStudioAudioEngineSource,SteamAudioUnity");
+            return (type != null) ? (AudioEngineSource) Activator.CreateInstance(type) : null;
         }
     }
 }

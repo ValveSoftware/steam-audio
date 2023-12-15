@@ -16,6 +16,8 @@
 
 #include <phonon.h>
 
+namespace SteamAudioFMOD {
+
 namespace Library
 {
     void getLoadingBinaryPath(char* loadingBinaryPath,
@@ -62,3 +64,5 @@ struct API
 };
 
 const API& gAPI();
+
+}

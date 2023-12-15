@@ -5,6 +5,8 @@
 
 #include "steamaudio_unity_native.h"
 
+namespace SteamAudioUnity {
+
 namespace AmbisonicDecoderEffect {
 
 enum Params
@@ -385,3 +387,5 @@ UnityAudioEffectDefinition gAmbisonicDecoderEffectDefinition
     AmbisonicDecoderEffect::getParam,
     nullptr
 };
+
+}

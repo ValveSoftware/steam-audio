@@ -5,6 +5,8 @@
 
 #include "steamaudio_unity_native.h"
 
+namespace SteamAudioUnity {
+
 namespace ReverbEffect {
 
 enum Params
@@ -369,3 +371,5 @@ UnityAudioEffectDefinition gReverbEffectDefinition
     ReverbEffect::getParam,
     nullptr
 };
+
+}

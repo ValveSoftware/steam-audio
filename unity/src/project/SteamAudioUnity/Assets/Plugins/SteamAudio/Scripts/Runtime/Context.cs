@@ -20,6 +20,11 @@ namespace SteamAudio
             contextSettings.logCallback = LogMessage;
             contextSettings.simdLevel = SIMDLevel.AVX2;
 
+            if (SteamAudioSettings.Singleton.EnableValidation)
+            {
+                contextSettings.flags = contextSettings.flags | ContextFlags.Validation;
+            }
+
             var status = API.iplContextCreate(ref contextSettings, out mContext);
             if (status != Error.Success)
                 throw new Exception(string.Format("Unable to create context. [{0}]", status));

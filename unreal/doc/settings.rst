@@ -170,5 +170,8 @@ HRTF Normalization Type
 SOFA File
     An imported SOFA file to use as a custom HRTF. The SOFA file be loaded at app startup. If the load fails, Steam Audio will revert to using its built-in HRTF.
 
+Enable Validation
+    If checked, Steam Audio will perform several extra validation checks while doing any processing. Note that this will significantly increase CPU usage, since Steam Audio will check all input and output buffers, as well as most function parameters for invalid values. Use this only when trying to diagnose issues.
+
 .. |reg|    unicode:: U+000AE .. REGISTERED SIGN
 .. |tm|     unicode:: U+2122  .. TRADE MARK SIGN

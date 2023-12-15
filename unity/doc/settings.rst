@@ -14,9 +14,9 @@ Audio Engine
 
 Enable Perspective Correction
     If checked, enables *perspective correction* for spatialized sound sources. When perspective correction is enabled, instead of spatializing sounds from their world-space position relative to the listener, sounds are spatialized from their *on-screen position* relative to the *user*. This can improve perceived localization accuracy in 3D non-VR applications.
-    
+
     To apply perspective correction, you must also check **Perspective Correction** on each **Steam Audio Source** to which you want to apply perspective correction. Some sounds, e.g. spatialized UI sounds, may not need perspective correction.
-    
+
     Perspective correction works by using the main camera's projection matrix to adjust source positions before applying spatialization. In addition to the projection matrix, Steam Audio also needs a measure of the screen/viewport size as seen at the user's position. This is controlled by adjusting the **Perspective Correction Factor**.
 
     This setting should not be checked for VR applications.
@@ -176,6 +176,9 @@ TAN Ambisonic Order
 
 TAN Max Sources
     Overrides the value of **Real Time Max Sources** when **Reflection Effect Type** is set to **TrueAudio Next**.
+
+Enable Validation
+    If checked, Steam Audio will perform several extra validation checks while doing any processing. Note that this will significantly increase CPU usage, since Steam Audio will check all input and output buffers, as well as most function parameters for invalid values. Use this only when trying to diagnose issues.
 
 .. |reg|    unicode:: U+000AE .. REGISTERED SIGN
 .. |tm|     unicode:: U+2122  .. TRADE MARK SIGN

@@ -14,6 +14,8 @@
 #define MAX_PATH 260
 #endif
 
+namespace SteamAudioFMOD {
+
 #if defined(IPL_OS_WINDOWS)
 const wchar_t* gLoadingBinaryNames[] = {
     L"phonon_fmod.dll",
@@ -219,4 +221,6 @@ const API& gAPI()
 {
     static API api{};
     return api;
+}
+
 }

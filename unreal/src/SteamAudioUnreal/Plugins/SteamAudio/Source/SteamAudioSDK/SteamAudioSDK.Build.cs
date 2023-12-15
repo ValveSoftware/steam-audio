@@ -62,5 +62,11 @@ public class SteamAudioSDK : ModuleRules
             string APLPathRelativeToEngine = Utils.MakePathRelativeTo(System.IO.Path.Combine(ModuleDirectory, APLName), Target.RelativeEnginePath);
             AdditionalPropertiesForReceipt.Add("AndroidPlugin", APLPathRelativeToEngine);
         }
+        if (Target.Platform == UnrealTargetPlatform.IOS)
+        {
+            PublicAdditionalLibraries.Add("$(PluginDir)/Source/SteamAudioSDK/lib/ios/libpffft.a");
+            PublicAdditionalLibraries.Add("$(PluginDir)/Source/SteamAudioSDK/lib/ios/libmysofa.a");
+            PublicAdditionalLibraries.Add("$(PluginDir)/Source/SteamAudioSDK/lib/ios/libphonon.a");
+        }
     }
 }

@@ -71,6 +71,8 @@ UNITY_AUDIODSP_EXPORT_API void UNITY_AUDIODSP_CALLBACK iplUnityRemoveSource(IPLi
 
 }
 
+namespace SteamAudioUnity {
+
 #if !defined(IPL_OS_UNSUPPORTED)
 
 // --------------------------------------------------------------------------------------------------------------------
@@ -187,3 +189,5 @@ private:
 };
 
 #endif
+
+}

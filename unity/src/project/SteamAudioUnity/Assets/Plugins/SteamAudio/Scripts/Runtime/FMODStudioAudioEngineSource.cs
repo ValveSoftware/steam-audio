@@ -41,7 +41,7 @@ namespace SteamAudio
             mSteamAudioSource = gameObject.GetComponent<SteamAudioSource>();
             if (mSteamAudioSource)
             {
-                mHandle = API.iplFMODAddSource(mSteamAudioSource.GetSource().Get());
+                mHandle = FMODStudioAPI.iplFMODAddSource(mSteamAudioSource.GetSource().Get());
             }
         }
 
@@ -51,7 +51,7 @@ namespace SteamAudio
 
             if (mSteamAudioSource)
             {
-                API.iplFMODRemoveSource(mHandle);
+                FMODStudioAPI.iplFMODRemoveSource(mHandle);
             }
         }
 

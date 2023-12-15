@@ -54,6 +54,10 @@ To build the Android plugin, you will need:
 -   Android SDK for platform 25 (Android 7.1 Nougat) or later (https://developer.android.com/studio)
 -   Android NDK (install using the Android SDK Manager)
 
+To build the iOS plugin, you will need:
+
+-   Xcode 14.0 or later (install from the Mac App Store)
+
 To build the documentation, you will need:
 
 -   Sphinx (https://www.sphinx-doc.org)
@@ -117,6 +121,7 @@ Option                              Description
 ``STEAMAUDIO_CROSSCOMPILE_WIN32``   ``TRUE`` if you want to compile for 32-bit Windows, ``FALSE`` otherwise.
 ``STEAMAUDIO_CROSSCOMPILE_LINUX``   ``TRUE`` if you want to cross-compile for Linux on Windows, ``FALSE`` otherwise.
 ``STEAMAUDIO_CROSSCOMPILE_ANDROID`` ``TRUE`` if you want to cross-compile for Android on Windows, ``FALSE`` otherwise.
+``STEAMAUDIO_CROSSCOMPILE_IOS``     ``TRUE`` if you want to cross-compile for iOS on macOS, ``FALSE`` otherwise.
 ``Sphinx_EXECUTABLE_DIR``           Absolute path to the directory containing the Sphinx executable.
 ``Unreal_EXECUTABLE_DIR``           Absolute path to the directory containing the UnrealBuildTool executable.
 =================================== ===================================================================================

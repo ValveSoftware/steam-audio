@@ -71,8 +71,10 @@ void FSteamAudioModule::StartupModule()
 #endif
 
     // Make sure the DLL is loaded.
+#if !PLATFORM_IOS
     Library = FPlatformProcess::GetDllHandle(*LibraryPath);
     check(Library);
+#endif
 
     // Initialize plugin factories. This allows the plugins to be selected in the platform settings.
     SpatializationPluginFactory = MakeUnique<FSteamAudioSpatializationPluginFactory>();
@@ -133,6 +135,7 @@ void FSteamAudioModule::OnPIEStarted(bool bSimulating)
     {
         if (Manager)
         {
+            Manager->ShutDownSteamAudio();
             Manager->InitializeSteamAudio(EManagerInitReason::PLAYING);
         }
     }

@@ -3,7 +3,7 @@
 
 cmake_minimum_required(VERSION 3.17)
 
-project(Phonon VERSION 4.4.1)
+project(Phonon VERSION 4.5.0)
 
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_MODULE_PATH "${CMAKE_HOME_DIRECTORY}/build")
@@ -22,6 +22,8 @@ elseif (APPLE AND CMAKE_SYSTEM_NAME STREQUAL "Darwin")
     set(IPL_OS_MACOS TRUE)
 elseif (ANDROID)
     set(IPL_OS_ANDROID TRUE)
+elseif (APPLE AND CMAKE_SYSTEM_NAME STREQUAL "iOS")
+    set(IPL_OS_IOS TRUE)
 endif()
 
 # CPU architecture detection
@@ -42,6 +44,8 @@ elseif (IPL_OS_ANDROID)
     elseif (CMAKE_ANDROID_ARCH STREQUAL "x86_64")
         set(IPL_CPU_X64 TRUE)
     endif()
+elseif (IPL_OS_IOS)
+    set(IPL_CPU_ARMV8 TRUE)
 endif()
 
 
@@ -59,6 +63,7 @@ option(STEAMAUDIOUNREAL_TARGET_UE4 "Compile using target names for Unreal Engine
 option(STEAMAUDIOUNREAL_CROSSCOMPILE_WIN32 "Cross-compile for Win32 on Win64." OFF)
 option(STEAMAUDIOUNREAL_CROSSCOMPILE_LINUX "Cross-compile for Linux on Win64." OFF)
 option(STEAMAUDIOUNREAL_CROSSCOMPILE_ANDROID "Cross-compile for Android on Win64." OFF)
+option(STEAMAUDIOUNREAL_CROSSCOMPILE_IOS "Cross-compile for iOS on Mac." OFF)
 
 # Options for all platforms
 option(STEAMAUDIOUNREAL_BUILD_DOCS "Build documentation." OFF)
@@ -85,6 +90,9 @@ if (IPL_OS_MACOS)
 endif()
 if (IPL_OS_ANDROID)
     add_definitions(-DIPL_OS_ANDROID)
+endif()
+if (IPL_OS_IOS)
+    add_definitions(-DIPL_OS_IOS)
 endif()
 
 if (IPL_CPU_X86)
@@ -141,6 +149,7 @@ endif()
 # macOS flags
 if (IPL_OS_MACOS)
     set(CMAKE_OSX_ARCHITECTURES "x86_64;arm64")
+    set(CMAKE_OSX_DEPLOYMENT_TARGET "10.13")
     add_compile_options(-Wno-extern-c-compat) # Suppress warning about empty API structs.
 endif()
 
@@ -149,6 +158,9 @@ if (IPL_OS_ANDROID)
     add_compile_options(-fPIC -g $<$<CONFIG:Release>:-O3>)
     add_link_options(-static-libstdc++)
 endif()
+
+# iOS flags
+# todo
 
 
 #

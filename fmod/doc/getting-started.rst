@@ -1,6 +1,8 @@
 Getting Started
 ===============
 
+.. highlight:: c++
+
 Requirements
 ------------
 
@@ -12,6 +14,7 @@ The Steam Audio FMOD Studio integration supports the following platforms:
 -  Linux (32-bit and 64-bit, tested with Ubuntu 18.04 LTS)
 -  macOS 10.7 or later (64-bit Intel)
 -  Android 5.0 or later (32-bit ARM, 64-bit ARM, 32-bit Intel)
+-  iOS 11.0 or later (64-bit ARM)
 
 
 Add Steam Audio to your FMOD Studio project
@@ -65,6 +68,18 @@ If you are using Unity as your game engine, see the Unity tab below. If you are 
 
         .. image:: media/unity_fmodsettings.png
 
+        If you are building for iOS, do the following instead:
+
+        1.  In Unity's main menu, click **FMOD** > **Edit Settings**.
+        2.  Under **Static Plugins**, click **Add Plugin**.
+        3.  In the text box that appears, enter ``FMOD_SteamAudio_Spatialize_GetDSPDescription``.
+        4.  Click **Add Plugin** again.
+        5.  In the text box that appears, enter ``FMOD_SteamAudio_MixerReturn_GetDSPDescription``.
+        6.  Click **Add Plugin** again.
+        7.  In the text box that appears, enter ``FMOD_SteamAudio_Reverb_GetDSPDescription``.
+
+        You can configure these static plugins as a platform-specific override for iOS, while using the ``phonon_fmod`` dynamic plugin on other platforms. For more information on how to do this, refer to the documentation for the FMOD Studio Unity integration.
+
         .. rubric:: Configure the Steam Audio Unity integration to use FMOD Studio
 
         1.  In Unity's main menu, click **Steam Audio** > **Settings**.
@@ -91,6 +106,29 @@ If you are using Unity as your game engine, see the Unity tab below. If you are 
 
         .. image:: media/unreal_fmodsettings.png
 
+        If you are building for iOS, the version of the FMOD Studio Unreal Engine plugin you are using may not correctly initialize static DSP plugins, leading to errors at runtime. As a workaround, you can modify the ``Source/FMODStudio/Private/FMODStudioModule.cpp`` file in the FMOD Studio plugin's root directory:
+
+        1.  Near the top of the file, after all the ``#include`` directives, add::
+
+                #if PLATFORM_IOS
+                extern "C" {
+                FMOD_DSP_DESCRIPTION* F_CALL FMOD_SteamAudio_Spatialize_GetDSPDescription();
+                FMOD_DSP_DESCRIPTION* F_CALL FMOD_SteamAudio_MixerReturn_GetDSPDescription();
+                FMOD_DSP_DESCRIPTION* F_CALL FMOD_SteamAudio_Reverb_GetDSPDescription();
+                }
+                #endif
+
+        2.  Next, in the ``FFMODStudioModule::CreateStudioSystem`` function, add the following lines after the code for loading dynamic plugins::
+
+                #if PLATFORM_IOS
+                    unsigned int Handle = 0;
+                    lowLevelSystem->registerDSP(FMOD_SteamAudio_Spatialize_GetDSPDescription(), &Handle);
+                    lowLevelSystem->registerDSP(FMOD_SteamAudio_MixerReturn_GetDSPDescription(), &Handle);
+                    lowLevelSystem->registerDSP(FMOD_SteamAudio_Reverb_GetDSPDescription(), &Handle);
+                #endif
+
+        This issue may be fixed in a newer version of FMOD Studio.
+
         .. rubric:: Configure the Steam Audio Unreal Engine plugin to use FMOD Studio
 
         1.  In Unreal's main menu, click **Edit** > **Project Settings**.
@@ -104,16 +142,31 @@ If you are using Unity as your game engine, see the Unity tab below. If you are 
 
         .. rubric:: Load the Steam Audio FMOD Studio integration
 
-        1.  When initializing FMOD Studio in your game engine, call ``FMOD::System::loadPlugin`` to load the Steam Audio FMOD Studio integration. The plugin files can be found in the ``steamaudio_fmod.zip`` file you downloaded earlier. The file name of the plugin depends on the platform:
+        When initializing FMOD Studio in your game engine, call ``FMOD::System::loadPlugin`` to load the Steam Audio FMOD Studio integration. The plugin files can be found in the ``steamaudio_fmod.zip`` file you downloaded earlier. The file name of the plugin depends on the platform:
 
-            -   Windows 32-bit: ``lib/windows-x86/phonon_fmod.dll``
-            -   Windows 64-bit: ``lib/windows-x64/phonon_fmod.dll``
-            -   Linux 32-bit: ``lib/linux-x86/libphonon_fmod.so``
-            -   Linux 64-bit: ``lib/linux-x64/libphonon_fmod.so``
-            -   macOS: ``lib/osx/libphonon_fmod.dylib``
-            -   Android ARMv7 (32-bit): ``lib/android-armv7/libphonon_fmod.so``
-            -   Android ARMv8/AArch64 (64-bit): ``lib/android-armv8/libphonon_fmod.so``
-            -   Android x86 (32-bit): ``lib/android-x86/libphonon_fmod.so``
+        -   Windows 32-bit: ``lib/windows-x86/phonon_fmod.dll``
+        -   Windows 64-bit: ``lib/windows-x64/phonon_fmod.dll``
+        -   Linux 32-bit: ``lib/linux-x86/libphonon_fmod.so``
+        -   Linux 64-bit: ``lib/linux-x64/libphonon_fmod.so``
+        -   macOS: ``lib/osx/libphonon_fmod.dylib``
+        -   Android ARMv7 (32-bit): ``lib/android-armv7/libphonon_fmod.so``
+        -   Android ARMv8/AArch64 (64-bit): ``lib/android-armv8/libphonon_fmod.so``
+        -   Android x86 (32-bit): ``lib/android-x86/libphonon_fmod.so``
+
+        On iOS, instead of calling ``FMOD::System::loadPlugin``, you will have to statically link to ``lib/ios/libphonon_fmod.a`` and use ``FMOD::System::registerDSP`` to register each of the Steam Audio DSP plugins. For example::
+
+            extern "C" {
+            FMOD_DSP_DESCRIPTION* F_CALL FMOD_SteamAudio_Spatialize_GetDSPDescription();
+            FMOD_DSP_DESCRIPTION* F_CALL FMOD_SteamAudio_MixerReturn_GetDSPDescription();
+            FMOD_DSP_DESCRIPTION* F_CALL FMOD_SteamAudio_Reverb_GetDSPDescription();
+            }
+
+            FMOD::System* system = ...; // initialized elsewhere
+
+            unsigned int handle = 0;
+            system->registerDSP(FMOD_SteamAudio_Spatialize_GetDSPDescription(), &handle);
+            system->registerDSP(FMOD_SteamAudio_MixerReturn_GetDSPDescription(), &handle);
+            system->registerDSP(FMOD_SteamAudio_Reverb_GetDSPDescription(), &handle);
 
         .. rubric:: Initialize the Steam Audio FMOD Studio integration
 

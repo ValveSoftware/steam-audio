@@ -11,6 +11,8 @@
 
 #include "steamaudio_fmod.h"
 
+namespace SteamAudioFMOD {
+
 extern std::shared_ptr<SourceManager> gSourceManager;
 
 namespace SpatializeEffect {
@@ -1461,3 +1463,5 @@ FMOD_DSP_DESCRIPTION gSpatializeEffect =
     nullptr,
     nullptr
 };
+
+}

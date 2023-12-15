@@ -4,9 +4,14 @@
 //
 
 using System;
+using UnityEngine; // deleteme?
 using UnityEditor;
 #if UNITY_2021_2_OR_NEWER
 using UnityEditor.Build;
+#endif
+using UnityEditor.Callbacks;
+#if UNITY_IOS
+using UnityEditor.iOS.Xcode;
 #endif
 
 namespace SteamAudio
@@ -42,13 +47,48 @@ namespace SteamAudio
             NamedBuildTarget[] supportedPlatforms = {
                 NamedBuildTarget.Standalone,
                 NamedBuildTarget.Android,
+                NamedBuildTarget.iOS,
             };
 
             foreach (var supportedPlatform in supportedPlatforms)
             {
-                PlayerSettings.SetScriptingDefineSymbols(supportedPlatform, "STEAMAUDIO_ENABLED");
+                var defines = PlayerSettings.GetScriptingDefineSymbols(supportedPlatform);
+                if (!defines.Contains("STEAMAUDIO_ENABLED"))
+                {
+                    if (defines.Length > 0)
+                    {
+                        defines += ";";
+                    }
+
+                    defines += "STEAMAUDIO_ENABLED";
+
+                    PlayerSettings.SetScriptingDefineSymbols(supportedPlatform, defines);
+                }
             }
 #endif
+        }
+    }
+
+    public static class BuildProcessor
+    {
+        [PostProcessBuild]
+        public static void OnPostProcessBuild(BuildTarget buildTarget, string buildPath)
+        {
+            if (buildTarget == BuildTarget.iOS)
+            {
+#if UNITY_IOS
+                var projectPath = PBXProject.GetPBXProjectPath(buildPath);
+
+                var project = new PBXProject();
+                project.ReadFromFile(projectPath);
+
+                var file = project.AddFile("usr/lib/libz.tbd", "Frameworks/libz.tbd", PBXSourceTree.Sdk);
+                var target = project.TargetGuidByName("UnityFramework");
+                project.AddFileToBuild(target, file);
+
+                project.WriteToFile(projectPath);
+#endif
+            }
         }
     }
 }
