@@ -4,7 +4,7 @@ Valve Corporation
 
 ## Supported Platforms
 
-Steam Audio supports Windows (32 bit and 64 bit), Linux (32 bit and 64 bit), macOS, and Android (armv7, arm64, x86, x64) platforms.
+Steam Audio supports Windows (32 bit and 64 bit), Linux (32 bit and 64 bit), macOS, Android (armv7, arm64, x86, x64), and iOS platforms.
 
 ## Supported Integrations
 
