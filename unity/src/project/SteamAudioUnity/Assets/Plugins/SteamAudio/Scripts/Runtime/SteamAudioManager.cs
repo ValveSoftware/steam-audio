@@ -193,9 +193,14 @@ namespace SteamAudio
             return reflectionEffectType;
         }
 
-        public static PerspectiveCorrection GetPerspectiveCorrection()
+        public static PerspectiveCorrection GetPerspectiveCorrection() 
         {
-            PerspectiveCorrection correction;
+            if (!SteamAudioSettings.Singleton.perspectiveCorrection) 
+            {
+                return default;
+            }
+
+            PerspectiveCorrection correction = default;
             if (Camera.main != null && Camera.main.aspect > .0f)
             {
                 correction.enabled = SteamAudioSettings.Singleton.perspectiveCorrection ? Bool.True : Bool.False;
@@ -204,13 +209,6 @@ namespace SteamAudio
 
                 // Camera space matches OpenGL convention. No need to transform matrix to ConvertTransform.
                 correction.transform = Common.TransformMatrix(Camera.main.projectionMatrix * Camera.main.worldToCameraMatrix);
-            }
-            else
-            {
-                correction.enabled = Bool.False;
-                correction.xfactor = 1.0f;
-                correction.yfactor = 1.0f;
-                correction.transform = Common.TransformMatrix(UnityEngine.Matrix4x4.identity);
             }
 
             return correction;
