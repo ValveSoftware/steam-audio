@@ -67,6 +67,7 @@ namespace SteamAudio
         bool mSimulationCompleted = false;
         float mSimulationUpdateTimeElapsed = 0.0f;
         bool mSceneCommitRequired = false;
+        Camera mainCamera;
 
         static SteamAudioManager sSingleton = null;
 
