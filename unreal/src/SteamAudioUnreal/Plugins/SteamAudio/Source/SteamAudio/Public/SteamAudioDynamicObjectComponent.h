@@ -1,5 +1,5 @@
 //
-// Copyright (C) Valve Corporation. All rights reserved.
+// Copyright 2017-2023 Valve Corporation.
 //
 
 #pragma once
@@ -35,7 +35,7 @@ public:
 
     /** Called once every frame. */
     virtual void TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
-    
+
     FSoftObjectPath GetAssetToLoad();
 
 protected:

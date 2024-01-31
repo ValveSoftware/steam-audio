@@ -1,5 +1,5 @@
 //
-// Copyright (C) Valve Corporation. All rights reserved.
+// Copyright 2017-2023 Valve Corporation.
 //
 
 #include "SteamAudioSourceComponentVisualizer.h"
@@ -27,7 +27,7 @@ FSteamAudioSourceComponentVisualizer::FSteamAudioSourceComponentVisualizer()
     , PrevDipolePower(0.0f)
 {}
 
-void FSteamAudioSourceComponentVisualizer::DrawVisualization(const UActorComponent* Component, 
+void FSteamAudioSourceComponentVisualizer::DrawVisualization(const UActorComponent* Component,
     const FSceneView* View, FPrimitiveDrawInterface* PDI)
 {
     const USteamAudioSourceComponent* SourceComponent = Cast<USteamAudioSourceComponent>(Component);

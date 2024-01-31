@@ -1,5 +1,5 @@
 //
-// Copyright (C) Valve Corporation. All rights reserved.
+// Copyright 2017-2023 Valve Corporation.
 //
 
 #include "SteamAudioStaticMeshActor.h"
@@ -40,7 +40,7 @@ void ASteamAudioStaticMeshActor::BeginPlay()
         iplSceneRelease(&Scene);
         return;
     }
-     
+
     iplStaticMeshAdd(StaticMesh, Scene);
 }
 

@@ -1,5 +1,5 @@
 //
-// Copyright (C) Valve Corporation. All rights reserved.
+// Copyright 2017-2023 Valve Corporation.
 //
 
 #pragma once
@@ -34,7 +34,7 @@ public:
 	/** Volume correction factor. */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = HRTFSettings, meta = (DisplayName = "Volume Gain (dB)", UIMin = "-12.0", UIMax = "12.0"))
 	float Volume;
-    
+
     /** HRTF normalization algorithm. */
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = HRTFSettings)
     EHRTFNormType NormalizationType;

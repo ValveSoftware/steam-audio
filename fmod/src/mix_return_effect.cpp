@@ -1,5 +1,5 @@
 //
-// Copyright 2017 Valve Corporation. All rights reserved. Subject to the following license:
+// Copyright 2017-2023 Valve Corporation. Subject to the following license:
 // https://valvesoftware.github.io/steam-audio/license.html
 //
 
@@ -17,7 +17,7 @@ enum Params
     /**
      *  **Type**: `FMOD_DSP_PARAMETER_TYPE_BOOL`
      *
-     *  If true, applies HRTF-based 3D audio rendering to mixed reflected sound. Results in an improvement in 
+     *  If true, applies HRTF-based 3D audio rendering to mixed reflected sound. Results in an improvement in
      *  spatialization quality, at the cost of slightly increased CPU usage.
      */
     BINAURAL,
@@ -279,7 +279,7 @@ FMOD_RESULT F_CALL process(FMOD_DSP_STATE* state,
 
         iplAudioBufferDeinterleave(gContext, in, &effect->inBuffer);
         iplAudioBufferMix(gContext, &effect->inBuffer, &effect->outBuffer);
-        
+
         iplAudioBufferInterleave(gContext, &effect->outBuffer, out);
 
         return FMOD_OK;
@@ -291,12 +291,12 @@ FMOD_RESULT F_CALL process(FMOD_DSP_STATE* state,
 }
 
 /** Descriptor for the Mixer Return effect. */
-FMOD_DSP_DESCRIPTION gMixerReturnEffect 
+FMOD_DSP_DESCRIPTION gMixerReturnEffect
 {
     FMOD_PLUGIN_SDK_VERSION,
     "Steam Audio Mixer Return",
     STEAMAUDIO_FMOD_VERSION,
-    1, 
+    1,
     1,
     MixerReturnEffect::create,
     MixerReturnEffect::release,

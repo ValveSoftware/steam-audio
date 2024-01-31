@@ -1,5 +1,5 @@
 ﻿//
-// Copyright 2017 Valve Corporation. All rights reserved. Subject to the following license:
+// Copyright 2017-2023 Valve Corporation. Subject to the following license:
 // https://valvesoftware.github.io/steam-audio/license.html
 //
 #if STEAMAUDIO_ENABLED
@@ -79,7 +79,7 @@ namespace SteamAudio
                     // when FindDSP is called next.
                     mFoundDSP = false;
                 }
-            } 
+            }
             else
             {
                 // We haven't yet seen a valid event emitter component, so make sure we look for one when

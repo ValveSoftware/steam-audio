@@ -1,5 +1,5 @@
 //
-// Copyright 2017 Valve Corporation. All rights reserved. Subject to the following license:
+// Copyright 2017-2023 Valve Corporation. Subject to the following license:
 // https://valvesoftware.github.io/steam-audio/license.html
 //
 
@@ -85,7 +85,7 @@ UnityAudioParameterDefinition gParamDefinitions[] =
     { "SimOutHigh", "", "Simulation outputs (upper 32 bits).", -std::numeric_limits<float>::max(), std::numeric_limits<float>::max(), 0.0f, 1.0f, 1.0f },
     { "DirectBinaural", "", "Apply HRTF to direct path.", 0.0f, 1.0f, 1.0f, 1.0f, 1.0f },
     { "SimOutHandle", "", "Simulation outputs handle.", std::numeric_limits<float>::min(), std::numeric_limits<float>::max(), -1.0f, 1.0f, 1.0f },
-    { "PerspectiveCorr", "", "Apply perspective correction to direct path.", 0.0f, 1.0f, 0.0f, 1.0f, 1.0f }, 
+    { "PerspectiveCorr", "", "Apply perspective correction to direct path.", 0.0f, 1.0f, 0.0f, 1.0f, 1.0f },
 };
 
 #if !defined(IPL_OS_UNSUPPORTED)
@@ -279,10 +279,10 @@ InitFlags lazyInit(UnityAudioEffectState* state,
     {
         if (!effect->inBuffer.data)
             iplAudioBufferAllocate(gContext, numChannelsIn, audioSettings.frameSize, &effect->inBuffer);
-        
+
         if (!effect->outBuffer.data)
             iplAudioBufferAllocate(gContext, numChannelsOut, audioSettings.frameSize, &effect->outBuffer);
-        
+
         if (!effect->directBuffer.data)
             iplAudioBufferAllocate(gContext, numChannelsIn, audioSettings.frameSize, &effect->directBuffer);
 
@@ -297,7 +297,7 @@ InitFlags lazyInit(UnityAudioEffectState* state,
 
             if (!effect->reflectionsBuffer.data)
                 iplAudioBufferAllocate(gContext, numAmbisonicChannels, audioSettings.frameSize, &effect->reflectionsBuffer);
-            
+
             if (!effect->reflectionsSpatializedBuffer.data)
                 iplAudioBufferAllocate(gContext, numChannelsOut, audioSettings.frameSize, &effect->reflectionsSpatializedBuffer);
 
@@ -325,7 +325,7 @@ UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK recordDistanceAttenuation(UnityAud
     {
         effect->distanceAttenuationCurveValue = attenuationIn;
     }
-    
+
     return UNITY_AUDIODSP_OK;
 }
 
@@ -564,7 +564,7 @@ void getLatestSource(UnityAudioEffectState* state)
     auto effect = state->GetEffectData<State>();
     if (!effect)
         return;
-    
+
     if (effect->newSimulationSourceWritten)
     {
         iplSourceRelease(&effect->simulationSource[0]);

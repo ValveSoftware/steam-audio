@@ -1,4 +1,4 @@
-# Copyright 2017 Valve Corporation. All rights reserved. Subject to the following license:
+# Copyright 2017-2023 Valve Corporation. Subject to the following license:
 # https://valvesoftware.github.io/steam-audio/license.html
 
 include(SteamAudioHelpers)
@@ -165,11 +165,21 @@ elseif (IPL_OS_IOS)
 endif()
 
 if (NOT UNREAL_FMOD_PLUGIN_DIR STREQUAL "")
-    add_custom_command(
-        TARGET      phonon_fmod
-        POST_BUILD
-        COMMAND     ${CMAKE_COMMAND} -E copy $<TARGET_FILE:phonon_fmod> ${UNREAL_FMOD_PLUGIN_DIR}
-    )
+    if (IPL_OS_MACOS)
+        # CMake's Xcode generator runs post-build steps before code signing, so the copied files don't have the signature applied.
+        # This causes issues in newer versions of macOS, which refuse to load .bundles that don't have a signature.
+        add_custom_target(phonon_fmod_copy_unreal ALL
+            COMMAND     ${CMAKE_COMMAND} -E copy $<TARGET_FILE:phonon_fmod> ${UNREAL_FMOD_PLUGIN_DIR}
+            VERBATIM
+        )
+        add_dependencies(phonon_fmod_copy_unreal phonon_fmod)
+    else()
+        add_custom_command(
+            TARGET      phonon_fmod
+            POST_BUILD
+            COMMAND     ${CMAKE_COMMAND} -E copy $<TARGET_FILE:phonon_fmod> ${UNREAL_FMOD_PLUGIN_DIR}
+        )
+    endif()
 endif()
 
 

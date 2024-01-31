@@ -1,5 +1,5 @@
 //
-// Copyright (C) Valve Corporation. All rights reserved.
+// Copyright 2017-2023 Valve Corporation.
 //
 
 #include "SteamAudioListenerDetails.h"
@@ -53,7 +53,7 @@ void FSteamAudioListenerDetails::CustomizeDetails(IDetailLayoutBuilder& DetailLa
         ]
         .ValueContent()
         [
-            SNew(SHorizontalBox) + 
+            SNew(SHorizontalBox) +
                 SHorizontalBox::Slot()
                 .AutoWidth()
                 [
@@ -71,7 +71,7 @@ void FSteamAudioListenerDetails::CustomizeDetails(IDetailLayoutBuilder& DetailLa
         ];
 }
 
-FReply FSteamAudioListenerDetails::OnBakeReverb() 
+FReply FSteamAudioListenerDetails::OnBakeReverb()
 {
     UWorld* World = GEditor->GetLevelViewportClients()[0]->GetWorld();
     ULevel* Level = World->GetCurrentLevel();

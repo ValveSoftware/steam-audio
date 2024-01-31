@@ -1,5 +1,5 @@
 //
-// Copyright (C) Valve Corporation. All rights reserved.
+// Copyright 2017-2023 Valve Corporation.
 //
 
 #include "SteamAudioFMODStudio.h"
@@ -130,7 +130,7 @@ FVector FFMODStudioAudioEngineState::ConvertVectorFromFMODStudio(const FMOD_VECT
     UnrealVector.X /= 0.01f;
     UnrealVector.Y /= 0.01f;
     UnrealVector.Z /= 0.01f;
-    
+
     return UnrealVector;
 }
 
@@ -138,12 +138,12 @@ FTransform FFMODStudioAudioEngineState::GetListenerTransform()
 {
 	FTransform Transform;
 	FVector Position, Right, Up, Ahead;
-            
+
     if (StudioSystem)
     {
         FMOD_3D_ATTRIBUTES ListenerAttributes{};
         StudioSystem->getListenerAttributes(0, &ListenerAttributes);
-        
+
         Position = ConvertVectorFromFMODStudio(ListenerAttributes.position);
         Ahead = ConvertVectorFromFMODStudio(ListenerAttributes.forward);
         Up = ConvertVectorFromFMODStudio(ListenerAttributes.up);
@@ -293,5 +293,5 @@ FMOD::DSP* FFMODStudioAudioEngineSource::GetDSP()
 }
 
 #undef LOCTEXT_NAMESPACE
-	
+
 IMPLEMENT_MODULE(SteamAudio::FSteamAudioFMODStudioModule, SteamAudioFMODStudio)

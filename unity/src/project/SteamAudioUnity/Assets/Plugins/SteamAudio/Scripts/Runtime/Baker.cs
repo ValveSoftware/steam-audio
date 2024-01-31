@@ -1,5 +1,5 @@
 ﻿//
-// Copyright 2017 Valve Corporation. All rights reserved. Subject to the following license:
+// Copyright 2017-2023 Valve Corporation. Subject to the following license:
 // https://valvesoftware.github.io/steam-audio/license.html
 //
 #if STEAMAUDIO_ENABLED
@@ -170,7 +170,7 @@ namespace SteamAudio
 
         public static void CancelBake()
         {
-            // Ensures partial baked data is not serialized and that bake is properly canceled for multiple 
+            // Ensures partial baked data is not serialized and that bake is properly canceled for multiple
             // probe boxes.
             sCancel = true;
             API.iplReflectionsBakerCancelBake(SteamAudioManager.Context.Get());

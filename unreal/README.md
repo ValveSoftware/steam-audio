@@ -1,7 +1,7 @@
 Steam Audio Unreal Engine 4 Plugin
 ========================================================================================================================
 
-Copyright (c) Valve Corporation. All rights reserved.
+Copyright 2017-2023 Valve Corporation.
 
 
 The Steam Audio Unreal Engine 4 plugin is integrated into the Unreal Engine 4 source code, which is available via

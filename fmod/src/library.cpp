@@ -1,5 +1,5 @@
 //
-// Copyright 2017 Valve Corporation. All rights reserved. Subject to the following license:
+// Copyright 2017-2023 Valve Corporation. Subject to the following license:
 // https://valvesoftware.github.io/steam-audio/license.html
 //
 
@@ -168,7 +168,7 @@ void Library::unload(HMODULE library)
     FreeLibrary(library);
 }
 
-void* Library::getFunction(HMODULE library, 
+void* Library::getFunction(HMODULE library,
                            const char* name)
 {
     return GetProcAddress(library, name);

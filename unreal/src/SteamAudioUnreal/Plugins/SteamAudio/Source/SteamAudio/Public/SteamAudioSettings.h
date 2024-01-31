@@ -1,5 +1,5 @@
 //
-// Copyright (C) Valve Corporation. All rights reserved.
+// Copyright 2017-2023 Valve Corporation.
 //
 
 #pragma once
@@ -271,7 +271,7 @@ public:
 
     UPROPERTY(Config, EditAnywhere, Category = "Default HRTF Settings", meta = (DisplayName = "HRTF Volume Gain (dB)", UIMin = "-12.0", UIMax = "12.0"))
     float HRTFVolume;
-    
+
     UPROPERTY(Config, EditAnywhere, Category = "Default HRTF Settings", meta = (DisplayName = "HRTF Normalization Type"))
     EHRTFNormType HRTFNormalizationType;
 
@@ -280,7 +280,7 @@ public:
 
     UPROPERTY(Config, EditAnywhere, Category = "Advanced Settings")
     bool EnableValidation;
-    
+
     USteamAudioSettings();
 
     /** Returns a copy of the settings in a raw struct. */

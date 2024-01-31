@@ -1,5 +1,5 @@
 //
-// Copyright (C) Valve Corporation. All rights reserved.
+// Copyright 2017-2023 Valve Corporation.
 //
 
 #pragma once
@@ -134,7 +134,7 @@ private:
 
     /** The Steam Audio Context object. */
     IPLContext Context;
-    
+
     /** The (default) HRTF. */
     IPLHRTF HRTF;
 
@@ -149,10 +149,10 @@ private:
 
     /** The TrueAudio Next device. */
     IPLTrueAudioNextDevice TrueAudioNextDevice;
-    
+
     /** The global scene used for simulation. */
     IPLScene Scene;
-    
+
     /** The Steam Audio Simulator object. */
     IPLSimulator Simulator;
 
@@ -170,16 +170,16 @@ private:
 
     /** Scenes referenced by each dynamic object that's currently loaded. */
     TMap<FString, IPLScene> DynamicObjects;
-    
+
     /** Reference counts for the scenes referenced by dynamic objects. */
     TMap<FString, int> DynamicObjectRefCounts;
-    
+
     /** Steam Audio Source components that are currently registered for simulation. */
     TSet<USteamAudioSourceComponent*> Sources;
 
     /** Steam Audio Listener components that are currently registered for simulation. */
     TSet<USteamAudioListenerComponent*> Listeners;
-    
+
     /** The audio plugin listener used to receive global data from the built-in audio engine. */
     TAudioPluginListenerPtr AudioPluginListener;
 
@@ -188,7 +188,7 @@ private:
 
     /** Thread pool containing the simulation thread. */
     FQueuedThreadPool* ThreadPool;
-    
+
     /** If true, the simulation thread is idle. */
     std::atomic<bool> ThreadPoolIdle;
 

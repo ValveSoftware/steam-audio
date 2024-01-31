@@ -1,5 +1,5 @@
 //
-// Copyright (C) Valve Corporation. All rights reserved.
+// Copyright 2017-2023 Valve Corporation.
 //
 
 #include "SteamAudioListenerComponent.h"
@@ -46,7 +46,7 @@ void USteamAudioListenerComponent::SetInputs()
 		FVector ListenerAhead;
 		FVector ListenerUp;
 		FVector ListenerRight;
-		
+
 		PlayerController->GetAudioListenerPosition(ListenerPosition, ListenerAhead, ListenerRight);
 		ListenerUp = FVector::CrossProduct(ListenerRight, ListenerAhead);
 
@@ -147,9 +147,9 @@ void USteamAudioListenerComponent::BeginPlay()
 	}
 
     iplSourceAdd(Source, Simulator);
- 
+
 	Manager.AddListener(this);
-    
+
 	SteamAudio::IAudioEngineState* AudioEngineState = SteamAudio::FSteamAudioModule::GetAudioEngineState();
 	if (AudioEngineState)
     {

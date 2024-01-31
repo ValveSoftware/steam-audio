@@ -1,5 +1,5 @@
 //
-// Copyright 2017 Valve Corporation. All rights reserved. Subject to the following license:
+// Copyright 2017-2023 Valve Corporation. Subject to the following license:
 // https://valvesoftware.github.io/steam-audio/license.html
 //
 
@@ -16,8 +16,8 @@ enum Params
 {
     /**
      *  **Type**: `FMOD_DSP_PARAMETER_TYPE_BOOL`
-     * 
-     *  If true, applies HRTF-based 3D audio rendering to reverb. Results in an improvement in spatialization quality 
+     *
+     *  If true, applies HRTF-based 3D audio rendering to reverb. Results in an improvement in spatialization quality
      *  when using convolution or hybrid reverb, at the cost of slightly increased CPU usage.
      */
     BINAURAL,
@@ -130,13 +130,13 @@ InitFlags lazyInit(FMOD_DSP_STATE* state,
 
         if (!effect->inBuffer.data)
             iplAudioBufferAllocate(gContext, numChannelsIn, audioSettings.frameSize, &effect->inBuffer);
-        
+
         if (!effect->monoBuffer.data)
             iplAudioBufferAllocate(gContext, 1, audioSettings.frameSize, &effect->monoBuffer);
-        
+
         if (!effect->reflectionsBuffer.data)
             iplAudioBufferAllocate(gContext, numAmbisonicChannels, audioSettings.frameSize, &effect->reflectionsBuffer);
-        
+
         if (!effect->outBuffer.data)
             iplAudioBufferAllocate(gContext, numChannelsOut, audioSettings.frameSize, &effect->outBuffer);
 
@@ -325,7 +325,7 @@ FMOD_DSP_DESCRIPTION gReverbEffect
     FMOD_PLUGIN_SDK_VERSION,
     "Steam Audio Reverb",
     STEAMAUDIO_FMOD_VERSION,
-    1, 
+    1,
     1,
     ReverbEffect::create,
     ReverbEffect::release,

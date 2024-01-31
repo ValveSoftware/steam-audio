@@ -1,5 +1,5 @@
 //
-// Copyright (C) Valve Corporation. All rights reserved.
+// Copyright 2017-2023 Valve Corporation.
 //
 
 #pragma once
@@ -31,15 +31,15 @@ public:
     /** Whether or not to export all actors attached to this actor. */
     UPROPERTY(EditAnywhere, Category = ExportSettings)
     bool bExportAllChildren;
-    
+
     /** The number of vertices exported to Steam Audio. */
     UPROPERTY(VisibleAnywhere, Category = GeometryStatistics, meta = (DisplayName = "Vertices"))
     int NumVertices;
-    
+
     /** The number of triangles exported to Steam Audio. */
     UPROPERTY(VisibleAnywhere, Category = GeometryStatistics, meta = (DisplayName = "Triangles"))
     int NumTriangles;
-        
+
     USteamAudioGeometryComponent();
 
     /**
@@ -57,7 +57,7 @@ public:
 private:
     /** Recalculates the number of vertices and triangles that are exported as part of this component. */
     void UpdateStatistics();
-    
+
     /** Calculates the number of vertices and triangles to export from a single Static Mesh Actor. */
     static void GetStatisticsForStaticMeshActor(AStaticMeshActor* StaticMeshActor, int& NumVertices, int& NumTriangles);
 

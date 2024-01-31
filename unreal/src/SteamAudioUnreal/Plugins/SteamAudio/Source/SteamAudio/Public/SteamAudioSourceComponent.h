@@ -1,5 +1,5 @@
 //
-// Copyright (C) Valve Corporation. All rights reserved.
+// Copyright 2017-2023 Valve Corporation.
 //
 
 #pragma once
@@ -92,7 +92,7 @@ public:
     /** The high frequency (8 kHz and above) EQ value for transmission. Only if not simulating transmission. */
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = OcclusionSettings, meta = (UIMin = "0.0", UIMax = "1.0"))
     float TransmissionHighValue;
-    
+
     /** The maximum number of rays to trace when finding surfaces between the source and the listener for the
         purposes of simulating transmission. */
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = OcclusionSettings, meta = (UIMin = "1", UIMax = "8"))

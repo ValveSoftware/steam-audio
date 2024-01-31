@@ -1,5 +1,5 @@
 #
-# Copyright (c) Valve Corporation. All rights reserved.
+# Copyright 2017-2023 Valve Corporation.
 #
 
 import os
@@ -7,7 +7,7 @@ import shutil
 import urllib.request, urllib.error, urllib.parse
 import zipfile
 
-version = "4.5.0"
+version = "4.5.1"
 
 def download_file(url):
     remote_file = urllib.request.urlopen(url)

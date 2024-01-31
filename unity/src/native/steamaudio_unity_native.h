@@ -1,5 +1,5 @@
 //
-// Copyright 2017 Valve Corporation. All rights reserved. Subject to the following license:
+// Copyright 2017-2023 Valve Corporation. Subject to the following license:
 // https://valvesoftware.github.io/steam-audio/license.html
 //
 
@@ -107,11 +107,11 @@ int orderForNumChannels(int numChannels);
 int numChannelsForOrder(int order);
 
 // Returns the number of samples corresponding to a given duration and sampling rate.
-int numSamplesForDuration(float duration, 
+int numSamplesForDuration(float duration,
                           int samplingRate);
 
 // Converts a 3D vector from Unity's coordinate system to Steam Audio's coordinate system.
-IPLVector3 convertVector(float x, 
+IPLVector3 convertVector(float x,
                          float y,
                          float z);
 
@@ -119,16 +119,16 @@ IPLVector3 convertVector(float x,
 IPLVector3 unitVector(IPLVector3 v);
 
 // Calculates the dot product of two 3D vectors.
-float dot(const IPLVector3& a, 
+float dot(const IPLVector3& a,
           const IPLVector3& b);
 
 // Calculates the cross product of two 3D vectors.
-IPLVector3 cross(const IPLVector3& a, 
+IPLVector3 cross(const IPLVector3& a,
                  const IPLVector3& b);
 
 // Ramps a volume from a start value to an end value, applying it to a buffer.
-void applyVolumeRamp(float startVolume, 
-                     float endVolume, 
+void applyVolumeRamp(float startVolume,
+                     float endVolume,
                      int numSamples,
                      float* buffer);
 

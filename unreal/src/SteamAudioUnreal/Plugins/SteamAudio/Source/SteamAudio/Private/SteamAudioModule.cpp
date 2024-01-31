@@ -1,5 +1,5 @@
 //
-// Copyright (C) Valve Corporation. All rights reserved.
+// Copyright 2017-2023 Valve Corporation.
 //
 
 #include "SteamAudioModule.h"
@@ -135,7 +135,6 @@ void FSteamAudioModule::OnPIEStarted(bool bSimulating)
     {
         if (Manager)
         {
-            Manager->ShutDownSteamAudio();
             Manager->InitializeSteamAudio(EManagerInitReason::PLAYING);
         }
     }

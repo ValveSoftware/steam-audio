@@ -1,5 +1,5 @@
 //
-// Copyright (C) Valve Corporation. All rights reserved.
+// Copyright 2017-2023 Valve Corporation.
 //
 
 #include "SteamAudioProbeVolumeDetails.h"
@@ -66,7 +66,7 @@ void FSteamAudioProbeVolumeDetails::CustomizeDetails(IDetailLayoutBuilder& Detai
         ]
         .ValueContent()
         [
-            SNew(SHorizontalBox) 
+            SNew(SHorizontalBox)
                 + SHorizontalBox::Slot()
                 .AutoWidth()
                 [
@@ -112,7 +112,7 @@ void FSteamAudioProbeVolumeDetails::CustomizeDetails(IDetailLayoutBuilder& Detai
         ]
         .ValueContent()
         [
-            SNew(SHorizontalBox) + 
+            SNew(SHorizontalBox) +
                 SHorizontalBox::Slot()
                 .AutoWidth()
                 [
@@ -227,7 +227,7 @@ FReply FSteamAudioProbeVolumeDetails::OnGenerateProbes()
 
             Async(EAsyncExecution::Thread, [ProbeVolumeHandle, StaticMeshActor, AssetName]()
             {
-                if (ProbeVolumeHandle->GenerateProbes(StaticMeshActor, AssetName)) 
+                if (ProbeVolumeHandle->GenerateProbes(StaticMeshActor, AssetName))
                 {
                     FSteamAudioEditorModule::NotifySucceeded(NSLOCTEXT("SteamAudio", "GenerateProbesSuccess", "Generated probes."));
                 }

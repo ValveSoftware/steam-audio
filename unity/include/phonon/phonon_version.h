@@ -1,5 +1,5 @@
 /*
- *  Copyright 2017 Valve Corporation. All rights reserved. Subject to the following license:
+ *  Copyright 2017-2023 Valve Corporation. Subject to the following license:
  *  https://valvesoftware.github.io/steam-audio/license.html
  */
 
@@ -8,7 +8,7 @@
 
 #define STEAMAUDIO_VERSION_MAJOR 4
 #define STEAMAUDIO_VERSION_MINOR 5
-#define STEAMAUDIO_VERSION_PATCH 0
+#define STEAMAUDIO_VERSION_PATCH 1
 #define STEAMAUDIO_VERSION       (((uint32_t)(STEAMAUDIO_VERSION_MAJOR) << 16) | \
                                   ((uint32_t)(STEAMAUDIO_VERSION_MINOR) << 8) |  \
                                   ((uint32_t)(STEAMAUDIO_VERSION_PATCH)))

@@ -1,5 +1,5 @@
 //
-// Copyright (C) Valve Corporation. All rights reserved.
+// Copyright 2017-2023 Valve Corporation.
 //
 
 #include "SteamAudioBakedSourceComponentVisualizer.h"
@@ -15,13 +15,13 @@ namespace SteamAudio {
 // FSteamAudioBakedSourceComponentVisualizer
 // ---------------------------------------------------------------------------------------------------------------------
 
-void FSteamAudioBakedSourceComponentVisualizer::DrawVisualization(const UActorComponent* Component, 
+void FSteamAudioBakedSourceComponentVisualizer::DrawVisualization(const UActorComponent* Component,
     const FSceneView* View, FPrimitiveDrawInterface* PDI)
 {
     const USteamAudioBakedSourceComponent* BakedSourceComponent = Cast<USteamAudioBakedSourceComponent>(Component);
     if (BakedSourceComponent)
     {
-        DrawWireSphere(PDI, BakedSourceComponent->GetOwner()->GetActorLocation(), FLinearColor::Yellow, 
+        DrawWireSphere(PDI, BakedSourceComponent->GetOwner()->GetActorLocation(), FLinearColor::Yellow,
             ConvertSteamAudioDistanceToUnreal(BakedSourceComponent->InfluenceRadius), 32, 1);
     }
 }

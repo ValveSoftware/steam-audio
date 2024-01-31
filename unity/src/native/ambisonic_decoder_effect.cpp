@@ -1,5 +1,5 @@
 //
-// Copyright 2018 Valve Corporation. All rights reserved. Subject to the following license:
+// Copyright 2017-2023 Valve Corporation. Subject to the following license:
 // https://valvesoftware.github.io/steam-audio/license.html
 //
 
@@ -85,10 +85,10 @@ InitFlags lazyInit(UnityAudioEffectState* state,
     {
         if (!effect->inBuffer.data)
             iplAudioBufferAllocate(gContext, numChannelsIn, audioSettings.frameSize, &effect->inBuffer);
-        
+
         if (!effect->n3dInBuffer.data)
             iplAudioBufferAllocate(gContext, numChannelsIn, audioSettings.frameSize, &effect->n3dInBuffer);
-        
+
         if (!effect->outBuffer.data)
             iplAudioBufferAllocate(gContext, numChannelsOut, audioSettings.frameSize, &effect->outBuffer);
 

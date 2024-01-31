@@ -1,5 +1,5 @@
 //
-// Copyright 2017 Valve Corporation. All rights reserved. Subject to the following license:
+// Copyright 2017-2023 Valve Corporation. Subject to the following license:
 // https://valvesoftware.github.io/steam-audio/license.html
 //
 
@@ -57,7 +57,7 @@ extern UnityAudioEffectDefinition gReverbEffectDefinition;
 
 int UnityGetAudioEffectDefinitions(UnityAudioEffectDefinition*** definitions)
 {
-    static UnityAudioEffectDefinition* effects[] = { 
+    static UnityAudioEffectDefinition* effects[] = {
         &SteamAudioUnity::gMixerReturnEffectDefinition,
         &SteamAudioUnity::gReverbEffectDefinition,
         &SteamAudioUnity::gSpatializeEffectDefinition,
@@ -218,7 +218,7 @@ int numSamplesForDuration(float duration,
 }
 
 IPLVector3 convertVector(float x,
-                         float y, 
+                         float y,
                          float z)
 {
     return IPLVector3{ x, y, -z };
@@ -233,7 +233,7 @@ IPLVector3 unitVector(IPLVector3 v)
     return IPLVector3{ v.x / length, v.y / length, v.z / length };
 }
 
-float dot(const IPLVector3& a, 
+float dot(const IPLVector3& a,
           const IPLVector3& b)
 {
     return (a.x * b.x + a.y * b.y + a.z * b.z);
@@ -249,9 +249,9 @@ IPLVector3 cross(const IPLVector3& a,
     return c;
 }
 
-void applyVolumeRamp(float startVolume, 
-                     float endVolume, 
-                     int numSamples, 
+void applyVolumeRamp(float startVolume,
+                     float endVolume,
+                     int numSamples,
                      float* buffer)
 {
     for (auto i = 0; i < numSamples; ++i)

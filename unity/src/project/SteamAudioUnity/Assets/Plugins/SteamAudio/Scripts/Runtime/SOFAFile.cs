@@ -1,5 +1,5 @@
 //
-// Copyright 2017 Valve Corporation. All rights reserved. Subject to the following license:
+// Copyright 2017-2023 Valve Corporation. Subject to the following license:
 // https://valvesoftware.github.io/steam-audio/license.html
 //
 
@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace SteamAudio
 {
-    /* 
+    /*
      * Represents a serializable object that is created when importing a .sofa file as an asset.
      */
     public class SOFAFile : ScriptableObject

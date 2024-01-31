@@ -1,5 +1,5 @@
 //
-// Copyright (C) Valve Corporation. All rights reserved.
+// Copyright 2017-2023 Valve Corporation.
 //
 
 #include "SteamAudioDynamicObjectDetails.h"
@@ -51,7 +51,7 @@ void FSteamAudioDynamicObjectDetails::CustomizeDetails(IDetailLayoutBuilder& Det
         ]
         .ValueContent()
         [
-            SNew(SHorizontalBox) + 
+            SNew(SHorizontalBox) +
                 SHorizontalBox::Slot()
                 .AutoWidth()
                 [
@@ -74,7 +74,7 @@ void FSteamAudioDynamicObjectDetails::CustomizeDetails(IDetailLayoutBuilder& Det
         ]
         .ValueContent()
         [
-            SNew(SHorizontalBox) + 
+            SNew(SHorizontalBox) +
                 SHorizontalBox::Slot()
                 .AutoWidth()
                 [

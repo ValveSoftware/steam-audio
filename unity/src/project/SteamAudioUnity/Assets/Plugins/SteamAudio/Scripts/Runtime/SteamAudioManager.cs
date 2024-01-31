@@ -1,5 +1,5 @@
 ﻿//
-// Copyright 2017 Valve Corporation. All rights reserved. Subject to the following license:
+// Copyright 2017-2023 Valve Corporation. Subject to the following license:
 // https://valvesoftware.github.io/steam-audio/license.html
 //
 
@@ -67,7 +67,7 @@ namespace SteamAudio
         bool mSimulationCompleted = false;
         float mSimulationUpdateTimeElapsed = 0.0f;
         bool mSceneCommitRequired = false;
-        Camera mainCamera;
+        Camera mMainCamera;
 
         static SteamAudioManager sSingleton = null;
 
@@ -194,10 +194,10 @@ namespace SteamAudio
             return reflectionEffectType;
         }
 
-        public static PerspectiveCorrection GetPerspectiveCorrection() {
-            if (!SteamAudioSettings.Singleton.perspectiveCorrection) {
+        public static PerspectiveCorrection GetPerspectiveCorrection()
+        {
+            if (!SteamAudioSettings.Singleton.perspectiveCorrection)
                 return default;
-            }
 
             var mainCamera = Singleton.GetMainCamera();
             PerspectiveCorrection correction = default;
@@ -214,8 +214,9 @@ namespace SteamAudio
             return correction;
         }
 
-        public Camera GetMainCamera() {
-            return mainCamera != null ? mainCamera : (mainCamera = Camera.main);
+        public Camera GetMainCamera()
+        {
+            return mMainCamera;
         }
 
         public static SimulationSettings GetSimulationSettings(bool baking)
@@ -446,6 +447,7 @@ namespace SteamAudio
         {
             LoadScene(scene, mContext, additive: (loadSceneMode == LoadSceneMode.Additive));
 
+            NotifyMainCameraChanged();
             NotifyAudioListenerChanged();
         }
 
@@ -464,6 +466,12 @@ namespace SteamAudio
             {
                 sSingleton.mListenerComponent = sSingleton.mListener.GetComponent<SteamAudioListener>();
             }
+        }
+
+        // Call this function when you create or change the main camera.
+        public static void NotifyMainCameraChanged()
+        {
+            sSingleton.mMainCamera = Camera.main;
         }
 
         // Call this function to request that changes to a scene be committed. Call only when changes have happened.

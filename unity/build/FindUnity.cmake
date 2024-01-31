@@ -1,9 +1,9 @@
-# Copyright 2017 Valve Corporation. All rights reserved. Subject to the following license:
+# Copyright 2017-2023 Valve Corporation. Subject to the following license:
 # https://valvesoftware.github.io/steam-audio/license.html
 
 include(FindPackageHandleStandardArgs)
 
-find_path(Unity_INCLUDE_DIR 
+find_path(Unity_INCLUDE_DIR
 	NAMES 			AudioPluginInterface.h
 	PATHS 			${CMAKE_HOME_DIRECTORY}/include
 	PATH_SUFFIXES 	unity5
@@ -14,8 +14,8 @@ find_program(Unity_EXECUTABLE
 	PATHS ${Unity_EXECUTABLE_DIR}
 )
 
-find_package_handle_standard_args(Unity 
-	FOUND_VAR 		Unity_FOUND 
+find_package_handle_standard_args(Unity
+	FOUND_VAR 		Unity_FOUND
 	REQUIRED_VARS 	Unity_INCLUDE_DIR
 )
 

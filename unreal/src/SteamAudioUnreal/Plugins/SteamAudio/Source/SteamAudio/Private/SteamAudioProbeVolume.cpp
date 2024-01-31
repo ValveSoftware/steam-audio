@@ -1,5 +1,5 @@
 //
-// Copyright (C) Valve Corporation. All rights reserved.
+// Copyright 2017-2023 Valve Corporation.
 //
 
 #include "SteamAudioProbeVolume.h"
@@ -96,7 +96,7 @@ bool ASteamAudioProbeVolume::GenerateProbes(ASteamAudioStaticMeshActor* StaticMe
 {
 	check(StaticMeshActor);
     check(ProbeComponent);
-	
+
 	TPromise<bool> Promise;
 
 	Async(EAsyncExecution::Thread, [this, StaticMeshActor, AssetName, &Promise]()

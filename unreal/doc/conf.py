@@ -18,7 +18,7 @@
 # -- Project information -----------------------------------------------------
 
 project = 'Steam Audio Unreal Engine Integration'
-copyright = '2023, Valve Corporation'
+copyright = '2017-2023, Valve Corporation'
 author = 'Valve Corporation'
 
 

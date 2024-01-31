@@ -1,4 +1,4 @@
-# Copyright 2017 Valve Corporation. All rights reserved. Subject to the following license:
+# Copyright 2017-2023 Valve Corporation. Subject to the following license:
 # https://valvesoftware.github.io/steam-audio/license.html
 
 include(FindPackageHandleStandardArgs)
@@ -6,7 +6,7 @@ include(SteamAudioHelpers)
 
 get_local_lib_path(IPL_LIB_PATH)
 
-find_path(SteamAudio_INCLUDE_DIR 
+find_path(SteamAudio_INCLUDE_DIR
 	NAMES 			phonon.h
 	PATHS 			${CMAKE_HOME_DIRECTORY}/include
 	PATH_SUFFIXES 	phonon
@@ -18,13 +18,13 @@ if (BUILD_SHARED_LIBS)
 		PATHS ${IPL_LIB_PATH}
 	)
 
-	find_package_handle_standard_args(SteamAudio 
-		FOUND_VAR 		SteamAudio_FOUND 
+	find_package_handle_standard_args(SteamAudio
+		FOUND_VAR 		SteamAudio_FOUND
 		REQUIRED_VARS 	SteamAudio_INCLUDE_DIR
 	)
 else()
-	find_package_handle_standard_args(SteamAudio 
-		FOUND_VAR 		SteamAudio_FOUND 
+	find_package_handle_standard_args(SteamAudio
+		FOUND_VAR 		SteamAudio_FOUND
 		REQUIRED_VARS 	SteamAudio_INCLUDE_DIR SteamAudio_LIBRARY
 	)
 endif()

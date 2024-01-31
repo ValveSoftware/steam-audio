@@ -1,5 +1,5 @@
 //
-// Copyright (C) Valve Corporation. All rights reserved.
+// Copyright 2017-2023 Valve Corporation.
 //
 
 #include "SteamAudioDynamicObjectComponent.h"
@@ -33,7 +33,7 @@ FSoftObjectPath USteamAudioDynamicObjectComponent::GetAssetToLoad()
             AssetToLoad = DefaultObject->Asset;
         }
     }
-    
+
     return AssetToLoad;
 }
 

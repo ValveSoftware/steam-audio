@@ -18,7 +18,7 @@
 # -- Project information -----------------------------------------------------
 
 project = 'Steam Audio Unity Integration'
-copyright = '2021, Valve Corporation'
+copyright = '2017-2023, Valve Corporation'
 author = 'Valve Corporation'
 
 

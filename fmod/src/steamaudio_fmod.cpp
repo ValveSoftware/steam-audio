@@ -1,5 +1,5 @@
 //
-// Copyright 2017 Valve Corporation. All rights reserved. Subject to the following license:
+// Copyright 2017-2023 Valve Corporation. Subject to the following license:
 // https://valvesoftware.github.io/steam-audio/license.html
 //
 
@@ -44,7 +44,7 @@ IPLSpeakerLayout speakerLayoutForNumChannels(int numChannels)
     IPLSpeakerLayout speakerLayout;
     speakerLayout.numSpeakers = numChannels;
     speakerLayout.speakers = nullptr;
-    
+
     if (numChannels == 1)
         speakerLayout.type = IPL_SPEAKERLAYOUTTYPE_MONO;
     else if (numChannels == 2)
@@ -57,7 +57,7 @@ IPLSpeakerLayout speakerLayoutForNumChannels(int numChannels)
         speakerLayout.type = IPL_SPEAKERLAYOUTTYPE_SURROUND_7_1;
     else
         speakerLayout.type = IPL_SPEAKERLAYOUTTYPE_CUSTOM;
-    
+
     return speakerLayout;
 }
 
@@ -89,7 +89,7 @@ IPLVector3 unitVector(IPLVector3 v)
     auto length = sqrtf(v.x * v.x + v.y * v.y + v.z * v.z);
     if (length < 1e-2f)
         length = 1e-2f;
-    
+
     return IPLVector3{v.x / length, v.y / length, v.z / length};
 }
 
@@ -125,7 +125,7 @@ void applyVolumeRamp(float startVolume,
     {
         auto fraction = static_cast<float>(i) / static_cast<float>(numSamples);
         auto volume = fraction * endVolume + (1.0f - fraction) * startVolume;
-        
+
         buffer[i] *= volume;
     }
 }
@@ -145,7 +145,7 @@ IPLCoordinateSpace3 calcListenerCoordinates(FMOD_DSP_STATE* state)
     auto numListeners = 1;
     FMOD_3D_ATTRIBUTES listenerAttributes;
     state->functions->getlistenerattributes(state, &numListeners, &listenerAttributes);
-    
+
     return calcCoordinates(listenerAttributes);
 }
 
@@ -168,20 +168,20 @@ void initContextAndDefaultHRTF(IPLAudioSettings audioSettings)
     IPLContextSettings contextSettings{};
     contextSettings.version = STEAMAUDIO_VERSION;
     contextSettings.simdLevel = IPL_SIMDLEVEL_AVX2;
-    
+
     IPLContext context = nullptr;
     IPL_API(iplContextCreate(&contextSettings, &context));
-    
+
     IPLHRTFSettings hrtfSettings{};
     hrtfSettings.type = IPL_HRTFTYPE_DEFAULT;
     hrtfSettings.volume = 1.0f;
-    
+
     IPLHRTF hrtf = nullptr;
     iplHRTFCreate(context, &audioSettings, &hrtfSettings, &hrtf);
-    
+
     iplFMODInitialize(context);
     iplFMODSetHRTF(hrtf);
-    
+
     iplHRTFRelease(&hrtf);
     iplContextRelease(&context);
 }
@@ -210,13 +210,13 @@ int32_t SourceManager::addSource(IPLSource source)
 {
     // Retain a reference to this source.
     auto sourceRetained = iplSourceRetain(source);
-    
+
     auto handle = -1;
-    
+
     // First, figure out the handle we want to use.
     {
         std::lock_guard<std::mutex> lock(mHandleMutex);
-        
+
         if (mFreeHandles.empty())
         {
             // No free handles, use the next-available unused handle.
@@ -229,18 +229,18 @@ int32_t SourceManager::addSource(IPLSource source)
             mFreeHandles.pop();
         }
     }
-    
+
     assert(handle >= 0);
-    
+
     // Now store the mapping from the handle to this source.
     {
         std::lock_guard<std::mutex> lock(mSourceMutex);
-        
+
         assert(mSources.find(handle) == mSources.end());
-        
+
         mSources[handle] = sourceRetained;
     }
-    
+
     return handle;
 }
 
@@ -249,18 +249,18 @@ void SourceManager::removeSource(int32_t handle)
     // Remove the source from the handle-to-source map.
     {
         std::lock_guard<std::mutex> lock(mSourceMutex);
-        
+
         if (mSources.find(handle) != mSources.end())
         {
             iplSourceRelease(&mSources[handle]);
             mSources.erase(handle);
         }
     }
-    
+
     // Mark the handle as free.
     {
         std::lock_guard<std::mutex> lock(mHandleMutex);
-        
+
         mFreeHandles.push(handle);
     }
 }
@@ -268,7 +268,7 @@ void SourceManager::removeSource(int32_t handle)
 IPLSource SourceManager::getSource(int32_t handle)
 {
     std::lock_guard<std::mutex> lock(mSourceMutex);
-    
+
     if (mSources.find(handle) != mSources.end())
         return mSources[handle];
     else
@@ -326,8 +326,8 @@ FMOD_DSP_DESCRIPTION* F_CALL FMOD_SteamAudio_Reverb_GetDSPDescription()
     return &SteamAudioFMOD::gReverbEffect;
 }
 
-void F_CALL iplFMODGetVersion(unsigned int* major, 
-                              unsigned int* minor, 
+void F_CALL iplFMODGetVersion(unsigned int* major,
+                              unsigned int* minor,
                               unsigned int* patch)
 {
     if (major)
@@ -398,7 +398,7 @@ void F_CALL iplFMODSetReverbSource(IPLSource reverbSource)
     {
         iplSourceRelease(&gReverbSource[1]);
         gReverbSource[1] = iplSourceRetain(reverbSource);
- 
+
         gNewReverbSourceWritten = true;
     }
 }

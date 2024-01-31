@@ -1,5 +1,5 @@
 //
-// Copyright (C) Valve Corporation. All rights reserved.
+// Copyright 2017-2023 Valve Corporation.
 //
 
 #pragma once
@@ -56,7 +56,7 @@ extern std::atomic<bool> GIsBaking;
 DECLARE_DELEGATE(FSteamAudioBakeComplete);
 
 /** Runs one or more bakes for a level. */
-void STEAMAUDIOEDITOR_API Bake(UWorld* World, ULevel* Level, const TArray<FBakeTask>& Tasks, 
+void STEAMAUDIOEDITOR_API Bake(UWorld* World, ULevel* Level, const TArray<FBakeTask>& Tasks,
     FSteamAudioBakeComplete OnBakeComplete = FSteamAudioBakeComplete());
 
 #endif

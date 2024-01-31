@@ -1,5 +1,5 @@
 //
-// Copyright (C) Valve Corporation. All rights reserved.
+// Copyright 2017-2023 Valve Corporation.
 //
 
 #pragma once
@@ -31,10 +31,10 @@ public:
 
     // Returns the class object for the class corresponding to this asset type.
     virtual UClass* GetSupportedClass() const override;
-    
+
     // Returns the asset category to which this asset type belongs.
     virtual uint32 GetCategories() override;
-    
+
     // Returns the sub-menu under the asset category in which to show this asset type, when creating assets in the
     // content browser.
     virtual const TArray<FText>& GetSubMenus() const override;

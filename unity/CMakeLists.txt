@@ -1,9 +1,9 @@
-# Copyright 2017 Valve Corporation. All rights reserved. Subject to the following license:
+# Copyright 2017-2023 Valve Corporation. Subject to the following license:
 # https://valvesoftware.github.io/steam-audio/license.html
 
 cmake_minimum_required(VERSION 3.17)
 
-project(Phonon VERSION 4.5.0)
+project(Phonon VERSION 4.5.1)
 
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_MODULE_PATH "${CMAKE_HOME_DIRECTORY}/build")

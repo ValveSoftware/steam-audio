@@ -1,5 +1,5 @@
 //
-// Copyright (C) Valve Corporation. All rights reserved.
+// Copyright 2017-2023 Valve Corporation.
 //
 
 #pragma once
@@ -18,7 +18,7 @@ namespace SteamAudio {
 /**
  * Rendering state for a single reverb voice.
  */
-struct FSteamAudioReverbSource 
+struct FSteamAudioReverbSource
 {
 	FSteamAudioReverbSource();
 
@@ -66,7 +66,7 @@ struct FSteamAudioReverbSource
 /**
  * Singleton object containing shared state for the reverb plugin.
  */
-class FSteamAudioReverbPlugin : public IAudioReverb 
+class FSteamAudioReverbPlugin : public IAudioReverb
 {
 public:
 	FSteamAudioReverbPlugin();
@@ -168,7 +168,7 @@ public:
  * A submix plugin that optionally a) applies listener-centric reverb to its input, and/or b) adds mixed
  * source-centric reflections into its output.
  */
-class FSteamAudioReverbSubmixPlugin : public FSoundEffectSubmix 
+class FSteamAudioReverbSubmixPlugin : public FSoundEffectSubmix
 {
 public:
 	FSteamAudioReverbSubmixPlugin();
@@ -251,7 +251,7 @@ private:
  * Actual settings for the submix plugin.
  */
 USTRUCT(BlueprintType)
-struct FSteamAudioReverbSubmixPluginSettings 
+struct FSteamAudioReverbSubmixPluginSettings
 {
 	GENERATED_USTRUCT_BODY()
 
@@ -275,7 +275,7 @@ struct FSteamAudioReverbSubmixPluginSettings
  * Settings object for the submix plugin.
  */
 UCLASS()
-class USteamAudioReverbSubmixPluginPreset : public USoundEffectSubmixPreset 
+class USteamAudioReverbSubmixPluginPreset : public USoundEffectSubmixPreset
 {
 	GENERATED_BODY()
 

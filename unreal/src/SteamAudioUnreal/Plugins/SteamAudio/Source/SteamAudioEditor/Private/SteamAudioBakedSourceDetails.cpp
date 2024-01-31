@@ -1,5 +1,5 @@
 //
-// Copyright (C) Valve Corporation. All rights reserved.
+// Copyright 2017-2023 Valve Corporation.
 //
 
 #include "SteamAudioBakedSourceDetails.h"
@@ -51,7 +51,7 @@ void FSteamAudioBakedSourceDetails::CustomizeDetails(IDetailLayoutBuilder& Detai
         ]
         .ValueContent()
         [
-            SNew(SHorizontalBox) + 
+            SNew(SHorizontalBox) +
                 SHorizontalBox::Slot()
                 .AutoWidth()
                 [

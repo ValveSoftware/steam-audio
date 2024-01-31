@@ -1,5 +1,5 @@
 ﻿//
-// Copyright 2017 Valve Corporation. All rights reserved. Subject to the following license:
+// Copyright 2017-2023 Valve Corporation. Subject to the following license:
 // https://valvesoftware.github.io/steam-audio/license.html
 //
 
@@ -54,8 +54,8 @@ namespace SteamAudio
         }
 
         public int GetNumProbes()
-        { 
-            return (mProbeSpheres == null) ? 0 : mProbeSpheres.Length; 
+        {
+            return (mProbeSpheres == null) ? 0 : mProbeSpheres.Length;
         }
 
         public int GetNumLayers()

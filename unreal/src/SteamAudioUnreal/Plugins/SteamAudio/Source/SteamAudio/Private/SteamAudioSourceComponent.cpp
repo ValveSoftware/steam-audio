@@ -1,5 +1,5 @@
 //
-// Copyright (C) Valve Corporation. All rights reserved.
+// Copyright 2017-2023 Valve Corporation.
 //
 
 #include "SteamAudioSourceComponent.h"
@@ -49,7 +49,7 @@ void USteamAudioSourceComponent::SetInputs(IPLSimulationFlags Flags)
         return;
 
     IPLSimulationInputs Inputs{};
-    
+
     Inputs.flags = IPL_SIMULATIONFLAGS_DIRECT;
     if (bSimulateReflections)
     {

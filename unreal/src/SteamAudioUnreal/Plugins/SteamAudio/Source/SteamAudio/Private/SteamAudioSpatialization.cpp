@@ -1,5 +1,5 @@
 //
-// Copyright (C) Valve Corporation. All rights reserved.
+// Copyright 2017-2023 Valve Corporation.
 //
 
 #include "SteamAudioSpatialization.h"
@@ -293,7 +293,7 @@ void FSteamAudioSpatializationPlugin::ProcessAudio(const FAudioPluginSourceInput
     if (Source.HRTF && Source.PanningEffect && Source.BinauralEffect && Source.OutBuffer.data)
     {
         // Workaround. The directions passed to spatializer is not consistent with the coordinate system of UE4, therefore
-        // special tranformation is performed here. Review this change if further changes are made to the direction passed 
+        // special tranformation is performed here. Review this change if further changes are made to the direction passed
         // to the spatializer.
         IPLVector3 RelativeDirection;
         RelativeDirection.x = InputData.SpatializationParams->EmitterPosition.Y;
@@ -321,7 +321,7 @@ void FSteamAudioSpatializationPlugin::ProcessAudio(const FAudioPluginSourceInput
     }
 
     // Apply pathing if specified.
-    if (Source.bApplyPathing && Source.HRTF && Source.PathEffect && Source.AmbisonicsDecodeEffect && 
+    if (Source.bApplyPathing && Source.HRTF && Source.PathEffect && Source.AmbisonicsDecodeEffect &&
         Source.PathingInputBuffer.data && Source.PathingBuffer.data && Source.SpatializedPathingBuffer.data && Source.OutBuffer.data)
     {
         // FIXME: Unreal 4.27 does not pass the audio component id correctly to the spatializer plugin. It does this

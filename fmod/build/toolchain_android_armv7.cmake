@@ -1,5 +1,5 @@
 #
-# Copyright (c) Valve Corporation. All rights reserved.
+# Copyright 2017-2023 Valve Corporation.
 #
 
 set(CMAKE_SYSTEM_NAME Android)

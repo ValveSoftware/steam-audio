@@ -1,5 +1,5 @@
 //
-// Copyright (C) Valve Corporation. All rights reserved.
+// Copyright 2017-2023 Valve Corporation.
 //
 
 #include "SOFAFileFactory.h"
@@ -22,7 +22,7 @@ USOFAFileFactory::USOFAFileFactory(const FObjectInitializer& ObjectInitializer)
     Formats.Add(TEXT("sofa;SOFA file with HRTF data"));
 }
 
-UObject* USOFAFileFactory::FactoryCreateBinary(UClass* InClass, UObject* InParent, FName InName, EObjectFlags Flags, 
+UObject* USOFAFileFactory::FactoryCreateBinary(UClass* InClass, UObject* InParent, FName InName, EObjectFlags Flags,
     UObject* Context, const TCHAR* Type, const uint8*& Buffer, const uint8* BufferEnd, FFeedbackContext* Warn)
 {
     GEditor->GetEditorSubsystem<UImportSubsystem>()->BroadcastAssetPreImport(this, InClass, InParent, InName, Type);

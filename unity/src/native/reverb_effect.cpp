@@ -1,5 +1,5 @@
 //
-// Copyright 2017 Valve Corporation. All rights reserved. Subject to the following license:
+// Copyright 2017-2023 Valve Corporation. Subject to the following license:
 // https://valvesoftware.github.io/steam-audio/license.html
 //
 
@@ -67,7 +67,7 @@ InitFlags lazyInit(UnityAudioEffectState* state,
 
     if (!gHRTF[1])
         return initFlags;
-    
+
     if (!state->effectdata)
     {
         state->effectdata = new State();
@@ -158,7 +158,7 @@ UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK release(UnityAudioEffectState* sta
 
     if (!state->effectdata)
         return UNITY_AUDIODSP_OK;
-    
+
     auto effect = state->GetEffectData<State>();
     if (!effect)
         return UNITY_AUDIODSP_OK;

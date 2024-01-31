@@ -1,5 +1,5 @@
 ﻿//
-// Copyright 2017 Valve Corporation. All rights reserved. Subject to the following license:
+// Copyright 2017-2023 Valve Corporation. Subject to the following license:
 // https://valvesoftware.github.io/steam-audio/license.html
 //
 
@@ -15,7 +15,7 @@ namespace SteamAudio
     {
         public const uint kVersionMajor = 4;
         public const uint kVersionMinor = 5;
-        public const uint kVersionPatch = 0;
+        public const uint kVersionPatch = 1;
         public const uint kVersion = (kVersionMajor << 16) | (kVersionMinor << 8) | kVersionPatch;
     }
 

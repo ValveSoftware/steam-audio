@@ -1,5 +1,5 @@
 ﻿//
-// Copyright 2017 Valve Corporation. All rights reserved. Subject to the following license:
+// Copyright 2017-2023 Valve Corporation. Subject to the following license:
 // https://valvesoftware.github.io/steam-audio/license.html
 //
 
@@ -212,7 +212,10 @@ namespace SteamAudio
                 mSource.Release();
                 mSource = null;
             }
+        }
 
+        ~SteamAudioSource()
+        {
             mThis.Free();
         }
 
@@ -500,7 +503,7 @@ namespace SteamAudio
                         return 0.0f;
                     else
                         return rMin / distance;
-                
+
                 case AudioRolloffMode.Linear:
                     if (distance < rMin)
                         return 1.0f;
