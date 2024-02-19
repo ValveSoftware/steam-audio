@@ -1,0 +1,45 @@
+diff --git a/CLW/CLW.lua b/CLW/CLW.lua
+index 9afc83d..6163e55 100644
+--- a/CLW/CLW.lua
++++ b/CLW/CLW.lua
+@@ -6,10 +6,11 @@ project "CLW"
+ 
+     if os.is("macosx") then
+         buildoptions "-std=c++11 -stdlib=libc++"
+-    else if os.is("linux") then
++    elseif os.is("linux") then
+         buildoptions "-std=c++11 -fPIC"
+         os.execute("rm -rf obj");
+-        end
++    elseif os.is("windows") then
++        flags {"StaticRuntime"}
+     end
+ 
+     configuration {}
+diff --git a/Calc/Calc.lua b/Calc/Calc.lua
+index 9bb3832..e4ffd13 100644
+--- a/Calc/Calc.lua
++++ b/Calc/Calc.lua
+@@ -9,6 +9,8 @@ project "Calc"
+             os.execute("rm -rf obj")
+         elseif os.is("macosx") then
+             buildoptions "-std=c++11 -stdlib=libc++"
++        elseif os.is("windows") then
++            flags {"StaticRuntime"}
+         end
+     else
+         kind "SharedLib"
+diff --git a/RadeonRays/RadeonRays.lua b/RadeonRays/RadeonRays.lua
+index 0e89fb6..b918240 100644
+--- a/RadeonRays/RadeonRays.lua
++++ b/RadeonRays/RadeonRays.lua
+@@ -2,6 +2,9 @@ project "RadeonRays"
+ 
+     if( _OPTIONS["static_library"]) then
+         kind "StaticLib"
++        if os.is("windows") then
++            flags {"StaticRuntime"}
++        end
+     else
+         kind "SharedLib"
+     end

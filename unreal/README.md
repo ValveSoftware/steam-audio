@@ -1,11 +1,9 @@
-Steam Audio Unreal Engine 4 Plugin
-========================================================================================================================
+# Steam Audio Unreal Engine Integration
 
-Copyright 2017-2023 Valve Corporation.
+This directory contains the source code for the Steam Audio Unreal Engine integration, which allows you to integrate Steam Audio's spatial audio features into your Unreal Engine project.
 
+For more information:
 
-The Steam Audio Unreal Engine 4 plugin is integrated into the Unreal Engine 4 source code, which is available via
-GitHub at <https://github.com/EpicGames/UnrealEngine>. Refer to the Unreal Engine 4 repository for more details,
-including documentation, source code and build instructions.
-
-This subdirectory of the Steam Audio GitHub repository contains documentation only.
+- [Getting Started](doc/getting-started.rst)
+- [User's Guide](doc/guide.rst)
+- [Build Instructions](doc/build-instructions.rst)

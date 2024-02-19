@@ -1,9 +1,20 @@
-# Copyright 2017-2023 Valve Corporation. Subject to the following license:
-# https://valvesoftware.github.io/steam-audio/license.html
+# Copyright 2017-2023 Valve Corporation.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 
 cmake_minimum_required(VERSION 3.17)
 
-project(Phonon VERSION 4.5.1)
+project(Phonon VERSION 4.5.2)
 
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_MODULE_PATH "${CMAKE_HOME_DIRECTORY}/build")
@@ -161,6 +172,7 @@ find_package(FMOD REQUIRED)
 find_package(SteamAudio REQUIRED)
 
 if (STEAMAUDIOFMOD_BUILD_DOCS)
+    set(DOXYGEN_SKIP_DOT TRUE)
     find_package(Doxygen REQUIRED)
     find_package(Sphinx REQUIRED)
 endif()

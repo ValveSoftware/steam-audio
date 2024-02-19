@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AutoVisualizer xmlns="http://schemas.microsoft.com/vstudio/debugger/natvis/2010">
+	<Type Name="ipl::Array&lt;*,*&gt;">
+		<DisplayString>{{size = {mSizes}}}</DisplayString>
+		<Expand>
+			<ArrayItems>
+				<Direction>Forward</Direction>
+				<Rank>$T2</Rank>
+				<Size>mSizes[$i]</Size>
+				<ValuePointer>($T1*) mElements._Mypair._Myval2</ValuePointer>
+			</ArrayItems>
+		</Expand>
+	</Type>
+
+	<Type Name="ipl::Array&lt;*,1&gt;" Priority="MediumHigh">
+		<DisplayString>{{size = {mSize}}}</DisplayString>
+		<Expand>
+			<ArrayItems>
+				<Size>mSize</Size>
+				<ValuePointer>($T1*) mElements._Mypair._Myval2</ValuePointer>
+			</ArrayItems>
+		</Expand>
+	</Type>
+</AutoVisualizer>

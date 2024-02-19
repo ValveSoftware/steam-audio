@@ -1,0 +1,9 @@
+newmtl default
+  Ns 10.0000
+  Ni 1.5000
+  Tr 0  0
+  illum 2
+  Ka 1 1 1
+  Kd 1 1 1
+  Ks 0.2 0.2 0.2
+  Ke 0 0 0

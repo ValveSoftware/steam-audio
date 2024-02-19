@@ -1,0 +1,205 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Global site tag (gtag.js) - Google Analytics --> <script async src="https://www.googletagmanager.com/gtag/js?id=UA-144540649-1"> </script> <script> window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);} gtag('js', new Date()); gtag('config', 'UA-144540649-1'); </script>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <meta name="author" content="">
+
+    <title>
+
+        Steam Audio
+
+    </title>
+
+      <link rel="shortcut icon" href="assets/img/favicon.ico" type="image/x-icon" />
+      <link href="assets/fonts/motiva-sans.css" rel="stylesheet">
+      <link href="assets/css/toolkit-startup.css" rel="stylesheet">
+      <link href="assets/css/application-startup.css" rel="stylesheet">
+      <link href="assets/font-awesome-4.7.0/css/font-awesome.css" rel="stylesheet">
+      <link href="assets/fonts/motiva-sans-bold.css" rel="stylesheet">
+
+
+    <style>
+      /* note: this is a hack for ios iframe for bootstrap themes shopify page */
+      /* this chunk of css is not part of the toolkit :) */
+      /* …curses ios, etc… */
+      @media (max-width: 768px) and (-webkit-min-device-pixel-ratio: 2) {
+        body {
+          width: 1px;
+          min-width: 100%;
+          *width: 100%;
+        }
+        #stage {
+          height: 1px;
+          overflow: auto;
+          min-height: 100vh;
+          -webkit-overflow-scrolling: touch;
+        }
+      }
+    </style>
+  </head>
+
+
+<body>
+
+<div class="stage-shelf stage-shelf-right hidden" id="sidebar">
+  <ul class="nav nav-bordered nav-stacked flex-column">
+    <li class="nav-header">Main Menu</li>
+    <li class="nav-item">
+      <a class="nav-link" href="downloads.html">Downloads</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="http://steamcommunity.com/app/596420/allnews/">News</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="http://steamcommunity.com/app/596420/discussions/">Support</a>
+    </li>
+  </ul>
+</div>
+
+<div class="stage" id="stage">
+
+<div class="block block-inverse"
+     style="background-image: url(assets/img/steam-audio-landing-background.png); padding-bottom: 40px; background-position-y: top;">
+
+  <div class="container py-4 fixed-top app-navbar">
+    <nav class="navbar navbar-transparent navbar-padded navbar-toggleable-sm">
+      <button
+        class="navbar-toggler navbar-toggler-right hidden-md-up"
+        type="button"
+        data-target="#stage"
+        data-toggle="stage"
+        data-distance="-250">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <a class="navbar-brand mr-auto" href="index.html">
+        <img src="assets/img/steam-audio-logo.png" />
+      </a>
+
+      <div class="hidden-sm-down text-uppercase">
+        <ul class="navbar-nav">
+          <li class="nav-item px-1 ">
+            <a class="nav-link" href="downloads.html">Downloads</a>
+          </li>
+          <li class="nav-item px-1 ">
+            <a class="nav-link" href="http://steamcommunity.com/app/596420/allnews/">News</a>
+          </li>
+          <li class="nav-item px-1 ">
+            <a class="nav-link" href="http://steamcommunity.com/app/596420/discussions/">Support</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+  </div>
+</div>
+
+<div class="block block-fill-height" style="background-color:#ccc;">
+  <div class="container text-xs-center">
+
+    <div class="row mb-5">
+      <div class="col-xs-10 offset-xs-1 col-sm-8 offset-sm-2 col-lg-8 offset-lg-2">
+        <h2 class="text-uppercase" style="font-size:30pt; font-family: MotivaSans-Bold; margin-bottom: .3em;">Download Steam Audio</h2>
+      </div>
+    </div>
+
+    <div class="row mb-5">
+      <div class="col-xs-10 offset-xs-1 col-sm-10 offset-sm-1 col-lg-10 offset-lg-1">
+        <p>Steam Audio is available for free to all developers (<a href="https://valvesoftware.github.io/steam-audio/license.html">license agreement</a>). The latest release is @PROJECT_VERSION_MAJOR@.@PROJECT_VERSION_MINOR@.@PROJECT_VERSION_PATCH@ (<a href="https://github.com/ValveSoftware/steam-audio/releases/tag/v@PROJECT_VERSION_MAJOR@.@PROJECT_VERSION_MINOR@.@PROJECT_VERSION_PATCH@">release notes</a>).</p>
+      </div>
+    </div>
+
+    <div class="row app-marketing-grid" style="color:#000;">
+      <div class="col-md-4 px-4 mb-5">
+        <img class="mb-1" src="assets/img/icon_unity_large.png">
+        <h6 class="text-uppercase" style="font-weight:bold; margin-top: 2em; margin-bottom: 2em; color:#000; text-align: left; border-bottom: 4px solid #000; padding: 10px;">Unity Plugin</h6>
+        <ul class="list-group">
+          <li class="list-group-item" style="background: none; border: none;"><a href="https://github.com/ValveSoftware/steam-audio/releases/download/v@PROJECT_VERSION_MAJOR@.@PROJECT_VERSION_MINOR@.@PROJECT_VERSION_PATCH@/steamaudio_unity_@PROJECT_VERSION_MAJOR@.@PROJECT_VERSION_MINOR@.@PROJECT_VERSION_PATCH@.zip" style="color: #000; font-size: 14pt;"><i class="fa fa-arrow-circle-down" style="margin-right: 8px;"></i> Unity Plugin (ZIP)</a></li>
+          <li class="list-group-item" style="background: none; border: none;"><a href="doc/unity/index.html" style="color: #000; font-size: 14pt;"><i class="fa fa-arrow-circle-down" style="margin-right: 8px;"></i> User Manual (HTML)</a></li>
+        </ul>
+      </div>
+
+      <div class="col-md-4 px-4 mb-5">
+        <img class="mb-1" src="assets/img/icon_unreal_large.png">
+        <h6 class="text-uppercase" style="font-weight:bold; margin-top: 2em; margin-bottom: 2em; color:#000; text-align: left; border-bottom: 4px solid #000; padding: 10px;">Unreal Engine Plugin</h6>
+        <ul class="list-group">
+          <li class="list-group-item" style="background: none; border: none;"><a href="https://github.com/ValveSoftware/steam-audio/releases/download/v@PROJECT_VERSION_MAJOR@.@PROJECT_VERSION_MINOR@.@PROJECT_VERSION_PATCH@/steamaudio_unreal_@PROJECT_VERSION_MAJOR@.@PROJECT_VERSION_MINOR@.@PROJECT_VERSION_PATCH@.zip" style="color: #000; font-size: 14pt;"><i class="fa fa-arrow-circle-down" style="margin-right: 8px;"></i> Unreal Engine Plugin (ZIP)</a></li>
+          <li class="list-group-item" style="background: none; border: none;"><a href="doc/unreal/index.html" style="color: #000; font-size: 14pt;"><i class="fa fa-arrow-circle-down" style="margin-right: 8px;"></i> User Manual (HTML)</a></li>
+        </ul>
+      </div>
+
+      <div class="col-md-4 px-4 mb-5">
+        <img class="mb-1" src="assets/img/icon_fmod_large.png">
+        <h6 class="text-uppercase" style="font-weight:bold; margin-top: 2em; margin-bottom: 2em; color:#000; text-align: left; border-bottom: 4px solid #000; padding: 10px;">FMOD Studio Plugin</h6>
+        <ul class="list-group">
+          <li class="list-group-item" style="background: none; border: none;"><a href="https://github.com/ValveSoftware/steam-audio/releases/download/v@PROJECT_VERSION_MAJOR@.@PROJECT_VERSION_MINOR@.@PROJECT_VERSION_PATCH@/steamaudio_fmod_@PROJECT_VERSION_MAJOR@.@PROJECT_VERSION_MINOR@.@PROJECT_VERSION_PATCH@.zip" style="color: #000; font-size: 14pt;"><i class="fa fa-arrow-circle-down" style="margin-right: 8px;"></i> FMOD Studio Plugin (ZIP)</a></li>
+          <li class="list-group-item" style="background: none; border: none;"><a href="doc/fmod/index.html" style="color: #000; font-size: 14pt;"><i class="fa fa-arrow-circle-down" style="margin-right: 8px;"></i> User Manual (HTML)</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="row app-marketing-grid" style="color:#000;">
+      <div class="col-md-4 px-4 mb-5">
+        <img class="mb-1" src="assets/img/icon_c_api_large.png">
+        <h6 class="text-uppercase" style="font-weight:bold; margin-top: 2em; margin-bottom: 2em; color:#000; text-align: left; border-bottom: 4px solid #000; padding: 10px;">C API</h6>
+        <ul class="list-group">
+          <li class="list-group-item" style="background: none; border: none;"><a href="https://github.com/ValveSoftware/steam-audio/releases/download/v@PROJECT_VERSION_MAJOR@.@PROJECT_VERSION_MINOR@.@PROJECT_VERSION_PATCH@/steamaudio_@PROJECT_VERSION_MAJOR@.@PROJECT_VERSION_MINOR@.@PROJECT_VERSION_PATCH@.zip" style="color: #000; font-size: 14pt;"><i class="fa fa-arrow-circle-down" style="margin-right: 8px;"></i> C API (ZIP)</a></li>
+          <li class="list-group-item" style="background: none; border: none;"><a href="doc/capi/index.html" style="color: #000; font-size: 14pt;"><i class="fa fa-arrow-circle-down" style="margin-right: 8px;"></i> Documentation (HTML)</a></li>
+        </ul>
+      </div>
+
+      <div class="col-md-4 px-4 mb-5">
+        <img class="mb-1" src="assets/img/icon_archive_large.png">
+        <h6 class="text-uppercase" style="font-weight:bold; margin-top: 2em; margin-bottom: 2em; color:#000; text-align: left; border-bottom: 4px solid #000; padding: 10px;">Other Downloads</h6>
+        <ul class="list-group">
+          <li class="list-group-item" style="background: none; border: none;"><a href="https://github.com/ValveSoftware/steam-audio/releases" style="color: #000; font-size: 14pt;"><i class="fa fa-external-link-square" style="margin-right: 8px;"></i> Releases on GitHub</a></li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="block block-inverse" style="background-color: #000; padding-top: 20px; padding-bottom:0px">
+ <div class="container">
+    <div class="row">
+      <div class="col-md-3">
+        <img src="assets/img/whiteicons/logo_footer_steamaudio.png" />
+      </div>
+      <div class="col-md-9">
+        <p style="font-size:10pt; color: #999">© Valve Corporation. All rights reserved. Steam, Steam Logo, SteamVR and SteamVR logos are trademarks and/or registered trademarks of Valve Corporation
+in the US and other countries. Use of Steam is subject to the Steam Subscriber Agreement at <a href="http://store.steampowered.com/subscriber_agreement/">http://store.steampowered.com/subscriber_agreement/</a></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>
+
+
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/js/tether.min.js"></script>
+    <script src="assets/js/toolkit.js"></script>
+    <script src="assets/js/application.js"></script>
+    <script>
+    $("#learn-more-button").on('click', function(event) {
+      var target;
+      target = this.hash;
+
+      event.preventDefault();
+
+      var derp = $(target).offset();
+
+      return $('html, body').animate({
+        scrollTop: $(target).offset().top
+      }, 600, function() {
+        return window.history.pushState(null, null, target);
+      });
+    });
+</script>
+  </body>
+</html>

@@ -1,5 +1,16 @@
-# Copyright 2017-2023 Valve Corporation. Subject to the following license:
-# https://valvesoftware.github.io/steam-audio/license.html
+# Copyright 2017-2023 Valve Corporation.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 
 function (get_local_lib_path LIB_PATH)
 	if (IPL_OS_WINDOWS)
@@ -58,78 +69,5 @@ function (get_bin_subdir BIN_SUBDIR)
 		endif()
 	elseif (IPL_OS_IOS)
 		set(${BIN_SUBDIR} ios PARENT_SCOPE)
-	endif()
-endfunction()
-
-function (add_executable_or_apk name)
-  if (IPL_OS_ANDROID)
-    add_library(${name} SHARED ${ARGN})
-    if (IPL_CPU_ARMV7)
-      set_target_properties(${name} PROPERTIES
-        LIBRARY_OUTPUT_DIRECTORY          "${CMAKE_HOME_DIRECTORY}/build/android/${name}/src/main/jniLibs/armeabi-v7a"
-        LIBRARY_OUTPUT_DIRECTORY_DEBUG    "${CMAKE_HOME_DIRECTORY}/build/android/${name}/src/main/jniLibs/armeabi-v7a"
-        LIBRARY_OUTPUT_DIRECTORY_RELEASE  "${CMAKE_HOME_DIRECTORY}/build/android/${name}/src/main/jniLibs/armeabi-v7a"
-      )
-      add_custom_command(TARGET ${name} POST_BUILD
-      	COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_HOME_DIRECTORY}/build/android/${name}/src/main/jniLibs/armeabi-v7a
-        COMMAND gradlew --offline --no-daemon ${name}:assembleArmv7 WORKING_DIRECTORY ${CMAKE_HOME_DIRECTORY}/build/android
-      )
-    elseif (IPL_CPU_X86)
-      set_target_properties(${name} PROPERTIES
-        LIBRARY_OUTPUT_DIRECTORY          "${CMAKE_HOME_DIRECTORY}/build/android/${name}/src/main/jniLibs/x86"
-        LIBRARY_OUTPUT_DIRECTORY_DEBUG    "${CMAKE_HOME_DIRECTORY}/build/android/${name}/src/main/jniLibs/x86"
-        LIBRARY_OUTPUT_DIRECTORY_RELEASE  "${CMAKE_HOME_DIRECTORY}/build/android/${name}/src/main/jniLibs/x86"
-      )
-      add_custom_command(TARGET ${name} POST_BUILD
-      	COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_HOME_DIRECTORY}/build/android/${name}/src/main/jniLibs/x86
-        COMMAND gradlew --offline --no-daemon ${name}:assembleX86 WORKING_DIRECTORY ${CMAKE_HOME_DIRECTORY}/build/android
-      )
-    elseif (IPL_CPU_X64)
-      set_target_properties(${name} PROPERTIES
-        LIBRARY_OUTPUT_DIRECTORY          "${CMAKE_HOME_DIRECTORY}/build/android/${name}/src/main/jniLibs/x86_64"
-        LIBRARY_OUTPUT_DIRECTORY_DEBUG    "${CMAKE_HOME_DIRECTORY}/build/android/${name}/src/main/jniLibs/x86_64"
-        LIBRARY_OUTPUT_DIRECTORY_RELEASE  "${CMAKE_HOME_DIRECTORY}/build/android/${name}/src/main/jniLibs/x86_64"
-      )
-      add_custom_command(TARGET ${name} POST_BUILD
-      	COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_HOME_DIRECTORY}/build/android/${name}/src/main/jniLibs/x86_64
-        COMMAND gradlew --offline --no-daemon ${name}:assembleX64 WORKING_DIRECTORY ${CMAKE_HOME_DIRECTORY}/build/android
-      )
-    elseif (IPL_CPU_ARMV8)
-      set_target_properties(${name} PROPERTIES
-        LIBRARY_OUTPUT_DIRECTORY          "${CMAKE_HOME_DIRECTORY}/build/android/${name}/src/main/jniLibs/arm64-v8a"
-        LIBRARY_OUTPUT_DIRECTORY_DEBUG    "${CMAKE_HOME_DIRECTORY}/build/android/${name}/src/main/jniLibs/arm64-v8a"
-        LIBRARY_OUTPUT_DIRECTORY_RELEASE  "${CMAKE_HOME_DIRECTORY}/build/android/${name}/src/main/jniLibs/arm64-v8a"
-      )
-      add_custom_command(TARGET ${name} POST_BUILD
-      	COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_HOME_DIRECTORY}/build/android/${name}/src/main/jniLibs/arm64-v8a
-        COMMAND gradlew --offline --no-daemon ${name}:assembleArm64 WORKING_DIRECTORY ${CMAKE_HOME_DIRECTORY}/build/android
-      )
-    endif()
-  else()
-    add_executable(${name} ${ARGN})
-	if (IPL_OS_IOS)
-		set_target_properties(${name} PROPERTIES MACOSX_BUNDLE_GUI_IDENTIFIER com.valve.${name})
-		set_target_properties(${name} PROPERTIES MACOSX_BUNDLE_BUNDLE_VERSION 1.0.0)
-		set_target_properties(${name} PROPERTIES MACOSX_BUNDLE_SHORT_VERSION_STRING 1.0.0)
-	endif()
-  endif()
-endfunction()
-
-function (install_executable_or_apk name dir)
-	if (IPL_OS_ANDROID)
-		if (IPL_CPU_ARMV7)
-			set(arch armv7)
-		elseif (IPL_CPU_ARMV8)
-			set(arch arm64)
-		elseif (IPL_CPU_X86)
-			set(arch x86)
-		elseif (IPL_CPU_X64)
-			set(arch x64)
-		endif()
-		install(FILES ${CMAKE_HOME_DIRECTORY}/build/android/${name}/build/outputs/apk/${name}-${arch}-debug.apk DESTINATION ${dir} RENAME ${name}.apk)
-	elseif (IPL_OS_IOS)
-		install(TARGETS ${name} BUNDLE DESTINATION ${dir})
-	else()
-		install(TARGETS ${name} RUNTIME DESTINATION ${dir})
 	endif()
 endfunction()

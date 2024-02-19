@@ -1,0 +1,233 @@
+diff --git a/tan/build/cmake/CMakeLists.txt b/tan/build/cmake/CMakeLists.txt
+index 9401a40..8c9990f 100644
+--- a/tan/build/cmake/CMakeLists.txt
++++ b/tan/build/cmake/CMakeLists.txt
+@@ -50,10 +50,10 @@ add_subdirectory(../../samples/proj/cmake/GPUUtilities cmake-GPUUtilities-bin)
+ #add_subdirectory(../../samples/proj/cmake/AmbisonicVRDecoder cmake-AmbisonicVRDecoder-bin)
+ add_subdirectory(../../samples/proj/cmake/CLKernelPreprocessor cmake-CLKernelPreprocessor-bin)
+ add_subdirectory(../../samples/proj/cmake/FileToHeader cmake-FileToHeader-bin)
+-add_subdirectory(../../samples/proj/cmake/TrueAudioVR cmake-TrueAudioVR-bin)
+-add_subdirectory(../../samples/proj/cmake/RoomAcousticQT cmake-RoomAcousticQT-bin)
++#add_subdirectory(../../samples/proj/cmake/TrueAudioVR cmake-TrueAudioVR-bin)
++#add_subdirectory(../../samples/proj/cmake/RoomAcousticQT cmake-RoomAcousticQT-bin)
+ 
+-add_subdirectory(../../samples/proj/cmake/ReverbMixer cmake-ReverbMixer-bin)
++#add_subdirectory(../../samples/proj/cmake/ReverbMixer cmake-ReverbMixer-bin)
+ 
+ if(WIN32)
+   #not implemented yet: add_subdirectory(../../samples/proj/cmake/OculusRoomTAN cmake-OculusRoomTAN-bin)
+@@ -68,8 +68,8 @@ add_subdirectory(../../tanlibrary/proj/cmake/clFFT cmake-clFFT-bin)
+ add_subdirectory(../../tanlibrary/proj/cmake/TAN cmake-TAN-bin)
+ 
+ #tests
+-add_subdirectory(../../tests/proj/cmake/TALibDopplerTest cmake-TALibDopplerTest-bin)
+-add_subdirectory(../../tests/proj/cmake/TALibTestConvolution cmake-TALibTestConvolution-bin)
+-add_subdirectory(../../tests/proj/cmake/TALibTestDynamicChannelConvolution cmake-TALibTestDynamicChannelConvolution-bin)
+-add_subdirectory(../../tests/proj/cmake/TALibVRTest cmake-TALibVRTest-bin)
++#add_subdirectory(../../tests/proj/cmake/TALibDopplerTest cmake-TALibDopplerTest-bin)
++#add_subdirectory(../../tests/proj/cmake/TALibTestConvolution cmake-TALibTestConvolution-bin)
++#add_subdirectory(../../tests/proj/cmake/TALibTestDynamicChannelConvolution cmake-TALibTestDynamicChannelConvolution-bin)
++#add_subdirectory(../../tests/proj/cmake/TALibVRTest cmake-TALibVRTest-bin)
+ #add_subdirectory(../../tests/proj/cmake/TanDeviceResourcesTest cmake-TanDeviceResourcesTest-bin)
+\ No newline at end of file
+diff --git a/tan/tanlibrary/proj/cmake/TAN/CMakeLists.txt b/tan/tanlibrary/proj/cmake/TAN/CMakeLists.txt
+index 41906f9..733e71e 100644
+--- a/tan/tanlibrary/proj/cmake/TAN/CMakeLists.txt
++++ b/tan/tanlibrary/proj/cmake/TAN/CMakeLists.txt
+@@ -53,7 +53,7 @@ if(IS_DIRECTORY ${IPP_DIR})
+ # enable IPP
+ ADD_DEFINITIONS(-DUSE_IPP)
+ include_directories(${IPP_DIR}/include)
+-link_directories(${IPP_DIR}/lib/intel64_win)
++link_directories(${IPP_DIR}/lib/windows-x64)
+ endif()
+ 
+ include_directories(../../../../../amf)
+@@ -186,7 +186,7 @@ target_link_libraries(TrueAudioNext Graal2)
+ target_link_libraries(TrueAudioNext clFFT-master)
+ if(IS_DIRECTORY ${IPP_DIR})
+ # enable IPP
+- target_link_libraries(TrueAudioNext ippimt)
++#  target_link_libraries(TrueAudioNext ippimt)
+  target_link_libraries(TrueAudioNext ippsmt)
+  target_link_libraries(TrueAudioNext ippvmmt)
+  target_link_libraries(TrueAudioNext ippcoremt)
+diff --git a/tan/tanlibrary/src/TrueAudioNext/fft/FFTImpl.cpp b/tan/tanlibrary/src/TrueAudioNext/fft/FFTImpl.cpp
+index 0c6f340..5264bb0 100644
+--- a/tan/tanlibrary/src/TrueAudioNext/fft/FFTImpl.cpp
++++ b/tan/tanlibrary/src/TrueAudioNext/fft/FFTImpl.cpp
+@@ -110,6 +110,7 @@ TANFFTImpl::TANFFTImpl(TANContext *pContextTAN, bool useConvQueue) :
+    //     AMFPropertyInfoEnum(TAN_OUTPUT_MEMORY_TYPE ,  L"Output Memory Type", AMF_MEMORY_HOST, AMF_MEMORY_ENUM_DESCRIPTION, false),
+    // AMFPrimitivePropertyInfoMapEnd
+ 
++#if !USE_IPP
+ 		for (int i = 0; i < MAX_CACHE_POWER; i++)
+ 		{
+ 			fwdPlans[i] = NULL;
+@@ -117,6 +118,7 @@ TANFFTImpl::TANFFTImpl(TANContext *pContextTAN, bool useConvQueue) :
+ 			fwdRealPlans[i] = NULL;
+ 			bwdRealPlans[i] = NULL;			
+ 		}
++#endif
+ }
+ //-------------------------------------------------------------------------------------------------
+ TANFFTImpl::~TANFFTImpl(void)
+@@ -251,8 +253,10 @@ AMF_RESULT  AMF_STD_CALL TANFFTImpl::InitCpu()
+ 
+     m_doProcessingOnGpu = false;
+ 
++#if !USE_IPP
+     void * FFTWDll = NULL;
+     bFFTWavailable = false;
++#endif
+ 
+ #ifdef USE_IPP
+ 	/* Init IPP library */
+@@ -295,6 +299,7 @@ AMF_RESULT  AMF_STD_CALL TANFFTImpl::InitCpu()
+ 	*/
+ 
+ 	//libfftw3f-3.dll
++#if !USE_IPP
+ #ifdef _WIN32
+     FFTWDll = LoadSharedLibrary("", "libfftw3f-3", true);
+ #else
+@@ -344,6 +349,7 @@ AMF_RESULT  AMF_STD_CALL TANFFTImpl::InitCpu()
+     }
+ 
+ 	return bFFTWavailable ? AMF_OK : AMF_FAIL;
++#endif
+ }
+ //-------------------------------------------------------------------------------------------------
+ AMF_RESULT  AMF_STD_CALL TANFFTImpl::InitGpu()
+@@ -403,6 +409,7 @@ AMF_RESULT  AMF_STD_CALL TANFFTImpl::Terminate()
+ 		}
+     }
+     else {
++#if !USE_IPP
+         for (int i = 0; i < MAX_CACHE_POWER; i++)
+         {
+             if (fwdPlans[i] != NULL) {
+@@ -422,13 +429,14 @@ AMF_RESULT  AMF_STD_CALL TANFFTImpl::Terminate()
+ 				bwdRealPlans[i] = NULL;
+ 			}
+ 		}
+-
++#endif
+     }
+ 	
+ 
+     return AMF_OK;
+ }
+ 
++#if !USE_IPP
+ void TANFFTImpl::GetFFTWCachePath(char *path, DWORD len)
+ {
+ #ifdef _WIN32
+@@ -501,6 +509,7 @@ void TANFFTImpl::cacheFFTWplans()
+ 		delete(ppBufferOutput); // _aligned_free(ppBufferOutput);
+ 	}
+ }
++#endif
+ 
+ 
+ //-------------------------------------------------------------------------------------------------
+@@ -881,6 +890,7 @@ AMF_RESULT AMF_STD_CALL TANFFTImpl::TransformImplFFTW1Chan(
+     float* pBufferOutput[]
+     )
+ {
++#if !USE_IPP
+     amf_uint64 key = 0;
+     key = direction;
+     key |= log2len << 1;
+@@ -910,6 +920,7 @@ AMF_RESULT AMF_STD_CALL TANFFTImpl::TransformImplFFTW1Chan(
+             pBufferOutput[channel][k] /= fftLength;
+         }
+     }
++#endif
+ 
+     return AMF_OK;
+ }
+@@ -922,7 +933,7 @@ AMF_RESULT AMF_STD_CALL TANFFTImpl::TransformImplFFTWReal1Chan(
+ 	float* pBufferOutput[]
+ )
+ {
+-
++#if !USE_IPP
+ 	int fftWDir = 0;
+ 	bool usePlanarMode = false;
+ 	switch (direction) {
+@@ -988,6 +999,7 @@ AMF_RESULT AMF_STD_CALL TANFFTImpl::TransformImplFFTWReal1Chan(
+ 		//	pBufferOutput[channel][fftLength + 1] = 0.0;
+ 		//}
+ 	}
++#endif
+ 
+ 	return AMF_OK;
+ }
+@@ -997,7 +1009,7 @@ AMF_RESULT AMF_STD_CALL TANFFTImpl::TransformImplFFTWReal(TAN_FFT_TRANSFORM_DIRE
+ 	amf_size log2len,
+ 	float* in,
+ 	float* out) {
+-
++#if !USE_IPP
+ 	int fftWDir = 0;
+ 	bool usePlanarMode = false;
+ 	switch (direction) {
+@@ -1049,6 +1061,7 @@ AMF_RESULT AMF_STD_CALL TANFFTImpl::TransformImplFFTWReal(TAN_FFT_TRANSFORM_DIRE
+ 			out[k] /= fftLength;
+ 		}
+ 	}
++#endif
+ 
+ 	return AMF_OK;
+ }
+@@ -1062,6 +1075,7 @@ AMF_RESULT AMF_STD_CALL TANFFTImpl::TransformImplCpuOMP(
+     float* ppBufferOutput[]
+     )
+ {
++#if !USE_IPP
+     amf_uint fftLength = 1 << log2len;
+ 	bool useRealFFT = (direction == TAN_FFT_R2C_TRANSFORM_DIRECTION_FORWARD 
+ 					|| direction == TAN_FFT_C2R_TRANSFORM_DIRECTION_BACKWARD
+@@ -1117,6 +1131,7 @@ AMF_RESULT AMF_STD_CALL TANFFTImpl::TransformImplCpuOMP(
+ //  todo try this:      res = TransformImplCpu(direction, log2len, channels, ppBufferInput, ppBufferOutput);
+ 
+     }
++#endif
+ 
+     return AMF_OK;
+ }
+diff --git a/tan/tanlibrary/src/TrueAudioNext/fft/FFTImpl.h b/tan/tanlibrary/src/TrueAudioNext/fft/FFTImpl.h
+index a097dee..0dc3aa0 100644
+--- a/tan/tanlibrary/src/TrueAudioNext/fft/FFTImpl.h
++++ b/tan/tanlibrary/src/TrueAudioNext/fft/FFTImpl.h
+@@ -54,11 +54,13 @@
+ #include "public/include/components/Component.h"//AMF
+ #include "public/common/PropertyStorageExImpl.h"
+ #include <unordered_map>
++#if !USE_IPP
+ #ifdef _WIN32
+ #include "tanlibrary/src/fftw-3.3.5-dll64/fftw3.h"
+ #else
+ #include "tanlibrary/src/fftw-3.3.5/api/fftw3.h"
+ #endif
++#endif
+ 
+ #ifndef _WIN32
+ typedef unsigned int DWORD;
+@@ -120,6 +122,7 @@ namespace amf
+ 		IppsFFTSpec_C_32fc **m_IppFFTspecsC32F[MAX_CACHE_POWER];
+ 		Ipp8u **m_IppFFTworkBuf[MAX_CACHE_POWER];
+ #endif
++#if !USE_IPP
+ #ifndef __linux__
+         bool bFFTWavailable;
+         // FFTW declarations for dynamic load:
+@@ -249,6 +252,7 @@ namespace amf
+ 
+ 		void GetFFTWCachePath(char *path, DWORD len);
+ 		void cacheFFTWplans();
++#endif
+ 
+ 
+ 		enum CLFFT_TRANSFORM_TYPE

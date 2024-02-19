@@ -1,0 +1,584 @@
+{
+   "flatbuffers": {
+        "type": "required",
+        "tool": true,
+        "check": {
+            "headers": ["flatbuffers/flatbuffers.h"],
+            "programs": [["flatc"]]
+        },
+        "fetch": {
+            "git": "https://github.com/google/flatbuffers.git",
+            "tag": "6df40a2471737b27271bdd9b900ab5f3aec746c7"
+        },
+        "configure": {
+            "cmake": [
+                {
+                    "flags": [
+                        "-DFLATBUFFERS_BUILD_FLATLIB=FALSE",
+                        "-DFLATBUFFERS_BUILD_FLATHASH=FALSE",
+                        "-DFLATBUFFERS_BUILD_TESTS=FALSE"
+                    ]
+                },
+                {
+                    "platforms": ["osx"],
+                    "flags": [
+                        "-DCMAKE_C_FLAGS=-Wno-error=unused-but-set-variable",
+                        "-DCMAKE_CXX_FLAGS=-Wno-error=unused-but-set-variable",
+                        "-DCMAKE_C_FLAGS=-Wno-unknown-warning-option",
+                        "-DCMAKE_CXX_FLAGS=-Wno-unknown-warning-option"
+                    ]
+                }
+            ]
+        },
+        "build": {
+            "cmake": {}
+        },
+        "install": true,
+        "copy": [
+            ["install/$platform/include", "include"],
+            ["install/$platform/bin", "bin/$platform"]
+        ]
+    },
+    "ispc": {
+        "tool": true,
+        "platforms": ["windows-x86", "windows-x64", "linux-x86", "linux-x64", "osx"],
+        "check": {
+            "programs": [["ispc"]]
+        },
+        "fetch": {
+            "url": {
+                "windows-x64": "https://github.com/ispc/ispc/releases/download/v1.12.0/ispc-v1.12.0-windows.zip",
+                "linux-x64": "https://github.com/ispc/ispc/releases/download/v1.12.0/ispc-v1.12.0b-linux.tar.gz",
+                "osx": "https://github.com/ispc/ispc/releases/download/v1.12.0/ispc-v1.12.0-macOS.tar.gz"
+            },
+            "prefix": {
+                "windows-x64": "ispc-v1.12.0-windows",
+                "linux-x64": "ispc-v1.12.0-linux",
+                "osx": "ispc-v1.12.0-macOS"
+            }
+        },
+        "copy": [
+            ["build/$platform/bin", "bin/$platform"]
+        ]
+    },
+    "doxygen": {
+        "tool": true,
+        "platforms": ["windows-x64"],
+        "check": {
+            "programs": [["doxygen"]]
+        },
+        "fetch": {
+            "url": "https://github.com/doxygen/doxygen/releases/download/Release_1_9_6/doxygen-1.9.6.windows.x64.bin.zip"
+        },
+        "copy": [
+            ["build/$platform/doxygen.exe", "bin/$platform"],
+            ["build/$platform/doxyindexer.exe", "bin/$platform"],
+            ["build/$platform/doxysearch.cgi.exe", "bin/$platform"],
+            ["build/$platform/doxywizard.exe", "bin/$platform"],
+            ["build/$platform/libclang.dll", "bin/$platform"]
+        ]
+    },
+    "pffft": {
+        "type": "required",
+        "check": {
+            "headers": ["pffft.h"],
+            "static_libraries": [["pffft"]]
+        },
+        "fetch": {
+            "git": "https://github.com/marton78/pffft.git",
+            "tag": "e0bf595c98ded55cc457a371c1b29c8cab552628"
+        },
+        "configure": {
+            "cmake": [
+                {
+                    "flags": [
+                        "-DPFFFT_USE_TYPE_DOUBLE=OFF",
+                        "-DPFFFT_USE_FFTPACK=OFF",
+                        "-DPFFFT_USE_BENCH_GREEN=OFF",
+                        "-DPFFFT_USE_BENCH_KISS=OFF",
+                        "-DPFFFT_USE_BENCH_POCKET=OFF"
+                    ]
+                },
+                {
+                    "platforms": ["windows-x86", "windows-x64"],
+                    "flags": [
+                        "-DTARGET_C_ARCH=AVX",
+                        "-DTARGET_CXX_ARCH=AVX"
+                    ]
+                },
+                {
+                    "platforms": ["linux-x86", "linux-x64", "android-x86", "android-x64"],
+                    "flags": [
+                        "-DTARGET_C_ARCH=sandybridge",
+                        "-DTARGET_CXX_ARCH=sandybridge"
+                    ]
+                },
+                {
+                    "platforms": ["android-armv7"],
+                    "flags": [
+                        "-DTARGET_C_ARCH=armv7-a",
+                        "-DTARGET_CXX_ARCH=armv7-a",
+                        "-DTARGET_C_EXTRA=neon",
+                        "-DTARGET_CXX_EXTRA=neon"
+                    ]
+                },
+                {
+                    "platforms": ["windows-arm64", "linux-arm64", "android-arm64", "ios"],
+                    "flags": [
+                        "-DTARGET_C_ARCH=armv8-a",
+                        "-DTARGET_CXX_ARCH=armv8-a",
+                        "-DTARGET_C_EXTRA=neon",
+                        "-DTARGET_CXX_EXTRA=neon"
+                    ]
+                }
+            ]
+        },
+        "build": {
+            "cmake": {
+                "target": "PFFFT"
+            }
+        },
+        "install": true,
+        "copy": [
+            ["install/$platform/include", "include"],
+            ["install/$platform/lib", "lib/$platform/$config"]
+        ]
+    },
+    "ffts": {
+        "platforms": ["android-armv7", "android-arm64", "android-x86", "android-x64"],
+        "check": {
+            "headers": ["ffts.h"],
+            "static_libraries": [["ffts", "ffts_static"]]
+        },
+        "fetch": {
+            "git": "https://github.com/linkotec/ffts.git",
+            "tag": "2c8da4877588e288ff4cd550f14bec2dc7bf668c"
+        },
+        "configure": {
+            "cmake": [
+                {
+                    "flags": [
+                        "-DDISABLE_DYNAMIC_CODE=ON"
+                    ]
+                }
+            ]
+        },
+        "build": {
+            "cmake": {
+                "target": "ffts_static"
+            }
+        },
+        "install": true,
+        "copy": [
+            ["install/$platform/include/ffts", "include"],
+            ["install/$platform/lib", "lib/$platform/$config"]
+        ]
+    },
+    "ipp": {
+        "platforms": ["windows-x86", "windows-x64", "linux-x86", "linux-x64", "osx"],
+        "check": {
+            "headers": ["ipp.h"],
+            "static_libraries": [
+                ["ippcore", "ippcoremt"],
+                ["ippvm", "ippvmmt"],
+                ["ipps", "ippsmt"]
+            ]
+        },
+        "fetch": {
+            "fail": "Intel IPP was not found under deps/ipp. This is an optional dependency, and Steam Audio will fall back to using built-in implementations for vector math, and PFFFT for FFT functionality. However, to get the same performance level as the shipped Steam Audio binaries, you should place the IPP headers and static libraries under deps/ipp as described in the build instructions."
+        }
+    },
+    "zlib": {
+        "type": "required",
+        "check": {
+            "headers": ["zlib.h"],
+            "static_libraries": [["zlibstatic", "z"]]
+        },
+        "fetch": {
+            "git": "https://github.com/madler/zlib.git",
+            "tag": "04f42ceca40f73e2978b50e93806c2a18c1281fc",
+            "patch": "zlib.patch"
+        },
+        "configure": {
+            "cmake": []
+        },
+        "build": {
+            "cmake": {
+                "target": "zlibstatic"
+            }
+        },
+        "install": true,
+        "copy": [
+            ["install/$platform/include", "include"],
+            ["install/$platform/lib", "lib/$platform/$config"]
+        ]
+    },
+    "mysofa": {
+        "type": "required",
+        "check": {
+            "headers": ["mysofa.h"],
+            "static_libraries": [["mysofa"]]
+        },
+        "depends": ["zlib"],
+        "fetch": {
+            "git": "https://github.com/hoene/libmysofa.git",
+            "tag": "da9e4adc619ee3d1ae5e68da3ed14aa5e60b3ec1"
+        },
+        "configure": {
+            "cmake": [
+                {
+                    "flags": [
+                        "-DBUILD_SHARED_LIBS=FALSE",
+                        "-DBUILD_TESTS=FALSE"
+                    ]
+                },
+                {
+                    "platforms": ["linux-x64", "linux-arm64", "android-armv7", "android-arm64", "android-x86", "android-x64"],
+                    "flags": [
+                        "-DCMAKE_C_FLAGS=-fPIC",
+                        "-DCMAKE_CXX_FLAGS=-fPIC"
+                    ]
+                },
+                {
+                    "platforms": ["linux-x86"],
+                    "flags": [
+                        "-DCMAKE_C_FLAGS=-fPIC -m32",
+                        "-DCMAKE_CXX_FLAGS=-fPIC -m32",
+                        "-DCMAKE_SHARED_LINKER_FLAGS=-m32",
+                        "-DCMAKE_EXE_LINKER_FLAGS=-m32"
+                    ]
+                },
+                {
+                    "stamp": false,
+                    "flags": [
+                        "-DZLIB_ROOT=$deps/zlib/lib/$platform",
+                        "-DZLIB_INCLUDE_DIR=$deps/zlib/include"
+                    ]
+                }
+            ]
+        },
+        "build": {
+            "cmake": {}
+        },
+        "install": true,
+        "copy": [
+            ["install/$platform/include", "include"],
+            ["install/$platform/lib", "lib/$platform/$config"]
+       ]
+    },
+    "embree": {
+        "platforms": ["windows-x86", "windows-x64", "linux-x86", "linux-x64", "osx"],
+        "check": {
+            "headers": ["rtcore.h"],
+            "static_libraries": [
+                ["lexers"],
+                ["math"],
+                ["simd"],
+                ["sys"],
+                ["tasking"],
+                ["embree"],
+                ["embree_sse42"],
+                ["embree_avx"],
+                ["embree_avx2"]
+            ]
+        },
+        "depends": ["ispc"],
+        "fetch": {
+            "git": "https://github.com/embree/embree.git",
+            "tag": "8b2ad69f899ca0710f94d10303a2f02d7426faaf",
+            "patch": "embree.patch"
+        },
+        "configure": {
+            "cmake": [
+                {
+                    "flags": [
+                        "-DEMBREE_STATIC_LIB=ON",
+                        "-DEMBREE_STATIC_RUNTIME=ON",
+                        "-DEMBREE_ISPC_SUPPORT=ON",
+                        "-DBUILD_TESTING=OFF",
+                        "-DEMBREE_TUTORIALS=OFF",
+                        "-DEMBREE_GEOMETRY_QUADS=OFF",
+                        "-DEMBREE_GEOMETRY_LINES=OFF",
+                        "-DEMBREE_GEOMETRY_HAIR=OFF",
+                        "-DEMBREE_GEOMETRY_SUBDIV=OFF",
+                        "-DEMBREE_GEOMETRY_USER=OFF",
+                        "-DEMBREE_TASKING_SYSTEM=INTERNAL",
+                        "-DEMBREE_MAX_ISA=AVX2"
+                    ]
+                },
+                {
+                    "platforms": ["linux-x86"],
+                    "flags": [
+                        "-DEMBREE_IGNORE_CMAKE_CXX_FLAGS=OFF"
+                    ]
+                },
+                {
+                    "platforms": ["osx"],
+                    "flags": [
+                        "-DCMAKE_OSX_ARCHITECTURES=x86_64"
+                    ]
+                },
+                {
+                    "stamp": false,
+                    "platforms": ["windows-x86", "windows-x64"],
+                    "flags": [
+                        "-DEMBREE_ISPC_EXECUTABLE=$deps/ispc/bin/windows-x64/ispc.exe"
+                    ]
+                },
+                {
+                    "stamp": false,
+                    "platforms": ["linux-x86", "linux-x64"],
+                    "flags": [
+                        "-DEMBREE_ISPC_EXECUTABLE=$deps/ispc/bin/linux-x64/ispc"
+                    ]
+                },
+                {
+                    "stamp": false,
+                    "platforms": ["osx"],
+                    "flags": [
+                        "-DEMBREE_ISPC_EXECUTABLE=$deps/ispc/bin/osx/ispc"
+                    ]
+                }
+            ]
+        },
+        "build": {
+            "cmake": {}
+        },
+        "install": true,
+        "copy": [
+            ["install/$platform/include/embree2", "include"],
+            ["install/$platform/lib", "lib/$platform/$config"]
+        ]
+    },
+    "opencl": {
+        "type": "extra",
+        "platforms": ["windows-x64"],
+        "alt_platform_names": {
+            "windows-x64": "x86_64"
+        },
+        "check": {
+            "headers": ["CL/cl.h"],
+            "static_libraries": [["OpenCL"]]
+        },
+        "fetch": {
+            "url": "https://github.com/GPUOpen-LibrariesAndSDKs/OCL-SDK/files/1406216/lightOCLSDK.zip"
+        },
+        "copy": [
+            ["build/$platform/include", "include"],
+            ["build/$platform/lib", "lib"]
+        ]
+    },
+    "radeonrays": {
+        "type": "extra",
+        "platforms": ["windows-x64"],
+        "check": {
+            "headers": ["radeon_rays.h"],
+            "static_libraries": [
+                ["CLW64"],
+                ["Calc64"],
+                ["RadeonRays64"]
+            ]
+        },
+        "depends": ["opencl"],
+        "fetch": {
+            "git": "https://github.com/GPUOpen-LibrariesAndSDKs/RadeonRays_SDK.git",
+            "tag": "b22632c1daf94c2fbd0ea3a85c3f48b306fd8f43",
+            "patch": "radeonrays.patch"
+        },
+        "configure": {
+            "custom": {
+                "env": {
+                    "AMDAPPSDKROOT": "$deps/opencl"
+                },
+                "working_directory": "$src/radeonrays",
+                "commands": [
+                    ["./Tools/premake/win/premake5.exe", "--static_library", "--no_tests", "--embed_kernels", "vs2015"]
+                ],
+                "stamp": [
+                    "--static_library",
+                    "--no_tests",
+                    "--embed_kernels",
+                    "vs2015"
+                ]
+            }
+        },
+        "build": {
+            "custom": {
+                "working_directory": "$src/radeonrays",
+                "commands": [
+                    [ "$msbuild:2015", "RadeonRays.sln", "-property:Platform=x64", "-property:Configuration=$Config","-target:RadeonRays" ]
+                ]
+            }
+        },
+        "copy": [
+            ["src/radeonrays/RadeonRays/include", "include"],
+            ["src/radeonrays/Bin/$Config/x64", "lib/$platform/$config"]
+        ]
+    },
+    "trueaudionext": {
+        "type": "extra",
+        "platforms": ["windows-x64"],
+        "check": {
+            "headers": ["TrueAudioNext.h", "GpuUtilities.h"],
+            "static_libraries": [
+                ["TrueAudioNext"],
+                ["GPUUtilities"]
+            ],
+            "shared_libraries": [
+                ["TrueAudioNext"],
+                ["GPUUtilities"]
+            ]
+        },
+        "depends": ["ipp", "opencl"],
+        "fetch": {
+            "git": "https://github.com/GPUOpen-LibrariesAndSDKs/TAN.git",
+            "tag": "690ed6a92c594f4ba3a26d1c8b77dbff386c9b04",
+            "patch": "trueaudionext.patch"
+        },
+        "configure": {
+            "custom": {
+                "env": {
+                    "AMDAPPSDKROOT": "$deps/opencl"
+                },
+                "commands": [
+                    [
+                        "$cmake",
+                        "-G", "$vs", "-A", "x64",
+                        "-DIPP_DIR=$deps/ipp",
+                        "-S", "$src/trueaudionext/tan/build/cmake",
+                        "-B", "$build",
+                        "-DCMAKE_BUILD_TYPE=$Config"
+                    ]
+                ],
+                "stamp": []
+            }
+        },
+        "build": {
+            "custom": {
+                "commands": [
+                    [ "$cmake", "--build", "$build", "--config", "$Config"]
+                ]
+            }
+        },
+        "copy": [
+            ["src/trueaudionext/tan/tanlibrary/include", "include"],
+            ["src/trueaudionext/tan/samples/src/GPUUtilities/GpuUtilities.h", "include"],
+            ["src/trueaudionext/amf/public", "include/public"],
+            ["build/$platform/cmake-TAN-bin/$Config/TrueAudioNext.lib", "lib/$platform/$config"],
+            ["build/$platform/cmake-GPUUtilities-bin/$Config/GPUUtilities.lib", "lib/$platform/$config"],
+            ["build/$platform/cmake-TAN-bin/$Config/TrueAudioNext.dll", "bin/$platform/$config"],
+            ["build/$platform/cmake-GPUUtilities-bin/$Config/GPUUtilities.dll", "bin/$platform/$config"]
+        ]
+    },
+    "catch": {
+        "check": {
+            "headers": ["catch.hpp"]
+        },
+        "fetch": {
+            "git": "https://github.com/catchorg/Catch2.git",
+            "tag": "3b18d9e962835100d7e12ac80d22882e408e40dc"
+        },
+        "copy": [
+            ["src/catch/single_include", "include"]
+        ]
+    },
+    "glfw": {
+        "platforms": ["windows-x64"],
+        "check": {
+            "headers": ["GLFW/glfw3.h"],
+            "static_libraries": [["glfw3"]]
+        },
+        "fetch": {
+            "git": "https://github.com/glfw/glfw.git",
+            "tag": "e2c92645460f680fd272fd2eed591efb2be7dc31"
+        },
+        "configure": {
+            "cmake": [
+                {
+                    "flags": [
+                        "-DGLFW_BUILD_EXAMPLES=FALSE",
+                        "-DGLFW_BUILD_TESTS=FALSE",
+                        "-DGLFW_BUILD_DOCS=FALSE",
+                        "-DUSE_MSVC_RUNTIME_LIBRARY_DLL=FALSE"
+                    ]
+                }
+            ]
+        },
+        "build": {
+            "cmake": {}
+        },
+        "install": true,
+        "copy": [
+            ["install/$platform/include", "include"],
+            ["install/$platform/lib", "lib/$platform/$config"]
+        ]
+    },
+    "imgui": {
+        "platforms": ["windows-x64"],
+        "check": {
+            "headers": ["imgui.h"]
+        },
+        "fetch": {
+            "git": "https://github.com/ocornut/imgui.git",
+            "tag": "b81bd7ed984ce095c20a059dd0f4d527e006998f"
+        },
+        "copy": [
+            ["src/imgui/imconfig.h", "include"],
+            ["src/imgui/imgui.h", "include"],
+            ["src/imgui/imgui.cpp", "include"],
+            ["src/imgui/imgui_internal.h", "include"],
+            ["src/imgui/imstb_rectpack.h", "include"],
+            ["src/imgui/imstb_textedit.h", "include"],
+            ["src/imgui/imstb_truetype.h", "include"],
+            ["src/imgui/imgui_demo.cpp", "include"],
+            ["src/imgui/imgui_draw.cpp", "include"],
+            ["src/imgui/imgui_tables.cpp", "include"],
+            ["src/imgui/imgui_widgets.cpp", "include"],
+            ["src/imgui/backends/imgui_impl_opengl2.h", "include"],
+            ["src/imgui/backends/imgui_impl_opengl2.cpp", "include"],
+            ["src/imgui/backends/imgui_impl_glfw.h", "include"],
+            ["src/imgui/backends/imgui_impl_glfw.cpp", "include"]
+        ]
+    },
+    "portaudio": {
+        "platforms": ["windows-x64"],
+        "check": {
+            "headers": ["portaudio.h"],
+            "static_libraries": [["portaudio_static_x64"]]
+        },
+        "fetch": {
+            "git": "https://github.com/PortAudio/portaudio.git",
+            "tag": "147dd722548358763a8b649b3e4b41dfffbcfbb6"
+        },
+        "configure": {
+            "cmake": [
+                {
+                    "flags": [
+                        "-DPA_BUILD_SHARED=OFF"
+                    ]
+                }
+            ]
+        },
+        "build": {
+            "cmake": {}
+        },
+        "install": true,
+        "copy": [
+            ["install/$platform/include", "include"],
+            ["install/$platform/lib", "lib/$platform/$config"]
+        ]
+    },
+    "drwav": {
+        "platforms": ["windows-x64"],
+        "check": {
+            "headers": ["dr_wav.h"]
+        },
+        "fetch": {
+            "git": "https://github.com/mackron/dr_libs.git",
+            "tag": "a4b73d3d423e1cea0652b76d0806e7620337a40f"
+        },
+        "copy": [
+            ["src/drwav/dr_wav.h", "include"]
+        ]
+    }
+}
