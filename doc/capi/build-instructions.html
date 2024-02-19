@@ -1,0 +1,576 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Build Instructions &mdash; Steam Audio C API  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/steamaudio.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Integrating Steam Audio" href="integration.html" />
+    <link rel="prev" title="Programmer’s Guide" href="guide.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html">
+          
+
+          
+            
+            <img src="_static/steam-audio-logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                4.5.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Steam Audio SDK</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guide.html">Programmer’s Guide</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Build Instructions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#overview">Overview</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#directory-structure">Directory Structure</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#building-the-sdk">Building the SDK</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#requirements">Requirements</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#setting-up-third-party-libraries">Setting up third-party libraries</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#closed-source-dependencies">Closed-source dependencies</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#id1">Building the SDK</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#building-using-the-build-script">Building using the build script</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#building-using-cmake-directly">Building using CMake directly</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#generating-the-zip-file">Generating the zip file</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="integration.html">Integrating Steam Audio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference.html">API Reference</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Steam Audio C API</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Build Instructions</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="build-instructions">
+<h1>Build Instructions<a class="headerlink" href="#build-instructions" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
+<p>Building the Steam Audio SDK involves the following steps:</p>
+<ol class="arabic simple">
+<li><p>Building the SDK binaries (<code class="docutils literal notranslate"><span class="pre">phonon.dll</span></code> on Windows, for example). This step involves compiling C++ code, and must be done separately on each supported platform.</p></li>
+<li><p><em>(Optional)</em> Generating the zip file (<code class="docutils literal notranslate"><span class="pre">steamaudio.zip</span></code>) for distribution.</p></li>
+</ol>
+<div class="section" id="directory-structure">
+<h3>Directory Structure<a class="headerlink" href="#directory-structure" title="Permalink to this headline">¶</a></h3>
+<p>Below is an overview of the directories contained within the source repository for the Steam Audio SDK:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 17%" />
+<col style="width: 83%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Directory</p></th>
+<th class="head"><p>Contents</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">bin/</span></code></p></td>
+<td><p>Compiled binaries placed by the <code class="docutils literal notranslate"><span class="pre">INSTALL</span></code> target of the build system generated by CMake.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">build/</span></code></p></td>
+<td><p>Build scripts and the build system generated by CMake.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">deps/</span></code></p></td>
+<td><p>Third-party tools and libraries that the SDK depends on.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">dist/</span></code></p></td>
+<td><p>The zip file generated by the <code class="docutils literal notranslate"><span class="pre">PACKAGE</span></code> target.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">doc/</span></code></p></td>
+<td><p>Documentation.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">src/</span></code></p></td>
+<td><p>Source code.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">src/core/</span></code></p></td>
+<td><p>C++ source code for the Steam Audio SDK.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">src/test/</span></code></p></td>
+<td><p>C++ source code for unit tests.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">src/itest/</span></code></p></td>
+<td><p>C++ source code for interactive tests involving listening and/or visualization.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">src/benchmark/</span></code></p></td>
+<td><p>C++ source code for performance benchmarks.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">src/samples/</span></code></p></td>
+<td><p>C++ source code for sample programs.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="building-the-sdk">
+<h2>Building the SDK<a class="headerlink" href="#building-the-sdk" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="requirements">
+<h3>Requirements<a class="headerlink" href="#requirements" title="Permalink to this headline">¶</a></h3>
+<p>To build the SDK on any platform, you need the following software:</p>
+<ul class="simple">
+<li><p>CMake 3.17 or later (<a class="reference external" href="https://cmake.org">https://cmake.org</a>)</p></li>
+<li><p>Python 3.4 or later (<a class="reference external" href="https://www.python.org">https://www.python.org</a>)</p></li>
+</ul>
+<p>To build for Windows, you will need:</p>
+<ul class="simple">
+<li><p>Visual Studio 2013 or later (<a class="reference external" href="https://visualstudio.microsoft.com">https://visualstudio.microsoft.com</a>)</p></li>
+</ul>
+<p>To build for Linux, you will need:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">g++</span></code> 4.8 or later (install using your distribution’s package manager)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">g++-multilib</span></code> 4.8 or later if building the 32-bit binaries on a 64-bit system (install using your distribution’s package manager)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">glibc</span></code> 2.19 or later</p></li>
+</ul>
+<p>To build for macOS, you will need:</p>
+<ul class="simple">
+<li><p>Xcode 7.0 or later (install from the Mac App Store)</p></li>
+</ul>
+<p>To build for Android, you will need:</p>
+<ul class="simple">
+<li><p>Android SDK for platform 25 (Android 7.1 Nougat) or later (<a class="reference external" href="https://developer.android.com/studio">https://developer.android.com/studio</a>)</p></li>
+<li><p>Android NDK (install using the Android SDK Manager)</p></li>
+</ul>
+<p>To build for iOS, you will need:</p>
+<ul class="simple">
+<li><p>Xcode 14.0 or later (install from the Mac App Store)</p></li>
+</ul>
+</div>
+<div class="section" id="setting-up-third-party-libraries">
+<h3>Setting up third-party libraries<a class="headerlink" href="#setting-up-third-party-libraries" title="Permalink to this headline">¶</a></h3>
+<p>Steam Audio depends on multiple third-party libraries, which are not included in the source distribution. Before building Steam Audio, you must download them using:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ cd build
+$ python get_depedencies.py --platform &lt;platform&gt;
+</pre></div>
+</div>
+<p>This will download all third-party dependencies, build them for the platform <code class="docutils literal notranslate"><span class="pre">&lt;platform&gt;</span></code> from source, and place them in the appropriate location under <code class="docutils literal notranslate"><span class="pre">deps/</span></code>.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">get_dependencies.py</span></code> script understands the following command-line parameters:</p>
+<blockquote>
+<div><dl class="option-list">
+<dt><kbd><span class="option">--platform <var>&lt;platform&gt;</var></span></kbd></dt>
+<dd><p>The target platform that dependencies should be downloaded for. Use the <code class="docutils literal notranslate"><span class="pre">--help</span></code> parameter to see a list of currently-supported platforms.</p>
+</dd>
+</dl>
+<p class="attribution">—architecture &lt;architecture&gt;
+The target CPU architecture that dependencies should be downloaded for. Use the <code class="docutils literal notranslate"><span class="pre">--help</span></code> parameter to see a list of currently-supported architectures.</p>
+</div></blockquote>
+<blockquote>
+<div><dl class="option-list">
+<dt><kbd><span class="option">--toolchain <var>&lt;version&gt;</var></span></kbd></dt>
+<dd><p>The version of Visual Studio to use. This is required when either the host platform or the target platform is Windows, i.e., if either you are building for Windows, or are building for another platform on a Windows system. Use the <code class="docutils literal notranslate"><span class="pre">--help</span></code> parameter to see a list of currently-supported Visual Studio versions.</p>
+</dd>
+</dl>
+<p class="attribution">—ndk &lt;path&gt;
+The absolute path to the Android NDK. This is required when the target platform is Android.</p>
+</div></blockquote>
+<blockquote>
+<div><dl class="option-list">
+<dt><kbd><span class="option">--clean <var>&lt;option&gt;</var></span></kbd></dt>
+<dd><p>If <code class="docutils literal notranslate"><span class="pre">&lt;option&gt;</span></code> is <code class="docutils literal notranslate"><span class="pre">output</span></code>, then all dependencies will be removed from <code class="docutils literal notranslate"><span class="pre">deps/</span></code>. If <code class="docutils literal notranslate"><span class="pre">&lt;option&gt;</span></code> is <code class="docutils literal notranslate"><span class="pre">build</span></code>, then all intermediate build files for the dependencies will be removed. If <code class="docutils literal notranslate"><span class="pre">&lt;option&gt;</span></code> is <code class="docutils literal notranslate"><span class="pre">all</span></code>, then the both the dependencies as well as their intermediate build files will be removed.</p>
+</dd>
+</dl>
+<p class="attribution">—dependency &lt;name&gt;
+Download and build/extract only the dependency called <code class="docutils literal notranslate"><span class="pre">&lt;name&gt;</span></code>. This is intended mainly for troubleshooting purposes. For a full list of dependencies, refer to the <code class="docutils literal notranslate"><span class="pre">dependencies.json</span></code> file, and the comments in <code class="docutils literal notranslate"><span class="pre">get_dependencies.py</span></code>.</p>
+</div></blockquote>
+<blockquote>
+<div><dl class="option-list">
+<dt><kbd><span class="option">--extra</span></kbd></dt>
+<dd><p>Also build certain dependencies that are marked as “extra”. These are optional dependencies, and may have complicated build system requirements, so are disabled by default.</p>
+</dd>
+</dl>
+<p class="attribution">—debug
+Build debug binaries.</p>
+</div></blockquote>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>One of the dependencies, Radeon Rays (<a class="reference external" href="https://github.com/GPUOpen-LibrariesAndSDKs/RadeonRays_SDK">https://github.com/GPUOpen-LibrariesAndSDKs/RadeonRays_SDK</a>), requires Visual Studio 2015 (or the Visual Studio 2015 Build Tools) and Intel Integrated Performance Primitives (see Closed-sourc dependencies below) in order to build. This dependency only applies to Windows 64-bit builds, and is optional. If <code class="docutils literal notranslate"><span class="pre">get_dependencies.py</span></code> is unable to build Radeon Rays successfully for any reason, the Steam Audio CMake scripts will automatically disable this functionality.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">get_dependencies.py</span></code> script will create a directory called <code class="docutils literal notranslate"><span class="pre">deps-build</span></code> under <code class="docutils literal notranslate"><span class="pre">core</span></code>. This directory contains downloaded source code and binary files, along with intermediate build files for all the dependencies. Nothing in this directory needs to be checked in to any form of source control. After the dependencies are successfully built and copied to <code class="docutils literal notranslate"><span class="pre">deps</span></code> by the script, <code class="docutils literal notranslate"><span class="pre">deps-build</span></code> can be safely deleted.</p>
+</div>
+<div class="section" id="closed-source-dependencies">
+<h4>Closed-source dependencies<a class="headerlink" href="#closed-source-dependencies" title="Permalink to this headline">¶</a></h4>
+<p>Some dependencies are closed-source and cannot currently be downloaded automatically. These are all optional, and if they are not present, Steam Audio will automatically switch to using open-source alternatives, or disable the feature.</p>
+<p>For Windows, Linux, and macOS:</p>
+<ul class="simple">
+<li><p><strong>Intel Integrated Performance Primitives (IPP)</strong>.
+Provides high-performance vector math and FFT implementations on Intel-based PC platforms.
+This is an <strong>optional</strong> dependency, and Steam Audio will fall back to using built-in vector math implementations, and PFFFT for FFT implementations. However, IPP is recommended in order to achieve the same performance as the binaries shipped with Steam Audio releases.
+Download from <a class="reference external" href="https://www.intel.com/content/www/us/en/developer/tools/oneapi/ipp.html">https://www.intel.com/content/www/us/en/developer/tools/oneapi/ipp.html</a>, and install using the downloaded installer.
+Find the directory under your IPP installation that contains the files <code class="docutils literal notranslate"><span class="pre">ipp.h</span></code>, <code class="docutils literal notranslate"><span class="pre">ippvm.h</span></code>, and <code class="docutils literal notranslate"><span class="pre">ipps.h</span></code>. Place the contents of this directory in <code class="docutils literal notranslate"><span class="pre">deps/ipp/include</span></code>.
+Place <code class="docutils literal notranslate"><span class="pre">ippcoremt.lib</span></code> / <code class="docutils literal notranslate"><span class="pre">libippcore.a</span></code>, <code class="docutils literal notranslate"><span class="pre">ippvmmt.lib</span></code> / <code class="docutils literal notranslate"><span class="pre">libippvm.a</span></code>, and <code class="docutils literal notranslate"><span class="pre">ippsmt.lib</span></code> / <code class="docutils literal notranslate"><span class="pre">libipps.a</span></code> in the appropriate platform-specific subdirectory of <code class="docutils literal notranslate"><span class="pre">deps/ipp/lib</span></code>.</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>In the above instructions, “platform-specific subdirectory of <code class="docutils literal notranslate"><span class="pre">lib/</span></code>” means:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">lib/windows-x86</span></code> for Windows 32-bit</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">lib/windows-x64</span></code> for Windows 64-bit</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">lib/linux-x86</span></code> for Linux 32-bit</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">lib/linux-x64</span></code> for Linux 64-bit</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">lib/osx</span></code> for macOS</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">lib/android-armv7</span></code> for Android 32-bit ARM (ARMv7)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">lib/android-armv8</span></code> for Android 64-bit ARM (ARMv8)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">lib/android-x86</span></code> for Android 32-bit Intel</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">lib/android-x64</span></code> for Android 64-bit Intel</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">lib/ios</span></code> for iOS</p></li>
+</ul>
+</div>
+</div>
+</div>
+<div class="section" id="id1">
+<h3>Building the SDK<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="building-using-the-build-script">
+<h4>Building using the build script<a class="headerlink" href="#building-using-the-build-script" title="Permalink to this headline">¶</a></h4>
+<p>To build, run the following from a command prompt in the <code class="docutils literal notranslate"><span class="pre">core</span></code> directory of the repository:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ cd build
+$ python build.py --minimal
+</pre></div>
+</div>
+<p>This will generate a build system that can build the Steam Audio SDK and unit tests with minimal dependencies. This means that several features that require additional dependencies will be disabled, but allows you to get a working build quickly.</p>
+<p>On Windows, this will generate a Visual Studio 2015 solution for 64-bit Windows (<code class="docutils literal notranslate"><span class="pre">build/windows-vs2015-x64/Phonon.sln</span></code>) and build it in the Release configuration.</p>
+<p>On Linux, this will generate a Makefile for 64-bit Linux (<code class="docutils literal notranslate"><span class="pre">build/linux-x64-release/Makefile</span></code>) and build it.</p>
+<p>On macOS, this will generate an Xcode project (<code class="docutils literal notranslate"><span class="pre">build/osx/Phonon.xcodeproj</span></code>) and build it in the Release configuration.</p>
+<p>On Android, this will generate a Makefile for 32-bit ARM (<code class="docutils literal notranslate"><span class="pre">build/android-armv7-release/Makefile</span></code>) and build it.</p>
+<p>On iOS, this will generate an Xcode project (<code class="docutils literal notranslate"><span class="pre">build/ios/Phonon.xcodeproj</span></code>) and build it in the Release configuration.</p>
+<p>If CMake cannot generate the build system due to missing dependencies, you can run CMake directly and adjust settings that control where CMake looks for dependencies, and which targets it builds.</p>
+<p>The Steam Audio build script (<code class="docutils literal notranslate"><span class="pre">build.py</span></code>) lets you specify the following command line parameters to control its behavior:</p>
+<blockquote>
+<div><dl class="option-list">
+<dt><kbd><span class="option">-p</span>, <span class="option">--platform <var>NAME</var></span></kbd></dt>
+<dd><p>Specifies the target platform. Valid options are <code class="docutils literal notranslate"><span class="pre">windows</span></code>, <code class="docutils literal notranslate"><span class="pre">linux</span></code>, <code class="docutils literal notranslate"><span class="pre">osx</span></code>, <code class="docutils literal notranslate"><span class="pre">android</span></code>, and <code class="docutils literal notranslate"><span class="pre">ios</span></code>. Default is the current host platform.</p>
+</dd>
+<dt><kbd><span class="option">-t</span>, <span class="option">--toolchain <var>NAME</var></span></kbd></dt>
+<dd><p>Specifies the compiler version (on Windows only). Valid options are <code class="docutils literal notranslate"><span class="pre">vs2013</span></code>, <code class="docutils literal notranslate"><span class="pre">vs2015</span></code>, <code class="docutils literal notranslate"><span class="pre">vs2017</span></code>, <code class="docutils literal notranslate"><span class="pre">vs2019</span></code>. Default is <code class="docutils literal notranslate"><span class="pre">vs2015</span></code>.</p>
+</dd>
+<dt><kbd><span class="option">-a</span>, <span class="option">--architecture <var>NAME</var></span></kbd></dt>
+<dd><p>Specifies the CPU architecture to build for. Valid options are <code class="docutils literal notranslate"><span class="pre">x86</span></code> (32-bit Intel, available on Windows, Linux, and Android), <code class="docutils literal notranslate"><span class="pre">x64</span></code> (64-bit Intel, available on Windows, Linux, macOS, and Android), <code class="docutils literal notranslate"><span class="pre">armv7</span></code> (32-bit ARM, available on Android), and <code class="docutils literal notranslate"><span class="pre">arm64</span></code> (64-bit ARM, available on Android and iOS). Default is <code class="docutils literal notranslate"><span class="pre">x64</span></code> for Windows, Linux, and macOS; <code class="docutils literal notranslate"><span class="pre">armv7</span></code> for Android; and <code class="docutils literal notranslate"><span class="pre">arm64</span></code> for iOS.</p>
+</dd>
+<dt><kbd><span class="option">-c</span>, <span class="option">--configuration <var>NAME</var></span></kbd></dt>
+<dd><p>Specifies the build configuration. Valid options are <code class="docutils literal notranslate"><span class="pre">debug</span></code> and <code class="docutils literal notranslate"><span class="pre">release</span></code>. Default is <code class="docutils literal notranslate"><span class="pre">release</span></code>.</p>
+</dd>
+<dt><kbd><span class="option">-o</span>, <span class="option">--operation <var>NAME</var></span></kbd></dt>
+<dd><p>Specifies the CMake operation to perform. Valid options are <code class="docutils literal notranslate"><span class="pre">generate</span></code> (generates the build system), <code class="docutils literal notranslate"><span class="pre">build</span></code> (build all targets in the build system), <code class="docutils literal notranslate"><span class="pre">install</span></code> (runs the <code class="docutils literal notranslate"><span class="pre">INSTALL</span></code> target, which copies binaries to the <code class="docutils literal notranslate"><span class="pre">bin/</span></code> folder), <code class="docutils literal notranslate"><span class="pre">package</span></code> (runs the <code class="docutils literal notranslate"><span class="pre">PACKAGE</span></code> target, which generates the zip file and copies it to the <code class="docutils literal notranslate"><span class="pre">dist/</span></code> folder), <code class="docutils literal notranslate"><span class="pre">ci_build</span></code> (which runs <code class="docutils literal notranslate"><span class="pre">generate</span></code>, then <code class="docutils literal notranslate"><span class="pre">build</span></code>, then <code class="docutils literal notranslate"><span class="pre">install</span></code>), and <code class="docutils literal notranslate"><span class="pre">ci_package</span></code> (which runs <code class="docutils literal notranslate"><span class="pre">generate</span></code>, then <code class="docutils literal notranslate"><span class="pre">package</span></code>). Default is <code class="docutils literal notranslate"><span class="pre">generate</span></code> followed by <code class="docutils literal notranslate"><span class="pre">build</span></code>.</p>
+</dd>
+</dl>
+<p class="attribution">—minimal
+Specifies that the generated build system should use minimal dependencies. This means that documentation, interactive tests, benchmarks, and sample programs will not be built. Support for Embree, Radeon Rays, and TrueAudio Next will also be disabled, and Intel IPP will also be disabled.</p>
+</div></blockquote>
+</div>
+<div class="section" id="building-using-cmake-directly">
+<h4>Building using CMake directly<a class="headerlink" href="#building-using-cmake-directly" title="Permalink to this headline">¶</a></h4>
+<p>You can also directly using CMake to generate the build system. This is useful if you need to specify non-default paths for CMake to search for dependencies. To do this, first create the directory in which you want to generate the build system:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ cd build
+$ mkdir windows-vs2019-x64
+</pre></div>
+</div>
+<p>Now run CMake:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ cmake ../..
+</pre></div>
+</div>
+<p>Alternatively, use <code class="docutils literal notranslate"><span class="pre">cmake-gui</span></code> if you prefer using a GUI to configure various CMake options:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ cmake-gui ../..
+</pre></div>
+</div>
+<p>When building for Android, Steam Audio provides the following toolchain files that you can use:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 76%" />
+<col style="width: 24%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Toolchain File</p></th>
+<th class="head"><p>Platform</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">build/toolchain_android_armv7.cmake</span></code></p></td>
+<td><p>32-bit ARM</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">build/toolchain_android_armv8.cmake</span></code></p></td>
+<td><p>64-bit ARM</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">build/toolchain_android_x86.cmake</span></code></p></td>
+<td><p>32-bit Intel</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">build/toolchain_android_x64.cmake</span></code></p></td>
+<td><p>64-bit Intel</p></td>
+</tr>
+</tbody>
+</table>
+<p>When building for iOS, Steam Audio provides the following toolchain files that you can use:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 76%" />
+<col style="width: 24%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Toolchain File</p></th>
+<th class="head"><p>Platform</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">build/toolchain_ios.cmake</span></code></p></td>
+<td><p>64-bit ARM</p></td>
+</tr>
+</tbody>
+</table>
+<p>Below are some of the CMake options you may want to configure:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 26%" />
+<col style="width: 74%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Option</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">BUILD_SHARED_LIBS</span></code></p></td>
+<td><p>Build shared libraries instead of static.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">STEAMAUDIO_BUILD_TESTS</span></code></p></td>
+<td><p>Build unit tests.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">STEAMAUDIO_BUILD_ITESTS</span></code></p></td>
+<td><p>Build interactive tests. (Windows x64 only)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">STEAMAUDIO_BUILD_BENCHMARKS</span></code></p></td>
+<td><p>Build benchmarks.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">STEAMAUDIO_BUILD_SAMPLES</span></code></p></td>
+<td><p>Build samples.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">STEAMAUDIO_BUILD_DOCS</span></code></p></td>
+<td><p>Build documentation.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">STEAMAUDIO_ENABLE_AVX</span></code></p></td>
+<td><p>Enable AVX intrinsics. (Windows only)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">STEAMAUDIO_ENABLE_IPP</span></code></p></td>
+<td><p>Enable Intel IPP support for accelerated FFT and vector math operations. (Windows, Linux, macOS only)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">STEAMAUDIO_ENABLE_FFTS</span></code></p></td>
+<td><p>Enable FFTS support for accelerated FFT  operations. (Android only)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">STEAMAUDIO_ENABLE_EMBREE</span></code></p></td>
+<td><p>Enable Intel Embree support for ray tracing. (Windows, Linux, macOS only)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">STEAMAUDIO_ENABLE_RADEONRAYS</span></code></p></td>
+<td><p>Enable AMD Radeon Rays support for GPU-accelerated ray tracing. (Windows x64 only)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">STEAMAUDIO_ENABLE_TRUEAUDIONEXT</span></code></p></td>
+<td><p>Enable AMD TrueAudio Next support for GPU-accelerated convolution. (Windows x64 only)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="generating-the-zip-file">
+<h3>Generating the zip file<a class="headerlink" href="#generating-the-zip-file" title="Permalink to this headline">¶</a></h3>
+<p>As an optional step, you can package the SDK, including documentation, into a zip file. To do this, run the following from a command prompt in the <code class="docutils literal notranslate"><span class="pre">core</span></code> directory of the repository:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ cd build
+$ python build.py -o install
+$ python build.py -o package
+</pre></div>
+</div>
+<p>This will place the generated zip file in <code class="docutils literal notranslate"><span class="pre">dist/steamaudio.zip</span></code>.</p>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="integration.html" class="btn btn-neutral float-right" title="Integrating Steam Audio" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="guide.html" class="btn btn-neutral float-left" title="Programmer’s Guide" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2017-2023, Valve Corporation.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
