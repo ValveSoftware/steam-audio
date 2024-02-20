@@ -104,6 +104,7 @@ After creating the context, we need to load Head-Related Transfer Function (HRTF
 
     IPLHRTFSettings hrtfSettings{};
     hrtfSettings.type = IPL_HRTFTYPE_DEFAULT;
+    hrtfSettings.volume = 1.0f;
 
 We also need to specify some key properties that define how we will process audio. All audio processing in Steam Audio is done using uncompressed Pulse Code Modulated (PCM) audio data. Audio signals are represented as a series of *samples* measured at discrete, regularly-spaced points in time. Multi-channel audio is represented as multiple audio signals: for example, stereo (2-channel) audio contains 2 audio signals, so there are 2 samples for any given point in time.
 
@@ -297,6 +298,7 @@ Full program listing
 
         IPLHRTFSettings hrtfSettings;
         hrtfSettings.type = IPL_HRTFTYPE_DEFAULT;
+        hrtfSettings.volume = 1.0f;
 
         IPLHRTF hrtf{};
         iplHRTFCreate(context, &audioSettings, &hrtfSettings, &hrtf);
