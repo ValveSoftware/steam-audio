@@ -17,6 +17,7 @@
 #ifndef IPL_PHONON_H
 #define IPL_PHONON_H
 
+#include <stdint.h>
 #include <stddef.h>
 
 #include "phonon_version.h"
