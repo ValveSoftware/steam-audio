@@ -73,7 +73,7 @@ Setting up third-party libraries
 Steam Audio depends on multiple third-party libraries, which are not included in the source distribution. Before building Steam Audio, you must download them using::
 
     $ cd build
-    $ python get_depedencies.py --platform <platform>
+    $ python get_dependencies.py --platform <platform>
 
 This will download all third-party dependencies, build them for the platform ``<platform>`` from source, and place them in the appropriate location under ``deps/``.
 
