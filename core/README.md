@@ -6,4 +6,4 @@ For more information:
 
 - [Getting Started](doc/getting-started.rst)
 - [Programmer's Guide](doc/guide.rst)
-- [Build Instructions](build-instructions.rst)
+- [Build Instructions](doc/build-instructions.rst)
