@@ -1389,7 +1389,7 @@ typedef struct {
 
     /** Pointer to a buffer containing SOFA file data from which to load HRTF data. Either \c sofaFileName
         or \c sofaData should be non-NULL. Only for \c IPL_HRTFTYPE_SOFA. */
-    const uint8_t* sofaData;
+    const IPLuint8* sofaData;
 
     /** Size (in bytes) of the buffer pointed to by \c sofaData. Only for \c IPL_HRTFTYPE_SOFA. */
     int sofaDataSize;
