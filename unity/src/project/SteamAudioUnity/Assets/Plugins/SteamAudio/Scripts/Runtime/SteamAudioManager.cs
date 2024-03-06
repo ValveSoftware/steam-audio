@@ -439,7 +439,8 @@ namespace SteamAudio
 
 #if UNITY_EDITOR && UNITY_2019_3_OR_NEWER
                 // If the developer has disabled scene reload, SceneManager.sceneLoaded won't fire during initial load
-                if (EditorSettings.enterPlayModeOptions.HasFlag(EnterPlayModeOptions.DisableSceneReload))
+                if ( EditorSettings.enterPlayModeOptionsEnabled &&
+                    EditorSettings.enterPlayModeOptions.HasFlag(EnterPlayModeOptions.DisableSceneReload))
                 {
                     OnSceneLoaded(SceneManager.GetActiveScene(), LoadSceneMode.Single);
                 }
