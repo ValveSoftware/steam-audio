@@ -714,13 +714,13 @@ typedef enum {
     IPL_SCENETYPE_DEFAULT,
 
     /** The Intel Embree ray tracer. Supports multi-threading. This is a highly optimized implementation, and
-        is likely to be faster than the Phonon ray tracer. However, Embree requires Windows, Linux, or macOS,
+        is likely to be faster than the default ray tracer. However, Embree requires Windows, Linux, or macOS,
         and a 32-bit x86 or 64-bit x86_64 CPU. */
     IPL_SCENETYPE_EMBREE,
 
     /** The AMD Radeon Rays ray tracer. This is an OpenCL implementation, and can use either the CPU or any
         GPU that supports OpenCL 1.2 or later. If using the GPU, it is likely to be significantly faster than
-        the Phonon ray tracer. However, with heavy real-time simulation workloads, it may impact your
+        the default ray tracer. However, with heavy real-time simulation workloads, it may impact your
         application's frame rate. On supported AMD GPUs, you can use the Resource Reservation feature to
         mitigate this issue. */
     IPL_SCENETYPE_RADEONRAYS,
@@ -828,7 +828,8 @@ typedef struct {
                                 origin than this value.
     \param  maxDistance         The maximum distance from the origin at which an intersection may occur for it
                                 to be considered. This function must not return any intersections farther from
-                                the origin than this value.
+                                the origin than this value. If this value is less than or equal to \c minDistance,
+                                the function should ignore the ray, and return immediately.
     \param  hit                 [out] Information describing the ray's intersection with geometry, if any.
     \param  userData            Pointer to a block of memory containing arbitrary data, specified during the call to
                                 \c iplSceneCreate.
@@ -845,7 +846,8 @@ typedef void (IPLCALL *IPLClosestHitCallback)(const IPLRay* ray, IPLfloat32 minD
                                 origin than this value.
     \param  maxDistance         The maximum distance from the origin at which an intersection may occur for it
                                 to be considered. This function must not return any intersections farther from
-                                the origin than this value.
+                                the origin than this value. If this value is less than or equal to \c minDistance,
+                                the function should ignore the ray, set \c occluded to 1, and return immediately.
     \param  occluded            [out] An integer indicating whether the ray intersects any geometry. A value of 0
                                 indicates no intersection, 1 indicates that an intersection exists.
     \param  userData            Pointer to a block of memory containing arbitrary data, specified during the call to
@@ -864,7 +866,9 @@ typedef void (IPLCALL *IPLAnyHitCallback)(const IPLRay* ray, IPLfloat32 minDista
     \param  minDistances        Array containing, for each ray, the minimum distance from the origin at which
                                 an intersection may occur for it to be considered.
     \param  maxDistances        Array containing, for each ray, the maximum distance from the origin at which
-                                an intersection may occur for it to be considered.
+                                an intersection may occur for it to be considered. If, for some ray with index \c i,
+                                `maxDistances[i]` is less than `minDistances[i]`, the function should ignore
+                                the ray.
     \param  hits                [out] Information describing each ray's intersection with geometry, if any.
     \param  userData            Pointer to a block of memory containing arbitrary data, specified during the call to
                                 \c iplSceneCreate.
@@ -880,7 +884,9 @@ typedef void (IPLCALL *IPLBatchedClosestHitCallback)(IPLint32 numRays, const IPL
     \param  minDistances        Array containing, for each ray, the minimum distance from the origin at which
                                 an intersection may occur for it to be considered.
     \param  maxDistances        Array containing, for each ray, the maximum distance from the origin at which
-                                an intersection may occur for it to be considered.
+                                an intersection may occur for it to be considered. If, for some ray with index \c i,
+                                `maxDistances[i]` is less than `minDistances[i]`, the function should ignore the
+                                ray and set `occluded[i]` to 1.
     \param  occluded            [out] Array of integers indicating, for each ray, whether the ray intersects any
                                 geometry. 0 indicates no intersection, 1 indicates that an intersection exists.
     \param  userData            Pointer to a block of memory containing arbitrary data, specified during the call to
@@ -1389,7 +1395,7 @@ typedef struct {
 
     /** Pointer to a buffer containing SOFA file data from which to load HRTF data. Either \c sofaFileName
         or \c sofaData should be non-NULL. Only for \c IPL_HRTFTYPE_SOFA. */
-    const uint8_t* sofaData;
+    const IPLuint8* sofaData;
 
     /** Size (in bytes) of the buffer pointed to by \c sofaData. Only for \c IPL_HRTFTYPE_SOFA. */
     int sofaDataSize;
