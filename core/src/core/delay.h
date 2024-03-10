@@ -17,7 +17,7 @@
 #pragma once
 
 #if defined(IPL_ENABLE_FLOAT8)
-#include <immintrin.h>
+#include "float8.h"
 #endif
 
 #include "array.h"
@@ -49,7 +49,7 @@ public:
     void get(float4_t& out);
 
 #if defined(IPL_ENABLE_FLOAT8)
-    void get(float8_t& out);
+    void IPL_FLOAT8_ATTR get(float8_t& out);
 #endif
 
     void get(int numSamples,
@@ -58,7 +58,7 @@ public:
     void put(float4_t in);
 
 #if defined(IPL_ENABLE_FLOAT8)
-    void put(float8_t in);
+    void IPL_FLOAT8_ATTR put(float8_t in);
 #endif
 
     void put(int numSamples,

@@ -101,7 +101,7 @@ private:
                                        float4_t* out);
 
 #if defined(IPL_ENABLE_FLOAT8)
-    static void multiplyHadamardMatrix(const float8_t* in,
+    static void IPL_FLOAT8_ATTR multiplyHadamardMatrix(const float8_t* in,
                                        float8_t* out);
 #endif
 

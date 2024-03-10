@@ -109,7 +109,7 @@ public:
 
 #if defined(IPL_ENABLE_FLOAT8)
     // Applies the filter to 8 samples of input, using SIMD operations.
-    float8_t apply(float8_t in);
+    float8_t IPL_FLOAT8_ATTR apply(float8_t in);
 #endif
 
     // Applies the filter to an entire buffer of input, using SIMD operations.
@@ -137,9 +137,9 @@ private:
     void apply_float4(int size, const float* in, float* out);
 
 #if defined(IPL_ENABLE_FLOAT8)
-    void resetFilter_float8();
-    void setFilter_float8(const IIR& filter);
-    void apply_float8(int size, const float* in, float* out);
+    void IPL_FLOAT8_ATTR resetFilter_float8();
+    void IPL_FLOAT8_ATTR setFilter_float8(const IIR& filter);
+    void IPL_FLOAT8_ATTR apply_float8(int size, const float* in, float* out);
 #endif
 };
 

@@ -505,13 +505,15 @@ if (STEAMAUDIO_ENABLE_AVX)
         float8_delay.cpp
         float8_reverb_effect.cpp
     )
-    set_source_files_properties(
-        float8_iir.cpp
-        float8_delay.cpp
-        float8_reverb_effect.cpp
-        PROPERTIES
-            COMPILE_FLAGS "/arch:AVX"
-    )
+	if (IPL_OS_WINDOWS)
+        set_source_files_properties(
+            float8_iir.cpp
+            float8_delay.cpp
+            float8_reverb_effect.cpp
+            PROPERTIES
+                COMPILE_FLAGS "/arch:AVX"
+        )
+	endif()
 endif()
 
 if (STEAMAUDIO_ENABLE_EMBREE)
