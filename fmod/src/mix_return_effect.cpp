@@ -239,6 +239,9 @@ FMOD_RESULT F_CALL process(FMOD_DSP_STATE* state,
 {
     if (operation == FMOD_DSP_PROCESS_QUERY)
     {
+        if (!initFmodOutBufferFormat(inBuffers, outBuffers))
+            return FMOD_ERR_DSP_DONTPROCESS;
+
         if (inputsIdle)
             return FMOD_ERR_DSP_DONTPROCESS;
     }

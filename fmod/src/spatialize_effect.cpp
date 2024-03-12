@@ -1283,12 +1283,8 @@ FMOD_RESULT F_CALL process(FMOD_DSP_STATE* state,
 
     if (operation == FMOD_DSP_PROCESS_QUERY)
     {
-        if (outBuffers)
-        {
-            outBuffers->speakermode = FMOD_SPEAKERMODE_STEREO;
-            outBuffers->buffernumchannels[0] = 2;
-            outBuffers->bufferchannelmask[0] = 0;
-        }
+        if (!initFmodOutBufferFormat(inBuffers, outBuffers))
+            return FMOD_ERR_DSP_DONTPROCESS;
 
         if (inputsIdle)
         {
