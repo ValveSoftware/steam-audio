@@ -93,7 +93,7 @@ void UNITY_AUDIODSP_CALLBACK iplUnityGetVersion(unsigned int* major, unsigned in
 
 void UNITY_AUDIODSP_CALLBACK iplUnityInitialize(IPLContext context)
 {
-    assert(gContext == nullptr);
+    assert(SteamAudioUnity::gContext == nullptr);
 
     SteamAudioUnity::gContext = iplContextRetain(context);
 
