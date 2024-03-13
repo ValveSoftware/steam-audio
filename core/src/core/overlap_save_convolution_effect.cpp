@@ -64,6 +64,10 @@ void OverlapSavePartitioner::partition(const ImpulseResponse& ir,
 {
     PROFILE_FUNCTION();
 
+    fftIR.reset();
+
+    numChannels = std::min({numChannels, ir.numChannels(), fftIR.numChannels()});
+
     for (auto i = 0; i < numChannels; ++i)
     {
         auto numSamplesLeft = std::min(numSamples, ir.numSamples());
