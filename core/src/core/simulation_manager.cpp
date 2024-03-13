@@ -124,7 +124,7 @@ void SimulationManager::addProbeBatch(shared_ptr<ProbeBatch> probeBatch)
 
     if (mEnablePathing)
     {
-        mPathSimulators[probeBatch.get()] = make_unique<PathSimulator>(*probeBatch, mNumVisSamples, mAsymmetricVisRange, mDown);
+        mPathSimulators[1][probeBatch.get()] = ipl::make_shared<PathSimulator>(*probeBatch, mNumVisSamples, mAsymmetricVisRange, mDown);
     }
 }
 
@@ -134,7 +134,7 @@ void SimulationManager::removeProbeBatch(shared_ptr<ProbeBatch> probeBatch)
 
     if (mEnablePathing)
     {
-        mPathSimulators.erase(probeBatch.get());
+        mPathSimulators[1].erase(probeBatch.get());
     }
 }
 
@@ -153,6 +153,11 @@ void SimulationManager::commit()
     if (mProbeManager)
     {
         mProbeManager->commit();
+    }
+
+    if (mEnablePathing)
+    {
+        mPathSimulators[0] = mPathSimulators[1];
     }
 
     mSourceData[0] = mSourceData[1];
@@ -470,7 +475,7 @@ void SimulationManager::simulatePathing()
         if (source->pathingInputs.enabled)
         {
             auto probeBatch = source->pathingInputs.probes.get();
-            auto& simulator = *mPathSimulators[source->pathingInputs.probes.get()];
+            auto& simulator = *mPathSimulators[0][source->pathingInputs.probes.get()];
 
             sourceProbes.reset();
             probeBatch->getInfluencingProbes(source->pathingInputs.source.origin, sourceProbes);
@@ -519,7 +524,7 @@ void SimulationManager::simulatePathing(SimulationData& source)
     if (source.pathingInputs.enabled)
     {
         auto probeBatch = source.pathingInputs.probes.get();
-        auto& simulator = *mPathSimulators[source.pathingInputs.probes.get()];
+        auto& simulator = *mPathSimulators[0][source.pathingInputs.probes.get()];
 
         probeBatch->getInfluencingProbes(source.pathingInputs.source.origin, sourceProbes);
         sourceProbes.checkOcclusion(*mScene, source.pathingInputs.source.origin);
@@ -554,7 +559,7 @@ void SimulationManager::simulatePathing(SimulationData& source, ProbeNeighborhoo
     if (source.pathingInputs.enabled)
     {
         auto probeBatch = source.pathingInputs.probes.get();
-        auto& simulator = *mPathSimulators[source.pathingInputs.probes.get()];
+        auto& simulator = *mPathSimulators[0][source.pathingInputs.probes.get()];
 
         probeBatch->getInfluencingProbes(source.pathingInputs.source.origin, sourceProbes);
         sourceProbes.checkOcclusion(*mScene, source.pathingInputs.source.origin);

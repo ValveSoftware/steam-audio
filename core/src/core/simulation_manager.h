@@ -210,7 +210,7 @@ private:
     unique_ptr<OverlapSavePartitioner> mPartitioner;
     shared_ptr<OpenCLDevice> mOpenCL;
     shared_ptr<TANDevice> mTAN;
-    map<const ProbeBatch*, unique_ptr<PathSimulator>> mPathSimulators;
+    map<const ProbeBatch*, shared_ptr<PathSimulator>> mPathSimulators[2];
     JobGraph mJobGraph;
     unique_ptr<ThreadPool> mThreadPool;
     unique_ptr<SharedSimulationData> mSharedData;
