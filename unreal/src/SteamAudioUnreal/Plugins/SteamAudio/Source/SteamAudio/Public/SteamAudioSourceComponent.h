@@ -128,7 +128,7 @@ public:
 
     /** The probe volume within which to simulate pathing. Only if simulating pathing. */
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = PathingSettings)
-    TSoftObjectPtr<ASteamAudioProbeVolume> PathingProbeBatch;
+    ASteamAudioProbeVolume* PathingProbeBatch;
 
     /** If true, baked paths are checked for occlusion by dynamic geometry. Only if simulating pathing. */
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = PathingSettings)

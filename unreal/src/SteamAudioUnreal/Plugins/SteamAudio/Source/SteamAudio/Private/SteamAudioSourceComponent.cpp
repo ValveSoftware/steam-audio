@@ -67,7 +67,7 @@ void USteamAudioSourceComponent::SetInputs(IPLSimulationFlags Flags)
     {
         Inputs.flags = static_cast<IPLSimulationFlags>(Inputs.flags | IPL_SIMULATIONFLAGS_REFLECTIONS);
     }
-    if (bSimulatePathing && PathingProbeBatch.IsValid())
+    if (bSimulatePathing && PathingProbeBatch)
     {
         Inputs.flags = static_cast<IPLSimulationFlags>(Inputs.flags | IPL_SIMULATIONFLAGS_PATHING);
     }
@@ -106,7 +106,7 @@ void USteamAudioSourceComponent::SetInputs(IPLSimulationFlags Flags)
 
     if (PathingProbeBatch)
     {
-        Inputs.pathingProbes = PathingProbeBatch.Get()->GetProbeBatch();
+        Inputs.pathingProbes = PathingProbeBatch->GetProbeBatch();
     }
 
     Inputs.bakedDataIdentifier = GetBakedDataIdentifier();
