@@ -33,7 +33,7 @@ void IIRFilterer::resetFilter_float8()
     memset(mCoeffs8, 0, 8 * 12 * sizeof(float));
 }
 
-void IIRFilterer::setFilter_float8(const IIR& filter)
+void IPL_FLOAT8_ATTR IIRFilterer::setFilter_float8(const IIR& filter)
 {
     mFilter = filter;
 
@@ -86,7 +86,7 @@ void IIRFilterer::setFilter_float8(const IIR& filter)
     }
 }
 
-float8_t IIRFilterer::apply(float8_t in)
+float8_t IPL_FLOAT8_ATTR IIRFilterer::apply(float8_t in)
 {
     auto coeffxp7 = float8::load(&mCoeffs8[0][0]);
     auto coeffxp6 = float8::load(&mCoeffs8[1][0]);
@@ -150,7 +150,7 @@ float8_t IIRFilterer::apply(float8_t in)
     return y;
 }
 
-void IIRFilterer::apply_float8(int size,
+void IPL_FLOAT8_ATTR IIRFilterer::apply_float8(int size,
                                const float* in,
                                float* out)
 {

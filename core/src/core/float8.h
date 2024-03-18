@@ -24,6 +24,12 @@
 // float8
 // --------------------------------------------------------------------------------------------------------------------
 
+#if ( defined(__clang__) || defined(__GNUC__) ) && ( defined(IPL_CPU_X86) || defined(IPL_CPU_X64) )
+#define IPL_FLOAT8_ATTR __attribute__((target("avx")))
+#else
+#define IPL_FLOAT8_ATTR
+#endif
+
 #if defined(IPL_CPU_X86) || defined(IPL_CPU_X64)
 #include "avx_float8.h"
 #endif

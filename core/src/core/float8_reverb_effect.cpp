@@ -27,7 +27,7 @@ namespace ipl {
 // ReverbEffect
 // --------------------------------------------------------------------------------------------------------------------
 
-void ReverbEffect::apply_float8(const float* reverbTimes,
+void IPL_FLOAT8_ATTR ReverbEffect::apply_float8(const float* reverbTimes,
                                 const float* in,
                                 float* out)
 {
@@ -142,7 +142,7 @@ void ReverbEffect::apply_float8(const float* reverbTimes,
     float8::avoidTransitionPenalty();
 }
 
-void ReverbEffect::tail_float8(float* out)
+void IPL_FLOAT8_ATTR ReverbEffect::tail_float8(float* out)
 {
     for (auto i = 0; i < kNumDelays; ++i)
     {
@@ -211,7 +211,7 @@ void ReverbEffect::tail_float8(float* out)
     float8::avoidTransitionPenalty();
 }
 
-void ReverbEffect::multiplyHadamardMatrix(const float8_t* in,
+void IPL_FLOAT8_ATTR ReverbEffect::multiplyHadamardMatrix(const float8_t* in,
                                           float8_t* out)
 {
     out[0]  = in[0] + in[1] + in[2] + in[3] + in[4] + in[5] + in[6] + in[7] + in[8] + in[9] + in[10] + in[11] + in[12] + in[13] + in[14] + in[15];

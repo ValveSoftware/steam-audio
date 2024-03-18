@@ -88,7 +88,7 @@ if (IPL_OS_WINDOWS AND IPL_CPU_X64)
     option(STEAMAUDIO_BUILD_DOCS "Build documentation." ON)
 endif()
 
-if (IPL_OS_WINDOWS AND (IPL_CPU_X86 OR IPL_CPU_X64))
+if ((IPL_OS_WINDOWS OR IPL_OS_LINUX) AND (IPL_CPU_X86 OR IPL_CPU_X64))
     option(STEAMAUDIO_ENABLE_AVX "Enable AVX intrinsics." ON)
 endif()
 

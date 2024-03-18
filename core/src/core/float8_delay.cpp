@@ -25,7 +25,7 @@ namespace ipl {
 // Delay
 // --------------------------------------------------------------------------------------------------------------------
 
-void Delay::get(float8_t& out)
+void IPL_FLOAT8_ATTR Delay::get(float8_t& out)
 {
     if (mReadCursor + 7 < static_cast<int>(mRingBuffer.size(0)))
     {
@@ -57,7 +57,7 @@ void Delay::get(float8_t& out)
     }
 }
 
-void Delay::put(float8_t in)
+void IPL_FLOAT8_ATTR Delay::put(float8_t in)
 {
     if (mCursor + 7 < static_cast<int>(mRingBuffer.size(0)))
     {
