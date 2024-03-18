@@ -301,7 +301,6 @@
                         "-DEMBREE_GEOMETRY_LINES=OFF",
                         "-DEMBREE_GEOMETRY_HAIR=OFF",
                         "-DEMBREE_GEOMETRY_SUBDIV=OFF",
-                        "-DEMBREE_GEOMETRY_USER=OFF",
                         "-DEMBREE_TASKING_SYSTEM=INTERNAL",
                         "-DEMBREE_MAX_ISA=AVX2"
                     ]
