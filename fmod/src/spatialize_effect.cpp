@@ -655,46 +655,49 @@ InitFlags lazyInit(FMOD_DSP_STATE* state,
 
     if (numChannelsIn > 0 && numChannelsOut > 0)
     {
+        int success = IPL_STATUS_SUCCESS;
+
         if (effect->inBuffer.data && effect->inBuffer.numChannels < numChannelsIn)
             iplAudioBufferFree(gContext, &effect->inBuffer);
 
         if (!effect->inBuffer.data)
-            iplAudioBufferAllocate(gContext, numChannelsIn, audioSettings.frameSize, &effect->inBuffer);
+            success |= iplAudioBufferAllocate(gContext, numChannelsIn, audioSettings.frameSize, &effect->inBuffer);
 
         if (effect->outBuffer.data && effect->outBuffer.numChannels < numChannelsOut)
             iplAudioBufferFree(gContext, &effect->outBuffer);
 
         if (!effect->outBuffer.data)
-            iplAudioBufferAllocate(gContext, numChannelsOut, audioSettings.frameSize, &effect->outBuffer);
+            success |= iplAudioBufferAllocate(gContext, numChannelsOut, audioSettings.frameSize, &effect->outBuffer);
 
         if (effect->directBuffer.data && effect->directBuffer.numChannels < numChannelsIn)
             iplAudioBufferFree(gContext, &effect->directBuffer);
 
         if (!effect->directBuffer.data)
-            iplAudioBufferAllocate(gContext, numChannelsIn, audioSettings.frameSize, &effect->directBuffer);
+            success |= iplAudioBufferAllocate(gContext, numChannelsIn, audioSettings.frameSize, &effect->directBuffer);
 
         if (!effect->monoBuffer.data)
-            iplAudioBufferAllocate(gContext, 1, audioSettings.frameSize, &effect->monoBuffer);
+            success |= iplAudioBufferAllocate(gContext, 1, audioSettings.frameSize, &effect->monoBuffer);
 
-        initFlags = static_cast<InitFlags>(initFlags | INIT_DIRECTAUDIOBUFFERS);
+        initFlags = success == IPL_STATUS_SUCCESS ? static_cast<InitFlags>(initFlags | INIT_DIRECTAUDIOBUFFERS) : initFlags;
 
         if ((effect->applyReflections || effect->applyPathing) && gIsSimulationSettingsValid)
         {
+            success = IPL_STATUS_SUCCESS;
             auto numAmbisonicChannels = numChannelsForOrder(gSimulationSettings.maxOrder);
 
             if (effect->reflectionsBuffer.data && effect->reflectionsBuffer.numChannels < numAmbisonicChannels)
                 iplAudioBufferFree(gContext, &effect->reflectionsBuffer);
 
             if (!effect->reflectionsBuffer.data)
-                iplAudioBufferAllocate(gContext, numAmbisonicChannels, audioSettings.frameSize, &effect->reflectionsBuffer);
+                success |= iplAudioBufferAllocate(gContext, numAmbisonicChannels, audioSettings.frameSize, &effect->reflectionsBuffer);
 
             if (effect->reflectionsSpatializedBuffer.data && effect->reflectionsSpatializedBuffer.numChannels < numChannelsOut)
                 iplAudioBufferFree(gContext, &effect->reflectionsSpatializedBuffer);
 
             if (!effect->reflectionsSpatializedBuffer.data)
-                iplAudioBufferAllocate(gContext, numChannelsOut, audioSettings.frameSize, &effect->reflectionsSpatializedBuffer);
+                success |= iplAudioBufferAllocate(gContext, numChannelsOut, audioSettings.frameSize, &effect->reflectionsSpatializedBuffer);
 
-            initFlags = static_cast<InitFlags>(initFlags | INIT_REFLECTIONAUDIOBUFFERS);
+            initFlags = success == IPL_STATUS_SUCCESS ? static_cast<InitFlags>(initFlags | INIT_REFLECTIONAUDIOBUFFERS) : initFlags;
         }
     }
 
