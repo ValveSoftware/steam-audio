@@ -655,11 +655,20 @@ InitFlags lazyInit(FMOD_DSP_STATE* state,
 
     if (numChannelsIn > 0 && numChannelsOut > 0)
     {
+        if (effect->inBuffer.data && effect->inBuffer.numChannels < numChannelsIn)
+            iplAudioBufferFree(gContext, &effect->inBuffer);
+
         if (!effect->inBuffer.data)
             iplAudioBufferAllocate(gContext, numChannelsIn, audioSettings.frameSize, &effect->inBuffer);
 
+        if (effect->outBuffer.data && effect->outBuffer.numChannels < numChannelsOut)
+            iplAudioBufferFree(gContext, &effect->outBuffer);
+
         if (!effect->outBuffer.data)
             iplAudioBufferAllocate(gContext, numChannelsOut, audioSettings.frameSize, &effect->outBuffer);
+
+        if (effect->directBuffer.data && effect->directBuffer.numChannels < numChannelsIn)
+            iplAudioBufferFree(gContext, &effect->directBuffer);
 
         if (!effect->directBuffer.data)
             iplAudioBufferAllocate(gContext, numChannelsIn, audioSettings.frameSize, &effect->directBuffer);
@@ -673,8 +682,14 @@ InitFlags lazyInit(FMOD_DSP_STATE* state,
         {
             auto numAmbisonicChannels = numChannelsForOrder(gSimulationSettings.maxOrder);
 
+            if (effect->reflectionsBuffer.data && effect->reflectionsBuffer.numChannels < numAmbisonicChannels)
+                iplAudioBufferFree(gContext, &effect->reflectionsBuffer);
+
             if (!effect->reflectionsBuffer.data)
                 iplAudioBufferAllocate(gContext, numAmbisonicChannels, audioSettings.frameSize, &effect->reflectionsBuffer);
+
+            if (effect->reflectionsSpatializedBuffer.data && effect->reflectionsSpatializedBuffer.numChannels < numChannelsOut)
+                iplAudioBufferFree(gContext, &effect->reflectionsSpatializedBuffer);
 
             if (!effect->reflectionsSpatializedBuffer.data)
                 iplAudioBufferAllocate(gContext, numChannelsOut, audioSettings.frameSize, &effect->reflectionsSpatializedBuffer);
