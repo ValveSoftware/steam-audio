@@ -62,7 +62,9 @@ struct State
     IPLAudioBuffer outBuffer;
 
     IPLReflectionMixer reflectionMixer;
+    IPLReflectionEffectSettings reflectionMixerSettingsBackup;
     IPLAmbisonicsDecodeEffect ambisonicsEffect;
+    IPLAmbisonicsDecodeEffectSettings ambisonicsEffectSettingsBackup;
 };
 
 enum InitFlags
@@ -102,6 +104,12 @@ InitFlags lazyInit(FMOD_DSP_STATE* state,
     {
         status = IPL_STATUS_SUCCESS;
 
+        if (effect->reflectionMixer && effect->reflectionMixerSettingsBackup.numChannels != numChannelsForOrder(gSimulationSettings.maxOrder))
+        {
+            iplReflectionMixerReset(effect->reflectionMixer);
+            iplReflectionMixerRelease(&effect->reflectionMixer);
+        }
+
         if (!effect->reflectionMixer)
         {
             IPLReflectionEffectSettings effectSettings;
@@ -109,6 +117,8 @@ InitFlags lazyInit(FMOD_DSP_STATE* state,
             effectSettings.numChannels = numChannelsForOrder(gSimulationSettings.maxOrder);
 
             status = iplReflectionMixerCreate(gContext, &audioSettings, &effectSettings, &effect->reflectionMixer);
+
+            effect->reflectionMixerSettingsBackup = effectSettings;
 
             if (!gNewReflectionMixerWritten)
             {
@@ -127,6 +137,12 @@ InitFlags lazyInit(FMOD_DSP_STATE* state,
     {
         status = IPL_STATUS_SUCCESS;
 
+        if (effect->ambisonicsEffect && effect->ambisonicsEffectSettingsBackup.speakerLayout.type != speakerLayoutForNumChannels(numChannelsOut).type)
+        {
+            iplAmbisonicsDecodeEffectReset(effect->ambisonicsEffect);
+            iplAmbisonicsDecodeEffectRelease(&effect->ambisonicsEffect);
+        }
+
         if (!effect->ambisonicsEffect)
         {
             IPLAmbisonicsDecodeEffectSettings effectSettings;
@@ -135,6 +151,8 @@ InitFlags lazyInit(FMOD_DSP_STATE* state,
             effectSettings.maxOrder = gSimulationSettings.maxOrder;
 
             status = iplAmbisonicsDecodeEffectCreate(gContext, &audioSettings, &effectSettings, &effect->ambisonicsEffect);
+
+            effect->ambisonicsEffectSettingsBackup = effectSettings;
         }
 
         if (status == IPL_STATUS_SUCCESS)
@@ -143,18 +161,29 @@ InitFlags lazyInit(FMOD_DSP_STATE* state,
 
     if (numChannelsIn > 0 && numChannelsOut > 0)
     {
+        int success = IPL_STATUS_SUCCESS;
+
         auto numAmbisonicChannels = numChannelsForOrder(gSimulationSettings.maxOrder);
 
+        if (effect->reflectionsBuffer.data && effect->reflectionsBuffer.numChannels < numAmbisonicChannels)
+            iplAudioBufferFree(gContext, &effect->reflectionsBuffer);
+
         if (!effect->reflectionsBuffer.data)
-            iplAudioBufferAllocate(gContext, numAmbisonicChannels, audioSettings.frameSize, &effect->reflectionsBuffer);
+            success |= iplAudioBufferAllocate(gContext, numAmbisonicChannels, audioSettings.frameSize, &effect->reflectionsBuffer);
+
+        if (effect->inBuffer.data && effect->inBuffer.numChannels < numChannelsIn)
+            iplAudioBufferFree(gContext, &effect->inBuffer);
 
         if (!effect->inBuffer.data)
-            iplAudioBufferAllocate(gContext, numChannelsIn, audioSettings.frameSize, &effect->inBuffer);
+            success |= iplAudioBufferAllocate(gContext, numChannelsIn, audioSettings.frameSize, &effect->inBuffer);
+
+        if (effect->outBuffer.data && effect->outBuffer.numChannels < numChannelsOut)
+            iplAudioBufferFree(gContext, &effect->outBuffer);
 
         if (!effect->outBuffer.data)
-            iplAudioBufferAllocate(gContext, numChannelsOut, audioSettings.frameSize, &effect->outBuffer);
+            success |= iplAudioBufferAllocate(gContext, numChannelsOut, audioSettings.frameSize, &effect->outBuffer);
 
-        initFlags = static_cast<InitFlags>(initFlags | INIT_AUDIOBUFFERS);
+        initFlags = success == IPL_STATUS_SUCCESS ? static_cast<InitFlags>(initFlags | INIT_AUDIOBUFFERS) : initFlags;
     }
 
     return initFlags;
