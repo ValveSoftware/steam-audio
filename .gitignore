@@ -1,0 +1,18 @@
+# Binary downloads
+*/steamaudio_*.*.*.zip
+
+# Generated CMake solutions
+*/build/windows-vs****-*
+*/build/osx
+
+# Build results
+fmod/lib
+
+unreal/src/SteamAudioUnreal/Plugins/SteamAudio/Source/SteamAudioSDK/lib
+unreal/src/SteamAudioUnreal/Plugins/FMODStudio/Binaries
+
+unity/src/project/SteamAudioUnity/Assets/Plugins/FMOD/platforms/mac/lib/*.bundle
+unity/src/project/SteamAudioUnity/Assets/Plugins/FMOD/platforms/win/lib/**/*.dll
+unity/src/project/SteamAudioUnity/Assets/Plugins/SteamAudio/Binaries/**/*.so
+unity/src/project/SteamAudioUnity/Assets/Plugins/SteamAudio/Binaries/**/*.dll
+unity/src/project/SteamAudioUnity/Assets/Plugins/SteamAudio/Binaries/**/*.bundle
