@@ -14,7 +14,7 @@
 
 cmake_minimum_required(VERSION 3.17)
 
-project(Phonon VERSION 4.5.2)
+project(Phonon VERSION 4.5.3)
 
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_MODULE_PATH "${CMAKE_HOME_DIRECTORY}/build")
@@ -178,6 +178,9 @@ if (IPL_OS_LINUX)
     add_compile_options(-fPIC -g -fvisibility=hidden -Wl,--no-undefined)
     if (IPL_CPU_X86)
         add_compile_options(-m32 -mfpmath=sse -march=native)
+    endif()
+    if (STEAMAUDIO_ENABLE_AVX)
+        add_compile_options(-fabi-version=6)
     endif()
 endif()
 

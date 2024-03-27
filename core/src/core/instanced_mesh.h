@@ -69,6 +69,16 @@ public:
         return mNumTriangles;
     }
 
+    const Scene& subScene() const
+    {
+        return *mSubScene;
+    }
+
+    const Matrix4x4f& transform() const
+    {
+        return mTransform;
+    }
+
     virtual void updateTransform(const IScene& scene,
                                  const Matrix4x4f& transform) override;
 

@@ -19,7 +19,7 @@
 
 #define STEAMAUDIO_VERSION_MAJOR 4
 #define STEAMAUDIO_VERSION_MINOR 5
-#define STEAMAUDIO_VERSION_PATCH 2
+#define STEAMAUDIO_VERSION_PATCH 3
 #define STEAMAUDIO_VERSION       (((IPLuint32)(STEAMAUDIO_VERSION_MAJOR) << 16) | \
                                   ((IPLuint32)(STEAMAUDIO_VERSION_MINOR) << 8) |  \
                                   ((IPLuint32)(STEAMAUDIO_VERSION_PATCH)))
