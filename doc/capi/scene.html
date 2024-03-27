@@ -70,7 +70,7 @@
             
             
               <div class="version">
-                4.5.2
+                4.5.3
               </div>
             
           
@@ -856,14 +856,14 @@
 <dt class="sig sig-object cpp" id="_CPPv4N12IPLSceneType20IPL_SCENETYPE_EMBREEE">
 <span id="_CPPv3N12IPLSceneType20IPL_SCENETYPE_EMBREEE"></span><span id="_CPPv2N12IPLSceneType20IPL_SCENETYPE_EMBREEE"></span><span class="target" id="group__scene_1gga35d01ba9362309add292009a29f10c5da7edd52612dc1be0fa468533d2d5a1209"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_SCENETYPE_EMBREE</span></span></span><a class="headerlink" href="#_CPPv4N12IPLSceneType20IPL_SCENETYPE_EMBREEE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>The Intel Embree ray tracer. </p>
-<p>Supports multi-threading. This is a highly optimized implementation, and is likely to be faster than the Phonon ray tracer. However, Embree requires Windows, Linux, or macOS, and a 32-bit x86 or 64-bit x86_64 CPU. </p>
+<p>Supports multi-threading. This is a highly optimized implementation, and is likely to be faster than the default ray tracer. However, Embree requires Windows, Linux, or macOS, and a 32-bit x86 or 64-bit x86_64 CPU. </p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N12IPLSceneType24IPL_SCENETYPE_RADEONRAYSE">
 <span id="_CPPv3N12IPLSceneType24IPL_SCENETYPE_RADEONRAYSE"></span><span id="_CPPv2N12IPLSceneType24IPL_SCENETYPE_RADEONRAYSE"></span><span class="target" id="group__scene_1gga35d01ba9362309add292009a29f10c5daf18e67daedac28fa80abc728f82bb050"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_SCENETYPE_RADEONRAYS</span></span></span><a class="headerlink" href="#_CPPv4N12IPLSceneType24IPL_SCENETYPE_RADEONRAYSE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>The AMD Radeon Rays ray tracer. </p>
-<p>This is an OpenCL implementation, and can use either the CPU or any GPU that supports OpenCL 1.2 or later. If using the GPU, it is likely to be significantly faster than the Phonon ray tracer. However, with heavy real-time simulation workloads, it may impact your application’s frame rate. On supported AMD GPUs, you can use the Resource Reservation feature to mitigate this issue. </p>
+<p>This is an OpenCL implementation, and can use either the CPU or any GPU that supports OpenCL 1.2 or later. If using the GPU, it is likely to be significantly faster than the default ray tracer. However, with heavy real-time simulation workloads, it may impact your application’s frame rate. On supported AMD GPUs, you can use the Resource Reservation feature to mitigate this issue. </p>
 </dd></dl>
 
 <dl class="cpp enumerator">
@@ -888,7 +888,7 @@
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>ray</strong> – The ray to trace. </p></li>
 <li><p><strong>minDistance</strong> – The minimum distance from the origin at which an intersection may occur for it to be considered. This function must not return any intersections closer to the origin than this value. </p></li>
-<li><p><strong>maxDistance</strong> – The maximum distance from the origin at which an intersection may occur for it to be considered. This function must not return any intersections farther from the origin than this value. </p></li>
+<li><p><strong>maxDistance</strong> – The maximum distance from the origin at which an intersection may occur for it to be considered. This function must not return any intersections farther from the origin than this value. If this value is less than or equal to <code class="docutils literal notranslate"><span class="pre">minDistance</span></code>, the function should ignore the ray, and return immediately. </p></li>
 <li><p><strong>hit</strong> – [out] Information describing the ray’s intersection with geometry, if any. </p></li>
 <li><p><strong>userData</strong> – Pointer to a block of memory containing arbitrary data, specified during the call to <code class="docutils literal notranslate"><span class="pre">iplSceneCreate</span></code>. </p></li>
 </ul>
@@ -906,7 +906,7 @@
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>ray</strong> – The ray to trace. </p></li>
 <li><p><strong>minDistance</strong> – The minimum distance from the origin at which an intersection may occur for it to be considered. This function must not return any intersections closer to the origin than this value. </p></li>
-<li><p><strong>maxDistance</strong> – The maximum distance from the origin at which an intersection may occur for it to be considered. This function must not return any intersections farther from the origin than this value. </p></li>
+<li><p><strong>maxDistance</strong> – The maximum distance from the origin at which an intersection may occur for it to be considered. This function must not return any intersections farther from the origin than this value. If this value is less than or equal to <code class="docutils literal notranslate"><span class="pre">minDistance</span></code>, the function should ignore the ray, set <code class="docutils literal notranslate"><span class="pre">occluded</span></code> to 1, and return immediately. </p></li>
 <li><p><strong>occluded</strong> – [out] An integer indicating whether the ray intersects any geometry. A value of 0 indicates no intersection, 1 indicates that an intersection exists. </p></li>
 <li><p><strong>userData</strong> – Pointer to a block of memory containing arbitrary data, specified during the call to <code class="docutils literal notranslate"><span class="pre">iplSceneCreate</span></code>. </p></li>
 </ul>
@@ -925,7 +925,7 @@
 <li><p><strong>numRays</strong> – The number of rays to trace. </p></li>
 <li><p><strong>rays</strong> – Array containing the rays. </p></li>
 <li><p><strong>minDistances</strong> – Array containing, for each ray, the minimum distance from the origin at which an intersection may occur for it to be considered. </p></li>
-<li><p><strong>maxDistances</strong> – Array containing, for each ray, the maximum distance from the origin at which an intersection may occur for it to be considered. </p></li>
+<li><p><strong>maxDistances</strong> – Array containing, for each ray, the maximum distance from the origin at which an intersection may occur for it to be considered. If, for some ray with index <code class="docutils literal notranslate"><span class="pre">i</span></code>, <code class="docutils literal notranslate"><span class="pre">maxDistances[i]</span></code> is less than <code class="docutils literal notranslate"><span class="pre">minDistances[i]</span></code>, the function should ignore the ray. </p></li>
 <li><p><strong>hits</strong> – [out] Information describing each ray’s intersection with geometry, if any. </p></li>
 <li><p><strong>userData</strong> – Pointer to a block of memory containing arbitrary data, specified during the call to <code class="docutils literal notranslate"><span class="pre">iplSceneCreate</span></code>. </p></li>
 </ul>
@@ -944,7 +944,7 @@
 <li><p><strong>numRays</strong> – The number of rays to trace. </p></li>
 <li><p><strong>rays</strong> – Array containing the rays. </p></li>
 <li><p><strong>minDistances</strong> – Array containing, for each ray, the minimum distance from the origin at which an intersection may occur for it to be considered. </p></li>
-<li><p><strong>maxDistances</strong> – Array containing, for each ray, the maximum distance from the origin at which an intersection may occur for it to be considered. </p></li>
+<li><p><strong>maxDistances</strong> – Array containing, for each ray, the maximum distance from the origin at which an intersection may occur for it to be considered. If, for some ray with index <code class="docutils literal notranslate"><span class="pre">i</span></code>, <code class="docutils literal notranslate"><span class="pre">maxDistances[i]</span></code> is less than <code class="docutils literal notranslate"><span class="pre">minDistances[i]</span></code>, the function should ignore the ray and set <code class="docutils literal notranslate"><span class="pre">occluded[i]</span></code> to 1. </p></li>
 <li><p><strong>occluded</strong> – [out] Array of integers indicating, for each ray, whether the ray intersects any geometry. 0 indicates no intersection, 1 indicates that an intersection exists. </p></li>
 <li><p><strong>userData</strong> – Pointer to a block of memory containing arbitrary data, specified during the call to <code class="docutils literal notranslate"><span class="pre">iplSceneCreate</span></code>. </p></li>
 </ul>

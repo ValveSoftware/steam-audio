@@ -70,7 +70,7 @@
             
             
               <div class="version">
-                4.5.2
+                4.5.3
               </div>
             
           
@@ -326,6 +326,7 @@
 <p>After creating the context, we need to load Head-Related Transfer Function (HRTF) data. An HRTF is a set of filters that is applied to audio in order to spatialize it. Steam Audio provides a default HRTF, and that’s what we’ll use for this example:</p>
 <div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">IPLHRTFSettings</span> <span class="n">hrtfSettings</span><span class="p">{};</span>
 <span class="n">hrtfSettings</span><span class="p">.</span><span class="n">type</span> <span class="o">=</span> <span class="n">IPL_HRTFTYPE_DEFAULT</span><span class="p">;</span>
+<span class="n">hrtfSettings</span><span class="p">.</span><span class="n">volume</span> <span class="o">=</span> <span class="mf">1.0f</span><span class="p">;</span>
 </pre></div>
 </div>
 <p>We also need to specify some key properties that define how we will process audio. All audio processing in Steam Audio is done using uncompressed Pulse Code Modulated (PCM) audio data. Audio signals are represented as a series of <em>samples</em> measured at discrete, regularly-spaced points in time. Multi-channel audio is represented as multiple audio signals: for example, stereo (2-channel) audio contains 2 audio signals, so there are 2 samples for any given point in time.</p>
@@ -504,6 +505,7 @@
 
     <span class="n">IPLHRTFSettings</span> <span class="n">hrtfSettings</span><span class="p">;</span>
     <span class="n">hrtfSettings</span><span class="p">.</span><span class="n">type</span> <span class="o">=</span> <span class="n">IPL_HRTFTYPE_DEFAULT</span><span class="p">;</span>
+    <span class="n">hrtfSettings</span><span class="p">.</span><span class="n">volume</span> <span class="o">=</span> <span class="mf">1.0f</span><span class="p">;</span>
 
     <span class="n">IPLHRTF</span> <span class="n">hrtf</span><span class="p">{};</span>
     <span class="n">iplHRTFCreate</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">audioSettings</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">hrtfSettings</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">hrtf</span><span class="p">);</span>
