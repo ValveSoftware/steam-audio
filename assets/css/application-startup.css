@@ -84,9 +84,48 @@
 }
 
 
+/* hero section block */
+.hero h1 {
+  font-size: 48pt;
+}
+.hero h2 {
+  font-size: 30pt;
+}
+.hero h3 {
+  font-size: 16pt;
+}
+@media (max-width: 768px) {
+  .hero h1 {
+    font-size: 30pt;
+    padding: 15px 0;
+  }
+  .hero h2 {
+    font-size: 22pt;
+  }
+  .hero h3 {
+    font-size: 16pt;
+  }
+}
+
+
 /* marketing grid block */
 .app-block-marketing-grid .container {
   margin-bottom: -60px;
+}
+.app-marketing-grid {
+  color: #000;
+  display: flex;
+  justify-content: center;
+}
+.app-marketing-grid img {
+  max-width: 100%;
+  height: auto;
+}
+.app-marketing-grid.dark {
+  color: #fff;
+}
+.app-marketin-grid.dark p {
+  color: #aaa;
 }
 .app-marketing-grid .m-b {
   margin-bottom: 10px !important;
