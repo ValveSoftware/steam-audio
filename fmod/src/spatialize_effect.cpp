@@ -514,11 +514,16 @@ struct State
     IPLAudioBuffer reflectionsSpatializedBuffer;
 
     IPLPanningEffect panningEffect;
+    IPLPanningEffectSettings panningEffectSettingsBackup;
     IPLBinauralEffect binauralEffect;
     IPLDirectEffect directEffect;
+    IPLDirectEffectSettings directEffectSettingsBackup;
     IPLReflectionEffect reflectionEffect;
+    IPLReflectionEffectSettings reflectionEffectSettingsBackup;
     IPLPathEffect pathEffect;
+    IPLPathEffectSettings pathEffectSettingsBackup;
     IPLAmbisonicsDecodeEffect ambisonicsEffect;
+    IPLAmbisonicsDecodeEffectSettings ambisonicsEffectSettingsBackup;
 };
 
 enum InitFlags
@@ -560,12 +565,20 @@ InitFlags lazyInit(FMOD_DSP_STATE* state,
 
     if (numChannelsOut > 0)
     {
+        if (effect->panningEffect && effect->panningEffectSettingsBackup.speakerLayout.type != speakerLayoutForNumChannels(numChannelsOut).type)
+        {
+            iplPanningEffectReset(effect->panningEffect);
+            iplPanningEffectRelease(&effect->panningEffect);
+        }
+
         if (!effect->panningEffect)
         {
             IPLPanningEffectSettings effectSettings{};
             effectSettings.speakerLayout = speakerLayoutForNumChannels(numChannelsOut);
 
             status = iplPanningEffectCreate(gContext, &audioSettings, &effectSettings, &effect->panningEffect);
+
+            effect->panningEffectSettingsBackup = effectSettings;
         }
 
         if (status == IPL_STATUS_SUCCESS)
@@ -586,12 +599,21 @@ InitFlags lazyInit(FMOD_DSP_STATE* state,
     if (numChannelsIn > 0)
     {
         status = IPL_STATUS_SUCCESS;
+
+        if (effect->directEffect && effect->directEffectSettingsBackup.numChannels != numChannelsIn)
+        {
+            iplDirectEffectReset(effect->directEffect);
+            iplDirectEffectRelease(&effect->directEffect);
+        }
+
         if (!effect->directEffect)
         {
             IPLDirectEffectSettings effectSettings;
             effectSettings.numChannels = numChannelsIn;
 
             status = iplDirectEffectCreate(gContext, &audioSettings, &effectSettings, &effect->directEffect);
+
+            effect->directEffectSettingsBackup = effectSettings;
         }
 
         if (status == IPL_STATUS_SUCCESS)
@@ -602,6 +624,12 @@ InitFlags lazyInit(FMOD_DSP_STATE* state,
     {
         status = IPL_STATUS_SUCCESS;
 
+        if (effect->reflectionEffect && effect->reflectionEffectSettingsBackup.numChannels != numChannelsForOrder(gSimulationSettings.maxOrder))
+        {
+            iplReflectionEffectReset(effect->reflectionEffect);
+            iplReflectionEffectRelease(&effect->reflectionEffect);
+        }
+
         if (!effect->reflectionEffect)
         {
             IPLReflectionEffectSettings effectSettings;
@@ -610,6 +638,8 @@ InitFlags lazyInit(FMOD_DSP_STATE* state,
             effectSettings.irSize = numSamplesForDuration(gSimulationSettings.maxDuration, audioSettings.samplingRate);
 
             status = iplReflectionEffectCreate(gContext, &audioSettings, &effectSettings, &effect->reflectionEffect);
+
+            effect->reflectionEffectSettingsBackup = effectSettings;
         }
 
         if (status == IPL_STATUS_SUCCESS)
@@ -620,6 +650,12 @@ InitFlags lazyInit(FMOD_DSP_STATE* state,
     {
         status = IPL_STATUS_SUCCESS;
 
+        if (effect->pathEffect && effect->pathEffectSettingsBackup.speakerLayout.type != speakerLayoutForNumChannels(numChannelsOut).type)
+        {
+            iplPathEffectReset(effect->pathEffect);
+            iplPathEffectRelease(&effect->pathEffect);
+        }
+
         if (!effect->pathEffect)
         {
             IPLPathEffectSettings effectSettings{};
@@ -629,6 +665,8 @@ InitFlags lazyInit(FMOD_DSP_STATE* state,
             effectSettings.hrtf = gHRTF[1];
 
             status = iplPathEffectCreate(gContext, &audioSettings, &effectSettings, &effect->pathEffect);
+
+            effect->pathEffectSettingsBackup = effectSettings;
         }
 
         if (status == IPL_STATUS_SUCCESS)
@@ -639,6 +677,12 @@ InitFlags lazyInit(FMOD_DSP_STATE* state,
     {
         status = IPL_STATUS_SUCCESS;
 
+        if (effect->ambisonicsEffect && effect->ambisonicsEffectSettingsBackup.speakerLayout.type != speakerLayoutForNumChannels(numChannelsOut).type)
+        {
+            iplAmbisonicsDecodeEffectReset(effect->ambisonicsEffect);
+            iplAmbisonicsDecodeEffectRelease(&effect->ambisonicsEffect);
+        }
+
         if (!effect->ambisonicsEffect)
         {
             IPLAmbisonicsDecodeEffectSettings effectSettings;
@@ -647,6 +691,8 @@ InitFlags lazyInit(FMOD_DSP_STATE* state,
             effectSettings.maxOrder = gSimulationSettings.maxOrder;
 
             status = iplAmbisonicsDecodeEffectCreate(gContext, &audioSettings, &effectSettings, &effect->ambisonicsEffect);
+
+            effect->ambisonicsEffectSettingsBackup = effectSettings;
         }
 
         if (status == IPL_STATUS_SUCCESS)
@@ -655,31 +701,49 @@ InitFlags lazyInit(FMOD_DSP_STATE* state,
 
     if (numChannelsIn > 0 && numChannelsOut > 0)
     {
+        int success = IPL_STATUS_SUCCESS;
+
+        if (effect->inBuffer.data && effect->inBuffer.numChannels < numChannelsIn)
+            iplAudioBufferFree(gContext, &effect->inBuffer);
+
         if (!effect->inBuffer.data)
-            iplAudioBufferAllocate(gContext, numChannelsIn, audioSettings.frameSize, &effect->inBuffer);
+            success |= iplAudioBufferAllocate(gContext, numChannelsIn, audioSettings.frameSize, &effect->inBuffer);
+
+        if (effect->outBuffer.data && effect->outBuffer.numChannels < numChannelsOut)
+            iplAudioBufferFree(gContext, &effect->outBuffer);
 
         if (!effect->outBuffer.data)
-            iplAudioBufferAllocate(gContext, numChannelsOut, audioSettings.frameSize, &effect->outBuffer);
+            success |= iplAudioBufferAllocate(gContext, numChannelsOut, audioSettings.frameSize, &effect->outBuffer);
+
+        if (effect->directBuffer.data && effect->directBuffer.numChannels < numChannelsIn)
+            iplAudioBufferFree(gContext, &effect->directBuffer);
 
         if (!effect->directBuffer.data)
-            iplAudioBufferAllocate(gContext, numChannelsIn, audioSettings.frameSize, &effect->directBuffer);
+            success |= iplAudioBufferAllocate(gContext, numChannelsIn, audioSettings.frameSize, &effect->directBuffer);
 
         if (!effect->monoBuffer.data)
-            iplAudioBufferAllocate(gContext, 1, audioSettings.frameSize, &effect->monoBuffer);
+            success |= iplAudioBufferAllocate(gContext, 1, audioSettings.frameSize, &effect->monoBuffer);
 
-        initFlags = static_cast<InitFlags>(initFlags | INIT_DIRECTAUDIOBUFFERS);
+        initFlags = success == IPL_STATUS_SUCCESS ? static_cast<InitFlags>(initFlags | INIT_DIRECTAUDIOBUFFERS) : initFlags;
 
         if ((effect->applyReflections || effect->applyPathing) && gIsSimulationSettingsValid)
         {
+            success = IPL_STATUS_SUCCESS;
             auto numAmbisonicChannels = numChannelsForOrder(gSimulationSettings.maxOrder);
 
+            if (effect->reflectionsBuffer.data && effect->reflectionsBuffer.numChannels < numAmbisonicChannels)
+                iplAudioBufferFree(gContext, &effect->reflectionsBuffer);
+
             if (!effect->reflectionsBuffer.data)
-                iplAudioBufferAllocate(gContext, numAmbisonicChannels, audioSettings.frameSize, &effect->reflectionsBuffer);
+                success |= iplAudioBufferAllocate(gContext, numAmbisonicChannels, audioSettings.frameSize, &effect->reflectionsBuffer);
+
+            if (effect->reflectionsSpatializedBuffer.data && effect->reflectionsSpatializedBuffer.numChannels < numChannelsOut)
+                iplAudioBufferFree(gContext, &effect->reflectionsSpatializedBuffer);
 
             if (!effect->reflectionsSpatializedBuffer.data)
-                iplAudioBufferAllocate(gContext, numChannelsOut, audioSettings.frameSize, &effect->reflectionsSpatializedBuffer);
+                success |= iplAudioBufferAllocate(gContext, numChannelsOut, audioSettings.frameSize, &effect->reflectionsSpatializedBuffer);
 
-            initFlags = static_cast<InitFlags>(initFlags | INIT_REFLECTIONAUDIOBUFFERS);
+            initFlags = success == IPL_STATUS_SUCCESS ? static_cast<InitFlags>(initFlags | INIT_REFLECTIONAUDIOBUFFERS) : initFlags;
         }
     }
 
@@ -1283,12 +1347,8 @@ FMOD_RESULT F_CALL process(FMOD_DSP_STATE* state,
 
     if (operation == FMOD_DSP_PROCESS_QUERY)
     {
-        if (outBuffers)
-        {
-            outBuffers->speakermode = FMOD_SPEAKERMODE_STEREO;
-            outBuffers->buffernumchannels[0] = 2;
-            outBuffers->bufferchannelmask[0] = 0;
-        }
+        if (!initFmodOutBufferFormat(inBuffers, outBuffers))
+            return FMOD_ERR_DSP_DONTPROCESS;
 
         if (inputsIdle)
         {

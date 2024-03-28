@@ -197,6 +197,72 @@ void initContextAndDefaultHRTF(IPLAudioSettings audioSettings)
     iplContextRelease(&context);
 }
 
+bool initFmodOutBufferFormat(const FMOD_DSP_BUFFER_ARRAY* inBuffers, FMOD_DSP_BUFFER_ARRAY* outBuffers)
+{
+	if (!inBuffers || !outBuffers)
+	{
+		return false;
+	}
+
+	// From https://www.fmod.com/docs/2.02/api/plugin-api-dsp.html#fmod_dsp_process_query
+	// "If audio is to be processed, 'outbufferarray' must be filled with the expected output format, channel count and mask."
+	// -> our changes to outbufferarray will communicate to FMOD that we have accepted a certain configuration
+	// Since they want us to set the output speaker format, I guess this can only mean that they poke the plugin for 
+	// its output format via the input format. Otherwise, what would be the point of giving us the output speaker 
+	// format and expecting us to set it to the same value?
+
+	int bufferNumChannels = 0;
+	FMOD_CHANNELMASK bufferChannelMask;
+	auto outputSpeakerMode = inBuffers->speakermode;
+
+	switch (inBuffers->speakermode)
+	{
+	case FMOD_SPEAKERMODE_MONO:
+		bufferNumChannels = 1;
+		bufferChannelMask = FMOD_CHANNELMASK_MONO;
+		break;
+	case FMOD_SPEAKERMODE_STEREO:
+		bufferNumChannels = 2;
+		bufferChannelMask = FMOD_CHANNELMASK_STEREO;
+		break;
+	case FMOD_SPEAKERMODE_QUAD:
+		bufferNumChannels = 4;
+		bufferChannelMask = FMOD_CHANNELMASK_QUAD;
+		break;
+	case FMOD_SPEAKERMODE_SURROUND:
+		bufferNumChannels = 5;
+		bufferChannelMask = FMOD_CHANNELMASK_SURROUND;
+		break;
+	case FMOD_SPEAKERMODE_5POINT1:
+		bufferNumChannels = 6;
+		bufferChannelMask = FMOD_CHANNELMASK_5POINT1;
+		break;
+	case FMOD_SPEAKERMODE_7POINT1:
+		bufferNumChannels = 8;
+		bufferChannelMask = FMOD_CHANNELMASK_7POINT1;
+		break;
+	case FMOD_SPEAKERMODE_7POINT1POINT4:
+		bufferNumChannels = 8;
+		bufferChannelMask = FMOD_CHANNELMASK_7POINT1;
+		outputSpeakerMode = FMOD_SPEAKERMODE_7POINT1;
+		break;
+	default:
+		// Unsupported output format, prevent processing
+		return false;
+	}
+
+	for (size_t i = 0; i < outBuffers->numbuffers; i++)
+	{
+		outBuffers->buffernumchannels[i] = bufferNumChannels;
+		outBuffers->bufferchannelmask[i] = bufferChannelMask;
+	}
+
+	// Accept the input format by setting the output format to what the plugin can support for that input format
+	outBuffers->speakermode = outputSpeakerMode;
+
+	return true;
+}
+
 
 // --------------------------------------------------------------------------------------------------------------------
 // SourceManager

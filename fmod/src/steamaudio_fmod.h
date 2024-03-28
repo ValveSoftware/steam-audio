@@ -124,6 +124,10 @@ bool isRunningInEditor();
 // Creates a context and default HRTF. Should only be called if isRunningInEditor returns true.
 void initContextAndDefaultHRTF(IPLAudioSettings audioSettings);
 
+// Initialize FMOD's outBuffer (output format, channel count, mask). Returns true on success.
+bool initFmodOutBufferFormat(const FMOD_DSP_BUFFER_ARRAY* inBuffers, 
+                               FMOD_DSP_BUFFER_ARRAY* outBuffers);
+
 
 // --------------------------------------------------------------------------------------------------------------------
 // SourceManager
