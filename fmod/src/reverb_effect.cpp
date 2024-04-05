@@ -33,15 +33,30 @@ enum Params
      */
     BINAURAL,
 
+    /**
+     *  **Type**: `FMOD_DSP_PARAMETER_TYPE_INT`
+     *
+     *  **Range**: 0 to 2.
+     *
+     *  Controls the output format.
+     *
+     *  - `0`: Output will be the format in FMOD's mixer.
+     *  - `1`: Output will be the format from FMOD's final output.
+     *  - `2`: Output will be the format from the event's input.
+     */
+    OUTPUT_FORMAT,
+
     /** The number of parameters in this effect. */
     NUM_PARAMS
 };
 
 FMOD_DSP_PARAMETER_DESC gParams[] = {
-    { FMOD_DSP_PARAMETER_TYPE_BOOL, "Binaural", "", "Spatialize reflected sound using HRTF." }
+    { FMOD_DSP_PARAMETER_TYPE_BOOL, "Binaural", "", "Spatialize reflected sound using HRTF." },
+    { FMOD_DSP_PARAMETER_TYPE_INT, "OutputFormat", "", "Output Format" },
 };
 
 FMOD_DSP_PARAMETER_DESC* gParamsArray[NUM_PARAMS];
+const char* gOutputFormatValues[] = { "From Mixer", "From Final Out", "From Input" };
 
 void initParamDescs()
 {
@@ -51,12 +66,14 @@ void initParamDescs()
     }
 
     gParams[BINAURAL].booldesc = {false};
+    gParams[OUTPUT_FORMAT].intdesc = { 0, 2, 0, false, gOutputFormatValues };
 }
 
 struct State
 {
     bool binaural;
-
+    ParameterSpeakerFormatType outputFormat;
+    
     IPLAudioBuffer inBuffer;
     IPLAudioBuffer monoBuffer;
     IPLAudioBuffer reflectionsBuffer;
@@ -193,6 +210,7 @@ void reset(FMOD_DSP_STATE* state)
         return;
 
     effect->binaural = false;
+    effect->outputFormat = ParameterSpeakerFormatType::PARAMETER_FROM_MIXER;
 }
 
 FMOD_RESULT F_CALL create(FMOD_DSP_STATE* state)
@@ -261,6 +279,43 @@ FMOD_RESULT F_CALL setBool(FMOD_DSP_STATE* state,
     return FMOD_OK;
 }
 
+FMOD_RESULT F_CALL getInt(FMOD_DSP_STATE* state, 
+                          int index,
+                          int* value, 
+                          char*)
+{
+    auto effect = reinterpret_cast<State*>(state->plugindata);
+
+    switch (index)
+    {
+    case OUTPUT_FORMAT:
+        *value = static_cast<int>(effect->outputFormat);
+        break;
+    default:
+        return FMOD_ERR_INVALID_PARAM;
+    }
+
+    return FMOD_OK;
+}
+
+FMOD_RESULT F_CALL setInt(FMOD_DSP_STATE* state,
+                          int index,
+                          int value)
+{
+    auto effect = reinterpret_cast<State*>(state->plugindata);
+
+    switch (index)
+    {
+    case OUTPUT_FORMAT:
+        effect->outputFormat = static_cast<ParameterSpeakerFormatType>(value);
+        break;
+    default:
+        return FMOD_ERR_INVALID_PARAM;
+    }
+
+    return FMOD_OK;
+}
+
 FMOD_RESULT F_CALL process(FMOD_DSP_STATE* state,
                            unsigned int length,
                            const FMOD_DSP_BUFFER_ARRAY* inBuffers,
@@ -270,7 +325,8 @@ FMOD_RESULT F_CALL process(FMOD_DSP_STATE* state,
 {
     if (operation == FMOD_DSP_PROCESS_QUERY)
     {
-        if (!initFmodOutBufferFormat(inBuffers, outBuffers))
+        auto effect = reinterpret_cast<State*>(state->plugindata);
+        if (!initFmodOutBufferFormat(inBuffers, outBuffers, state, effect->outputFormat))
             return FMOD_ERR_DSP_DONTPROCESS;
 
         if (inputsIdle)
@@ -379,11 +435,11 @@ FMOD_DSP_DESCRIPTION gReverbEffect
     ReverbEffect::NUM_PARAMS,
     ReverbEffect::gParamsArray,
     nullptr,
-    nullptr,
+    ReverbEffect::setInt,
     ReverbEffect::setBool,
     nullptr,
     nullptr,
-    nullptr,
+    ReverbEffect::getInt,
     ReverbEffect::getBool,
     nullptr,
     nullptr,

@@ -197,25 +197,42 @@ void initContextAndDefaultHRTF(IPLAudioSettings audioSettings)
     iplContextRelease(&context);
 }
 
-bool initFmodOutBufferFormat(const FMOD_DSP_BUFFER_ARRAY* inBuffers, FMOD_DSP_BUFFER_ARRAY* outBuffers)
+bool initFmodOutBufferFormat(const FMOD_DSP_BUFFER_ARRAY* inBuffers, 
+                             FMOD_DSP_BUFFER_ARRAY* outBuffers,
+                             FMOD_DSP_STATE* state,
+                             ParameterSpeakerFormatType outputFormat)
 {
-	if (!inBuffers || !outBuffers)
+	if (!inBuffers || !outBuffers || !state || !state->functions)
 	{
 		return false;
 	}
-
-	// From https://www.fmod.com/docs/2.02/api/plugin-api-dsp.html#fmod_dsp_process_query
-	// "If audio is to be processed, 'outbufferarray' must be filled with the expected output format, channel count and mask."
-	// -> our changes to outbufferarray will communicate to FMOD that we have accepted a certain configuration
-	// Since they want us to set the output speaker format, I guess this can only mean that they poke the plugin for 
-	// its output format via the input format. Otherwise, what would be the point of giving us the output speaker 
-	// format and expecting us to set it to the same value?
+    
+    // platforms speaker mode
+    FMOD_SPEAKERMODE mixerMode = {};
+    // final speaker mode
+    FMOD_SPEAKERMODE outputMode = {};
+    state->functions->getspeakermode(state, &mixerMode, &outputMode);
 
 	int bufferNumChannels = 0;
 	FMOD_CHANNELMASK bufferChannelMask;
-	auto outputSpeakerMode = inBuffers->speakermode;
+    FMOD_SPEAKERMODE outputSpeakerMode = {};
+    
+    switch (outputFormat) {
+        case PARAMETER_FROM_MIXER:
+            outputSpeakerMode = mixerMode;
+            break;
+        case PARAMETER_FROM_FINAL_OUTPUT:
+            outputSpeakerMode = outputMode;
+            break;
+        case PARAMETER_FROM_INPUT:
+            outputSpeakerMode = inBuffers->speakermode;
+            break;
+        default:
+            // Missing switch case
+            return false;
+    }
 
-	switch (inBuffers->speakermode)
+	switch (outputSpeakerMode)
 	{
 	case FMOD_SPEAKERMODE_MONO:
 		bufferNumChannels = 1;

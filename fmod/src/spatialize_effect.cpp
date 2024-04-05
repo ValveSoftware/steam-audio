@@ -374,6 +374,19 @@ enum Params
      *  be obtained by calling `iplFMODAddSource`.
      */
     SIMULATION_OUTPUTS_HANDLE,
+    
+    /**
+     *  **Type**: `FMOD_DSP_PARAMETER_TYPE_INT`
+     *
+     *  **Range**: 0 to 2.
+     *
+     *  Controls the output format.
+     *
+     *  - `0`: Output will be the format in FMOD's mixer.
+     *  - `1`: Output will be the format from FMOD's final output.
+     *  - `2`: Output will be the format from the event's input.
+     */
+    OUTPUT_FORMAT,
 
     /** The number of parameters in this effect. */
     NUM_PARAMS
@@ -414,6 +427,7 @@ FMOD_DSP_PARAMETER_DESC gParams[] = {
     { FMOD_DSP_PARAMETER_TYPE_BOOL, "DirectBinaural", "", "Apply HRTF to direct path." },
     { FMOD_DSP_PARAMETER_TYPE_DATA, "DistRange", "", "Distance attenuation range." },
     { FMOD_DSP_PARAMETER_TYPE_INT, "SimOutHandle", "", "Simulation outputs handle." },
+    { FMOD_DSP_PARAMETER_TYPE_INT, "OutputFormat", "", "Output Format" },
 };
 
 FMOD_DSP_PARAMETER_DESC* gParamsArray[NUM_PARAMS];
@@ -423,6 +437,7 @@ const char* gDistanceAttenuationTypeValues[] = {"Off", "Physics-Based", "Curve-D
 const char* gHRTFInterpolationValues[] = {"Nearest", "Bilinear"};
 const char* gTransmissionTypeValues[] = {"Frequency Independent", "Frequency Dependent"};
 const char* gRolloffTypeValues[] = {"Linear Squared", "Linear", "Inverse", "Inverse Squared", "Custom"};
+const char* gOutputFormatValues[] = {"From Mixer", "From Final Out", "From Input"};
 
 void initParamDescs()
 {
@@ -465,6 +480,7 @@ void initParamDescs()
     gParams[DIRECT_BINAURAL].booldesc = {true};
     gParams[DISTANCE_ATTENUATION_RANGE].datadesc = {FMOD_DSP_PARAMETER_DATA_TYPE_ATTENUATION_RANGE};
     gParams[SIMULATION_OUTPUTS_HANDLE].intdesc = {-1, 10000, -1};
+    gParams[OUTPUT_FORMAT].intdesc = {0, 2, 0, false, gOutputFormatValues};
 }
 
 struct State
@@ -498,6 +514,7 @@ struct State
     float pathingMixLevel;
     FMOD_DSP_PARAMETER_ATTENUATION_RANGE attenuationRange;
     std::atomic<bool> attenuationRangeSet;
+    ParameterSpeakerFormatType outputFormat;
 
     IPLSource simulationSource[2];
     std::atomic<bool> newSimulationSourceWritten;
@@ -787,6 +804,7 @@ void reset(FMOD_DSP_STATE* state)
     effect->attenuationRange.min = 1.0f;
     effect->attenuationRange.max = 20.0f;
     effect->attenuationRangeSet = false;
+    effect->outputFormat = ParameterSpeakerFormatType::PARAMETER_FROM_MIXER;
 
     effect->simulationSource[0] = nullptr;
     effect->simulationSource[1] = nullptr;
@@ -898,6 +916,9 @@ FMOD_RESULT F_CALL getInt(FMOD_DSP_STATE* state,
         break;
     case SIMULATION_OUTPUTS_HANDLE:
         *value = -1;
+        break;
+    case OUTPUT_FORMAT:
+        *value = static_cast<int>(effect->outputFormat);
         break;
     default:
         return FMOD_ERR_INVALID_PARAM;
@@ -1075,6 +1096,9 @@ FMOD_RESULT F_CALL setInt(FMOD_DSP_STATE* state,
         {
             setSource(state, gSourceManager->getSource(value));
         }
+        break;
+    case OUTPUT_FORMAT:
+        effect->outputFormat = static_cast<ParameterSpeakerFormatType>(value);
         break;
     default:
         return FMOD_ERR_INVALID_PARAM;
@@ -1347,7 +1371,7 @@ FMOD_RESULT F_CALL process(FMOD_DSP_STATE* state,
 
     if (operation == FMOD_DSP_PROCESS_QUERY)
     {
-        if (!initFmodOutBufferFormat(inBuffers, outBuffers))
+        if (!initFmodOutBufferFormat(inBuffers, outBuffers, state, effect->outputFormat))
             return FMOD_ERR_DSP_DONTPROCESS;
 
         if (inputsIdle)

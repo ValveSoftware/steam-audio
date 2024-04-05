@@ -52,6 +52,13 @@ enum ParameterApplyType
     PARAMETER_USERDEFINED,
 };
 
+enum ParameterSpeakerFormatType
+{
+    PARAMETER_FROM_MIXER,
+    PARAMETER_FROM_FINAL_OUTPUT,
+    PARAMETER_FROM_INPUT,
+};
+
 
 // --------------------------------------------------------------------------------------------------------------------
 // Global State
@@ -126,7 +133,9 @@ void initContextAndDefaultHRTF(IPLAudioSettings audioSettings);
 
 // Initialize FMOD's outBuffer (output format, channel count, mask). Returns true on success.
 bool initFmodOutBufferFormat(const FMOD_DSP_BUFFER_ARRAY* inBuffers, 
-                               FMOD_DSP_BUFFER_ARRAY* outBuffers);
+                             FMOD_DSP_BUFFER_ARRAY* outBuffers,
+                             FMOD_DSP_STATE* state,
+                             ParameterSpeakerFormatType outputFormat);
 
 
 // --------------------------------------------------------------------------------------------------------------------
