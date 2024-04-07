@@ -720,19 +720,19 @@ InitFlags lazyInit(FMOD_DSP_STATE* state,
     {
         int success = IPL_STATUS_SUCCESS;
 
-        if (effect->inBuffer.data && effect->inBuffer.numChannels < numChannelsIn)
+        if (effect->inBuffer.data && effect->inBuffer.numChannels != numChannelsIn)
             iplAudioBufferFree(gContext, &effect->inBuffer);
 
         if (!effect->inBuffer.data)
             success |= iplAudioBufferAllocate(gContext, numChannelsIn, audioSettings.frameSize, &effect->inBuffer);
 
-        if (effect->outBuffer.data && effect->outBuffer.numChannels < numChannelsOut)
+        if (effect->outBuffer.data && effect->outBuffer.numChannels != numChannelsOut)
             iplAudioBufferFree(gContext, &effect->outBuffer);
 
         if (!effect->outBuffer.data)
             success |= iplAudioBufferAllocate(gContext, numChannelsOut, audioSettings.frameSize, &effect->outBuffer);
 
-        if (effect->directBuffer.data && effect->directBuffer.numChannels < numChannelsIn)
+        if (effect->directBuffer.data && effect->directBuffer.numChannels != numChannelsIn)
             iplAudioBufferFree(gContext, &effect->directBuffer);
 
         if (!effect->directBuffer.data)
@@ -748,13 +748,13 @@ InitFlags lazyInit(FMOD_DSP_STATE* state,
             success = IPL_STATUS_SUCCESS;
             auto numAmbisonicChannels = numChannelsForOrder(gSimulationSettings.maxOrder);
 
-            if (effect->reflectionsBuffer.data && effect->reflectionsBuffer.numChannels < numAmbisonicChannels)
+            if (effect->reflectionsBuffer.data && effect->reflectionsBuffer.numChannels != numAmbisonicChannels)
                 iplAudioBufferFree(gContext, &effect->reflectionsBuffer);
 
             if (!effect->reflectionsBuffer.data)
                 success |= iplAudioBufferAllocate(gContext, numAmbisonicChannels, audioSettings.frameSize, &effect->reflectionsBuffer);
 
-            if (effect->reflectionsSpatializedBuffer.data && effect->reflectionsSpatializedBuffer.numChannels < numChannelsOut)
+            if (effect->reflectionsSpatializedBuffer.data && effect->reflectionsSpatializedBuffer.numChannels != numChannelsOut)
                 iplAudioBufferFree(gContext, &effect->reflectionsSpatializedBuffer);
 
             if (!effect->reflectionsSpatializedBuffer.data)

@@ -176,7 +176,7 @@ InitFlags lazyInit(FMOD_DSP_STATE* state,
 
         auto numAmbisonicChannels = numChannelsForOrder(gSimulationSettings.maxOrder);
 
-        if (effect->inBuffer.data && effect->inBuffer.numChannels < numChannelsIn)
+        if (effect->inBuffer.data && effect->inBuffer.numChannels != numChannelsIn)
             iplAudioBufferFree(gContext, &effect->inBuffer);
 
         if (!effect->inBuffer.data)
@@ -185,13 +185,13 @@ InitFlags lazyInit(FMOD_DSP_STATE* state,
         if (!effect->monoBuffer.data)
             success |= iplAudioBufferAllocate(gContext, 1, audioSettings.frameSize, &effect->monoBuffer);
 
-        if (effect->reflectionsBuffer.data && effect->reflectionsBuffer.numChannels < numAmbisonicChannels)
+        if (effect->reflectionsBuffer.data && effect->reflectionsBuffer.numChannels != numAmbisonicChannels)
             iplAudioBufferFree(gContext, &effect->reflectionsBuffer);
 
         if (!effect->reflectionsBuffer.data)
             success |= iplAudioBufferAllocate(gContext, numAmbisonicChannels, audioSettings.frameSize, &effect->reflectionsBuffer);
 
-        if (effect->outBuffer.data && effect->outBuffer.numChannels < numChannelsOut)
+        if (effect->outBuffer.data && effect->outBuffer.numChannels != numChannelsOut)
             iplAudioBufferFree(gContext, &effect->outBuffer);
 
         if (!effect->outBuffer.data)
