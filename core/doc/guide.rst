@@ -714,6 +714,11 @@ First, when creating the simulator, you must specify parameters related to refle
 
 For information on the various parameters configured here, see :ref:`ref_simulation`. Among other things, the above code enables reflection simulation, specifies that up to 4096 rays will be traced from the listener, that the simulation should use 2 threads, and the result of the simulation should be stored in a 4-channel (1st order Ambisonics) impulse response (IR) that is 2.0 seconds long.
 
+When creating the source, you must also configure it to be used for reflection simulation::
+
+    IPLSourceSettings sourceSettings{};
+    sourceSettings.flags = IPL_SIMULATIONFLAGS_REFLECTIONS;
+
 Simulating reflections
 ~~~~~~~~~~~~~~~~~~~~~~
 
