@@ -510,7 +510,7 @@ namespace SteamAudio
                 case AudioRolloffMode.Logarithmic:
                     if (distance < rMin)
                         return 1.0f;
-                    else if (distance < rMax)
+                    else if (distance > rMax)
                         return 0.0f;
                     else
                         return rMin / distance;
