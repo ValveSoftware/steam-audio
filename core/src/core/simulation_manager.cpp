@@ -120,7 +120,10 @@ SimulationManager::SimulationManager(bool enableDirect,
 
 void SimulationManager::addProbeBatch(shared_ptr<ProbeBatch> probeBatch)
 {
-    mProbeManager->addProbeBatch(probeBatch);
+    if (mProbeManager)
+    {
+        mProbeManager->addProbeBatch(probeBatch);
+    }
 
     if (mEnablePathing)
     {
@@ -130,7 +133,10 @@ void SimulationManager::addProbeBatch(shared_ptr<ProbeBatch> probeBatch)
 
 void SimulationManager::removeProbeBatch(shared_ptr<ProbeBatch> probeBatch)
 {
-    mProbeManager->removeProbeBatch(probeBatch);
+    if (mProbeManager)
+    {
+        mProbeManager->removeProbeBatch(probeBatch);
+    }
 
     if (mEnablePathing)
     {
