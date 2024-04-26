@@ -14,8 +14,6 @@
 // limitations under the License.
 //
 
-#if !defined(IPL_OS_MACOSX) || defined(IPL_CPU_ARM64)
-
 #include "fft.h"
 
 #include <pffft.h>
@@ -109,5 +107,3 @@ void FFT::applyInverse(const complex_t* spectrum,
 }
 
 }
-
-#endif
