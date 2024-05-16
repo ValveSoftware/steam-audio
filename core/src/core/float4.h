@@ -28,6 +28,19 @@
 #include "neon_float4.h"
 #endif
 
+namespace ipl {
+
+namespace float4
+{
+    template <typename T>
+    inline bool isAligned(const T* p)
+    {
+        return ((reinterpret_cast<size_t>(p) & 0xf) == 0);
+    }
+}
+
+}
+
 #if defined(IPL_OS_WINDOWS)
 
 namespace ipl {

@@ -30,9 +30,19 @@ void ArrayMath::add(int size,
 {
     auto simdSize = size & ~3;
 
-    for (auto i = 0; i < simdSize; i += 4)
+    if (float4::isAligned(in1) && float4::isAligned(in2) && float4::isAligned(out))
     {
-        float4::store(&out[i], float4::add(float4::load(&in1[i]), float4::load(&in2[i])));
+        for (auto i = 0; i < simdSize; i += 4)
+        {
+            float4::store(&out[i], float4::add(float4::load(&in1[i]), float4::load(&in2[i])));
+        }
+    }
+    else
+    {
+        for (auto i = 0; i < simdSize; i += 4)
+        {
+            float4::storeu(&out[i], float4::add(float4::loadu(&in1[i]), float4::loadu(&in2[i])));
+        }
     }
 
     for (auto i = simdSize; i < size; ++i)
@@ -57,9 +67,19 @@ void ArrayMath::multiply(int size,
 {
     auto simdSize = size & ~3;
 
-    for (auto i = 0; i < simdSize; i += 4)
+    if (float4::isAligned(in1) && float4::isAligned(in2) && float4::isAligned(out))
     {
-        float4::store(&out[i], float4::mul(float4::load(&in1[i]), float4::load(&in2[i])));
+        for (auto i = 0; i < simdSize; i += 4)
+        {
+            float4::store(&out[i], float4::mul(float4::load(&in1[i]), float4::load(&in2[i])));
+        }
+    }
+    else
+    {
+        for (auto i = 0; i < simdSize; i += 4)
+        {
+            float4::storeu(&out[i], float4::mul(float4::loadu(&in1[i]), float4::loadu(&in2[i])));
+        }
     }
 
     for (auto i = simdSize; i < size; ++i)
@@ -88,19 +108,39 @@ void ArrayMath::multiply(int size,
 
 #if (defined(IPL_CPU_X86) || defined(IPL_CPU_X64))
 
-    for (auto i = 0U; i < simdArraySizeAsReal; i += 4)
+    if (float4::isAligned(in1) && float4::isAligned(in2) && float4::isAligned(out))
     {
-        auto x1 = float4::load(&in1Data[i]);
-        auto x2 = float4::load(&in2Data[i]);
+        for (auto i = 0U; i < simdArraySizeAsReal; i += 4)
+        {
+            auto x1 = float4::load(&in1Data[i]);
+            auto x2 = float4::load(&in2Data[i]);
 
-        auto b0 = float4::set(-1.0f, 1.0f, -1.0f, 1.0f);
-        auto b1 = _mm_shuffle_ps(x1, x1, _MM_SHUFFLE(2, 2, 0, 0));
-        auto b3 = _mm_shuffle_ps(x1, x1, _MM_SHUFFLE(3, 3, 1, 1));
-        auto b4 = _mm_shuffle_ps(x2, x2, _MM_SHUFFLE(2, 3, 0, 1));
+            auto b0 = float4::set(-1.0f, 1.0f, -1.0f, 1.0f);
+            auto b1 = _mm_shuffle_ps(x1, x1, _MM_SHUFFLE(2, 2, 0, 0));
+            auto b3 = _mm_shuffle_ps(x1, x1, _MM_SHUFFLE(3, 3, 1, 1));
+            auto b4 = _mm_shuffle_ps(x2, x2, _MM_SHUFFLE(2, 3, 0, 1));
 
-        auto y = float4::add(float4::mul(b1, x2), float4::mul(b0, float4::mul(b3, b4)));
+            auto y = float4::add(float4::mul(b1, x2), float4::mul(b0, float4::mul(b3, b4)));
 
-        float4::store(&outData[i], y);
+            float4::store(&outData[i], y);
+        }
+    }
+    else
+    {
+        for (auto i = 0U; i < simdArraySizeAsReal; i += 4)
+        {
+            auto x1 = float4::loadu(&in1Data[i]);
+            auto x2 = float4::loadu(&in2Data[i]);
+
+            auto b0 = float4::set(-1.0f, 1.0f, -1.0f, 1.0f);
+            auto b1 = _mm_shuffle_ps(x1, x1, _MM_SHUFFLE(2, 2, 0, 0));
+            auto b3 = _mm_shuffle_ps(x1, x1, _MM_SHUFFLE(3, 3, 1, 1));
+            auto b4 = _mm_shuffle_ps(x2, x2, _MM_SHUFFLE(2, 3, 0, 1));
+
+            auto y = float4::add(float4::mul(b1, x2), float4::mul(b0, float4::mul(b3, b4)));
+
+            float4::storeu(&outData[i], y);
+        }
     }
 
 #elif (defined(IPL_CPU_ARMV7) || defined(IPL_CPU_ARM64))
@@ -137,15 +177,31 @@ void ArrayMath::multiplyAccumulate(int size,
 {
     auto simdSize = size & ~3;
 
-    for (auto i = 0; i < simdSize; i += 4)
+    if (float4::isAligned(in1) && float4::isAligned(in2) && float4::isAligned(accum))
     {
-        auto x1 = float4::load(&in1[i]);
-        auto x2 = float4::load(&in2[i]);
-        auto y = float4::load(&accum[i]);
+        for (auto i = 0; i < simdSize; i += 4)
+        {
+            auto x1 = float4::load(&in1[i]);
+            auto x2 = float4::load(&in2[i]);
+            auto y = float4::load(&accum[i]);
 
-        y = float4::add(y, float4::mul(x1, x2));
+            y = float4::add(y, float4::mul(x1, x2));
 
-        float4::store(&accum[i], y);
+            float4::store(&accum[i], y);
+        }
+    }
+    else
+    {
+        for (auto i = 0; i < simdSize; i += 4)
+        {
+            auto x1 = float4::loadu(&in1[i]);
+            auto x2 = float4::loadu(&in2[i]);
+            auto y = float4::loadu(&accum[i]);
+
+            y = float4::add(y, float4::mul(x1, x2));
+
+            float4::storeu(&accum[i], y);
+        }
     }
 
     for (auto i = simdSize; i < size; ++i)
@@ -168,21 +224,43 @@ void ArrayMath::multiplyAccumulate(int size,
 
 #if (defined(IPL_CPU_X86) || defined(IPL_CPU_X64))
 
-    for (auto i = 0U; i < simdArraySizeAsReal; i += 4)
+    if (float4::isAligned(in1) && float4::isAligned(in2) && float4::isAligned(accum))
     {
-        auto x1 = float4::load(&in1Data[i]);
-        auto x2 = float4::load(&in2Data[i]);
+        for (auto i = 0U; i < simdArraySizeAsReal; i += 4)
+        {
+            auto x1 = float4::load(&in1Data[i]);
+            auto x2 = float4::load(&in2Data[i]);
 
-        auto b0 = float4::set(-1.0f, 1.0f, -1.0f, 1.0f);
-        auto b1 = _mm_shuffle_ps(x1, x1, _MM_SHUFFLE(2, 2, 0, 0));
-        auto b3 = _mm_shuffle_ps(x1, x1, _MM_SHUFFLE(3, 3, 1, 1));
-        auto b4 = _mm_shuffle_ps(x2, x2, _MM_SHUFFLE(2, 3, 0, 1));
+            auto b0 = float4::set(-1.0f, 1.0f, -1.0f, 1.0f);
+            auto b1 = _mm_shuffle_ps(x1, x1, _MM_SHUFFLE(2, 2, 0, 0));
+            auto b3 = _mm_shuffle_ps(x1, x1, _MM_SHUFFLE(3, 3, 1, 1));
+            auto b4 = _mm_shuffle_ps(x2, x2, _MM_SHUFFLE(2, 3, 0, 1));
 
-        auto y = float4::add(float4::mul(b1, x2), float4::mul(b0, float4::mul(b3, b4)));
+            auto y = float4::add(float4::mul(b1, x2), float4::mul(b0, float4::mul(b3, b4)));
 
-        y = float4::add(y, float4::load(&outData[i]));
+            y = float4::add(y, float4::load(&outData[i]));
 
-        float4::store(&outData[i], y);
+            float4::store(&outData[i], y);
+        }
+    }
+    else
+    {
+        for (auto i = 0U; i < simdArraySizeAsReal; i += 4)
+        {
+            auto x1 = float4::loadu(&in1Data[i]);
+            auto x2 = float4::loadu(&in2Data[i]);
+
+            auto b0 = float4::set(-1.0f, 1.0f, -1.0f, 1.0f);
+            auto b1 = _mm_shuffle_ps(x1, x1, _MM_SHUFFLE(2, 2, 0, 0));
+            auto b3 = _mm_shuffle_ps(x1, x1, _MM_SHUFFLE(3, 3, 1, 1));
+            auto b4 = _mm_shuffle_ps(x2, x2, _MM_SHUFFLE(2, 3, 0, 1));
+
+            auto y = float4::add(float4::mul(b1, x2), float4::mul(b0, float4::mul(b3, b4)));
+
+            y = float4::add(y, float4::load(&outData[i]));
+
+            float4::storeu(&outData[i], y);
+        }
     }
 
 #elif (defined(IPL_CPU_ARMV7) || defined(IPL_CPU_ARM64))
@@ -217,9 +295,19 @@ void ArrayMath::scale(int size,
     auto simdSize = size & ~3;
     auto simdScalar = float4::set1(scalar);
 
-    for (auto i = 0; i < simdSize; i += 4)
+    if (float4::isAligned(in) && float4::isAligned(out))
     {
-        float4::store(&out[i], float4::mul(float4::load(&in[i]), simdScalar));
+        for (auto i = 0; i < simdSize; i += 4)
+        {
+            float4::store(&out[i], float4::mul(float4::load(&in[i]), simdScalar));
+        }
+    }
+    else
+    {
+        for (auto i = 0; i < simdSize; i += 4)
+        {
+            float4::storeu(&out[i], float4::mul(float4::loadu(&in[i]), simdScalar));
+        }
     }
 
     for (auto i = simdSize; i < size; ++i)
@@ -244,14 +332,29 @@ void ArrayMath::scaleAccumulate(int size,
     auto simdSize = size & ~3;
     auto simdScalar = float4::set1(scalar);
 
-    for (auto i = 0; i < simdSize; i += 4)
+    if (float4::isAligned(in) && float4::isAligned(out))
     {
-        auto x = float4::load(&in[i]);
-        auto y = float4::load(&out[i]);
+        for (auto i = 0; i < simdSize; i += 4)
+        {
+            auto x = float4::load(&in[i]);
+            auto y = float4::load(&out[i]);
 
-        y = float4::add(y, float4::mul(x, simdScalar));
+            y = float4::add(y, float4::mul(x, simdScalar));
 
-        float4::store(&out[i], y);
+            float4::store(&out[i], y);
+        }
+    }
+    else
+    {
+        for (auto i = 0; i < simdSize; i += 4)
+        {
+            auto x = float4::loadu(&in[i]);
+            auto y = float4::loadu(&out[i]);
+
+            y = float4::add(y, float4::mul(x, simdScalar));
+
+            float4::storeu(&out[i], y);
+        }
     }
 
     for (auto i = simdSize; i < size; ++i)
@@ -268,9 +371,19 @@ void ArrayMath::addConstant(int size,
     auto simdSize = size & ~3;
     auto simdConstant = float4::set1(constant);
 
-    for (auto i = 0; i < simdSize; i += 4)
+    if (float4::isAligned(in) && float4::isAligned(out))
     {
-        float4::store(&out[i], float4::add(float4::load(&in[i]), simdConstant));
+        for (auto i = 0; i < simdSize; i += 4)
+        {
+            float4::store(&out[i], float4::add(float4::load(&in[i]), simdConstant));
+        }
+    }
+    else
+    {
+        for (auto i = 0; i < simdSize; i += 4)
+        {
+            float4::storeu(&out[i], float4::add(float4::loadu(&in[i]), simdConstant));
+        }
     }
 
     for (auto i = simdSize; i < size; ++i)
@@ -315,9 +428,19 @@ void ArrayMath::threshold(int size,
     auto simdSize = size & ~3;
     auto simdMinValue = float4::set1(minValue);
 
-    for (auto i = 0; i < simdSize; i += 4)
+    if (float4::isAligned(in) && float4::isAligned(out))
     {
-        float4::store(&out[i], float4::max(float4::load(&in[i]), simdMinValue));
+        for (auto i = 0; i < simdSize; i += 4)
+        {
+            float4::store(&out[i], float4::max(float4::load(&in[i]), simdMinValue));
+        }
+    }
+    else
+    {
+        for (auto i = 0; i < simdSize; i += 4)
+        {
+            float4::storeu(&out[i], float4::max(float4::loadu(&in[i]), simdMinValue));
+        }
     }
 
     for (auto i = simdSize; i < size; ++i)

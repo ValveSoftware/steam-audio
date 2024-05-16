@@ -35,3 +35,16 @@
 #endif
 
 #endif
+
+namespace ipl {
+
+namespace float8
+{
+    template <typename T>
+    inline bool isAligned(const T* p)
+    {
+        return ((reinterpret_cast<size_t>(p) & 0x1f) == 0);
+    }
+}
+
+}
