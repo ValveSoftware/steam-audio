@@ -54,7 +54,7 @@ namespace SteamAudio
         {
             base.SetGlobalHRTFDisabled(disabled);
 
-            API.setGlobalHRTFDisabled(disabled);
+            API.iplUnitySetGlobalHRTFDisabled(disabled);
         }
     }
 

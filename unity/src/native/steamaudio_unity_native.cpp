@@ -184,7 +184,7 @@ void UNITY_AUDIODSP_CALLBACK iplUnityRemoveSource(IPLint32 handle)
     SteamAudioUnity::gSourceManager->removeSource(handle);
 }
 
-void UNITY_AUDIODSP_CALLBACK setGlobalHRTFDisabled(bool disabled)
+void UNITY_AUDIODSP_CALLBACK iplUnitySetGlobalHRTFDisabled(bool disabled)
 {
     SteamAudioUnity::hrtfGlobalDisable = disabled;
 }

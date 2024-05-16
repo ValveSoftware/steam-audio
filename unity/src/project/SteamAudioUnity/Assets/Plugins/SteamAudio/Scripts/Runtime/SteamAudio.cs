@@ -1374,6 +1374,6 @@ namespace SteamAudio
 #else
         [DllImport("audioplugin_phonon")]
 #endif
-        public static extern void setGlobalHRTFDisabled(bool disabled);
+        public static extern void iplUnitySetGlobalHRTFDisabled(bool disabled);
     }
 }

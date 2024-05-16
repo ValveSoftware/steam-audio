@@ -249,6 +249,6 @@ F_EXPORT IPLint32 F_CALL iplFMODAddSource(IPLSource source);
 
 F_EXPORT void F_CALL iplFMODRemoveSource(IPLint32 handle);
 
-F_EXPORT void F_CALL setGlobalHRTFDisabled(bool disabled);
+F_EXPORT void F_CALL iplFMODSetGlobalHRTFDisabled(bool disabled);
 
 }

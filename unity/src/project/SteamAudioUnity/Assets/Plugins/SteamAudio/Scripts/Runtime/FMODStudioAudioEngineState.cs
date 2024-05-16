@@ -49,7 +49,7 @@ namespace SteamAudio
         {
             base.SetGlobalHRTFDisabled(disabled);
 
-            FMODStudioAPI.setGlobalHRTFDisabled(disabled);
+            FMODStudioAPI.iplFMODSetGlobalHRTFDisabled(disabled);
         }
     }
 

@@ -514,7 +514,7 @@ void F_CALL iplFMODRemoveSource(IPLint32 handle)
     gSourceManager->removeSource(handle);
 }
 
-void F_CALL setGlobalHRTFDisabled(bool disabled) 
+void F_CALL iplFMODSetGlobalHRTFDisabled(bool disabled)
 {
     hrtfGlobalDisable = disabled;
 }
