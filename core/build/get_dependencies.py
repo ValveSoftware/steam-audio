@@ -682,14 +682,12 @@ def install_dependency(name, dep, platform, cmake, debug):
 # ----------------------------------------------------------------------------------------------------------------------
 
 def copy_file(src, dest):
-    # print('copy file', src, 'to', dest)
     make_dir(dest)
     shutil.copy(src, dest)
 
 def copy_directory(src, dest):
     if os.path.exists(dest):
         delete_directory(dest)
-    # print('copy directory', src, 'to', dest)
     shutil.copytree(src, dest)
 
 def copy_dependency(name, dep, platform):
@@ -699,11 +697,19 @@ def copy_dependency(name, dep, platform):
         src = os.path.join(os.getcwd(), 'deps-build', name, copy_item[0])
         dest = os.path.join(os.getcwd(), 'deps', name, copy_item[1])
 
-        if True or os.path.exists(src):
+        if os.path.exists(src):
             if '.' not in src or os.path.isdir(src):
                 copy_directory(src, dest)
             else:
                 copy_file(src, dest)
+        elif copy_item[0].startswith('install/') and copy_item[0].endswith('/lib'):
+            # try lib64 instead of lib
+            src = src.replace('/lib', '/lib64')
+            if os.path.exists(src):
+                if '.' not in src or os.path.isdir(src):
+                    copy_directory(src, dest)
+                else:
+                    copy_file(src, dest)
 
     stamp_copy(name, platform)
 
