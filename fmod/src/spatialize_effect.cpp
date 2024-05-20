@@ -374,6 +374,19 @@ enum Params
      *  be obtained by calling `iplFMODAddSource`.
      */
     SIMULATION_OUTPUTS_HANDLE,
+    
+    /**
+     *  **Type**: `FMOD_DSP_PARAMETER_TYPE_INT`
+     *
+     *  **Range**: 0 to 2.
+     *
+     *  Controls the output format.
+     *
+     *  - `0`: Output will be the format in FMOD's mixer.
+     *  - `1`: Output will be the format from FMOD's final output.
+     *  - `2`: Output will be the format from the event's input.
+     */
+    OUTPUT_FORMAT,
 
     /** The number of parameters in this effect. */
     NUM_PARAMS
@@ -414,6 +427,7 @@ FMOD_DSP_PARAMETER_DESC gParams[] = {
     { FMOD_DSP_PARAMETER_TYPE_BOOL, "DirectBinaural", "", "Apply HRTF to direct path." },
     { FMOD_DSP_PARAMETER_TYPE_DATA, "DistRange", "", "Distance attenuation range." },
     { FMOD_DSP_PARAMETER_TYPE_INT, "SimOutHandle", "", "Simulation outputs handle." },
+    { FMOD_DSP_PARAMETER_TYPE_INT, "OutputFormat", "", "Output Format" },
 };
 
 FMOD_DSP_PARAMETER_DESC* gParamsArray[NUM_PARAMS];
@@ -423,6 +437,7 @@ const char* gDistanceAttenuationTypeValues[] = {"Off", "Physics-Based", "Curve-D
 const char* gHRTFInterpolationValues[] = {"Nearest", "Bilinear"};
 const char* gTransmissionTypeValues[] = {"Frequency Independent", "Frequency Dependent"};
 const char* gRolloffTypeValues[] = {"Linear Squared", "Linear", "Inverse", "Inverse Squared", "Custom"};
+const char* gOutputFormatValues[] = {"From Mixer", "From Final Out", "From Input"};
 
 void initParamDescs()
 {
@@ -465,6 +480,7 @@ void initParamDescs()
     gParams[DIRECT_BINAURAL].booldesc = {true};
     gParams[DISTANCE_ATTENUATION_RANGE].datadesc = {FMOD_DSP_PARAMETER_DATA_TYPE_ATTENUATION_RANGE};
     gParams[SIMULATION_OUTPUTS_HANDLE].intdesc = {-1, 10000, -1};
+    gParams[OUTPUT_FORMAT].intdesc = {0, 2, 0, false, gOutputFormatValues};
 }
 
 struct State
@@ -498,6 +514,7 @@ struct State
     float pathingMixLevel;
     FMOD_DSP_PARAMETER_ATTENUATION_RANGE attenuationRange;
     std::atomic<bool> attenuationRangeSet;
+    ParameterSpeakerFormatType outputFormat;
 
     IPLSource simulationSource[2];
     std::atomic<bool> newSimulationSourceWritten;
@@ -514,11 +531,16 @@ struct State
     IPLAudioBuffer reflectionsSpatializedBuffer;
 
     IPLPanningEffect panningEffect;
+    IPLPanningEffectSettings panningEffectSettingsBackup;
     IPLBinauralEffect binauralEffect;
     IPLDirectEffect directEffect;
+    IPLDirectEffectSettings directEffectSettingsBackup;
     IPLReflectionEffect reflectionEffect;
+    IPLReflectionEffectSettings reflectionEffectSettingsBackup;
     IPLPathEffect pathEffect;
+    IPLPathEffectSettings pathEffectSettingsBackup;
     IPLAmbisonicsDecodeEffect ambisonicsEffect;
+    IPLAmbisonicsDecodeEffectSettings ambisonicsEffectSettingsBackup;
 };
 
 enum InitFlags
@@ -560,12 +582,20 @@ InitFlags lazyInit(FMOD_DSP_STATE* state,
 
     if (numChannelsOut > 0)
     {
+        if (effect->panningEffect && effect->panningEffectSettingsBackup.speakerLayout.type != speakerLayoutForNumChannels(numChannelsOut).type)
+        {
+            iplPanningEffectReset(effect->panningEffect);
+            iplPanningEffectRelease(&effect->panningEffect);
+        }
+
         if (!effect->panningEffect)
         {
             IPLPanningEffectSettings effectSettings{};
             effectSettings.speakerLayout = speakerLayoutForNumChannels(numChannelsOut);
 
             status = iplPanningEffectCreate(gContext, &audioSettings, &effectSettings, &effect->panningEffect);
+
+            effect->panningEffectSettingsBackup = effectSettings;
         }
 
         if (status == IPL_STATUS_SUCCESS)
@@ -586,12 +616,21 @@ InitFlags lazyInit(FMOD_DSP_STATE* state,
     if (numChannelsIn > 0)
     {
         status = IPL_STATUS_SUCCESS;
+
+        if (effect->directEffect && effect->directEffectSettingsBackup.numChannels != numChannelsIn)
+        {
+            iplDirectEffectReset(effect->directEffect);
+            iplDirectEffectRelease(&effect->directEffect);
+        }
+
         if (!effect->directEffect)
         {
             IPLDirectEffectSettings effectSettings;
             effectSettings.numChannels = numChannelsIn;
 
             status = iplDirectEffectCreate(gContext, &audioSettings, &effectSettings, &effect->directEffect);
+
+            effect->directEffectSettingsBackup = effectSettings;
         }
 
         if (status == IPL_STATUS_SUCCESS)
@@ -602,6 +641,12 @@ InitFlags lazyInit(FMOD_DSP_STATE* state,
     {
         status = IPL_STATUS_SUCCESS;
 
+        if (effect->reflectionEffect && effect->reflectionEffectSettingsBackup.numChannels != numChannelsForOrder(gSimulationSettings.maxOrder))
+        {
+            iplReflectionEffectReset(effect->reflectionEffect);
+            iplReflectionEffectRelease(&effect->reflectionEffect);
+        }
+
         if (!effect->reflectionEffect)
         {
             IPLReflectionEffectSettings effectSettings;
@@ -610,6 +655,8 @@ InitFlags lazyInit(FMOD_DSP_STATE* state,
             effectSettings.irSize = numSamplesForDuration(gSimulationSettings.maxDuration, audioSettings.samplingRate);
 
             status = iplReflectionEffectCreate(gContext, &audioSettings, &effectSettings, &effect->reflectionEffect);
+
+            effect->reflectionEffectSettingsBackup = effectSettings;
         }
 
         if (status == IPL_STATUS_SUCCESS)
@@ -620,6 +667,12 @@ InitFlags lazyInit(FMOD_DSP_STATE* state,
     {
         status = IPL_STATUS_SUCCESS;
 
+        if (effect->pathEffect && effect->pathEffectSettingsBackup.speakerLayout.type != speakerLayoutForNumChannels(numChannelsOut).type)
+        {
+            iplPathEffectReset(effect->pathEffect);
+            iplPathEffectRelease(&effect->pathEffect);
+        }
+
         if (!effect->pathEffect)
         {
             IPLPathEffectSettings effectSettings{};
@@ -629,6 +682,8 @@ InitFlags lazyInit(FMOD_DSP_STATE* state,
             effectSettings.hrtf = gHRTF[1];
 
             status = iplPathEffectCreate(gContext, &audioSettings, &effectSettings, &effect->pathEffect);
+
+            effect->pathEffectSettingsBackup = effectSettings;
         }
 
         if (status == IPL_STATUS_SUCCESS)
@@ -639,6 +694,12 @@ InitFlags lazyInit(FMOD_DSP_STATE* state,
     {
         status = IPL_STATUS_SUCCESS;
 
+        if (effect->ambisonicsEffect && effect->ambisonicsEffectSettingsBackup.speakerLayout.type != speakerLayoutForNumChannels(numChannelsOut).type)
+        {
+            iplAmbisonicsDecodeEffectReset(effect->ambisonicsEffect);
+            iplAmbisonicsDecodeEffectRelease(&effect->ambisonicsEffect);
+        }
+
         if (!effect->ambisonicsEffect)
         {
             IPLAmbisonicsDecodeEffectSettings effectSettings;
@@ -647,6 +708,8 @@ InitFlags lazyInit(FMOD_DSP_STATE* state,
             effectSettings.maxOrder = gSimulationSettings.maxOrder;
 
             status = iplAmbisonicsDecodeEffectCreate(gContext, &audioSettings, &effectSettings, &effect->ambisonicsEffect);
+
+            effect->ambisonicsEffectSettingsBackup = effectSettings;
         }
 
         if (status == IPL_STATUS_SUCCESS)
@@ -655,31 +718,49 @@ InitFlags lazyInit(FMOD_DSP_STATE* state,
 
     if (numChannelsIn > 0 && numChannelsOut > 0)
     {
+        int success = IPL_STATUS_SUCCESS;
+
+        if (effect->inBuffer.data && effect->inBuffer.numChannels != numChannelsIn)
+            iplAudioBufferFree(gContext, &effect->inBuffer);
+
         if (!effect->inBuffer.data)
-            iplAudioBufferAllocate(gContext, numChannelsIn, audioSettings.frameSize, &effect->inBuffer);
+            success |= iplAudioBufferAllocate(gContext, numChannelsIn, audioSettings.frameSize, &effect->inBuffer);
+
+        if (effect->outBuffer.data && effect->outBuffer.numChannels != numChannelsOut)
+            iplAudioBufferFree(gContext, &effect->outBuffer);
 
         if (!effect->outBuffer.data)
-            iplAudioBufferAllocate(gContext, numChannelsOut, audioSettings.frameSize, &effect->outBuffer);
+            success |= iplAudioBufferAllocate(gContext, numChannelsOut, audioSettings.frameSize, &effect->outBuffer);
+
+        if (effect->directBuffer.data && effect->directBuffer.numChannels != numChannelsIn)
+            iplAudioBufferFree(gContext, &effect->directBuffer);
 
         if (!effect->directBuffer.data)
-            iplAudioBufferAllocate(gContext, numChannelsIn, audioSettings.frameSize, &effect->directBuffer);
+            success |= iplAudioBufferAllocate(gContext, numChannelsIn, audioSettings.frameSize, &effect->directBuffer);
 
         if (!effect->monoBuffer.data)
-            iplAudioBufferAllocate(gContext, 1, audioSettings.frameSize, &effect->monoBuffer);
+            success |= iplAudioBufferAllocate(gContext, 1, audioSettings.frameSize, &effect->monoBuffer);
 
-        initFlags = static_cast<InitFlags>(initFlags | INIT_DIRECTAUDIOBUFFERS);
+        initFlags = success == IPL_STATUS_SUCCESS ? static_cast<InitFlags>(initFlags | INIT_DIRECTAUDIOBUFFERS) : initFlags;
 
         if ((effect->applyReflections || effect->applyPathing) && gIsSimulationSettingsValid)
         {
+            success = IPL_STATUS_SUCCESS;
             auto numAmbisonicChannels = numChannelsForOrder(gSimulationSettings.maxOrder);
 
+            if (effect->reflectionsBuffer.data && effect->reflectionsBuffer.numChannels != numAmbisonicChannels)
+                iplAudioBufferFree(gContext, &effect->reflectionsBuffer);
+
             if (!effect->reflectionsBuffer.data)
-                iplAudioBufferAllocate(gContext, numAmbisonicChannels, audioSettings.frameSize, &effect->reflectionsBuffer);
+                success |= iplAudioBufferAllocate(gContext, numAmbisonicChannels, audioSettings.frameSize, &effect->reflectionsBuffer);
+
+            if (effect->reflectionsSpatializedBuffer.data && effect->reflectionsSpatializedBuffer.numChannels != numChannelsOut)
+                iplAudioBufferFree(gContext, &effect->reflectionsSpatializedBuffer);
 
             if (!effect->reflectionsSpatializedBuffer.data)
-                iplAudioBufferAllocate(gContext, numChannelsOut, audioSettings.frameSize, &effect->reflectionsSpatializedBuffer);
+                success |= iplAudioBufferAllocate(gContext, numChannelsOut, audioSettings.frameSize, &effect->reflectionsSpatializedBuffer);
 
-            initFlags = static_cast<InitFlags>(initFlags | INIT_REFLECTIONAUDIOBUFFERS);
+            initFlags = success == IPL_STATUS_SUCCESS ? static_cast<InitFlags>(initFlags | INIT_REFLECTIONAUDIOBUFFERS) : initFlags;
         }
     }
 
@@ -723,6 +804,7 @@ void reset(FMOD_DSP_STATE* state)
     effect->attenuationRange.min = 1.0f;
     effect->attenuationRange.max = 20.0f;
     effect->attenuationRangeSet = false;
+    effect->outputFormat = ParameterSpeakerFormatType::PARAMETER_FROM_MIXER;
 
     effect->simulationSource[0] = nullptr;
     effect->simulationSource[1] = nullptr;
@@ -834,6 +916,9 @@ FMOD_RESULT F_CALL getInt(FMOD_DSP_STATE* state,
         break;
     case SIMULATION_OUTPUTS_HANDLE:
         *value = -1;
+        break;
+    case OUTPUT_FORMAT:
+        *value = static_cast<int>(effect->outputFormat);
         break;
     default:
         return FMOD_ERR_INVALID_PARAM;
@@ -1011,6 +1096,9 @@ FMOD_RESULT F_CALL setInt(FMOD_DSP_STATE* state,
         {
             setSource(state, gSourceManager->getSource(value));
         }
+        break;
+    case OUTPUT_FORMAT:
+        effect->outputFormat = static_cast<ParameterSpeakerFormatType>(value);
         break;
     default:
         return FMOD_ERR_INVALID_PARAM;
@@ -1283,12 +1371,8 @@ FMOD_RESULT F_CALL process(FMOD_DSP_STATE* state,
 
     if (operation == FMOD_DSP_PROCESS_QUERY)
     {
-        if (outBuffers)
-        {
-            outBuffers->speakermode = FMOD_SPEAKERMODE_STEREO;
-            outBuffers->buffernumchannels[0] = 2;
-            outBuffers->bufferchannelmask[0] = 0;
-        }
+        if (!initFmodOutBufferFormat(inBuffers, outBuffers, state, effect->outputFormat))
+            return FMOD_ERR_DSP_DONTPROCESS;
 
         if (inputsIdle)
         {
@@ -1348,7 +1432,8 @@ FMOD_RESULT F_CALL process(FMOD_DSP_STATE* state,
 
         iplDirectEffectApply(effect->directEffect, &directParams, &effect->inBuffer, &effect->directBuffer);
 
-        if (effect->directBinaural)
+        bool directBinaural = numChannelsOut == 2 && effect->directBinaural;
+        if (directBinaural)
         {
             IPLBinauralEffectParams binauralParams{};
             binauralParams.direction = direction;
@@ -1409,7 +1494,7 @@ FMOD_RESULT F_CALL process(FMOD_DSP_STATE* state,
                     ambisonicsParams.order = gSimulationSettings.maxOrder;
                     ambisonicsParams.hrtf = gHRTF[0];
                     ambisonicsParams.orientation = listenerCoordinates;
-                    ambisonicsParams.binaural = (effect->reflectionsBinaural) ? IPL_TRUE : IPL_FALSE;
+                    ambisonicsParams.binaural = numChannelsOut == 2 && (effect->reflectionsBinaural) ? IPL_TRUE : IPL_FALSE;
 
                     iplAmbisonicsDecodeEffectApply(effect->ambisonicsEffect, &ambisonicsParams, &effect->reflectionsBuffer, &effect->reflectionsSpatializedBuffer);
 
@@ -1427,7 +1512,7 @@ FMOD_RESULT F_CALL process(FMOD_DSP_STATE* state,
 
                 IPLPathEffectParams pathParams = simulationOutputs.pathing;
                 pathParams.order = gSimulationSettings.maxOrder;
-                pathParams.binaural = (effect->pathingBinaural) ? IPL_TRUE : IPL_FALSE;
+                pathParams.binaural = numChannelsOut == 2 && (effect->pathingBinaural) ? IPL_TRUE : IPL_FALSE;
                 pathParams.hrtf = gHRTF[0];
                 pathParams.listener = listenerCoordinates;
 

@@ -44,6 +44,7 @@ studio.plugins.registerPluginDescription("Steam Audio Spatializer", {
 		"ReflMixLevel": {displayName: "Reflections Mix Level"},
 		"PathBinaural": {displayName: "Apply HRTF To Pathing"},
 		"PathMixLevel": {displayName: "Pathing Mix Level"},
+		"OutputFormat": {displayName: "Output Format"},
 	},
 	deckUi: {
 		deckWidgetType: studio.ui.deckWidgetType.Layout,
@@ -253,7 +254,7 @@ studio.plugins.registerPluginDescription("Steam Audio Spatializer", {
 						deckWidgetType: studio.ui.deckWidgetType.Button,
 						binding: "ReflBinaural",
 						text: "On"
-					}
+					},
 				]
 			},
 			{
@@ -275,7 +276,11 @@ studio.plugins.registerPluginDescription("Steam Audio Spatializer", {
 						deckWidgetType: studio.ui.deckWidgetType.Button,
 						binding: "PathBinaural",
 						text: "On"
-					}
+					},
+					{
+						deckWidgetType: studio.ui.deckWidgetType.Dropdown,
+						binding: "OutputFormat"
+					},
 				]
 			},
 			{
@@ -337,7 +342,11 @@ studio.plugins.registerPluginDescription("Steam Audio Mixer Return", {
 						binding: "Binaural",
 						text: "On",
 						buttonWidth: 64
-					}
+					},
+					{
+						deckWidgetType: studio.ui.deckWidgetType.Dropdown,
+						binding: "OutputFormat"
+					},
 				]
 			}
 		]
@@ -366,7 +375,11 @@ studio.plugins.registerPluginDescription("Steam Audio Reverb", {
 						binding: "Binaural",
 						text: "Enable",
 						buttonWidth: 64
-					}
+					},
+					{
+						deckWidgetType: studio.ui.deckWidgetType.Dropdown,
+						binding: "OutputFormat"
+					},
 				]
 			}
 		]

@@ -1368,5 +1368,4 @@ namespace SteamAudio
         [DllImport("audioplugin_phonon")]
 #endif
         public static extern void iplUnityTerminate();
-    }
 }

@@ -33,15 +33,31 @@ enum Params
      */
     BINAURAL,
 
+    /**
+     *  **Type**: `FMOD_DSP_PARAMETER_TYPE_INT`
+     *
+     *  **Range**: 0 to 2.
+     *
+     *  Controls the output format.
+     *
+     *  - `0`: Output will be the format in FMOD's mixer.
+     *  - `1`: Output will be the format from FMOD's final output.
+     *  - `2`: Output will be the format from the event's input.
+     */
+    OUTPUT_FORMAT,
+
     /** The number of parameters in this effect. */
     NUM_PARAMS
 };
 
 FMOD_DSP_PARAMETER_DESC gParams[] = {
-    { FMOD_DSP_PARAMETER_TYPE_BOOL, "Binaural", "", "Spatialize reflected sound using HRTF." }
+    { FMOD_DSP_PARAMETER_TYPE_BOOL, "Binaural", "", "Spatialize reflected sound using HRTF." },
+    { FMOD_DSP_PARAMETER_TYPE_INT, "OutputFormat", "", "Output Format" },
 };
 
 FMOD_DSP_PARAMETER_DESC* gParamsArray[NUM_PARAMS];
+
+const char* gOutputFormatValues[] = { "From Mixer", "From Final Out", "From Input" };
 
 void initParamDescs()
 {
@@ -51,18 +67,22 @@ void initParamDescs()
     }
 
     gParams[BINAURAL].booldesc = {false};
+    gParams[OUTPUT_FORMAT].intdesc = { 0, 2, 0, false, gOutputFormatValues };
 }
 
 struct State
 {
     bool binaural;
+    ParameterSpeakerFormatType outputFormat;
 
     IPLAudioBuffer reflectionsBuffer;
     IPLAudioBuffer inBuffer;
     IPLAudioBuffer outBuffer;
 
     IPLReflectionMixer reflectionMixer;
+    IPLReflectionEffectSettings reflectionMixerSettingsBackup;
     IPLAmbisonicsDecodeEffect ambisonicsEffect;
+    IPLAmbisonicsDecodeEffectSettings ambisonicsEffectSettingsBackup;
 };
 
 enum InitFlags
@@ -102,6 +122,12 @@ InitFlags lazyInit(FMOD_DSP_STATE* state,
     {
         status = IPL_STATUS_SUCCESS;
 
+        if (effect->reflectionMixer && effect->reflectionMixerSettingsBackup.numChannels != numChannelsForOrder(gSimulationSettings.maxOrder))
+        {
+            iplReflectionMixerReset(effect->reflectionMixer);
+            iplReflectionMixerRelease(&effect->reflectionMixer);
+        }
+
         if (!effect->reflectionMixer)
         {
             IPLReflectionEffectSettings effectSettings;
@@ -109,6 +135,8 @@ InitFlags lazyInit(FMOD_DSP_STATE* state,
             effectSettings.numChannels = numChannelsForOrder(gSimulationSettings.maxOrder);
 
             status = iplReflectionMixerCreate(gContext, &audioSettings, &effectSettings, &effect->reflectionMixer);
+
+            effect->reflectionMixerSettingsBackup = effectSettings;
 
             if (!gNewReflectionMixerWritten)
             {
@@ -127,6 +155,12 @@ InitFlags lazyInit(FMOD_DSP_STATE* state,
     {
         status = IPL_STATUS_SUCCESS;
 
+        if (effect->ambisonicsEffect && effect->ambisonicsEffectSettingsBackup.speakerLayout.type != speakerLayoutForNumChannels(numChannelsOut).type)
+        {
+            iplAmbisonicsDecodeEffectReset(effect->ambisonicsEffect);
+            iplAmbisonicsDecodeEffectRelease(&effect->ambisonicsEffect);
+        }
+
         if (!effect->ambisonicsEffect)
         {
             IPLAmbisonicsDecodeEffectSettings effectSettings;
@@ -135,6 +169,8 @@ InitFlags lazyInit(FMOD_DSP_STATE* state,
             effectSettings.maxOrder = gSimulationSettings.maxOrder;
 
             status = iplAmbisonicsDecodeEffectCreate(gContext, &audioSettings, &effectSettings, &effect->ambisonicsEffect);
+
+            effect->ambisonicsEffectSettingsBackup = effectSettings;
         }
 
         if (status == IPL_STATUS_SUCCESS)
@@ -143,18 +179,29 @@ InitFlags lazyInit(FMOD_DSP_STATE* state,
 
     if (numChannelsIn > 0 && numChannelsOut > 0)
     {
+        int success = IPL_STATUS_SUCCESS;
+
         auto numAmbisonicChannels = numChannelsForOrder(gSimulationSettings.maxOrder);
 
+        if (effect->reflectionsBuffer.data && effect->reflectionsBuffer.numChannels != numAmbisonicChannels)
+            iplAudioBufferFree(gContext, &effect->reflectionsBuffer);
+
         if (!effect->reflectionsBuffer.data)
-            iplAudioBufferAllocate(gContext, numAmbisonicChannels, audioSettings.frameSize, &effect->reflectionsBuffer);
+            success |= iplAudioBufferAllocate(gContext, numAmbisonicChannels, audioSettings.frameSize, &effect->reflectionsBuffer);
+
+        if (effect->inBuffer.data && effect->inBuffer.numChannels != numChannelsIn)
+            iplAudioBufferFree(gContext, &effect->inBuffer);
 
         if (!effect->inBuffer.data)
-            iplAudioBufferAllocate(gContext, numChannelsIn, audioSettings.frameSize, &effect->inBuffer);
+            success |= iplAudioBufferAllocate(gContext, numChannelsIn, audioSettings.frameSize, &effect->inBuffer);
+
+        if (effect->outBuffer.data && effect->outBuffer.numChannels != numChannelsOut)
+            iplAudioBufferFree(gContext, &effect->outBuffer);
 
         if (!effect->outBuffer.data)
-            iplAudioBufferAllocate(gContext, numChannelsOut, audioSettings.frameSize, &effect->outBuffer);
+            success |= iplAudioBufferAllocate(gContext, numChannelsOut, audioSettings.frameSize, &effect->outBuffer);
 
-        initFlags = static_cast<InitFlags>(initFlags | INIT_AUDIOBUFFERS);
+        initFlags = success == IPL_STATUS_SUCCESS ? static_cast<InitFlags>(initFlags | INIT_AUDIOBUFFERS) : initFlags;
     }
 
     return initFlags;
@@ -167,6 +214,7 @@ void reset(FMOD_DSP_STATE* state)
         return;
 
     effect->binaural = false;
+    effect->outputFormat = ParameterSpeakerFormatType::PARAMETER_FROM_MIXER;
 }
 
 FMOD_RESULT F_CALL create(FMOD_DSP_STATE* state)
@@ -212,6 +260,25 @@ FMOD_RESULT F_CALL getBool(FMOD_DSP_STATE* state,
     return FMOD_OK;
 }
 
+FMOD_RESULT F_CALL getInt(FMOD_DSP_STATE* state,
+    int index,
+    int* value,
+    char*)
+{
+    auto effect = reinterpret_cast<State*>(state->plugindata);
+
+    switch (index)
+    {
+    case OUTPUT_FORMAT:
+        *value = static_cast<int>(effect->outputFormat);
+        break;
+    default:
+        return FMOD_ERR_INVALID_PARAM;
+    }
+
+    return FMOD_OK;
+}
+
 FMOD_RESULT F_CALL setBool(FMOD_DSP_STATE* state,
                            int index,
                            FMOD_BOOL value)
@@ -230,6 +297,24 @@ FMOD_RESULT F_CALL setBool(FMOD_DSP_STATE* state,
     return FMOD_OK;
 }
 
+FMOD_RESULT F_CALL setInt(FMOD_DSP_STATE* state,
+    int index,
+    int value)
+{
+    auto effect = reinterpret_cast<State*>(state->plugindata);
+
+    switch (index)
+    {
+    case OUTPUT_FORMAT:
+        effect->outputFormat = static_cast<ParameterSpeakerFormatType>(value);
+        break;
+    default:
+        return FMOD_ERR_INVALID_PARAM;
+    }
+
+    return FMOD_OK;
+}
+
 FMOD_RESULT F_CALL process(FMOD_DSP_STATE* state,
                            unsigned int length,
                            const FMOD_DSP_BUFFER_ARRAY* inBuffers,
@@ -239,6 +324,10 @@ FMOD_RESULT F_CALL process(FMOD_DSP_STATE* state,
 {
     if (operation == FMOD_DSP_PROCESS_QUERY)
     {
+        auto effect = reinterpret_cast<State*>(state->plugindata);
+        if (!initFmodOutBufferFormat(inBuffers, outBuffers, state, effect->outputFormat))
+            return FMOD_ERR_DSP_DONTPROCESS;
+
         if (inputsIdle)
             return FMOD_ERR_DSP_DONTPROCESS;
     }
@@ -284,7 +373,7 @@ FMOD_RESULT F_CALL process(FMOD_DSP_STATE* state,
         ambisonicsParams.order = gSimulationSettings.maxOrder;
         ambisonicsParams.hrtf = gHRTF[0];
         ambisonicsParams.orientation = listenerCoordinates;
-        ambisonicsParams.binaural = (effect->binaural) ? IPL_TRUE : IPL_FALSE;
+        ambisonicsParams.binaural = numChannelsOut == 2 && (effect->binaural) ? IPL_TRUE : IPL_FALSE;
 
         iplAmbisonicsDecodeEffectApply(effect->ambisonicsEffect, &ambisonicsParams, &effect->reflectionsBuffer, &effect->outBuffer);
 
@@ -318,11 +407,11 @@ FMOD_DSP_DESCRIPTION gMixerReturnEffect
     MixerReturnEffect::NUM_PARAMS,
     MixerReturnEffect::gParamsArray,
     nullptr,
-    nullptr,
+    MixerReturnEffect::setInt,
     MixerReturnEffect::setBool,
     nullptr,
     nullptr,
-    nullptr,
+    MixerReturnEffect::getInt,
     MixerReturnEffect::getBool,
     nullptr,
     nullptr,

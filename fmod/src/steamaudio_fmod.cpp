@@ -197,6 +197,89 @@ void initContextAndDefaultHRTF(IPLAudioSettings audioSettings)
     iplContextRelease(&context);
 }
 
+bool initFmodOutBufferFormat(const FMOD_DSP_BUFFER_ARRAY* inBuffers, 
+                             FMOD_DSP_BUFFER_ARRAY* outBuffers,
+                             FMOD_DSP_STATE* state,
+                             ParameterSpeakerFormatType outputFormat)
+{
+	if (!inBuffers || !outBuffers || !state || !state->functions)
+	{
+		return false;
+	}
+    
+    // platforms speaker mode
+    FMOD_SPEAKERMODE mixerMode = {};
+    // final speaker mode
+    FMOD_SPEAKERMODE outputMode = {};
+    state->functions->getspeakermode(state, &mixerMode, &outputMode);
+
+	int bufferNumChannels = 0;
+	FMOD_CHANNELMASK bufferChannelMask;
+    FMOD_SPEAKERMODE outputSpeakerMode = {};
+    
+    switch (outputFormat) {
+        case PARAMETER_FROM_MIXER:
+            outputSpeakerMode = mixerMode;
+            break;
+        case PARAMETER_FROM_FINAL_OUTPUT:
+            outputSpeakerMode = outputMode;
+            break;
+        case PARAMETER_FROM_INPUT:
+            outputSpeakerMode = inBuffers->speakermode;
+            break;
+        default:
+            // Missing switch case
+            return false;
+    }
+
+	switch (outputSpeakerMode)
+	{
+	case FMOD_SPEAKERMODE_MONO:
+		bufferNumChannels = 1;
+		bufferChannelMask = FMOD_CHANNELMASK_MONO;
+		break;
+	case FMOD_SPEAKERMODE_STEREO:
+		bufferNumChannels = 2;
+		bufferChannelMask = FMOD_CHANNELMASK_STEREO;
+		break;
+	case FMOD_SPEAKERMODE_QUAD:
+		bufferNumChannels = 4;
+		bufferChannelMask = FMOD_CHANNELMASK_QUAD;
+		break;
+	case FMOD_SPEAKERMODE_SURROUND:
+		bufferNumChannels = 5;
+		bufferChannelMask = FMOD_CHANNELMASK_SURROUND;
+		break;
+	case FMOD_SPEAKERMODE_5POINT1:
+		bufferNumChannels = 6;
+		bufferChannelMask = FMOD_CHANNELMASK_5POINT1;
+		break;
+	case FMOD_SPEAKERMODE_7POINT1:
+		bufferNumChannels = 8;
+		bufferChannelMask = FMOD_CHANNELMASK_7POINT1;
+		break;
+	case FMOD_SPEAKERMODE_7POINT1POINT4:
+		bufferNumChannels = 8;
+		bufferChannelMask = FMOD_CHANNELMASK_7POINT1;
+		outputSpeakerMode = FMOD_SPEAKERMODE_7POINT1;
+		break;
+	default:
+		// Unsupported output format, prevent processing
+		return false;
+	}
+
+	for (size_t i = 0; i < outBuffers->numbuffers; i++)
+	{
+		outBuffers->buffernumchannels[i] = bufferNumChannels;
+		outBuffers->bufferchannelmask[i] = bufferChannelMask;
+	}
+
+	// Accept the input format by setting the output format to what the plugin can support for that input format
+	outBuffers->speakermode = outputSpeakerMode;
+
+	return true;
+}
+
 
 // --------------------------------------------------------------------------------------------------------------------
 // SourceManager

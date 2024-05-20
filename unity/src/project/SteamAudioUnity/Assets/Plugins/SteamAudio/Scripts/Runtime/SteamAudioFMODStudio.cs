@@ -72,5 +72,4 @@ namespace SteamAudio
         [DllImport("phonon_fmod")]
 #endif
         public static extern void iplFMODRemoveSource(int handle);
-    }
 }
