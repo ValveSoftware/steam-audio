@@ -495,6 +495,11 @@ elseif (FFT_LIBRARY STREQUAL "PFFFT")
     target_sources(core PRIVATE
         pffft_fft.cpp
     )
+elseif (FFT_LIBRARY STREQUAL "DJFFT")
+    target_sources(core PRIVATE
+        dj_fft.h
+        djfft_fft.cpp
+    )
 endif()
 
 if (STEAMAUDIO_ENABLE_AVX)
