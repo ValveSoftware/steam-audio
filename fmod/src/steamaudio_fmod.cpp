@@ -42,7 +42,6 @@ std::atomic<bool> gNewHRTFWritten{ false };
 std::atomic<bool> gIsSimulationSettingsValid{ false };
 std::atomic<bool> gNewReverbSourceWritten{ false };
 std::atomic<bool> gNewReflectionMixerWritten{ false };
-std::atomic<bool> hrtfGlobalDisable{ false };
 
 std::shared_ptr<SourceManager> gSourceManager;
 
@@ -512,9 +511,4 @@ void F_CALL iplFMODRemoveSource(IPLint32 handle)
         return;
 
     gSourceManager->removeSource(handle);
-}
-
-void F_CALL iplFMODSetGlobalHRTFDisabled(bool disabled)
-{
-    hrtfGlobalDisable = disabled;
 }

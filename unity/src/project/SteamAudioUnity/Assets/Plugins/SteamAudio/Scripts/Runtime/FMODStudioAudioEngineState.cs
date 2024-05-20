@@ -44,13 +44,6 @@ namespace SteamAudio
         {
             FMODStudioAPI.iplFMODSetReverbSource(reverbSource.Get());
         }
-
-        public override void SetGlobalHRTFDisabled(bool disabled)
-        {
-            base.SetGlobalHRTFDisabled(disabled);
-
-            FMODStudioAPI.iplFMODSetGlobalHRTFDisabled(disabled);
-        }
     }
 
     public sealed class FMODStudioAudioEngineStateHelpers : AudioEngineStateHelpers
