@@ -83,7 +83,7 @@ namespace SteamAudio
             if (mEventEmitter != null)
             {
                 var eventInstance = FMODUnity_StudioEventEmitter_EventInstance.GetValue(mEventEmitter, null);
-                if (eventInstance != mEventInstance)
+                if (!eventInstance.Equals(mEventInstance))
                 {
                     // The event instance is different from the one we last used, which most likely means the
                     // event-related objects were destroyed and re-created. Make sure we look for the DSP instance
