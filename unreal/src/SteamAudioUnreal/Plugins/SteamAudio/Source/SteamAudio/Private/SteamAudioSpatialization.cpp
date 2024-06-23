@@ -339,7 +339,7 @@ void FSteamAudioSpatializationPlugin::ProcessAudio(const FAudioPluginSourceInput
         // FIXME: Unreal 4.27 does not pass the audio component id correctly to the spatializer plugin. It does this
         // correctly for the occlusion and reverb plugins.
         UAudioComponent* AudioComponent = UAudioComponent::GetAudioComponentFromID(InputData.AudioComponentId);
-        USteamAudioSourceComponent* SteamAudioSourceComponent = (AudioComponent) ? AudioComponent->GetOwner()->FindComponentByClass<USteamAudioSourceComponent>() : nullptr;
+        USteamAudioSourceComponent* SteamAudioSourceComponent = AudioComponent && AudioComponent->GetOwner() ? AudioComponent->GetOwner()->FindComponentByClass<USteamAudioSourceComponent>() : nullptr;
 
         if (SteamAudioSourceComponent && FSteamAudioModule::IsPlaying())
         {
