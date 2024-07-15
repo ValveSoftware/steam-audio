@@ -88,6 +88,9 @@ if (IPL_OS_WINDOWS AND IPL_CPU_X64)
     option(STEAMAUDIO_BUILD_DOCS "Build documentation." ON)
 endif()
 
+# If true, statically link against the C/C++ runtime library.
+option(STEAMAUDIO_STATIC_RUNTIME "Statically link against the C/C++ runtime library." ON)
+
 if ((IPL_OS_WINDOWS OR IPL_OS_LINUX) AND (IPL_CPU_X86 OR IPL_CPU_X64))
     option(STEAMAUDIO_ENABLE_AVX "Enable AVX intrinsics." ON)
 endif()
@@ -157,7 +160,10 @@ if (IPL_OS_WINDOWS)
     )
     add_compile_options(
         /EHsc /MP /W3 /Zi
-        $<IF:$<CONFIG:Debug>,/MTd,/MT>
+        $<$<AND:$<CONFIG:Debug>,$<BOOL:${STEAMAUDIO_STATIC_RUNTIME}>>:/MTd>
+        $<$<AND:$<CONFIG:Debug>,$<NOT:$<BOOL:${STEAMAUDIO_STATIC_RUNTIME}>>>:/MDd>
+        $<$<AND:$<NOT:$<CONFIG:Debug>>,$<BOOL:${STEAMAUDIO_STATIC_RUNTIME}>>:/MT>
+        $<$<AND:$<NOT:$<CONFIG:Debug>>,$<NOT:$<BOOL:${STEAMAUDIO_STATIC_RUNTIME}>>>:/MD>
         $<$<CONFIG:Debug>:/RTC1>
         $<$<NOT:$<CONFIG:Debug>>:/Ox>
         $<$<CONFIG:Release>:/GL>

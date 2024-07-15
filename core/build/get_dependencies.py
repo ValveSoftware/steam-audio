@@ -475,7 +475,7 @@ def fetch_dependency(name, dep, platform):
 def toolchain(suffix):
     return os.path.join(os.getcwd(), 'build', 'toolchain_' + suffix + '.cmake')
 
-def configure_cmake(name, cmake_layers, platform, cmake, vs_version, ndk_path, debug):
+def configure_cmake(name, cmake_layers, platform, cmake, vs_version, ndk_path, debug, shared_crt):
     src_dir = os.path.join(os.getcwd(), 'deps-build', name, 'src', name)
     build_dir = os.path.join(os.getcwd(), 'deps-build', name, 'build', platform)
     install_dir = os.path.join(os.getcwd(), 'deps-build', name, 'install', platform)
@@ -486,16 +486,28 @@ def configure_cmake(name, cmake_layers, platform, cmake, vs_version, ndk_path, d
 
     if platform == 'windows-x86':
         cmake_args += ['-G', vs_generator_name(vs_version), '-A', 'Win32']
-        cmake_args += ['-DCMAKE_C_FLAGS_RELEASE=/MT', '-DCMAKE_CXX_FLAGS_RELEASE=/MT']
-        cmake_args += ['-DCMAKE_C_FLAGS_DEBUG=/MTd', '-DCMAKE_CXX_FLAGS_DEBUG=/MTd']
+        if not shared_crt:
+            cmake_args += ['-DCMAKE_C_FLAGS_RELEASE=/MT', '-DCMAKE_CXX_FLAGS_RELEASE=/MT']
+            cmake_args += ['-DCMAKE_C_FLAGS_DEBUG=/MTd', '-DCMAKE_CXX_FLAGS_DEBUG=/MTd']
+        else:
+            cmake_args += ['-DCMAKE_C_FLAGS_RELEASE=/MD', '-DCMAKE_CXX_FLAGS_RELEASE=/MD']
+            cmake_args += ['-DCMAKE_C_FLAGS_DEBUG=/MDd', '-DCMAKE_CXX_FLAGS_DEBUG=/MDd']
     elif platform == 'windows-x64':
         cmake_args += ['-G', vs_generator_name(vs_version), '-A', 'x64']
-        cmake_args += ['-DCMAKE_C_FLAGS_RELEASE=/MT', '-DCMAKE_CXX_FLAGS_RELEASE=/MT']
-        cmake_args += ['-DCMAKE_C_FLAGS_DEBUG=/MTd', '-DCMAKE_CXX_FLAGS_DEBUG=/MTd']
+        if not shared_crt:
+            cmake_args += ['-DCMAKE_C_FLAGS_RELEASE=/MT', '-DCMAKE_CXX_FLAGS_RELEASE=/MT']
+            cmake_args += ['-DCMAKE_C_FLAGS_DEBUG=/MTd', '-DCMAKE_CXX_FLAGS_DEBUG=/MTd']
+        else:
+            cmake_args += ['-DCMAKE_C_FLAGS_RELEASE=/MD', '-DCMAKE_CXX_FLAGS_RELEASE=/MD']
+            cmake_args += ['-DCMAKE_C_FLAGS_DEBUG=/MDd', '-DCMAKE_CXX_FLAGS_DEBUG=/MDd']
     elif platform == 'windows-arm64':
         cmake_args += ['-G', vs_generator_name(vs_version), '-A', 'ARM64']
-        cmake_args += ['-DCMAKE_C_FLAGS_RELEASE=/MT', '-DCMAKE_CXX_FLAGS_RELEASE=/MT']
-        cmake_args += ['-DCMAKE_C_FLAGS_DEBUG=/MTd', '-DCMAKE_CXX_FLAGS_DEBUG=/MTd']
+        if not shared_crt:
+            cmake_args += ['-DCMAKE_C_FLAGS_RELEASE=/MT', '-DCMAKE_CXX_FLAGS_RELEASE=/MT']
+            cmake_args += ['-DCMAKE_C_FLAGS_DEBUG=/MTd', '-DCMAKE_CXX_FLAGS_DEBUG=/MTd']
+        else:
+            cmake_args += ['-DCMAKE_C_FLAGS_RELEASE=/MD', '-DCMAKE_CXX_FLAGS_RELEASE=/MD']
+            cmake_args += ['-DCMAKE_C_FLAGS_DEBUG=/MDd', '-DCMAKE_CXX_FLAGS_DEBUG=/MDd']
     elif platform == 'linux-x86':
         cmake_args += ['-G', 'Unix Makefiles']
         cmake_args += ['-DCMAKE_C_FLAGS=-m32', '-DCMAKE_CXX_FLAGS=-m32', '-DCMAKE_SHARED_LINKER_FLAGS=-m32', '-DCMAKE_EXE_LINKER_FLAGS=-m32']
@@ -597,7 +609,7 @@ def configure_custom(name, custom, platform, cmake, vs_version):
 
     stamp_configure(name, platform, stamp)
 
-def configure_dependency(name, dep, platform, cmake, vs_version, ndk_path, debug):
+def configure_dependency(name, dep, platform, cmake, vs_version, ndk_path, debug, shared_crt):
     configure = dep.get("configure", {})
     if len(configure) == 0:
         return
@@ -606,7 +618,7 @@ def configure_dependency(name, dep, platform, cmake, vs_version, ndk_path, debug
     custom = configure.get("custom", None)
 
     if cmake_layers is not None:
-        configure_cmake(name, cmake_layers, platform, cmake, vs_version, ndk_path, debug)
+        configure_cmake(name, cmake_layers, platform, cmake, vs_version, ndk_path, debug, shared_crt)
     elif custom is not None:
         configure_custom(name, custom, platform, cmake, vs_version)
 
@@ -790,6 +802,7 @@ parser.add_argument('--extra', help = "Also process extra optional dependencies.
 parser.add_argument('--debug', help = "Build debug binaries.", action='store_true', default=False)
 parser.add_argument('--toolsonly', help = "Build tool dependencies only.", action='store_true', default=False)
 parser.add_argument('--libsonly', help = "Build library dependencies only.", action='store_true', default=False)
+parser.add_argument('--sharedcrt', help = "Link to shared C/C++ runtime library. (Windows only)", action='store_true', default=False)
 args = parser.parse_args()
 
 if args.platform in ['osx', 'ios']:
@@ -898,7 +911,7 @@ for name in ordered_dep_names:
 
     try:
         fetch_dependency(name, dep, platform)
-        configure_dependency(name, dep, platform, cmake, vs_version, args.ndk, debug)
+        configure_dependency(name, dep, platform, cmake, vs_version, args.ndk, debug, args.sharedcrt)
         build_dependency(name, dep, platform, cmake, vs_version, args.ndk, debug)
         install_dependency(name, dep, platform, cmake, debug)
         copy_dependency(name, dep, platform)
