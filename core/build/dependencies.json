@@ -17,8 +17,8 @@
                         "-DFLATBUFFERS_BUILD_FLATLIB=FALSE",
                         "-DFLATBUFFERS_BUILD_FLATHASH=FALSE",
                         "-DFLATBUFFERS_BUILD_TESTS=FALSE",
-						"-DCMAKE_CXX_STANDARD=17",
-						"-DCMAKE_CXX_FLAGS=-Wno-stringop-overflow"
+			"-DCMAKE_CXX_STANDARD=17",
+			"-DCMAKE_CXX_FLAGS=-Wno-stringop-overflow"
                     ]
                 },
                 {
