@@ -403,7 +403,7 @@ FMOD_RESULT F_CALL process(FMOD_DSP_STATE* state,
             ambisonicsParams.order = gSimulationSettings.maxOrder;
             ambisonicsParams.hrtf = gHRTF[0];
             ambisonicsParams.orientation = listenerCoordinates;
-            ambisonicsParams.binaural = numChannelsOut == 2 && (effect->binaural) ? IPL_TRUE : IPL_FALSE;
+            ambisonicsParams.binaural = numChannelsOut == 2 && !gHRTFDisabled && (effect->binaural) ? IPL_TRUE : IPL_FALSE;
 
             iplAmbisonicsDecodeEffectApply(effect->ambisonicsEffect, &ambisonicsParams, &effect->reflectionsBuffer, &effect->outBuffer);
 

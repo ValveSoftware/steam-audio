@@ -72,4 +72,12 @@ namespace SteamAudio
         [DllImport("phonon_fmod")]
 #endif
         public static extern void iplFMODRemoveSource(int handle);
+
+#if UNITY_IOS && !UNITY_EDITOR
+        [DllImport("__Internal")]
+#else
+        [DllImport("phonon_fmod")]
+#endif
+        public static extern void iplFMODSetHRTFDisabled(bool disabled);
+    }
 }
