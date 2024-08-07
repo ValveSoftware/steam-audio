@@ -58,7 +58,7 @@ namespace SteamAudio
             return (type != null) ? (AudioEngineState) Activator.CreateInstance(type) : null;
         }
 
-        public virtual void SetGlobalHRTFDisabled(bool disabled) 
+        public virtual void SetHRTFDisabled(bool disabled) 
         { }
     }
 

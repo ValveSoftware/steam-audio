@@ -506,7 +506,7 @@ namespace SteamAudio
             if (mAudioEngineState == null)
                 return;
 
-            mAudioEngineState.SetGlobalHRTFDisabled(SteamAudioSettings.Singleton.hrtfGlobalDisable);
+            mAudioEngineState.SetHRTFDisabled(SteamAudioSettings.Singleton.hrtfDisabled);
             var perspectiveCorrection = GetPerspectiveCorrection();
             mAudioEngineState.SetPerspectiveCorrection(perspectiveCorrection);
 

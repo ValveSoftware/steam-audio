@@ -78,6 +78,6 @@ namespace SteamAudio
 #else
         [DllImport("phonon_fmod")]
 #endif
-        public static extern void iplFMODSetGlobalHRTFDisabled(bool disabled);
+        public static extern void iplFMODSetHRTFDisabled(bool disabled);
     }
 }

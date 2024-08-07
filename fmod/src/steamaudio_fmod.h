@@ -74,7 +74,7 @@ extern std::atomic<bool> gNewHRTFWritten;
 extern std::atomic<bool> gIsSimulationSettingsValid;
 extern std::atomic<bool> gNewReverbSourceWritten;
 extern std::atomic<bool> gNewReflectionMixerWritten;
-extern std::atomic<bool> hrtfGlobalDisable;
+extern std::atomic<bool> gHRTFDisabled;
 
 
 // --------------------------------------------------------------------------------------------------------------------
@@ -249,6 +249,6 @@ F_EXPORT IPLint32 F_CALL iplFMODAddSource(IPLSource source);
 
 F_EXPORT void F_CALL iplFMODRemoveSource(IPLint32 handle);
 
-F_EXPORT void F_CALL iplFMODSetGlobalHRTFDisabled(bool disabled);
+F_EXPORT void F_CALL iplFMODSetHRTFDisabled(bool disabled);
 
 }

@@ -50,11 +50,11 @@ namespace SteamAudio
             API.iplUnitySetReverbSource(reverbSource.Get());
         }
 
-        public override void SetGlobalHRTFDisabled(bool disabled)
+        public override void SetHRTFDisabled(bool disabled)
         {
-            base.SetGlobalHRTFDisabled(disabled);
+            base.SetHRTFDisabled(disabled);
 
-            API.iplUnitySetGlobalHRTFDisabled(disabled);
+            API.iplUnitySetHRTFDisabled(disabled);
         }
     }
 
