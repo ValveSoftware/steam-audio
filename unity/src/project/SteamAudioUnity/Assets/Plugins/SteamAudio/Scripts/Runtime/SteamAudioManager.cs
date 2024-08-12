@@ -1261,6 +1261,12 @@ namespace SteamAudio
             var dataAsset = (!exportOBJ) ? GetDataAsset(dynamicObject) : null;
             var objFileName = (exportOBJ) ? GetOBJFileName(dynamicObject) : "";
 
+            if (!exportOBJ && dataAsset == null)
+                return;
+
+            if (exportOBJ && (objFileName == null || objFileName.Length == 0))
+                return;
+
             Export(objects, dynamicObject.name, dataAsset, objFileName, true, exportOBJ);
         }
 
