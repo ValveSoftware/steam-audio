@@ -49,6 +49,13 @@ namespace SteamAudio
         {
             API.iplUnitySetReverbSource(reverbSource.Get());
         }
+
+        public override void SetHRTFDisabled(bool disabled)
+        {
+            base.SetHRTFDisabled(disabled);
+
+            API.iplUnitySetHRTFDisabled(disabled);
+        }
     }
 
     public sealed class UnityAudioEngineStateHelpers : AudioEngineStateHelpers

@@ -1368,4 +1368,12 @@ namespace SteamAudio
         [DllImport("audioplugin_phonon")]
 #endif
         public static extern void iplUnityTerminate();
+
+#if UNITY_IOS && !UNITY_EDITOR
+        [DllImport("__Internal")]
+#else
+        [DllImport("audioplugin_phonon")]
+#endif
+        public static extern void iplUnitySetHRTFDisabled(bool disabled);
+    }
 }

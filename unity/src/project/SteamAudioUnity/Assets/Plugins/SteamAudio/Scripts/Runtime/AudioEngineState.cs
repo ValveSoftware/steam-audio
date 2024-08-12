@@ -57,6 +57,9 @@ namespace SteamAudio
             var type = Type.GetType("SteamAudio.FMODStudioAudioEngineState,SteamAudioUnity");
             return (type != null) ? (AudioEngineState) Activator.CreateInstance(type) : null;
         }
+
+        public virtual void SetHRTFDisabled(bool disabled) 
+        { }
     }
 
     public abstract class AudioEngineStateHelpers

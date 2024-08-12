@@ -23,6 +23,7 @@ namespace SteamAudio
     public class SteamAudioSettingsInspector : Editor
     {
         SerializedProperty mAudioEngine;
+        SerializedProperty mHRTFDisabled;
         SerializedProperty mPerspectiveCorrection;
         SerializedProperty mPerspectiveCorrectionFactor;
         SerializedProperty mHRTFVolumeNormalizationType;
@@ -77,6 +78,7 @@ namespace SteamAudio
         private void OnEnable()
         {
             mAudioEngine = serializedObject.FindProperty("audioEngine");
+            mHRTFDisabled = serializedObject.FindProperty("hrtfDisabled");
             mPerspectiveCorrection = serializedObject.FindProperty("perspectiveCorrection");
             mPerspectiveCorrectionFactor = serializedObject.FindProperty("perspectiveCorrectionFactor");
             mHRTFVolumeGainDB = serializedObject.FindProperty("hrtfVolumeGainDB");
@@ -126,6 +128,7 @@ namespace SteamAudio
             serializedObject.Update();
 
             EditorGUILayout.PropertyField(mAudioEngine);
+            EditorGUILayout.PropertyField(mHRTFDisabled, new UnityEngine.GUIContent("Disable HRTF Globally", "Disable HRTF rendering for all events/sources. Useful when the end user is using speakers instead of headphones."));
             EditorGUILayout.PropertyField(mPerspectiveCorrection, new UnityEngine.GUIContent("Enable Perspective Correction"));
 
             if (mPerspectiveCorrection.boolValue)

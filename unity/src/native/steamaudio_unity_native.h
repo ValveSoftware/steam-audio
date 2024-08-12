@@ -78,6 +78,8 @@ UNITY_AUDIODSP_EXPORT_API IPLint32 UNITY_AUDIODSP_CALLBACK iplUnityAddSource(IPL
 
 UNITY_AUDIODSP_EXPORT_API void UNITY_AUDIODSP_CALLBACK iplUnityRemoveSource(IPLint32 handle);
 
+UNITY_AUDIODSP_EXPORT_API void UNITY_AUDIODSP_CALLBACK iplUnitySetHRTFDisabled(bool disabled);
+
 #endif
 
 }
@@ -102,6 +104,7 @@ extern std::atomic<bool> gNewPerspectiveCorrectionWritten;
 extern std::atomic<bool> gIsSimulationSettingsValid;
 extern std::atomic<bool> gNewReverbSourceWritten;
 extern std::atomic<bool> gNewReflectionMixerWritten;
+extern std::atomic<bool> gHRTFDisabled;
 
 
 // --------------------------------------------------------------------------------------------------------------------

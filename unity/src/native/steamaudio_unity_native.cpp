@@ -45,6 +45,7 @@ std::atomic<bool> gNewPerspectiveCorrectionWritten{ false };
 std::atomic<bool> gIsSimulationSettingsValid{ false };
 std::atomic<bool> gNewReverbSourceWritten{ false };
 std::atomic<bool> gNewReflectionMixerWritten{ false };
+std::atomic<bool> gHRTFDisabled{ false };
 
 std::shared_ptr<SourceManager> gSourceManager;
 
@@ -181,6 +182,11 @@ void UNITY_AUDIODSP_CALLBACK iplUnityRemoveSource(IPLint32 handle)
         return;
 
     SteamAudioUnity::gSourceManager->removeSource(handle);
+}
+
+void UNITY_AUDIODSP_CALLBACK iplUnitySetHRTFDisabled(bool disabled)
+{
+    SteamAudioUnity::gHRTFDisabled = disabled;
 }
 
 
