@@ -176,7 +176,7 @@ endif()
 #
 
 add_library(hrtf OBJECT hrtf.cpp)
-target_include_directories(hrtf PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+target_include_directories(hrtf PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>")
 
 
 #
@@ -582,7 +582,7 @@ if (STEAMAUDIO_BUILD_CSHARP_BINDINGS)
 endif()
 
 # This is needed so we can include generated headers
-target_include_directories(core PUBLIC ${CMAKE_CURRENT_BINARY_DIR})
+target_include_directories(core PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>")
 
 if (IPL_OS_WINDOWS)
     target_link_libraries(core PUBLIC delayimp)
@@ -639,7 +639,7 @@ source_group("OpenCL Files" FILES ${CL_SOURCE})
 
 target_compile_definitions(core PRIVATE STEAMAUDIO_BUILDING_CORE)
 
-target_precompile_headers(core PUBLIC pch.h)
+target_precompile_headers(core PRIVATE pch.h)
 
 
 #
@@ -670,7 +670,7 @@ if (IPL_OS_LINUX)
     target_link_options(phonon PRIVATE -Wl,--exclude-libs,ALL)
 endif()
 
-if (IPL_OS_WINDOWS AND IPL_CPU_X64 AND BUILD_SHARED_LIBS)
+if (IPL_OS_WINDOWS AND IPL_CPU_X64 AND BUILD_SHARED_LIBS AND STEAMAUDIO_DEPS_CLOSED_SOURCE)
     set_target_properties(phonon PROPERTIES LINK_FLAGS "/DELAYLOAD:opencl.dll /DELAYLOAD:gpuutilities.dll /DELAYLOAD:trueaudionext.dll")
 endif()
 
@@ -967,16 +967,18 @@ if (IPL_OS_MACOS)
     )
 endif()
 
-if (IPL_OS_WINDOWS)
-    install(
-        FILES       ${CMAKE_CURRENT_BINARY_DIR}/$<CONFIG>/phonon.pdb
-        DESTINATION symbols/${IPL_BIN_SUBDIR}
-    )
-elseif (IPL_OS_LINUX AND NOT IPL_CPU_ARMV8)
-    install(
-        FILES       ${CMAKE_CURRENT_BINARY_DIR}/libphonon.so.dbg
-        DESTINATION symbols/${IPL_BIN_SUBDIR}
-    )
+if(BUILD_SHARED_LIBS)
+  if (IPL_OS_WINDOWS)
+      install(
+          FILES       ${CMAKE_CURRENT_BINARY_DIR}/phonon.pdb
+          DESTINATION bin
+      )
+  elseif (IPL_OS_LINUX AND NOT IPL_CPU_ARMV8)
+      install(
+          FILES       ${CMAKE_CURRENT_BINARY_DIR}/libphonon.so.dbg
+          DESTINATION bin
+      )
+  endif()
 endif()
 
 install(
@@ -992,6 +994,30 @@ if (IPL_OS_WINDOWS AND IPL_CPU_X64)
                     ${CMAKE_HOME_DIRECTORY}/deps/trueaudionext/bin/windows-x64/$<LOWER_CASE:$<CONFIG>>/GPUUtilities.dll
         DESTINATION lib/${IPL_BIN_SUBDIR}
     )
+endif()
+
+if(STEAMAUDIO_EXPORT)
+    export(EXPORT steam-audio_exports
+    NAMESPACE steam-audio::
+    FILE ${CMAKE_CURRENT_BINARY_DIR}/steam-audioTargets.cmake
+    )
+
+    # required to resolve object libraries on import
+    install(TARGETS core hrtf EXPORT steam-audio_exports)
+
+    install(EXPORT steam-audio_exports
+    NAMESPACE steam-audio::
+    FILE steam-audioTargets.cmake
+    DESTINATION share/steam-audio
+    )
+
+    include(CMakePackageConfigHelpers)
+    configure_package_config_file(steam-audio-config.cmake.in
+    ${CMAKE_CURRENT_BINARY_DIR}/steam-audio-config.cmake
+    INSTALL_DESTINATION share/steam-audio)
+
+    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/steam-audio-config.cmake
+            DESTINATION share/steam-audio )
 endif()
 
 include(CMakeListsInternal.txt OPTIONAL)
