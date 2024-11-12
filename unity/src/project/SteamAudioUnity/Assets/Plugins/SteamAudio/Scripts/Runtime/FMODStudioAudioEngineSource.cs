@@ -30,6 +30,14 @@ namespace SteamAudio
         SteamAudioSource mSteamAudioSource = null;
         int mHandle = -1;
 
+        static readonly object[] Array1 = new object[1];
+        static readonly object[] Array2 = new object[2];
+        static readonly object[] Array5 = new object[5];
+
+        static readonly object BoxedZero = (int)0;
+        static readonly object[] BoxedNumbers = new object[] { BoxedZero, (int)1, (int)2 };
+        static readonly object BoxedSimulationOutputsParamIndex = kSimulationOutputsParamIndex;
+
         static Type FMOD_DSP;
         static Type FMOD_ChannelGroup;
         static Type FMOD_Studio_EventInstance;
@@ -74,8 +82,10 @@ namespace SteamAudio
             if (!mFoundDSP)
                 return;
 
-            var index = kSimulationOutputsParamIndex;
-            FMOD_DSP_setParameterInt.Invoke(mDSP, new object[] { index++, mHandle });
+            var args = Array2;
+            args[1] = mHandle;
+            args[0] = BoxedSimulationOutputsParamIndex;
+            FMOD_DSP_setParameterInt.Invoke(mDSP, args);
         }
 
         void CheckForChangedEventInstance()
@@ -83,7 +93,7 @@ namespace SteamAudio
             if (mEventEmitter != null)
             {
                 var eventInstance = FMODUnity_StudioEventEmitter_EventInstance.GetValue(mEventEmitter, null);
-                if (!eventInstance.Equals(mEventInstance))
+                if (eventInstance != mEventInstance)
                 {
                     // The event instance is different from the one we last used, which most likely means the
                     // event-related objects were destroyed and re-created. Make sure we look for the DSP instance
@@ -114,19 +124,23 @@ namespace SteamAudio
             if (!((bool)FMOD_Studio_EventInstance_isValid.Invoke(mEventInstance, null)))
                 return;
 
-            var channelGroup = Activator.CreateInstance(FMOD_ChannelGroup);
+            object channelGroup = null;
 
-            var getChannelGroupArgs = new object[] { channelGroup };
+            var getChannelGroupArgs = Array1;
+            getChannelGroupArgs[0] = channelGroup;
             FMOD_Studio_EventInstance_getChannelGroup.Invoke(mEventInstance, getChannelGroupArgs);
             channelGroup = getChannelGroupArgs[0];
 
-            var getNumDSPsArgs = new object[] { 0 };
+            var getNumDSPsArgs = Array1;
+            getNumDSPsArgs[0] = BoxedZero;
             FMOD_ChannelGroup_getNumDSPs.Invoke(channelGroup, getNumDSPsArgs);
             int numDSPs = (int)getNumDSPsArgs[0];
 
             for (var i = 0; i < numDSPs; ++i)
             {
-                var getDSPArgs = new object[] { i, mDSP };
+                var getDSPArgs = Array2;
+                getDSPArgs[1] = mDSP;
+                getDSPArgs[0] = i < BoxedNumbers.Length ? BoxedNumbers[i] : i;
                 FMOD_ChannelGroup_getDSP.Invoke(channelGroup, getDSPArgs);
                 mDSP = getDSPArgs[1];
 
@@ -136,7 +150,12 @@ namespace SteamAudio
                 var dspConfigWidth = 0;
                 var dspConfigHeight = 0;
 
-                var getInfoArgs = new object[] { dspName, dspVersion, dspNumChannels, dspConfigWidth, dspConfigHeight };
+                var getInfoArgs = Array5;
+                getInfoArgs[4] = dspConfigHeight;
+                getInfoArgs[3] = dspConfigWidth;
+                getInfoArgs[2] = dspNumChannels;
+                getInfoArgs[1] = dspVersion;
+                getInfoArgs[0] = dspName;
                 FMOD_DSP_getInfo.Invoke(mDSP, getInfoArgs);
                 dspName = (string)getInfoArgs[0];
 
