@@ -70,7 +70,7 @@
             
             
               <div class="version">
-                4.5.3
+                4.6.0
               </div>
             
           
@@ -866,6 +866,11 @@
 </pre></div>
 </div>
 <p>For information on the various parameters configured here, see <a class="reference internal" href="simulation.html#ref-simulation"><span class="std std-ref">Simulation</span></a>. Among other things, the above code enables reflection simulation, specifies that up to 4096 rays will be traced from the listener, that the simulation should use 2 threads, and the result of the simulation should be stored in a 4-channel (1st order Ambisonics) impulse response (IR) that is 2.0 seconds long.</p>
+<p>When creating the source, you must also configure it to be used for reflection simulation:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">IPLSourceSettings</span> <span class="n">sourceSettings</span><span class="p">{};</span>
+<span class="n">sourceSettings</span><span class="p">.</span><span class="n">flags</span> <span class="o">=</span> <span class="n">IPL_SIMULATIONFLAGS_REFLECTIONS</span><span class="p">;</span>
+</pre></div>
+</div>
 </div>
 <div class="section" id="simulating-reflections">
 <h3>Simulating reflections<a class="headerlink" href="#simulating-reflections" title="Permalink to this headline">¶</a></h3>

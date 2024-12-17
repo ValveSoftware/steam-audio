@@ -1,0 +1,308 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Spatializer &mdash; Steam Audio Wwise Integration  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/tabs.css" type="text/css" />
+  <link rel="stylesheet" href="_static/steamaudio.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Reverb" href="reverb.html" />
+    <link rel="prev" title="Effects" href="effects.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html">
+          
+
+          
+            
+            <img src="_static/steam-audio-logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                4.6.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Wwise Integration</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guide.html">User’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="build-instructions.html">Build Instructions</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="reference.html">Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="effects.html">Effects</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Spatializer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="reverb.html">Reverb</a></li>
+<li class="toctree-l3"><a class="reference internal" href="mixer-return.html">Mixer Return</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api-reference.html">API Reference</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Steam Audio Wwise Integration</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="reference.html">Reference</a> &raquo;</li>
+        
+          <li><a href="effects.html">Effects</a> &raquo;</li>
+        
+      <li>Spatializer</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="spatializer">
+<h1>Spatializer<a class="headerlink" href="#spatializer" title="Permalink to this headline">¶</a></h1>
+<p>Provides options for controlling how an event is spatialized.</p>
+<img alt="_images/spatializer.png" src="_images/spatializer.png" />
+<dl>
+<dt>Apply HRTF</dt><dd><p>If checked, Steam Audio uses HRTF-based binaural rendering. Results in improved localization, including vertical and front-back spatialization, at the cost of slightly increased CPU usage. Requires stereo headphones.</p>
+<p>If unchecked, uses constant-power panning. Can be used to render to any channel configuration.</p>
+</dd>
+<dt>Position (X)</dt><dd><p>The x-coordinate of the source relative to the listener. Only used when previewing in the Wwise authoring app.</p>
+</dd>
+<dt>Position (Y)</dt><dd><p>The y-coordinate of the source relative to the listener. Only used when previewing in the Wwise authoring app.</p>
+</dd>
+<dt>Position (Z)</dt><dd><p>The z-coordinate of the source relative to the listener. Only used when previewing in the Wwise authoring app.</p>
+</dd>
+<dt>HRTF Interpolation</dt><dd><p>Controls how HRTFs are interpolated when the source moves relative to the listener.</p>
+<ul class="simple">
+<li><p><em>Nearest</em>: Uses the HRTF from the direction nearest to the direction of the source for which HRTF data is available. The fastest option, but can result in audible artifacts for certain kinds of audio clips, such as white noise or engine sounds.</p></li>
+<li><p><em>Bilinear</em>: Uses an HRTF generated after interpolating from four directions nearest to the direction of the source, for which HRTF data is available. This may result in smoother audio for some kinds of sources when the listener looks around, but has higher CPU usage (up to 2x).</p></li>
+</ul>
+</dd>
+<dt>Distance Attenuation</dt><dd><p>If checked, a physics-based distance attenuation model is used. This is an inverse distance falloff.</p>
+<p>If unchecked, distance attenuation is not applied by Steam Audio. You can continue to use Wwise’s built-in distance attenuation controls to apply distance attenuation.</p>
+</dd>
+<dt>Air Absorption</dt><dd><p>If checked, a physics-based frequency-dependent distance-based air absorption model is used. This is an exponential falloff, with higher frequencies falling off faster with distance than lower frequencies.</p>
+<p>If unchecked, air absorption is not applied by Steam Audio. You can continue to tuse Wwise’s built-in air distance-based low-pass and high-pass filter controls to apply air absorption.</p>
+</dd>
+<dt>Directivity</dt><dd><p>If checked, a dipole directivity model is used. You can control the dipole shape using the <strong>Dipole Weight</strong> and <strong>Dipole Power</strong> parameters.</p>
+</dd>
+<dt>Dipole Weight</dt><dd><p>Blends between monopole (omnidirectional) and dipole directivity patterns. 0 = pure monopole (sound is emitted in all directions with equal intensity), 100% = pure dipole (sound is focused to the front and back of the source). At 50%, the source has a cardioid directivity, with most of the sound emitted to the front of the source. Only used if <strong>Directivity</strong> is checked.</p>
+</dd>
+<dt>Dipole Power</dt><dd><p>Controls how focused the dipole directivity is. Higher values result in sharper directivity patterns. Only used if <strong>Directivity</strong> is checked.</p>
+</dd>
+<dt>Occlusion</dt><dd><p>Specifies how occlusion is simulated and applied to the event.</p>
+<ul class="simple">
+<li><p><em>Off</em>. Occlusion is not applied.</p></li>
+<li><p><em>Simulation-Defined</em>. Occlusion is applied. The occlusion value must be supplied by the game engine via the <code class="docutils literal notranslate"><span class="pre">SIMULATION_OUTPUTS</span></code> parameter.</p></li>
+<li><p><em>User-Defined</em>. Uses the <strong>Occlusion Value</strong> parameter to control occlusion. The occlusion value will <em>not</em> automatically change based on surrounding geometry. You are expected to control the <strong>Occlusion Value</strong> parameter using RTPC to achieve this effect. This option is intended for integrating your own occlusion model with Steam Audio.</p></li>
+</ul>
+</dd>
+<dt>Occlusion Value</dt><dd><p>The occlusion attenuation value. Only used if <strong>Occlusion</strong> is set to <strong>User-Defined</strong>. 0% = sound is completely attenuated, 100% = sound is not attenuated at all.</p>
+</dd>
+<dt>Transmission</dt><dd><p>Specifies how transmission is simulated and applied to the event.</p>
+<ul class="simple">
+<li><p><em>Off</em>. Transmission is not applied.</p></li>
+<li><p><em>Simulation-Defined</em>. Transmission is applied. The transmission filter EQ values must be supplied by the game engine via the <code class="docutils literal notranslate"><span class="pre">SIMULATION_OUTPUTS</span></code> DSP parameter.</p></li>
+<li><p><em>User-Defined</em>. Uses the <strong>Transmission Low</strong>, <strong>Transmission Mid</strong>, and <strong>Transmission High</strong> parameters to control transmission. The transmission values will <em>not</em> automatically change based on surrounding geometry. You are expected to control the parameters using RTPC to achieve this effect. This option is intended for integrating your own occlusion and transmission model with Steam Audio.</p></li>
+</ul>
+</dd>
+<dt>Transmission Type</dt><dd><p>Specifies how the transmission filter is applied.</p>
+<ul class="simple">
+<li><p><em>Frequency Independent</em>. Transmission is modeled as a single attenuation factor.</p></li>
+<li><p><em>Frequency Dependent</em>. Transmission is modeled as a 3-band EQ.</p></li>
+</ul>
+</dd>
+<dt>Transmission Low</dt><dd><p>The low frequency (up to 800 Hz) EQ value for transmission. Only used if <strong>Transmission</strong> is set to <strong>User-Defined</strong>. 0% = low frequencies are completely attenuated, 100% = low frequencies are not attenuated at all.</p>
+</dd>
+<dt>Transmission Mid</dt><dd><p>The middle frequency (800 Hz to 8 kHz) EQ value for transmission. Only used if <strong>Transmission</strong> is set to <strong>User-Defined</strong>. 0% = middle frequencies are completely attenuated, 100% = middle frequencies are not attenuated at all.</p>
+</dd>
+<dt>Transmission High</dt><dd><p>The high frequency (8 kHz and above) EQ value for transmission. Only used if <strong>Transmission</strong> is set to <strong>User-Defined</strong>. 0% = high frequencies are completely attenuated, 100% = high frequencies are not attenuated at all.</p>
+</dd>
+<dt>Direct Mix Level</dt><dd><p>The contribution of the direct sound path to the overall mix for this event. Lower values reduce the contribution more.</p>
+</dd>
+<dt>Reflections</dt><dd><p>If enabled, reflections reaching the listener from the source will be applied to the event.</p>
+</dd>
+<dt>Apply HRTF To Reflections</dt><dd><p>If checked, applies HRTF-based 3D audio rendering to reflections. Results in an improvement in spatialization quality when using convolution or hybrid reverb, at the cost of slightly increased CPU usage. Default: off.</p>
+</dd>
+<dt>Reflections Mix Level</dt><dd><p>The contribution of reflections to the overall mix for this event. Lower values reduce the contribution more.</p>
+</dd>
+<dt>Pathing</dt><dd><p>If checked, shortest paths taken by sound as it propagates from the source to the listener will be simulated, and appropriate spatialization will be applied to the event for these indirect paths.</p>
+</dd>
+<dt>Apply HRTF To Pathing</dt><dd><p>If checked, applies HRTF-based 3D audio rendering to pathing. Results in an improvement in spatialization quality, at the cost of slightly increased CPU usage. Default: off.</p>
+</dd>
+<dt>Pathing Mix Level</dt><dd><p>The contribution of pathing to the overall mix for this event. Lower values reduce the contribution more.</p>
+</dd>
+</dl>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="reverb.html" class="btn btn-neutral float-right" title="Reverb" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="effects.html" class="btn btn-neutral float-left" title="Effects" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2017-2024, Valve Corporation.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

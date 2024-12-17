@@ -1,0 +1,459 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>User’s Guide &mdash; Steam Audio Wwise Integration  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/tabs.css" type="text/css" />
+  <link rel="stylesheet" href="_static/steamaudio.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/tabs.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Build Instructions" href="build-instructions.html" />
+    <link rel="prev" title="Getting Started" href="getting-started.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html">
+          
+
+          
+            
+            <img src="_static/steam-audio-logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                4.6.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Wwise Integration</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting Started</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">User’s Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#spatialize-an-event">Spatialize an event</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#apply-distance-falloff">Apply distance falloff</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#apply-frequency-dependent-air-absorption">Apply frequency-dependent air absorption</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#specify-a-source-directivity-pattern">Specify a source directivity pattern</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#use-a-custom-hrtf">Use a custom HRTF</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#model-occlusion-by-geometry">Model occlusion by geometry</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#model-transmission-through-geometry">Model transmission through geometry</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#model-reflection-by-geometry">Model reflection by geometry</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#apply-physics-based-reverb-to-a-mixer-bus">Apply physics-based reverb to a mixer bus</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#model-sound-paths-from-a-moving-source-to-a-moving-listener">Model sound paths from a moving source to a moving listener</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="build-instructions.html">Build Instructions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference.html">Reference</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Steam Audio Wwise Integration</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>User’s Guide</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="user-s-guide">
+<h1>User’s Guide<a class="headerlink" href="#user-s-guide" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="spatialize-an-event">
+<h2>Spatialize an event<a class="headerlink" href="#spatialize-an-event" title="Permalink to this headline">¶</a></h2>
+<p>To spatialize an event:</p>
+<ol class="arabic simple">
+<li><p>In the <strong>Actor-Mixer Hierarchy</strong>, select the sound object you want to spatializer.</p></li>
+<li><p>Click the <strong>Effects</strong> tab.</p></li>
+<li><p>Right-click in the <strong>Effects</strong> list, then click <strong>Add Effect</strong> &gt; <strong>Steam Audio Spatializer</strong> &gt; <strong>Default (Custom)</strong>.</p></li>
+</ol>
+<p>Steam Audio will apply HRTF-based binaural rendering to the event, using default settings. You can control many properties of the spatialization using the <a class="reference internal" href="spatializer.html"><span class="doc">Steam Audio Spatializer</span></a> effect, including occlusion, reflections, and more.</p>
+</div>
+<div class="section" id="apply-distance-falloff">
+<h2>Apply distance falloff<a class="headerlink" href="#apply-distance-falloff" title="Permalink to this headline">¶</a></h2>
+<p>You can continue to use Wwise’s built-in tools for controlling distance attenuation of your sound objects, including using RTPC curves to drive the attenuation from the game engine.</p>
+<p>As an alternative, you can also use Steam Audio’s physics-based distance attenuation. For more information, see <a class="reference internal" href="spatializer.html"><span class="doc">Steam Audio Spatializer</span></a>.</p>
+</div>
+<div class="section" id="apply-frequency-dependent-air-absorption">
+<h2>Apply frequency-dependent air absorption<a class="headerlink" href="#apply-frequency-dependent-air-absorption" title="Permalink to this headline">¶</a></h2>
+<p>You can continue to use Wwise’s built-in tools for applying distance-dependent low-pass filters and high-pass filters to your sound objects, including using RTPC curves to drive the filters from the game engine.</p>
+<p>As an alternative, you can also use Steam Audio’s air absorption. For more information, see <a class="reference internal" href="spatializer.html"><span class="doc">Steam Audio Spatializer</span></a>.</p>
+</div>
+<div class="section" id="specify-a-source-directivity-pattern">
+<h2>Specify a source directivity pattern<a class="headerlink" href="#specify-a-source-directivity-pattern" title="Permalink to this headline">¶</a></h2>
+<p>You can configure a source that emits sound with different intensities in different directions. For example, a megaphone that projects sound mostly to the front. To do this:</p>
+<ol class="arabic simple">
+<li><p>Select the sound object in the <strong>Actor-Mixer Hierarchy</strong>.</p></li>
+<li><p>Make sure a Steam Audio Spatializer effect is added to its effect list.</p></li>
+<li><p>Click the <strong>Edit</strong> button in the row corresponding to the Steam Audio Spatializer effect.</p></li>
+<li><p>Set <strong>Directivity</strong> to <strong>Simulation-Defined</strong>.</p></li>
+<li><p>Use the <strong>Dipole Weight</strong> and <strong>Dipole Power</strong> sliders to control the directivity pattern.</p></li>
+</ol>
+<p>For more information, see <a class="reference internal" href="spatializer.html"><span class="doc">Steam Audio Spatializer</span></a>.</p>
+</div>
+<div class="section" id="use-a-custom-hrtf">
+<h2>Use a custom HRTF<a class="headerlink" href="#use-a-custom-hrtf" title="Permalink to this headline">¶</a></h2>
+<p>You (or your players) can replace Steam Audio’s built-in HRTF with any HRTF of your choosing. This is useful for comparing different HRTF databases, measurement or simulation techniques, or even allowing players to use a preferred HRTF with your game or app.</p>
+<p>Steam Audio loads custom HRTFs from SOFA files. These files have a <code class="docutils literal notranslate"><span class="pre">.sofa</span></code> extension.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The Spatially-Oriented Format for Acoustics (SOFA) file format is defined by an Audio Engineering Society (AES) standard. For more details, click <a class="reference external" href="https://www.sofaconventions.org">here</a>.</p>
+</div>
+<p>Custom HRTFs are loaded and set by the game engine. No special configuration is needed within Wwise.</p>
+<div class="sphinx-tabs docutils container">
+<div aria-label="Tabbed content" class="closeable" role="tablist"><button aria-controls="panel-0-VW5pdHk=" aria-selected="true" class="sphinx-tabs-tab group-tab" id="tab-0-VW5pdHk=" name="VW5pdHk=" role="tab" tabindex="0">Unity</button><button aria-controls="panel-0-VW5yZWFsIEVuZ2luZQ==" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-0-VW5yZWFsIEVuZ2luZQ==" name="VW5yZWFsIEVuZ2luZQ==" role="tab" tabindex="-1">Unreal Engine</button><button aria-controls="panel-0-Qysr" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-0-Qysr" name="Qysr" role="tab" tabindex="-1">C++</button></div><div aria-labelledby="tab-0-VW5pdHk=" class="sphinx-tabs-panel group-tab" id="panel-0-VW5pdHk=" name="VW5pdHk=" role="tabpanel" tabindex="0"><p>Follow the instructions in the Steam Audio Unity integration documentation to specify custom HRTFs.</p>
+</div><div aria-labelledby="tab-0-VW5yZWFsIEVuZ2luZQ==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-0-VW5yZWFsIEVuZ2luZQ==" name="VW5yZWFsIEVuZ2luZQ==" role="tabpanel" tabindex="0"><p>The Steam Audio Unreal Engine plugin does not currently support custom HRTFs.</p>
+</div><div aria-labelledby="tab-0-Qysr" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-0-Qysr" name="Qysr" role="tabpanel" tabindex="0"><ol class="arabic simple">
+<li><p>In the game engine, use <code class="docutils literal notranslate"><span class="pre">iplHRTFCreate</span></code> to load one or more SOFA files.</p></li>
+<li><p>Call <code class="docutils literal notranslate"><span class="pre">iplWwiseSetHRTF</span></code> to specify the HRTF to use for spatialization.</p></li>
+</ol>
+</div></div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The SOFA file format allows for very flexible ways of defining HRTFs, but Steam Audio only supports a restricted subset. The following restrictions apply (for more information, including definitions of the terms below, click <a class="reference external" href="https://www.sofaconventions.org">here</a>):</p>
+<ul class="simple">
+<li><p>SOFA files must use the <code class="docutils literal notranslate"><span class="pre">SimpleFreeFieldHRIR</span></code> convention.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">Data.SamplingRate</span></code> variable may be specified only once, and may contain only a single value. Steam Audio will automatically resample the HRTF data to the user’s output sampling rate at run-time.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">SourcePosition</span></code> variable must be specified once for each measurement.</p></li>
+<li><p>Each source must have a single emitter, with <code class="docutils literal notranslate"><span class="pre">EmitterPosition</span></code> set to <code class="docutils literal notranslate"><span class="pre">[0</span> <span class="pre">0</span> <span class="pre">0]</span></code>.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">ListenerPosition</span></code> variable may be specified only once (and not once per measurement). Its value must be <code class="docutils literal notranslate"><span class="pre">[0</span> <span class="pre">0</span> <span class="pre">0]</span></code>.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">ListenerView</span></code> variable is optional. If specified, its value must be <code class="docutils literal notranslate"><span class="pre">[1</span> <span class="pre">0</span> <span class="pre">0]</span></code> (in Cartesian coordinates) or <code class="docutils literal notranslate"><span class="pre">[0</span> <span class="pre">0</span> <span class="pre">1]</span></code> (in spherical coordinates).</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">ListenerUp</span></code> variable is optional. If specified, its value must be <code class="docutils literal notranslate"><span class="pre">[0</span> <span class="pre">0</span> <span class="pre">1]</span></code> (in Cartesian coordinates) or <code class="docutils literal notranslate"><span class="pre">[0</span> <span class="pre">90</span> <span class="pre">1]</span></code> (in spherical coordinates).</p></li>
+<li><p>The listener must have two receivers. The receiver positions are ignored.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">Data.Delay</span></code> variable may be specified only once. Its value must be 0.</p></li>
+</ul>
+</div>
+</div>
+<div class="section" id="model-occlusion-by-geometry">
+<h2>Model occlusion by geometry<a class="headerlink" href="#model-occlusion-by-geometry" title="Permalink to this headline">¶</a></h2>
+<p>You can configure an event to be occluded by scene geometry. To do this:</p>
+<ol class="arabic simple">
+<li><p>Select the sound object in the <strong>Actor-Mixer Hierarchy</strong>.</p></li>
+<li><p>Make sure a Steam Audio Spatializer effect is added to its effect list.</p></li>
+<li><p>Click the <strong>Edit</strong> button in the row corresponding to the Steam Audio Spatializer effect.</p></li>
+<li><p>Set <strong>Occlusion</strong> to <strong>Simulation-Defined</strong>.</p></li>
+</ol>
+<p>You must now configure your game engine to enable occlusion simulation for this event.</p>
+<div class="sphinx-tabs docutils container">
+<div aria-label="Tabbed content" class="closeable" role="tablist"><button aria-controls="panel-1-VW5pdHk=" aria-selected="true" class="sphinx-tabs-tab group-tab" id="tab-1-VW5pdHk=" name="VW5pdHk=" role="tab" tabindex="0">Unity</button><button aria-controls="panel-1-VW5yZWFsIEVuZ2luZQ==" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-1-VW5yZWFsIEVuZ2luZQ==" name="VW5yZWFsIEVuZ2luZQ==" role="tab" tabindex="-1">Unreal Engine</button><button aria-controls="panel-1-Qysr" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-1-Qysr" name="Qysr" role="tab" tabindex="-1">C++</button></div><div aria-labelledby="tab-1-VW5pdHk=" class="sphinx-tabs-panel group-tab" id="panel-1-VW5pdHk=" name="VW5pdHk=" role="tabpanel" tabindex="0"><ol class="arabic simple">
+<li><p>Select the GameObject containing the AkGameObj component.</p></li>
+<li><p>Make sure a Steam Audio Source component is attached to it.</p></li>
+<li><p>In the Inspector, check <strong>Occlusion</strong>.</p></li>
+</ol>
+<p>Steam Audio will now use raycast occlusion to check if the source is occluded from the listener by any geometry. This assumes that the source is a single point. You can also model sources with larger spatial extent. For more information, refer to the Steam Audio Unity integration documentation.</p>
+</div><div aria-labelledby="tab-1-VW5yZWFsIEVuZ2luZQ==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-1-VW5yZWFsIEVuZ2luZQ==" name="VW5yZWFsIEVuZ2luZQ==" role="tabpanel" tabindex="0"><ol class="arabic simple">
+<li><p>Select the actor containing the AkComponent component.</p></li>
+<li><p>Make sure a Steam Audio Source component is attached to it.</p></li>
+<li><p>In the Details tab, check <strong>Simulate Occlusion</strong>.</p></li>
+</ol>
+<p>Steam Audio will now use raycast occlusion to check if the source is occluded from the listener by any geometry. This assumes that the source is a single point. You can also model sources with larger spatial extent. For more information, refer to the Steam Audio Unreal Engine integration documentation.</p>
+</div><div aria-labelledby="tab-1-Qysr" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-1-Qysr" name="Qysr" role="tabpanel" tabindex="0"><ol class="arabic simple">
+<li><p>Whenever you create a Wwise Game Object corresponding to a sound source, create a corresponding <code class="docutils literal notranslate"><span class="pre">IPLSource</span></code> object.</p></li>
+<li><p>Bind the <code class="docutils literal notranslate"><span class="pre">IPLSource</span></code> to its corresponding <code class="docutils literal notranslate"><span class="pre">AkGameObjectID</span></code> by calling <code class="docutils literal notranslate"><span class="pre">iplWwiseAddSource</span></code>.</p></li>
+<li><p>Add the <code class="docutils literal notranslate"><span class="pre">IPLSource</span></code> to your <code class="docutils literal notranslate"><span class="pre">IPLSimulator</span></code> object using <code class="docutils literal notranslate"><span class="pre">iplSourceAdd</span></code>, as usual.</p></li>
+<li><p>Call <code class="docutils literal notranslate"><span class="pre">iplSimulatorRunDirect</span></code> to run occlusion simulations. The Steam Audio Wwise integration will automatically use the latest simulated occlusion parameter values.</p></li>
+</ol>
+</div></div>
+<p>You can also explicitly control occlusion manually or via scripting. For more information, see <a class="reference internal" href="spatializer.html"><span class="doc">Steam Audio Spatializer</span></a>.</p>
+</div>
+<div class="section" id="model-transmission-through-geometry">
+<h2>Model transmission through geometry<a class="headerlink" href="#model-transmission-through-geometry" title="Permalink to this headline">¶</a></h2>
+<p>You can configure an event to be transmitted through occluding geometry, with the sound attenuated based on material properties. To do this:</p>
+<ol class="arabic simple">
+<li><p>Select the sound object in the <strong>Actor-Mixer Hierarchy</strong>.</p></li>
+<li><p>Make sure a Steam Audio Spatializer effect is added to its effect list.</p></li>
+<li><p>Click the <strong>Edit</strong> button in the row corresponding to the Steam Audio Spatializer effect.</p></li>
+<li><p>Make sure <strong>Occlusion</strong> is set to <strong>Simulation-Defined</strong>, then set <strong>Transmission</strong> to <strong>Simulation-Defined</strong>.</p></li>
+</ol>
+<p>You must now configure your game engine to enable transmission simulation for this event.</p>
+<div class="sphinx-tabs docutils container">
+<div aria-label="Tabbed content" class="closeable" role="tablist"><button aria-controls="panel-2-VW5pdHk=" aria-selected="true" class="sphinx-tabs-tab group-tab" id="tab-2-VW5pdHk=" name="VW5pdHk=" role="tab" tabindex="0">Unity</button><button aria-controls="panel-2-VW5yZWFsIEVuZ2luZQ==" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-2-VW5yZWFsIEVuZ2luZQ==" name="VW5yZWFsIEVuZ2luZQ==" role="tab" tabindex="-1">Unreal Engine</button><button aria-controls="panel-2-Qysr" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-2-Qysr" name="Qysr" role="tab" tabindex="-1">C++</button></div><div aria-labelledby="tab-2-VW5pdHk=" class="sphinx-tabs-panel group-tab" id="panel-2-VW5pdHk=" name="VW5pdHk=" role="tabpanel" tabindex="0"><ol class="arabic simple">
+<li><p>Select the GameObject containing the AkGameObj component.</p></li>
+<li><p>Make sure a Steam Audio Source component is attached to it.</p></li>
+<li><p>In the Inspector, make sure <strong>Occlusion</strong> is checked, then check <strong>Transmission</strong>.</p></li>
+</ol>
+<p>Steam Audio will now model how sound travels through occluding geometry, based on the acoustic material properties of the geometry.</p>
+</div><div aria-labelledby="tab-2-VW5yZWFsIEVuZ2luZQ==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-2-VW5yZWFsIEVuZ2luZQ==" name="VW5yZWFsIEVuZ2luZQ==" role="tabpanel" tabindex="0"><ol class="arabic simple">
+<li><p>Select the actor containing the AkComponent component.</p></li>
+<li><p>Make sure a Steam Audio Source component is attached to it.</p></li>
+<li><p>In the Details tab, make sure <strong>Simulate Occlusion</strong> is checked, then check <strong>Simulate Transmission</strong>.</p></li>
+</ol>
+<p>Steam Audio will now model how sound travels through occluding geometry, based on the acoustic material properties of the geometry.</p>
+</div><div aria-labelledby="tab-2-Qysr" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-2-Qysr" name="Qysr" role="tabpanel" tabindex="0"><ol class="arabic simple">
+<li><p>Whenever you create a Wwise Game Object corresponding to a sound source, create a corresponding <code class="docutils literal notranslate"><span class="pre">IPLSource</span></code> object.</p></li>
+<li><p>Bind the <code class="docutils literal notranslate"><span class="pre">IPLSource</span></code> to its corresponding <code class="docutils literal notranslate"><span class="pre">AkGameObjectID</span></code> by calling <code class="docutils literal notranslate"><span class="pre">iplWwiseAddSource</span></code>.</p></li>
+<li><p>Add the <code class="docutils literal notranslate"><span class="pre">IPLSource</span></code> to your <code class="docutils literal notranslate"><span class="pre">IPLSimulator</span></code> object using <code class="docutils literal notranslate"><span class="pre">iplSourceAdd</span></code>, as usual.</p></li>
+<li><p>Call <code class="docutils literal notranslate"><span class="pre">iplSimulatorRunDirect</span></code> to run occlusion and transmission simulations. The Steam Audio Wwise integration will automatically use the latest simulated occlusion and transmission parameter values.</p></li>
+</ol>
+</div></div>
+<p>You can also control whether the transmission effect is frequency-dependent, or explicitly control transmission manually or via scripting. For more information, see <a class="reference internal" href="spatializer.html"><span class="doc">Steam Audio Spatializer</span></a>.</p>
+</div>
+<div class="section" id="model-reflection-by-geometry">
+<h2>Model reflection by geometry<a class="headerlink" href="#model-reflection-by-geometry" title="Permalink to this headline">¶</a></h2>
+<p>You can configure an event to be reflected by surrounding geometry, with the reflected sound attenuated based on material properties. Reflections often enhance the sense of presence when used with spatial audio. To do this:</p>
+<ol class="arabic simple">
+<li><p>Select the event.</p></li>
+<li><p>Make sure a Steam Audio Spatializer effect is added to its effect list.</p></li>
+<li><p>Click the <strong>Edit</strong> button in the row corresponding to the Steam Audio Spatializer effect.</p></li>
+<li><p>Enable <strong>Reflections</strong>.</p></li>
+</ol>
+<p>You must now configure your game engine to enable reflections simulation for this event.</p>
+<div class="sphinx-tabs docutils container">
+<div aria-label="Tabbed content" class="closeable" role="tablist"><button aria-controls="panel-3-VW5pdHk=" aria-selected="true" class="sphinx-tabs-tab group-tab" id="tab-3-VW5pdHk=" name="VW5pdHk=" role="tab" tabindex="0">Unity</button><button aria-controls="panel-3-VW5yZWFsIEVuZ2luZQ==" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-3-VW5yZWFsIEVuZ2luZQ==" name="VW5yZWFsIEVuZ2luZQ==" role="tab" tabindex="-1">Unreal Engine</button><button aria-controls="panel-3-Qysr" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-3-Qysr" name="Qysr" role="tab" tabindex="-1">C++</button></div><div aria-labelledby="tab-3-VW5pdHk=" class="sphinx-tabs-panel group-tab" id="panel-3-VW5pdHk=" name="VW5pdHk=" role="tabpanel" tabindex="0"><ol class="arabic simple">
+<li><p>Select the GameObject containing the AkGameObj component.</p></li>
+<li><p>Make sure a Steam Audio Source component is attached to it.</p></li>
+<li><p>In the Inspector, check <strong>Reflections</strong>.</p></li>
+</ol>
+<p>Steam Audio will now use real-time ray tracing to model how sound is reflected by geometry, based on the acoustic material properties of the geometry. You can control many aspects of this process, including how many rays are traced, how many successive reflections are modeled, how reflected sound is rendered, and much more. Since modeling reflections is CPU-intensive, you can pre-compute reflections for a static sound source, or even offload the work to the GPU. For more information, refer to the Steam Audio Unity integration documentation.</p>
+</div><div aria-labelledby="tab-3-VW5yZWFsIEVuZ2luZQ==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-3-VW5yZWFsIEVuZ2luZQ==" name="VW5yZWFsIEVuZ2luZQ==" role="tabpanel" tabindex="0"><ol class="arabic simple">
+<li><p>Select the actor containing the AkComponent component.</p></li>
+<li><p>Make sure a Steam Audio Source component is attached to it.</p></li>
+<li><p>In the Details tab, check <strong>Simulate Reflections</strong>.</p></li>
+</ol>
+<p>Steam Audio will now use real-time ray tracing to model how sound is reflected by geometry, based on the acoustic material properties of the geometry. You can control many aspects of this process, including how many rays are traced, how many successive reflections are modeled, how reflected sound is rendered, and much more. Since modeling reflections is CPU-intensive, you can pre-compute reflections for a static sound source, or even offload the work to the GPU. For more information, refer to the Steam Audio Unreal Engine integration documentation.</p>
+</div><div aria-labelledby="tab-3-Qysr" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-3-Qysr" name="Qysr" role="tabpanel" tabindex="0"><ol class="arabic simple">
+<li><p>Whenever you create a Wwise Game Object corresponding to a sound source, create a corresponding <code class="docutils literal notranslate"><span class="pre">IPLSource</span></code> object.</p></li>
+<li><p>Bind the <code class="docutils literal notranslate"><span class="pre">IPLSource</span></code> to its corresponding <code class="docutils literal notranslate"><span class="pre">AkGameObjectID</span></code> by calling <code class="docutils literal notranslate"><span class="pre">iplWwiseAddSource</span></code>.</p></li>
+<li><p>Add the <code class="docutils literal notranslate"><span class="pre">IPLSource</span></code> to your <code class="docutils literal notranslate"><span class="pre">IPLSimulator</span></code> object using <code class="docutils literal notranslate"><span class="pre">iplSourceAdd</span></code>, as usual.</p></li>
+<li><p>Call <code class="docutils literal notranslate"><span class="pre">iplSimulatorRunReflections</span></code> to run reflection simulations. The Steam Audio Wwise integration will automatically use the latest simulated reflection parameter values.</p></li>
+</ol>
+</div></div>
+<p>For more information, see <a class="reference internal" href="spatializer.html"><span class="doc">Steam Audio Spatializer</span></a>.</p>
+</div>
+<div class="section" id="apply-physics-based-reverb-to-a-mixer-bus">
+<h2>Apply physics-based reverb to a mixer bus<a class="headerlink" href="#apply-physics-based-reverb-to-a-mixer-bus" title="Permalink to this headline">¶</a></h2>
+<p>You can also use ray tracing to automatically calculate physics-based reverb at the listener’s position. Physics-based reverbs are <em>directional</em>, which means they can model the direction from which a distant echo can be heard, and keep it consistent as the player looks around. Physics-based reverbs also model smooth transitions between different spaces in your scene, which is crucial for maintaining immersion as the player moves. To set up physics-based reverb:</p>
+<ol class="arabic simple">
+<li><p>In Wwise, select the Auxiliary Bus to which you want to add the reverb effect.</p></li>
+<li><p>Make sure a Steam Audio Reverb effect is added to its effects list.</p></li>
+<li><p>Add a <em>send</em> from one or more sound objects to the bus containing the Steam Audio Reverb effect. For more information, see the <a class="reference external" href="https://www.audiokinetic.com/en/library/2023.1.8_8601/?source=Help&amp;id=using_effects_to_implement_environment_acoustics">Wwise documentation</a>.</p></li>
+</ol>
+<p>You must now configure your game engine to enable reverb simulation.</p>
+<div class="sphinx-tabs docutils container">
+<div aria-label="Tabbed content" class="closeable" role="tablist"><button aria-controls="panel-4-VW5pdHk=" aria-selected="true" class="sphinx-tabs-tab group-tab" id="tab-4-VW5pdHk=" name="VW5pdHk=" role="tab" tabindex="0">Unity</button><button aria-controls="panel-4-VW5yZWFsIEVuZ2luZQ==" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-4-VW5yZWFsIEVuZ2luZQ==" name="VW5yZWFsIEVuZ2luZQ==" role="tab" tabindex="-1">Unreal Engine</button><button aria-controls="panel-4-Qysr" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-4-Qysr" name="Qysr" role="tab" tabindex="-1">C++</button></div><div aria-labelledby="tab-4-VW5pdHk=" class="sphinx-tabs-panel group-tab" id="panel-4-VW5pdHk=" name="VW5pdHk=" role="tabpanel" tabindex="0"><ol class="arabic simple">
+<li><p>Select the AkAudioListener.</p></li>
+<li><p>Make sure a Steam Audio Listener component is attached to it.</p></li>
+<li><p>In the Inspector, check <strong>Apply Reverb</strong>.</p></li>
+</ol>
+<p>Steam Audio will now use real-time ray tracing to simulate physics-based reverb. You can control many aspects of this simulation, including how many rays are traced, the length of the reverb tail, whether the reverb is rendered a convolution reverb, and much more. Since modeling physics-based reverb is CPU-intensive, you can (and typically will) pre-compute reverb throughout your scene. You can even offload simulation as well as rendering work to the GPU. For more information, refer to the Steam Audio Unity integration documentation.</p>
+</div><div aria-labelledby="tab-4-VW5yZWFsIEVuZ2luZQ==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-4-VW5yZWFsIEVuZ2luZQ==" name="VW5yZWFsIEVuZ2luZQ==" role="tabpanel" tabindex="0"><ol class="arabic simple">
+<li><p>Select the actor containing the Steam Audio Listener component.</p></li>
+<li><p>In the Details tab, check <strong>Simulate Reverb</strong>.</p></li>
+</ol>
+<p>Steam Audio will now use real-time ray tracing to simulate physics-based reverb. You can control many aspects of this simulation, including how many rays are traced, the length of the reverb tail, whether the reverb is rendered a convolution reverb, and much more. Since modeling physics-based reverb is CPU-intensive, you can (and typically will) pre-compute reverb throughout your scene. You can even offload simulation as well as rendering work to the GPU. For more information, refer to the Steam Audio Unreal Engine integration documentation.</p>
+</div><div aria-labelledby="tab-4-Qysr" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-4-Qysr" name="Qysr" role="tabpanel" tabindex="0"><ol class="arabic simple">
+<li><p>Call <code class="docutils literal notranslate"><span class="pre">iplSimulatorRunReflections</span></code> to run reflection simulations for a source located at the listener position.</p></li>
+<li><p>Call <code class="docutils literal notranslate"><span class="pre">iplWwiseSetReverbSource</span></code> to specify the <code class="docutils literal notranslate"><span class="pre">IPLSource</span></code> used to simulate reverb.</p></li>
+</ol>
+</div></div>
+<p>For more information, see <a class="reference internal" href="reverb.html"><span class="doc">Steam Audio Reverb</span></a>.</p>
+</div>
+<div class="section" id="model-sound-paths-from-a-moving-source-to-a-moving-listener">
+<h2>Model sound paths from a moving source to a moving listener<a class="headerlink" href="#model-sound-paths-from-a-moving-source-to-a-moving-listener" title="Permalink to this headline">¶</a></h2>
+<p>You may want to model sound propagation from a source to the listener, along a long, complicated path, like a twisting corridor. The main goal is often to ensure that the sound is positioned as if it’s coming from the correct door, window, or other opening. This is known as the <em>pathing</em> or <em>portaling</em> problem.</p>
+<p>While you can solve this by enabling reflections on an event, it would require too many rays (and so too much CPU) to simulate accurately. Instead, you can use Steam Audio to bake pathing information in a probe batch, and use it to efficiently find paths from a moving source to a moving listener. To do this:</p>
+<ol class="arabic simple">
+<li><p>Select the event.</p></li>
+<li><p>Make sure a Steam Audio Spatializer effect is added to its effect list.</p></li>
+<li><p>Click the <strong>Edit</strong> button in the row corresponding to the Steam Audio Spatializer effect.</p></li>
+<li><p>Enable <strong>Pathing</strong>.</p></li>
+</ol>
+<p>You must now configure your game engine to enable reflections simulation for this event.</p>
+<div class="sphinx-tabs docutils container">
+<div aria-label="Tabbed content" class="closeable" role="tablist"><button aria-controls="panel-5-VW5pdHk=" aria-selected="true" class="sphinx-tabs-tab group-tab" id="tab-5-VW5pdHk=" name="VW5pdHk=" role="tab" tabindex="0">Unity</button><button aria-controls="panel-5-VW5yZWFsIEVuZ2luZQ==" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-5-VW5yZWFsIEVuZ2luZQ==" name="VW5yZWFsIEVuZ2luZQ==" role="tab" tabindex="-1">Unreal Engine</button><button aria-controls="panel-5-Qysr" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-5-Qysr" name="Qysr" role="tab" tabindex="-1">C++</button></div><div aria-labelledby="tab-5-VW5pdHk=" class="sphinx-tabs-panel group-tab" id="panel-5-VW5pdHk=" name="VW5pdHk=" role="tabpanel" tabindex="0"><ol class="arabic simple">
+<li><p>Make sure that pathing information is baked for one or more probe batches in your scene. For more information, refer to the Steam Audio Unity integration documentation.</p></li>
+<li><p>Select the GameObject containing the AkGameObj component.</p></li>
+<li><p>Make sure a Steam Audio Source component is attached to it.</p></li>
+<li><p>Check <strong>Pathing</strong>.</p></li>
+</ol>
+<p>You can control many aspects of the baking process, as well as the run-time path finding algorithm. For more information, refer to the Steam Audio Unity integration documentation.</p>
+</div><div aria-labelledby="tab-5-VW5yZWFsIEVuZ2luZQ==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-5-VW5yZWFsIEVuZ2luZQ==" name="VW5yZWFsIEVuZ2luZQ==" role="tabpanel" tabindex="0"><ol class="arabic simple">
+<li><p>Make sure that pathing information is baked for one or more probe batches in your scene. For more information, refer to the Steam Audio Unreal Engine integration documentation.</p></li>
+<li><p>Select the actor containing the AkComponent component.</p></li>
+<li><p>Make sure a Steam Audio Source component is attached to it.</p></li>
+<li><p>Check <strong>Simulate Pathing</strong>.</p></li>
+</ol>
+<p>You can control many aspects of the baking process, as well as the run-time path finding algorithm. For more information, refer to the Steam Audio Unreal Engine integration documentation.</p>
+</div><div aria-labelledby="tab-5-Qysr" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-5-Qysr" name="Qysr" role="tabpanel" tabindex="0"><ol class="arabic simple">
+<li><p>Whenever you create a Wwise Game Object corresponding to a sound source, create a corresponding <code class="docutils literal notranslate"><span class="pre">IPLSource</span></code> object.</p></li>
+<li><p>Bind the <code class="docutils literal notranslate"><span class="pre">IPLSource</span></code> to its corresponding <code class="docutils literal notranslate"><span class="pre">AkGameObjectID</span></code> by calling <code class="docutils literal notranslate"><span class="pre">iplWwiseAddSource</span></code>.</p></li>
+<li><p>Add the <code class="docutils literal notranslate"><span class="pre">IPLSource</span></code> to your <code class="docutils literal notranslate"><span class="pre">IPLSimulator</span></code> object using <code class="docutils literal notranslate"><span class="pre">iplSourceAdd</span></code>, as usual.</p></li>
+<li><p>Call <code class="docutils literal notranslate"><span class="pre">iplSimulatorRunPathing</span></code> to run pathing simulations. The Steam Audio Wwise integration will automatically use the latest simulated pathing parameter values.</p></li>
+</ol>
+</div></div>
+<p>For more information, see <a class="reference internal" href="spatializer.html"><span class="doc">Steam Audio Spatializer</span></a>.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="build-instructions.html" class="btn btn-neutral float-right" title="Build Instructions" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="getting-started.html" class="btn btn-neutral float-left" title="Getting Started" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2017-2024, Valve Corporation.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
