@@ -36,7 +36,7 @@ public:
                           int samplingRate,
                           int frameSize);
 
-    void estimate(const EnergyField& energyField,
+    void estimate(const EnergyField* energyField,
                   const Reverb& reverb,
                   ImpulseResponse& impulseResponse,
                   float transitionTime,
@@ -53,10 +53,22 @@ private:
     ReverbEffect mReverbEffect;
     Array<float, 2> mTempFrame;
     Array<float> mReverbIR;
+    IIRFilterer mBandpassFilters[Bands::kNumBands];
 
     void calcReverbIR(int numSamples,
                       const float* eqCoeffs,
                       const float* reverbTimes);
+
+    void estimateHybridEQFromIR(const ImpulseResponse& ir,
+                                float transitionTime,
+                                float overlapFraction,
+                                int samplingRate,
+                                float* bandIR,
+                                float* eq);
+
+    static float calcRelativeEDC(const float* ir,
+                                 int numSamples,
+                                 int cutoffSample);
 };
 
 

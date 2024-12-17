@@ -30,7 +30,7 @@ ITEST(convolutioneffect)
     auto context = std::make_shared<Context>(nullptr, nullptr, nullptr, SIMDLevel::AVX2, STEAMAUDIO_VERSION);
 
     SceneType sceneType = SceneType::Default;
-    IndirectEffectType indirectType = IndirectEffectType::Convolution;
+    IndirectEffectType indirectType = IndirectEffectType::Hybrid;
 	auto embree = (sceneType == SceneType::Embree) ? make_shared<EmbreeDevice>() : nullptr;
 
 #if defined(IPL_USES_OPENCL) && defined(IPL_USES_RADEONRAYS)
@@ -73,7 +73,7 @@ ITEST(convolutioneffect)
     source->reflectionInputs.reverbScale[0] = 1.0f;
     source->reflectionInputs.reverbScale[1] = 1.0f;
     source->reflectionInputs.reverbScale[2] = 1.0f;
-    source->reflectionInputs.transitionTime = 1.0f;
+    source->reflectionInputs.transitionTime = 0.1f;
     source->reflectionInputs.overlapFraction = 0.25f;
     source->reflectionInputs.baked = false;
 
@@ -91,7 +91,12 @@ ITEST(convolutioneffect)
     convolutionSettings.numChannels = ambisonicsBufferChannels;
     convolutionSettings.irSize = static_cast<int>(ceilf(1.0f * audioSettings.samplingRate));
 
+    HybridReverbEffectSettings hybrid_settings{};
+    hybrid_settings.numChannels = convolutionSettings.numChannels;
+    hybrid_settings.irSize = convolutionSettings.irSize;
+
     OverlapSaveConvolutionEffect convolutionEffect(audioSettings, convolutionSettings);
+    HybridReverbEffect hybrid_effect(audioSettings, hybrid_settings);
 #if defined(IPL_USES_TRUEAUDIONEXT)
 	TANConvolutionEffect tanEffect;
 	TANConvolutionMixer tanMixer;
@@ -159,6 +164,18 @@ ITEST(convolutioneffect)
 
 			tanMixer.apply(tanMixerParams, ambisonics);
 		}
+        else if (indirectType == IndirectEffectType::Hybrid)
+        {
+            HybridReverbEffectParams hybrid_params{};
+            hybrid_params.fftIR = &source->reflectionOutputs.overlapSaveFIR;
+            hybrid_params.numChannels = ambisonicsBufferChannels;
+            hybrid_params.numSamples = hybrid_settings.irSize;
+            hybrid_params.reverb = &source->reflectionOutputs.reverb;
+            hybrid_params.eqCoeffs = source->reflectionOutputs.hybridEQ;
+            hybrid_params.delay = source->reflectionOutputs.hybridDelay;
+
+            hybrid_effect.apply(hybrid_params, mono, ambisonics);
+        }
 		else
 #endif
 		{

@@ -14,7 +14,7 @@
 // limitations under the License.
 //
 
-#if defined(IPL_OS_WINDOWS) || defined(IPL_OS_LINUX) || defined(IPL_OS_MACOSX) || defined(IPL_OS_ANDROID) || defined(IPL_OS_IOS)
+#if defined(IPL_OS_WINDOWS) || defined(IPL_OS_LINUX) || defined(IPL_OS_MACOSX) || defined(IPL_OS_ANDROID) || defined(IPL_OS_IOS) || defined(IPL_OS_WASM)
 
 #include "error.h"
 #include "log.h"

@@ -14,7 +14,7 @@
 
 cmake_minimum_required(VERSION 3.17)
 
-project(Phonon VERSION 4.5.3)
+project(Phonon VERSION 4.6.0)
 
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_MODULE_PATH "${CMAKE_HOME_DIRECTORY}/build")
@@ -35,6 +35,8 @@ elseif (ANDROID)
     set(IPL_OS_ANDROID TRUE)
 elseif (APPLE AND CMAKE_SYSTEM_NAME STREQUAL "iOS")
     set(IPL_OS_IOS TRUE)
+elseif (CMAKE_SYSTEM_NAME STREQUAL "Emscripten")
+    set(IPL_OS_WASM TRUE)
 endif()
 
 # CPU architecture detection
@@ -57,6 +59,8 @@ elseif (IPL_OS_ANDROID)
     endif()
 elseif (IPL_OS_IOS)
     set(IPL_CPU_ARMV8 TRUE)
+elseif (IPL_OS_WASM)
+    set(IPL_CPU_ARMV7 TRUE)
 endif()
 
 
@@ -94,6 +98,9 @@ if (IPL_OS_ANDROID)
 endif()
 if (IPL_OS_IOS)
     add_definitions(-DIPL_OS_IOS)
+endif()
+if (IPL_OS_WASM)
+    add_definitions(-DIPL_OS_WASM)
 endif()
 
 if (IPL_CPU_X86)
@@ -162,6 +169,12 @@ endif()
 # iOS flags
 # todo
 
+# WASM flags
+if (IPL_OS_WASM)
+    add_compile_options(-msimd128 -mfpu=neon)
+    add_link_options(-sALLOW_MEMORY_GROWTH=1 -sSINGLE_FILE=1)
+endif()
+
 
 #
 # DEPENDENCIES
@@ -172,9 +185,14 @@ find_package(FMOD REQUIRED)
 find_package(SteamAudio REQUIRED)
 
 if (STEAMAUDIOFMOD_BUILD_DOCS)
+    set(Doxygen_ROOT ${CMAKE_HOME_DIRECTORY}/../core/deps/doxygen/bin/${IPL_BIN_SUBDIR})
     set(DOXYGEN_SKIP_DOT TRUE)
-    find_package(Doxygen REQUIRED)
-    find_package(Sphinx REQUIRED)
+    find_package(Doxygen)
+    find_package(Sphinx)
+    if (NOT DOXYGEN_FOUND OR NOT Sphinx_FOUND)
+        message(STATUS "Disabling docs")
+        set(STEAMAUDIOFMOD_BUILD_DOCS OFF)
+    endif()
 endif()
 
 
@@ -200,7 +218,16 @@ set(CPACK_PACKAGE_FILE_NAME steamaudio_fmod)
 set(CPACK_PACKAGE_DIRECTORY ${CMAKE_HOME_DIRECTORY}/dist)
 set(CPACK_INSTALL_CMAKE_PROJECTS "")
 set(CPACK_INSTALLED_DIRECTORIES
-    ${CMAKE_INSTALL_PREFIX}/lib lib
+    ${CMAKE_INSTALL_PREFIX}/lib/windows-x86 lib/windows-x86
+    ${CMAKE_INSTALL_PREFIX}/lib/windows-x64 lib/windows-x64
+    ${CMAKE_INSTALL_PREFIX}/lib/linux-x86 lib/linux-x86
+    ${CMAKE_INSTALL_PREFIX}/lib/linux-x64 lib/linux-x64
+    ${CMAKE_INSTALL_PREFIX}/lib/osx lib/osx
+    ${CMAKE_INSTALL_PREFIX}/lib/android-armv7 lib/android-armv7
+    ${CMAKE_INSTALL_PREFIX}/lib/android-armv8 lib/android-armv8
+    ${CMAKE_INSTALL_PREFIX}/lib/android-x86 lib/android-x86
+    ${CMAKE_INSTALL_PREFIX}/lib/android-x64 lib/android-x64
+    ${CMAKE_INSTALL_PREFIX}/lib/ios lib/ios
     ${CMAKE_INSTALL_PREFIX}/symbols symbols
     ${CMAKE_INSTALL_PREFIX}/src src
     ${CMAKE_INSTALL_PREFIX}/doc doc

@@ -1,0 +1,79 @@
+// See https://www.audiokinetic.com/library/edge/?source=SDK&id=plugin__packaging.html#plugin_packaging_bundle_metadata
+// for the documentation about the bundle_template.json format
+{
+    // Unique identifier of this bundle. Id must be unique across all existing plugins and versions.
+    "id": "Valve.SteamAudioWwise.${year}_${major}_${minor}_${build}",
+
+    // Name displayed in the Wwise Launcher for this bundle
+    "name": "Steam Audio Wwise Integration",
+    
+    // Tag uniquely identifying the plug-in (format [0-9A-z_]+, 50 characters maximum)
+    "tag": "SteamAudioWwise",
+
+    // Description displayed in the Wwise Launcher for this bundle
+    "description": "Physically-based sound rendering.",
+
+    // Vendor name displayed in the Wwise Launcher for this bundle
+    "vendor": "Valve Corp.",
+
+    // Base64 representation of an image to be displayed in the Wwise Launcher for this bundle (PNG, JPEG or GIF)
+    "image": "data:image/png;base64,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",
+
+    // Type of this bundle, must be "plugin"
+    "type": "plugin",
+
+    // Data that is specific to this bundle type
+    "productDependentData": {
+        "targetWwiseVersion": {
+            "year": 2023,
+            "major": 1
+        }
+    },
+
+    // Version of this bundle
+    "version": {
+        "year": ${year},
+        "major": ${major},
+        "minor": ${minor},
+        "build": ${build}
+    },
+
+    // List of EULAs associated with this bundle
+    "eulas": [
+        // {
+        //     "displayName": string, // Name displayed in the Wwise Launcher for this EULA
+        //     "displayContent": string, // Text displayed in the Wwise Launcher for this EULA
+        //     "id": string // Unique identifier of this EULA
+        // },
+        // ...
+    ],
+
+    // Labels displayed next to this bundle
+    "labels": [
+        // {
+        //     "class": string, // Style class applied to this label (default, primary, success, info, warning, danger)
+        //     "displayName": string // Name displayed in the Wwise Launcher for this label
+        // },
+        // ...
+    ],
+
+    // Online documentation links for this bundle
+    "links": [
+        // {
+        //     "displayName": string, // Name displayed in the Wwise Launcher for this link
+        //     "id": string, // Unique identifier of this link
+        //     "url": string // Target URL of this link
+        // },
+        // ...
+    ],
+
+    // Local documentation files for this bundle
+    "documentation": [
+        // {
+        //     "displayName": string, // Name displayed in the Wwise Launcher for this documentation file
+        //     "filePath": string, // Path to the documentation file
+        //     "language": "en" | "ja" | "zh" // Language of the documentation file
+        // },
+        // ...
+    ]
+}

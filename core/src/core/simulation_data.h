@@ -72,6 +72,9 @@ struct ReflectionSimulationState
     Array<float> distanceAttenuationCorrectionCurve;
     bool applyDistanceAttenuationCorrectionCurve;
     unique_ptr<ImpulseResponse> impulseResponse;
+    unique_ptr<ImpulseResponse> impulseResponseCopy;
+    std::atomic<bool> impulseResponseUpdated;
+    bool validSimulationData;
 };
 
 struct ReflectionSimulationOutputs

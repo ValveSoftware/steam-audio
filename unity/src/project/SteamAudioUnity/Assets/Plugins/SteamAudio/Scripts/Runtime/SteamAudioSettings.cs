@@ -24,7 +24,8 @@ namespace SteamAudio
     public enum AudioEngineType
     {
         Unity,
-        FMODStudio
+        FMODStudio,
+        Wwise
     }
 
     [CreateAssetMenu(menuName = "Steam Audio/Steam Audio Settings")]

@@ -27,12 +27,16 @@ namespace ipl {
 
 namespace BakedReflectionSimulator
 {
+    void findUniqueProbeBatches(const ProbeNeighborhood& neighborhood, unordered_set<const ProbeBatch*>& batches);
+
     void lookupEnergyField(const BakedDataIdentifier& identifier,
                            const ProbeNeighborhood& probeNeighborhood,
+                           const unordered_set<const ProbeBatch*>& uniqueBatches,
                            EnergyField& energyField);
 
     void lookupReverb(const BakedDataIdentifier& identifier,
                       const ProbeNeighborhood& probeNeighborhood,
+                      const unordered_set<const ProbeBatch*>& uniqueBatches,
                       Reverb& reverb);
 };
 

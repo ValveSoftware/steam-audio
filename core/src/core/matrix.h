@@ -663,6 +663,16 @@ public:
     {
         memset(elements.data(), 0, numRows * numCols * sizeof(T));
     }
+
+    void resize(int numRows, int numCols)
+    {
+        this->numRows = numRows;
+        this->numCols = numCols;
+
+        elements.resize(numRows * numCols);
+
+        zero();
+    }
 };
 
 // Adds two matrices.

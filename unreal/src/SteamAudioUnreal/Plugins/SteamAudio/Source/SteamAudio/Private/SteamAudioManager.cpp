@@ -322,6 +322,13 @@ bool FSteamAudioManager::InitializeSteamAudio(EManagerInitReason Reason)
             AudioEngineStateFactory = FModuleManager::LoadModulePtr<IAudioEngineStateFactory>(TEXT("SteamAudioFMODStudio"));
         }
 
+        if (SteamAudioSettings.AudioEngine == EAudioEngineType::WWISE)
+        {
+            // We're using Wwise, so try to load the corresponding support plugin. If this is not enabled in
+            // project settings, this step will fail.
+            AudioEngineStateFactory = FModuleManager::LoadModulePtr<IAudioEngineStateFactory>(TEXT("SteamAudioWwise"));
+        }
+
         if (!AudioEngineStateFactory)
         {
             // We are either configured to use Unreal's built-in audio engine, or loading the support plugin for

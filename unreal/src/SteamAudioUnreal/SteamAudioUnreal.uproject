@@ -1,6 +1,6 @@
 {
 	"FileVersion": 3,
-	"EngineAssociation": "4.27",
+	"EngineAssociation": "5.4",
 	"Category": "",
 	"Description": "",
 	"Modules": [
@@ -20,10 +20,18 @@
 		},
 		{
 			"Name": "FMODStudio",
-			"Enabled": true
+			"Enabled": false
 		},
 		{
 			"Name": "SteamAudioFMODStudio",
+			"Enabled": false
+		},
+		{
+			"Name": "SteamAudioWwise",
+			"Enabled": true
+		},
+		{
+			"Name": "Wwise",
 			"Enabled": true
 		}
 	]

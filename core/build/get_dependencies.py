@@ -109,7 +109,10 @@ def filter_get_platform(dep, host_platform, target_platform):
 def filter_dependency(dep, platform):
     platforms = dep.get("platforms", [])
     if len(platforms) > 0:
-        return platform in platforms
+        if platform == "android-armv8":
+            return "android-arm64" in platforms
+        else:
+            return platform in platforms
     else:
         # nothing specified, so supported on all platforms
         return True
@@ -475,7 +478,7 @@ def fetch_dependency(name, dep, platform):
 def toolchain(suffix):
     return os.path.join(os.getcwd(), 'build', 'toolchain_' + suffix + '.cmake')
 
-def configure_cmake(name, cmake_layers, platform, cmake, vs_version, ndk_path, debug, shared_crt):
+def configure_cmake(name, cmake_layers, platform, cmake, vs_version, ndk_path, emsdk_path, debug, shared_crt):
     src_dir = os.path.join(os.getcwd(), 'deps-build', name, 'src', name)
     build_dir = os.path.join(os.getcwd(), 'deps-build', name, 'build', platform)
     install_dir = os.path.join(os.getcwd(), 'deps-build', name, 'install', platform)
@@ -557,6 +560,10 @@ def configure_cmake(name, cmake_layers, platform, cmake, vs_version, ndk_path, d
     elif platform == 'ios':
         cmake_args += ['-G', 'Xcode']
         cmake_args += ['-DCMAKE_TOOLCHAIN_FILE=' + toolchain('ios')]
+    elif platform == 'wasm':
+        cmake_args += ['-G', 'Unix Makefiles']
+        cmake_args += ['-DCMAKE_TOOLCHAIN_FILE=' + os.path.join(emsdk_path, 'upstream', 'emscripten', 'cmake', 'Modules', 'Platform', 'Emscripten.cmake')]
+        cmake_args += ['-DCMAKE_BUILD_TYPE=' + ('Debug' if debug else 'Release')]
 
     stamp = []
 
@@ -609,7 +616,7 @@ def configure_custom(name, custom, platform, cmake, vs_version):
 
     stamp_configure(name, platform, stamp)
 
-def configure_dependency(name, dep, platform, cmake, vs_version, ndk_path, debug, shared_crt):
+def configure_dependency(name, dep, platform, cmake, vs_version, ndk_path, emsdk_path, debug, shared_crt):
     configure = dep.get("configure", {})
     if len(configure) == 0:
         return
@@ -618,7 +625,7 @@ def configure_dependency(name, dep, platform, cmake, vs_version, ndk_path, debug
     custom = configure.get("custom", None)
 
     if cmake_layers is not None:
-        configure_cmake(name, cmake_layers, platform, cmake, vs_version, ndk_path, debug, shared_crt)
+        configure_cmake(name, cmake_layers, platform, cmake, vs_version, ndk_path, emsdk_path, debug, shared_crt)
     elif custom is not None:
         configure_custom(name, custom, platform, cmake, vs_version)
 
@@ -792,10 +799,11 @@ print('Host platform:', host_platform)
 # --- Command-line parameters
 
 parser = argparse.ArgumentParser()
-parser.add_argument('-p', '--platform', help = "Target operating system.", choices = ['windows', 'osx', 'linux', 'android', 'ios'], type = str.lower, default = host_os)
+parser.add_argument('-p', '--platform', help = "Target operating system.", choices = ['windows', 'osx', 'linux', 'android', 'ios', 'wasm'], type = str.lower, default = host_os)
 parser.add_argument('-a', '--architecture', help = "CPU architecture.", choices = ['x86', 'x64', 'armv7', 'arm64'], type = str.lower, default = 'x64')
 parser.add_argument('-t', '--toolchain', help = "Compiler toolchain. (Windows only)", choices = ['vs2013', 'vs2015', 'vs2017', 'vs2019', 'vs2022'], type = str.lower, default = 'vs2019')
 parser.add_argument('--ndk', help = "Path to the Android NDK. (Android only)", default = os.getenv('ANDROID_NDK'))
+parser.add_argument('--emsdk', help = "Path to the Emscripten SDK. (WebAssembly only)", default = os.getenv('EMSDK'))
 parser.add_argument('--clean', help = "Dependencies or build products to clean.", type=str.lower, choices=['output', 'build', 'src', 'all'])
 parser.add_argument('--dependency', help = "A single dependency to process.", type=str.lower)
 parser.add_argument('--extra', help = "Also process extra optional dependencies.", action='store_true', default=False)
@@ -805,7 +813,7 @@ parser.add_argument('--libsonly', help = "Build library dependencies only.", act
 parser.add_argument('--sharedcrt', help = "Link to shared C/C++ runtime library. (Windows only)", action='store_true', default=False)
 args = parser.parse_args()
 
-if args.platform in ['osx', 'ios']:
+if args.platform in ['osx', 'ios', 'wasm']:
     target_platform = args.platform
 elif args.platform == 'android' and args.architecture == 'arm64':
     target_platform = 'android-armv8'
@@ -911,7 +919,7 @@ for name in ordered_dep_names:
 
     try:
         fetch_dependency(name, dep, platform)
-        configure_dependency(name, dep, platform, cmake, vs_version, args.ndk, debug, args.sharedcrt)
+        configure_dependency(name, dep, platform, cmake, vs_version, args.ndk, args.emsdk, debug, args.sharedcrt)
         build_dependency(name, dep, platform, cmake, vs_version, args.ndk, debug)
         install_dependency(name, dep, platform, cmake, debug)
         copy_dependency(name, dep, platform)

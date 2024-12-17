@@ -1509,6 +1509,32 @@ IPLAPI void IPLCALL iplPanningEffectReset(IPLPanningEffect effect);
 */
 IPLAPI IPLAudioEffectState IPLCALL iplPanningEffectApply(IPLPanningEffect effect, IPLPanningEffectParams* params, IPLAudioBuffer* in, IPLAudioBuffer* out);
 
+/** Returns the number of tail samples remaining in a panning effect's internal buffers.
+
+    Tail samples are audio samples that should be played even after the input to the effect has stopped
+    playing and no further input samples are available.
+
+    \param  effect  The panning effect.
+
+    \return The number of tail samples remaining.
+*/
+IPLAPI IPLint32 IPLCALL iplPanningEffectGetTailSize(IPLPanningEffect effect);
+
+/** Retrieves a single frame of tail samples from a panning effect's internal buffers.
+
+    After the input to the panning effect has stopped, this function must be called instead of
+    \c iplPanningEffectApply until the return value indicates that no more tail samples remain.
+
+    \param  effect  The panning effect.
+    \param  out     The output audio buffer. Must have as many channels as needed for the speaker layout
+                    specified when creating the panning effect. For example, if the speaker layout is
+                    \c IPL_SPEAKERLAYOUTTYPE_SURROUND_5_1, the output buffer must contain 6 channels.
+
+    \return \c IPL_AUDIOEFFECTSTATE_TAILREMAINING if any tail samples remain in the effect's internal buffers, or
+            \c IPL_AUDIOEFFECTSTATE_TAILCOMPLETE otherwise.
+*/
+IPLAPI IPLAudioEffectState IPLCALL iplPanningEffectGetTail(IPLPanningEffect effect, IPLAudioBuffer* out);
+
 /** \} */
 
 
@@ -1607,6 +1633,30 @@ IPLAPI void IPLCALL iplBinauralEffectReset(IPLBinauralEffect effect);
 */
 IPLAPI IPLAudioEffectState IPLCALL iplBinauralEffectApply(IPLBinauralEffect effect, IPLBinauralEffectParams* params, IPLAudioBuffer* in, IPLAudioBuffer* out);
 
+/** Returns the number of tail samples remaining in a binaural effect's internal buffers.
+
+    Tail samples are audio samples that should be played even after the input to the effect has stopped
+    playing and no further input samples are available.
+
+    \param  effect  The binaural effect.
+
+    \return The number of tail samples remaining.
+*/
+IPLAPI IPLint32 IPLCALL iplBinauralEffectGetTailSize(IPLBinauralEffect effect);
+
+/** Retrieves a single frame of tail samples from a binaural effect's internal buffers.
+
+    After the input to the binaural effect has stopped, this function must be called instead of
+    \c iplBinauralEffectApply until the return value indicates that no more tail samples remain.
+
+    \param  effect  The binaural effect.
+    \param  out     The output audio buffer. Must be 2-channel.
+
+    \return \c IPL_AUDIOEFFECTSTATE_TAILREMAINING if any tail samples remain in the effect's internal buffers, or
+            \c IPL_AUDIOEFFECTSTATE_TAILCOMPLETE otherwise.
+*/
+IPLAPI IPLAudioEffectState IPLCALL iplBinauralEffectGetTail(IPLBinauralEffect effect, IPLAudioBuffer* out);
+
 /** \} */
 
 
@@ -1686,6 +1736,30 @@ IPLAPI void IPLCALL iplVirtualSurroundEffectReset(IPLVirtualSurroundEffect effec
 */
 IPLAPI IPLAudioEffectState IPLCALL iplVirtualSurroundEffectApply(IPLVirtualSurroundEffect effect, IPLVirtualSurroundEffectParams* params, IPLAudioBuffer* in, IPLAudioBuffer* out);
 
+/** Returns the number of tail samples remaining in a virtual surround effect's internal buffers.
+
+    Tail samples are audio samples that should be played even after the input to the effect has stopped
+    playing and no further input samples are available.
+
+    \param  effect  The virtual surround effect.
+
+    \return The number of tail samples remaining.
+*/
+IPLAPI IPLint32 IPLCALL iplVirtualSurroundEffectGetTailSize(IPLVirtualSurroundEffect effect);
+
+/** Retrieves a single frame of tail samples from a virtual surround effect's internal buffers.
+
+    After the input to the virtual surround effect has stopped, this function must be called instead of
+    \c iplVirtualSurroundEffectApply until the return value indicates that no more tail samples remain.
+
+    \param  effect  The virtual surround effect.
+    \param  out     The output audio buffer. Must be 2-channel.
+
+    \return \c IPL_AUDIOEFFECTSTATE_TAILREMAINING if any tail samples remain in the effect's internal buffers, or
+            \c IPL_AUDIOEFFECTSTATE_TAILCOMPLETE otherwise.
+*/
+IPLAPI IPLAudioEffectState IPLCALL iplVirtualSurroundEffectGetTail(IPLVirtualSurroundEffect effect, IPLAudioBuffer* out);
+
 /** \} */
 
 
@@ -1762,6 +1836,31 @@ IPLAPI void IPLCALL iplAmbisonicsEncodeEffectReset(IPLAmbisonicsEncodeEffect eff
 */
 IPLAPI IPLAudioEffectState IPLCALL iplAmbisonicsEncodeEffectApply(IPLAmbisonicsEncodeEffect effect, IPLAmbisonicsEncodeEffectParams* params, IPLAudioBuffer* in, IPLAudioBuffer* out);
 
+/** Returns the number of tail samples remaining in an Ambisonics encode effect's internal buffers.
+
+    Tail samples are audio samples that should be played even after the input to the effect has stopped
+    playing and no further input samples are available.
+
+    \param  effect  The Ambisonics encode effect.
+
+    \return The number of tail samples remaining.
+*/
+IPLAPI IPLint32 IPLCALL iplAmbisonicsEncodeEffectGetTailSize(IPLAmbisonicsEncodeEffect effect);
+
+/** Retrieves a single frame of tail samples from an Ambisonics encode effect's internal buffers.
+
+    After the input to the Ambisonics encode effect has stopped, this function must be called instead of
+    \c iplAmbisonicsEncodeEffectApply until the return value indicates that no more tail samples remain.
+
+    \param  effect  The Ambisonics encode effect.
+    \param  out     The output audio buffer. Must have as many channels as needed for the
+                    Ambisonics order specified when creating the effect.
+
+    \return \c IPL_AUDIOEFFECTSTATE_TAILREMAINING if any tail samples remain in the effect's internal buffers, or
+            \c IPL_AUDIOEFFECTSTATE_TAILCOMPLETE otherwise.
+*/
+IPLAPI IPLAudioEffectState IPLCALL iplAmbisonicsEncodeEffectGetTail(IPLAmbisonicsEncodeEffect effect, IPLAudioBuffer* out);
+
 /** \} */
 
 
@@ -1836,6 +1935,31 @@ IPLAPI void IPLCALL iplAmbisonicsPanningEffectReset(IPLAmbisonicsPanningEffect e
     \return \c IPL_AUDIOEFFECTSTATE_TAILCOMPLETE to indicate that this effect does not generate any tail samples.
 */
 IPLAPI IPLAudioEffectState IPLCALL iplAmbisonicsPanningEffectApply(IPLAmbisonicsPanningEffect effect, IPLAmbisonicsPanningEffectParams* params, IPLAudioBuffer* in, IPLAudioBuffer* out);
+
+/** Returns the number of tail samples remaining in an Ambisonics panning effect's internal buffers.
+
+    Tail samples are audio samples that should be played even after the input to the effect has stopped
+    playing and no further input samples are available.
+
+    \param  effect  The Ambisonics panning effect.
+
+    \return The number of tail samples remaining.
+*/
+IPLAPI IPLint32 IPLCALL iplAmbisonicsPanningEffectGetTailSize(IPLAmbisonicsPanningEffect effect);
+
+/** Retrieves a single frame of tail samples from a Ambisonics panning effect's internal buffers.
+
+    After the input to the Ambisonics panning effect has stopped, this function must be called instead of
+    \c iplAmbisonicsPanningEffectApply until the return value indicates that no more tail samples remain.
+
+    \param  effect  The Ambisonics panning effect.
+    \param  out     The output audio buffer. Must have as many channels as needed for the speaker layout
+                    specified when creating the effect.
+
+    \return \c IPL_AUDIOEFFECTSTATE_TAILREMAINING if any tail samples remain in the effect's internal buffers, or
+            \c IPL_AUDIOEFFECTSTATE_TAILCOMPLETE otherwise.
+*/
+IPLAPI IPLAudioEffectState IPLCALL iplAmbisonicsPanningEffectGetTail(IPLAmbisonicsPanningEffect effect, IPLAudioBuffer* out);
 
 /** \} */
 
@@ -1915,6 +2039,30 @@ IPLAPI void IPLCALL iplAmbisonicsBinauralEffectReset(IPLAmbisonicsBinauralEffect
 */
 IPLAPI IPLAudioEffectState IPLCALL iplAmbisonicsBinauralEffectApply(IPLAmbisonicsBinauralEffect effect, IPLAmbisonicsBinauralEffectParams* params, IPLAudioBuffer* in, IPLAudioBuffer* out);
 
+/** Returns the number of tail samples remaining in an Ambisonics binaural effect's internal buffers.
+
+    Tail samples are audio samples that should be played even after the input to the effect has stopped
+    playing and no further input samples are available.
+
+    \param  effect  The Ambisonics binaural effect.
+
+    \return The number of tail samples remaining.
+*/
+IPLAPI IPLint32 IPLCALL iplAmbisonicsBinauralEffectGetTailSize(IPLAmbisonicsBinauralEffect effect);
+
+/** Retrieves a single frame of tail samples from an Ambisonics binaural effect's internal buffers.
+
+    After the input to the Ambisonics binaural effect has stopped, this function must be called instead of
+    \c iplAmbisonicsBinauralEffectApply until the return value indicates that no more tail samples remain.
+
+    \param  effect  The Ambisonics binaural effect.
+    \param  out     The output audio buffer. Must have 2 channels.
+
+    \return \c IPL_AUDIOEFFECTSTATE_TAILREMAINING if any tail samples remain in the effect's internal buffers, or
+            \c IPL_AUDIOEFFECTSTATE_TAILCOMPLETE otherwise.
+*/
+IPLAPI IPLAudioEffectState IPLCALL iplAmbisonicsBinauralEffectGetTail(IPLAmbisonicsBinauralEffect effect, IPLAudioBuffer* out);
+
 /** \} */
 
 
@@ -1990,6 +2138,31 @@ IPLAPI void IPLCALL iplAmbisonicsRotationEffectReset(IPLAmbisonicsRotationEffect
     \return \c IPL_AUDIOEFFECTSTATE_TAILCOMPLETE to indicate that this effect does not generate any tail samples.
 */
 IPLAPI IPLAudioEffectState IPLCALL iplAmbisonicsRotationEffectApply(IPLAmbisonicsRotationEffect effect, IPLAmbisonicsRotationEffectParams* params, IPLAudioBuffer* in, IPLAudioBuffer* out);
+
+/** Returns the number of tail samples remaining in an Ambisonics rotation effect's internal buffers.
+
+    Tail samples are audio samples that should be played even after the input to the effect has stopped
+    playing and no further input samples are available.
+
+    \param  effect  The Ambisonics rotation effect.
+
+    \return The number of tail samples remaining.
+*/
+IPLAPI IPLint32 IPLCALL iplAmbisonicsRotationEffectGetTailSize(IPLAmbisonicsRotationEffect effect);
+
+/** Retrieves a single frame of tail samples from an Ambisonics rotation effect's internal buffers.
+
+    After the input to the Ambisonics rotation effect has stopped, this function must be called instead of
+    \c iplAmbisonicsRotationEffectApply until the return value indicates that no more tail samples remain.
+
+    \param  effect  The Ambisonics rotation effect.
+    \param  out     The output audio buffer. Must have as many channels as needed for the Ambisonics order
+                    specified when creating the effect.
+
+    \return \c IPL_AUDIOEFFECTSTATE_TAILREMAINING if any tail samples remain in the effect's internal buffers, or
+            \c IPL_AUDIOEFFECTSTATE_TAILCOMPLETE otherwise.
+*/
+IPLAPI IPLAudioEffectState IPLCALL iplAmbisonicsRotationEffectGetTail(IPLAmbisonicsRotationEffect effect, IPLAudioBuffer* out);
 
 /** \} */
 
@@ -2080,6 +2253,32 @@ IPLAPI void IPLCALL iplAmbisonicsDecodeEffectReset(IPLAmbisonicsDecodeEffect eff
             \c IPL_AUDIOEFFECTSTATE_TAILCOMPLETE otherwise.
 */
 IPLAPI IPLAudioEffectState IPLCALL iplAmbisonicsDecodeEffectApply(IPLAmbisonicsDecodeEffect effect, IPLAmbisonicsDecodeEffectParams* params, IPLAudioBuffer* in, IPLAudioBuffer* out);
+
+/** Returns the number of tail samples remaining in an Ambisonics decode effect's internal buffers.
+
+    Tail samples are audio samples that should be played even after the input to the effect has stopped
+    playing and no further input samples are available.
+
+    \param  effect  The Ambisonics decode effect.
+
+    \return The number of tail samples remaining.
+*/
+IPLAPI IPLint32 IPLCALL iplAmbisonicsDecodeEffectGetTailSize(IPLAmbisonicsDecodeEffect effect);
+
+/** Retrieves a single frame of tail samples from an Ambisonics decode effect's internal buffers.
+
+    After the input to the Ambisonics decode effect has stopped, this function must be called instead of
+    \c iplAmbisonicsDecodeEffectApply until the return value indicates that no more tail samples remain.
+
+    \param  effect  The Ambisonics decode effect.
+    \param  out     The output audio buffer. Must have as many channels as needed for the speaker layout
+                    specified when creating the effect (if using panning) or 2 channels (if using
+                    binaural rendering).
+
+    \return \c IPL_AUDIOEFFECTSTATE_TAILREMAINING if any tail samples remain in the effect's internal buffers, or
+            \c IPL_AUDIOEFFECTSTATE_TAILCOMPLETE otherwise.
+*/
+IPLAPI IPLAudioEffectState IPLCALL iplAmbisonicsDecodeEffectGetTail(IPLAmbisonicsDecodeEffect effect, IPLAudioBuffer* out);
 
 /** \} */
 
@@ -2195,6 +2394,30 @@ IPLAPI void IPLCALL iplDirectEffectReset(IPLDirectEffect effect);
             \c IPL_AUDIOEFFECTSTATE_TAILCOMPLETE otherwise.
 */
 IPLAPI IPLAudioEffectState IPLCALL iplDirectEffectApply(IPLDirectEffect effect, IPLDirectEffectParams* params, IPLAudioBuffer* in, IPLAudioBuffer* out);
+
+/** Returns the number of tail samples remaining in a direct effect's internal buffers.
+
+    Tail samples are audio samples that should be played even after the input to the effect has stopped
+    playing and no further input samples are available.
+
+    \param  effect  The direct effect.
+
+    \return The number of tail samples remaining.
+*/
+IPLAPI IPLint32 IPLCALL iplDirectEffectGetTailSize(IPLDirectEffect effect);
+
+/** Retrieves a single frame of tail samples from a direct effect's internal buffers.
+
+    After the input to the direct effect has stopped, this function must be called instead of
+    \c iplDirectEffectApply until the return value indicates that no more tail samples remain.
+
+    \param  effect  The direct effect.
+    \param  out     The output audio buffer. Must have as many channels as specified when creating the effect.
+
+    \return \c IPL_AUDIOEFFECTSTATE_TAILREMAINING if any tail samples remain in the effect's internal buffers, or
+            \c IPL_AUDIOEFFECTSTATE_TAILCOMPLETE otherwise.
+*/
+IPLAPI IPLAudioEffectState IPLCALL iplDirectEffectGetTail(IPLDirectEffect effect, IPLAudioBuffer* out);
 
 /** \} */
 
@@ -2345,6 +2568,37 @@ IPLAPI void IPLCALL iplReflectionEffectReset(IPLReflectionEffect effect);
 */
 IPLAPI IPLAudioEffectState IPLCALL iplReflectionEffectApply(IPLReflectionEffect effect, IPLReflectionEffectParams* params, IPLAudioBuffer* in, IPLAudioBuffer* out, IPLReflectionMixer mixer);
 
+/** Returns the number of tail samples remaining in a reflection effect's internal buffers.
+
+    Tail samples are audio samples that should be played even after the input to the effect has stopped
+    playing and no further input samples are available.
+
+    \param  effect  The reflection effect.
+
+    \return The number of tail samples remaining.
+*/
+IPLAPI IPLint32 IPLCALL iplReflectionEffectGetTailSize(IPLReflectionEffect effect);
+
+/** Retrieves a single frame of tail samples from a reflection effect's internal buffers.
+
+    After the input to the reflection effect has stopped, this function must be called instead of
+    \c iplReflectionEffectApply until the return value indicates that no more tail samples remain.
+
+    \param  effect  The reflection effect.
+    \param  out     The output audio buffer. Must have as many channels as the impulse response
+                    specified when creating the effect (for convolution, hybrid, and TAN) or at
+                    least 1 channel (for parametric).
+    \param  mixer   If this is non-null, then the tail samples will be mixed into the given
+                    mixer object instead of being returned in the \c out parameter. The mixed output can
+                    be retrieved elsewhere in the audio pipeline using \c iplReflectionMixerApply. This
+                    can have a performance benefit if using convolution. If using TAN, specifying
+                    a mixer is required.
+
+    \return \c IPL_AUDIOEFFECTSTATE_TAILREMAINING if any tail samples remain in the effect's internal buffers, or
+            \c IPL_AUDIOEFFECTSTATE_TAILCOMPLETE otherwise.
+*/
+IPLAPI IPLAudioEffectState IPLCALL iplReflectionEffectGetTail(IPLReflectionEffect effect, IPLAudioBuffer* out, IPLReflectionMixer mixer);
+
 /** Creates a reflection effect mixer.
 
     \param  context         The context used to initialize Steam Audio.
@@ -2494,6 +2748,31 @@ IPLAPI void IPLCALL iplPathEffectReset(IPLPathEffect effect);
             \c IPL_AUDIOEFFECTSTATE_TAILCOMPLETE otherwise.
 */
 IPLAPI IPLAudioEffectState IPLCALL iplPathEffectApply(IPLPathEffect effect, IPLPathEffectParams* params, IPLAudioBuffer* in, IPLAudioBuffer* out);
+
+/** Returns the number of tail samples remaining in a path effect's internal buffers.
+
+    Tail samples are audio samples that should be played even after the input to the effect has stopped
+    playing and no further input samples are available.
+
+    \param  effect  The path effect.
+
+    \return The number of tail samples remaining.
+*/
+IPLAPI IPLint32 IPLCALL iplPathEffectGetTailSize(IPLPathEffect effect);
+
+/** Retrieves a single frame of tail samples from a path effect's internal buffers.
+
+    After the input to the path effect has stopped, this function must be called instead of
+    \c iplPathEffectApply until the return value indicates that no more tail samples remain.
+
+    \param  effect  The path effect.
+    \param  out     The output audio buffer. Must have as many channels as needed for the
+                    Ambisonics order specified when creating the effect.
+
+    \return \c IPL_AUDIOEFFECTSTATE_TAILREMAINING if any tail samples remain in the effect's internal buffers, or
+            \c IPL_AUDIOEFFECTSTATE_TAILCOMPLETE otherwise.
+*/
+IPLAPI IPLAudioEffectState IPLCALL iplPathEffectGetTail(IPLPathEffect effect, IPLAudioBuffer* out);
 
 /** \} */
 

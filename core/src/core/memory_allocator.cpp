@@ -15,6 +15,7 @@
 //
 
 #include "memory_allocator.h"
+#include "error.h"
 
 namespace ipl {
 
@@ -32,22 +33,25 @@ void Memory::init(AllocateCallback allocateCallback,
 void* Memory::allocate(size_t size,
                        size_t alignment)
 {
+    void* pointer = nullptr;
+
     if (mAllocateCallback)
     {
-        return mAllocateCallback(size, alignment);
+        pointer = mAllocateCallback(size, alignment);
     }
     else
     {
 #if defined(IPL_OS_WINDOWS)
-        return _aligned_malloc(size, alignment);
+        pointer = _aligned_malloc(size, alignment);
 #else
-        void* pointer;
-        int status = posix_memalign(&pointer, alignment, size);
-        if (status != 0)
-            return nullptr;
-        return pointer;
+        posix_memalign(&pointer, alignment, size);
 #endif
     }
+
+    if (!pointer && size > 0)
+        throw Exception(Status::OutOfMemory);
+
+    return pointer;
 }
 
 void Memory::free(void* memblock)

@@ -33,7 +33,7 @@ def detect_host_system():
 # Parses the command line.
 def parse_command_line(host_system):
     parser = argparse.ArgumentParser()
-    parser.add_argument('-p', '--platform', help = "Target operating system.", choices = ['windows', 'osx', 'linux', 'android', 'ios'], type = str.lower, default = host_system)
+    parser.add_argument('-p', '--platform', help = "Target operating system.", choices = ['windows', 'osx', 'linux', 'android', 'ios', 'wasm'], type = str.lower, default = host_system)
     parser.add_argument('-t', '--toolchain', help = "Compiler toolchain. (Windows only)", choices = ['vs2013', 'vs2015', 'vs2017', 'vs2019', 'vs2022'], type = str.lower, default = 'vs2019')
     parser.add_argument('-a', '--architecture', help = "CPU architecture.", choices = ['x86', 'x64', 'armv7', 'arm64'], type = str.lower, default = 'x64')
     parser.add_argument('-c', '--configuration', help = "Build configuration.", choices = ['debug', 'release'], type = str.lower, default = 'release')
@@ -49,12 +49,14 @@ def build_subdir(args):
         return args.platform
     elif args.platform in ['linux', 'android']:
         return "-".join([args.platform, args.architecture, args.configuration])
+    elif args.platform in ['wasm']:
+        return "-".join([args.platform, args.configuration])
 
 # Returns the subdirectory in which to create output files.
 def bin_subdir(args):
     if args.platform in ['windows', 'linux', 'android']:
         return "-".join([args.platform, args.architecture])
-    elif args.platform in ['osx', 'ios']:
+    elif args.platform in ['osx', 'ios', 'wasm']:
         return "-".join([args.platform])
 
 # Returns the root directory of the repository.
@@ -64,10 +66,10 @@ def root_dir():
 # Returns the generator name to pass to CMake, based on the platform.
 def generator_name(args):
     if args.platform == 'windows':
-        suffix = '';
+        suffix = ''
         if args.architecture == 'x64' and args.toolchain in ['vs2013', 'vs2015', 'vs2017']:
-            suffix = ' Win64';
-        generator = '';
+            suffix = ' Win64'
+        generator = ''
         if args.toolchain == 'vs2013':
             generator = 'Visual Studio 12 2013'
         elif args.toolchain == 'vs2015':
@@ -81,7 +83,7 @@ def generator_name(args):
         return generator + suffix
     elif args.platform in ['osx', 'ios']:
         return 'Xcode'
-    elif args.platform in ['linux', 'android']:
+    elif args.platform in ['linux', 'android', 'wasm']:
         return 'Unix Makefiles'
 
 # Returns the configuration name to pass to CMake.
@@ -96,6 +98,8 @@ def run_cmake(program_name, args):
     env = os.environ.copy()
     if os.getenv('STEAMAUDIO_OVERRIDE_PYTHONPATH') is not None:
         env['PYTHONPATH'] = ''
+    if os.getenv('STEAMAUDIO_OVERRIDE_SDKROOT') is not None:
+        env['SDKROOT'] = ''
 
     subprocess.check_call([program_name] + args, env=env)
 
@@ -149,6 +153,14 @@ def cmake_generate(args):
     # On Windows x64, build documentation.
     if args.platform == 'windows' and args.architecture == 'x64':
         cmake_args += ['-DSTEAMAUDIOUNITY_BUILD_DOCS=TRUE']
+
+    if args.platform == 'wasm':
+        cmake_args += ['-DCMAKE_TOOLCHAIN_FILE=' + os.environ.get('EMSDK') + '/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake']
+        cmake_args += ['-DBUILD_SHARED_LIBS=FALSE']
+        cmake_args += ['-DCMAKE_FIND_ROOT_PATH_MODE_INCLUDE=BOTH']
+        cmake_args += ['-DCMAKE_FIND_ROOT_PATH_MODE_LIBRARY=BOTH']
+        cmake_args += ['-DEMSCRIPTEN_SYSTEM_PROCESSOR=arm']
+        cmake_args += ['-DCMAKE_BUILD_TYPE=' + config_name(args)]
 
     # Point to the location of the Unity editor.
     if os.environ.get('STEAMAUDIOUNITY_UNITY_DIR') is not None:

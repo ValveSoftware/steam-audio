@@ -22,7 +22,7 @@
 
 #if !defined(IPL_OS_UNSUPPORTED)
 
-#if defined(IPL_OS_IOS)
+#if defined(IPL_OS_IOS) || defined(IPL_OS_WASM)
 #define STEAMAUDIO_SKIP_API_FUNCTIONS
 #endif
 #include <phonon_interfaces.h>

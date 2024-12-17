@@ -60,6 +60,12 @@ If you are using Unity as your game engine, see the Unity tab below. If you are 
 
         These instructions assume that you have added the FMOD Studio Unity integration and the Steam Audio Unity integration to your Unity project.
 
+        .. rubric:: Import the Steam Audio FMOD Studio support package
+
+        1.  In Unity's main menu, click **Assets** > **Import Package** > **Custom Package**.
+        2.  Navigate to the ``unity`` subdirectory of the directory into which you extracted ``steamaudio_unity.zip``, and double-click the ``SteamAudioFMODStudio.unitypackage`` file.
+        3.  In the Import dialog box, make sure everything is selected, and click **Import**.
+
         .. rubric:: Configure the FMOD Studio Unity integration to use Steam Audio
 
         1.  In Unity's main menu, click **FMOD** > **Edit Settings**.

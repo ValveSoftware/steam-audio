@@ -76,6 +76,9 @@ if (IPL_OS_IOS)
 endif()
 
 target_precompile_headers(phonon_test PRIVATE pch.h)
+set_property(SOURCE test.cpp PROPERTY SKIP_PRECOMPILE_HEADERS TRUE)
+
+set_target_properties(phonon_test PROPERTIES UNITY_BUILD FALSE)
 
 add_test(NAME UnitTests COMMAND phonon_test ~[ReflectionSimulator] WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
 

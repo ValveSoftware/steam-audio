@@ -33,12 +33,14 @@ def detect_host_system():
 # Parses the command line.
 def parse_command_line(host_system):
     parser = argparse.ArgumentParser()
-    parser.add_argument('-p', '--platform', help = "Target operating system.", choices = ['windows', 'osx', 'linux', 'android', 'ios'], type = str.lower, default = host_system)
+    parser.add_argument('-p', '--platform', help = "Target operating system.", choices = ['windows', 'osx', 'linux', 'android', 'ios', 'wasm'], type = str.lower, default = host_system)
     parser.add_argument('-t', '--toolchain', help = "Compiler toolchain. (Windows only)", choices = ['vs2013', 'vs2015', 'vs2017', 'vs2019', 'vs2022'], type = str.lower, default = 'vs2019')
     parser.add_argument('-a', '--architecture', help = "CPU architecture.", choices = ['x86', 'x64', 'armv7', 'arm64'], type = str.lower, default = 'x64')
     parser.add_argument('-c', '--configuration', help = "Build configuration.", choices = ['debug', 'release'], type = str.lower, default = 'release')
     parser.add_argument('-o', '--operation', help = "CMake operation.", choices = ['generate', 'build', 'test', 'install', 'package', 'default', 'ci_build', 'ci_package'], type = str.lower, default = 'default')
     parser.add_argument('--minimal', action='store_true', help='Use build options that minimize dependencies.')
+    parser.add_argument('--unity', action='store_true', help='Configure a unity build (for improved build performance on CI systems).')
+    parser.add_argument('--parallel', type=int, default=0, help='Number of threads to use when building. 0 = no threading.')
     args = parser.parse_args()
     return args
 
@@ -50,6 +52,8 @@ def build_subdir(args):
         return args.platform
     elif args.platform in ['linux', 'android']:
         return "-".join([args.platform, args.architecture, args.configuration])
+    elif args.platform in ['wasm']:
+        return "-".join([args.platform, args.configuration])
 
 # Returns the root directory of the repository.
 def root_dir():
@@ -58,8 +62,8 @@ def root_dir():
 # Returns the generator name to pass to CMake, based on the platform.
 def generator_name(args):
     if args.platform == 'windows':
-        suffix = '';
-        generator = '';
+        suffix = ''
+        generator = ''
         if args.toolchain == 'vs2013':
             generator = 'Visual Studio 12 2013'
         elif args.toolchain == 'vs2015':
@@ -73,7 +77,7 @@ def generator_name(args):
         return generator + suffix
     elif args.platform in ['osx', 'ios']:
         return 'Xcode'
-    elif args.platform in ['linux', 'android']:
+    elif args.platform in ['linux', 'android', 'wasm']:
         return 'Unix Makefiles'
 
 # Returns the configuration name to pass to CMake.
@@ -88,6 +92,8 @@ def run_cmake(program_name, args):
     env = os.environ.copy()
     if os.getenv('STEAMAUDIO_OVERRIDE_PYTHONPATH') is not None:
         env['PYTHONPATH'] = ''
+    if os.getenv('STEAMAUDIO_OVERRIDE_SDKROOT') is not None:
+        env['SDKROOT'] = ''
 
     subprocess.check_call([program_name] + args, env=env)
 
@@ -135,6 +141,14 @@ def cmake_generate(args):
     elif args.platform == 'ios':
         cmake_args += ['-DCMAKE_TOOLCHAIN_FILE=' + root_dir() + '/build/toolchain_ios.cmake']
 
+    elif args.platform == 'wasm':
+        cmake_args += ['-DCMAKE_TOOLCHAIN_FILE=' + os.environ.get('EMSDK') + '/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake']
+        cmake_args += ['-DBUILD_SHARED_LIBS=FALSE']
+        cmake_args += ['-DCMAKE_FIND_ROOT_PATH_MODE_INCLUDE=BOTH']
+        cmake_args += ['-DCMAKE_FIND_ROOT_PATH_MODE_LIBRARY=BOTH']
+        cmake_args += ['-DEMSCRIPTEN_SYSTEM_PROCESSOR=arm']
+        cmake_args += ['-DCMAKE_BUILD_TYPE=' + config_name(args)]
+
     # Install files to bin/.
     cmake_args += ['-DCMAKE_INSTALL_PREFIX=' + root_dir() + '/bin']
 
@@ -149,6 +163,10 @@ def cmake_generate(args):
         cmake_args += ['-DSTEAMAUDIO_ENABLE_RADEONRAYS=FALSE']
         cmake_args += ['-DSTEAMAUDIO_ENABLE_TRUEAUDIONEXT=FALSE']
 
+    # If specified, enable unity builds.
+    if args.unity:
+        cmake_args += ['-DCMAKE_UNITY_BUILD=TRUE']
+
     cmake_args += ['../..']
 
     run_cmake('cmake', cmake_args)
@@ -159,6 +177,10 @@ def cmake_build(args):
 
     if args.platform in ['windows', 'osx', 'ios']:
         cmake_args += ['--config', config_name(args)]
+
+    # If specified, build using multiple threads.
+    if args.parallel > 0:
+        cmake_args += ['--parallel', str(args.parallel)]
 
     run_cmake('cmake', cmake_args)
 
@@ -274,6 +296,11 @@ if cmake_path is not None:
         os.environ['PATH'] = os.path.normpath(os.path.join(cmake_path, 'CMake.app', 'Contents', 'bin')) + os.pathsep + os.environ['PATH']
     else:
         os.environ['PATH'] = os.path.normpath(os.path.join(cmake_path, 'bin')) + os.pathsep + os.environ['PATH']
+
+# CI defaults.
+if args.operation == 'ci_build':
+    args.unity = True
+    args.parallel = 4
 
 if args.operation == 'generate':
     cmake_generate(args)

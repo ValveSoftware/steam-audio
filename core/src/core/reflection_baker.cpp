@@ -20,6 +20,7 @@
 #include "energy_field_factory.h"
 #include "opencl_energy_field.h"
 #include "thread_pool.h"
+#include "profiler.h"
 
 namespace ipl {
 
@@ -49,6 +50,8 @@ void ReflectionBaker::bake(const IScene& scene,
                            ProgressCallback callback,
                            void* userData)
 {
+    PROFILE_FUNCTION();
+
     assert(bakeConvolution || bakeParametric);
     assert(identifier.type == BakedDataType::Reflections);
     assert(identifier.variation != BakedDataVariation::Dynamic);

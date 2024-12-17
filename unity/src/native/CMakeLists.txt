@@ -105,6 +105,8 @@ elseif(IPL_OS_ANDROID)
     endif()
 elseif (IPL_OS_IOS)
     set(PLUGIN_DIR ${CMAKE_HOME_DIRECTORY}/src/project/SteamAudioUnity/Assets/Plugins/SteamAudio/Binaries/iOS/)
+elseif (IPL_OS_WASM)
+    set(PLUGIN_DIR ${CMAKE_HOME_DIRECTORY}/src/project/SteamAudioUnity/Assets/Plugins/SteamAudio/Binaries/HTML5/)
 endif()
 
 if (IPL_OS_MACOS)

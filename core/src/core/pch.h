@@ -20,6 +20,7 @@
 #include <float.h>
 #include <math.h>
 #include <stddef.h>
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -28,7 +29,6 @@
 #include <algorithm>
 #include <atomic>
 #include <complex>
-// #include <cmath>
 #include <cstdarg>
 #include <cstdint>
 #include <cstring>
@@ -38,6 +38,7 @@
 #include <fstream>
 #include <functional>
 #include <future>
+#include <iterator>
 #include <list>
 #include <map>
 #include <memory>
@@ -50,6 +51,7 @@
 #include <stack>
 #include <unordered_map>
 #include <unordered_set>
+#include <vector>
 #endif
 
 #include "platform.h"

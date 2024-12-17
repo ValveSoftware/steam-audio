@@ -71,6 +71,8 @@ struct SharedSimulationData
 class SimulationManager
 {
 public:
+    static bool sEnableProbeCachingForMissingProbes;
+
     SimulationManager(bool enableDirect,
                       bool enableIndirect,
                       bool enablePathing,
@@ -186,6 +188,8 @@ public:
 
     void simulatePathing(SimulationData& source, ProbeNeighborhood& listenerProbeNeighborhood);
 
+    void simulatePathing(SimulationData& source, ProbeNeighborhood& sourceProbeNeighborhood, ProbeNeighborhood& listenerProbeNeighborhood);
+
 private:
     bool mEnableDirect;
     bool mEnableIndirect;
@@ -217,21 +221,17 @@ private:
     CoordinateSpace3f mPrevListener;
     list<shared_ptr<SimulationData>> mSourceData[2];
     vector<CoordinateSpace3f> mRealTimeSources;
-    vector<CoordinateSpace3f> mBakedSources;
-    vector<BakedDataIdentifier> mBakedDataIdentifiers;
     vector<Directivity> mRealTimeDirectivities;
     vector<EnergyField*> mRealTimeEnergyFields;
     vector<EnergyField*> mAccumEnergyFields;
-    vector<EnergyField*> mBakedEnergyFields;
-    vector<Reverb*> mBakedReverbs;
     vector<EnergyField*> mEnergyFieldsForReconstruction;
     vector<EnergyField*> mEnergyFieldsForCPUReconstruction;
-    vector<int> mNumFramesAccumulated;
     vector<const float*> mDistanceAttenuationCorrectionCurves;
     vector<AirAbsorptionModel> mAirAbsorptionModels;
     vector<ImpulseResponse*> mImpulseResponses;
     ProbeNeighborhood mTempSourcePathingProbes;
     ProbeNeighborhood mTempListenerPathingProbes;
+    unordered_set<const ProbeBatch*> mProbeBatchesForLookup;
 
     // Version number of the scene when simulateIndirect() was last called.
     uint32_t mSceneVersion;
@@ -243,6 +243,17 @@ private:
 
     // Records that we have used the latest version of the scene.
     void resetSceneChanged();
+
+    void simulateRealTimeReflections();
+    void accumulateEnergyFields();
+    void lookupBakedReflections();
+    void copyEnergyFieldsFromDeviceToHost();
+    void generateDistanceCorrectionCurves(int numSamples);
+    void reconstructImpulseResponses();
+    void estimateReverb();
+    void estimateHybridReverb();
+    void copyImpulseResponsesFromHostToDevice();
+    void partitionImpulseResponses(int numChannels, int numSamples);
 };
 
 }

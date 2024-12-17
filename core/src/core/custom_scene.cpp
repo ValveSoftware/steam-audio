@@ -15,6 +15,7 @@
 //
 
 #include "custom_scene.h"
+#include "profiler.h"
 
 namespace ipl {
 
@@ -34,6 +35,8 @@ Hit CustomScene::closestHit(const Ray& ray,
                             float minDistance,
                             float maxDistance) const
 {
+    PROFILE_FUNCTION();
+
     Hit hit;
     mClosestHitCallback(&ray, minDistance, maxDistance, &hit, mUserData);
     return hit;
@@ -43,6 +46,8 @@ bool CustomScene::anyHit(const Ray& ray,
                          float minDistance,
                          float maxDistance) const
 {
+    PROFILE_FUNCTION();
+
     uint8_t occluded = 0;
     mAnyHitCallback(&ray, minDistance, maxDistance, &occluded, mUserData);
     return (occluded != 0);
@@ -54,6 +59,8 @@ void CustomScene::closestHits(int numRays,
                               const float* maxDistances,
                               Hit* hits) const
 {
+    PROFILE_FUNCTION();
+
     if (mBatchedClosestHitCallback)
     {
         mBatchedClosestHitCallback(numRays, rays, minDistances, maxDistances, hits, mUserData);
@@ -73,6 +80,8 @@ void CustomScene::anyHits(int numRays,
                           const float* maxDistances,
                           bool* occluded) const
 {
+    PROFILE_FUNCTION();
+
     if (mBatchedAnyHitCallback)
     {
         mBatchedAnyHitCallback(numRays, rays, minDistances, maxDistances, reinterpret_cast<uint8_t*>(occluded), mUserData);

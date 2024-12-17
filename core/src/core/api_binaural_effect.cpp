@@ -156,28 +156,4 @@ IPLerror CContext::createBinauralEffect(IPLAudioSettings* audioSettings,
     return IPL_STATUS_SUCCESS;
 }
 
-// --------------------------------------------------------------------------------------------------------------------
-// API Functions
-// --------------------------------------------------------------------------------------------------------------------
-
-IPLint32 IPLCALL iplBinauralEffectGetTailSize(IPLBinauralEffect effect)
-{
-    if (!effect)
-        return 0;
-
-    auto _effect = reinterpret_cast<api::CBinauralEffect*>(effect);
-
-    return _effect->getTailSize();
-}
-
-IPLAudioEffectState IPLCALL iplBinauralEffectGetTail(IPLBinauralEffect effect, IPLAudioBuffer* out)
-{
-    if (!effect)
-        return IPL_AUDIOEFFECTSTATE_TAILCOMPLETE;
-
-    auto _effect = reinterpret_cast<api::CBinauralEffect*>(effect);
-
-    return _effect->getTail(out);
-}
-
 }

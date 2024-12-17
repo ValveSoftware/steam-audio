@@ -23,12 +23,15 @@
 #include "reflection_simulator_factory.h"
 #include "sh.h"
 #include "simulation_data.h"
+#include "profiler.h"
 
 namespace ipl {
 
 // --------------------------------------------------------------------------------------------------------------------
 // SimulationManager
 // --------------------------------------------------------------------------------------------------------------------
+
+bool SimulationManager::sEnableProbeCachingForMissingProbes = false;
 
 SimulationManager::SimulationManager(bool enableDirect,
                                      bool enableIndirect,
@@ -116,6 +119,8 @@ SimulationManager::SimulationManager(bool enableDirect,
     mSharedData->reflection.order = maxOrder;
     mSharedData->reflection.irradianceMinDistance = 1.0f;
     mSharedData->reflection.reconstructionType = ReconstructionType::Linear;
+    
+    mProbeBatchesForLookup.reserve(16);
 }
 
 void SimulationManager::addProbeBatch(shared_ptr<ProbeBatch> probeBatch)
@@ -179,6 +184,8 @@ void SimulationManager::simulateDirect()
 
 void SimulationManager::simulateDirect(SimulationData& source)
 {
+    PROFILE_FUNCTION();
+
     mDirectSimulator->simulate(mScene.get(), source.directInputs.flags, source.directInputs.source, mSharedData->direct.listener,
                                source.directInputs.distanceAttenuationModel, source.directInputs.airAbsorptionModel,
                                source.directInputs.directivity, source.directInputs.occlusionType, source.directInputs.occlusionRadius,
@@ -187,273 +194,393 @@ void SimulationManager::simulateDirect(SimulationData& source)
 
 void SimulationManager::simulateIndirect()
 {
+    PROFILE_FUNCTION();
+
     auto numChannels = SphericalHarmonics::numCoeffsForOrder(mSharedData->reflection.order);
     auto numSamples = static_cast<int>(ceilf(mSharedData->reflection.duration * mSamplingRate));
 
+    for (auto& source : mSourceData[0])
+    {
+        source->reflectionState.validSimulationData = true;
+    }
+
+    simulateRealTimeReflections();
+    lookupBakedReflections();
+
+    if (mSceneType == SceneType::RadeonRays && mIndirectType != IndirectEffectType::TrueAudioNext)
+    {
+        copyEnergyFieldsFromDeviceToHost();
+    }
+
+    if (mIndirectType != IndirectEffectType::Parametric)
+    {
+        generateDistanceCorrectionCurves(numSamples);
+        reconstructImpulseResponses();
+    }
+
+    if (mIndirectType == IndirectEffectType::Parametric || mIndirectType == IndirectEffectType::Hybrid)
+    {
+        estimateReverb();
+    }
+
+    if (mIndirectType == IndirectEffectType::Hybrid)
+    {
+        estimateHybridReverb();
+    }
+
+    if (mSceneType != SceneType::RadeonRays && mIndirectType == IndirectEffectType::TrueAudioNext)
+    {
+        copyImpulseResponsesFromHostToDevice();
+    }
+
+    partitionImpulseResponses(numChannels, numSamples);
+
+    for (auto& source : mSourceData[0])
+    {
+        if (!source->reflectionInputs.enabled)
+            continue;
+
+        if (!source->reflectionState.validSimulationData)
+            continue;
+
+        if (source->reflectionState.impulseResponseUpdated)
+            continue;
+
+        if (mIndirectType == IndirectEffectType::Convolution || mIndirectType == IndirectEffectType::Hybrid)
+        {
+            memcpy(source->reflectionState.impulseResponseCopy->data(),
+                   source->reflectionState.impulseResponse->data(),
+                   source->reflectionState.impulseResponse->numChannels() * source->reflectionState.impulseResponse->numSamples() * sizeof(float));
+        }
+
+        source->reflectionState.impulseResponseUpdated = true;
+    }
+}
+
+void SimulationManager::simulateRealTimeReflections()
+{
+    PROFILE_FUNCTION();
+
     mRealTimeSources.clear();
-    mBakedSources.clear();
-    mBakedDataIdentifiers.clear();
     mRealTimeDirectivities.clear();
     mRealTimeEnergyFields.clear();
-    mAccumEnergyFields.clear();
-    mBakedEnergyFields.clear();
-    mBakedReverbs.clear();
-    mEnergyFieldsForReconstruction.clear();
-    mEnergyFieldsForCPUReconstruction.clear();
-    mNumFramesAccumulated.clear();
-    mDistanceAttenuationCorrectionCurves.clear();
-    mAirAbsorptionModels.clear();
-    mImpulseResponses.clear();
 
     auto listenerChanged = hasListenerChanged();
     auto sceneChanged = hasSceneChanged();
 
     for (auto& source : mSourceData[0])
     {
+        if (!source->reflectionInputs.enabled)
+            continue;
+
+        if (source->reflectionInputs.baked)
+            continue;
+
+        mRealTimeSources.push_back(source->reflectionInputs.source);
+        mRealTimeDirectivities.push_back(source->reflectionInputs.directivity);
+
         auto sourceChanged = source->hasSourceChanged();
 
-        if (source->reflectionInputs.enabled)
+        if (listenerChanged || sourceChanged || sceneChanged)
         {
-            if (source->reflectionInputs.baked &&
-                source->reflectionInputs.bakedDataIdentifier.type == BakedDataType::Reflections)
-            {
-                mBakedSources.push_back(source->reflectionInputs.source);
-                mBakedReverbs.push_back(&source->reflectionOutputs.reverb);
-                mBakedDataIdentifiers.push_back(source->reflectionInputs.bakedDataIdentifier);
-                mBakedEnergyFields.push_back(source->reflectionState.accumEnergyField.get());
-            }
-            else if (!source->reflectionInputs.baked)
-            {
-                mRealTimeSources.push_back(source->reflectionInputs.source);
-                mRealTimeDirectivities.push_back(source->reflectionInputs.directivity);
-
-                // todo: gpu accumulation
-                if (listenerChanged || sourceChanged || sceneChanged)
-                {
-                    mRealTimeEnergyFields.push_back(source->reflectionState.accumEnergyField.get());
-                    source->reflectionState.numFramesAccumulated = 0;
-                }
-                else
-                {
-                    mRealTimeEnergyFields.push_back(source->reflectionState.energyField.get());
-                }
-
-                mAccumEnergyFields.push_back(source->reflectionState.accumEnergyField.get());
-
-                mNumFramesAccumulated.push_back(source->reflectionState.numFramesAccumulated);
-            }
-
-            if (mSceneType == SceneType::RadeonRays &&
-                mIndirectType == IndirectEffectType::TrueAudioNext &&
-                source->reflectionInputs.baked)
-            {
-                mEnergyFieldsForCPUReconstruction.push_back(source->reflectionState.accumEnergyField.get());
-            }
-            else
-            {
-                mEnergyFieldsForReconstruction.push_back(source->reflectionState.accumEnergyField.get());
-            }
-
-            mAirAbsorptionModels.push_back(source->reflectionInputs.airAbsorptionModel);
-            mImpulseResponses.push_back(source->reflectionState.impulseResponse.get());
+            mRealTimeEnergyFields.push_back(source->reflectionState.accumEnergyField.get());
+            source->reflectionState.numFramesAccumulated = 0;
+        }
+        else
+        {
+            mRealTimeEnergyFields.push_back(source->reflectionState.energyField.get());
         }
     }
 
-    if (mRealTimeSources.size() > 0)
+    if (mRealTimeSources.empty())
+        return;
+
+    mJobGraph.reset();
+
+    mReflectionSimulator->simulate(*mScene, static_cast<int>(mRealTimeSources.size()), mRealTimeSources.data(), 1, &mSharedData->reflection.listener,
+                                   mRealTimeDirectivities.data(), mSharedData->reflection.numRays, mSharedData->reflection.numBounces,
+                                   mSharedData->reflection.duration, mSharedData->reflection.order, mSharedData->reflection.irradianceMinDistance,
+                                   mRealTimeEnergyFields.data(), mJobGraph);
+
+    mThreadPool->process(mJobGraph);
+
+    accumulateEnergyFields();
+}
+
+void SimulationManager::accumulateEnergyFields()
+{
+    for (auto& source : mSourceData[0])
     {
-        mJobGraph.reset();
+        if (!source->reflectionInputs.enabled)
+            continue;
 
-        mReflectionSimulator->simulate(*mScene, static_cast<int>(mRealTimeSources.size()), mRealTimeSources.data(), 1, &mSharedData->reflection.listener,
-                                       mRealTimeDirectivities.data(), mSharedData->reflection.numRays, mSharedData->reflection.numBounces,
-                                       mSharedData->reflection.duration, mSharedData->reflection.order, mSharedData->reflection.irradianceMinDistance,
-                                       mRealTimeEnergyFields.data(), mJobGraph);
+        if (source->reflectionInputs.baked)
+            continue;
 
-        mThreadPool->process(mJobGraph);
-
-        for (auto i = 0u; i < mRealTimeSources.size(); ++i)
+        if (source->reflectionState.numFramesAccumulated > 0)
         {
-            if (mRealTimeEnergyFields[i] != mAccumEnergyFields[i])
-            {
-                EnergyField::scale(*mAccumEnergyFields[i], static_cast<float>(mNumFramesAccumulated[i]), *mAccumEnergyFields[i]);
-                EnergyField::add(*mRealTimeEnergyFields[i], *mAccumEnergyFields[i], *mAccumEnergyFields[i]);
-                EnergyField::scale(*mAccumEnergyFields[i], 1.0f / (1.0f + mNumFramesAccumulated[i]), *mAccumEnergyFields[i]);
-            }
+            EnergyField::scale(*source->reflectionState.accumEnergyField, static_cast<float>(source->reflectionState.numFramesAccumulated), *source->reflectionState.accumEnergyField);
+            EnergyField::add(*source->reflectionState.energyField, *source->reflectionState.accumEnergyField, *source->reflectionState.accumEnergyField);
+            EnergyField::scale(*source->reflectionState.accumEnergyField, 1.0f / (1.0f + source->reflectionState.numFramesAccumulated), *source->reflectionState.accumEnergyField);
         }
 
-        for (auto& source : mSourceData[0])
-        {
-            if (source->reflectionInputs.enabled)
-            {
-                ++source->reflectionState.numFramesAccumulated;
+        ++source->reflectionState.numFramesAccumulated;
 
-                source->reflectionState.prevSource = source->reflectionInputs.source;
-                source->reflectionState.prevDirectivity = source->reflectionInputs.directivity;
-            }
-        }
-
-        mPrevListener = mSharedData->reflection.listener;
+        source->reflectionState.prevSource = source->reflectionInputs.source;
+        source->reflectionState.prevDirectivity = source->reflectionInputs.directivity;
     }
 
-    // TODO: Combine all probe occlusion checks into a single call to manage cases where batched
-    // calls may be blocking.
-    if (mBakedSources.size() > 0)
-    {
-        ProbeNeighborhood sourceProbes;
-        ProbeNeighborhood listenerProbes;
-        ProbeNeighborhood* probes = &listenerProbes;
+    mPrevListener = mSharedData->reflection.listener;
 
-        mProbeManager->getInfluencingProbes(mSharedData->reflection.listener.origin, listenerProbes);
-        listenerProbes.checkOcclusion(*mScene, mSharedData->reflection.listener.origin);
-        listenerProbes.calcWeights(mSharedData->reflection.listener.origin);
+    resetSceneChanged();
+}
 
-        for (auto i = 0u; i < mBakedSources.size(); ++i)
-        {
-            if (mBakedDataIdentifiers[i].variation == BakedDataVariation::StaticListener)
-            {
-                mProbeManager->getInfluencingProbes(mBakedSources[i].origin, sourceProbes);
-                sourceProbes.checkOcclusion(*mScene, mBakedSources[i].origin);
-                sourceProbes.calcWeights(mBakedSources[i].origin);
+void SimulationManager::lookupBakedReflections()
+{
+    PROFILE_FUNCTION();
 
-                probes = &sourceProbes;
-            }
+    ProbeNeighborhood sourceProbes;
+    ProbeNeighborhood listenerProbes;
+    ProbeNeighborhood* probes = &listenerProbes;
 
-            if (mIndirectType != IndirectEffectType::Parametric)
-            {
-                BakedReflectionSimulator::lookupEnergyField(mBakedDataIdentifiers[i], *probes, *mBakedEnergyFields[i]);
-            }
-
-            if (mIndirectType == IndirectEffectType::Parametric || mIndirectType == IndirectEffectType::Hybrid)
-            {
-                BakedReflectionSimulator::lookupReverb(mBakedDataIdentifiers[i], *probes, *mBakedReverbs[i]);
-            }
-        }
-    }
-
-#if defined(IPL_USES_OPENCL)
-    if (mSceneType == SceneType::RadeonRays && mIndirectType != IndirectEffectType::TrueAudioNext)
-    {
-        for (auto i = 0; i < mRealTimeSources.size(); ++i)
-        {
-            static_cast<OpenCLEnergyField&>(*mAccumEnergyFields[i]).copyDeviceToHost();
-        }
-    }
-#endif
+    mProbeManager->getInfluencingProbes(mSharedData->reflection.listener.origin, listenerProbes);
+    listenerProbes.checkOcclusion(*mScene, mSharedData->reflection.listener.origin);
+    listenerProbes.calcWeights(mSharedData->reflection.listener.origin);
 
     for (auto& source : mSourceData[0])
     {
-        if (source->reflectionInputs.enabled)
+        PROFILE_ZONE("lookupBakedReflections::source");
+
+        if (!source->reflectionInputs.enabled)
+            continue;
+
+        if (!source->reflectionInputs.baked || source->reflectionInputs.bakedDataIdentifier.type != BakedDataType::Reflections)
+            continue;
+
+        if (source->reflectionInputs.bakedDataIdentifier.variation == BakedDataVariation::StaticListener)
         {
-            auto& energyField = *source->reflectionState.accumEnergyField;
+            mProbeManager->getInfluencingProbes(source->reflectionInputs.source.origin, sourceProbes);
+            sourceProbes.checkOcclusion(*mScene, source->reflectionInputs.source.origin);
+            sourceProbes.calcWeights(source->reflectionInputs.source.origin);
 
-            if (mIndirectType == IndirectEffectType::Parametric || mIndirectType == IndirectEffectType::Hybrid)
-            {
-                if (!source->reflectionInputs.baked)
-                {
-                    ReverbEstimator::estimate(energyField, source->reflectionInputs.airAbsorptionModel, source->reflectionOutputs.reverb);
-                }
+            probes = &sourceProbes;
+        }
 
-                if (source->reflectionInputs.reverbScale[0] != 1.0f ||
-                    source->reflectionInputs.reverbScale[1] != 1.0f ||
-                    source->reflectionInputs.reverbScale[2] != 1.0f)
-                {
-                    ReverbEstimator::applyReverbScale(source->reflectionInputs.reverbScale, energyField);
+        source->reflectionState.validSimulationData = sEnableProbeCachingForMissingProbes ? probes->hasValidProbes() : true;
+        if (!source->reflectionState.validSimulationData)
+            continue;
 
-                    source->reflectionOutputs.reverb.reverbTimes[0] *= source->reflectionInputs.reverbScale[0];
-                    source->reflectionOutputs.reverb.reverbTimes[1] *= source->reflectionInputs.reverbScale[1];
-                    source->reflectionOutputs.reverb.reverbTimes[2] *= source->reflectionInputs.reverbScale[2];
-                }
-            }
+        BakedReflectionSimulator::findUniqueProbeBatches(*probes, mProbeBatchesForLookup);
 
-            if (mIndirectType != IndirectEffectType::Parametric)
-            {
-                if (source->reflectionState.prevDistanceAttenuationModel != source->reflectionInputs.distanceAttenuationModel ||
-                    source->reflectionInputs.distanceAttenuationModel.dirty)
-                {
-                    DistanceAttenuationModel::generateCorrectionCurve(DistanceAttenuationModel{},
-                                                                      source->reflectionInputs.distanceAttenuationModel,
-                                                                      mSamplingRate, numSamples,
-                                                                      source->reflectionState.distanceAttenuationCorrectionCurve.data());
+        if (mIndirectType != IndirectEffectType::Parametric)
+        {
+            BakedReflectionSimulator::lookupEnergyField(source->reflectionInputs.bakedDataIdentifier, *probes, mProbeBatchesForLookup, *source->reflectionState.accumEnergyField);
+        }
 
-                    source->reflectionInputs.distanceAttenuationModel.dirty = false;
-                    source->reflectionState.prevDistanceAttenuationModel = source->reflectionInputs.distanceAttenuationModel;
-                    
-                    // From here on out, we will always apply a distance attenuation correction curve for this source.
-                    source->reflectionState.applyDistanceAttenuationCorrectionCurve = true;
-                }
-
-                // Now we build up the array of pointers to distance attenuation correction curves. If we have ever generated
-                // a correction curve for this source, we will apply it during reconstruction.
-                if (source->reflectionState.applyDistanceAttenuationCorrectionCurve)
-                {
-                    mDistanceAttenuationCorrectionCurves.push_back(source->reflectionState.distanceAttenuationCorrectionCurve.data());
-                }
-                else
-                {
-                    mDistanceAttenuationCorrectionCurves.push_back(nullptr);
-                }
-            }
+        if (mIndirectType == IndirectEffectType::Parametric || mIndirectType == IndirectEffectType::Hybrid)
+        {
+            BakedReflectionSimulator::lookupReverb(source->reflectionInputs.bakedDataIdentifier, *probes, mProbeBatchesForLookup, source->reflectionOutputs.reverb);
         }
     }
+}
 
-    if (mIndirectType != IndirectEffectType::Parametric)
+void SimulationManager::copyEnergyFieldsFromDeviceToHost()
+{
+#if defined(IPL_USES_OPENCL)
+    for (auto& source : mSourceData[0])
     {
+        if (!source->reflectionInputs.enabled)
+            continue;
+
+        if (source->reflectionInputs.baked)
+            continue;
+
+        static_cast<OpenCLEnergyField&>(*source->reflectionState.accumEnergyField).copyDeviceToHost();
+    }
+#endif
+}
+
+void SimulationManager::generateDistanceCorrectionCurves(int numSamples)
+{
+    PROFILE_FUNCTION();
+
+    mDistanceAttenuationCorrectionCurves.clear();
+
+    for (auto& source : mSourceData[0])
+    {
+        if (!source->reflectionInputs.enabled)
+            continue;
+
+        if (source->reflectionState.prevDistanceAttenuationModel != source->reflectionInputs.distanceAttenuationModel ||
+            source->reflectionInputs.distanceAttenuationModel.dirty)
+        {
+            DistanceAttenuationModel::generateCorrectionCurve(DistanceAttenuationModel{},
+                                                              source->reflectionInputs.distanceAttenuationModel,
+                                                              mSamplingRate, numSamples,
+                                                              source->reflectionState.distanceAttenuationCorrectionCurve.data());
+
+            source->reflectionInputs.distanceAttenuationModel.dirty = false;
+            source->reflectionState.prevDistanceAttenuationModel = source->reflectionInputs.distanceAttenuationModel;
+
+            // From here on out, we will always apply a distance attenuation correction curve for this source.
+            source->reflectionState.applyDistanceAttenuationCorrectionCurve = true;
+        }
+
+        // Now we build up the array of pointers to distance attenuation correction curves. If we have ever generated
+        // a correction curve for this source, we will apply it during reconstruction.
+        if (source->reflectionState.applyDistanceAttenuationCorrectionCurve && source->reflectionState.validSimulationData)
+        {
+            mDistanceAttenuationCorrectionCurves.push_back(source->reflectionState.distanceAttenuationCorrectionCurve.data());
+        }
+        else
+        {
+            mDistanceAttenuationCorrectionCurves.push_back(nullptr);
+        }
+    }
+}
+
+void SimulationManager::reconstructImpulseResponses()
+{
+    PROFILE_FUNCTION();
+
+    mEnergyFieldsForReconstruction.clear();
+    mEnergyFieldsForCPUReconstruction.clear();
+    mAirAbsorptionModels.clear();
+    mImpulseResponses.clear();
+
+    for (auto& source : mSourceData[0])
+    {
+        if (!source->reflectionInputs.enabled)
+            continue;
+
         if (mSceneType == SceneType::RadeonRays &&
             mIndirectType == IndirectEffectType::TrueAudioNext &&
-            mEnergyFieldsForCPUReconstruction.size() > 0)
+            source->reflectionInputs.baked)
         {
-            mCPUReconstructor->reconstruct(static_cast<int>(mImpulseResponses.size()), mEnergyFieldsForCPUReconstruction.data(),
-                                           mDistanceAttenuationCorrectionCurves.data(), mAirAbsorptionModels.data(),
-                                           mImpulseResponses.data(), mSharedData->reflection.reconstructionType,
-                                           mSharedData->reflection.duration, mSharedData->reflection.order);
+            mEnergyFieldsForCPUReconstruction.push_back(source->reflectionState.accumEnergyField.get());
+        }
+        else
+        {
+            mEnergyFieldsForReconstruction.push_back(source->reflectionState.accumEnergyField.get());
         }
 
-        if (mEnergyFieldsForReconstruction.size() > 0)
-        {
-            mReconstructor->reconstruct(static_cast<int>(mImpulseResponses.size()), mEnergyFieldsForReconstruction.data(),
-                                        mDistanceAttenuationCorrectionCurves.data(), mAirAbsorptionModels.data(),
-                                        mImpulseResponses.data(), mSharedData->reflection.reconstructionType,
-                                        mSharedData->reflection.duration, mSharedData->reflection.order);
-        }
+        mAirAbsorptionModels.push_back(source->reflectionInputs.airAbsorptionModel);
+        mImpulseResponses.push_back(source->reflectionState.impulseResponse.get());
     }
+
+    if (mEnergyFieldsForReconstruction.empty() && mEnergyFieldsForCPUReconstruction.empty())
+        return;
+
+    if (mSceneType == SceneType::RadeonRays &&
+        mIndirectType == IndirectEffectType::TrueAudioNext &&
+        mEnergyFieldsForCPUReconstruction.size() > 0)
+    {
+        mCPUReconstructor->reconstruct(static_cast<int>(mImpulseResponses.size()), mEnergyFieldsForCPUReconstruction.data(),
+                                       mDistanceAttenuationCorrectionCurves.data(), mAirAbsorptionModels.data(),
+                                       mImpulseResponses.data(), mSharedData->reflection.reconstructionType,
+                                       mSharedData->reflection.duration, mSharedData->reflection.order);
+    }
+
+    if (mEnergyFieldsForReconstruction.size() > 0)
+    {
+        mReconstructor->reconstruct(static_cast<int>(mImpulseResponses.size()), mEnergyFieldsForReconstruction.data(),
+                                    mDistanceAttenuationCorrectionCurves.data(), mAirAbsorptionModels.data(),
+                                    mImpulseResponses.data(), mSharedData->reflection.reconstructionType,
+                                    mSharedData->reflection.duration, mSharedData->reflection.order);
+    }
+}
+
+void SimulationManager::estimateReverb()
+{
+    PROFILE_FUNCTION();
 
     for (auto& source : mSourceData[0])
     {
-        if (source->reflectionInputs.enabled)
+        if (!source->reflectionInputs.enabled)
+            continue;
+
+        if (!source->reflectionInputs.baked)
         {
-            auto energyField = source->reflectionState.accumEnergyField.get();
-            auto impulseResponse = source->reflectionState.impulseResponse.get();
+            ReverbEstimator::estimate(*source->reflectionState.accumEnergyField, source->reflectionInputs.airAbsorptionModel, source->reflectionOutputs.reverb);
+        }
 
-            if (mIndirectType == IndirectEffectType::Hybrid)
-            {
-                mHybridReverbEstimator->estimate(*energyField, source->reflectionOutputs.reverb, *impulseResponse,
-                                                 source->reflectionInputs.transitionTime, source->reflectionInputs.overlapFraction,
-                                                 mSharedData->reflection.order, source->reflectionOutputs.hybridEQ);
+        if (source->reflectionState.validSimulationData && (source->reflectionInputs.reverbScale[0] != 1.0f ||
+                                                            source->reflectionInputs.reverbScale[1] != 1.0f ||
+                                                            source->reflectionInputs.reverbScale[2] != 1.0f))
+        {
+            ReverbEstimator::applyReverbScale(source->reflectionInputs.reverbScale, *source->reflectionState.accumEnergyField);
 
-                source->reflectionOutputs.hybridDelay = static_cast<int>(ceilf((1.0f - source->reflectionInputs.overlapFraction) * source->reflectionInputs.transitionTime * mSamplingRate));
-            }
+            source->reflectionOutputs.reverb.reverbTimes[0] *= source->reflectionInputs.reverbScale[0];
+            source->reflectionOutputs.reverb.reverbTimes[1] *= source->reflectionInputs.reverbScale[1];
+            source->reflectionOutputs.reverb.reverbTimes[2] *= source->reflectionInputs.reverbScale[2];
+        }
+    }
+}
 
-            if (mIndirectType == IndirectEffectType::TrueAudioNext)
-            {
-#if defined(IPL_USES_TRUEAUDIONEXT)
-                if (mSceneType != SceneType::RadeonRays || source->reflectionInputs.baked)
-                {
-                    static_cast<OpenCLImpulseResponse*>(impulseResponse)->copyHostToDevice();
-                }
+void SimulationManager::estimateHybridReverb()
+{
+    PROFILE_FUNCTION();
 
-                if (source->reflectionOutputs.tanSlot >= 0)
-                {
-                    mTAN->setIR(source->reflectionOutputs.tanSlot, static_cast<OpenCLImpulseResponse*>(impulseResponse)->channelBuffers());
-                }
+    for (auto& source : mSourceData[0])
+    {
+        if (!source->reflectionInputs.enabled)
+            continue;
+
+        if (!source->reflectionState.validSimulationData)
+            continue;
+
+        mHybridReverbEstimator->estimate(source->reflectionState.accumEnergyField.get(), source->reflectionOutputs.reverb, *source->reflectionState.impulseResponse,
+                                         source->reflectionInputs.transitionTime, source->reflectionInputs.overlapFraction,
+                                         mSharedData->reflection.order, source->reflectionOutputs.hybridEQ);
+
+        source->reflectionOutputs.hybridDelay = static_cast<int>(ceilf((1.0f - source->reflectionInputs.overlapFraction) * source->reflectionInputs.transitionTime * mSamplingRate));
+    }
+}
+
+void SimulationManager::copyImpulseResponsesFromHostToDevice()
+{
+#if defined(IPL_USES_OPENCL)
+    for (auto& source : mSourceData[0])
+    {
+        if (!source->reflectionInputs.enabled)
+            continue;
+
+        if (!source->reflectionState.validSimulationData)
+            continue;
+
+        static_cast<OpenCLImpulseResponse*>(source->reflectionState.impulseResponse.get())->copyHostToDevice();
+    }
 #endif
-            }
-            else if (mIndirectType != IndirectEffectType::Parametric)
-            {
-                mPartitioner->partition(*impulseResponse, numChannels, numSamples, *source->reflectionOutputs.overlapSaveFIR.writeBuffer);
-                source->reflectionOutputs.overlapSaveFIR.commitWriteBuffer();
+}
 
-                source->reflectionOutputs.numChannels = numChannels;
-                source->reflectionOutputs.numSamples = numSamples;
+void SimulationManager::partitionImpulseResponses(int numChannels, int numSamples)
+{
+    PROFILE_FUNCTION();
+
+    for (auto& source : mSourceData[0])
+    {
+        if (!source->reflectionInputs.enabled)
+            continue;
+
+        if (!source->reflectionState.validSimulationData)
+            continue;
+
+        if (mIndirectType == IndirectEffectType::TrueAudioNext)
+        {
+#if defined(IPL_USES_TRUEAUDIONEXT)
+            if (source->reflectionOutputs.tanSlot >= 0)
+            {
+                mTAN->setIR(source->reflectionOutputs.tanSlot, static_cast<OpenCLImpulseResponse*>(source->reflectionState.impulseResponse.get())->channelBuffers());
             }
+#endif
+        }
+        else if (mIndirectType != IndirectEffectType::Parametric)
+        {
+            mPartitioner->partition(*source->reflectionState.impulseResponse, numChannels, numSamples, *source->reflectionOutputs.overlapSaveFIR.writeBuffer);
+
+            source->reflectionOutputs.overlapSaveFIR.commitWriteBuffer();
+            source->reflectionOutputs.numChannels = numChannels;
+            source->reflectionOutputs.numSamples = numSamples;
         }
     }
 
@@ -463,12 +590,12 @@ void SimulationManager::simulateIndirect()
         mTAN->updateIRs();
     }
 #endif
-
-    resetSceneChanged();
 }
 
 void SimulationManager::simulatePathing()
 {
+    PROFILE_FUNCTION();
+
     ProbeNeighborhood sourceProbes;
     ProbeNeighborhood listenerProbes;
     ProbeBatch* prevListenerProbeBatch = nullptr;
@@ -514,6 +641,8 @@ void SimulationManager::simulatePathing()
 
 void SimulationManager::simulatePathing(SimulationData& source)
 {
+    PROFILE_FUNCTION();
+
     ProbeNeighborhood& sourceProbes = mTempSourcePathingProbes;
     ProbeNeighborhood& listenerProbes = mTempListenerPathingProbes;
 
@@ -555,6 +684,8 @@ void SimulationManager::simulatePathing(SimulationData& source)
 
 void SimulationManager::simulatePathing(SimulationData& source, ProbeNeighborhood& listenerProbeNeighborhood)
 {
+    PROFILE_FUNCTION();
+
     ProbeNeighborhood& sourceProbes = mTempSourcePathingProbes;
 
     if (sourceProbes.numProbes() != ProbeNeighborhood::kMaxProbesPerBatch)
@@ -576,6 +707,28 @@ void SimulationManager::simulatePathing(SimulationData& source, ProbeNeighborhoo
             source.pathingInputs.order, source.pathingInputs.enableValidation, source.pathingInputs.findAlternatePaths,
             source.pathingInputs.simplifyPaths, source.pathingInputs.realTimeVis,
             source.pathingState.eq, source.pathingState.sh.data(), &source.pathingState.direction, &source.pathingState.distanceRatio, mSharedData->pathing.visCallback, mSharedData->pathing.userData);
+
+        memcpy(source.pathingOutputs.eq, source.pathingState.eq, Bands::kNumBands * sizeof(float));
+        memcpy(source.pathingOutputs.sh.data(), source.pathingState.sh.data(), source.pathingOutputs.sh.totalSize() * sizeof(float));
+        source.pathingOutputs.direction = source.pathingState.direction;
+        source.pathingOutputs.distanceRatio = source.pathingState.distanceRatio;
+    }
+}
+
+void SimulationManager::simulatePathing(SimulationData& source, ProbeNeighborhood& sourceProbeNeighborhood, ProbeNeighborhood& listenerProbeNeighborhood)
+{
+    PROFILE_FUNCTION();
+
+    if (source.pathingInputs.enabled)
+    {
+        auto probeBatch = source.pathingInputs.probes.get();
+        auto& simulator = *mPathSimulators[0][source.pathingInputs.probes.get()];
+
+        simulator.findPaths(source.pathingInputs.source.origin, mSharedData->pathing.listener.origin, *mScene, *probeBatch, sourceProbeNeighborhood,
+            listenerProbeNeighborhood, source.pathingInputs.visRadius, source.pathingInputs.visThreshold, source.pathingInputs.visRange,
+            source.pathingInputs.order, source.pathingInputs.enableValidation, source.pathingInputs.findAlternatePaths,
+            source.pathingInputs.simplifyPaths, source.pathingInputs.realTimeVis,
+            source.pathingState.eq, source.pathingState.sh.data(), &source.pathingState.direction, &source.pathingState.distanceRatio, mSharedData->pathing.visCallback, mSharedData->pathing.userData, true);
 
         memcpy(source.pathingOutputs.eq, source.pathingState.eq, Bands::kNumBands * sizeof(float));
         memcpy(source.pathingOutputs.sh.data(), source.pathingState.sh.data(), source.pathingOutputs.sh.totalSize() * sizeof(float));

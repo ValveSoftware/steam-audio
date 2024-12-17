@@ -103,6 +103,32 @@ IPLSphere CProbeArray::getProbe(IPLint32 index)
     return sphere;
 }
 
+void CProbeArray::resize(IPLint32 size)
+{
+    if (size <= 0)
+        return;
+
+    auto _probeArray = mHandle.get();
+    if (!_probeArray)
+        return;
+
+    _probeArray->probes.resize(size);
+}
+
+void CProbeArray::setProbe(IPLint32 index, IPLSphere* probe)
+{
+    if (index < 0 || !probe)
+        return;
+
+    auto _probeArray = mHandle.get();
+    if (!_probeArray)
+        return;
+
+    const auto& _probe = *reinterpret_cast<Sphere*>(probe);
+
+    _probeArray->probes[index].influence = _probe;
+}
+
 
 // --------------------------------------------------------------------------------------------------------------------
 // CProbeBatch

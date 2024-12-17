@@ -18,6 +18,7 @@
 
 #include "array_math.h"
 #include "profiler.h"
+#include "propagation_medium.h"
 #include "sh.h"
 
 namespace ipl {
@@ -37,9 +38,70 @@ HybridReverbEstimator::HybridReverbEstimator(float maxDuration,
     , mReverbEffect(AudioSettings{samplingRate, frameSize})
     , mTempFrame(2, frameSize)
     , mReverbIR(static_cast<int>(ceilf(maxDuration * samplingRate)))
-{}
+{
+    mBandpassFilters[0].setFilter(IIR::lowPass(Bands::kHighCutoffFrequencies[0], samplingRate));
+    mBandpassFilters[1].setFilter(IIR::bandPass(Bands::kLowCutoffFrequencies[1], Bands::kHighCutoffFrequencies[1], samplingRate));
+    mBandpassFilters[2].setFilter(IIR::highPass(Bands::kLowCutoffFrequencies[2], samplingRate));
+}
 
-void HybridReverbEstimator::estimate(const EnergyField& energyField,
+float HybridReverbEstimator::calcRelativeEDC(const float* ir,
+                                             int numSamples,
+                                             int cutoffSample)
+{
+    auto sum = 0.0f;
+    auto cutoffSum = 0.0f;
+    for (auto i = numSamples - 1; i >= 0; --i)
+    {
+        sum += ir[i] * ir[i];
+        if (i == cutoffSample)
+        {
+            cutoffSum = sum;
+        }
+    }
+
+    return (sum == 0.0f) ? 0.0f : cutoffSum / sum;
+}
+
+void HybridReverbEstimator::estimateHybridEQFromIR(const ImpulseResponse& ir,
+                                                   float transitionTime,
+                                                   float overlapFraction,
+                                                   int samplingRate,
+                                                   float* bandIR,
+                                                   float* eq)
+{
+    float whiteNoiseNorm[3] = {0.984652f, 0.996133f, 1.000000f};
+
+    auto cutoffSample = static_cast<int>(floorf((1.0f - overlapFraction) * transitionTime * samplingRate));
+
+    // Assume the default air absorption model when estimating hybrid reverb EQ directly from an IR.
+    AirAbsorptionModel airAbsorption;
+
+    for (auto i = 0; i < Bands::kNumBands; ++i)
+    {
+        mBandpassFilters[i].reset();
+        mBandpassFilters[i].apply(ir.numSamples(), ir[0], bandIR);
+
+        for (auto j = 0; j < ir.numSamples(); ++j)
+        {
+            auto distance = PropagationMedium::kSpeedOfSound * (((float) j) / samplingRate);
+            bandIR[j] *= sqrtf(1.0f / airAbsorption.evaluate(distance, i));
+        }
+
+        eq[i] = calcRelativeEDC(bandIR, ir.numSamples(), cutoffSample);
+    }
+
+    for (int i = 0; i < Bands::kNumBands; ++i)
+    {
+        eq[i] *= 1.0f / whiteNoiseNorm[i];
+    }
+
+    for (int i = 0; i < Bands::kNumBands; ++i)
+    {
+        eq[i] = sqrtf(eq[i]);
+    }
+}
+
+void HybridReverbEstimator::estimate(const EnergyField* energyField,
                                      const Reverb& reverb,
                                      ImpulseResponse& impulseResponse,
                                      float transitionTime,
@@ -51,10 +113,17 @@ void HybridReverbEstimator::estimate(const EnergyField& energyField,
 
     auto numChannels = SphericalHarmonics::numCoeffsForOrder(order);
 
-    auto cutoffBin = static_cast<int>(ceilf(((1.0f - overlapFraction) * transitionTime) / EnergyField::kBinDuration));
-    for (auto i = 0; i < Bands::kNumBands; ++i)
+    if (energyField)
     {
-        eqCoeffs[i] = sqrtf(4.0f * Math::kPi * energyField[0][i][cutoffBin]);
+        auto cutoffBin = static_cast<int>(ceilf(((1.0f - overlapFraction) * transitionTime) / EnergyField::kBinDuration));
+        for (auto i = 0; i < Bands::kNumBands; ++i)
+        {
+            eqCoeffs[i] = sqrtf(4.0f * Math::kPi * (*energyField)[0][i][cutoffBin]);
+        }
+    }
+    else
+    {
+        estimateHybridEQFromIR(impulseResponse, transitionTime, overlapFraction, mSamplingRate, mReverbIR.data(), eqCoeffs);
     }
 
     auto transitionTimeInSamples = static_cast<int>(ceilf(transitionTime * mSamplingRate));

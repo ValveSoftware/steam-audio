@@ -43,6 +43,8 @@ void EQEffect::reset()
     setFilterGains(1, mPrevGains);
 
     mCurrent = 0;
+
+    mFirstFrame = true;
 }
 
 AudioEffectState EQEffect::apply(const EQEffectParams& params,
@@ -54,6 +56,18 @@ AudioEffectState EQEffect::apply(const EQEffectParams& params,
     assert(out.numChannels() == 1);
 
     PROFILE_FUNCTION();
+
+    if (mFirstFrame)
+    {
+        for (auto i = 0; i < Bands::kNumBands; ++i)
+        {
+            mPrevGains[i] = params.gains[i];
+        }
+
+        setFilterGains(mCurrent, params.gains);
+
+        mFirstFrame = false;
+    }
 
     if (mPrevGains[0] != params.gains[0] || mPrevGains[1] != params.gains[1] || mPrevGains[2] != params.gains[2])
     {

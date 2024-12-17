@@ -20,6 +20,7 @@
 
 #include "sh.h"
 #include "radeonrays_static_mesh.h"
+#include "profiler.h"
 
 namespace ipl {
 
@@ -156,6 +157,8 @@ void RadeonRaysReflectionSimulator::simulate(const IScene& scene,
                                              Array<float, 2>& image,
                                              JobGraph& jobGraph)
 {
+    PROFILE_FUNCTION();
+
     assert(numListeners == 1);
 
     // If we've been asked to simulate more sources than the max number we were initialized with, don't process the
@@ -227,6 +230,8 @@ void RadeonRaysReflectionSimulator::simulate(const IScene& scene,
                                              EnergyField* const* energyFields,
                                              JobGraph& jobGraph)
 {
+    PROFILE_FUNCTION();
+
     // If we've been asked to simulate more sources than the max number we were initialized with, don't process the
     // extra ones.
     if (numSources > mMaxNumSources)

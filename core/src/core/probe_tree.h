@@ -97,6 +97,8 @@ public:
     ProbeTree(int numProbes,
               const Probe* probes);
 
+    const ProbeTreeNode& getRootNode() const { return mNodes[0]; }
+
     void getInfluencingProbes(const Vector3f& point,
                               const Probe* probes,
                               int maxInfluencingProbes,

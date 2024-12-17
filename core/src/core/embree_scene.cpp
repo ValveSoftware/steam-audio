@@ -21,6 +21,7 @@
 #include "embree_instanced_mesh.h"
 #include "embree_scene.h"
 #include "embree_static_mesh.h"
+#include "profiler.h"
 
 namespace ipl {
 
@@ -220,6 +221,8 @@ Hit EmbreeScene::closestHit(const Ray& ray,
                             float minDistance,
                             float maxDistance) const
 {
+    PROFILE_FUNCTION();
+
     RTCRay embreeRay = { 0 };
     embreeRay.org[0] = ray.origin.x();
     embreeRay.org[1] = ray.origin.y();
@@ -253,6 +256,8 @@ bool EmbreeScene::anyHit(const Ray& ray,
                          float minDistance,
                          float maxDistance) const
 {
+    PROFILE_FUNCTION();
+
     RTCRay embreeRay = { 0 };
     embreeRay.org[0] = ray.origin.x();
     embreeRay.org[1] = ray.origin.y();
@@ -278,6 +283,8 @@ void EmbreeScene::closestHits(int numRays,
                               const float* maxDistances,
                               Hit* hits) const
 {
+    PROFILE_FUNCTION();
+
     for (auto i = 0; i < numRays; ++i)
     {
         hits[i] = closestHit(rays[i], minDistances[i], maxDistances[i]);
@@ -290,6 +297,8 @@ void EmbreeScene::anyHits(int numRays,
                           const float* maxDistances,
                           bool* occluded) const
 {
+    PROFILE_FUNCTION();
+
     for (auto i = 0; i < numRays; ++i)
     {
         occluded[i] = (maxDistances[i] >= 0.0f) ? anyHit(rays[i], minDistances[i], maxDistances[i]) : true;

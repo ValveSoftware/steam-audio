@@ -247,6 +247,7 @@ BakedPathData::BakedPathData(const IScene& scene,
                 (int threadIndex,
                     std::atomic<bool>&)
             {
+                PROFILE_ZONE("BakedPathData::bakeJob");
                 for (auto j = 0; j < probes.numProbes(); ++j)
                 {
                     threadPaths[threadIndex][j].nodes.clear();
@@ -627,6 +628,8 @@ void PathBaker::bake(const IScene& scene,
                      ProgressCallback progressCallback,
                      void* callbackUserData)
 {
+    PROFILE_FUNCTION();
+
     assert(identifier.type == BakedDataType::Pathing);
     assert(identifier.variation == BakedDataVariation::Dynamic);
 

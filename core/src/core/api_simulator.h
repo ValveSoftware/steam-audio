@@ -14,6 +14,8 @@
 // limitations under the License.
 //
 
+#pragma once
+
 #include "simulation_data.h"
 #include "simulation_manager.h"
 using namespace ipl;

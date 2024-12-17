@@ -36,7 +36,7 @@ if (BUILD_SHARED_LIBS)
 else()
 	find_package_handle_standard_args(SteamAudio
 		FOUND_VAR 		SteamAudio_FOUND
-		REQUIRED_VARS 	SteamAudio_INCLUDE_DIR SteamAudio_LIBRARY
+		REQUIRED_VARS 	SteamAudio_INCLUDE_DIR
 	)
 endif()
 
@@ -49,7 +49,6 @@ if (SteamAudio_FOUND)
 			add_library(SteamAudio::SteamAudio ALIAS SteamAudio)
 		else()
 			add_library(SteamAudio::SteamAudio UNKNOWN IMPORTED)
-			set_target_properties(SteamAudio::SteamAudio PROPERTIES IMPORTED_LOCATION ${SteamAudio_LIBRARY})
 			target_include_directories(SteamAudio::SteamAudio INTERFACE ${SteamAudio_INCLUDE_DIR})
 		endif()
 	endif()

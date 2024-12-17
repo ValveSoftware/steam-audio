@@ -86,6 +86,20 @@ void IPL_FLOAT8_ATTR Delay::put(float8_t in)
     }
 }
 
+
+// --------------------------------------------------------------------------------------------------------------------
+// Allpass
+// --------------------------------------------------------------------------------------------------------------------
+
+float8_t IPL_FLOAT8_ATTR Allpass::apply(float8_t x)
+{
+    auto vm = float8::zero();
+    mDelay.get(vm);
+    auto v = float8::sub(x, float8::mul(float8::set1(mAm), vm));
+    mDelay.put(v);
+    return float8::add(float8::mul(float8::set1(mB0), v), vm);
+}
+
 }
 
 #endif

@@ -141,7 +141,8 @@ bool PathSimulator::findPaths(const Vector3f& source,
                               Vector3f* avgDirection,
                               float* distanceRatio,
                               ValidationRayVisualizationCallback validationRayVisualization,
-                              void* userData)
+                              void* userData,
+                              bool forceDirectOcclusion)
 {
     PROFILE_FUNCTION();
 
@@ -153,7 +154,7 @@ bool PathSimulator::findPaths(const Vector3f& source,
     int starts[kMaxPaths];
     int ends[kMaxPaths];
 
-    if (scene.isOccluded(listener, source))
+    if (scene.isOccluded(listener, source) || forceDirectOcclusion)
     {
         if (sourceProbes.hasValidProbes() && listenerProbes.hasValidProbes())
         {
@@ -524,12 +525,12 @@ void PathSimulator::calcAmbisonicsCoeffsForPaths(const Vector3f& source,
                     deviationTerm[j] /= deviationTermReference[j];
                 }
 
-                auto overallGain = 0.0f;
+                auto overallGain = 1.0f;
                 EQEffect::normalizeGains(deviationTerm, overallGain);
 
                 for (auto j = 0; j < Bands::kNumBands; ++j)
                 {
-                    eqGains[j] += deviationTerm[j];
+                    eqGains[j] += (overallGain * deviationTerm[j]);
                 }
             }
             else

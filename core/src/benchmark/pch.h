@@ -21,6 +21,8 @@
 
 #include <chrono>
 #include <fstream>
+#include <map>
+#include <string>
 #include <thread>
 #include <vector>
 

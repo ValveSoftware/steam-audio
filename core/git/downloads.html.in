@@ -144,6 +144,15 @@
 
     <div class="row app-marketing-grid" style="color:#000;">
       <div class="col-md-4 px-4 mb-5">
+        <img class="mb-1" src="assets/img/icon_wwise_large.png">
+        <h6 class="text-uppercase" style="font-weight:bold; margin-top: 2em; margin-bottom: 2em; color:#000; text-align: left; border-bottom: 4px solid #000; padding: 10px;">Wwise Plugin</h6>
+        <ul class="list-group">
+          <li class="list-group-item" style="background: none; border: none;"><a href="https://github.com/ValveSoftware/steam-audio/releases/download/v@PROJECT_VERSION_MAJOR@.@PROJECT_VERSION_MINOR@.@PROJECT_VERSION_PATCH@/steamaudio_wwise_@PROJECT_VERSION_MAJOR@.@PROJECT_VERSION_MINOR@.@PROJECT_VERSION_PATCH@.zip" style="color: #000; font-size: 14pt;"><i class="fa fa-arrow-circle-down" style="margin-right: 8px;"></i> Wwise Plugin (ZIP)</a></li>
+          <li class="list-group-item" style="background: none; border: none;"><a href="doc/wwise/index.html" style="color: #000; font-size: 14pt;"><i class="fa fa-arrow-circle-down" style="margin-right: 8px;"></i> User Manual (HTML)</a></li>
+        </ul>
+      </div>
+
+      <div class="col-md-4 px-4 mb-5">
         <img class="mb-1" src="assets/img/icon_c_api_large.png">
         <h6 class="text-uppercase" style="font-weight:bold; margin-top: 2em; margin-bottom: 2em; color:#000; text-align: left; border-bottom: 4px solid #000; padding: 10px;">C API</h6>
         <ul class="list-group">

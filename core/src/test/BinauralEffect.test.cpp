@@ -128,7 +128,7 @@ TEST_CASE("Applying binaural effects with bilinear interpolation on default HRTF
     REQUIRE(ValidateBinauralEffect(1, IPL_HRTFINTERPOLATION_BILINEAR, hrtfParams, 1024));
 }
 
-#if !defined(IPL_OS_IOS)
+#if !defined(IPL_OS_IOS) && !defined(IPL_OS_WASM)
 
 TEST_CASE("Applying binaural effects with nearest neighbor interpolation on SOFA HRTF does not produce NANs. D1.", "[BinauralEffect]")
 {

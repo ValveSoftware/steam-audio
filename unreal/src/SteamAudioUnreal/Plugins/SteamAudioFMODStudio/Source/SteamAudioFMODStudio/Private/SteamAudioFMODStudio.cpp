@@ -118,10 +118,14 @@ void FFMODStudioAudioEngineState::Initialize(IPLContext Context, IPLHRTF HRTF, c
 
 void FFMODStudioAudioEngineState::Destroy()
 {
+#if PLATFORM_IOS
+	FSteamAudioFMODStudioModule::Get().iplFMODTerminate();
+#else
 	if (FSteamAudioFMODStudioModule::Get().Library)
 	{
 		FSteamAudioFMODStudioModule::Get().iplFMODTerminate();
 	}
+#endif
 }
 
 void FFMODStudioAudioEngineState::SetHRTF(IPLHRTF HRTF)

@@ -1,0 +1,17 @@
+{
+    "name": "SteamAudioFMODStudio",
+    "rootNamespace": "",
+    "references": [
+        "GUID:558d81aa619cc114fbdab8165212bc9d",
+        "GUID:0c752da273b17c547ae705acf0f2adf2"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

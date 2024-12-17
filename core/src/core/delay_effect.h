@@ -65,6 +65,7 @@ private:
     int mWritePos;
     float mPrevDelayInSamples;
     int mNumTailSamplesRemaining;
+    bool mFirstFrame;
 };
 
 }

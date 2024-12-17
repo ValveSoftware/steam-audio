@@ -71,7 +71,7 @@ BakedReflectionsData::BakedReflectionsData(const BakedDataIdentifier& identifier
         {
             if (!mNeedsUpdate[i])
             {
-                if (serializedObject->energy_fields()->Get(i) != nullptr)
+                if (serializedObject->energy_fields()->Length() > i && serializedObject->energy_fields()->Get(i) != nullptr)
                 {
                     mEnergyFields[i] = ipl::make_unique<EnergyField>(serializedObject->energy_fields()->Get(i));
                 }
@@ -202,6 +202,45 @@ uint64_t BakedReflectionsData::serializedSize() const
     return size;
 }
 
+void BakedReflectionsData::evaluateEnergyField(const ProbeNeighborhood& neighborhood, EnergyField& energyField)
+{
+    for (auto i = 0; i < neighborhood.numProbes(); ++i)
+    {
+        if (!neighborhood.batches[i] || neighborhood.probeIndices[i] < 0)
+            continue;
+
+        if (neighborhood.batches[i]->hasData(mIdentifier) && &(*neighborhood.batches[i])[mIdentifier] != this)
+            continue;
+
+        auto* probeEnergyField = lookupEnergyField(neighborhood.probeIndices[i]);
+        if (!probeEnergyField)
+            continue;
+
+        EnergyField::scaleAccumulate(*probeEnergyField, neighborhood.weights[i], energyField);
+    }
+}
+
+void BakedReflectionsData::evaluateReverb(const ProbeNeighborhood& neighborhood, Reverb& reverb)
+{
+    for (auto i = 0; i < neighborhood.numProbes(); ++i)
+    {
+        if (!neighborhood.batches[i] || neighborhood.probeIndices[i] < 0)
+            continue;
+
+        if (neighborhood.batches[i]->hasData(mIdentifier) && &(*neighborhood.batches[i])[mIdentifier] != this)
+            continue;
+
+        auto* probeReverb = lookupReverb(neighborhood.probeIndices[i]);
+        if (!probeReverb)
+            continue;
+
+        for (auto j = 0; j < Bands::kNumBands; ++j)
+        {
+            reverb.reverbTimes[j] += neighborhood.weights[i] * probeReverb->reverbTimes[j];
+        }
+    }
+}
+
 flatbuffers::Offset<Serialized::BakedReflectionsData> BakedReflectionsData::serialize(SerializedObject& serializedObject) const
 {
     auto& fbb = serializedObject.fbb();
@@ -229,6 +268,11 @@ flatbuffers::Offset<Serialized::BakedReflectionsData> BakedReflectionsData::seri
     }
 
     return Serialized::CreateBakedReflectionsData(fbb, energyFieldsOffset, reverbsOffset, needsUpdateOffset);
+}
+
+int BakedReflectionsData::numProbes() const
+{
+    return static_cast<int>(mNeedsUpdate.size());
 }
 
 void BakedReflectionsData::setHasConvolution(bool hasConvolution)

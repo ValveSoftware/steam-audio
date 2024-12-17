@@ -31,6 +31,7 @@ enum class EAudioEngineType : uint8
 {
     UNREAL      UMETA(DisplayName = "Unreal"),
     FMODSTUDIO  UMETA(DisplayName = "FMOD Studio"),
+    WWISE       UMETA(DisplayName = "Wwise"),
 };
 
 /**

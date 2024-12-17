@@ -70,4 +70,39 @@ private:
     int mReadCursor;
 };
 
+
+// --------------------------------------------------------------------------------------------------------------------
+// Allpass
+// --------------------------------------------------------------------------------------------------------------------
+
+class Allpass
+{
+public:
+    Allpass();
+
+    Allpass(int delay,
+            float gain,
+            int frameSize);
+
+    void resize(int delay,
+                float gain,
+                int frameSize);
+
+    void reset();
+
+    float apply(float x);
+
+    float4_t apply(float4_t x);
+
+#if defined(IPL_ENABLE_FLOAT8)
+    float8_t IPL_FLOAT8_ATTR apply(float8_t x);
+#endif
+
+private:
+    Delay mDelay;
+    float mB0;
+    float mAm;
+};
+
+
 }

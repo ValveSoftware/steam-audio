@@ -128,6 +128,14 @@
                         "-DTARGET_C_EXTRA=neon",
                         "-DTARGET_CXX_EXTRA=neon"
                     ]
+                },
+                {
+                    "platforms": ["wasm"],
+                    "flags": [
+                        "-DEMSCRIPTEN_SYSTEM_PROCESSOR=armv7l",
+                        "-DCMAKE_C_FLAGS=-msimd128 -mfpu=neon -DPFFFT_ENABLE_NEON=1 -D__arm__=1",
+                        "-DCMAKE_CXX_FLAGS=-msimd128 -mfpu=neon -DPFFFT_ENABLE_NEON=1 -D__arm__=1"
+                    ]
                 }
             ]
         },
@@ -150,13 +158,27 @@
         },
         "fetch": {
             "git": "https://github.com/linkotec/ffts.git",
-            "tag": "2c8da4877588e288ff4cd550f14bec2dc7bf668c"
+            "tag": "2c8da4877588e288ff4cd550f14bec2dc7bf668c",
+            "patch": "ffts.patch"
         },
         "configure": {
             "cmake": [
                 {
+                    "platforms": ["android-arm64", "android-x86", "android-x64"],
                     "flags": [
                         "-DDISABLE_DYNAMIC_CODE=ON"
+                    ]
+                },
+                {
+                    "platforms": ["android-armv7"],
+                    "flags": [
+                        "-DENABLE_NEON=ON"
+                    ]
+                },
+                {
+                    "platforms": ["android-arm64"],
+                    "flags": [
+                        "-DENABLE_NEON=OFF"
                     ]
                 }
             ]
@@ -198,7 +220,16 @@
             "patch": "zlib.patch"
         },
         "configure": {
-            "cmake": []
+            "cmake": [
+                {
+                    "platforms": ["wasm"],
+                    "flags": [
+                        "-DEMSCRIPTEN_SYSTEM_PROCESSOR=arm",
+                        "-DCMAKE_C_FLAGS=-msimd128 -mfpu=neon -D__arm__=1",
+                        "-DCMAKE_CXX_FLAGS=-msimd128 -mfpu=neon -D__arm__=1"
+                    ]
+                }
+            ]
         },
         "build": {
             "cmake": {
@@ -249,8 +280,18 @@
                 {
                     "stamp": false,
                     "flags": [
-                        "-DZLIB_ROOT=$deps/zlib/lib/$platform",
+                        "-DZLIB_ROOT=$deps/zlib/lib/$platform/$config",
                         "-DZLIB_INCLUDE_DIR=$deps/zlib/include"
+                    ]
+                },
+                {
+                    "platforms": ["wasm"],
+                    "flags": [
+                        "-DEMSCRIPTEN_SYSTEM_PROCESSOR=arm",
+                        "-DCMAKE_C_FLAGS=-msimd128 -mfpu=neon -D__linux__ -D__arm__=1",
+                        "-DCMAKE_CXX_FLAGS=-msimd128 -mfpu=neon -D__linux__ -D__arm__=1",
+                        "-DWIN32=1",
+                        "-DCMAKE_FIND_ROOT_PATH_MODE_LIBRARY=BOTH"
                     ]
                 }
             ]
@@ -535,6 +576,22 @@
             ["src/imgui/backends/imgui_impl_opengl2.cpp", "include"],
             ["src/imgui/backends/imgui_impl_glfw.h", "include"],
             ["src/imgui/backends/imgui_impl_glfw.cpp", "include"]
+        ]
+    },
+    "implot": {
+        "platforms": ["windows-x64"],
+        "check": {
+            "headers": ["implot.h"]
+        },
+        "fetch": {
+            "git": "https://github.com/epezent/implot.git",
+            "tag": "f156599faefe316f7dd20fe6c783bf87c8bb6fd9"
+        },
+        "copy": [
+            ["src/implot/implot.h", "include"],
+            ["src/implot/implot_internal.h", "include"],
+            ["src/implot/implot.cpp", "include"],
+            ["src/implot/implot_items.cpp", "include"]
         ]
     },
     "portaudio": {

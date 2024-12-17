@@ -1,0 +1,142 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 748f412..4f23349 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -447,17 +447,6 @@ set(FFTS_SOURCES
+   src/types.h
+ )
+ 
+-if(NOT DISABLE_DYNAMIC_CODE)
+-  if(CMAKE_SYSTEM_PROCESSOR MATCHES "amd64.*|x86_64.*|AMD64.*")
+-    list(APPEND FFTS_SOURCES
+-      src/codegen_sse.h
+-    )
+-  else()
+-    message(WARNING "Dynamic code is only supported with x64, disabling dynamic code.")
+-    set(DISABLE_DYNAMIC_CODE ON)
+-  endif(CMAKE_SYSTEM_PROCESSOR MATCHES "amd64.*|x86_64.*|AMD64.*")
+-endif(NOT DISABLE_DYNAMIC_CODE)
+-
+ if(ENABLE_NEON)
+   list(APPEND FFTS_SOURCES
+     src/neon.s
+@@ -485,6 +474,17 @@ elseif(HAVE_XMMINTRIN_H)
+     src/macros-avx.h
+     src/macros-sse.h
+   )
++
++  if(NOT DISABLE_DYNAMIC_CODE)
++    if(CMAKE_SYSTEM_PROCESSOR MATCHES "amd64.*|x86_64.*|AMD64.*")
++      list(APPEND FFTS_SOURCES
++        src/codegen_sse.h
++      )
++    else()
++      message(WARNING "Dynamic code is only supported with x64, disabling dynamic code.")
++      set(DISABLE_DYNAMIC_CODE ON)
++    endif(CMAKE_SYSTEM_PROCESSOR MATCHES "amd64.*|x86_64.*|AMD64.*")
++  endif(NOT DISABLE_DYNAMIC_CODE)
+ endif(ENABLE_NEON)
+ 
+ if(DISABLE_DYNAMIC_CODE)
+diff --git a/src/codegen.c b/src/codegen.c
+index 0bce616..ddc476d 100644
+--- a/src/codegen.c
++++ b/src/codegen.c
+@@ -155,7 +155,7 @@ transform_func_t ffts_generate_func_code(ffts_plan_t *p, size_t N, size_t leaf_N
+     start = generate_prologue(&fp, p);
+ 
+ #ifdef HAVE_NEON
+-    memcpy(fp, neon_ee, neon_oo - neon_ee);
++    memcpy(fp, (char*) neon_ee, (char*) neon_oo - (char*) neon_ee);
+     if (sign < 0) {
+         fp[33] ^= 0x00200000;
+         fp[37] ^= 0x00200000;
+@@ -320,7 +320,7 @@ transform_func_t ffts_generate_func_code(ffts_plan_t *p, size_t N, size_t leaf_N
+ 
+         if(p->i1) {
+             MOVI(&fp, 11, p->i1);
+-            memcpy(fp, neon_oo, neon_eo - neon_oo);
++            memcpy(fp, (char*) neon_oo, (char*) neon_eo - (char*) neon_oo);
+             if(sign < 0) {
+                 fp[12] ^= 0x00200000;
+                 fp[13] ^= 0x00200000;
+@@ -341,7 +341,7 @@ transform_func_t ffts_generate_func_code(ffts_plan_t *p, size_t N, size_t leaf_N
+         *fp = LDRI(11, 1, ((uint32_t)&p->oe_ws) - ((uint32_t)p));
+         fp++;
+ 
+-        memcpy(fp, neon_oe, neon_end - neon_oe);
++        memcpy(fp, (char*) neon_oe, (char*) neon_end - (char*) neon_oe);
+         if(sign < 0) {
+             fp[19] ^= 0x00200000;
+             fp[20] ^= 0x00200000;
+@@ -363,7 +363,7 @@ transform_func_t ffts_generate_func_code(ffts_plan_t *p, size_t N, size_t leaf_N
+         *fp = LDRI(11, 1, ((uint32_t)&p->eo_ws) - ((uint32_t)p));
+         fp++;
+ 
+-        memcpy(fp, neon_eo, neon_oe - neon_eo);
++        memcpy(fp, (char*) neon_eo, (char*) neon_oe - (char*) neon_eo);
+         if(sign < 0) {
+             fp[10] ^= 0x00200000;
+             fp[11] ^= 0x00200000;
+@@ -390,7 +390,7 @@ transform_func_t ffts_generate_func_code(ffts_plan_t *p, size_t N, size_t leaf_N
+ 
+         if(p->i1) {
+             MOVI(&fp, 11, p->i1);
+-            memcpy(fp, neon_oo, neon_eo - neon_oo);
++            memcpy(fp, (char*) neon_oo, (char*) neon_eo - (char*) neon_oo);
+             if(sign < 0) {
+                 fp[12] ^= 0x00200000;
+                 fp[13] ^= 0x00200000;
+@@ -433,7 +433,7 @@ transform_func_t ffts_generate_func_code(ffts_plan_t *p, size_t N, size_t leaf_N
+         *fp = LDRI(2, 1, ((uint32_t)&p->ee_ws) - ((uint32_t)p));
+         fp++;
+         MOVI(&fp, 11, p->i1);
+-        memcpy(fp, neon_ee, neon_oo - neon_ee);
++        memcpy(fp, (char*) neon_ee, (char*) neon_oo - (char*) neon_ee);
+         if(sign < 0) {
+             fp[33] ^= 0x00200000;
+             fp[37] ^= 0x00200000;
+@@ -545,7 +545,7 @@ transform_func_t ffts_generate_func_code(ffts_plan_t *p, size_t N, size_t leaf_N
+         } else if(!pps[2]) {
+             //uint32_t *x_8_t_addr = fp;
+ #ifdef HAVE_NEON
+-            memcpy(fp, neon_x8_t, neon_ee - neon_x8_t);
++            memcpy(fp, (char*) neon_x8_t, (char*) neon_ee - (char*) neon_x8_t);
+             if(sign < 0) {
+                 fp[31] ^= 0x00200000;
+                 fp[32] ^= 0x00200000;
+diff --git a/src/codegen_arm.h b/src/codegen_arm.h
+index 3d146da..980815d 100644
+--- a/src/codegen_arm.h
++++ b/src/codegen_arm.h
+@@ -108,7 +108,7 @@ static FFTS_INLINE insns_t* generate_size4_base_case(insns_t **fp, int sign)
+ 
+ #ifdef HAVE_NEON
+ 	len = (char*) neon_x8 - (char*) neon_x4;
+-	memcpy(x_4_addr, neon_x4, len);
++	memcpy(x_4_addr, (char*) neon_x4, len);
+ 
+ 	if (sign < 0) {
+ 		x_4_addr[26] ^= 0x00200000;
+@@ -141,7 +141,7 @@ static FFTS_INLINE insns_t* generate_size8_base_case(insns_t **fp, int sign)
+ 
+ #ifdef HAVE_NEON
+ 	len = (char*) neon_x8_t - (char*) neon_x8;
+-	memcpy(x_8_addr, neon_x8, len);
++	memcpy(x_8_addr, (char*) neon_x8, len);
+ 
+ 	/*
+ 	* Changes adds to subtracts and vice versa to allow the computation
+diff --git a/src/ffts.c b/src/ffts.c
+index 35c5cad..f1ec6ca 100644
+--- a/src/ffts.c
++++ b/src/ffts.c
+@@ -115,7 +115,7 @@ ffts_flush_instruction_cache(void *start, size_t length)
+ #else
+ #ifdef __APPLE__
+     sys_icache_invalidate(start, length);
+-#elif __ANDROID__
++#elif __ANDROID__ && defined(__arm__)
+     cacheflush((long) start, (long) start + length, 0);
+ #elif __linux__
+ #if GCC_VERSION_AT_LEAST(4,3)

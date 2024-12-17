@@ -96,6 +96,8 @@ def run_cmake(program_name, args):
     env = os.environ.copy()
     if os.getenv('STEAMAUDIO_OVERRIDE_PYTHONPATH') is not None:
         env['PYTHONPATH'] = ''
+    if os.getenv('STEAMAUDIO_OVERRIDE_SDKROOT') is not None:
+        env['SDKROOT'] = ''
 
     subprocess.check_call([program_name] + args, env=env)
 

@@ -31,16 +31,61 @@ namespace SteamAudio
     {
         public static void BuildSteamAudio()
         {
+            var baseAssets = new string[]
+            {
+                "Assets/Plugins/SteamAudio/SteamAudioUnity.asmdef",
+                "Assets/Plugins/SteamAudio/Binaries",
+                "Assets/Plugins/SteamAudio/Resources",
+                "Assets/Plugins/SteamAudio/Scripts/Runtime",
+                "Assets/Plugins/SteamAudio/Scripts/Editor",
+            };
+
+
+            var fmodAssets = new string[]
+            {
+                "Assets/Plugins/SteamAudio/Scripts/FMODStudio",
+                "Assets/Plugins/FMOD/platforms/win/lib/x86/phonon_fmod.dll",
+                "Assets/Plugins/FMOD/platforms/win/lib/x86_64/phonon_fmod.dll",
+                "Assets/Plugins/FMOD/platforms/linux/lib/x86/libphonon_fmod.so",
+                "Assets/Plugins/FMOD/platforms/linux/lib/x86_64/libphonon_fmod.so",
+                "Assets/Plugins/FMOD/platforms/mac/lib/phonon_fmod.bundle",
+                "Assets/Plugins/FMOD/platforms/android/lib/armeabi-v7a/libphonon_fmod.so",
+                "Assets/Plugins/FMOD/platforms/android/lib/arm64-v8a/libphonon_fmod.so",
+                "Assets/Plugins/FMOD/platforms/android/lib/x86/libphonon_fmod.so",
+                "Assets/Plugins/FMOD/platforms/ios/lib/libphonon_fmod.a",
+            };
+
+            var wwiseAssets = new string[]
+            {
+                "Assets/Plugins/SteamAudio/Scripts/Wwise",
+                "Assets/Wwise/API/Runtime/Plugins/Windows/x86/DSP/SteamAudioWwise.dll",
+                "Assets/Wwise/API/Runtime/Plugins/Windows/x86_64/DSP/SteamAudioWwise.dll",
+                "Assets/Wwise/API/Runtime/Plugins/Linux/x86_64/DSP/libSteamAudioWwise.so",
+                "Assets/Wwise/API/Runtime/Plugins/Mac/DSP/libSteamAudioWwise.bundle",
+                "Assets/Wwise/API/Runtime/Plugins/Android/armeabi-v7a/DSP/libSteamAudioWwise.so",
+                "Assets/Wwise/API/Runtime/Plugins/Android/arm64-v8a/DSP/libSteamAudioWwise.so",
+                "Assets/Wwise/API/Runtime/Plugins/Android/x86/DSP/libSteamAudioWwise.so",
+                "Assets/Wwise/API/Runtime/Plugins/iOS/iphoneos/DSP/SteamAudioWwiseFXFactory.h",
+                "Assets/Wwise/API/Runtime/Plugins/iOS/iphoneos/DSP/libSteamAudioWwiseFX.a",
+                "Assets/Wwise/API/Runtime/Plugins/iOS/iphonesimulator/DSP/SteamAudioWwiseFXFactory.h",
+                "Assets/Wwise/API/Runtime/Plugins/iOS/iphonesimulator/DSP/libSteamAudioWwiseFX.a",
+            };
+
+            BuildPackage("SteamAudio", baseAssets);
+            BuildPackage("SteamAudioFMODStudio", fmodAssets);
+            BuildPackage("SteamAudioWwise", wwiseAssets);
+        }
+
+        private static void BuildPackage(string name, string[] assets)
+        {
             var args = Environment.GetCommandLineArgs();
             var lastArg = args[args.Length - 1];
 
-            var fileName = "SteamAudio.unitypackage";
+            var fileName = name + ".unitypackage";
             if (lastArg != "SteamAudio.Build.BuildSteamAudio")
             {
                 fileName = lastArg + "/" + fileName;
             }
-
-            var assets = new string[] { "Assets/Plugins" };
 
             AssetDatabase.ExportPackage(assets, fileName, ExportPackageOptions.Recurse);
         }
@@ -59,6 +104,7 @@ namespace SteamAudio
                 NamedBuildTarget.Standalone,
                 NamedBuildTarget.Android,
                 NamedBuildTarget.iOS,
+                NamedBuildTarget.WebGL,
             };
 
             foreach (var supportedPlatform in supportedPlatforms)

@@ -27,10 +27,23 @@
 namespace ipl {
 
 // ---------------------------------------------------------------------------------------------------------------------
+// IBakedReflectionsLookup
+// ---------------------------------------------------------------------------------------------------------------------
+
+class IBakedReflectionsLookup : public IBakedData
+{
+public:
+    virtual void evaluateEnergyField(const ProbeNeighborhood& neighborhood, EnergyField& energyField) = 0;
+
+    virtual void evaluateReverb(const ProbeNeighborhood& neighborhood, Reverb& reverb) = 0;
+};
+
+
+// ---------------------------------------------------------------------------------------------------------------------
 // BakedReflectionsData
 // ---------------------------------------------------------------------------------------------------------------------
 
-class BakedReflectionsData : public IBakedData
+class BakedReflectionsData : public IBakedReflectionsLookup
 {
 public:
     BakedReflectionsData(const BakedDataIdentifier& identifier,
@@ -55,7 +68,13 @@ public:
 
     virtual uint64_t serializedSize() const override;
 
+    virtual void evaluateEnergyField(const ProbeNeighborhood& neighborhood, EnergyField& energyField) override;
+
+    virtual void evaluateReverb(const ProbeNeighborhood& neighborhood, Reverb& reverb) override;
+
     flatbuffers::Offset<Serialized::BakedReflectionsData> serialize(SerializedObject& serializedObject) const;
+
+    int numProbes() const;
 
     void setHasConvolution(bool hasConvolution);
 
@@ -72,6 +91,9 @@ public:
     EnergyField* lookupEnergyField(int index);
 
     Reverb* lookupReverb(int index);
+
+    vector<unique_ptr<EnergyField>>& getEnergyFields() { return mEnergyFields; }
+    vector<Reverb>& getReverbs() { return mReverbs; }
 
 private:
     BakedDataIdentifier mIdentifier;

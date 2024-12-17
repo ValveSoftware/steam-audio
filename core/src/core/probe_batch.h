@@ -85,6 +85,8 @@ public:
 
     int findNearest(const Vector3f& point) const;
 
+    void getProbe(int neighborProbeIndex, int* probeIndex, float* weight);
+
     void calcWeights(const Vector3f& point);
 };
 
@@ -103,42 +105,52 @@ public:
 
     ProbeBatch(SerializedObject& serializedObject);
 
-    int numProbes() const
+    virtual int numProbes() const
     {
         return static_cast<int>(mProbes.size());
     }
 
-    Probe* probes()
+    virtual Probe* probes()
     {
         return mProbes.data();
     }
 
-    const Probe* probes() const
+    virtual const Probe* probes() const
     {
         return mProbes.data();
     }
 
-    Probe& operator[](int i)
+    virtual Probe& operator[](int i)
     {
         return mProbes[i];
     }
 
-    const Probe& operator[](int i) const
+    virtual const Probe& operator[](int i) const
     {
         return mProbes[i];
     }
 
-    bool hasData(const BakedDataIdentifier& identifier) const
+    virtual map<BakedDataIdentifier, unique_ptr<IBakedData>>& getData()
+    {
+        return mData;
+    }
+
+    virtual const map<BakedDataIdentifier, unique_ptr<IBakedData>>& getData() const
+    {
+        return mData;
+    }
+
+    virtual bool hasData(const BakedDataIdentifier& identifier) const
     {
         return (mData.find(identifier) != mData.end());
     }
 
-    IBakedData& operator[](const BakedDataIdentifier& identifier)
+    virtual IBakedData& operator[](const BakedDataIdentifier& identifier)
     {
         return *mData[identifier];
     }
 
-    const IBakedData& operator[](const BakedDataIdentifier& identifier) const
+    virtual const IBakedData& operator[](const BakedDataIdentifier& identifier) const
     {
         return *mData.at(identifier);
     }
@@ -160,22 +172,22 @@ public:
     void updateEndpoint(const BakedDataIdentifier& identifier,
                         const Sphere& endpointInfluence);
 
-    void commit();
+    virtual void commit();
 
     void addData(const BakedDataIdentifier& identifier,
                  unique_ptr<IBakedData> data);
 
     void removeData(const BakedDataIdentifier& identifier);
 
-    void getInfluencingProbes(const Vector3f& point,
-                              ProbeNeighborhood& neighborhood,
-                              int offset = 0);
+    virtual void getInfluencingProbes(const Vector3f& point,
+                                      ProbeNeighborhood& neighborhood,
+                                      int offset = 0);
 
     flatbuffers::Offset<Serialized::ProbeBatch> serialize(SerializedObject& serializedObject) const;
 
     void serializeAsRoot(SerializedObject& serializedObject) const;
 
-private:
+protected:
     vector<Probe> mProbes;
     unique_ptr<ProbeTree> mProbeTree;
     map<BakedDataIdentifier, unique_ptr<IBakedData>> mData;

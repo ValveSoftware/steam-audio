@@ -146,7 +146,7 @@ std::shared_ptr<IScene> loadMesh(const std::string& fileName, const std::string&
     return std::move(scene);
 }
 
-#if !defined(IPL_OS_IOS)
+#if !defined(IPL_OS_IOS) && !defined(IPL_OS_WASM)
 
 TEST_CASE("All implementations of ReflectionSimulator produce comparable results.", "[ReflectionSimulator]")
 {

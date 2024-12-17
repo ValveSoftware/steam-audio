@@ -19,6 +19,7 @@
 #include "direct_simulator.h"
 #include "propagation_medium.h"
 #include "sh.h"
+#include "profiler.h"
 
 namespace ipl {
 
@@ -102,6 +103,8 @@ void ReflectionSimulator::simulate(const IScene& scene,
                                    Array<float, 2>& image,
                                    JobGraph& jobGraph)
 {
+    PROFILE_FUNCTION();
+
     assert(numListeners == 1);
 
     // If we've been asked to simulate more sources than the max number we were initialized with, don't process the
@@ -153,6 +156,8 @@ void ReflectionSimulator::simulate(const IScene& scene,
                                    EnergyField* const* energyFields,
                                    JobGraph& jobGraph)
 {
+    PROFILE_FUNCTION();
+
     assert(numListeners == 1);
 
     // If we've been asked to simulate more sources than the max number we were initialized with, don't process the
@@ -219,6 +224,8 @@ void ReflectionSimulator::simulate(const IScene& scene,
                                    float irradianceMinDistance,
                                    vector<Ray>& escapedRays)
 {
+    PROFILE_FUNCTION();
+
     // If we've been asked to simulate more sources than the max number we were initialized with, don't process the
     // extra ones.
     if (numSources > mMaxNumSources)
@@ -333,6 +340,8 @@ void ReflectionSimulator::simulateJob(const IScene& scene,
                                       int threadId,
                                       std::atomic<bool>& cancel)
 {
+    PROFILE_FUNCTION();
+
     assert(0 <= threadId && threadId < mNumThreads);
     assert(0 < mNumSources && mNumSources <= mMaxNumSources);
 
@@ -612,6 +621,8 @@ void BatchedReflectionSimulator::simulate(const IScene& scene,
                                           Array<float, 2>& image,
                                           JobGraph& jobGraph)
 {
+    PROFILE_FUNCTION();
+
     assert(numListeners == 1);
 
     // If we've been asked to simulate more sources than the max number we were initialized with, don't process the
@@ -663,6 +674,8 @@ void BatchedReflectionSimulator::simulate(const IScene& scene,
                                           EnergyField* const* energyFields,
                                           JobGraph& jobGraph)
 {
+    PROFILE_FUNCTION();
+
     assert(numListeners == 1);
 
     // If we've been asked to simulate more sources than the max number we were initialized with, don't process the
@@ -788,6 +801,8 @@ void BatchedReflectionSimulator::simulateJob(const IScene& scene,
                                              int threadId,
                                              std::atomic<bool>& cancel)
 {
+    PROFILE_FUNCTION();
+
     assert(0 <= threadId && threadId < mNumThreads);
 
     const auto scalar = (4.0f * Math::kPi) / mNumRays;

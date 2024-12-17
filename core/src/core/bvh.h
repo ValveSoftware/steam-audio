@@ -268,6 +268,10 @@ public:
     bool intersect(const Box& box,
                    const Mesh& mesh) const;
 
+    // Returns true if the given boxes intersect.
+    static bool boxIntersectsBox(const Box& box1,
+                                 const Box& box2);
+
 private:
     static const int kConstructionStackDepth = 128; // Maximum recursion depth during BVH construction.
     static const int kTraversalStackDepth = 128; // Maximum recursion depth during BVH traversal.
@@ -317,10 +321,6 @@ private:
                   float rightChildSurfaceArea,
                   int32_t numRightChildren,
                   float parentSurfaceArea) const;
-
-    // Returns true if the given boxes intersect.
-    static bool boxIntersectsBox(const Box& box1,
-                                 const Box& box2);
 
     // Returns true if the given triangle intersects the given box.
     static bool boxIntersectsTriangle(const Box& box,

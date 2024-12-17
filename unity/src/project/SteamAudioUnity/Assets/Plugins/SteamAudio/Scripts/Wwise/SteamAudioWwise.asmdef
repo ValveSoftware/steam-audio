@@ -1,0 +1,10 @@
+{
+    "name": "SteamAudioWwiseUnity",
+    "references": [
+        "SteamAudioUnity",
+        "AK.Wwise.Unity.API",
+        "AK.Wwise.Unity.MonoBehaviour"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": []
+}

@@ -19,6 +19,7 @@
 #include "job_graph.h"
 #include "sampling.h"
 #include "sh.h"
+#include "profiler.h"
 
 namespace ipl {
 
@@ -123,6 +124,8 @@ ProbeVisibilityGraph::ProbeVisibilityGraph(const IScene& scene,
                                            void* callbackUserData)
     : mAdjacent(probes.numProbes())
 {
+    PROFILE_FUNCTION();
+
     auto totalPairs = probes.numProbes() * (probes.numProbes() - 1) / 2;
     auto pairsProcessed = 0;
 
@@ -154,6 +157,8 @@ ProbeVisibilityGraph::ProbeVisibilityGraph(const IScene& scene,
 
 ProbeVisibilityGraph::ProbeVisibilityGraph(const Serialized::VisibilityGraph* serializedObject)
 {
+    PROFILE_FUNCTION();
+
     assert(serializedObject);
     assert(serializedObject->nodes() && serializedObject->nodes()->Length() > 0);
 

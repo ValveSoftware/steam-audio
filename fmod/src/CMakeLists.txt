@@ -125,6 +125,8 @@ elseif (IPL_OS_ANDROID)
     endif()
 elseif (IPL_OS_IOS)
     set(UNITY_FMOD_PLUGIN_DIR ${CMAKE_HOME_DIRECTORY}/../unity/src/project/SteamAudioUnity/Assets/Plugins/FMOD/platforms/ios/lib)
+elseif (IPL_OS_WASM)
+    set(UNITY_FMOD_PLUGIN_DIR ${CMAKE_HOME_DIRECTORY}/../unity/src/project/SteamAudioUnity/Assets/Plugins/FMOD/platforms/html5/lib)
 endif()
 
 if (NOT UNITY_FMOD_PLUGIN_DIR STREQUAL "")

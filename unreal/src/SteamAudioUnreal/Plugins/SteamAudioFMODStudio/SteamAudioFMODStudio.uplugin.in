@@ -19,7 +19,7 @@
 			"Name": "SteamAudioFMODStudio",
 			"Type": "Runtime",
 			"LoadingPhase": "PreDefault",
-			"WhitelistPlatforms": [ "Win32", "Win64", "Linux", "Mac", "Android", "IOS" ]
+			"WhitelistPlatforms": [ "Win64", "Linux", "Mac", "Android", "IOS" ]
 		}
 	],
 	"Plugins": [

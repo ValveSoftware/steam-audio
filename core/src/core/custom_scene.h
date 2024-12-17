@@ -108,7 +108,7 @@ public:
     {}
 
     // TODO: Implement this method.
-    virtual uint32_t version() const
+    virtual uint32_t version() const override
     {
         return 0;
     }

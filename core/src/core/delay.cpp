@@ -44,6 +44,8 @@ void Delay::resize(int delay,
 void Delay::reset()
 {
     mRingBuffer.zero();
+    mCursor = 0;
+    mReadCursor = 0;
 }
 
 void Delay::get(float4_t& out)
@@ -149,6 +151,60 @@ void Delay::put(int numSamples,
         memcpy(&mRingBuffer[0], &in[size1], size2 * sizeof(float));
         mCursor = size2;
     }
+}
+
+
+// --------------------------------------------------------------------------------------------------------------------
+// Allpass
+// --------------------------------------------------------------------------------------------------------------------
+
+Allpass::Allpass()
+    : mB0(0.0f)
+    , mAm(0.0f)
+{
+    reset();
+}
+
+Allpass::Allpass(int delay,
+                 float gain,
+                 int frameSize)
+{
+    resize(delay, gain, frameSize);
+    reset();
+}
+
+void Allpass::resize(int delay,
+                     float gain,
+                     int frameSize)
+{
+    mDelay.resize(delay, frameSize);
+    mB0 = -gain;
+    mAm = -gain;
+}
+
+void Allpass::reset()
+{
+    mDelay.reset();
+    mB0 = 0.0f;
+    mAm = 0.0f;
+}
+
+float Allpass::apply(float x)
+{
+    auto vm = 0.0f;
+    mDelay.get(1, &vm);
+    auto v = x - mAm * vm;
+    mDelay.put(1, &v);
+    return mB0 * v + vm;
+}
+
+float4_t Allpass::apply(float4_t x)
+{
+    auto vm = float4::zero();
+    mDelay.get(vm);
+    auto v = float4::sub(x, float4::mul(float4::set1(mAm), vm));
+    mDelay.put(v);
+    return float4::add(float4::mul(float4::set1(mB0), v), vm);
 }
 
 }

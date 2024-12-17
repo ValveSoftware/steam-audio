@@ -260,29 +260,4 @@ IPLerror CContext::createReflectionMixer(IPLAudioSettings* audioSettings,
     return IPL_STATUS_SUCCESS;
 }
 
-// --------------------------------------------------------------------------------------------------------------------
-// API Functions
-// --------------------------------------------------------------------------------------------------------------------
-
-IPLint32 IPLCALL iplReflectionEffectGetTailSize(IPLReflectionEffect effect)
-{
-    if (!effect)
-        return 0;
-
-    auto _effect = reinterpret_cast<api::CReflectionEffect*>(effect);
-
-    return _effect->getTailSize();
-}
-
-IPLAudioEffectState IPLCALL iplReflectionEffectGetTail(IPLReflectionEffect effect, IPLAudioBuffer* out, IPLReflectionMixer mixer)
-{
-    if (!effect)
-        return IPL_AUDIOEFFECTSTATE_TAILCOMPLETE;
-
-    auto _effect = reinterpret_cast<api::CReflectionEffect*>(effect);
-    auto _mixer = reinterpret_cast<api::CReflectionMixer*>(mixer);
-
-    return _effect->getTail(out, _mixer);
-}
-
 }

@@ -14,7 +14,7 @@
 
 cmake_minimum_required(VERSION 3.17)
 
-project(Phonon VERSION 4.5.3)
+project(Phonon VERSION 4.6.0)
 
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_MODULE_PATH "${CMAKE_HOME_DIRECTORY}/build")
@@ -37,6 +37,8 @@ elseif (APPLE AND (CMAKE_SYSTEM_NAME STREQUAL "iOS" OR CMAKE_SYSTEM_NAME STREQUA
     if (CMAKE_XCODE_ATTRIBUTE_SDKROOT STREQUAL "iphonesimulator")
         set(IPL_IOS_SIMULATOR TRUE)
     endif()
+elseif (CMAKE_SYSTEM_NAME STREQUAL "Emscripten")
+    set(IPL_OS_WASM TRUE)
 endif()
 
 # CPU architecture detection
@@ -69,6 +71,8 @@ elseif (IPL_OS_ANDROID)
     endif()
 elseif (IPL_OS_IOS)
     set(IPL_CPU_ARMV8 TRUE)
+elseif (IPL_OS_WASM)
+    set(IPL_CPU_ARMV7 TRUE)
 endif()
 
 
@@ -102,7 +106,7 @@ if ((IPL_OS_WINDOWS AND (IPL_CPU_X86 OR IPL_CPU_X64)) OR (IPL_OS_LINUX AND (IPL_
 endif()
 
 if (IPL_OS_ANDROID)
-    option(STEAMAUDIO_ENABLE_FFTS "Enable FFTS for FFT operations." ON)
+    option(STEAMAUDIO_ENABLE_FFTS "Enable FFTS for FFT operations." OFF)
 endif()
 
 if (IPL_OS_WINDOWS AND IPL_CPU_X64)
@@ -130,6 +134,9 @@ if (IPL_OS_ANDROID)
 endif()
 if (IPL_OS_IOS)
     add_definitions(-DIPL_OS_IOS)
+endif()
+if (IPL_OS_WASM)
+    add_definitions(-DIPL_OS_WASM)
 endif()
 
 if (IPL_CPU_X86)
@@ -214,6 +221,12 @@ endif()
 # iOS flags
 # todo
 
+# WASM flags
+if (IPL_OS_WASM)
+    add_compile_options(-msimd128 -mfpu=neon)
+    add_link_options(-sALLOW_MEMORY_GROWTH=1 -sSINGLE_FILE=1)
+endif()
+
 
 #
 # DEPENDENCIES
@@ -296,9 +309,10 @@ endif()
 if (STEAMAUDIO_BUILD_ITESTS)
     find_package(GLFW)
     find_package(IMGUI)
+    find_package(IMPLOT)
     find_package(PortAudio)
     find_package(DRWAV)
-    if (NOT GLFW_FOUND OR NOT IMGUI_FOUND OR NOT PortAudio_FOUND OR NOT DRWAV_FOUND)
+    if (NOT GLFW_FOUND OR NOT IMGUI_FOUND OR NOT IMPLOT_FOUND OR NOT PortAudio_FOUND OR NOT DRWAV_FOUND)
         message(STATUS "Disabling interactive tests")
         set(STEAMAUDIO_BUILD_ITESTS OFF)
     endif()
@@ -316,7 +330,15 @@ if (STEAMAUDIO_BUILD_DOCS)
     endif()
 endif()
 
-include(CMakeListsInternal.txt OPTIONAL)
+include(CMakeListsInternal.txt OPTIONAL RESULT_VARIABLE STEAMAUDIO_INTERNAL_MODE)
+if (NOT STEAMAUDIO_INTERNAL_MODE)
+    set(STEAMAUDIO_PROFILING_TOOLS "None;Generic")
+    set(STEAMAUDIO_PROFILING_TOOL "None" CACHE STRING "${STEAMAUDIO_PROFILING_TOOLS}")
+
+    if(NOT STEAMAUDIO_PROFILING_TOOL IN_LIST STEAMAUDIO_PROFILING_TOOLS)
+        message(FATAL_ERROR "Invalid option selected: ${STEAMAUDIO_PROFILING_TOOL}. Must be one of: ${STEAMAUDIO_PROFILING_TOOLS}.")
+    endif()
+endif()
 
 # Flags determined by options
 if (STEAMAUDIO_ENABLE_AVX)
@@ -407,6 +429,7 @@ set(CPACK_INSTALLED_DIRECTORIES
     ${CMAKE_INSTALL_PREFIX}/lib/android-x86 lib/android-x86
     ${CMAKE_INSTALL_PREFIX}/lib/android-x64 lib/android-x64
     ${CMAKE_INSTALL_PREFIX}/lib/ios lib/ios
+    ${CMAKE_INSTALL_PREFIX}/lib/wasm lib/wasm
     ${CMAKE_INSTALL_PREFIX}/doc doc
     ${CMAKE_INSTALL_PREFIX}/symbols/windows-x86 symbols/windows-x86
     ${CMAKE_INSTALL_PREFIX}/symbols/windows-x64 symbols/windows-x64

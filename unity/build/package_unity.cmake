@@ -26,12 +26,14 @@ execute_process(
 	COMMAND_ECHO STDOUT
 )
 
-execute_process(
-	COMMAND cmake -E copy ${CPACK_PACKAGE_DIRECTORY}/SteamAudio.unitypackage ${CPACK_PACKAGE_DIRECTORY}/../bin/unity
-	COMMAND_ECHO STDOUT
-)
+foreach (Unity_PACKAGE IN ITEMS SteamAudio SteamAudioFMODStudio SteamAudioWwise)
+	execute_process(
+		COMMAND cmake -E copy ${CPACK_PACKAGE_DIRECTORY}/${Unity_PACKAGE}.unitypackage ${CPACK_PACKAGE_DIRECTORY}/../bin/unity
+		COMMAND_ECHO STDOUT
+	)
 
-execute_process(
-	COMMAND cmake -E rm ${CPACK_PACKAGE_DIRECTORY}/SteamAudio.unitypackage
-	COMMAND_ECHO STDOUT
-)
+	execute_process(
+		COMMAND cmake -E rm ${CPACK_PACKAGE_DIRECTORY}/${Unity_PACKAGE}.unitypackage
+		COMMAND_ECHO STDOUT
+	)
+endforeach()

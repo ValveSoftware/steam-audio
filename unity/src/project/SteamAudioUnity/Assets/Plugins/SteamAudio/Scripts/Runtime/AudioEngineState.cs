@@ -16,9 +16,7 @@
 #if STEAMAUDIO_ENABLED
 
 using System;
-using System.Reflection;
 using UnityEngine;
-using SteamAudio;
 
 namespace SteamAudio
 {
@@ -47,6 +45,8 @@ namespace SteamAudio
                 return new UnityAudioEngineState();
             case AudioEngineType.FMODStudio:
                 return CreateFMODStudioAudioEngineState();
+            case AudioEngineType.Wwise:
+                return CreateWwiseAudioEngineState();
             default:
                 return null;
             }
@@ -54,8 +54,17 @@ namespace SteamAudio
 
         private static AudioEngineState CreateFMODStudioAudioEngineState()
         {
-            var type = Type.GetType("SteamAudio.FMODStudioAudioEngineState,SteamAudioUnity");
+            var type = Type.GetType("SteamAudio.FMODStudioAudioEngineState,SteamAudioFMODStudio");
             return (type != null) ? (AudioEngineState) Activator.CreateInstance(type) : null;
+        }
+
+        private static AudioEngineState CreateWwiseAudioEngineState()
+        {
+            var type = Type.GetType("SteamAudio.WwiseAudioEngineState,SteamAudioWwiseUnity");
+            if (type == null)
+                return null;
+
+            return (AudioEngineState) Activator.CreateInstance(type);
         }
 
         public virtual void SetHRTFDisabled(bool disabled) 
@@ -76,6 +85,8 @@ namespace SteamAudio
                     return new UnityAudioEngineStateHelpers();
                 case AudioEngineType.FMODStudio:
                     return CreateFMODStudioAudioEngineStateHelpers();
+                case AudioEngineType.Wwise:
+                    return CreateWwiseAudioEngineStateHelpers();
                 default:
                     return null;
             }
@@ -83,8 +94,17 @@ namespace SteamAudio
 
         private static AudioEngineStateHelpers CreateFMODStudioAudioEngineStateHelpers()
         {
-            var type = Type.GetType("SteamAudio.FMODStudioAudioEngineStateHelpers,SteamAudioUnity");
+            var type = Type.GetType("SteamAudio.FMODStudioAudioEngineStateHelpers,SteamAudioFMODStudio");
             return (type != null) ? (AudioEngineStateHelpers) Activator.CreateInstance(type) : null;
+        }
+
+        private static AudioEngineStateHelpers CreateWwiseAudioEngineStateHelpers()
+        {
+            var type = Type.GetType("SteamAudio.WwiseAudioEngineStateHelpers,SteamAudioWwiseUnity");
+            if (type == null)
+                return null;
+
+            return (AudioEngineStateHelpers) Activator.CreateInstance(type);
         }
     }
 }

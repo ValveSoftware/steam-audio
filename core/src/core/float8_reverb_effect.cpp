@@ -76,6 +76,11 @@ void IPL_FLOAT8_ATTR ReverbEffect::apply_float8(const float* reverbTimes,
     for (auto i = 0; i < kNumDelays; ++i)
     {
         mDelayLines[i].get(mFrameSize, mXOld[i]);
+
+        for (auto j = 0; j < Bands::kNumBands; ++j)
+        {
+            mAbsorptive[i][j][mCurrent].apply(mFrameSize, mXOld[i], mXOld[i]);
+        }
     }
 
     float8_t xOld[kNumDelays];
@@ -97,11 +102,6 @@ void IPL_FLOAT8_ATTR ReverbEffect::apply_float8(const float* reverbTimes,
 
     for (auto i = 0; i < kNumDelays; ++i)
     {
-        for (auto j = 0; j < Bands::kNumBands; ++j)
-        {
-            mAbsorptive[i][j][mCurrent].apply(mFrameSize, mXNew[i], mXNew[i]);
-        }
-
         ArrayMath::add(mFrameSize, mXNew[i], in, mXNew[i]);
 
         mDelayLines[i].put(mFrameSize, mXNew[i]);
@@ -114,24 +114,16 @@ void IPL_FLOAT8_ATTR ReverbEffect::apply_float8(const float* reverbTimes,
 
     ArrayMath::scale(mFrameSize, mXOld[0], 1.0f / kNumDelays, mXOld[0]);
 
-    float8_t xm, ym;
-    auto g = float8::set1(0.25f);
     for (auto i = 0; i < mFrameSize; i += 8)
     {
-        auto v = float8::loadu(&mXOld[0][i]);
+        xOld[0] = float8::loadu(&mXOld[0][i]);
 
-        for (auto k = 0; k < 2; ++k)
+        for (auto j = 0; j < kNumAllpasses; ++j)
         {
-            auto x = v;
-            mAllpassX[0][k].get(xm);
-            mAllpassY[1][k].get(ym);
-            auto y = float8::sub(float8::add(xm, float8::mul(g, ym)), float8::mul(g, x));
-            mAllpassX[0][k].put(x);
-            mAllpassY[1][k].put(y);
-            v = y;
+            xOld[0] = mAllpass[j].apply(xOld[0]);
         }
 
-        float8::storeu(&out[i], v);
+        float8::storeu(&out[i], xOld[0]);
     }
 
     for (auto i = 0; i < Bands::kNumBands; ++i)
@@ -147,6 +139,11 @@ void IPL_FLOAT8_ATTR ReverbEffect::tail_float8(float* out)
     for (auto i = 0; i < kNumDelays; ++i)
     {
         mDelayLines[i].get(mFrameSize, mXOld[i]);
+
+        for (auto j = 0; j < Bands::kNumBands; ++j)
+        {
+            mAbsorptive[i][j][mCurrent].apply(mFrameSize, mXOld[i], mXOld[i]);
+        }
     }
 
     float8_t xOld[kNumDelays];
@@ -168,11 +165,6 @@ void IPL_FLOAT8_ATTR ReverbEffect::tail_float8(float* out)
 
     for (auto i = 0; i < kNumDelays; ++i)
     {
-        for (auto j = 0; j < Bands::kNumBands; ++j)
-        {
-            mAbsorptive[i][j][mCurrent].apply(mFrameSize, mXNew[i], mXNew[i]);
-        }
-
         mDelayLines[i].put(mFrameSize, mXNew[i]);
     }
 
@@ -183,24 +175,16 @@ void IPL_FLOAT8_ATTR ReverbEffect::tail_float8(float* out)
 
     ArrayMath::scale(mFrameSize, mXOld[0], 1.0f / kNumDelays, mXOld[0]);
 
-    float8_t xm, ym;
-    auto g = float8::set1(0.25f);
     for (auto i = 0; i < mFrameSize; i += 8)
     {
-        auto v = float8::loadu(&mXOld[0][i]);
+        xOld[0] = float8::loadu(&mXOld[0][i]);
 
-        for (auto k = 0; k < 2; ++k)
+        for (auto j = 0; j < kNumAllpasses; ++j)
         {
-            auto x = v;
-            mAllpassX[0][k].get(xm);
-            mAllpassY[1][k].get(ym);
-            auto y = float8::sub(float8::add(xm, float8::mul(g, ym)), float8::mul(g, x));
-            mAllpassX[0][k].put(x);
-            mAllpassY[1][k].put(y);
-            v = y;
+            xOld[0] = mAllpass[j].apply(xOld[0]);
         }
 
-        float8::storeu(&out[i], v);
+        float8::storeu(&out[i], xOld[0]);
     }
 
     for (auto i = 0; i < Bands::kNumBands; ++i)

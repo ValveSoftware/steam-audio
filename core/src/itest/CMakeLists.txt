@@ -57,7 +57,7 @@ add_executable(phonon_itest
 	itest_energycurves.cpp
 )
 
-target_link_libraries(phonon_itest PRIVATE core hrtf GLFW::GLFW IMGUI::IMGUI PortAudio::PortAudio DRWAV::DRWAV)
+target_link_libraries(phonon_itest PRIVATE core hrtf GLFW::GLFW IMGUI::IMGUI IMPLOT::IMPLOT PortAudio::PortAudio DRWAV::DRWAV)
 
 target_compile_definitions(phonon_itest PRIVATE STEAMAUDIO_BUILDING_CORE)
 

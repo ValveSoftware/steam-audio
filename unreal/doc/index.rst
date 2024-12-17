@@ -37,4 +37,6 @@ This document describes the Steam Audio Unreal Engine integration, which lets yo
 
 If you are using FMOD Studio as your audio middleware, refer to the documentation for the Steam Audio FMOD Studio integration.
 
+If you are using Wwise as your audio middleware, refer to the documentation for the Steam Audio Wwise integration.
+
 If you are using some other third-party audio middleware, refer to the documentation for the Steam Audio SDK for more information on how to integrate Steam Audio with your audio middleware.

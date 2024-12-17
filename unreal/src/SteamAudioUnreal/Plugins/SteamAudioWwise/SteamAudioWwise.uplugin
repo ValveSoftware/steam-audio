@@ -1,0 +1,35 @@
+{
+	"FileVersion": 3,
+	"Version": 1,
+	"VersionName": "4.6.0",
+	"FriendlyName": "Steam Audio Wwise Support",
+	"Description": "Integrates the Steam Audio plugin for Unreal and the Steam Audio plugin for Wwise.",
+	"Category": "Audio",
+	"CreatedBy": "Valve Corporation",
+	"CreatedByURL": "https://valvesoftware.github.io/steam-audio",
+	"DocsURL": "https://valvesoftware.github.io/steam-audio/doc/unreal/index.html",
+	"MarketplaceURL": "",
+	"SupportURL": "https://steamcommunity.com/app/596420",
+	"EnabledByDefault": false,
+	"CanContainContent": true,
+	"IsBetaVersion": false,
+	"Installed": false,
+	"Modules": [
+		{
+			"Name": "SteamAudioWwise",
+			"Type": "Runtime",
+			"LoadingPhase": "PreDefault",
+			"WhitelistPlatforms": [ "Win64", "Linux", "Mac", "Android", "IOS" ]
+		}
+	],
+	"Plugins": [
+		{
+			"Name": "Wwise",
+			"Enabled": true
+		},
+		{
+			"Name": "SteamAudio",
+			"Enabled": true
+		}
+	]
+}

@@ -64,7 +64,8 @@ public:
                    Vector3f* avgDirection = nullptr,
                    float* distanceRatio = nullptr,
                    ValidationRayVisualizationCallback validationRayVisualization = nullptr,
-                   void* userData = nullptr);
+                   void* userData = nullptr,
+                   bool forceDirectOcclusion = false);
 
     SoundPath findShortestPathFromSourceProbeToListenerProbe(const IScene& scene, const ProbeBatch& probes,
         int sourceProbeIndex, int listenerProbeIndex, const BakedPathData& bakedPathData, float radius, float threshold,

@@ -77,6 +77,9 @@ SimulationData::SimulationData(bool enableIndirect,
             reflectionState.impulseResponse = ImpulseResponseFactory::create(indirectType, maxDuration, maxOrder, samplingRate, openCL);
             reflectionState.impulseResponse->reset();
 
+            reflectionState.impulseResponseCopy = ImpulseResponseFactory::create(indirectType, maxDuration, maxOrder, samplingRate, openCL);
+            reflectionState.impulseResponseCopy->reset();
+
             auto numChannels = SphericalHarmonics::numCoeffsForOrder(maxOrder);
             auto irSize = static_cast<int>(ceilf(maxDuration * samplingRate));
 
@@ -92,6 +95,10 @@ SimulationData::SimulationData(bool enableIndirect,
             reflectionOutputs.numChannels = numChannels;
             reflectionOutputs.numSamples = irSize;
         }
+
+        reflectionOutputs.reverb.reverbTimes[0] = .0f;
+        reflectionOutputs.reverb.reverbTimes[1] = .0f;
+        reflectionOutputs.reverb.reverbTimes[2] = .0f;
 
         if (indirectType == IndirectEffectType::Hybrid)
         {

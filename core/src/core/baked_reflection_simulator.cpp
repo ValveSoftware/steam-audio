@@ -15,6 +15,7 @@
 //
 
 #include "baked_reflection_simulator.h"
+#include "profiler.h"
 
 namespace ipl {
 
@@ -22,61 +23,66 @@ namespace ipl {
 // BakedReflectionSimulator
 // ---------------------------------------------------------------------------------------------------------------------
 
+void BakedReflectionSimulator::findUniqueProbeBatches(const ProbeNeighborhood& neighborhood, unordered_set<const ProbeBatch*>& batches)
+{
+    batches.clear();
+
+    for (auto i = 0; i < neighborhood.numProbes(); ++i)
+    {
+        if (!neighborhood.batches[i])
+            continue;
+
+        if (batches.find(neighborhood.batches[i]) != batches.end())
+            continue;
+
+        batches.insert(neighborhood.batches[i]);
+    }
+}
+
 void BakedReflectionSimulator::lookupEnergyField(const BakedDataIdentifier& identifier,
                                                  const ProbeNeighborhood& probeNeighborhood,
+                                                 const unordered_set<const ProbeBatch*>& uniqueBatches,
                                                  EnergyField& energyField)
 {
+    PROFILE_FUNCTION();
+
     assert(identifier.type == BakedDataType::Reflections);
 
     if (probeNeighborhood.hasValidProbes())
     {
         energyField.reset();
 
-        for (auto i = 0; i < probeNeighborhood.numProbes(); ++i)
+        for (const auto* batch : uniqueBatches)
         {
-            if (probeNeighborhood.batches[i] &&
-                probeNeighborhood.probeIndices[i] >= 0 &&
-                probeNeighborhood.weights[i] > 0.0f &&
-                probeNeighborhood.batches[i]->hasData(identifier))
-            {
-                auto& data = static_cast<BakedReflectionsData&>((*probeNeighborhood.batches[i])[identifier]);
-                const auto* probeEnergyField = data.lookupEnergyField(probeNeighborhood.probeIndices[i]);
-                if (probeEnergyField)
-                {
-                    EnergyField::scaleAccumulate(*probeEnergyField, probeNeighborhood.weights[i], energyField);
-                }
-            }
+            if (!batch->hasData(identifier))
+                continue;
+
+            auto& data = (IBakedReflectionsLookup&) ((*batch)[identifier]);
+            data.evaluateEnergyField(probeNeighborhood, energyField);
         }
     }
 }
 
 void BakedReflectionSimulator::lookupReverb(const BakedDataIdentifier& identifier,
                                             const ProbeNeighborhood& probeNeighborhood,
+                                            const unordered_set<const ProbeBatch*>& uniqueBatches,
                                             Reverb& reverb)
 {
+    PROFILE_FUNCTION();
+        
     assert(identifier.type == BakedDataType::Reflections);
 
     if (probeNeighborhood.hasValidProbes())
     {
         memset(&reverb, 0, sizeof(Reverb));
 
-        for (auto i = 0; i < probeNeighborhood.numProbes(); ++i)
+        for (const auto* batch : uniqueBatches)
         {
-            if (probeNeighborhood.batches[i] &&
-                probeNeighborhood.probeIndices[i] >= 0 &&
-                probeNeighborhood.weights[i] > 0.0f &&
-                probeNeighborhood.batches[i]->hasData(identifier))
-            {
-                auto& data = static_cast<BakedReflectionsData&>((*probeNeighborhood.batches[i])[identifier]);
-                const auto* probeReverb = data.lookupReverb(probeNeighborhood.probeIndices[i]);
-                if (probeReverb)
-                {
-                    for (auto j = 0; j < Bands::kNumBands; ++j)
-                    {
-                        reverb.reverbTimes[j] += probeNeighborhood.weights[i] * probeReverb->reverbTimes[j];
-                    }
-                }
-            }
+            if (!batch->hasData(identifier))
+                continue;
+
+            auto& data = (IBakedReflectionsLookup&) ((*batch)[identifier]);
+            data.evaluateReverb(probeNeighborhood, reverb);
         }
     }
 }

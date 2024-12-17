@@ -45,3 +45,5 @@ If you are using Unity as your game engine, refer to the documentation for the S
 If you are using Unreal Engine 4 as your game engine, refer to the documentation for the Steam Audio Unreal Engine integration.
 
 If you are using FMOD Studio as your audio middleware, refer to the documentation for the Steam Audio FMOD Studio integration.
+
+If you are using Wwise as your audio middleware, refer to the documentation for the Steam Audio Wwise integration.

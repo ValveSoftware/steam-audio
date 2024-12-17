@@ -58,6 +58,7 @@ private:
     Array<float> mTemp;
     float mPrevGains[Bands::kNumBands];
     int mCurrent;
+    bool mFirstFrame;
 
     void setFilterGains(int index,
                         const float* gains);

@@ -99,7 +99,6 @@ public:
                                int threadIndex = 0) const;
 
 private:
-    Array<float, 2> mDistances; // L1 distances between every pair of probes. Used as A* heuristic.
     Array<int, 2> mParents; // Per-thread array indicating the predecessor of each node, used during path finding.
     Array<float, 2> mCosts; // Per-thread array indicating the cost of each node, used during path finding.
     mutable vector<priority_queue<PriorityQueueEntry>> mPriorityQueue; // Per-thread priority queues for use during path finding.

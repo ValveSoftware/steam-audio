@@ -140,28 +140,4 @@ IPLerror CContext::createAmbisonicsRotationEffect(IPLAudioSettings* audioSetting
     return IPL_STATUS_SUCCESS;
 }
 
-// --------------------------------------------------------------------------------------------------------------------
-// API Functions
-// --------------------------------------------------------------------------------------------------------------------
-
-IPLint32 IPLCALL iplAmbisonicsRotationEffectGetTailSize(IPLAmbisonicsRotationEffect effect)
-{
-    if (!effect)
-        return 0;
-
-    auto _effect = reinterpret_cast<api::CAmbisonicsRotationEffect*>(effect);
-
-    return _effect->getTailSize();
-}
-
-IPLAudioEffectState IPLCALL iplAmbisonicsRotationEffectGetTail(IPLAmbisonicsRotationEffect effect, IPLAudioBuffer* out)
-{
-    if (!effect)
-        return IPL_AUDIOEFFECTSTATE_TAILCOMPLETE;
-
-    auto _effect = reinterpret_cast<api::CAmbisonicsRotationEffect*>(effect);
-
-    return _effect->getTail(out);
-}
-
 }

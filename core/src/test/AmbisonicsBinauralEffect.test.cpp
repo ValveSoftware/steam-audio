@@ -104,7 +104,7 @@ TEST_CASE("Applying ambisonics binaural effects using default HRTF does not prod
     REQUIRE(ValidateAmbisonicsBinauralEffect(hrtfParams, 1024, 3));
 }
 
-#if !defined(IPL_OS_IOS)
+#if !defined(IPL_OS_IOS) && !defined(IPL_OS_WASM)
 
 TEST_CASE("Applying ambisonics binaural effects using SOFA HRTF does not produce NANs. D1.", "[AmbisonicsBinauralEffect]")
 {

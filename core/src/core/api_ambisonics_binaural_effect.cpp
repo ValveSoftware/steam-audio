@@ -150,28 +150,4 @@ IPLerror CContext::createAmbisonicsBinauralEffect(IPLAudioSettings* audioSetting
     return IPL_STATUS_SUCCESS;
 }
 
-// --------------------------------------------------------------------------------------------------------------------
-// API Functions
-// --------------------------------------------------------------------------------------------------------------------
-
-IPLint32 IPLCALL iplAmbisonicsBinauralEffectGetTailSize(IPLAmbisonicsBinauralEffect effect)
-{
-    if (!effect)
-        return 0;
-
-    auto _effect = reinterpret_cast<api::CAmbisonicsBinauralEffect*>(effect);
-
-    return _effect->getTailSize();
-}
-
-IPLAudioEffectState IPLCALL iplAmbisonicsBinauralEffectGetTail(IPLAmbisonicsBinauralEffect effect, IPLAudioBuffer* out)
-{
-    if (!effect)
-        return IPL_AUDIOEFFECTSTATE_TAILCOMPLETE;
-
-    auto _effect = reinterpret_cast<api::CAmbisonicsBinauralEffect*>(effect);
-
-    return _effect->getTail(out);
-}
-
 }

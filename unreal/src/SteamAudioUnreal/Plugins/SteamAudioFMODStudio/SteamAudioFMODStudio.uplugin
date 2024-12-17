@@ -1,7 +1,7 @@
 {
 	"FileVersion": 3,
 	"Version": 1,
-	"VersionName": "4.5.3",
+	"VersionName": "4.6.0",
 	"FriendlyName": "Steam Audio FMOD Studio Support",
 	"Description": "Integrates the Steam Audio plugin for Unreal and the Steam Audio plugin for FMOD Studio.",
 	"Category": "Audio",
@@ -19,7 +19,7 @@
 			"Name": "SteamAudioFMODStudio",
 			"Type": "Runtime",
 			"LoadingPhase": "PreDefault",
-			"WhitelistPlatforms": [ "Win32", "Win64", "Linux", "Mac", "Android", "IOS" ]
+			"WhitelistPlatforms": [ "Win64", "Linux", "Mac", "Android", "IOS" ]
 		}
 	],
 	"Plugins": [

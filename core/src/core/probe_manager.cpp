@@ -15,6 +15,7 @@
 //
 
 #include "probe_manager.h"
+#include "profiler.h"
 
 namespace ipl {
 
@@ -50,6 +51,8 @@ void ProbeNeighborhood::reset()
 void ProbeNeighborhood::checkOcclusion(const IScene& scene,
                                        const Vector3f& point)
 {
+    PROFILE_FUNCTION();
+
     int nProbes = numProbes();
     int nValidProbes = numValidProbes();
 
@@ -101,8 +104,22 @@ int ProbeNeighborhood::findNearest(const Vector3f& point) const
     return minIndex;
 }
 
+void ProbeNeighborhood::getProbe(int neighborProbeIndex, int* probeIndex, float* weight)
+{
+    if (neighborProbeIndex < 0 || neighborProbeIndex >= weights.size(0))
+        return;
+
+    if (probeIndex)
+        *probeIndex = probeIndices[neighborProbeIndex];
+
+    if (weight)
+        *weight = weights[neighborProbeIndex];
+}
+
 void ProbeNeighborhood::calcWeights(const Vector3f& point)
 {
+    PROFILE_FUNCTION();
+
     float totalWeight = 0.0f;
     for (auto i = 0u; i < weights.size(0); ++i)
     {
@@ -146,6 +163,8 @@ void ProbeManager::commit()
 void ProbeManager::getInfluencingProbes(const Vector3f& point,
                                         ProbeNeighborhood& neighborhood)
 {
+    PROFILE_FUNCTION();
+
     auto numProbes = static_cast<int>(mProbeBatches[0].size() * ProbeNeighborhood::kMaxProbesPerBatch);
     if (neighborhood.numProbes() != numProbes)
     {
