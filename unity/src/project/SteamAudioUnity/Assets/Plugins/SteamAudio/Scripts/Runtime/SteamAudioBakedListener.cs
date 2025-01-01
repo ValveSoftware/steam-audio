@@ -154,5 +154,5 @@ namespace SteamAudio
 #endif
         }
 #endif
-        }
+    }
 }
