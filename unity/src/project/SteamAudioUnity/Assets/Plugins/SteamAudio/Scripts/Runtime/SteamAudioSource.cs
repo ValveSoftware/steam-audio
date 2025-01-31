@@ -316,7 +316,7 @@ namespace SteamAudio
             inputs.visRadius = mSettings.bakingVisibilityRadius;
             inputs.visThreshold = mSettings.bakingVisibilityThreshold;
             inputs.visRange = mSettings.bakingVisibilityRange;
-            inputs.pathingOrder = mSettings.bakingAmbisonicOrder;
+            inputs.pathingOrder = mSettings.realTimeAmbisonicOrder;
             inputs.enableValidation = pathValidation ? Bool.True : Bool.False;
             inputs.findAlternatePaths = findAlternatePaths ? Bool.True : Bool.False;
 
