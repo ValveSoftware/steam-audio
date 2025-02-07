@@ -21,16 +21,16 @@
 // Constants
 // --------------------------------------------------------------------------------------------------------------------
 
-#define PI                          3.14159f
-#define SOURCE_RADIUS               0.1f
-#define LISTENER_RADIUS             0.1f
-#define SPEED_OF_SOUND              340.0f
-#define RAY_SURFACE_OFFSET          1e-2f
-#define SPECULAR_EXPONENT           1e+2f
-#define NUM_BANDS                   3
-#define NUM_BINS                    256
-#define BIN_DURATION                0.01f
-#define NUM_LOCAL_HISTOGRAMS        2                     // Number of copies for scrambling (tunable)
+#define PI                          3.14159f              // Mathematical constant Pi
+#define SOURCE_RADIUS               0.1f                  // Radius of the sound source sphere (in meters)
+#define LISTENER_RADIUS             0.1f                  // Radius of the listener sphere (in meters)
+#define SPEED_OF_SOUND              340.0f                // Speed of sound in air (in meters per second)
+#define RAY_SURFACE_OFFSET          1e-2f                 // Small offset to prevent ray self-intersection (meters)
+#define SPECULAR_EXPONENT           1e+2f                 // Exponent for specular reflection in Phong shading model (unitless, higher value = more specular)
+#define NUM_BANDS                   3                     // Number of frequency bands (e.g., Low, Mid, High)
+#define NUM_BINS                    256                   // Number of time bins used for energy histograms
+#define BIN_DURATION                0.01f                 // Duration of each time bin (in seconds)
+#define NUM_LOCAL_HISTOGRAMS        2                     // Number of local histograms per workgroup (for atomic contention reduction, tunable)
 
 // --------------------------------------------------------------------------------------------------------------------
 // CoordinateSpace
