@@ -17,6 +17,7 @@
 #pragma once
 
 #include "memory_allocator.h"
+#include <chrono>
 
 namespace ipl {
 
