@@ -59,7 +59,7 @@ AudioEffectState DelayEffect::apply(const DelayEffectParams& params,
     }
 
     auto curDelayInSamples = mFirstFrame ? params.delayInSamples : mPrevDelayInSamples;
-    auto dDelayInSamples = (params.delayInSamples - mPrevDelayInSamples) / mFrameSize;
+    auto dDelayInSamples = mFirstFrame ? 0.0f : (params.delayInSamples - mPrevDelayInSamples) / mFrameSize;
 
     for (auto i = 0; i < mFrameSize; ++i)
     {
