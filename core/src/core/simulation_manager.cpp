@@ -531,9 +531,7 @@ void SimulationManager::estimateHybridReverb()
 
         mHybridReverbEstimator->estimate(source->reflectionState.accumEnergyField.get(), source->reflectionOutputs.reverb, *source->reflectionState.impulseResponse,
                                          source->reflectionInputs.transitionTime, source->reflectionInputs.overlapFraction,
-                                         mSharedData->reflection.order, source->reflectionOutputs.hybridEQ);
-
-        source->reflectionOutputs.hybridDelay = static_cast<int>(ceilf((1.0f - source->reflectionInputs.overlapFraction) * source->reflectionInputs.transitionTime * mSamplingRate));
+                                         mSharedData->reflection.order, source->reflectionOutputs.hybridEQ, source->reflectionOutputs.hybridDelay);
     }
 }
 

@@ -42,7 +42,8 @@ public:
                   float transitionTime,
                   float overlapFraction,
                   int order,
-                  float* eqCoeffs);
+                  float* eqCoeffs,
+                  int& delay);
 
 private:
     float mMaxDuration;
@@ -54,6 +55,8 @@ private:
     Array<float, 2> mTempFrame;
     Array<float> mReverbIR;
     IIRFilterer mBandpassFilters[Bands::kNumBands];
+
+    int estimateDelay(float transitionTime, float overlapFraction);
 
     void calcReverbIR(int numSamples,
                       const float* eqCoeffs,

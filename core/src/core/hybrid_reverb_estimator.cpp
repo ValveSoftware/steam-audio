@@ -107,11 +107,20 @@ void HybridReverbEstimator::estimate(const EnergyField* energyField,
                                      float transitionTime,
                                      float overlapFraction,
                                      int order,
-                                     float* eqCoeffs)
+                                     float* eqCoeffs,
+                                     int& delay)
 {
     PROFILE_FUNCTION();
 
     auto numChannels = SphericalHarmonics::numCoeffsForOrder(order);
+
+    // If the transition time is greater than the length of the IR, clamp it.
+    auto transitionTimeInSamples = static_cast<int>(ceilf(transitionTime * mSamplingRate));
+    if (transitionTimeInSamples >= impulseResponse.numSamples())
+    {
+        transitionTimeInSamples = impulseResponse.numSamples() - 1;
+        transitionTime = static_cast<float>(transitionTimeInSamples) / mSamplingRate;
+    }
 
     if (energyField)
     {
@@ -126,7 +135,7 @@ void HybridReverbEstimator::estimate(const EnergyField* energyField,
         estimateHybridEQFromIR(impulseResponse, transitionTime, overlapFraction, mSamplingRate, mReverbIR.data(), eqCoeffs);
     }
 
-    auto transitionTimeInSamples = static_cast<int>(ceilf(transitionTime * mSamplingRate));
+    transitionTimeInSamples = static_cast<int>(ceilf(transitionTime * mSamplingRate));
     auto rampStart = static_cast<int>((1.0f - overlapFraction) * transitionTimeInSamples);
     auto rampEnd = transitionTimeInSamples;
     auto numTransitionSamples = rampEnd - rampStart;
@@ -155,6 +164,11 @@ void HybridReverbEstimator::estimate(const EnergyField* energyField,
             impulseResponse[i][j] = 0.0f;
         }
     }
+}
+
+int HybridReverbEstimator::estimateDelay(float transitionTime, float overlapFraction)
+{
+    return std::max(0, static_cast<int>(floorf((1.0f - overlapFraction) * transitionTime * mSamplingRate)));
 }
 
 void HybridReverbEstimator::calcReverbIR(int numSamples,
