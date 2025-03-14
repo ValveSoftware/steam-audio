@@ -16,6 +16,7 @@
 
 #include "SteamAudioReverb.h"
 #include "Components/AudioComponent.h"
+#include "GameFramework/Actor.h"
 #include "HAL/UnrealMemory.h"
 #include "Sound/SoundSubmix.h"
 #include "SteamAudioCommon.h"
@@ -241,8 +242,13 @@ void FSteamAudioReverbPlugin::OnInitSource(const uint32 SourceId, const FName& A
         }
     }
 
-    if (!Source.InBuffer.data)
+    if (!Source.InBuffer.data || Source.InBuffer.numChannels != NumChannels)
     {
+        if (Source.InBuffer.data)
+        {
+            iplAudioBufferFree(Context, &Source.InBuffer);
+        }
+
         IPLerror Status = iplAudioBufferAllocate(Context, NumChannels, AudioSettings.frameSize, &Source.InBuffer);
         if (Status != IPL_STATUS_SUCCESS)
         {
@@ -273,8 +279,13 @@ void FSteamAudioReverbPlugin::OnInitSource(const uint32 SourceId, const FName& A
         }
     }
 
-    if (!Source.OutBuffer.data)
+    if (!Source.OutBuffer.data || Source.OutBuffer.numChannels != NumChannels)
     {
+        if (Source.OutBuffer.data)
+        {
+            iplAudioBufferFree(Context, &Source.OutBuffer);
+        }
+
         IPLerror Status = iplAudioBufferAllocate(Context, NumChannels, AudioSettings.frameSize, &Source.OutBuffer);
         if (Status != IPL_STATUS_SUCCESS)
         {
