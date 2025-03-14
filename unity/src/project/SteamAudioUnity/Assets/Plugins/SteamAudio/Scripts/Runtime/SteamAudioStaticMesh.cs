@@ -14,6 +14,8 @@
 // limitations under the License.
 //
 
+using System.Threading.Tasks;
+
 using UnityEngine;
 
 namespace SteamAudio
@@ -26,6 +28,7 @@ namespace SteamAudio
 
 #if STEAMAUDIO_ENABLED
         StaticMesh mStaticMesh = null;
+        Task<StaticMesh> mTask = null;
 
         void Start()
         {
@@ -41,6 +44,10 @@ namespace SteamAudio
             if (mStaticMesh != null)
             {
                 mStaticMesh.Release();
+            }
+            else if (mTask != null)
+            {
+                mTask.ContinueWith(static e => e.Result.Release());
             }
         }
 
@@ -66,12 +73,19 @@ namespace SteamAudio
         {
             if (mStaticMesh == null && asset != null)
             {
-                mStaticMesh = new StaticMesh(SteamAudioManager.Context, SteamAudioManager.CurrentScene, asset);
-
-                if (enabled)
+                if (mTask == null)
                 {
-                    mStaticMesh.AddToScene(SteamAudioManager.CurrentScene);
-                    SteamAudioManager.ScheduleCommitScene();
+                    mTask = Task.Run(() => new StaticMesh(SteamAudioManager.Context, SteamAudioManager.CurrentScene, asset));
+                }
+                else if (mTask.IsCompleted)
+                {
+                    mStaticMesh = mTask.Result;
+                    mTask = null;
+                    if (enabled)
+                    {
+                        mStaticMesh.AddToScene(SteamAudioManager.CurrentScene);
+                        SteamAudioManager.ScheduleCommitScene();
+                    }
                 }
             }
         }
