@@ -16,6 +16,7 @@
 
 #include "SteamAudioOcclusion.h"
 #include "Components/AudioComponent.h"
+#include "GameFramework/Actor.h"
 #include "HAL/UnrealMemory.h"
 #include "SteamAudioCommon.h"
 #include "SteamAudioManager.h"
@@ -40,6 +41,7 @@ FSteamAudioOcclusionSource::FSteamAudioOcclusionSource()
     , DirectEffect(nullptr)
     , InBuffer()
     , OutBuffer()
+    , PrevNumChannels(0)
 {}
 
 FSteamAudioOcclusionSource::~FSteamAudioOcclusionSource()
@@ -117,8 +119,13 @@ void FSteamAudioOcclusionPlugin::OnInitSource(const uint32 SourceId, const FName
 
     IPLContext Context = FSteamAudioModule::GetManager().GetContext();
 
-    if (!Source.DirectEffect)
+    if (!Source.DirectEffect || Source.PrevNumChannels != NumChannels)
     {
+        if (Source.DirectEffect)
+        {
+            iplDirectEffectRelease(&Source.DirectEffect);
+        }
+
         IPLDirectEffectSettings DirectSettings{};
         DirectSettings.numChannels = NumChannels;
 
@@ -129,8 +136,13 @@ void FSteamAudioOcclusionPlugin::OnInitSource(const uint32 SourceId, const FName
         }
     }
 
-    if (!Source.InBuffer.data)
+    if (!Source.InBuffer.data || Source.InBuffer.numChannels != NumChannels)
     {
+        if (Source.InBuffer.data)
+        {
+            iplAudioBufferFree(Context, &Source.InBuffer);
+        }
+
         IPLerror Status = iplAudioBufferAllocate(Context, NumChannels, AudioSettings.frameSize, &Source.InBuffer);
         if (Status != IPL_STATUS_SUCCESS)
         {
@@ -138,14 +150,21 @@ void FSteamAudioOcclusionPlugin::OnInitSource(const uint32 SourceId, const FName
         }
     }
 
-    if (!Source.OutBuffer.data)
+    if (!Source.OutBuffer.data || Source.OutBuffer.numChannels != NumChannels)
     {
+        if (Source.OutBuffer.data)
+        {
+            iplAudioBufferFree(Context, &Source.OutBuffer);
+        }
+
         IPLerror Status = iplAudioBufferAllocate(Context, NumChannels, AudioSettings.frameSize, &Source.OutBuffer);
         if (Status != IPL_STATUS_SUCCESS)
         {
             UE_LOG(LogSteamAudio, Error, TEXT("Unable to create output buffer for occlusion effect. [%d]"), Status);
         }
     }
+
+    Source.PrevNumChannels = NumChannels;
 
     Source.Reset();
 }

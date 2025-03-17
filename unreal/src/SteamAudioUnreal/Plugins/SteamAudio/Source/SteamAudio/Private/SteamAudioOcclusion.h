@@ -51,6 +51,8 @@ struct FSteamAudioOcclusionSource
     /** Deinterleaved output buffer. */
     IPLAudioBuffer OutBuffer;
 
+    int PrevNumChannels;
+
     void Reset();
 
     void ClearBuffers();
