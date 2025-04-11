@@ -1,101 +1,50 @@
 
 
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
-  <meta charset="utf-8" />
-  
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  
   <title>Panning Effect &mdash; Steam Audio C API  documentation</title>
-  
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/steamaudio.css?v=b5aaeb06" />
 
   
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/steamaudio.css" type="text/css" />
-
-  
-  
-
-  
-  
-
-  
-
-  
-  <!--[if lt IE 9]>
-    <script src="_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/doctools.js"></script>
-    
-    <script type="text/javascript" src="_static/js/theme.js"></script>
-
-    
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=7f41d439"></script>
+      <script src="_static/doctools.js?v=9a2dae69"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Binaural Effect" href="binaural-effect.html" />
     <link rel="prev" title="HRTF" href="hrtf.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
 
           
-            <a href="index.html">
           
-
-          
+          <a href="index.html">
             
-            <img src="_static/steam-audio-logo.png" class="logo" alt="Logo"/>
-          
+              <img src="_static/steam-audio-logo.png" class="logo" alt="Logo"/>
           </a>
-
-          
-            
-            
-              <div class="version">
-                4.6.0
-              </div>
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
-              <p class="caption"><span class="caption-text">Steam Audio SDK</span></p>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Steam Audio SDK</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="guide.html">Programmer’s Guide</a></li>
@@ -114,9 +63,23 @@
 <li class="toctree-l2"><a class="reference internal" href="audio-buffers.html">Audio Buffers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="hrtf.html">HRTF</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Panning Effect</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#typedefs">Typedefs</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#functions">Functions</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#structures">Structures</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#typedefs">Typedefs</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv416IPLPanningEffect"><code class="docutils literal notranslate"><span class="pre">IPLPanningEffect</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#functions">Functions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv422iplPanningEffectCreate10IPLContextP16IPLAudioSettingsP24IPLPanningEffectSettingsP16IPLPanningEffect"><code class="docutils literal notranslate"><span class="pre">iplPanningEffectCreate()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv422iplPanningEffectRetain16IPLPanningEffect"><code class="docutils literal notranslate"><span class="pre">iplPanningEffectRetain()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv423iplPanningEffectReleaseP16IPLPanningEffect"><code class="docutils literal notranslate"><span class="pre">iplPanningEffectRelease()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv421iplPanningEffectReset16IPLPanningEffect"><code class="docutils literal notranslate"><span class="pre">iplPanningEffectReset()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv421iplPanningEffectApply16IPLPanningEffectP22IPLPanningEffectParamsP14IPLAudioBufferP14IPLAudioBuffer"><code class="docutils literal notranslate"><span class="pre">iplPanningEffectApply()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#structures">Structures</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv424IPLPanningEffectSettings"><code class="docutils literal notranslate"><span class="pre">IPLPanningEffectSettings</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv422IPLPanningEffectParams"><code class="docutils literal notranslate"><span class="pre">IPLPanningEffectParams</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="binaural-effect.html">Binaural Effect</a></li>
@@ -136,90 +99,49 @@
 </li>
 </ul>
 
-            
-          
         </div>
-        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="index.html">Steam Audio C API</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
-      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-        
-          <li><a href="reference.html">API Reference</a> &raquo;</li>
-        
-      <li>Panning Effect</li>
-    
-    
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="reference.html">API Reference</a></li>
+      <li class="breadcrumb-item active">Panning Effect</li>
       <li class="wy-breadcrumbs-aside">
-        
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
-  <div class="section" id="panning-effect">
-<h1>Panning Effect<a class="headerlink" href="#panning-effect" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="typedefs">
-<h2>Typedefs<a class="headerlink" href="#typedefs" title="Permalink to this headline">¶</a></h2>
+             
+  <section id="panning-effect">
+<h1>Panning Effect<a class="headerlink" href="#panning-effect" title="Link to this heading"></a></h1>
+<section id="typedefs">
+<h2>Typedefs<a class="headerlink" href="#typedefs" title="Link to this heading"></a></h2>
 <dl class="cpp type">
 <dt class="sig sig-object cpp" id="_CPPv416IPLPanningEffect">
-<span id="_CPPv316IPLPanningEffect"></span><span id="_CPPv216IPLPanningEffect"></span><span id="IPLPanningEffect"></span><span class="target" id="group__panningeffect_1gac0039ccdc1feec683f55c033f116547a"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="n"><span class="pre">_IPLPanningEffect_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">IPLPanningEffect</span></span></span><a class="headerlink" href="#_CPPv416IPLPanningEffect" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv316IPLPanningEffect"></span><span id="_CPPv216IPLPanningEffect"></span><span id="IPLPanningEffect"></span><span class="target" id="group__panningeffect_1gac0039ccdc1feec683f55c033f116547a"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="n"><span class="pre">_IPLPanningEffect_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">IPLPanningEffect</span></span></span><a class="headerlink" href="#_CPPv416IPLPanningEffect" title="Link to this definition"></a><br /></dt>
 <dd><p>Pans a single-channel point source to a multi-channel speaker layout based on the 3D position of the source relative to the listener. </p>
 </dd></dl>
 
-</div>
-<div class="section" id="functions">
-<h2>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="functions">
+<h2>Functions<a class="headerlink" href="#functions" title="Link to this heading"></a></h2>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv422iplPanningEffectCreate10IPLContextP16IPLAudioSettingsP24IPLPanningEffectSettingsP16IPLPanningEffect">
-<span id="_CPPv322iplPanningEffectCreate10IPLContextP16IPLAudioSettingsP24IPLPanningEffectSettingsP16IPLPanningEffect"></span><span id="_CPPv222iplPanningEffectCreate10IPLContextP16IPLAudioSettingsP24IPLPanningEffectSettingsP16IPLPanningEffect"></span><span id="iplPanningEffectCreate__IPLContext.IPLAudioSettingsP.IPLPanningEffectSettingsP.IPLPanningEffectP"></span><span class="target" id="group__panningeffect_1ga49450ba5c4da34a4195c52bd9259012e"></span><a class="reference internal" href="types.html#_CPPv48IPLerror" title="IPLerror"><span class="n"><span class="pre">IPLerror</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplPanningEffectCreate</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="context.html#_CPPv410IPLContext" title="IPLContext"><span class="n"><span class="pre">IPLContext</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">context</span></span>, <a class="reference internal" href="audio-buffers.html#_CPPv416IPLAudioSettings" title="IPLAudioSettings"><span class="n"><span class="pre">IPLAudioSettings</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">audioSettings</span></span>, <a class="reference internal" href="#_CPPv424IPLPanningEffectSettings" title="IPLPanningEffectSettings"><span class="n"><span class="pre">IPLPanningEffectSettings</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">effectSettings</span></span>, <a class="reference internal" href="#_CPPv416IPLPanningEffect" title="IPLPanningEffect"><span class="n"><span class="pre">IPLPanningEffect</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">effect</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv422iplPanningEffectCreate10IPLContextP16IPLAudioSettingsP24IPLPanningEffectSettingsP16IPLPanningEffect" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv322iplPanningEffectCreate10IPLContextP16IPLAudioSettingsP24IPLPanningEffectSettingsP16IPLPanningEffect"></span><span id="_CPPv222iplPanningEffectCreate10IPLContextP16IPLAudioSettingsP24IPLPanningEffectSettingsP16IPLPanningEffect"></span><span id="iplPanningEffectCreate__IPLContext.IPLAudioSettingsP.IPLPanningEffectSettingsP.IPLPanningEffectP"></span><span class="target" id="group__panningeffect_1ga49450ba5c4da34a4195c52bd9259012e"></span><a class="reference internal" href="types.html#_CPPv48IPLerror" title="IPLerror"><span class="n"><span class="pre">IPLerror</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplPanningEffectCreate</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="context.html#_CPPv410IPLContext" title="IPLContext"><span class="n"><span class="pre">IPLContext</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">context</span></span>, <a class="reference internal" href="audio-buffers.html#_CPPv416IPLAudioSettings" title="IPLAudioSettings"><span class="n"><span class="pre">IPLAudioSettings</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">audioSettings</span></span>, <a class="reference internal" href="#_CPPv424IPLPanningEffectSettings" title="IPLPanningEffectSettings"><span class="n"><span class="pre">IPLPanningEffectSettings</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">effectSettings</span></span>, <a class="reference internal" href="#_CPPv416IPLPanningEffect" title="IPLPanningEffect"><span class="n"><span class="pre">IPLPanningEffect</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">effect</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv422iplPanningEffectCreate10IPLContextP16IPLAudioSettingsP24IPLPanningEffectSettingsP16IPLPanningEffect" title="Link to this definition"></a><br /></dt>
 <dd><p>Creates a panning effect. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>context</strong> – The context used to initialize Steam Audio. </p></li>
 <li><p><strong>audioSettings</strong> – Global audio processing settings. </p></li>
@@ -227,7 +149,7 @@
 <li><p><strong>effect</strong> – [out] The created panning effect.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Status code indicating whether or not the operation succeeded. </p>
 </dd>
 </dl>
@@ -235,13 +157,13 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv422iplPanningEffectRetain16IPLPanningEffect">
-<span id="_CPPv322iplPanningEffectRetain16IPLPanningEffect"></span><span id="_CPPv222iplPanningEffectRetain16IPLPanningEffect"></span><span id="iplPanningEffectRetain__IPLPanningEffect"></span><span class="target" id="group__panningeffect_1ga189f125b0c50cb6dc5bec731e25ac138"></span><a class="reference internal" href="#_CPPv416IPLPanningEffect" title="IPLPanningEffect"><span class="n"><span class="pre">IPLPanningEffect</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplPanningEffectRetain</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv416IPLPanningEffect" title="IPLPanningEffect"><span class="n"><span class="pre">IPLPanningEffect</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">effect</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv422iplPanningEffectRetain16IPLPanningEffect" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv322iplPanningEffectRetain16IPLPanningEffect"></span><span id="_CPPv222iplPanningEffectRetain16IPLPanningEffect"></span><span id="iplPanningEffectRetain__IPLPanningEffect"></span><span class="target" id="group__panningeffect_1ga189f125b0c50cb6dc5bec731e25ac138"></span><a class="reference internal" href="#_CPPv416IPLPanningEffect" title="IPLPanningEffect"><span class="n"><span class="pre">IPLPanningEffect</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplPanningEffectRetain</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv416IPLPanningEffect" title="IPLPanningEffect"><span class="n"><span class="pre">IPLPanningEffect</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">effect</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv422iplPanningEffectRetain16IPLPanningEffect" title="Link to this definition"></a><br /></dt>
 <dd><p>Retains an additional reference to a panning effect. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>effect</strong> – The panning effect to retain a reference to.</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The additional reference to the panning effect. </p>
 </dd>
 </dl>
@@ -249,10 +171,10 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv423iplPanningEffectReleaseP16IPLPanningEffect">
-<span id="_CPPv323iplPanningEffectReleaseP16IPLPanningEffect"></span><span id="_CPPv223iplPanningEffectReleaseP16IPLPanningEffect"></span><span id="iplPanningEffectRelease__IPLPanningEffectP"></span><span class="target" id="group__panningeffect_1ga542da9fd95204724aaa194504a8a6e7d"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplPanningEffectRelease</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv416IPLPanningEffect" title="IPLPanningEffect"><span class="n"><span class="pre">IPLPanningEffect</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">effect</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv423iplPanningEffectReleaseP16IPLPanningEffect" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv323iplPanningEffectReleaseP16IPLPanningEffect"></span><span id="_CPPv223iplPanningEffectReleaseP16IPLPanningEffect"></span><span id="iplPanningEffectRelease__IPLPanningEffectP"></span><span class="target" id="group__panningeffect_1ga542da9fd95204724aaa194504a8a6e7d"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplPanningEffectRelease</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv416IPLPanningEffect" title="IPLPanningEffect"><span class="n"><span class="pre">IPLPanningEffect</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">effect</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv423iplPanningEffectReleaseP16IPLPanningEffect" title="Link to this definition"></a><br /></dt>
 <dd><p>Releases a reference to a panning effect. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>effect</strong> – The panning effect to release a reference to. </p>
 </dd>
 </dl>
@@ -260,10 +182,10 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv421iplPanningEffectReset16IPLPanningEffect">
-<span id="_CPPv321iplPanningEffectReset16IPLPanningEffect"></span><span id="_CPPv221iplPanningEffectReset16IPLPanningEffect"></span><span id="iplPanningEffectReset__IPLPanningEffect"></span><span class="target" id="group__panningeffect_1ga140b9d769804912a6ee4c6fda75901d7"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplPanningEffectReset</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv416IPLPanningEffect" title="IPLPanningEffect"><span class="n"><span class="pre">IPLPanningEffect</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">effect</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv421iplPanningEffectReset16IPLPanningEffect" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv321iplPanningEffectReset16IPLPanningEffect"></span><span id="_CPPv221iplPanningEffectReset16IPLPanningEffect"></span><span id="iplPanningEffectReset__IPLPanningEffect"></span><span class="target" id="group__panningeffect_1ga140b9d769804912a6ee4c6fda75901d7"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplPanningEffectReset</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv416IPLPanningEffect" title="IPLPanningEffect"><span class="n"><span class="pre">IPLPanningEffect</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">effect</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv421iplPanningEffectReset16IPLPanningEffect" title="Link to this definition"></a><br /></dt>
 <dd><p>Resets the internal processing state of a panning effect. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>effect</strong> – The panning effect to reset. </p>
 </dd>
 </dl>
@@ -271,11 +193,11 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv421iplPanningEffectApply16IPLPanningEffectP22IPLPanningEffectParamsP14IPLAudioBufferP14IPLAudioBuffer">
-<span id="_CPPv321iplPanningEffectApply16IPLPanningEffectP22IPLPanningEffectParamsP14IPLAudioBufferP14IPLAudioBuffer"></span><span id="_CPPv221iplPanningEffectApply16IPLPanningEffectP22IPLPanningEffectParamsP14IPLAudioBufferP14IPLAudioBuffer"></span><span id="iplPanningEffectApply__IPLPanningEffect.IPLPanningEffectParamsP.IPLAudioBufferP.IPLAudioBufferP"></span><span class="target" id="group__panningeffect_1ga93294af68a10b5846a7f64bec6beb9e4"></span><a class="reference internal" href="audio-buffers.html#_CPPv419IPLAudioEffectState" title="IPLAudioEffectState"><span class="n"><span class="pre">IPLAudioEffectState</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplPanningEffectApply</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv416IPLPanningEffect" title="IPLPanningEffect"><span class="n"><span class="pre">IPLPanningEffect</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">effect</span></span>, <a class="reference internal" href="#_CPPv422IPLPanningEffectParams" title="IPLPanningEffectParams"><span class="n"><span class="pre">IPLPanningEffectParams</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">params</span></span>, <a class="reference internal" href="audio-buffers.html#_CPPv414IPLAudioBuffer" title="IPLAudioBuffer"><span class="n"><span class="pre">IPLAudioBuffer</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">in</span></span>, <a class="reference internal" href="audio-buffers.html#_CPPv414IPLAudioBuffer" title="IPLAudioBuffer"><span class="n"><span class="pre">IPLAudioBuffer</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">out</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv421iplPanningEffectApply16IPLPanningEffectP22IPLPanningEffectParamsP14IPLAudioBufferP14IPLAudioBuffer" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv321iplPanningEffectApply16IPLPanningEffectP22IPLPanningEffectParamsP14IPLAudioBufferP14IPLAudioBuffer"></span><span id="_CPPv221iplPanningEffectApply16IPLPanningEffectP22IPLPanningEffectParamsP14IPLAudioBufferP14IPLAudioBuffer"></span><span id="iplPanningEffectApply__IPLPanningEffect.IPLPanningEffectParamsP.IPLAudioBufferP.IPLAudioBufferP"></span><span class="target" id="group__panningeffect_1ga93294af68a10b5846a7f64bec6beb9e4"></span><a class="reference internal" href="audio-buffers.html#_CPPv419IPLAudioEffectState" title="IPLAudioEffectState"><span class="n"><span class="pre">IPLAudioEffectState</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplPanningEffectApply</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv416IPLPanningEffect" title="IPLPanningEffect"><span class="n"><span class="pre">IPLPanningEffect</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">effect</span></span>, <a class="reference internal" href="#_CPPv422IPLPanningEffectParams" title="IPLPanningEffectParams"><span class="n"><span class="pre">IPLPanningEffectParams</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">params</span></span>, <a class="reference internal" href="audio-buffers.html#_CPPv414IPLAudioBuffer" title="IPLAudioBuffer"><span class="n"><span class="pre">IPLAudioBuffer</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">in</span></span>, <a class="reference internal" href="audio-buffers.html#_CPPv414IPLAudioBuffer" title="IPLAudioBuffer"><span class="n"><span class="pre">IPLAudioBuffer</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">out</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv421iplPanningEffectApply16IPLPanningEffectP22IPLPanningEffectParamsP14IPLAudioBufferP14IPLAudioBuffer" title="Link to this definition"></a><br /></dt>
 <dd><p>Applies a panning effect to an audio buffer. </p>
 <p>This effect CANNOT be applied in-place.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>effect</strong> – The panning effect to apply. </p></li>
 <li><p><strong>params</strong> – Parameters for applying the effect. </p></li>
@@ -283,24 +205,24 @@
 <li><p><strong>out</strong> – The output audio buffer. Must have as many channels as needed for the speaker layout specified when creating the panning effect. For example, if the speaker layout is <code class="docutils literal notranslate"><span class="pre">IPL_SPEAKERLAYOUTTYPE_SURROUND_5_1</span></code>, the output buffer must contain 6 channels.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">IPL_AUDIOEFFECTSTATE_TAILCOMPLETE</span></code> to indicate that this effect does not generate any tail samples. </p>
 </dd>
 </dl>
 </dd></dl>
 
-</div>
-<div class="section" id="structures">
-<h2>Structures<a class="headerlink" href="#structures" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="structures">
+<h2>Structures<a class="headerlink" href="#structures" title="Link to this heading"></a></h2>
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv424IPLPanningEffectSettings">
-<span id="_CPPv324IPLPanningEffectSettings"></span><span id="_CPPv224IPLPanningEffectSettings"></span><span id="IPLPanningEffectSettings"></span><span class="target" id="struct_i_p_l_panning_effect_settings"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLPanningEffectSettings</span></span></span><a class="headerlink" href="#_CPPv424IPLPanningEffectSettings" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv324IPLPanningEffectSettings"></span><span id="_CPPv224IPLPanningEffectSettings"></span><span id="IPLPanningEffectSettings"></span><span class="target" id="struct_i_p_l_panning_effect_settings"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLPanningEffectSettings</span></span></span><a class="headerlink" href="#_CPPv424IPLPanningEffectSettings" title="Link to this definition"></a><br /></dt>
 <dd><p>Settings used to create a panning effect. </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N24IPLPanningEffectSettings13speakerLayoutE">
-<span id="_CPPv3N24IPLPanningEffectSettings13speakerLayoutE"></span><span id="_CPPv2N24IPLPanningEffectSettings13speakerLayoutE"></span><span id="IPLPanningEffectSettings::speakerLayout__IPLSpeakerLayout"></span><span class="target" id="struct_i_p_l_panning_effect_settings_1ae2881f808b7ed510cf1be3a24c2f0ac5"></span><a class="reference internal" href="audio-buffers.html#_CPPv416IPLSpeakerLayout" title="IPLSpeakerLayout"><span class="n"><span class="pre">IPLSpeakerLayout</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">speakerLayout</span></span></span><a class="headerlink" href="#_CPPv4N24IPLPanningEffectSettings13speakerLayoutE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N24IPLPanningEffectSettings13speakerLayoutE"></span><span id="_CPPv2N24IPLPanningEffectSettings13speakerLayoutE"></span><span id="IPLPanningEffectSettings::speakerLayout__IPLSpeakerLayout"></span><span class="target" id="struct_i_p_l_panning_effect_settings_1ae2881f808b7ed510cf1be3a24c2f0ac5"></span><a class="reference internal" href="audio-buffers.html#_CPPv416IPLSpeakerLayout" title="IPLSpeakerLayout"><span class="n"><span class="pre">IPLSpeakerLayout</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">speakerLayout</span></span></span><a class="headerlink" href="#_CPPv4N24IPLPanningEffectSettings13speakerLayoutE" title="Link to this definition"></a><br /></dt>
 <dd><p>The speaker layout to pan input audio to. </p>
 </dd></dl>
 
@@ -309,68 +231,51 @@
 
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv422IPLPanningEffectParams">
-<span id="_CPPv322IPLPanningEffectParams"></span><span id="_CPPv222IPLPanningEffectParams"></span><span id="IPLPanningEffectParams"></span><span class="target" id="struct_i_p_l_panning_effect_params"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLPanningEffectParams</span></span></span><a class="headerlink" href="#_CPPv422IPLPanningEffectParams" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv322IPLPanningEffectParams"></span><span id="_CPPv222IPLPanningEffectParams"></span><span id="IPLPanningEffectParams"></span><span class="target" id="struct_i_p_l_panning_effect_params"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLPanningEffectParams</span></span></span><a class="headerlink" href="#_CPPv422IPLPanningEffectParams" title="Link to this definition"></a><br /></dt>
 <dd><p>Parameters for applying a panning effect to an audio buffer. </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N22IPLPanningEffectParams9directionE">
-<span id="_CPPv3N22IPLPanningEffectParams9directionE"></span><span id="_CPPv2N22IPLPanningEffectParams9directionE"></span><span id="IPLPanningEffectParams::direction__IPLVector3"></span><span class="target" id="struct_i_p_l_panning_effect_params_1a6d6d43ed60cddbbc9a71b9e83b073db5"></span><a class="reference internal" href="geometry.html#_CPPv410IPLVector3" title="IPLVector3"><span class="n"><span class="pre">IPLVector3</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">direction</span></span></span><a class="headerlink" href="#_CPPv4N22IPLPanningEffectParams9directionE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N22IPLPanningEffectParams9directionE"></span><span id="_CPPv2N22IPLPanningEffectParams9directionE"></span><span id="IPLPanningEffectParams::direction__IPLVector3"></span><span class="target" id="struct_i_p_l_panning_effect_params_1a6d6d43ed60cddbbc9a71b9e83b073db5"></span><a class="reference internal" href="geometry.html#_CPPv410IPLVector3" title="IPLVector3"><span class="n"><span class="pre">IPLVector3</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">direction</span></span></span><a class="headerlink" href="#_CPPv4N22IPLPanningEffectParams9directionE" title="Link to this definition"></a><br /></dt>
 <dd><p>Unit vector pointing from the listener towards the source. </p>
 </dd></dl>
 
 </div>
 </dd></dl>
 
-</div>
-</div>
+</section>
+</section>
 
 
            </div>
-           
           </div>
-          <footer>
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="binaural-effect.html" class="btn btn-neutral float-right" title="Binaural Effect" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="hrtf.html" class="btn btn-neutral float-left" title="HRTF" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="binaural-effect.html" class="btn btn-neutral float-right" title="Binaural Effect" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &#169; Copyright 2017-2023, Valve Corporation.
-
-    </p>
+    <p>&#169; Copyright 2017-2023, Valve Corporation.</p>
   </div>
-    
-    
-    
-    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>

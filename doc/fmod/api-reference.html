@@ -1,101 +1,49 @@
 
 
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
-  <meta charset="utf-8" />
-  
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  
   <title>API Reference &mdash; Steam Audio FMOD Studio Integration  documentation</title>
-  
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/steamaudio.css?v=6893bda5" />
 
   
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/tabs.css" type="text/css" />
-  <link rel="stylesheet" href="_static/steamaudio.css" type="text/css" />
-
-  
-  
-
-  
-  
-
-  
-
-  
-  <!--[if lt IE 9]>
-    <script src="_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/doctools.js"></script>
-    
-    <script type="text/javascript" src="_static/js/theme.js"></script>
-
-    
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=7f41d439"></script>
+      <script src="_static/doctools.js?v=9a2dae69"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="prev" title="Mixer Return" href="mixer-return.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
 
           
-            <a href="index.html">
           
-
-          
+          <a href="index.html">
             
-            <img src="_static/steam-audio-logo.png" class="logo" alt="Logo"/>
-          
+              <img src="_static/steam-audio-logo.png" class="logo" alt="Logo"/>
           </a>
-
-          
-            
-            
-              <div class="version">
-                4.5.3
-              </div>
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
-              <p class="caption"><span class="caption-text">FMOD Studio Integration</span></p>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">FMOD Studio Integration</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="guide.html">User’s Guide</a></li>
@@ -103,7 +51,15 @@
 <li class="toctree-l1 current"><a class="reference internal" href="reference.html">Reference</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="effects.html">Effects</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">API Reference</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#functions">Functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#functions">Functions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv417iplFMODGetVersionPjPjPj"><code class="docutils literal notranslate"><span class="pre">iplFMODGetVersion()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv417iplFMODInitialize10IPLContext"><code class="docutils literal notranslate"><span class="pre">iplFMODInitialize()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv416iplFMODTerminatev"><code class="docutils literal notranslate"><span class="pre">iplFMODTerminate()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv414iplFMODSetHRTF7IPLHRTF"><code class="docutils literal notranslate"><span class="pre">iplFMODSetHRTF()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv428iplFMODSetSimulationSettings21IPLSimulationSettings"><code class="docutils literal notranslate"><span class="pre">iplFMODSetSimulationSettings()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv422iplFMODSetReverbSource9IPLSource"><code class="docutils literal notranslate"><span class="pre">iplFMODSetReverbSource()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="#dsp-parameters">DSP Parameters</a></li>
 </ul>
 </li>
@@ -111,81 +67,40 @@
 </li>
 </ul>
 
-            
-          
         </div>
-        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="index.html">Steam Audio FMOD Studio Integration</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
-      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-        
-          <li><a href="reference.html">Reference</a> &raquo;</li>
-        
-      <li>API Reference</li>
-    
-    
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="reference.html">Reference</a></li>
+      <li class="breadcrumb-item active">API Reference</li>
       <li class="wy-breadcrumbs-aside">
-        
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
-  <div class="section" id="api-reference">
-<h1>API Reference<a class="headerlink" href="#api-reference" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="functions">
-<h2>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h2>
+             
+  <section id="api-reference">
+<h1>API Reference<a class="headerlink" href="#api-reference" title="Link to this heading"></a></h1>
+<section id="functions">
+<h2>Functions<a class="headerlink" href="#functions" title="Link to this heading"></a></h2>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv417iplFMODGetVersionPjPjPj">
-<span id="_CPPv317iplFMODGetVersionPjPjPj"></span><span id="_CPPv217iplFMODGetVersionPjPjPj"></span><span id="iplFMODGetVersion__unsigned-iP.unsigned-iP.unsigned-iP"></span><span class="target" id="steamaudio__fmod_8h_1ab2b9ff2b011ced2d6ddaa62bd56f12d3"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplFMODGetVersion</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span> <span class="pre">int</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">major</span></span>, <span class="kt"><span class="pre">unsigned</span> <span class="pre">int</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">minor</span></span>, <span class="kt"><span class="pre">unsigned</span> <span class="pre">int</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">patch</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv417iplFMODGetVersionPjPjPj" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv317iplFMODGetVersionPjPjPj"></span><span id="_CPPv217iplFMODGetVersionPjPjPj"></span><span id="iplFMODGetVersion__unsigned-iP.unsigned-iP.unsigned-iP"></span><span class="target" id="steamaudio__fmod_8h_1ab2b9ff2b011ced2d6ddaa62bd56f12d3"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplFMODGetVersion</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">major</span></span>, <span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">minor</span></span>, <span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">patch</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv417iplFMODGetVersionPjPjPj" title="Link to this definition"></a><br /></dt>
 <dd><p>Returns the version of the FMOD Studio integration being used. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>major</strong> – Major version number. For example, “1” in “1.2.3”. </p></li>
 <li><p><strong>minor</strong> – Minor version number. For example, “2” in “1.2.3”. </p></li>
@@ -197,11 +112,11 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv417iplFMODInitialize10IPLContext">
-<span id="_CPPv317iplFMODInitialize10IPLContext"></span><span id="_CPPv217iplFMODInitialize10IPLContext"></span><span id="iplFMODInitialize__IPLContext"></span><span class="target" id="steamaudio__fmod_8h_1a73f0e76cf4f79d6b2575b415e41dfe95"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplFMODInitialize</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">IPLContext</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">context</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv417iplFMODInitialize10IPLContext" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv317iplFMODInitialize10IPLContext"></span><span id="_CPPv217iplFMODInitialize10IPLContext"></span><span id="iplFMODInitialize__IPLContext"></span><span class="target" id="steamaudio__fmod_8h_1a73f0e76cf4f79d6b2575b415e41dfe95"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplFMODInitialize</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">IPLContext</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">context</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv417iplFMODInitialize10IPLContext" title="Link to this definition"></a><br /></dt>
 <dd><p>Initializes the FMOD Studio integration. </p>
 <p>This function must be called before creating any Steam Audio DSP effects.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>context</strong> – The Steam Audio context created by the game engine when initializing Steam Audio. </p>
 </dd>
 </dl>
@@ -209,18 +124,18 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv416iplFMODTerminatev">
-<span id="_CPPv316iplFMODTerminatev"></span><span id="_CPPv216iplFMODTerminatev"></span><span id="iplFMODTerminate"></span><span class="target" id="steamaudio__fmod_8h_1a2df749dd1a96bd1c54edb04a3c7b4e87"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplFMODTerminate</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv416iplFMODTerminatev" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv316iplFMODTerminatev"></span><span id="_CPPv216iplFMODTerminatev"></span><span id="iplFMODTerminate"></span><span class="target" id="steamaudio__fmod_8h_1a2df749dd1a96bd1c54edb04a3c7b4e87"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplFMODTerminate</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv416iplFMODTerminatev" title="Link to this definition"></a><br /></dt>
 <dd><p>Shuts down the FMOD Studio integration. </p>
 <p>This function must be called after all Steam Audio DSP effects have been destroyed. </p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv414iplFMODSetHRTF7IPLHRTF">
-<span id="_CPPv314iplFMODSetHRTF7IPLHRTF"></span><span id="_CPPv214iplFMODSetHRTF7IPLHRTF"></span><span id="iplFMODSetHRTF__IPLHRTF"></span><span class="target" id="steamaudio__fmod_8h_1ac696b869d1212ee0f4107b6dfe4fdc3c"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplFMODSetHRTF</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">IPLHRTF</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hrtf</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv414iplFMODSetHRTF7IPLHRTF" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv314iplFMODSetHRTF7IPLHRTF"></span><span id="_CPPv214iplFMODSetHRTF7IPLHRTF"></span><span id="iplFMODSetHRTF__IPLHRTF"></span><span class="target" id="steamaudio__fmod_8h_1ac696b869d1212ee0f4107b6dfe4fdc3c"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplFMODSetHRTF</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">IPLHRTF</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hrtf</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv414iplFMODSetHRTF7IPLHRTF" title="Link to this definition"></a><br /></dt>
 <dd><p>Specifies the HRTF to use for spatialization in subsequent audio frames. </p>
 <p>This function must be called once during initialization, after <code class="docutils literal notranslate"><span class="pre">iplFMODInitialize</span></code>. It should also be called whenever the game engine needs to change the HRTF.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>hrtf</strong> – The HRTF to use for spatialization. </p>
 </dd>
 </dl>
@@ -228,11 +143,11 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv428iplFMODSetSimulationSettings21IPLSimulationSettings">
-<span id="_CPPv328iplFMODSetSimulationSettings21IPLSimulationSettings"></span><span id="_CPPv228iplFMODSetSimulationSettings21IPLSimulationSettings"></span><span id="iplFMODSetSimulationSettings__IPLSimulationSettings"></span><span class="target" id="steamaudio__fmod_8h_1a6b300ef4262129edb50b3143d20a65a7"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplFMODSetSimulationSettings</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">IPLSimulationSettings</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">simulationSettings</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv428iplFMODSetSimulationSettings21IPLSimulationSettings" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv328iplFMODSetSimulationSettings21IPLSimulationSettings"></span><span id="_CPPv228iplFMODSetSimulationSettings21IPLSimulationSettings"></span><span id="iplFMODSetSimulationSettings__IPLSimulationSettings"></span><span class="target" id="steamaudio__fmod_8h_1a6b300ef4262129edb50b3143d20a65a7"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplFMODSetSimulationSettings</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">IPLSimulationSettings</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">simulationSettings</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv428iplFMODSetSimulationSettings21IPLSimulationSettings" title="Link to this definition"></a><br /></dt>
 <dd><p>Specifies the simulation settings used by the game engine for simulating direct and/or indirect sound propagation. </p>
 <p>This function must be called once during initialization, after <code class="docutils literal notranslate"><span class="pre">iplFMODInitialize</span></code>.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>simulationSettings</strong> – The simulation settings used by the game engine. </p>
 </dd>
 </dl>
@@ -240,79 +155,62 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv422iplFMODSetReverbSource9IPLSource">
-<span id="_CPPv322iplFMODSetReverbSource9IPLSource"></span><span id="_CPPv222iplFMODSetReverbSource9IPLSource"></span><span id="iplFMODSetReverbSource__IPLSource"></span><span class="target" id="steamaudio__fmod_8h_1ab4541a0f7e59d7f1dfaf662a6b913ba9"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplFMODSetReverbSource</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">IPLSource</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">reverbSource</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv422iplFMODSetReverbSource9IPLSource" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv322iplFMODSetReverbSource9IPLSource"></span><span id="_CPPv222iplFMODSetReverbSource9IPLSource"></span><span id="iplFMODSetReverbSource__IPLSource"></span><span class="target" id="steamaudio__fmod_8h_1ab4541a0f7e59d7f1dfaf662a6b913ba9"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplFMODSetReverbSource</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">IPLSource</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">reverbSource</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv422iplFMODSetReverbSource9IPLSource" title="Link to this definition"></a><br /></dt>
 <dd><p>Specifies the <code class="docutils literal notranslate"><span class="pre">IPLSource</span></code> object used by the game engine for simulating reverb. </p>
 <p>Typically, listener-centric reverb is simulated by creating an <code class="docutils literal notranslate"><span class="pre">IPLSource</span></code> object with the same position as the listener, and simulating reflections. To render this simulated reverb, call this function and pass it the <code class="docutils literal notranslate"><span class="pre">IPLSource</span></code> object used.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>reverbSource</strong> – The source object used by the game engine for simulating reverb. </p>
 </dd>
 </dl>
 </dd></dl>
 
-</div>
-<div class="section" id="dsp-parameters">
-<h2>DSP Parameters<a class="headerlink" href="#dsp-parameters" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="dsp-parameters">
+<h2>DSP Parameters<a class="headerlink" href="#dsp-parameters" title="Link to this heading"></a></h2>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p>doxygenenum: Cannot find enum “SpatializeEffect::Params” in doxygen xml output for project “SteamAudioFMOD” from directory: C:/buildslave/phonon_rel_win64/build/fmod/build/windows-vs2019-x64/doc/xml</p>
-</div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>doxygenenum: Cannot find enum “ReverbEffect::Params” in doxygen xml output for project “SteamAudioFMOD” from directory: C:/buildslave/phonon_rel_win64/build/fmod/build/windows-vs2019-x64/doc/xml</p>
+<p>doxygenenum: Cannot find enum “SpatializeEffect::Params” in doxygen xml output for project “SteamAudioFMOD” from directory: C:/buildworker/phonon_rel_win64/build/fmod/build/windows-vs2019-x64/doc/xml</p>
 </div>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p>doxygenenum: Cannot find enum “MixerReturnEffect::Params” in doxygen xml output for project “SteamAudioFMOD” from directory: C:/buildslave/phonon_rel_win64/build/fmod/build/windows-vs2019-x64/doc/xml</p>
+<p>doxygenenum: Cannot find enum “ReverbEffect::Params” in doxygen xml output for project “SteamAudioFMOD” from directory: C:/buildworker/phonon_rel_win64/build/fmod/build/windows-vs2019-x64/doc/xml</p>
 </div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>doxygenenum: Cannot find enum “MixerReturnEffect::Params” in doxygen xml output for project “SteamAudioFMOD” from directory: C:/buildworker/phonon_rel_win64/build/fmod/build/windows-vs2019-x64/doc/xml</p>
 </div>
-</div>
+</section>
+</section>
 
 
            </div>
-           
           </div>
-          <footer>
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="mixer-return.html" class="btn btn-neutral float-left" title="Mixer Return" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &#169; Copyright 2017-2023, Valve Corporation.
-
-    </p>
+    <p>&#169; Copyright 2017-2023, Valve Corporation.</p>
   </div>
-    
-    
-    
-    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>

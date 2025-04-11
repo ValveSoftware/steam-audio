@@ -1,101 +1,50 @@
 
 
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
-  <meta charset="utf-8" />
-  
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  
   <title>Ambisonics Panning Effect &mdash; Steam Audio C API  documentation</title>
-  
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/steamaudio.css?v=b5aaeb06" />
 
   
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/steamaudio.css" type="text/css" />
-
-  
-  
-
-  
-  
-
-  
-
-  
-  <!--[if lt IE 9]>
-    <script src="_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/doctools.js"></script>
-    
-    <script type="text/javascript" src="_static/js/theme.js"></script>
-
-    
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=7f41d439"></script>
+      <script src="_static/doctools.js?v=9a2dae69"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Ambisonics Binaural Effect" href="ambisonics-binaural-effect.html" />
     <link rel="prev" title="Ambisonics Encode Effect" href="ambisonics-encode-effect.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
 
           
-            <a href="index.html">
           
-
-          
+          <a href="index.html">
             
-            <img src="_static/steam-audio-logo.png" class="logo" alt="Logo"/>
-          
+              <img src="_static/steam-audio-logo.png" class="logo" alt="Logo"/>
           </a>
-
-          
-            
-            
-              <div class="version">
-                4.6.0
-              </div>
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
-              <p class="caption"><span class="caption-text">Steam Audio SDK</span></p>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Steam Audio SDK</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="guide.html">Programmer’s Guide</a></li>
@@ -118,9 +67,23 @@
 <li class="toctree-l2"><a class="reference internal" href="virtual-surround-effect.html">Virtual Surround Effect</a></li>
 <li class="toctree-l2"><a class="reference internal" href="ambisonics-encode-effect.html">Ambisonics Encode Effect</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Ambisonics Panning Effect</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#typedefs">Typedefs</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#functions">Functions</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#structures">Structures</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#typedefs">Typedefs</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv426IPLAmbisonicsPanningEffect"><code class="docutils literal notranslate"><span class="pre">IPLAmbisonicsPanningEffect</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#functions">Functions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv432iplAmbisonicsPanningEffectCreate10IPLContextP16IPLAudioSettingsP34IPLAmbisonicsPanningEffectSettingsP26IPLAmbisonicsPanningEffect"><code class="docutils literal notranslate"><span class="pre">iplAmbisonicsPanningEffectCreate()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv432iplAmbisonicsPanningEffectRetain26IPLAmbisonicsPanningEffect"><code class="docutils literal notranslate"><span class="pre">iplAmbisonicsPanningEffectRetain()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv433iplAmbisonicsPanningEffectReleaseP26IPLAmbisonicsPanningEffect"><code class="docutils literal notranslate"><span class="pre">iplAmbisonicsPanningEffectRelease()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv431iplAmbisonicsPanningEffectReset26IPLAmbisonicsPanningEffect"><code class="docutils literal notranslate"><span class="pre">iplAmbisonicsPanningEffectReset()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv431iplAmbisonicsPanningEffectApply26IPLAmbisonicsPanningEffectP32IPLAmbisonicsPanningEffectParamsP14IPLAudioBufferP14IPLAudioBuffer"><code class="docutils literal notranslate"><span class="pre">iplAmbisonicsPanningEffectApply()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#structures">Structures</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv434IPLAmbisonicsPanningEffectSettings"><code class="docutils literal notranslate"><span class="pre">IPLAmbisonicsPanningEffectSettings</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv432IPLAmbisonicsPanningEffectParams"><code class="docutils literal notranslate"><span class="pre">IPLAmbisonicsPanningEffectParams</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="ambisonics-binaural-effect.html">Ambisonics Binaural Effect</a></li>
@@ -136,91 +99,50 @@
 </li>
 </ul>
 
-            
-          
         </div>
-        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="index.html">Steam Audio C API</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
-      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-        
-          <li><a href="reference.html">API Reference</a> &raquo;</li>
-        
-      <li>Ambisonics Panning Effect</li>
-    
-    
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="reference.html">API Reference</a></li>
+      <li class="breadcrumb-item active">Ambisonics Panning Effect</li>
       <li class="wy-breadcrumbs-aside">
-        
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
-  <div class="section" id="ambisonics-panning-effect">
-<h1>Ambisonics Panning Effect<a class="headerlink" href="#ambisonics-panning-effect" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="typedefs">
-<h2>Typedefs<a class="headerlink" href="#typedefs" title="Permalink to this headline">¶</a></h2>
+             
+  <section id="ambisonics-panning-effect">
+<h1>Ambisonics Panning Effect<a class="headerlink" href="#ambisonics-panning-effect" title="Link to this heading"></a></h1>
+<section id="typedefs">
+<h2>Typedefs<a class="headerlink" href="#typedefs" title="Link to this heading"></a></h2>
 <dl class="cpp type">
 <dt class="sig sig-object cpp" id="_CPPv426IPLAmbisonicsPanningEffect">
-<span id="_CPPv326IPLAmbisonicsPanningEffect"></span><span id="_CPPv226IPLAmbisonicsPanningEffect"></span><span id="IPLAmbisonicsPanningEffect"></span><span class="target" id="group__ambisonicspanning_1gae1505c6993ad0a1d76c74b6f55f18f0e"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="n"><span class="pre">_IPLAmbisonicsPanningEffect_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">IPLAmbisonicsPanningEffect</span></span></span><a class="headerlink" href="#_CPPv426IPLAmbisonicsPanningEffect" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv326IPLAmbisonicsPanningEffect"></span><span id="_CPPv226IPLAmbisonicsPanningEffect"></span><span id="IPLAmbisonicsPanningEffect"></span><span class="target" id="group__ambisonicspanning_1gae1505c6993ad0a1d76c74b6f55f18f0e"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="n"><span class="pre">_IPLAmbisonicsPanningEffect_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">IPLAmbisonicsPanningEffect</span></span></span><a class="headerlink" href="#_CPPv426IPLAmbisonicsPanningEffect" title="Link to this definition"></a><br /></dt>
 <dd><p>Renders Ambisonic audio by panning it to a standard speaker layout. </p>
 <p>This involves calculating signals to emit from each speaker so as to approximate the Ambisonic sound field. </p>
 </dd></dl>
 
-</div>
-<div class="section" id="functions">
-<h2>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="functions">
+<h2>Functions<a class="headerlink" href="#functions" title="Link to this heading"></a></h2>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv432iplAmbisonicsPanningEffectCreate10IPLContextP16IPLAudioSettingsP34IPLAmbisonicsPanningEffectSettingsP26IPLAmbisonicsPanningEffect">
-<span id="_CPPv332iplAmbisonicsPanningEffectCreate10IPLContextP16IPLAudioSettingsP34IPLAmbisonicsPanningEffectSettingsP26IPLAmbisonicsPanningEffect"></span><span id="_CPPv232iplAmbisonicsPanningEffectCreate10IPLContextP16IPLAudioSettingsP34IPLAmbisonicsPanningEffectSettingsP26IPLAmbisonicsPanningEffect"></span><span id="iplAmbisonicsPanningEffectCreate__IPLContext.IPLAudioSettingsP.IPLAmbisonicsPanningEffectSettingsP.IPLAmbisonicsPanningEffectP"></span><span class="target" id="group__ambisonicspanning_1gac9e084f0b4b5db477bcd81076d31f143"></span><a class="reference internal" href="types.html#_CPPv48IPLerror" title="IPLerror"><span class="n"><span class="pre">IPLerror</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplAmbisonicsPanningEffectCreate</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="context.html#_CPPv410IPLContext" title="IPLContext"><span class="n"><span class="pre">IPLContext</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">context</span></span>, <a class="reference internal" href="audio-buffers.html#_CPPv416IPLAudioSettings" title="IPLAudioSettings"><span class="n"><span class="pre">IPLAudioSettings</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">audioSettings</span></span>, <a class="reference internal" href="#_CPPv434IPLAmbisonicsPanningEffectSettings" title="IPLAmbisonicsPanningEffectSettings"><span class="n"><span class="pre">IPLAmbisonicsPanningEffectSettings</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">effectSettings</span></span>, <a class="reference internal" href="#_CPPv426IPLAmbisonicsPanningEffect" title="IPLAmbisonicsPanningEffect"><span class="n"><span class="pre">IPLAmbisonicsPanningEffect</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">effect</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv432iplAmbisonicsPanningEffectCreate10IPLContextP16IPLAudioSettingsP34IPLAmbisonicsPanningEffectSettingsP26IPLAmbisonicsPanningEffect" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv332iplAmbisonicsPanningEffectCreate10IPLContextP16IPLAudioSettingsP34IPLAmbisonicsPanningEffectSettingsP26IPLAmbisonicsPanningEffect"></span><span id="_CPPv232iplAmbisonicsPanningEffectCreate10IPLContextP16IPLAudioSettingsP34IPLAmbisonicsPanningEffectSettingsP26IPLAmbisonicsPanningEffect"></span><span id="iplAmbisonicsPanningEffectCreate__IPLContext.IPLAudioSettingsP.IPLAmbisonicsPanningEffectSettingsP.IPLAmbisonicsPanningEffectP"></span><span class="target" id="group__ambisonicspanning_1gac9e084f0b4b5db477bcd81076d31f143"></span><a class="reference internal" href="types.html#_CPPv48IPLerror" title="IPLerror"><span class="n"><span class="pre">IPLerror</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplAmbisonicsPanningEffectCreate</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="context.html#_CPPv410IPLContext" title="IPLContext"><span class="n"><span class="pre">IPLContext</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">context</span></span>, <a class="reference internal" href="audio-buffers.html#_CPPv416IPLAudioSettings" title="IPLAudioSettings"><span class="n"><span class="pre">IPLAudioSettings</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">audioSettings</span></span>, <a class="reference internal" href="#_CPPv434IPLAmbisonicsPanningEffectSettings" title="IPLAmbisonicsPanningEffectSettings"><span class="n"><span class="pre">IPLAmbisonicsPanningEffectSettings</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">effectSettings</span></span>, <a class="reference internal" href="#_CPPv426IPLAmbisonicsPanningEffect" title="IPLAmbisonicsPanningEffect"><span class="n"><span class="pre">IPLAmbisonicsPanningEffect</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">effect</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv432iplAmbisonicsPanningEffectCreate10IPLContextP16IPLAudioSettingsP34IPLAmbisonicsPanningEffectSettingsP26IPLAmbisonicsPanningEffect" title="Link to this definition"></a><br /></dt>
 <dd><p>Creates an Ambisonics panning effect. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>context</strong> – The context used to initialize Steam Audio. </p></li>
 <li><p><strong>audioSettings</strong> – Global audio processing settings. </p></li>
@@ -228,7 +150,7 @@
 <li><p><strong>effect</strong> – [out] The created Ambisonics panning effect.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Status code indicating whether or not the operation succeeded. </p>
 </dd>
 </dl>
@@ -236,13 +158,13 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv432iplAmbisonicsPanningEffectRetain26IPLAmbisonicsPanningEffect">
-<span id="_CPPv332iplAmbisonicsPanningEffectRetain26IPLAmbisonicsPanningEffect"></span><span id="_CPPv232iplAmbisonicsPanningEffectRetain26IPLAmbisonicsPanningEffect"></span><span id="iplAmbisonicsPanningEffectRetain__IPLAmbisonicsPanningEffect"></span><span class="target" id="group__ambisonicspanning_1ga87ef5bf286e97a490774e86b2976ffff"></span><a class="reference internal" href="#_CPPv426IPLAmbisonicsPanningEffect" title="IPLAmbisonicsPanningEffect"><span class="n"><span class="pre">IPLAmbisonicsPanningEffect</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplAmbisonicsPanningEffectRetain</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv426IPLAmbisonicsPanningEffect" title="IPLAmbisonicsPanningEffect"><span class="n"><span class="pre">IPLAmbisonicsPanningEffect</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">effect</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv432iplAmbisonicsPanningEffectRetain26IPLAmbisonicsPanningEffect" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv332iplAmbisonicsPanningEffectRetain26IPLAmbisonicsPanningEffect"></span><span id="_CPPv232iplAmbisonicsPanningEffectRetain26IPLAmbisonicsPanningEffect"></span><span id="iplAmbisonicsPanningEffectRetain__IPLAmbisonicsPanningEffect"></span><span class="target" id="group__ambisonicspanning_1ga87ef5bf286e97a490774e86b2976ffff"></span><a class="reference internal" href="#_CPPv426IPLAmbisonicsPanningEffect" title="IPLAmbisonicsPanningEffect"><span class="n"><span class="pre">IPLAmbisonicsPanningEffect</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplAmbisonicsPanningEffectRetain</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv426IPLAmbisonicsPanningEffect" title="IPLAmbisonicsPanningEffect"><span class="n"><span class="pre">IPLAmbisonicsPanningEffect</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">effect</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv432iplAmbisonicsPanningEffectRetain26IPLAmbisonicsPanningEffect" title="Link to this definition"></a><br /></dt>
 <dd><p>Retains an additional reference to an Ambisonics panning effect. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>effect</strong> – The Ambisonics panning effect to retain a reference to.</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The additional reference to the Ambisonics panning effect. </p>
 </dd>
 </dl>
@@ -250,10 +172,10 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv433iplAmbisonicsPanningEffectReleaseP26IPLAmbisonicsPanningEffect">
-<span id="_CPPv333iplAmbisonicsPanningEffectReleaseP26IPLAmbisonicsPanningEffect"></span><span id="_CPPv233iplAmbisonicsPanningEffectReleaseP26IPLAmbisonicsPanningEffect"></span><span id="iplAmbisonicsPanningEffectRelease__IPLAmbisonicsPanningEffectP"></span><span class="target" id="group__ambisonicspanning_1gaef4341042e72c88c6ed7d1f36e6ffb0f"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplAmbisonicsPanningEffectRelease</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv426IPLAmbisonicsPanningEffect" title="IPLAmbisonicsPanningEffect"><span class="n"><span class="pre">IPLAmbisonicsPanningEffect</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">effect</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv433iplAmbisonicsPanningEffectReleaseP26IPLAmbisonicsPanningEffect" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv333iplAmbisonicsPanningEffectReleaseP26IPLAmbisonicsPanningEffect"></span><span id="_CPPv233iplAmbisonicsPanningEffectReleaseP26IPLAmbisonicsPanningEffect"></span><span id="iplAmbisonicsPanningEffectRelease__IPLAmbisonicsPanningEffectP"></span><span class="target" id="group__ambisonicspanning_1gaef4341042e72c88c6ed7d1f36e6ffb0f"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplAmbisonicsPanningEffectRelease</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv426IPLAmbisonicsPanningEffect" title="IPLAmbisonicsPanningEffect"><span class="n"><span class="pre">IPLAmbisonicsPanningEffect</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">effect</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv433iplAmbisonicsPanningEffectReleaseP26IPLAmbisonicsPanningEffect" title="Link to this definition"></a><br /></dt>
 <dd><p>Releases a reference to an Ambisonics panning effect. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>effect</strong> – The Ambisonics panning effect to release a reference to. </p>
 </dd>
 </dl>
@@ -261,10 +183,10 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv431iplAmbisonicsPanningEffectReset26IPLAmbisonicsPanningEffect">
-<span id="_CPPv331iplAmbisonicsPanningEffectReset26IPLAmbisonicsPanningEffect"></span><span id="_CPPv231iplAmbisonicsPanningEffectReset26IPLAmbisonicsPanningEffect"></span><span id="iplAmbisonicsPanningEffectReset__IPLAmbisonicsPanningEffect"></span><span class="target" id="group__ambisonicspanning_1ga953e69ed96c37258f476112b076733e2"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplAmbisonicsPanningEffectReset</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv426IPLAmbisonicsPanningEffect" title="IPLAmbisonicsPanningEffect"><span class="n"><span class="pre">IPLAmbisonicsPanningEffect</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">effect</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv431iplAmbisonicsPanningEffectReset26IPLAmbisonicsPanningEffect" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv331iplAmbisonicsPanningEffectReset26IPLAmbisonicsPanningEffect"></span><span id="_CPPv231iplAmbisonicsPanningEffectReset26IPLAmbisonicsPanningEffect"></span><span id="iplAmbisonicsPanningEffectReset__IPLAmbisonicsPanningEffect"></span><span class="target" id="group__ambisonicspanning_1ga953e69ed96c37258f476112b076733e2"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplAmbisonicsPanningEffectReset</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv426IPLAmbisonicsPanningEffect" title="IPLAmbisonicsPanningEffect"><span class="n"><span class="pre">IPLAmbisonicsPanningEffect</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">effect</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv431iplAmbisonicsPanningEffectReset26IPLAmbisonicsPanningEffect" title="Link to this definition"></a><br /></dt>
 <dd><p>Resets the internal processing state of an Ambisonics panning effect. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>effect</strong> – The Ambisonics panning effect to reset. </p>
 </dd>
 </dl>
@@ -272,11 +194,11 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv431iplAmbisonicsPanningEffectApply26IPLAmbisonicsPanningEffectP32IPLAmbisonicsPanningEffectParamsP14IPLAudioBufferP14IPLAudioBuffer">
-<span id="_CPPv331iplAmbisonicsPanningEffectApply26IPLAmbisonicsPanningEffectP32IPLAmbisonicsPanningEffectParamsP14IPLAudioBufferP14IPLAudioBuffer"></span><span id="_CPPv231iplAmbisonicsPanningEffectApply26IPLAmbisonicsPanningEffectP32IPLAmbisonicsPanningEffectParamsP14IPLAudioBufferP14IPLAudioBuffer"></span><span id="iplAmbisonicsPanningEffectApply__IPLAmbisonicsPanningEffect.IPLAmbisonicsPanningEffectParamsP.IPLAudioBufferP.IPLAudioBufferP"></span><span class="target" id="group__ambisonicspanning_1gaf426029e163027a800c119261d81f3d8"></span><a class="reference internal" href="audio-buffers.html#_CPPv419IPLAudioEffectState" title="IPLAudioEffectState"><span class="n"><span class="pre">IPLAudioEffectState</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplAmbisonicsPanningEffectApply</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv426IPLAmbisonicsPanningEffect" title="IPLAmbisonicsPanningEffect"><span class="n"><span class="pre">IPLAmbisonicsPanningEffect</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">effect</span></span>, <a class="reference internal" href="#_CPPv432IPLAmbisonicsPanningEffectParams" title="IPLAmbisonicsPanningEffectParams"><span class="n"><span class="pre">IPLAmbisonicsPanningEffectParams</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">params</span></span>, <a class="reference internal" href="audio-buffers.html#_CPPv414IPLAudioBuffer" title="IPLAudioBuffer"><span class="n"><span class="pre">IPLAudioBuffer</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">in</span></span>, <a class="reference internal" href="audio-buffers.html#_CPPv414IPLAudioBuffer" title="IPLAudioBuffer"><span class="n"><span class="pre">IPLAudioBuffer</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">out</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv431iplAmbisonicsPanningEffectApply26IPLAmbisonicsPanningEffectP32IPLAmbisonicsPanningEffectParamsP14IPLAudioBufferP14IPLAudioBuffer" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv331iplAmbisonicsPanningEffectApply26IPLAmbisonicsPanningEffectP32IPLAmbisonicsPanningEffectParamsP14IPLAudioBufferP14IPLAudioBuffer"></span><span id="_CPPv231iplAmbisonicsPanningEffectApply26IPLAmbisonicsPanningEffectP32IPLAmbisonicsPanningEffectParamsP14IPLAudioBufferP14IPLAudioBuffer"></span><span id="iplAmbisonicsPanningEffectApply__IPLAmbisonicsPanningEffect.IPLAmbisonicsPanningEffectParamsP.IPLAudioBufferP.IPLAudioBufferP"></span><span class="target" id="group__ambisonicspanning_1gaf426029e163027a800c119261d81f3d8"></span><a class="reference internal" href="audio-buffers.html#_CPPv419IPLAudioEffectState" title="IPLAudioEffectState"><span class="n"><span class="pre">IPLAudioEffectState</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplAmbisonicsPanningEffectApply</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv426IPLAmbisonicsPanningEffect" title="IPLAmbisonicsPanningEffect"><span class="n"><span class="pre">IPLAmbisonicsPanningEffect</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">effect</span></span>, <a class="reference internal" href="#_CPPv432IPLAmbisonicsPanningEffectParams" title="IPLAmbisonicsPanningEffectParams"><span class="n"><span class="pre">IPLAmbisonicsPanningEffectParams</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">params</span></span>, <a class="reference internal" href="audio-buffers.html#_CPPv414IPLAudioBuffer" title="IPLAudioBuffer"><span class="n"><span class="pre">IPLAudioBuffer</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">in</span></span>, <a class="reference internal" href="audio-buffers.html#_CPPv414IPLAudioBuffer" title="IPLAudioBuffer"><span class="n"><span class="pre">IPLAudioBuffer</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">out</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv431iplAmbisonicsPanningEffectApply26IPLAmbisonicsPanningEffectP32IPLAmbisonicsPanningEffectParamsP14IPLAudioBufferP14IPLAudioBuffer" title="Link to this definition"></a><br /></dt>
 <dd><p>Applies an Ambisonics panning effect to an audio buffer. </p>
 <p>This effect CANNOT be applied in-place.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>effect</strong> – The Ambisonics panning effect to apply. </p></li>
 <li><p><strong>params</strong> – Parameters for applying the effect. </p></li>
@@ -284,30 +206,30 @@
 <li><p><strong>out</strong> – The output audio buffer. Must have as many channels as needed for the speaker layout specified when creating the effect.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">IPL_AUDIOEFFECTSTATE_TAILCOMPLETE</span></code> to indicate that this effect does not generate any tail samples. </p>
 </dd>
 </dl>
 </dd></dl>
 
-</div>
-<div class="section" id="structures">
-<h2>Structures<a class="headerlink" href="#structures" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="structures">
+<h2>Structures<a class="headerlink" href="#structures" title="Link to this heading"></a></h2>
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv434IPLAmbisonicsPanningEffectSettings">
-<span id="_CPPv334IPLAmbisonicsPanningEffectSettings"></span><span id="_CPPv234IPLAmbisonicsPanningEffectSettings"></span><span id="IPLAmbisonicsPanningEffectSettings"></span><span class="target" id="struct_i_p_l_ambisonics_panning_effect_settings"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLAmbisonicsPanningEffectSettings</span></span></span><a class="headerlink" href="#_CPPv434IPLAmbisonicsPanningEffectSettings" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv334IPLAmbisonicsPanningEffectSettings"></span><span id="_CPPv234IPLAmbisonicsPanningEffectSettings"></span><span id="IPLAmbisonicsPanningEffectSettings"></span><span class="target" id="struct_i_p_l_ambisonics_panning_effect_settings"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLAmbisonicsPanningEffectSettings</span></span></span><a class="headerlink" href="#_CPPv434IPLAmbisonicsPanningEffectSettings" title="Link to this definition"></a><br /></dt>
 <dd><p>Settings used to create an Ambisonics panning effect. </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N34IPLAmbisonicsPanningEffectSettings13speakerLayoutE">
-<span id="_CPPv3N34IPLAmbisonicsPanningEffectSettings13speakerLayoutE"></span><span id="_CPPv2N34IPLAmbisonicsPanningEffectSettings13speakerLayoutE"></span><span id="IPLAmbisonicsPanningEffectSettings::speakerLayout__IPLSpeakerLayout"></span><span class="target" id="struct_i_p_l_ambisonics_panning_effect_settings_1ae2881f808b7ed510cf1be3a24c2f0ac5"></span><a class="reference internal" href="audio-buffers.html#_CPPv416IPLSpeakerLayout" title="IPLSpeakerLayout"><span class="n"><span class="pre">IPLSpeakerLayout</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">speakerLayout</span></span></span><a class="headerlink" href="#_CPPv4N34IPLAmbisonicsPanningEffectSettings13speakerLayoutE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N34IPLAmbisonicsPanningEffectSettings13speakerLayoutE"></span><span id="_CPPv2N34IPLAmbisonicsPanningEffectSettings13speakerLayoutE"></span><span id="IPLAmbisonicsPanningEffectSettings::speakerLayout__IPLSpeakerLayout"></span><span class="target" id="struct_i_p_l_ambisonics_panning_effect_settings_1ae2881f808b7ed510cf1be3a24c2f0ac5"></span><a class="reference internal" href="audio-buffers.html#_CPPv416IPLSpeakerLayout" title="IPLSpeakerLayout"><span class="n"><span class="pre">IPLSpeakerLayout</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">speakerLayout</span></span></span><a class="headerlink" href="#_CPPv4N34IPLAmbisonicsPanningEffectSettings13speakerLayoutE" title="Link to this definition"></a><br /></dt>
 <dd><p>The speaker layout that will be used by output audio buffers. </p>
 </dd></dl>
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N34IPLAmbisonicsPanningEffectSettings8maxOrderE">
-<span id="_CPPv3N34IPLAmbisonicsPanningEffectSettings8maxOrderE"></span><span id="_CPPv2N34IPLAmbisonicsPanningEffectSettings8maxOrderE"></span><span id="IPLAmbisonicsPanningEffectSettings::maxOrder__IPLint32"></span><span class="target" id="struct_i_p_l_ambisonics_panning_effect_settings_1a51ad17576848f04fd5c9ddac74b7bd05"></span><a class="reference internal" href="types.html#_CPPv48IPLint32" title="IPLint32"><span class="n"><span class="pre">IPLint32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">maxOrder</span></span></span><a class="headerlink" href="#_CPPv4N34IPLAmbisonicsPanningEffectSettings8maxOrderE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N34IPLAmbisonicsPanningEffectSettings8maxOrderE"></span><span id="_CPPv2N34IPLAmbisonicsPanningEffectSettings8maxOrderE"></span><span id="IPLAmbisonicsPanningEffectSettings::maxOrder__IPLint32"></span><span class="target" id="struct_i_p_l_ambisonics_panning_effect_settings_1a51ad17576848f04fd5c9ddac74b7bd05"></span><a class="reference internal" href="types.html#_CPPv48IPLint32" title="IPLint32"><span class="n"><span class="pre">IPLint32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">maxOrder</span></span></span><a class="headerlink" href="#_CPPv4N34IPLAmbisonicsPanningEffectSettings8maxOrderE" title="Link to this definition"></a><br /></dt>
 <dd><p>The maximum Ambisonics order that will be used by input audio buffers. </p>
 </dd></dl>
 
@@ -316,13 +238,13 @@
 
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv432IPLAmbisonicsPanningEffectParams">
-<span id="_CPPv332IPLAmbisonicsPanningEffectParams"></span><span id="_CPPv232IPLAmbisonicsPanningEffectParams"></span><span id="IPLAmbisonicsPanningEffectParams"></span><span class="target" id="struct_i_p_l_ambisonics_panning_effect_params"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLAmbisonicsPanningEffectParams</span></span></span><a class="headerlink" href="#_CPPv432IPLAmbisonicsPanningEffectParams" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv332IPLAmbisonicsPanningEffectParams"></span><span id="_CPPv232IPLAmbisonicsPanningEffectParams"></span><span id="IPLAmbisonicsPanningEffectParams"></span><span class="target" id="struct_i_p_l_ambisonics_panning_effect_params"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLAmbisonicsPanningEffectParams</span></span></span><a class="headerlink" href="#_CPPv432IPLAmbisonicsPanningEffectParams" title="Link to this definition"></a><br /></dt>
 <dd><p>Parameters for applying an Ambisonics panning effect to an audio buffer. </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N32IPLAmbisonicsPanningEffectParams5orderE">
-<span id="_CPPv3N32IPLAmbisonicsPanningEffectParams5orderE"></span><span id="_CPPv2N32IPLAmbisonicsPanningEffectParams5orderE"></span><span id="IPLAmbisonicsPanningEffectParams::order__IPLint32"></span><span class="target" id="struct_i_p_l_ambisonics_panning_effect_params_1a8f0bc3d342c8bf145d3f4fc741f84df9"></span><a class="reference internal" href="types.html#_CPPv48IPLint32" title="IPLint32"><span class="n"><span class="pre">IPLint32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">order</span></span></span><a class="headerlink" href="#_CPPv4N32IPLAmbisonicsPanningEffectParams5orderE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N32IPLAmbisonicsPanningEffectParams5orderE"></span><span id="_CPPv2N32IPLAmbisonicsPanningEffectParams5orderE"></span><span id="IPLAmbisonicsPanningEffectParams::order__IPLint32"></span><span class="target" id="struct_i_p_l_ambisonics_panning_effect_params_1a8f0bc3d342c8bf145d3f4fc741f84df9"></span><a class="reference internal" href="types.html#_CPPv48IPLint32" title="IPLint32"><span class="n"><span class="pre">IPLint32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">order</span></span></span><a class="headerlink" href="#_CPPv4N32IPLAmbisonicsPanningEffectParams5orderE" title="Link to this definition"></a><br /></dt>
 <dd><p>Ambisonic order of the input buffer. </p>
 <p>May be less than the <code class="docutils literal notranslate"><span class="pre">maxOrder</span></code> specified when creating the effect, in which case the effect will process fewer input channels, reducing CPU usage. </p>
 </dd></dl>
@@ -330,55 +252,38 @@
 </div>
 </dd></dl>
 
-</div>
-</div>
+</section>
+</section>
 
 
            </div>
-           
           </div>
-          <footer>
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="ambisonics-binaural-effect.html" class="btn btn-neutral float-right" title="Ambisonics Binaural Effect" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="ambisonics-encode-effect.html" class="btn btn-neutral float-left" title="Ambisonics Encode Effect" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="ambisonics-binaural-effect.html" class="btn btn-neutral float-right" title="Ambisonics Binaural Effect" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &#169; Copyright 2017-2023, Valve Corporation.
-
-    </p>
+    <p>&#169; Copyright 2017-2023, Valve Corporation.</p>
   </div>
-    
-    
-    
-    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>

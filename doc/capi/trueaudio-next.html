@@ -1,101 +1,50 @@
 
 
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
-  <meta charset="utf-8" />
-  
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  
   <title>TrueAudio Next &mdash; Steam Audio C API  documentation</title>
-  
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/steamaudio.css?v=b5aaeb06" />
 
   
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/steamaudio.css" type="text/css" />
-
-  
-  
-
-  
-  
-
-  
-
-  
-  <!--[if lt IE 9]>
-    <script src="_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/doctools.js"></script>
-    
-    <script type="text/javascript" src="_static/js/theme.js"></script>
-
-    
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=7f41d439"></script>
+      <script src="_static/doctools.js?v=9a2dae69"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Scene" href="scene.html" />
     <link rel="prev" title="Radeon Rays" href="radeon-rays.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
 
           
-            <a href="index.html">
           
-
-          
+          <a href="index.html">
             
-            <img src="_static/steam-audio-logo.png" class="logo" alt="Logo"/>
-          
+              <img src="_static/steam-audio-logo.png" class="logo" alt="Logo"/>
           </a>
-
-          
-            
-            
-              <div class="version">
-                4.6.0
-              </div>
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
-              <p class="caption"><span class="caption-text">Steam Audio SDK</span></p>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Steam Audio SDK</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="guide.html">Programmer’s Guide</a></li>
@@ -110,9 +59,20 @@
 <li class="toctree-l2"><a class="reference internal" href="opencl.html">OpenCL</a></li>
 <li class="toctree-l2"><a class="reference internal" href="radeon-rays.html">Radeon Rays</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">TrueAudio Next</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#typedefs">Typedefs</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#functions">Functions</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#structures">Structures</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#typedefs">Typedefs</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv422IPLTrueAudioNextDevice"><code class="docutils literal notranslate"><span class="pre">IPLTrueAudioNextDevice</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#functions">Functions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv428iplTrueAudioNextDeviceCreate15IPLOpenCLDeviceP30IPLTrueAudioNextDeviceSettingsP22IPLTrueAudioNextDevice"><code class="docutils literal notranslate"><span class="pre">iplTrueAudioNextDeviceCreate()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv428iplTrueAudioNextDeviceRetain22IPLTrueAudioNextDevice"><code class="docutils literal notranslate"><span class="pre">iplTrueAudioNextDeviceRetain()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv429iplTrueAudioNextDeviceReleaseP22IPLTrueAudioNextDevice"><code class="docutils literal notranslate"><span class="pre">iplTrueAudioNextDeviceRelease()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#structures">Structures</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv430IPLTrueAudioNextDeviceSettings"><code class="docutils literal notranslate"><span class="pre">IPLTrueAudioNextDeviceSettings</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="scene.html">Scene</a></li>
@@ -136,98 +96,57 @@
 </li>
 </ul>
 
-            
-          
         </div>
-        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="index.html">Steam Audio C API</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
-      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-        
-          <li><a href="reference.html">API Reference</a> &raquo;</li>
-        
-      <li>TrueAudio Next</li>
-    
-    
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="reference.html">API Reference</a></li>
+      <li class="breadcrumb-item active">TrueAudio Next</li>
       <li class="wy-breadcrumbs-aside">
-        
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
-  <div class="section" id="trueaudio-next">
-<h1>TrueAudio Next<a class="headerlink" href="#trueaudio-next" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="typedefs">
-<h2>Typedefs<a class="headerlink" href="#typedefs" title="Permalink to this headline">¶</a></h2>
+             
+  <section id="trueaudio-next">
+<h1>TrueAudio Next<a class="headerlink" href="#trueaudio-next" title="Link to this heading"></a></h1>
+<section id="typedefs">
+<h2>Typedefs<a class="headerlink" href="#typedefs" title="Link to this heading"></a></h2>
 <dl class="cpp type">
 <dt class="sig sig-object cpp" id="_CPPv422IPLTrueAudioNextDevice">
-<span id="_CPPv322IPLTrueAudioNextDevice"></span><span id="_CPPv222IPLTrueAudioNextDevice"></span><span id="IPLTrueAudioNextDevice"></span><span class="target" id="group__tan_1gaeee4f1a985a41a892a66e2ca11bccce8"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="n"><span class="pre">_IPLTrueAudioNextDevice_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">IPLTrueAudioNextDevice</span></span></span><a class="headerlink" href="#_CPPv422IPLTrueAudioNextDevice" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv322IPLTrueAudioNextDevice"></span><span id="_CPPv222IPLTrueAudioNextDevice"></span><span id="IPLTrueAudioNextDevice"></span><span class="target" id="group__tan_1gaeee4f1a985a41a892a66e2ca11bccce8"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="n"><span class="pre">_IPLTrueAudioNextDevice_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">IPLTrueAudioNextDevice</span></span></span><a class="headerlink" href="#_CPPv422IPLTrueAudioNextDevice" title="Link to this definition"></a><br /></dt>
 <dd><p>Application-wide state for the TrueAudio Next convolution engine. </p>
 <p>A TrueAudio Next device must be created before using any of Steam Audio’s TrueAudio Next convolution functionality. In terms of the TrueAudio Next API, this object encapsulates an <code class="docutils literal notranslate"><span class="pre">amf::TANContext</span></code> and amf::TANConvolution object. </p>
 </dd></dl>
 
-</div>
-<div class="section" id="functions">
-<h2>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="functions">
+<h2>Functions<a class="headerlink" href="#functions" title="Link to this heading"></a></h2>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv428iplTrueAudioNextDeviceCreate15IPLOpenCLDeviceP30IPLTrueAudioNextDeviceSettingsP22IPLTrueAudioNextDevice">
-<span id="_CPPv328iplTrueAudioNextDeviceCreate15IPLOpenCLDeviceP30IPLTrueAudioNextDeviceSettingsP22IPLTrueAudioNextDevice"></span><span id="_CPPv228iplTrueAudioNextDeviceCreate15IPLOpenCLDeviceP30IPLTrueAudioNextDeviceSettingsP22IPLTrueAudioNextDevice"></span><span id="iplTrueAudioNextDeviceCreate__IPLOpenCLDevice.IPLTrueAudioNextDeviceSettingsP.IPLTrueAudioNextDeviceP"></span><span class="target" id="group__tan_1ga7e677df6a219b6ea18bdc2c1d7d8fa12"></span><a class="reference internal" href="types.html#_CPPv48IPLerror" title="IPLerror"><span class="n"><span class="pre">IPLerror</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplTrueAudioNextDeviceCreate</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="opencl.html#_CPPv415IPLOpenCLDevice" title="IPLOpenCLDevice"><span class="n"><span class="pre">IPLOpenCLDevice</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">openCLDevice</span></span>, <a class="reference internal" href="#_CPPv430IPLTrueAudioNextDeviceSettings" title="IPLTrueAudioNextDeviceSettings"><span class="n"><span class="pre">IPLTrueAudioNextDeviceSettings</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">settings</span></span>, <a class="reference internal" href="#_CPPv422IPLTrueAudioNextDevice" title="IPLTrueAudioNextDevice"><span class="n"><span class="pre">IPLTrueAudioNextDevice</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">tanDevice</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv428iplTrueAudioNextDeviceCreate15IPLOpenCLDeviceP30IPLTrueAudioNextDeviceSettingsP22IPLTrueAudioNextDevice" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv328iplTrueAudioNextDeviceCreate15IPLOpenCLDeviceP30IPLTrueAudioNextDeviceSettingsP22IPLTrueAudioNextDevice"></span><span id="_CPPv228iplTrueAudioNextDeviceCreate15IPLOpenCLDeviceP30IPLTrueAudioNextDeviceSettingsP22IPLTrueAudioNextDevice"></span><span id="iplTrueAudioNextDeviceCreate__IPLOpenCLDevice.IPLTrueAudioNextDeviceSettingsP.IPLTrueAudioNextDeviceP"></span><span class="target" id="group__tan_1ga7e677df6a219b6ea18bdc2c1d7d8fa12"></span><a class="reference internal" href="types.html#_CPPv48IPLerror" title="IPLerror"><span class="n"><span class="pre">IPLerror</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplTrueAudioNextDeviceCreate</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="opencl.html#_CPPv415IPLOpenCLDevice" title="IPLOpenCLDevice"><span class="n"><span class="pre">IPLOpenCLDevice</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">openCLDevice</span></span>, <a class="reference internal" href="#_CPPv430IPLTrueAudioNextDeviceSettings" title="IPLTrueAudioNextDeviceSettings"><span class="n"><span class="pre">IPLTrueAudioNextDeviceSettings</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">settings</span></span>, <a class="reference internal" href="#_CPPv422IPLTrueAudioNextDevice" title="IPLTrueAudioNextDevice"><span class="n"><span class="pre">IPLTrueAudioNextDevice</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">tanDevice</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv428iplTrueAudioNextDeviceCreate15IPLOpenCLDeviceP30IPLTrueAudioNextDeviceSettingsP22IPLTrueAudioNextDevice" title="Link to this definition"></a><br /></dt>
 <dd><p>Creates a TrueAudio Next device. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>openCLDevice</strong> – The OpenCL device to use for running TrueAudio Next. </p></li>
 <li><p><strong>settings</strong> – The settings to use when creating the TrueAudio Next device. </p></li>
 <li><p><strong>tanDevice</strong> – [out] The created TrueAudio Next device.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Status code indicating whether or not the operation succeeded. </p>
 </dd>
 </dl>
@@ -235,13 +154,13 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv428iplTrueAudioNextDeviceRetain22IPLTrueAudioNextDevice">
-<span id="_CPPv328iplTrueAudioNextDeviceRetain22IPLTrueAudioNextDevice"></span><span id="_CPPv228iplTrueAudioNextDeviceRetain22IPLTrueAudioNextDevice"></span><span id="iplTrueAudioNextDeviceRetain__IPLTrueAudioNextDevice"></span><span class="target" id="group__tan_1ga2dcb820b39586bd8f6b454dbeb6de48e"></span><a class="reference internal" href="#_CPPv422IPLTrueAudioNextDevice" title="IPLTrueAudioNextDevice"><span class="n"><span class="pre">IPLTrueAudioNextDevice</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplTrueAudioNextDeviceRetain</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv422IPLTrueAudioNextDevice" title="IPLTrueAudioNextDevice"><span class="n"><span class="pre">IPLTrueAudioNextDevice</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">device</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv428iplTrueAudioNextDeviceRetain22IPLTrueAudioNextDevice" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv328iplTrueAudioNextDeviceRetain22IPLTrueAudioNextDevice"></span><span id="_CPPv228iplTrueAudioNextDeviceRetain22IPLTrueAudioNextDevice"></span><span id="iplTrueAudioNextDeviceRetain__IPLTrueAudioNextDevice"></span><span class="target" id="group__tan_1ga2dcb820b39586bd8f6b454dbeb6de48e"></span><a class="reference internal" href="#_CPPv422IPLTrueAudioNextDevice" title="IPLTrueAudioNextDevice"><span class="n"><span class="pre">IPLTrueAudioNextDevice</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplTrueAudioNextDeviceRetain</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv422IPLTrueAudioNextDevice" title="IPLTrueAudioNextDevice"><span class="n"><span class="pre">IPLTrueAudioNextDevice</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">device</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv428iplTrueAudioNextDeviceRetain22IPLTrueAudioNextDevice" title="Link to this definition"></a><br /></dt>
 <dd><p>Retains an additional reference to a TrueAudio Next device. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>device</strong> – The TrueAudio Next device to retain a reference to.</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The additional reference to the TrueAudio Next device. </p>
 </dd>
 </dl>
@@ -249,100 +168,83 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv429iplTrueAudioNextDeviceReleaseP22IPLTrueAudioNextDevice">
-<span id="_CPPv329iplTrueAudioNextDeviceReleaseP22IPLTrueAudioNextDevice"></span><span id="_CPPv229iplTrueAudioNextDeviceReleaseP22IPLTrueAudioNextDevice"></span><span id="iplTrueAudioNextDeviceRelease__IPLTrueAudioNextDeviceP"></span><span class="target" id="group__tan_1ga04efb84bfff75665971a67c14f28e12d"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplTrueAudioNextDeviceRelease</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv422IPLTrueAudioNextDevice" title="IPLTrueAudioNextDevice"><span class="n"><span class="pre">IPLTrueAudioNextDevice</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">device</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv429iplTrueAudioNextDeviceReleaseP22IPLTrueAudioNextDevice" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv329iplTrueAudioNextDeviceReleaseP22IPLTrueAudioNextDevice"></span><span id="_CPPv229iplTrueAudioNextDeviceReleaseP22IPLTrueAudioNextDevice"></span><span id="iplTrueAudioNextDeviceRelease__IPLTrueAudioNextDeviceP"></span><span class="target" id="group__tan_1ga04efb84bfff75665971a67c14f28e12d"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplTrueAudioNextDeviceRelease</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv422IPLTrueAudioNextDevice" title="IPLTrueAudioNextDevice"><span class="n"><span class="pre">IPLTrueAudioNextDevice</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">device</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv429iplTrueAudioNextDeviceReleaseP22IPLTrueAudioNextDevice" title="Link to this definition"></a><br /></dt>
 <dd><p>Releases a reference to a TrueAudio Next device. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>device</strong> – The TrueAudio Next device to release a reference to. </p>
 </dd>
 </dl>
 </dd></dl>
 
-</div>
-<div class="section" id="structures">
-<h2>Structures<a class="headerlink" href="#structures" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="structures">
+<h2>Structures<a class="headerlink" href="#structures" title="Link to this heading"></a></h2>
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv430IPLTrueAudioNextDeviceSettings">
-<span id="_CPPv330IPLTrueAudioNextDeviceSettings"></span><span id="_CPPv230IPLTrueAudioNextDeviceSettings"></span><span id="IPLTrueAudioNextDeviceSettings"></span><span class="target" id="struct_i_p_l_true_audio_next_device_settings"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLTrueAudioNextDeviceSettings</span></span></span><a class="headerlink" href="#_CPPv430IPLTrueAudioNextDeviceSettings" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv330IPLTrueAudioNextDeviceSettings"></span><span id="_CPPv230IPLTrueAudioNextDeviceSettings"></span><span id="IPLTrueAudioNextDeviceSettings"></span><span class="target" id="struct_i_p_l_true_audio_next_device_settings"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLTrueAudioNextDeviceSettings</span></span></span><a class="headerlink" href="#_CPPv430IPLTrueAudioNextDeviceSettings" title="Link to this definition"></a><br /></dt>
 <dd><p>Settings used to create a TrueAudio Next device. </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N30IPLTrueAudioNextDeviceSettings9frameSizeE">
-<span id="_CPPv3N30IPLTrueAudioNextDeviceSettings9frameSizeE"></span><span id="_CPPv2N30IPLTrueAudioNextDeviceSettings9frameSizeE"></span><span id="IPLTrueAudioNextDeviceSettings::frameSize__IPLint32"></span><span class="target" id="struct_i_p_l_true_audio_next_device_settings_1a585c33529103fcfd1cef24179f8f6bee"></span><a class="reference internal" href="types.html#_CPPv48IPLint32" title="IPLint32"><span class="n"><span class="pre">IPLint32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">frameSize</span></span></span><a class="headerlink" href="#_CPPv4N30IPLTrueAudioNextDeviceSettings9frameSizeE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N30IPLTrueAudioNextDeviceSettings9frameSizeE"></span><span id="_CPPv2N30IPLTrueAudioNextDeviceSettings9frameSizeE"></span><span id="IPLTrueAudioNextDeviceSettings::frameSize__IPLint32"></span><span class="target" id="struct_i_p_l_true_audio_next_device_settings_1a585c33529103fcfd1cef24179f8f6bee"></span><a class="reference internal" href="types.html#_CPPv48IPLint32" title="IPLint32"><span class="n"><span class="pre">IPLint32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">frameSize</span></span></span><a class="headerlink" href="#_CPPv4N30IPLTrueAudioNextDeviceSettings9frameSizeE" title="Link to this definition"></a><br /></dt>
 <dd><p>The number of samples in an audio frame. </p>
 </dd></dl>
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N30IPLTrueAudioNextDeviceSettings6irSizeE">
-<span id="_CPPv3N30IPLTrueAudioNextDeviceSettings6irSizeE"></span><span id="_CPPv2N30IPLTrueAudioNextDeviceSettings6irSizeE"></span><span id="IPLTrueAudioNextDeviceSettings::irSize__IPLint32"></span><span class="target" id="struct_i_p_l_true_audio_next_device_settings_1a58f861a84f1207106c1563d4b7a7ac68"></span><a class="reference internal" href="types.html#_CPPv48IPLint32" title="IPLint32"><span class="n"><span class="pre">IPLint32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">irSize</span></span></span><a class="headerlink" href="#_CPPv4N30IPLTrueAudioNextDeviceSettings6irSizeE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N30IPLTrueAudioNextDeviceSettings6irSizeE"></span><span id="_CPPv2N30IPLTrueAudioNextDeviceSettings6irSizeE"></span><span id="IPLTrueAudioNextDeviceSettings::irSize__IPLint32"></span><span class="target" id="struct_i_p_l_true_audio_next_device_settings_1a58f861a84f1207106c1563d4b7a7ac68"></span><a class="reference internal" href="types.html#_CPPv48IPLint32" title="IPLint32"><span class="n"><span class="pre">IPLint32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">irSize</span></span></span><a class="headerlink" href="#_CPPv4N30IPLTrueAudioNextDeviceSettings6irSizeE" title="Link to this definition"></a><br /></dt>
 <dd><p>The number of samples in the impulse responses that will be used for convolution. </p>
 </dd></dl>
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N30IPLTrueAudioNextDeviceSettings5orderE">
-<span id="_CPPv3N30IPLTrueAudioNextDeviceSettings5orderE"></span><span id="_CPPv2N30IPLTrueAudioNextDeviceSettings5orderE"></span><span id="IPLTrueAudioNextDeviceSettings::order__IPLint32"></span><span class="target" id="struct_i_p_l_true_audio_next_device_settings_1a8f0bc3d342c8bf145d3f4fc741f84df9"></span><a class="reference internal" href="types.html#_CPPv48IPLint32" title="IPLint32"><span class="n"><span class="pre">IPLint32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">order</span></span></span><a class="headerlink" href="#_CPPv4N30IPLTrueAudioNextDeviceSettings5orderE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N30IPLTrueAudioNextDeviceSettings5orderE"></span><span id="_CPPv2N30IPLTrueAudioNextDeviceSettings5orderE"></span><span id="IPLTrueAudioNextDeviceSettings::order__IPLint32"></span><span class="target" id="struct_i_p_l_true_audio_next_device_settings_1a8f0bc3d342c8bf145d3f4fc741f84df9"></span><a class="reference internal" href="types.html#_CPPv48IPLint32" title="IPLint32"><span class="n"><span class="pre">IPLint32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">order</span></span></span><a class="headerlink" href="#_CPPv4N30IPLTrueAudioNextDeviceSettings5orderE" title="Link to this definition"></a><br /></dt>
 <dd><p>The Ambisonic order of the impulse responses that will be used for convolution. </p>
 </dd></dl>
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N30IPLTrueAudioNextDeviceSettings10maxSourcesE">
-<span id="_CPPv3N30IPLTrueAudioNextDeviceSettings10maxSourcesE"></span><span id="_CPPv2N30IPLTrueAudioNextDeviceSettings10maxSourcesE"></span><span id="IPLTrueAudioNextDeviceSettings::maxSources__IPLint32"></span><span class="target" id="struct_i_p_l_true_audio_next_device_settings_1a05c2da8e49a6fc9602e11b2a3b853113"></span><a class="reference internal" href="types.html#_CPPv48IPLint32" title="IPLint32"><span class="n"><span class="pre">IPLint32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">maxSources</span></span></span><a class="headerlink" href="#_CPPv4N30IPLTrueAudioNextDeviceSettings10maxSourcesE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N30IPLTrueAudioNextDeviceSettings10maxSourcesE"></span><span id="_CPPv2N30IPLTrueAudioNextDeviceSettings10maxSourcesE"></span><span id="IPLTrueAudioNextDeviceSettings::maxSources__IPLint32"></span><span class="target" id="struct_i_p_l_true_audio_next_device_settings_1a05c2da8e49a6fc9602e11b2a3b853113"></span><a class="reference internal" href="types.html#_CPPv48IPLint32" title="IPLint32"><span class="n"><span class="pre">IPLint32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">maxSources</span></span></span><a class="headerlink" href="#_CPPv4N30IPLTrueAudioNextDeviceSettings10maxSourcesE" title="Link to this definition"></a><br /></dt>
 <dd><p>The maximum number of sources that will use TrueAudio Next for convolution. </p>
 </dd></dl>
 
 </div>
 </dd></dl>
 
-</div>
-</div>
+</section>
+</section>
 
 
            </div>
-           
           </div>
-          <footer>
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="scene.html" class="btn btn-neutral float-right" title="Scene" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="radeon-rays.html" class="btn btn-neutral float-left" title="Radeon Rays" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="scene.html" class="btn btn-neutral float-right" title="Scene" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &#169; Copyright 2017-2023, Valve Corporation.
-
-    </p>
+    <p>&#169; Copyright 2017-2023, Valve Corporation.</p>
   </div>
-    
-    
-    
-    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>

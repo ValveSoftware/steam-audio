@@ -1,101 +1,50 @@
 
 
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
-  <meta charset="utf-8" />
-  
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  
   <title>Serialization &mdash; Steam Audio C API  documentation</title>
-  
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/steamaudio.css?v=b5aaeb06" />
 
   
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/steamaudio.css" type="text/css" />
-
-  
-  
-
-  
-  
-
-  
-
-  
-  <!--[if lt IE 9]>
-    <script src="_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/doctools.js"></script>
-    
-    <script type="text/javascript" src="_static/js/theme.js"></script>
-
-    
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=7f41d439"></script>
+      <script src="_static/doctools.js?v=9a2dae69"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Embree" href="embree.html" />
     <link rel="prev" title="Geometry" href="geometry.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
 
           
-            <a href="index.html">
           
-
-          
+          <a href="index.html">
             
-            <img src="_static/steam-audio-logo.png" class="logo" alt="Logo"/>
-          
+              <img src="_static/steam-audio-logo.png" class="logo" alt="Logo"/>
           </a>
-
-          
-            
-            
-              <div class="version">
-                4.6.0
-              </div>
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
-              <p class="caption"><span class="caption-text">Steam Audio SDK</span></p>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Steam Audio SDK</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="guide.html">Programmer’s Guide</a></li>
@@ -106,9 +55,22 @@
 <li class="toctree-l2"><a class="reference internal" href="context.html">Context</a></li>
 <li class="toctree-l2"><a class="reference internal" href="geometry.html">Geometry</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Serialization</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#typedefs">Typedefs</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#functions">Functions</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#structures">Structures</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#typedefs">Typedefs</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv419IPLSerializedObject"><code class="docutils literal notranslate"><span class="pre">IPLSerializedObject</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#functions">Functions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv425iplSerializedObjectCreate10IPLContextP27IPLSerializedObjectSettingsP19IPLSerializedObject"><code class="docutils literal notranslate"><span class="pre">iplSerializedObjectCreate()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv425iplSerializedObjectRetain19IPLSerializedObject"><code class="docutils literal notranslate"><span class="pre">iplSerializedObjectRetain()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv426iplSerializedObjectReleaseP19IPLSerializedObject"><code class="docutils literal notranslate"><span class="pre">iplSerializedObjectRelease()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv426iplSerializedObjectGetSize19IPLSerializedObject"><code class="docutils literal notranslate"><span class="pre">iplSerializedObjectGetSize()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv426iplSerializedObjectGetData19IPLSerializedObject"><code class="docutils literal notranslate"><span class="pre">iplSerializedObjectGetData()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#structures">Structures</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv427IPLSerializedObjectSettings"><code class="docutils literal notranslate"><span class="pre">IPLSerializedObjectSettings</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="embree.html">Embree</a></li>
@@ -136,98 +98,57 @@
 </li>
 </ul>
 
-            
-          
         </div>
-        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="index.html">Steam Audio C API</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
-      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-        
-          <li><a href="reference.html">API Reference</a> &raquo;</li>
-        
-      <li>Serialization</li>
-    
-    
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="reference.html">API Reference</a></li>
+      <li class="breadcrumb-item active">Serialization</li>
       <li class="wy-breadcrumbs-aside">
-        
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
-  <div class="section" id="serialization">
-<h1>Serialization<a class="headerlink" href="#serialization" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="typedefs">
-<h2>Typedefs<a class="headerlink" href="#typedefs" title="Permalink to this headline">¶</a></h2>
+             
+  <section id="serialization">
+<h1>Serialization<a class="headerlink" href="#serialization" title="Link to this heading"></a></h1>
+<section id="typedefs">
+<h2>Typedefs<a class="headerlink" href="#typedefs" title="Link to this heading"></a></h2>
 <dl class="cpp type">
 <dt class="sig sig-object cpp" id="_CPPv419IPLSerializedObject">
-<span id="_CPPv319IPLSerializedObject"></span><span id="_CPPv219IPLSerializedObject"></span><span id="IPLSerializedObject"></span><span class="target" id="group__serialization_1gabdf1faa4465fb813878f22474ca668a5"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="n"><span class="pre">_IPLSerializedObject_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">IPLSerializedObject</span></span></span><a class="headerlink" href="#_CPPv419IPLSerializedObject" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv319IPLSerializedObject"></span><span id="_CPPv219IPLSerializedObject"></span><span id="IPLSerializedObject"></span><span class="target" id="group__serialization_1gabdf1faa4465fb813878f22474ca668a5"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="n"><span class="pre">_IPLSerializedObject_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">IPLSerializedObject</span></span></span><a class="headerlink" href="#_CPPv419IPLSerializedObject" title="Link to this definition"></a><br /></dt>
 <dd><p>A serialized representation of an API object, like an <code class="docutils literal notranslate"><span class="pre">IPLScene</span></code> or <code class="docutils literal notranslate"><span class="pre">IPLProbeBatch</span></code>. </p>
 <p>Create an empty serialized object if you want to serialize an existing object to a byte array, or create a serialized object that wraps an existing byte array if you want to deserialize it. </p>
 </dd></dl>
 
-</div>
-<div class="section" id="functions">
-<h2>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="functions">
+<h2>Functions<a class="headerlink" href="#functions" title="Link to this heading"></a></h2>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv425iplSerializedObjectCreate10IPLContextP27IPLSerializedObjectSettingsP19IPLSerializedObject">
-<span id="_CPPv325iplSerializedObjectCreate10IPLContextP27IPLSerializedObjectSettingsP19IPLSerializedObject"></span><span id="_CPPv225iplSerializedObjectCreate10IPLContextP27IPLSerializedObjectSettingsP19IPLSerializedObject"></span><span id="iplSerializedObjectCreate__IPLContext.IPLSerializedObjectSettingsP.IPLSerializedObjectP"></span><span class="target" id="group__serialization_1ga4f485f5e5bb53fd0f57e01424ecd7976"></span><a class="reference internal" href="types.html#_CPPv48IPLerror" title="IPLerror"><span class="n"><span class="pre">IPLerror</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplSerializedObjectCreate</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="context.html#_CPPv410IPLContext" title="IPLContext"><span class="n"><span class="pre">IPLContext</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">context</span></span>, <a class="reference internal" href="#_CPPv427IPLSerializedObjectSettings" title="IPLSerializedObjectSettings"><span class="n"><span class="pre">IPLSerializedObjectSettings</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">settings</span></span>, <a class="reference internal" href="#_CPPv419IPLSerializedObject" title="IPLSerializedObject"><span class="n"><span class="pre">IPLSerializedObject</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">serializedObject</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv425iplSerializedObjectCreate10IPLContextP27IPLSerializedObjectSettingsP19IPLSerializedObject" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv325iplSerializedObjectCreate10IPLContextP27IPLSerializedObjectSettingsP19IPLSerializedObject"></span><span id="_CPPv225iplSerializedObjectCreate10IPLContextP27IPLSerializedObjectSettingsP19IPLSerializedObject"></span><span id="iplSerializedObjectCreate__IPLContext.IPLSerializedObjectSettingsP.IPLSerializedObjectP"></span><span class="target" id="group__serialization_1ga4f485f5e5bb53fd0f57e01424ecd7976"></span><a class="reference internal" href="types.html#_CPPv48IPLerror" title="IPLerror"><span class="n"><span class="pre">IPLerror</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplSerializedObjectCreate</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="context.html#_CPPv410IPLContext" title="IPLContext"><span class="n"><span class="pre">IPLContext</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">context</span></span>, <a class="reference internal" href="#_CPPv427IPLSerializedObjectSettings" title="IPLSerializedObjectSettings"><span class="n"><span class="pre">IPLSerializedObjectSettings</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">settings</span></span>, <a class="reference internal" href="#_CPPv419IPLSerializedObject" title="IPLSerializedObject"><span class="n"><span class="pre">IPLSerializedObject</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">serializedObject</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv425iplSerializedObjectCreate10IPLContextP27IPLSerializedObjectSettingsP19IPLSerializedObject" title="Link to this definition"></a><br /></dt>
 <dd><p>Creates a serialized object. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>context</strong> – The context used to initialize Steam Audio. </p></li>
 <li><p><strong>settings</strong> – The settings to use when creating the serialized object. </p></li>
 <li><p><strong>serializedObject</strong> – [out] The created serialized object.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Status code indicating whether or not the operation succeeded. </p>
 </dd>
 </dl>
@@ -235,13 +156,13 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv425iplSerializedObjectRetain19IPLSerializedObject">
-<span id="_CPPv325iplSerializedObjectRetain19IPLSerializedObject"></span><span id="_CPPv225iplSerializedObjectRetain19IPLSerializedObject"></span><span id="iplSerializedObjectRetain__IPLSerializedObject"></span><span class="target" id="group__serialization_1ga9e0e89b81e499e0123dc83a3e4482df5"></span><a class="reference internal" href="#_CPPv419IPLSerializedObject" title="IPLSerializedObject"><span class="n"><span class="pre">IPLSerializedObject</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplSerializedObjectRetain</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv419IPLSerializedObject" title="IPLSerializedObject"><span class="n"><span class="pre">IPLSerializedObject</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">serializedObject</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv425iplSerializedObjectRetain19IPLSerializedObject" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv325iplSerializedObjectRetain19IPLSerializedObject"></span><span id="_CPPv225iplSerializedObjectRetain19IPLSerializedObject"></span><span id="iplSerializedObjectRetain__IPLSerializedObject"></span><span class="target" id="group__serialization_1ga9e0e89b81e499e0123dc83a3e4482df5"></span><a class="reference internal" href="#_CPPv419IPLSerializedObject" title="IPLSerializedObject"><span class="n"><span class="pre">IPLSerializedObject</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplSerializedObjectRetain</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv419IPLSerializedObject" title="IPLSerializedObject"><span class="n"><span class="pre">IPLSerializedObject</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">serializedObject</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv425iplSerializedObjectRetain19IPLSerializedObject" title="Link to this definition"></a><br /></dt>
 <dd><p>Retains an additional reference to a serialized object. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>serializedObject</strong> – The serialized object to retain a reference to.</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The additional reference to the serialized object. </p>
 </dd>
 </dl>
@@ -249,10 +170,10 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv426iplSerializedObjectReleaseP19IPLSerializedObject">
-<span id="_CPPv326iplSerializedObjectReleaseP19IPLSerializedObject"></span><span id="_CPPv226iplSerializedObjectReleaseP19IPLSerializedObject"></span><span id="iplSerializedObjectRelease__IPLSerializedObjectP"></span><span class="target" id="group__serialization_1ga11e0e3788372861f9cf6e59c716589a1"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplSerializedObjectRelease</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv419IPLSerializedObject" title="IPLSerializedObject"><span class="n"><span class="pre">IPLSerializedObject</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">serializedObject</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv426iplSerializedObjectReleaseP19IPLSerializedObject" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv326iplSerializedObjectReleaseP19IPLSerializedObject"></span><span id="_CPPv226iplSerializedObjectReleaseP19IPLSerializedObject"></span><span id="iplSerializedObjectRelease__IPLSerializedObjectP"></span><span class="target" id="group__serialization_1ga11e0e3788372861f9cf6e59c716589a1"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplSerializedObjectRelease</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv419IPLSerializedObject" title="IPLSerializedObject"><span class="n"><span class="pre">IPLSerializedObject</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">serializedObject</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv426iplSerializedObjectReleaseP19IPLSerializedObject" title="Link to this definition"></a><br /></dt>
 <dd><p>Releases a reference to a serialized object. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>serializedObject</strong> – The serialized object to release a reference to. </p>
 </dd>
 </dl>
@@ -260,12 +181,12 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv426iplSerializedObjectGetSize19IPLSerializedObject">
-<span id="_CPPv326iplSerializedObjectGetSize19IPLSerializedObject"></span><span id="_CPPv226iplSerializedObjectGetSize19IPLSerializedObject"></span><span id="iplSerializedObjectGetSize__IPLSerializedObject"></span><span class="target" id="group__serialization_1ga67796269cede56a83763e380f0d2f486"></span><a class="reference internal" href="types.html#_CPPv47IPLsize" title="IPLsize"><span class="n"><span class="pre">IPLsize</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplSerializedObjectGetSize</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv419IPLSerializedObject" title="IPLSerializedObject"><span class="n"><span class="pre">IPLSerializedObject</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">serializedObject</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv426iplSerializedObjectGetSize19IPLSerializedObject" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv326iplSerializedObjectGetSize19IPLSerializedObject"></span><span id="_CPPv226iplSerializedObjectGetSize19IPLSerializedObject"></span><span id="iplSerializedObjectGetSize__IPLSerializedObject"></span><span class="target" id="group__serialization_1ga67796269cede56a83763e380f0d2f486"></span><a class="reference internal" href="types.html#_CPPv47IPLsize" title="IPLsize"><span class="n"><span class="pre">IPLsize</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplSerializedObjectGetSize</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv419IPLSerializedObject" title="IPLSerializedObject"><span class="n"><span class="pre">IPLSerializedObject</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">serializedObject</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv426iplSerializedObjectGetSize19IPLSerializedObject" title="Link to this definition"></a><br /></dt>
 <dd><dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>serializedObject</strong> – The serialized object. </p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The size in bytes of the serialized data contained in a serialized object.</p>
 </dd>
 </dl>
@@ -273,36 +194,36 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv426iplSerializedObjectGetData19IPLSerializedObject">
-<span id="_CPPv326iplSerializedObjectGetData19IPLSerializedObject"></span><span id="_CPPv226iplSerializedObjectGetData19IPLSerializedObject"></span><span id="iplSerializedObjectGetData__IPLSerializedObject"></span><span class="target" id="group__serialization_1ga625b265e773e0a9ec88b0302b8fd1feb"></span><a class="reference internal" href="types.html#_CPPv47IPLbyte" title="IPLbyte"><span class="n"><span class="pre">IPLbyte</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">iplSerializedObjectGetData</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv419IPLSerializedObject" title="IPLSerializedObject"><span class="n"><span class="pre">IPLSerializedObject</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">serializedObject</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv426iplSerializedObjectGetData19IPLSerializedObject" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv326iplSerializedObjectGetData19IPLSerializedObject"></span><span id="_CPPv226iplSerializedObjectGetData19IPLSerializedObject"></span><span id="iplSerializedObjectGetData__IPLSerializedObject"></span><span class="target" id="group__serialization_1ga625b265e773e0a9ec88b0302b8fd1feb"></span><a class="reference internal" href="types.html#_CPPv47IPLbyte" title="IPLbyte"><span class="n"><span class="pre">IPLbyte</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">iplSerializedObjectGetData</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv419IPLSerializedObject" title="IPLSerializedObject"><span class="n"><span class="pre">IPLSerializedObject</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">serializedObject</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv426iplSerializedObjectGetData19IPLSerializedObject" title="Link to this definition"></a><br /></dt>
 <dd><dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>serializedObject</strong> – The serialized object. </p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>A pointer to a byte array of serialized data contained in a serialized object.</p>
 </dd>
 </dl>
 </dd></dl>
 
-</div>
-<div class="section" id="structures">
-<h2>Structures<a class="headerlink" href="#structures" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="structures">
+<h2>Structures<a class="headerlink" href="#structures" title="Link to this heading"></a></h2>
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv427IPLSerializedObjectSettings">
-<span id="_CPPv327IPLSerializedObjectSettings"></span><span id="_CPPv227IPLSerializedObjectSettings"></span><span id="IPLSerializedObjectSettings"></span><span class="target" id="struct_i_p_l_serialized_object_settings"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLSerializedObjectSettings</span></span></span><a class="headerlink" href="#_CPPv427IPLSerializedObjectSettings" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv327IPLSerializedObjectSettings"></span><span id="_CPPv227IPLSerializedObjectSettings"></span><span id="IPLSerializedObjectSettings"></span><span class="target" id="struct_i_p_l_serialized_object_settings"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLSerializedObjectSettings</span></span></span><a class="headerlink" href="#_CPPv427IPLSerializedObjectSettings" title="Link to this definition"></a><br /></dt>
 <dd><p>Settings used to create a serialized object. </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N27IPLSerializedObjectSettings4dataE">
-<span id="_CPPv3N27IPLSerializedObjectSettings4dataE"></span><span id="_CPPv2N27IPLSerializedObjectSettings4dataE"></span><span id="IPLSerializedObjectSettings::data__IPLbyteP"></span><span class="target" id="struct_i_p_l_serialized_object_settings_1a230a21a1b49b59f2e01b205ccab5b23b"></span><a class="reference internal" href="types.html#_CPPv47IPLbyte" title="IPLbyte"><span class="n"><span class="pre">IPLbyte</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">data</span></span></span><a class="headerlink" href="#_CPPv4N27IPLSerializedObjectSettings4dataE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N27IPLSerializedObjectSettings4dataE"></span><span id="_CPPv2N27IPLSerializedObjectSettings4dataE"></span><span id="IPLSerializedObjectSettings::data__IPLbyteP"></span><span class="target" id="struct_i_p_l_serialized_object_settings_1a230a21a1b49b59f2e01b205ccab5b23b"></span><a class="reference internal" href="types.html#_CPPv47IPLbyte" title="IPLbyte"><span class="n"><span class="pre">IPLbyte</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">data</span></span></span><a class="headerlink" href="#_CPPv4N27IPLSerializedObjectSettings4dataE" title="Link to this definition"></a><br /></dt>
 <dd><p>If non-NULL, the serialized object will contain the data in this buffer. </p>
 <p>If NULL, the serialized object will start out empty. </p>
 </dd></dl>
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N27IPLSerializedObjectSettings4sizeE">
-<span id="_CPPv3N27IPLSerializedObjectSettings4sizeE"></span><span id="_CPPv2N27IPLSerializedObjectSettings4sizeE"></span><span id="IPLSerializedObjectSettings::size__IPLsize"></span><span class="target" id="struct_i_p_l_serialized_object_settings_1a4daa0e49d40c0eab4805d66650bb8838"></span><a class="reference internal" href="types.html#_CPPv47IPLsize" title="IPLsize"><span class="n"><span class="pre">IPLsize</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">size</span></span></span><a class="headerlink" href="#_CPPv4N27IPLSerializedObjectSettings4sizeE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N27IPLSerializedObjectSettings4sizeE"></span><span id="_CPPv2N27IPLSerializedObjectSettings4sizeE"></span><span id="IPLSerializedObjectSettings::size__IPLsize"></span><span class="target" id="struct_i_p_l_serialized_object_settings_1a4daa0e49d40c0eab4805d66650bb8838"></span><a class="reference internal" href="types.html#_CPPv47IPLsize" title="IPLsize"><span class="n"><span class="pre">IPLsize</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">size</span></span></span><a class="headerlink" href="#_CPPv4N27IPLSerializedObjectSettings4sizeE" title="Link to this definition"></a><br /></dt>
 <dd><p>The number of bytes in the buffer pointed to by <code class="docutils literal notranslate"><span class="pre">data</span></code>. </p>
 <p>Set to 0 if <code class="docutils literal notranslate"><span class="pre">data</span></code> is NULL. </p>
 </dd></dl>
@@ -310,55 +231,38 @@
 </div>
 </dd></dl>
 
-</div>
-</div>
+</section>
+</section>
 
 
            </div>
-           
           </div>
-          <footer>
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="embree.html" class="btn btn-neutral float-right" title="Embree" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="geometry.html" class="btn btn-neutral float-left" title="Geometry" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="embree.html" class="btn btn-neutral float-right" title="Embree" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &#169; Copyright 2017-2023, Valve Corporation.
-
-    </p>
+    <p>&#169; Copyright 2017-2023, Valve Corporation.</p>
   </div>
-    
-    
-    
-    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>

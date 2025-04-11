@@ -1,101 +1,49 @@
 
 
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
-  <meta charset="utf-8" />
-  
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  
   <title>API Reference &mdash; Steam Audio Wwise Integration  documentation</title>
-  
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/steamaudio.css?v=6893bda5" />
 
   
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/tabs.css" type="text/css" />
-  <link rel="stylesheet" href="_static/steamaudio.css" type="text/css" />
-
-  
-  
-
-  
-  
-
-  
-
-  
-  <!--[if lt IE 9]>
-    <script src="_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/doctools.js"></script>
-    
-    <script type="text/javascript" src="_static/js/theme.js"></script>
-
-    
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=7f41d439"></script>
+      <script src="_static/doctools.js?v=9a2dae69"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="prev" title="Mixer Return" href="mixer-return.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
 
           
-            <a href="index.html">
           
-
-          
+          <a href="index.html">
             
-            <img src="_static/steam-audio-logo.png" class="logo" alt="Logo"/>
-          
+              <img src="_static/steam-audio-logo.png" class="logo" alt="Logo"/>
           </a>
-
-          
-            
-            
-              <div class="version">
-                4.6.0
-              </div>
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
-              <p class="caption"><span class="caption-text">Wwise Integration</span></p>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Wwise Integration</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="guide.html">User’s Guide</a></li>
@@ -103,89 +51,61 @@
 <li class="toctree-l1 current"><a class="reference internal" href="reference.html">Reference</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="effects.html">Effects</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">API Reference</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#functions">Functions</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#structures">Structures</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#functions">Functions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv418iplWwiseGetVersionPjPjPj"><code class="docutils literal notranslate"><span class="pre">iplWwiseGetVersion()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv418iplWwiseInitialize10IPLContextP16IPLWwiseSettings"><code class="docutils literal notranslate"><span class="pre">iplWwiseInitialize()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv417iplWwiseTerminatev"><code class="docutils literal notranslate"><span class="pre">iplWwiseTerminate()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv415iplWwiseSetHRTF7IPLHRTF"><code class="docutils literal notranslate"><span class="pre">iplWwiseSetHRTF()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv429iplWwiseSetSimulationSettings21IPLSimulationSettings"><code class="docutils literal notranslate"><span class="pre">iplWwiseSetSimulationSettings()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv423iplWwiseSetReverbSource9IPLSource"><code class="docutils literal notranslate"><span class="pre">iplWwiseSetReverbSource()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv417iplWwiseAddSource14AkGameObjectID9IPLSource"><code class="docutils literal notranslate"><span class="pre">iplWwiseAddSource()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv420iplWwiseRemoveSource14AkGameObjectID"><code class="docutils literal notranslate"><span class="pre">iplWwiseRemoveSource()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#structures">Structures</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv416IPLWwiseSettings"><code class="docutils literal notranslate"><span class="pre">IPLWwiseSettings</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
 </li>
 </ul>
 
-            
-          
         </div>
-        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="index.html">Steam Audio Wwise Integration</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
-      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-        
-          <li><a href="reference.html">Reference</a> &raquo;</li>
-        
-      <li>API Reference</li>
-    
-    
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="reference.html">Reference</a></li>
+      <li class="breadcrumb-item active">API Reference</li>
       <li class="wy-breadcrumbs-aside">
-        
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
-  <div class="section" id="api-reference">
-<h1>API Reference<a class="headerlink" href="#api-reference" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="functions">
-<h2>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h2>
+             
+  <section id="api-reference">
+<h1>API Reference<a class="headerlink" href="#api-reference" title="Link to this heading"></a></h1>
+<section id="functions">
+<h2>Functions<a class="headerlink" href="#functions" title="Link to this heading"></a></h2>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv418iplWwiseGetVersionPjPjPj">
-<span id="_CPPv318iplWwiseGetVersionPjPjPj"></span><span id="_CPPv218iplWwiseGetVersionPjPjPj"></span><span id="iplWwiseGetVersion__unsigned-iP.unsigned-iP.unsigned-iP"></span><span class="target" id="_steam_audio_common_8h_1a59f2283ef10d24d0d270213935e80868"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplWwiseGetVersion</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span> <span class="pre">int</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">major</span></span>, <span class="kt"><span class="pre">unsigned</span> <span class="pre">int</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">minor</span></span>, <span class="kt"><span class="pre">unsigned</span> <span class="pre">int</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">patch</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv418iplWwiseGetVersionPjPjPj" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv318iplWwiseGetVersionPjPjPj"></span><span id="_CPPv218iplWwiseGetVersionPjPjPj"></span><span id="iplWwiseGetVersion__unsigned-iP.unsigned-iP.unsigned-iP"></span><span class="target" id="_steam_audio_common_8h_1a59f2283ef10d24d0d270213935e80868"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplWwiseGetVersion</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">major</span></span>, <span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">minor</span></span>, <span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">patch</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv418iplWwiseGetVersionPjPjPj" title="Link to this definition"></a><br /></dt>
 <dd><p>Returns the version of the Wwise integration being used. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>major</strong> – Major version number. For example, “1” in “1.2.3”. </p></li>
 <li><p><strong>minor</strong> – Minor version number. For example, “2” in “1.2.3”. </p></li>
@@ -197,11 +117,11 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv418iplWwiseInitialize10IPLContextP16IPLWwiseSettings">
-<span id="_CPPv318iplWwiseInitialize10IPLContextP16IPLWwiseSettings"></span><span id="_CPPv218iplWwiseInitialize10IPLContextP16IPLWwiseSettings"></span><span id="iplWwiseInitialize__IPLContext.IPLWwiseSettingsP"></span><span class="target" id="_steam_audio_common_8h_1ac3492351c41a7ce67cd046db2ded341d"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplWwiseInitialize</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">IPLContext</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">context</span></span>, <a class="reference internal" href="#_CPPv416IPLWwiseSettings" title="IPLWwiseSettings"><span class="n"><span class="pre">IPLWwiseSettings</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">settings</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv418iplWwiseInitialize10IPLContextP16IPLWwiseSettings" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv318iplWwiseInitialize10IPLContextP16IPLWwiseSettings"></span><span id="_CPPv218iplWwiseInitialize10IPLContextP16IPLWwiseSettings"></span><span id="iplWwiseInitialize__IPLContext.IPLWwiseSettingsP"></span><span class="target" id="_steam_audio_common_8h_1ac3492351c41a7ce67cd046db2ded341d"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplWwiseInitialize</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">IPLContext</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">context</span></span>, <a class="reference internal" href="#_CPPv416IPLWwiseSettings" title="IPLWwiseSettings"><span class="n"><span class="pre">IPLWwiseSettings</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">settings</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv418iplWwiseInitialize10IPLContextP16IPLWwiseSettings" title="Link to this definition"></a><br /></dt>
 <dd><p>Initializes the Wwise integration. </p>
 <p>This function must be called before creating any Steam Audio DSP effects.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>context</strong> – The Steam Audio context created by the game engine when initializing Steam Audio. </p></li>
 <li><p><strong>settings</strong> – Settings for initializing the Wwise integration. May be <code class="docutils literal notranslate"><span class="pre">NULL</span></code>, in which case default values will be used. </p></li>
@@ -212,18 +132,18 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv417iplWwiseTerminatev">
-<span id="_CPPv317iplWwiseTerminatev"></span><span id="_CPPv217iplWwiseTerminatev"></span><span id="iplWwiseTerminate"></span><span class="target" id="_steam_audio_common_8h_1a5e07b0c227e74c168a9d958ae6ef4aac"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplWwiseTerminate</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv417iplWwiseTerminatev" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv317iplWwiseTerminatev"></span><span id="_CPPv217iplWwiseTerminatev"></span><span id="iplWwiseTerminate"></span><span class="target" id="_steam_audio_common_8h_1a5e07b0c227e74c168a9d958ae6ef4aac"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplWwiseTerminate</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv417iplWwiseTerminatev" title="Link to this definition"></a><br /></dt>
 <dd><p>Shuts down the Wwise integration. </p>
 <p>This function must be called after all Steam Audio DSP effects have been destroyed. </p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv415iplWwiseSetHRTF7IPLHRTF">
-<span id="_CPPv315iplWwiseSetHRTF7IPLHRTF"></span><span id="_CPPv215iplWwiseSetHRTF7IPLHRTF"></span><span id="iplWwiseSetHRTF__IPLHRTF"></span><span class="target" id="_steam_audio_common_8h_1aa9da32fc30693834ab51231e8dabd38d"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplWwiseSetHRTF</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">IPLHRTF</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hrtf</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv415iplWwiseSetHRTF7IPLHRTF" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv315iplWwiseSetHRTF7IPLHRTF"></span><span id="_CPPv215iplWwiseSetHRTF7IPLHRTF"></span><span id="iplWwiseSetHRTF__IPLHRTF"></span><span class="target" id="_steam_audio_common_8h_1aa9da32fc30693834ab51231e8dabd38d"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplWwiseSetHRTF</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">IPLHRTF</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hrtf</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv415iplWwiseSetHRTF7IPLHRTF" title="Link to this definition"></a><br /></dt>
 <dd><p>Specifies the HRTF to use for spatialization in subsequent audio frames. </p>
 <p>This function must be called once during initialization, after <code class="docutils literal notranslate"><span class="pre">iplWwiseInitialize</span></code>. It should also be called whenever the game engine needs to change the HRTF.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>hrtf</strong> – The HRTF to use for spatialization. </p>
 </dd>
 </dl>
@@ -231,11 +151,11 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv429iplWwiseSetSimulationSettings21IPLSimulationSettings">
-<span id="_CPPv329iplWwiseSetSimulationSettings21IPLSimulationSettings"></span><span id="_CPPv229iplWwiseSetSimulationSettings21IPLSimulationSettings"></span><span id="iplWwiseSetSimulationSettings__IPLSimulationSettings"></span><span class="target" id="_steam_audio_common_8h_1a67bc3304fb6a72c8d0e9be3fd6826276"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplWwiseSetSimulationSettings</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">IPLSimulationSettings</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">simulationSettings</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv429iplWwiseSetSimulationSettings21IPLSimulationSettings" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv329iplWwiseSetSimulationSettings21IPLSimulationSettings"></span><span id="_CPPv229iplWwiseSetSimulationSettings21IPLSimulationSettings"></span><span id="iplWwiseSetSimulationSettings__IPLSimulationSettings"></span><span class="target" id="_steam_audio_common_8h_1a67bc3304fb6a72c8d0e9be3fd6826276"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplWwiseSetSimulationSettings</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">IPLSimulationSettings</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">simulationSettings</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv429iplWwiseSetSimulationSettings21IPLSimulationSettings" title="Link to this definition"></a><br /></dt>
 <dd><p>Specifies the simulation settings used by the game engine for simulating direct and/or indirect sound propagation. </p>
 <p>This function must be called once during initialization, after <code class="docutils literal notranslate"><span class="pre">iplWwiseInitialize</span></code>.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>simulationSettings</strong> – The simulation settings used by the game engine. </p>
 </dd>
 </dl>
@@ -243,11 +163,11 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv423iplWwiseSetReverbSource9IPLSource">
-<span id="_CPPv323iplWwiseSetReverbSource9IPLSource"></span><span id="_CPPv223iplWwiseSetReverbSource9IPLSource"></span><span id="iplWwiseSetReverbSource__IPLSource"></span><span class="target" id="_steam_audio_common_8h_1a521b576218d67ad3024b9b9425cf7c98"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplWwiseSetReverbSource</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">IPLSource</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">reverbSource</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv423iplWwiseSetReverbSource9IPLSource" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv323iplWwiseSetReverbSource9IPLSource"></span><span id="_CPPv223iplWwiseSetReverbSource9IPLSource"></span><span id="iplWwiseSetReverbSource__IPLSource"></span><span class="target" id="_steam_audio_common_8h_1a521b576218d67ad3024b9b9425cf7c98"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplWwiseSetReverbSource</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">IPLSource</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">reverbSource</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv423iplWwiseSetReverbSource9IPLSource" title="Link to this definition"></a><br /></dt>
 <dd><p>Specifies the <code class="docutils literal notranslate"><span class="pre">IPLSource</span></code> object used by the game engine for simulating reverb. </p>
 <p>Typically, listener-centric reverb is simulated by creating an <code class="docutils literal notranslate"><span class="pre">IPLSource</span></code> object with the same position as the listener, and simulating reflections. To render this simulated reverb, call this function and pass it the <code class="docutils literal notranslate"><span class="pre">IPLSource</span></code> object used.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>reverbSource</strong> – The source object used by the game engine for simulating reverb. </p>
 </dd>
 </dl>
@@ -255,11 +175,11 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv417iplWwiseAddSource14AkGameObjectID9IPLSource">
-<span id="_CPPv317iplWwiseAddSource14AkGameObjectID9IPLSource"></span><span id="_CPPv217iplWwiseAddSource14AkGameObjectID9IPLSource"></span><span id="iplWwiseAddSource__AkGameObjectID.IPLSource"></span><span class="target" id="_steam_audio_common_8h_1afba86d2a5132ee720b8f4aeddea839e2"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplWwiseAddSource</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">AkGameObjectID</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">gameObjectID</span></span>, <span class="n"><span class="pre">IPLSource</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">source</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv417iplWwiseAddSource14AkGameObjectID9IPLSource" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv317iplWwiseAddSource14AkGameObjectID9IPLSource"></span><span id="_CPPv217iplWwiseAddSource14AkGameObjectID9IPLSource"></span><span id="iplWwiseAddSource__AkGameObjectID.IPLSource"></span><span class="target" id="_steam_audio_common_8h_1afba86d2a5132ee720b8f4aeddea839e2"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplWwiseAddSource</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">AkGameObjectID</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">gameObjectID</span></span>, <span class="n"><span class="pre">IPLSource</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">source</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv417iplWwiseAddSource14AkGameObjectID9IPLSource" title="Link to this definition"></a><br /></dt>
 <dd><p>Specifies the <code class="docutils literal notranslate"><span class="pre">IPLSource</span></code> object used by the game engine for simulating occlusion, reflections, etc. </p>
 <p>for the given Wwise game object (identified by its AkGameObjectID).</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>gameObjectID</strong> – The Wwise game object ID. </p></li>
 <li><p><strong>source</strong> – The Steam Audio source. </p></li>
@@ -270,82 +190,65 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv420iplWwiseRemoveSource14AkGameObjectID">
-<span id="_CPPv320iplWwiseRemoveSource14AkGameObjectID"></span><span id="_CPPv220iplWwiseRemoveSource14AkGameObjectID"></span><span id="iplWwiseRemoveSource__AkGameObjectID"></span><span class="target" id="_steam_audio_common_8h_1a85da96914e30cbffa82e7714e65eb722"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplWwiseRemoveSource</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">AkGameObjectID</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">gameObjectID</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv420iplWwiseRemoveSource14AkGameObjectID" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv320iplWwiseRemoveSource14AkGameObjectID"></span><span id="_CPPv220iplWwiseRemoveSource14AkGameObjectID"></span><span id="iplWwiseRemoveSource__AkGameObjectID"></span><span class="target" id="_steam_audio_common_8h_1a85da96914e30cbffa82e7714e65eb722"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplWwiseRemoveSource</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">AkGameObjectID</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">gameObjectID</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv420iplWwiseRemoveSource14AkGameObjectID" title="Link to this definition"></a><br /></dt>
 <dd><p>Remove any <code class="docutils literal notranslate"><span class="pre">IPLSource</span></code> object associated the given Wwise game object ID. </p>
 <p>This should be called when the game engine no longer needs to render occlusion, reflections, etc. for the given game object.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>gameObjectID</strong> – The Wwise game object ID. </p>
 </dd>
 </dl>
 </dd></dl>
 
-</div>
-<div class="section" id="structures">
-<h2>Structures<a class="headerlink" href="#structures" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="structures">
+<h2>Structures<a class="headerlink" href="#structures" title="Link to this heading"></a></h2>
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv416IPLWwiseSettings">
-<span id="_CPPv316IPLWwiseSettings"></span><span id="_CPPv216IPLWwiseSettings"></span><span id="IPLWwiseSettings"></span><span class="target" id="struct_i_p_l_wwise_settings"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLWwiseSettings</span></span></span><a class="headerlink" href="#_CPPv416IPLWwiseSettings" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv316IPLWwiseSettings"></span><span id="_CPPv216IPLWwiseSettings"></span><span id="IPLWwiseSettings"></span><span class="target" id="struct_i_p_l_wwise_settings"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLWwiseSettings</span></span></span><a class="headerlink" href="#_CPPv416IPLWwiseSettings" title="Link to this definition"></a><br /></dt>
 <dd><p>Settings used for initializing the Steam Audio Wwise integration. </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N16IPLWwiseSettings13metersPerUnitE">
-<span id="_CPPv3N16IPLWwiseSettings13metersPerUnitE"></span><span id="_CPPv2N16IPLWwiseSettings13metersPerUnitE"></span><span id="IPLWwiseSettings::metersPerUnit__IPLfloat32"></span><span class="target" id="struct_i_p_l_wwise_settings_1aebf2c273972ed1d2c7e335a533b5aee3"></span><span class="n"><span class="pre">IPLfloat32</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">metersPerUnit</span></span></span><a class="headerlink" href="#_CPPv4N16IPLWwiseSettings13metersPerUnitE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N16IPLWwiseSettings13metersPerUnitE"></span><span id="_CPPv2N16IPLWwiseSettings13metersPerUnitE"></span><span id="IPLWwiseSettings::metersPerUnit__IPLfloat32"></span><span class="target" id="struct_i_p_l_wwise_settings_1aebf2c273972ed1d2c7e335a533b5aee3"></span><span class="n"><span class="pre">IPLfloat32</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">metersPerUnit</span></span></span><a class="headerlink" href="#_CPPv4N16IPLWwiseSettings13metersPerUnitE" title="Link to this definition"></a><br /></dt>
 <dd><p>Scaling factor to apply when converting from game engine units to Steam Audio units (which are in meters). </p>
 </dd></dl>
 
 </div>
 </dd></dl>
 
-</div>
-</div>
+</section>
+</section>
 
 
            </div>
-           
           </div>
-          <footer>
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="mixer-return.html" class="btn btn-neutral float-left" title="Mixer Return" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &#169; Copyright 2017-2024, Valve Corporation.
-
-    </p>
+    <p>&#169; Copyright 2017-2024, Valve Corporation.</p>
   </div>
-    
-    
-    
-    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>

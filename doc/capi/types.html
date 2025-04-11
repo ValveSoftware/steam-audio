@@ -1,101 +1,50 @@
 
 
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
-  <meta charset="utf-8" />
-  
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  
   <title>Basic Data Types &mdash; Steam Audio C API  documentation</title>
-  
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/steamaudio.css?v=b5aaeb06" />
 
   
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/steamaudio.css" type="text/css" />
-
-  
-  
-
-  
-  
-
-  
-
-  
-  <!--[if lt IE 9]>
-    <script src="_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/doctools.js"></script>
-    
-    <script type="text/javascript" src="_static/js/theme.js"></script>
-
-    
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=7f41d439"></script>
+      <script src="_static/doctools.js?v=9a2dae69"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Context" href="context.html" />
     <link rel="prev" title="API Reference" href="reference.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
 
           
-            <a href="index.html">
           
-
-          
+          <a href="index.html">
             
-            <img src="_static/steam-audio-logo.png" class="logo" alt="Logo"/>
-          
+              <img src="_static/steam-audio-logo.png" class="logo" alt="Logo"/>
           </a>
-
-          
-            
-            
-              <div class="version">
-                4.6.0
-              </div>
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
-              <p class="caption"><span class="caption-text">Steam Audio SDK</span></p>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Steam Audio SDK</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="guide.html">Programmer’s Guide</a></li>
@@ -103,9 +52,31 @@
 <li class="toctree-l1"><a class="reference internal" href="integration.html">Integrating Steam Audio</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="reference.html">API Reference</a><ul class="current">
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Basic Data Types</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#typedefs">Typedefs</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#enumerations">Enumerations</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#callbacks">Callbacks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#typedefs">Typedefs</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv47IPLint8"><code class="docutils literal notranslate"><span class="pre">IPLint8</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv48IPLuint8"><code class="docutils literal notranslate"><span class="pre">IPLuint8</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv48IPLint16"><code class="docutils literal notranslate"><span class="pre">IPLint16</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv49IPLuint16"><code class="docutils literal notranslate"><span class="pre">IPLuint16</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv48IPLint32"><code class="docutils literal notranslate"><span class="pre">IPLint32</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv49IPLuint32"><code class="docutils literal notranslate"><span class="pre">IPLuint32</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv48IPLint64"><code class="docutils literal notranslate"><span class="pre">IPLint64</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv49IPLuint64"><code class="docutils literal notranslate"><span class="pre">IPLuint64</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv410IPLfloat32"><code class="docutils literal notranslate"><span class="pre">IPLfloat32</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv410IPLfloat64"><code class="docutils literal notranslate"><span class="pre">IPLfloat64</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv47IPLbyte"><code class="docutils literal notranslate"><span class="pre">IPLbyte</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv47IPLsize"><code class="docutils literal notranslate"><span class="pre">IPLsize</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv49IPLstring"><code class="docutils literal notranslate"><span class="pre">IPLstring</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#enumerations">Enumerations</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv47IPLbool"><code class="docutils literal notranslate"><span class="pre">IPLbool</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv48IPLerror"><code class="docutils literal notranslate"><span class="pre">IPLerror</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#callbacks">Callbacks</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv419IPLProgressCallback"><code class="docutils literal notranslate"><span class="pre">IPLProgressCallback</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="context.html">Context</a></li>
@@ -136,171 +107,130 @@
 </li>
 </ul>
 
-            
-          
         </div>
-        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="index.html">Steam Audio C API</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
-      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-        
-          <li><a href="reference.html">API Reference</a> &raquo;</li>
-        
-      <li>Basic Data Types</li>
-    
-    
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="reference.html">API Reference</a></li>
+      <li class="breadcrumb-item active">Basic Data Types</li>
       <li class="wy-breadcrumbs-aside">
-        
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
-  <div class="section" id="basic-data-types">
-<h1>Basic Data Types<a class="headerlink" href="#basic-data-types" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="typedefs">
-<h2>Typedefs<a class="headerlink" href="#typedefs" title="Permalink to this headline">¶</a></h2>
+             
+  <section id="basic-data-types">
+<h1>Basic Data Types<a class="headerlink" href="#basic-data-types" title="Link to this heading"></a></h1>
+<section id="typedefs">
+<h2>Typedefs<a class="headerlink" href="#typedefs" title="Link to this heading"></a></h2>
 <dl class="cpp type">
 <dt class="sig sig-object cpp" id="_CPPv47IPLint8">
-<span id="_CPPv37IPLint8"></span><span id="_CPPv27IPLint8"></span><span id="IPLint8"></span><span class="target" id="group__types_1ga23ec6a4ffc7339b25eaebf2937969d88"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLint8</span></span></span><a class="headerlink" href="#_CPPv47IPLint8" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv37IPLint8"></span><span id="_CPPv27IPLint8"></span><span id="IPLint8"></span><span class="target" id="group__types_1ga23ec6a4ffc7339b25eaebf2937969d88"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLint8</span></span></span><a class="headerlink" href="#_CPPv47IPLint8" title="Link to this definition"></a><br /></dt>
 <dd><p>Signed 8-bit integer. </p>
 </dd></dl>
 
 <dl class="cpp type">
 <dt class="sig sig-object cpp" id="_CPPv48IPLuint8">
-<span id="_CPPv38IPLuint8"></span><span id="_CPPv28IPLuint8"></span><span id="IPLuint8"></span><span class="target" id="group__types_1ga1da1fa3a1eec5f27a05e1e74c59ad0e0"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span> <span class="pre">char</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLuint8</span></span></span><a class="headerlink" href="#_CPPv48IPLuint8" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv38IPLuint8"></span><span id="_CPPv28IPLuint8"></span><span id="IPLuint8"></span><span class="target" id="group__types_1ga1da1fa3a1eec5f27a05e1e74c59ad0e0"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLuint8</span></span></span><a class="headerlink" href="#_CPPv48IPLuint8" title="Link to this definition"></a><br /></dt>
 <dd><p>Unsigned 8-bit integer. </p>
 </dd></dl>
 
 <dl class="cpp type">
 <dt class="sig sig-object cpp" id="_CPPv48IPLint16">
-<span id="_CPPv38IPLint16"></span><span id="_CPPv28IPLint16"></span><span id="IPLint16"></span><span class="target" id="group__types_1gacf47609e0dbbb169544a79ff27ad897d"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="kt"><span class="pre">short</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLint16</span></span></span><a class="headerlink" href="#_CPPv48IPLint16" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv38IPLint16"></span><span id="_CPPv28IPLint16"></span><span id="IPLint16"></span><span class="target" id="group__types_1gacf47609e0dbbb169544a79ff27ad897d"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="kt"><span class="pre">short</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLint16</span></span></span><a class="headerlink" href="#_CPPv48IPLint16" title="Link to this definition"></a><br /></dt>
 <dd><p>Signed 16-bit integer. </p>
 </dd></dl>
 
 <dl class="cpp type">
 <dt class="sig sig-object cpp" id="_CPPv49IPLuint16">
-<span id="_CPPv39IPLuint16"></span><span id="_CPPv29IPLuint16"></span><span id="IPLuint16"></span><span class="target" id="group__types_1gab3606e55ad5204ec478907322a70f3f9"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span> <span class="pre">short</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLuint16</span></span></span><a class="headerlink" href="#_CPPv49IPLuint16" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv39IPLuint16"></span><span id="_CPPv29IPLuint16"></span><span id="IPLuint16"></span><span class="target" id="group__types_1gab3606e55ad5204ec478907322a70f3f9"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">short</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLuint16</span></span></span><a class="headerlink" href="#_CPPv49IPLuint16" title="Link to this definition"></a><br /></dt>
 <dd><p>Unsigned 16-bit integer. </p>
 </dd></dl>
 
 <dl class="cpp type">
 <dt class="sig sig-object cpp" id="_CPPv48IPLint32">
-<span id="_CPPv38IPLint32"></span><span id="_CPPv28IPLint32"></span><span id="IPLint32"></span><span class="target" id="group__types_1ga500a973ddc50b67f4930c3b789475f58"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLint32</span></span></span><a class="headerlink" href="#_CPPv48IPLint32" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv38IPLint32"></span><span id="_CPPv28IPLint32"></span><span id="IPLint32"></span><span class="target" id="group__types_1ga500a973ddc50b67f4930c3b789475f58"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLint32</span></span></span><a class="headerlink" href="#_CPPv48IPLint32" title="Link to this definition"></a><br /></dt>
 <dd><p>Signed 32-bit integer. </p>
 </dd></dl>
 
 <dl class="cpp type">
 <dt class="sig sig-object cpp" id="_CPPv49IPLuint32">
-<span id="_CPPv39IPLuint32"></span><span id="_CPPv29IPLuint32"></span><span id="IPLuint32"></span><span class="target" id="group__types_1gabd8c9e27f005f26a2c09498c44287554"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span> <span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLuint32</span></span></span><a class="headerlink" href="#_CPPv49IPLuint32" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv39IPLuint32"></span><span id="_CPPv29IPLuint32"></span><span id="IPLuint32"></span><span class="target" id="group__types_1gabd8c9e27f005f26a2c09498c44287554"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLuint32</span></span></span><a class="headerlink" href="#_CPPv49IPLuint32" title="Link to this definition"></a><br /></dt>
 <dd><p>Unsigned 32-bit integer. </p>
 </dd></dl>
 
 <dl class="cpp type">
 <dt class="sig sig-object cpp" id="_CPPv48IPLint64">
-<span id="_CPPv38IPLint64"></span><span id="_CPPv28IPLint64"></span><span id="IPLint64"></span><span class="target" id="group__types_1gadd1fcea2fd061a06f115c9bf7239fe7b"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="kt"><span class="pre">long</span> <span class="pre">long</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLint64</span></span></span><a class="headerlink" href="#_CPPv48IPLint64" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv38IPLint64"></span><span id="_CPPv28IPLint64"></span><span id="IPLint64"></span><span class="target" id="group__types_1gadd1fcea2fd061a06f115c9bf7239fe7b"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="kt"><span class="pre">long</span></span><span class="w"> </span><span class="kt"><span class="pre">long</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLint64</span></span></span><a class="headerlink" href="#_CPPv48IPLint64" title="Link to this definition"></a><br /></dt>
 <dd><p>Signed 64-bit integer. </p>
 </dd></dl>
 
 <dl class="cpp type">
 <dt class="sig sig-object cpp" id="_CPPv49IPLuint64">
-<span id="_CPPv39IPLuint64"></span><span id="_CPPv29IPLuint64"></span><span id="IPLuint64"></span><span class="target" id="group__types_1gadbd4cf046459d1de71337e60f8b58443"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span> <span class="pre">long</span> <span class="pre">long</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLuint64</span></span></span><a class="headerlink" href="#_CPPv49IPLuint64" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv39IPLuint64"></span><span id="_CPPv29IPLuint64"></span><span id="IPLuint64"></span><span class="target" id="group__types_1gadbd4cf046459d1de71337e60f8b58443"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">long</span></span><span class="w"> </span><span class="kt"><span class="pre">long</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLuint64</span></span></span><a class="headerlink" href="#_CPPv49IPLuint64" title="Link to this definition"></a><br /></dt>
 <dd><p>Unsigned 64-bit integer. </p>
 </dd></dl>
 
 <dl class="cpp type">
 <dt class="sig sig-object cpp" id="_CPPv410IPLfloat32">
-<span id="_CPPv310IPLfloat32"></span><span id="_CPPv210IPLfloat32"></span><span id="IPLfloat32"></span><span class="target" id="group__types_1gaae74a77965d451d22a466a60cb622131"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLfloat32</span></span></span><a class="headerlink" href="#_CPPv410IPLfloat32" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv310IPLfloat32"></span><span id="_CPPv210IPLfloat32"></span><span id="IPLfloat32"></span><span class="target" id="group__types_1gaae74a77965d451d22a466a60cb622131"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLfloat32</span></span></span><a class="headerlink" href="#_CPPv410IPLfloat32" title="Link to this definition"></a><br /></dt>
 <dd><p>Single-precision floating-point number. </p>
 </dd></dl>
 
 <dl class="cpp type">
 <dt class="sig sig-object cpp" id="_CPPv410IPLfloat64">
-<span id="_CPPv310IPLfloat64"></span><span id="_CPPv210IPLfloat64"></span><span id="IPLfloat64"></span><span class="target" id="group__types_1ga9cfd381627d8b1002873e842309451d4"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLfloat64</span></span></span><a class="headerlink" href="#_CPPv410IPLfloat64" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv310IPLfloat64"></span><span id="_CPPv210IPLfloat64"></span><span id="IPLfloat64"></span><span class="target" id="group__types_1ga9cfd381627d8b1002873e842309451d4"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLfloat64</span></span></span><a class="headerlink" href="#_CPPv410IPLfloat64" title="Link to this definition"></a><br /></dt>
 <dd><p>Double-precision floating-point number. </p>
 </dd></dl>
 
 <dl class="cpp type">
 <dt class="sig sig-object cpp" id="_CPPv47IPLbyte">
-<span id="_CPPv37IPLbyte"></span><span id="_CPPv27IPLbyte"></span><span id="IPLbyte"></span><span class="target" id="group__types_1ga38b946dc486645dd9144e2ceea5167d5"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span> <span class="pre">char</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLbyte</span></span></span><a class="headerlink" href="#_CPPv47IPLbyte" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv37IPLbyte"></span><span id="_CPPv27IPLbyte"></span><span id="IPLbyte"></span><span class="target" id="group__types_1ga38b946dc486645dd9144e2ceea5167d5"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLbyte</span></span></span><a class="headerlink" href="#_CPPv47IPLbyte" title="Link to this definition"></a><br /></dt>
 <dd><p>A single byte. </p>
 </dd></dl>
 
 <dl class="cpp type">
 <dt class="sig sig-object cpp" id="_CPPv47IPLsize">
-<span id="_CPPv37IPLsize"></span><span id="_CPPv27IPLsize"></span><span id="IPLsize"></span><span class="target" id="group__types_1ga9e3539ec232b3c48e4c089c577fd528f"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLsize</span></span></span><a class="headerlink" href="#_CPPv47IPLsize" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv37IPLsize"></span><span id="_CPPv27IPLsize"></span><span id="IPLsize"></span><span class="target" id="group__types_1ga9e3539ec232b3c48e4c089c577fd528f"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLsize</span></span></span><a class="headerlink" href="#_CPPv47IPLsize" title="Link to this definition"></a><br /></dt>
 <dd><p>Unsigned integer of machine-dependent size. </p>
 <p>Equivalent to <code class="docutils literal notranslate"><span class="pre">size_t</span></code>. </p>
 </dd></dl>
 
 <dl class="cpp type">
 <dt class="sig sig-object cpp" id="_CPPv49IPLstring">
-<span id="_CPPv39IPLstring"></span><span id="_CPPv29IPLstring"></span><span id="IPLstring"></span><span class="target" id="group__types_1ga9e19aca0d2e93ea12c4f08ac50238324"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">IPLstring</span></span></span><a class="headerlink" href="#_CPPv49IPLstring" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv39IPLstring"></span><span id="_CPPv29IPLstring"></span><span id="IPLstring"></span><span class="target" id="group__types_1ga9e19aca0d2e93ea12c4f08ac50238324"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">IPLstring</span></span></span><a class="headerlink" href="#_CPPv49IPLstring" title="Link to this definition"></a><br /></dt>
 <dd><p>NULL-terminated ASCII or UTF-8 string. </p>
 </dd></dl>
 
-</div>
-<div class="section" id="enumerations">
-<h2>Enumerations<a class="headerlink" href="#enumerations" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="enumerations">
+<h2>Enumerations<a class="headerlink" href="#enumerations" title="Link to this heading"></a></h2>
 <dl class="cpp enum">
 <dt class="sig sig-object cpp" id="_CPPv47IPLbool">
-<span id="_CPPv37IPLbool"></span><span id="_CPPv27IPLbool"></span><span class="target" id="group__types_1ga14e97f616744727463bd3ee5764c4004"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLbool</span></span></span><a class="headerlink" href="#_CPPv47IPLbool" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv37IPLbool"></span><span id="_CPPv27IPLbool"></span><span class="target" id="group__types_1ga14e97f616744727463bd3ee5764c4004"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLbool</span></span></span><a class="headerlink" href="#_CPPv47IPLbool" title="Link to this definition"></a><br /></dt>
 <dd><p>Boolean values. </p>
 <p><em>Values:</em></p>
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N7IPLbool9IPL_FALSEE">
-<span id="_CPPv3N7IPLbool9IPL_FALSEE"></span><span id="_CPPv2N7IPLbool9IPL_FALSEE"></span><span class="target" id="group__types_1gga14e97f616744727463bd3ee5764c4004a263c4cbea932f2ce3a7759f669d6c7f9"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_FALSE</span></span></span><a class="headerlink" href="#_CPPv4N7IPLbool9IPL_FALSEE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N7IPLbool9IPL_FALSEE"></span><span id="_CPPv2N7IPLbool9IPL_FALSEE"></span><span class="target" id="group__types_1gga14e97f616744727463bd3ee5764c4004a263c4cbea932f2ce3a7759f669d6c7f9"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_FALSE</span></span></span><a class="headerlink" href="#_CPPv4N7IPLbool9IPL_FALSEE" title="Link to this definition"></a><br /></dt>
 <dd><p>The Boolean value <code class="docutils literal notranslate"><span class="pre">false</span></code>. </p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N7IPLbool8IPL_TRUEE">
-<span id="_CPPv3N7IPLbool8IPL_TRUEE"></span><span id="_CPPv2N7IPLbool8IPL_TRUEE"></span><span class="target" id="group__types_1gga14e97f616744727463bd3ee5764c4004aee8d3eb44895cf9a8f8dfc6e9941eb4a"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_TRUE</span></span></span><a class="headerlink" href="#_CPPv4N7IPLbool8IPL_TRUEE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N7IPLbool8IPL_TRUEE"></span><span id="_CPPv2N7IPLbool8IPL_TRUEE"></span><span class="target" id="group__types_1gga14e97f616744727463bd3ee5764c4004aee8d3eb44895cf9a8f8dfc6e9941eb4a"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_TRUE</span></span></span><a class="headerlink" href="#_CPPv4N7IPLbool8IPL_TRUEE" title="Link to this definition"></a><br /></dt>
 <dd><p>The Boolean value <code class="docutils literal notranslate"><span class="pre">true</span></code>. </p>
 </dd></dl>
 
@@ -308,102 +238,85 @@
 
 <dl class="cpp enum">
 <dt class="sig sig-object cpp" id="_CPPv48IPLerror">
-<span id="_CPPv38IPLerror"></span><span id="_CPPv28IPLerror"></span><span class="target" id="group__types_1ga0c1ecc8333267649cf60f453efa700c6"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLerror</span></span></span><a class="headerlink" href="#_CPPv48IPLerror" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv38IPLerror"></span><span id="_CPPv28IPLerror"></span><span class="target" id="group__types_1ga0c1ecc8333267649cf60f453efa700c6"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLerror</span></span></span><a class="headerlink" href="#_CPPv48IPLerror" title="Link to this definition"></a><br /></dt>
 <dd><p>Status codes returned by Steam Audio API functions. </p>
 <p><em>Values:</em></p>
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N8IPLerror18IPL_STATUS_SUCCESSE">
-<span id="_CPPv3N8IPLerror18IPL_STATUS_SUCCESSE"></span><span id="_CPPv2N8IPLerror18IPL_STATUS_SUCCESSE"></span><span class="target" id="group__types_1gga0c1ecc8333267649cf60f453efa700c6a65a2f169ef2b055425e7fe1cc400d0a1"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_STATUS_SUCCESS</span></span></span><a class="headerlink" href="#_CPPv4N8IPLerror18IPL_STATUS_SUCCESSE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N8IPLerror18IPL_STATUS_SUCCESSE"></span><span id="_CPPv2N8IPLerror18IPL_STATUS_SUCCESSE"></span><span class="target" id="group__types_1gga0c1ecc8333267649cf60f453efa700c6a65a2f169ef2b055425e7fe1cc400d0a1"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_STATUS_SUCCESS</span></span></span><a class="headerlink" href="#_CPPv4N8IPLerror18IPL_STATUS_SUCCESSE" title="Link to this definition"></a><br /></dt>
 <dd><p>The operation completed successfully. </p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N8IPLerror18IPL_STATUS_FAILUREE">
-<span id="_CPPv3N8IPLerror18IPL_STATUS_FAILUREE"></span><span id="_CPPv2N8IPLerror18IPL_STATUS_FAILUREE"></span><span class="target" id="group__types_1gga0c1ecc8333267649cf60f453efa700c6a3f4a0335d784045c0413ecd67e7dc170"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_STATUS_FAILURE</span></span></span><a class="headerlink" href="#_CPPv4N8IPLerror18IPL_STATUS_FAILUREE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N8IPLerror18IPL_STATUS_FAILUREE"></span><span id="_CPPv2N8IPLerror18IPL_STATUS_FAILUREE"></span><span class="target" id="group__types_1gga0c1ecc8333267649cf60f453efa700c6a3f4a0335d784045c0413ecd67e7dc170"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_STATUS_FAILURE</span></span></span><a class="headerlink" href="#_CPPv4N8IPLerror18IPL_STATUS_FAILUREE" title="Link to this definition"></a><br /></dt>
 <dd><p>An unspecified error occurred. </p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N8IPLerror22IPL_STATUS_OUTOFMEMORYE">
-<span id="_CPPv3N8IPLerror22IPL_STATUS_OUTOFMEMORYE"></span><span id="_CPPv2N8IPLerror22IPL_STATUS_OUTOFMEMORYE"></span><span class="target" id="group__types_1gga0c1ecc8333267649cf60f453efa700c6a9f85a0b36f589771938d7f3376e86788"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_STATUS_OUTOFMEMORY</span></span></span><a class="headerlink" href="#_CPPv4N8IPLerror22IPL_STATUS_OUTOFMEMORYE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N8IPLerror22IPL_STATUS_OUTOFMEMORYE"></span><span id="_CPPv2N8IPLerror22IPL_STATUS_OUTOFMEMORYE"></span><span class="target" id="group__types_1gga0c1ecc8333267649cf60f453efa700c6a9f85a0b36f589771938d7f3376e86788"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_STATUS_OUTOFMEMORY</span></span></span><a class="headerlink" href="#_CPPv4N8IPLerror22IPL_STATUS_OUTOFMEMORYE" title="Link to this definition"></a><br /></dt>
 <dd><p>The system ran out of memory. </p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N8IPLerror25IPL_STATUS_INITIALIZATIONE">
-<span id="_CPPv3N8IPLerror25IPL_STATUS_INITIALIZATIONE"></span><span id="_CPPv2N8IPLerror25IPL_STATUS_INITIALIZATIONE"></span><span class="target" id="group__types_1gga0c1ecc8333267649cf60f453efa700c6afc41c5c862180bc9148655e936fbafcd"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_STATUS_INITIALIZATION</span></span></span><a class="headerlink" href="#_CPPv4N8IPLerror25IPL_STATUS_INITIALIZATIONE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N8IPLerror25IPL_STATUS_INITIALIZATIONE"></span><span id="_CPPv2N8IPLerror25IPL_STATUS_INITIALIZATIONE"></span><span class="target" id="group__types_1gga0c1ecc8333267649cf60f453efa700c6afc41c5c862180bc9148655e936fbafcd"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_STATUS_INITIALIZATION</span></span></span><a class="headerlink" href="#_CPPv4N8IPLerror25IPL_STATUS_INITIALIZATIONE" title="Link to this definition"></a><br /></dt>
 <dd><p>An error occurred while initializing an external dependency. </p>
 </dd></dl>
 
 </dd></dl>
 
-</div>
-<div class="section" id="callbacks">
-<h2>Callbacks<a class="headerlink" href="#callbacks" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="callbacks">
+<h2>Callbacks<a class="headerlink" href="#callbacks" title="Link to this heading"></a></h2>
 <dl class="cpp type">
 <dt class="sig sig-object cpp" id="_CPPv419IPLProgressCallback">
-<span id="_CPPv319IPLProgressCallback"></span><span id="_CPPv219IPLProgressCallback"></span><span id="IPLProgressCallback"></span><span class="target" id="group__types_1gaac7cea53e3ac4c0928a9e37aed896eed"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">IPLProgressCallback</span></span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">(</span></span><a class="reference internal" href="#_CPPv410IPLfloat32" title="IPLfloat32"><span class="n"><span class="pre">IPLfloat32</span></span></a><span class="w"> </span><span class="n"><span class="pre">progress</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">userData</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#_CPPv419IPLProgressCallback" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv319IPLProgressCallback"></span><span id="_CPPv219IPLProgressCallback"></span><span id="IPLProgressCallback"></span><span class="target" id="group__types_1gaac7cea53e3ac4c0928a9e37aed896eed"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">IPLProgressCallback</span></span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">(</span></span><a class="reference internal" href="#_CPPv410IPLfloat32" title="IPLfloat32"><span class="n"><span class="pre">IPLfloat32</span></span></a><span class="w"> </span><span class="n"><span class="pre">progress</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">userData</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#_CPPv419IPLProgressCallback" title="Link to this definition"></a><br /></dt>
 <dd><p>Callback for updating the application on the progress of a function. </p>
 <p>You can use this to provide the user with visual feedback, like a progress bar.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>progress</strong> – Fraction of the function work that has been completed, between 0.0 and 1.0. </p></li>
-<li><p><strong>userData</strong> – Pointer to arbitrary user-specified data provided when calling the function that will call this callback. </p></li>
-</ul>
+<dt class="field-odd">Param progress<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Fraction of the function work that has been completed, between 0.0 and 1.0. </p>
+</dd>
+<dt class="field-even">Param userData<span class="colon">:</span></dt>
+<dd class="field-even"><p>Pointer to arbitrary user-specified data provided when calling the function that will call this callback. </p>
 </dd>
 </dl>
 </dd></dl>
 
-</div>
-</div>
+</section>
+</section>
 
 
            </div>
-           
           </div>
-          <footer>
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="context.html" class="btn btn-neutral float-right" title="Context" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="reference.html" class="btn btn-neutral float-left" title="API Reference" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="context.html" class="btn btn-neutral float-right" title="Context" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &#169; Copyright 2017-2023, Valve Corporation.
-
-    </p>
+    <p>&#169; Copyright 2017-2023, Valve Corporation.</p>
   </div>
-    
-    
-    
-    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>

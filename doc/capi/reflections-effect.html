@@ -1,101 +1,50 @@
 
 
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
-  <meta charset="utf-8" />
-  
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  
   <title>Reflection Effect &mdash; Steam Audio C API  documentation</title>
-  
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/steamaudio.css?v=b5aaeb06" />
 
   
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/steamaudio.css" type="text/css" />
-
-  
-  
-
-  
-  
-
-  
-
-  
-  <!--[if lt IE 9]>
-    <script src="_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/doctools.js"></script>
-    
-    <script type="text/javascript" src="_static/js/theme.js"></script>
-
-    
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=7f41d439"></script>
+      <script src="_static/doctools.js?v=9a2dae69"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Path Effect" href="path-effect.html" />
     <link rel="prev" title="Direct Effect" href="direct-effect.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
 
           
-            <a href="index.html">
           
-
-          
+          <a href="index.html">
             
-            <img src="_static/steam-audio-logo.png" class="logo" alt="Logo"/>
-          
+              <img src="_static/steam-audio-logo.png" class="logo" alt="Logo"/>
           </a>
-
-          
-            
-            
-              <div class="version">
-                4.6.0
-              </div>
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
-              <p class="caption"><span class="caption-text">Steam Audio SDK</span></p>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Steam Audio SDK</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="guide.html">Programmer’s Guide</a></li>
@@ -123,10 +72,34 @@
 <li class="toctree-l2"><a class="reference internal" href="ambisonics-decode-effect.html">Ambisonics Decode Effect</a></li>
 <li class="toctree-l2"><a class="reference internal" href="direct-effect.html">Direct Effect</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Reflection Effect</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#typedefs">Typedefs</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#functions">Functions</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#structures">Structures</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#enumerations">Enumerations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#typedefs">Typedefs</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv419IPLReflectionEffect"><code class="docutils literal notranslate"><span class="pre">IPLReflectionEffect</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv418IPLReflectionMixer"><code class="docutils literal notranslate"><span class="pre">IPLReflectionMixer</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv421IPLReflectionEffectIR"><code class="docutils literal notranslate"><span class="pre">IPLReflectionEffectIR</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#functions">Functions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv425iplReflectionEffectCreate10IPLContextP16IPLAudioSettingsP27IPLReflectionEffectSettingsP19IPLReflectionEffect"><code class="docutils literal notranslate"><span class="pre">iplReflectionEffectCreate()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv425iplReflectionEffectRetain19IPLReflectionEffect"><code class="docutils literal notranslate"><span class="pre">iplReflectionEffectRetain()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv426iplReflectionEffectReleaseP19IPLReflectionEffect"><code class="docutils literal notranslate"><span class="pre">iplReflectionEffectRelease()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv424iplReflectionEffectReset19IPLReflectionEffect"><code class="docutils literal notranslate"><span class="pre">iplReflectionEffectReset()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv424iplReflectionEffectApply19IPLReflectionEffectP25IPLReflectionEffectParamsP14IPLAudioBufferP14IPLAudioBuffer18IPLReflectionMixer"><code class="docutils literal notranslate"><span class="pre">iplReflectionEffectApply()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv424iplReflectionMixerCreate10IPLContextP16IPLAudioSettingsP27IPLReflectionEffectSettingsP18IPLReflectionMixer"><code class="docutils literal notranslate"><span class="pre">iplReflectionMixerCreate()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv424iplReflectionMixerRetain18IPLReflectionMixer"><code class="docutils literal notranslate"><span class="pre">iplReflectionMixerRetain()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv425iplReflectionMixerReleaseP18IPLReflectionMixer"><code class="docutils literal notranslate"><span class="pre">iplReflectionMixerRelease()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv423iplReflectionMixerReset18IPLReflectionMixer"><code class="docutils literal notranslate"><span class="pre">iplReflectionMixerReset()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv423iplReflectionMixerApply18IPLReflectionMixerP25IPLReflectionEffectParamsP14IPLAudioBuffer"><code class="docutils literal notranslate"><span class="pre">iplReflectionMixerApply()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#structures">Structures</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv427IPLReflectionEffectSettings"><code class="docutils literal notranslate"><span class="pre">IPLReflectionEffectSettings</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv425IPLReflectionEffectParams"><code class="docutils literal notranslate"><span class="pre">IPLReflectionEffectParams</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#enumerations">Enumerations</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv423IPLReflectionEffectType"><code class="docutils literal notranslate"><span class="pre">IPLReflectionEffectType</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="path-effect.html">Path Effect</a></li>
@@ -137,105 +110,64 @@
 </li>
 </ul>
 
-            
-          
         </div>
-        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="index.html">Steam Audio C API</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
-      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-        
-          <li><a href="reference.html">API Reference</a> &raquo;</li>
-        
-      <li>Reflection Effect</li>
-    
-    
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="reference.html">API Reference</a></li>
+      <li class="breadcrumb-item active">Reflection Effect</li>
       <li class="wy-breadcrumbs-aside">
-        
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
-  <div class="section" id="reflection-effect">
-<h1>Reflection Effect<a class="headerlink" href="#reflection-effect" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="typedefs">
-<h2>Typedefs<a class="headerlink" href="#typedefs" title="Permalink to this headline">¶</a></h2>
+             
+  <section id="reflection-effect">
+<h1>Reflection Effect<a class="headerlink" href="#reflection-effect" title="Link to this heading"></a></h1>
+<section id="typedefs">
+<h2>Typedefs<a class="headerlink" href="#typedefs" title="Link to this heading"></a></h2>
 <dl class="cpp type">
 <dt class="sig sig-object cpp" id="_CPPv419IPLReflectionEffect">
-<span id="_CPPv319IPLReflectionEffect"></span><span id="_CPPv219IPLReflectionEffect"></span><span id="IPLReflectionEffect"></span><span class="target" id="group__reflectioneffect_1gabaa1576eafdb1460f65c91138594366f"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="n"><span class="pre">_IPLReflectionEffect_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">IPLReflectionEffect</span></span></span><a class="headerlink" href="#_CPPv419IPLReflectionEffect" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv319IPLReflectionEffect"></span><span id="_CPPv219IPLReflectionEffect"></span><span id="IPLReflectionEffect"></span><span class="target" id="group__reflectioneffect_1gabaa1576eafdb1460f65c91138594366f"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="n"><span class="pre">_IPLReflectionEffect_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">IPLReflectionEffect</span></span></span><a class="headerlink" href="#_CPPv419IPLReflectionEffect" title="Link to this definition"></a><br /></dt>
 <dd><p>Applies the result of physics-based reflections simulation to an audio buffer. </p>
 <p>The result is encoded in Ambisonics, and can be decoded using an Ambisonics decode effect. </p>
 </dd></dl>
 
 <dl class="cpp type">
 <dt class="sig sig-object cpp" id="_CPPv418IPLReflectionMixer">
-<span id="_CPPv318IPLReflectionMixer"></span><span id="_CPPv218IPLReflectionMixer"></span><span id="IPLReflectionMixer"></span><span class="target" id="group__reflectioneffect_1ga0efdf93d5288c4deb708c7a02fac6b41"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="n"><span class="pre">_IPLReflectionMixer_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">IPLReflectionMixer</span></span></span><a class="headerlink" href="#_CPPv418IPLReflectionMixer" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv318IPLReflectionMixer"></span><span id="_CPPv218IPLReflectionMixer"></span><span id="IPLReflectionMixer"></span><span class="target" id="group__reflectioneffect_1ga0efdf93d5288c4deb708c7a02fac6b41"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="n"><span class="pre">_IPLReflectionMixer_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">IPLReflectionMixer</span></span></span><a class="headerlink" href="#_CPPv418IPLReflectionMixer" title="Link to this definition"></a><br /></dt>
 <dd><p>Mixes the outputs of multiple reflection effects, and generates a single sound field containing all the reflected sound reaching the listener. </p>
 <p>Using this is optional. Depending on the reflection effect algorithm used, a reflection mixer may provide a reduction in CPU usage. </p>
 </dd></dl>
 
 <dl class="cpp type">
 <dt class="sig sig-object cpp" id="_CPPv421IPLReflectionEffectIR">
-<span id="_CPPv321IPLReflectionEffectIR"></span><span id="_CPPv221IPLReflectionEffectIR"></span><span id="IPLReflectionEffectIR"></span><span class="target" id="group__reflectioneffect_1gace9ff94a8ee0a076a83cbfb2693112b5"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="n"><span class="pre">_IPLReflectionEffectIR_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">IPLReflectionEffectIR</span></span></span><a class="headerlink" href="#_CPPv421IPLReflectionEffectIR" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv321IPLReflectionEffectIR"></span><span id="_CPPv221IPLReflectionEffectIR"></span><span id="IPLReflectionEffectIR"></span><span class="target" id="group__reflectioneffect_1gace9ff94a8ee0a076a83cbfb2693112b5"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="n"><span class="pre">_IPLReflectionEffectIR_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">IPLReflectionEffectIR</span></span></span><a class="headerlink" href="#_CPPv421IPLReflectionEffectIR" title="Link to this definition"></a><br /></dt>
 <dd><p>A multi-channel impulse response for use with a reflection effect. </p>
 <p>Steam Audio creates and manages objects of this type internally, your application only needs to pass handles to these objects to the appropriate Steam Audio API functions. </p>
 </dd></dl>
 
-</div>
-<div class="section" id="functions">
-<h2>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="functions">
+<h2>Functions<a class="headerlink" href="#functions" title="Link to this heading"></a></h2>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv425iplReflectionEffectCreate10IPLContextP16IPLAudioSettingsP27IPLReflectionEffectSettingsP19IPLReflectionEffect">
-<span id="_CPPv325iplReflectionEffectCreate10IPLContextP16IPLAudioSettingsP27IPLReflectionEffectSettingsP19IPLReflectionEffect"></span><span id="_CPPv225iplReflectionEffectCreate10IPLContextP16IPLAudioSettingsP27IPLReflectionEffectSettingsP19IPLReflectionEffect"></span><span id="iplReflectionEffectCreate__IPLContext.IPLAudioSettingsP.IPLReflectionEffectSettingsP.IPLReflectionEffectP"></span><span class="target" id="group__reflectioneffect_1ga7ae987d0a6d63c5379e0e5ad8143dcdb"></span><a class="reference internal" href="types.html#_CPPv48IPLerror" title="IPLerror"><span class="n"><span class="pre">IPLerror</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplReflectionEffectCreate</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="context.html#_CPPv410IPLContext" title="IPLContext"><span class="n"><span class="pre">IPLContext</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">context</span></span>, <a class="reference internal" href="audio-buffers.html#_CPPv416IPLAudioSettings" title="IPLAudioSettings"><span class="n"><span class="pre">IPLAudioSettings</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">audioSettings</span></span>, <a class="reference internal" href="#_CPPv427IPLReflectionEffectSettings" title="IPLReflectionEffectSettings"><span class="n"><span class="pre">IPLReflectionEffectSettings</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">effectSettings</span></span>, <a class="reference internal" href="#_CPPv419IPLReflectionEffect" title="IPLReflectionEffect"><span class="n"><span class="pre">IPLReflectionEffect</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">effect</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv425iplReflectionEffectCreate10IPLContextP16IPLAudioSettingsP27IPLReflectionEffectSettingsP19IPLReflectionEffect" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv325iplReflectionEffectCreate10IPLContextP16IPLAudioSettingsP27IPLReflectionEffectSettingsP19IPLReflectionEffect"></span><span id="_CPPv225iplReflectionEffectCreate10IPLContextP16IPLAudioSettingsP27IPLReflectionEffectSettingsP19IPLReflectionEffect"></span><span id="iplReflectionEffectCreate__IPLContext.IPLAudioSettingsP.IPLReflectionEffectSettingsP.IPLReflectionEffectP"></span><span class="target" id="group__reflectioneffect_1ga7ae987d0a6d63c5379e0e5ad8143dcdb"></span><a class="reference internal" href="types.html#_CPPv48IPLerror" title="IPLerror"><span class="n"><span class="pre">IPLerror</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplReflectionEffectCreate</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="context.html#_CPPv410IPLContext" title="IPLContext"><span class="n"><span class="pre">IPLContext</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">context</span></span>, <a class="reference internal" href="audio-buffers.html#_CPPv416IPLAudioSettings" title="IPLAudioSettings"><span class="n"><span class="pre">IPLAudioSettings</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">audioSettings</span></span>, <a class="reference internal" href="#_CPPv427IPLReflectionEffectSettings" title="IPLReflectionEffectSettings"><span class="n"><span class="pre">IPLReflectionEffectSettings</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">effectSettings</span></span>, <a class="reference internal" href="#_CPPv419IPLReflectionEffect" title="IPLReflectionEffect"><span class="n"><span class="pre">IPLReflectionEffect</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">effect</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv425iplReflectionEffectCreate10IPLContextP16IPLAudioSettingsP27IPLReflectionEffectSettingsP19IPLReflectionEffect" title="Link to this definition"></a><br /></dt>
 <dd><p>Creates a reflection effect. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>context</strong> – The context used to initialize Steam Audio. </p></li>
 <li><p><strong>audioSettings</strong> – Global audio processing settings. </p></li>
@@ -243,7 +175,7 @@
 <li><p><strong>effect</strong> – [out] The created reflection effect.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Status code indicating whether or not the operation succeeded. </p>
 </dd>
 </dl>
@@ -251,13 +183,13 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv425iplReflectionEffectRetain19IPLReflectionEffect">
-<span id="_CPPv325iplReflectionEffectRetain19IPLReflectionEffect"></span><span id="_CPPv225iplReflectionEffectRetain19IPLReflectionEffect"></span><span id="iplReflectionEffectRetain__IPLReflectionEffect"></span><span class="target" id="group__reflectioneffect_1ga8823bf0972cf148c6e722ffa8a4a491f"></span><a class="reference internal" href="#_CPPv419IPLReflectionEffect" title="IPLReflectionEffect"><span class="n"><span class="pre">IPLReflectionEffect</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplReflectionEffectRetain</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv419IPLReflectionEffect" title="IPLReflectionEffect"><span class="n"><span class="pre">IPLReflectionEffect</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">effect</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv425iplReflectionEffectRetain19IPLReflectionEffect" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv325iplReflectionEffectRetain19IPLReflectionEffect"></span><span id="_CPPv225iplReflectionEffectRetain19IPLReflectionEffect"></span><span id="iplReflectionEffectRetain__IPLReflectionEffect"></span><span class="target" id="group__reflectioneffect_1ga8823bf0972cf148c6e722ffa8a4a491f"></span><a class="reference internal" href="#_CPPv419IPLReflectionEffect" title="IPLReflectionEffect"><span class="n"><span class="pre">IPLReflectionEffect</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplReflectionEffectRetain</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv419IPLReflectionEffect" title="IPLReflectionEffect"><span class="n"><span class="pre">IPLReflectionEffect</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">effect</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv425iplReflectionEffectRetain19IPLReflectionEffect" title="Link to this definition"></a><br /></dt>
 <dd><p>Retains an additional reference to a reflection effect. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>effect</strong> – The reflection effect to retain a reference to.</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The additional reference to the reflection effect. </p>
 </dd>
 </dl>
@@ -265,10 +197,10 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv426iplReflectionEffectReleaseP19IPLReflectionEffect">
-<span id="_CPPv326iplReflectionEffectReleaseP19IPLReflectionEffect"></span><span id="_CPPv226iplReflectionEffectReleaseP19IPLReflectionEffect"></span><span id="iplReflectionEffectRelease__IPLReflectionEffectP"></span><span class="target" id="group__reflectioneffect_1gaf1027c28257c924c0b88da3fb48f953a"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplReflectionEffectRelease</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv419IPLReflectionEffect" title="IPLReflectionEffect"><span class="n"><span class="pre">IPLReflectionEffect</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">effect</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv426iplReflectionEffectReleaseP19IPLReflectionEffect" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv326iplReflectionEffectReleaseP19IPLReflectionEffect"></span><span id="_CPPv226iplReflectionEffectReleaseP19IPLReflectionEffect"></span><span id="iplReflectionEffectRelease__IPLReflectionEffectP"></span><span class="target" id="group__reflectioneffect_1gaf1027c28257c924c0b88da3fb48f953a"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplReflectionEffectRelease</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv419IPLReflectionEffect" title="IPLReflectionEffect"><span class="n"><span class="pre">IPLReflectionEffect</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">effect</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv426iplReflectionEffectReleaseP19IPLReflectionEffect" title="Link to this definition"></a><br /></dt>
 <dd><p>Releases a reference to a reflection effect. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>effect</strong> – The reflection effect to release a reference to. </p>
 </dd>
 </dl>
@@ -276,10 +208,10 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv424iplReflectionEffectReset19IPLReflectionEffect">
-<span id="_CPPv324iplReflectionEffectReset19IPLReflectionEffect"></span><span id="_CPPv224iplReflectionEffectReset19IPLReflectionEffect"></span><span id="iplReflectionEffectReset__IPLReflectionEffect"></span><span class="target" id="group__reflectioneffect_1ga5365e78c49027f4857b25690d248480a"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplReflectionEffectReset</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv419IPLReflectionEffect" title="IPLReflectionEffect"><span class="n"><span class="pre">IPLReflectionEffect</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">effect</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv424iplReflectionEffectReset19IPLReflectionEffect" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv324iplReflectionEffectReset19IPLReflectionEffect"></span><span id="_CPPv224iplReflectionEffectReset19IPLReflectionEffect"></span><span id="iplReflectionEffectReset__IPLReflectionEffect"></span><span class="target" id="group__reflectioneffect_1ga5365e78c49027f4857b25690d248480a"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplReflectionEffectReset</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv419IPLReflectionEffect" title="IPLReflectionEffect"><span class="n"><span class="pre">IPLReflectionEffect</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">effect</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv424iplReflectionEffectReset19IPLReflectionEffect" title="Link to this definition"></a><br /></dt>
 <dd><p>Resets the internal processing state of a reflection effect. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>effect</strong> – The reflection effect to reset. </p>
 </dd>
 </dl>
@@ -287,11 +219,11 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv424iplReflectionEffectApply19IPLReflectionEffectP25IPLReflectionEffectParamsP14IPLAudioBufferP14IPLAudioBuffer18IPLReflectionMixer">
-<span id="_CPPv324iplReflectionEffectApply19IPLReflectionEffectP25IPLReflectionEffectParamsP14IPLAudioBufferP14IPLAudioBuffer18IPLReflectionMixer"></span><span id="_CPPv224iplReflectionEffectApply19IPLReflectionEffectP25IPLReflectionEffectParamsP14IPLAudioBufferP14IPLAudioBuffer18IPLReflectionMixer"></span><span id="iplReflectionEffectApply__IPLReflectionEffect.IPLReflectionEffectParamsP.IPLAudioBufferP.IPLAudioBufferP.IPLReflectionMixer"></span><span class="target" id="group__reflectioneffect_1ga457bcf7f6e2cb5a7ce5a6926e3a770f4"></span><a class="reference internal" href="audio-buffers.html#_CPPv419IPLAudioEffectState" title="IPLAudioEffectState"><span class="n"><span class="pre">IPLAudioEffectState</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplReflectionEffectApply</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv419IPLReflectionEffect" title="IPLReflectionEffect"><span class="n"><span class="pre">IPLReflectionEffect</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">effect</span></span>, <a class="reference internal" href="#_CPPv425IPLReflectionEffectParams" title="IPLReflectionEffectParams"><span class="n"><span class="pre">IPLReflectionEffectParams</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">params</span></span>, <a class="reference internal" href="audio-buffers.html#_CPPv414IPLAudioBuffer" title="IPLAudioBuffer"><span class="n"><span class="pre">IPLAudioBuffer</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">in</span></span>, <a class="reference internal" href="audio-buffers.html#_CPPv414IPLAudioBuffer" title="IPLAudioBuffer"><span class="n"><span class="pre">IPLAudioBuffer</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">out</span></span>, <a class="reference internal" href="#_CPPv418IPLReflectionMixer" title="IPLReflectionMixer"><span class="n"><span class="pre">IPLReflectionMixer</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">mixer</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv424iplReflectionEffectApply19IPLReflectionEffectP25IPLReflectionEffectParamsP14IPLAudioBufferP14IPLAudioBuffer18IPLReflectionMixer" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv324iplReflectionEffectApply19IPLReflectionEffectP25IPLReflectionEffectParamsP14IPLAudioBufferP14IPLAudioBuffer18IPLReflectionMixer"></span><span id="_CPPv224iplReflectionEffectApply19IPLReflectionEffectP25IPLReflectionEffectParamsP14IPLAudioBufferP14IPLAudioBuffer18IPLReflectionMixer"></span><span id="iplReflectionEffectApply__IPLReflectionEffect.IPLReflectionEffectParamsP.IPLAudioBufferP.IPLAudioBufferP.IPLReflectionMixer"></span><span class="target" id="group__reflectioneffect_1ga457bcf7f6e2cb5a7ce5a6926e3a770f4"></span><a class="reference internal" href="audio-buffers.html#_CPPv419IPLAudioEffectState" title="IPLAudioEffectState"><span class="n"><span class="pre">IPLAudioEffectState</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplReflectionEffectApply</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv419IPLReflectionEffect" title="IPLReflectionEffect"><span class="n"><span class="pre">IPLReflectionEffect</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">effect</span></span>, <a class="reference internal" href="#_CPPv425IPLReflectionEffectParams" title="IPLReflectionEffectParams"><span class="n"><span class="pre">IPLReflectionEffectParams</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">params</span></span>, <a class="reference internal" href="audio-buffers.html#_CPPv414IPLAudioBuffer" title="IPLAudioBuffer"><span class="n"><span class="pre">IPLAudioBuffer</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">in</span></span>, <a class="reference internal" href="audio-buffers.html#_CPPv414IPLAudioBuffer" title="IPLAudioBuffer"><span class="n"><span class="pre">IPLAudioBuffer</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">out</span></span>, <a class="reference internal" href="#_CPPv418IPLReflectionMixer" title="IPLReflectionMixer"><span class="n"><span class="pre">IPLReflectionMixer</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">mixer</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv424iplReflectionEffectApply19IPLReflectionEffectP25IPLReflectionEffectParamsP14IPLAudioBufferP14IPLAudioBuffer18IPLReflectionMixer" title="Link to this definition"></a><br /></dt>
 <dd><p>Applies a reflection effect to an audio buffer. </p>
 <p>This effect CANNOT be applied in-place.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>effect</strong> – The reflection effect to apply. </p></li>
 <li><p><strong>params</strong> – Parameters for applying the effect. </p></li>
@@ -300,7 +232,7 @@
 <li><p><strong>mixer</strong> – If this is non-null, then the output of this effect will be mixed into the given mixer object instead of being returned in the <code class="docutils literal notranslate"><span class="pre">out</span></code> parameter. The mixed output can be retrieved elsewhere in the audio pipeline using <code class="docutils literal notranslate"><span class="pre">iplReflectionMixerApply</span></code>. This can have a performance benefit if using convolution. If using TAN, specifying a mixer is required.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">IPL_AUDIOEFFECTSTATE_TAILREMAINING</span></code> if any tail samples remain in the effect’s internal buffers, or <code class="docutils literal notranslate"><span class="pre">IPL_AUDIOEFFECTSTATE_TAILCOMPLETE</span></code> otherwise. </p>
 </dd>
 </dl>
@@ -308,10 +240,10 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv424iplReflectionMixerCreate10IPLContextP16IPLAudioSettingsP27IPLReflectionEffectSettingsP18IPLReflectionMixer">
-<span id="_CPPv324iplReflectionMixerCreate10IPLContextP16IPLAudioSettingsP27IPLReflectionEffectSettingsP18IPLReflectionMixer"></span><span id="_CPPv224iplReflectionMixerCreate10IPLContextP16IPLAudioSettingsP27IPLReflectionEffectSettingsP18IPLReflectionMixer"></span><span id="iplReflectionMixerCreate__IPLContext.IPLAudioSettingsP.IPLReflectionEffectSettingsP.IPLReflectionMixerP"></span><span class="target" id="group__reflectioneffect_1ga3a8d4f3d5d1e4852c0ac3ef81c880d2e"></span><a class="reference internal" href="types.html#_CPPv48IPLerror" title="IPLerror"><span class="n"><span class="pre">IPLerror</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplReflectionMixerCreate</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="context.html#_CPPv410IPLContext" title="IPLContext"><span class="n"><span class="pre">IPLContext</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">context</span></span>, <a class="reference internal" href="audio-buffers.html#_CPPv416IPLAudioSettings" title="IPLAudioSettings"><span class="n"><span class="pre">IPLAudioSettings</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">audioSettings</span></span>, <a class="reference internal" href="#_CPPv427IPLReflectionEffectSettings" title="IPLReflectionEffectSettings"><span class="n"><span class="pre">IPLReflectionEffectSettings</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">effectSettings</span></span>, <a class="reference internal" href="#_CPPv418IPLReflectionMixer" title="IPLReflectionMixer"><span class="n"><span class="pre">IPLReflectionMixer</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">mixer</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv424iplReflectionMixerCreate10IPLContextP16IPLAudioSettingsP27IPLReflectionEffectSettingsP18IPLReflectionMixer" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv324iplReflectionMixerCreate10IPLContextP16IPLAudioSettingsP27IPLReflectionEffectSettingsP18IPLReflectionMixer"></span><span id="_CPPv224iplReflectionMixerCreate10IPLContextP16IPLAudioSettingsP27IPLReflectionEffectSettingsP18IPLReflectionMixer"></span><span id="iplReflectionMixerCreate__IPLContext.IPLAudioSettingsP.IPLReflectionEffectSettingsP.IPLReflectionMixerP"></span><span class="target" id="group__reflectioneffect_1ga3a8d4f3d5d1e4852c0ac3ef81c880d2e"></span><a class="reference internal" href="types.html#_CPPv48IPLerror" title="IPLerror"><span class="n"><span class="pre">IPLerror</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplReflectionMixerCreate</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="context.html#_CPPv410IPLContext" title="IPLContext"><span class="n"><span class="pre">IPLContext</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">context</span></span>, <a class="reference internal" href="audio-buffers.html#_CPPv416IPLAudioSettings" title="IPLAudioSettings"><span class="n"><span class="pre">IPLAudioSettings</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">audioSettings</span></span>, <a class="reference internal" href="#_CPPv427IPLReflectionEffectSettings" title="IPLReflectionEffectSettings"><span class="n"><span class="pre">IPLReflectionEffectSettings</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">effectSettings</span></span>, <a class="reference internal" href="#_CPPv418IPLReflectionMixer" title="IPLReflectionMixer"><span class="n"><span class="pre">IPLReflectionMixer</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">mixer</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv424iplReflectionMixerCreate10IPLContextP16IPLAudioSettingsP27IPLReflectionEffectSettingsP18IPLReflectionMixer" title="Link to this definition"></a><br /></dt>
 <dd><p>Creates a reflection effect mixer. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>context</strong> – The context used to initialize Steam Audio. </p></li>
 <li><p><strong>audioSettings</strong> – Global audio processing settings. </p></li>
@@ -319,7 +251,7 @@
 <li><p><strong>mixer</strong> – [out] The created reflection mixer.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Status code indicating whether or not the operation succeeded. </p>
 </dd>
 </dl>
@@ -327,13 +259,13 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv424iplReflectionMixerRetain18IPLReflectionMixer">
-<span id="_CPPv324iplReflectionMixerRetain18IPLReflectionMixer"></span><span id="_CPPv224iplReflectionMixerRetain18IPLReflectionMixer"></span><span id="iplReflectionMixerRetain__IPLReflectionMixer"></span><span class="target" id="group__reflectioneffect_1ga5b96a7f9ecab0623a6d69de2fcdbfca6"></span><a class="reference internal" href="#_CPPv418IPLReflectionMixer" title="IPLReflectionMixer"><span class="n"><span class="pre">IPLReflectionMixer</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplReflectionMixerRetain</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv418IPLReflectionMixer" title="IPLReflectionMixer"><span class="n"><span class="pre">IPLReflectionMixer</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">mixer</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv424iplReflectionMixerRetain18IPLReflectionMixer" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv324iplReflectionMixerRetain18IPLReflectionMixer"></span><span id="_CPPv224iplReflectionMixerRetain18IPLReflectionMixer"></span><span id="iplReflectionMixerRetain__IPLReflectionMixer"></span><span class="target" id="group__reflectioneffect_1ga5b96a7f9ecab0623a6d69de2fcdbfca6"></span><a class="reference internal" href="#_CPPv418IPLReflectionMixer" title="IPLReflectionMixer"><span class="n"><span class="pre">IPLReflectionMixer</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplReflectionMixerRetain</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv418IPLReflectionMixer" title="IPLReflectionMixer"><span class="n"><span class="pre">IPLReflectionMixer</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">mixer</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv424iplReflectionMixerRetain18IPLReflectionMixer" title="Link to this definition"></a><br /></dt>
 <dd><p>Retains an additional reference to a reflection mixer. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>mixer</strong> – The reflection mixer to retain a reference to.</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The additional reference to the reflection mixer. </p>
 </dd>
 </dl>
@@ -341,10 +273,10 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv425iplReflectionMixerReleaseP18IPLReflectionMixer">
-<span id="_CPPv325iplReflectionMixerReleaseP18IPLReflectionMixer"></span><span id="_CPPv225iplReflectionMixerReleaseP18IPLReflectionMixer"></span><span id="iplReflectionMixerRelease__IPLReflectionMixerP"></span><span class="target" id="group__reflectioneffect_1gab4b1a33227773503b8ba5c0bbd4a1d8f"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplReflectionMixerRelease</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv418IPLReflectionMixer" title="IPLReflectionMixer"><span class="n"><span class="pre">IPLReflectionMixer</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">mixer</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv425iplReflectionMixerReleaseP18IPLReflectionMixer" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv325iplReflectionMixerReleaseP18IPLReflectionMixer"></span><span id="_CPPv225iplReflectionMixerReleaseP18IPLReflectionMixer"></span><span id="iplReflectionMixerRelease__IPLReflectionMixerP"></span><span class="target" id="group__reflectioneffect_1gab4b1a33227773503b8ba5c0bbd4a1d8f"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplReflectionMixerRelease</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv418IPLReflectionMixer" title="IPLReflectionMixer"><span class="n"><span class="pre">IPLReflectionMixer</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">mixer</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv425iplReflectionMixerReleaseP18IPLReflectionMixer" title="Link to this definition"></a><br /></dt>
 <dd><p>Releases a reference to a reflection mixer. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>mixer</strong> – The reflection mixer to release a reference to. </p>
 </dd>
 </dl>
@@ -352,10 +284,10 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv423iplReflectionMixerReset18IPLReflectionMixer">
-<span id="_CPPv323iplReflectionMixerReset18IPLReflectionMixer"></span><span id="_CPPv223iplReflectionMixerReset18IPLReflectionMixer"></span><span id="iplReflectionMixerReset__IPLReflectionMixer"></span><span class="target" id="group__reflectioneffect_1ga6206b676ee9dbda392dea5a14b1e7cb3"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplReflectionMixerReset</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv418IPLReflectionMixer" title="IPLReflectionMixer"><span class="n"><span class="pre">IPLReflectionMixer</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">mixer</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv423iplReflectionMixerReset18IPLReflectionMixer" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv323iplReflectionMixerReset18IPLReflectionMixer"></span><span id="_CPPv223iplReflectionMixerReset18IPLReflectionMixer"></span><span id="iplReflectionMixerReset__IPLReflectionMixer"></span><span class="target" id="group__reflectioneffect_1ga6206b676ee9dbda392dea5a14b1e7cb3"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplReflectionMixerReset</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv418IPLReflectionMixer" title="IPLReflectionMixer"><span class="n"><span class="pre">IPLReflectionMixer</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">mixer</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv423iplReflectionMixerReset18IPLReflectionMixer" title="Link to this definition"></a><br /></dt>
 <dd><p>Resets the internal processing state of a reflection mixer. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>mixer</strong> – The reflection mixer to reset. </p>
 </dd>
 </dl>
@@ -363,46 +295,46 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv423iplReflectionMixerApply18IPLReflectionMixerP25IPLReflectionEffectParamsP14IPLAudioBuffer">
-<span id="_CPPv323iplReflectionMixerApply18IPLReflectionMixerP25IPLReflectionEffectParamsP14IPLAudioBuffer"></span><span id="_CPPv223iplReflectionMixerApply18IPLReflectionMixerP25IPLReflectionEffectParamsP14IPLAudioBuffer"></span><span id="iplReflectionMixerApply__IPLReflectionMixer.IPLReflectionEffectParamsP.IPLAudioBufferP"></span><span class="target" id="group__reflectioneffect_1gaa6471b8ee82c5afbd7b48a0cbbc74c73"></span><a class="reference internal" href="audio-buffers.html#_CPPv419IPLAudioEffectState" title="IPLAudioEffectState"><span class="n"><span class="pre">IPLAudioEffectState</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplReflectionMixerApply</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv418IPLReflectionMixer" title="IPLReflectionMixer"><span class="n"><span class="pre">IPLReflectionMixer</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">mixer</span></span>, <a class="reference internal" href="#_CPPv425IPLReflectionEffectParams" title="IPLReflectionEffectParams"><span class="n"><span class="pre">IPLReflectionEffectParams</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">params</span></span>, <a class="reference internal" href="audio-buffers.html#_CPPv414IPLAudioBuffer" title="IPLAudioBuffer"><span class="n"><span class="pre">IPLAudioBuffer</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">out</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv423iplReflectionMixerApply18IPLReflectionMixerP25IPLReflectionEffectParamsP14IPLAudioBuffer" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv323iplReflectionMixerApply18IPLReflectionMixerP25IPLReflectionEffectParamsP14IPLAudioBuffer"></span><span id="_CPPv223iplReflectionMixerApply18IPLReflectionMixerP25IPLReflectionEffectParamsP14IPLAudioBuffer"></span><span id="iplReflectionMixerApply__IPLReflectionMixer.IPLReflectionEffectParamsP.IPLAudioBufferP"></span><span class="target" id="group__reflectioneffect_1gaa6471b8ee82c5afbd7b48a0cbbc74c73"></span><a class="reference internal" href="audio-buffers.html#_CPPv419IPLAudioEffectState" title="IPLAudioEffectState"><span class="n"><span class="pre">IPLAudioEffectState</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplReflectionMixerApply</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv418IPLReflectionMixer" title="IPLReflectionMixer"><span class="n"><span class="pre">IPLReflectionMixer</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">mixer</span></span>, <a class="reference internal" href="#_CPPv425IPLReflectionEffectParams" title="IPLReflectionEffectParams"><span class="n"><span class="pre">IPLReflectionEffectParams</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">params</span></span>, <a class="reference internal" href="audio-buffers.html#_CPPv414IPLAudioBuffer" title="IPLAudioBuffer"><span class="n"><span class="pre">IPLAudioBuffer</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">out</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv423iplReflectionMixerApply18IPLReflectionMixerP25IPLReflectionEffectParamsP14IPLAudioBuffer" title="Link to this definition"></a><br /></dt>
 <dd><p>Retrieves the contents of a reflection mixer and places it into an audio buffer. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>mixer</strong> – The reflection mixer to retrieve audio from. </p></li>
 <li><p><strong>params</strong> – Parameters for applying the effect. </p></li>
 <li><p><strong>out</strong> – The output audio buffer. Must have as many channels as the impulse response specified when creating the mixer.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">IPL_AUDIOEFFECTSTATE_TAILREMAINING</span></code> if any tail samples remain in the effect’s internal buffers, or <code class="docutils literal notranslate"><span class="pre">IPL_AUDIOEFFECTSTATE_TAILCOMPLETE</span></code> otherwise. </p>
 </dd>
 </dl>
 </dd></dl>
 
-</div>
-<div class="section" id="structures">
-<h2>Structures<a class="headerlink" href="#structures" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="structures">
+<h2>Structures<a class="headerlink" href="#structures" title="Link to this heading"></a></h2>
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv427IPLReflectionEffectSettings">
-<span id="_CPPv327IPLReflectionEffectSettings"></span><span id="_CPPv227IPLReflectionEffectSettings"></span><span id="IPLReflectionEffectSettings"></span><span class="target" id="struct_i_p_l_reflection_effect_settings"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLReflectionEffectSettings</span></span></span><a class="headerlink" href="#_CPPv427IPLReflectionEffectSettings" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv327IPLReflectionEffectSettings"></span><span id="_CPPv227IPLReflectionEffectSettings"></span><span id="IPLReflectionEffectSettings"></span><span class="target" id="struct_i_p_l_reflection_effect_settings"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLReflectionEffectSettings</span></span></span><a class="headerlink" href="#_CPPv427IPLReflectionEffectSettings" title="Link to this definition"></a><br /></dt>
 <dd><p>Settings used to create a reflection effect. </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N27IPLReflectionEffectSettings4typeE">
-<span id="_CPPv3N27IPLReflectionEffectSettings4typeE"></span><span id="_CPPv2N27IPLReflectionEffectSettings4typeE"></span><span id="IPLReflectionEffectSettings::type__IPLReflectionEffectType"></span><span class="target" id="struct_i_p_l_reflection_effect_settings_1a5914026daa163a804b7f1f7a37e7b4b1"></span><a class="reference internal" href="#_CPPv423IPLReflectionEffectType" title="IPLReflectionEffectType"><span class="n"><span class="pre">IPLReflectionEffectType</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">type</span></span></span><a class="headerlink" href="#_CPPv4N27IPLReflectionEffectSettings4typeE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N27IPLReflectionEffectSettings4typeE"></span><span id="_CPPv2N27IPLReflectionEffectSettings4typeE"></span><span id="IPLReflectionEffectSettings::type__IPLReflectionEffectType"></span><span class="target" id="struct_i_p_l_reflection_effect_settings_1a5914026daa163a804b7f1f7a37e7b4b1"></span><a class="reference internal" href="#_CPPv423IPLReflectionEffectType" title="IPLReflectionEffectType"><span class="n"><span class="pre">IPLReflectionEffectType</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">type</span></span></span><a class="headerlink" href="#_CPPv4N27IPLReflectionEffectSettings4typeE" title="Link to this definition"></a><br /></dt>
 <dd><p>Type of reflection effect algorithm to use. </p>
 </dd></dl>
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N27IPLReflectionEffectSettings6irSizeE">
-<span id="_CPPv3N27IPLReflectionEffectSettings6irSizeE"></span><span id="_CPPv2N27IPLReflectionEffectSettings6irSizeE"></span><span id="IPLReflectionEffectSettings::irSize__IPLint32"></span><span class="target" id="struct_i_p_l_reflection_effect_settings_1a58f861a84f1207106c1563d4b7a7ac68"></span><a class="reference internal" href="types.html#_CPPv48IPLint32" title="IPLint32"><span class="n"><span class="pre">IPLint32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">irSize</span></span></span><a class="headerlink" href="#_CPPv4N27IPLReflectionEffectSettings6irSizeE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N27IPLReflectionEffectSettings6irSizeE"></span><span id="_CPPv2N27IPLReflectionEffectSettings6irSizeE"></span><span id="IPLReflectionEffectSettings::irSize__IPLint32"></span><span class="target" id="struct_i_p_l_reflection_effect_settings_1a58f861a84f1207106c1563d4b7a7ac68"></span><a class="reference internal" href="types.html#_CPPv48IPLint32" title="IPLint32"><span class="n"><span class="pre">IPLint32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">irSize</span></span></span><a class="headerlink" href="#_CPPv4N27IPLReflectionEffectSettings6irSizeE" title="Link to this definition"></a><br /></dt>
 <dd><p>Number of samples per channel in the IR. </p>
 </dd></dl>
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N27IPLReflectionEffectSettings11numChannelsE">
-<span id="_CPPv3N27IPLReflectionEffectSettings11numChannelsE"></span><span id="_CPPv2N27IPLReflectionEffectSettings11numChannelsE"></span><span id="IPLReflectionEffectSettings::numChannels__IPLint32"></span><span class="target" id="struct_i_p_l_reflection_effect_settings_1a3df0be9c0be579048507de45c80aed57"></span><a class="reference internal" href="types.html#_CPPv48IPLint32" title="IPLint32"><span class="n"><span class="pre">IPLint32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">numChannels</span></span></span><a class="headerlink" href="#_CPPv4N27IPLReflectionEffectSettings11numChannelsE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N27IPLReflectionEffectSettings11numChannelsE"></span><span id="_CPPv2N27IPLReflectionEffectSettings11numChannelsE"></span><span id="IPLReflectionEffectSettings::numChannels__IPLint32"></span><span class="target" id="struct_i_p_l_reflection_effect_settings_1a3df0be9c0be579048507de45c80aed57"></span><a class="reference internal" href="types.html#_CPPv48IPLint32" title="IPLint32"><span class="n"><span class="pre">IPLint32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">numChannels</span></span></span><a class="headerlink" href="#_CPPv4N27IPLReflectionEffectSettings11numChannelsE" title="Link to this definition"></a><br /></dt>
 <dd><p>Number of channels in the IR. </p>
 </dd></dl>
 
@@ -411,68 +343,68 @@
 
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv425IPLReflectionEffectParams">
-<span id="_CPPv325IPLReflectionEffectParams"></span><span id="_CPPv225IPLReflectionEffectParams"></span><span id="IPLReflectionEffectParams"></span><span class="target" id="struct_i_p_l_reflection_effect_params"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLReflectionEffectParams</span></span></span><a class="headerlink" href="#_CPPv425IPLReflectionEffectParams" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv325IPLReflectionEffectParams"></span><span id="_CPPv225IPLReflectionEffectParams"></span><span id="IPLReflectionEffectParams"></span><span class="target" id="struct_i_p_l_reflection_effect_params"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLReflectionEffectParams</span></span></span><a class="headerlink" href="#_CPPv425IPLReflectionEffectParams" title="Link to this definition"></a><br /></dt>
 <dd><p>Parameters for applying a reflection effect to an audio buffer. </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N25IPLReflectionEffectParams4typeE">
-<span id="_CPPv3N25IPLReflectionEffectParams4typeE"></span><span id="_CPPv2N25IPLReflectionEffectParams4typeE"></span><span id="IPLReflectionEffectParams::type__IPLReflectionEffectType"></span><span class="target" id="struct_i_p_l_reflection_effect_params_1a5914026daa163a804b7f1f7a37e7b4b1"></span><a class="reference internal" href="#_CPPv423IPLReflectionEffectType" title="IPLReflectionEffectType"><span class="n"><span class="pre">IPLReflectionEffectType</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">type</span></span></span><a class="headerlink" href="#_CPPv4N25IPLReflectionEffectParams4typeE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N25IPLReflectionEffectParams4typeE"></span><span id="_CPPv2N25IPLReflectionEffectParams4typeE"></span><span id="IPLReflectionEffectParams::type__IPLReflectionEffectType"></span><span class="target" id="struct_i_p_l_reflection_effect_params_1a5914026daa163a804b7f1f7a37e7b4b1"></span><a class="reference internal" href="#_CPPv423IPLReflectionEffectType" title="IPLReflectionEffectType"><span class="n"><span class="pre">IPLReflectionEffectType</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">type</span></span></span><a class="headerlink" href="#_CPPv4N25IPLReflectionEffectParams4typeE" title="Link to this definition"></a><br /></dt>
 <dd><p>Type of reflection effect algorithm to use. </p>
 </dd></dl>
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N25IPLReflectionEffectParams2irE">
-<span id="_CPPv3N25IPLReflectionEffectParams2irE"></span><span id="_CPPv2N25IPLReflectionEffectParams2irE"></span><span id="IPLReflectionEffectParams::ir__IPLReflectionEffectIR"></span><span class="target" id="struct_i_p_l_reflection_effect_params_1a23426eb5735d738836906f57c10949c9"></span><a class="reference internal" href="#_CPPv421IPLReflectionEffectIR" title="IPLReflectionEffectIR"><span class="n"><span class="pre">IPLReflectionEffectIR</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ir</span></span></span><a class="headerlink" href="#_CPPv4N25IPLReflectionEffectParams2irE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N25IPLReflectionEffectParams2irE"></span><span id="_CPPv2N25IPLReflectionEffectParams2irE"></span><span id="IPLReflectionEffectParams::ir__IPLReflectionEffectIR"></span><span class="target" id="struct_i_p_l_reflection_effect_params_1a23426eb5735d738836906f57c10949c9"></span><a class="reference internal" href="#_CPPv421IPLReflectionEffectIR" title="IPLReflectionEffectIR"><span class="n"><span class="pre">IPLReflectionEffectIR</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ir</span></span></span><a class="headerlink" href="#_CPPv4N25IPLReflectionEffectParams2irE" title="Link to this definition"></a><br /></dt>
 <dd><p>The impulse response. </p>
 <p>For <code class="docutils literal notranslate"><span class="pre">IPL_REFLECTIONEFFECTTYPE_CONVOLUTION</span></code> or <code class="docutils literal notranslate"><span class="pre">IPL_REFLECTIONEFFECTTYPE_HYBRID</span></code>. </p>
 </dd></dl>
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N25IPLReflectionEffectParams11reverbTimesE">
-<span id="_CPPv3N25IPLReflectionEffectParams11reverbTimesE"></span><span id="_CPPv2N25IPLReflectionEffectParams11reverbTimesE"></span><span id="IPLReflectionEffectParams::reverbTimes__IPLfloat32A"></span><span class="target" id="struct_i_p_l_reflection_effect_params_1a5a18a1274f78debd823c2b48f2d8cbb1"></span><a class="reference internal" href="types.html#_CPPv410IPLfloat32" title="IPLfloat32"><span class="n"><span class="pre">IPLfloat32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">reverbTimes</span></span></span><span class="p"><span class="pre">[</span></span><span class="m"><span class="pre">3</span></span><span class="p"><span class="pre">]</span></span><a class="headerlink" href="#_CPPv4N25IPLReflectionEffectParams11reverbTimesE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N25IPLReflectionEffectParams11reverbTimesE"></span><span id="_CPPv2N25IPLReflectionEffectParams11reverbTimesE"></span><span id="IPLReflectionEffectParams::reverbTimes__IPLfloat32A"></span><span class="target" id="struct_i_p_l_reflection_effect_params_1a5a18a1274f78debd823c2b48f2d8cbb1"></span><a class="reference internal" href="types.html#_CPPv410IPLfloat32" title="IPLfloat32"><span class="n"><span class="pre">IPLfloat32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">reverbTimes</span></span></span><span class="p"><span class="pre">[</span></span><span class="m"><span class="pre">3</span></span><span class="p"><span class="pre">]</span></span><a class="headerlink" href="#_CPPv4N25IPLReflectionEffectParams11reverbTimesE" title="Link to this definition"></a><br /></dt>
 <dd><p>3-band reverb decay times (RT60). </p>
 <p>For <code class="docutils literal notranslate"><span class="pre">IPL_REFLECTIONEFFECTTYPE_PARAMETRIC</span></code> or <code class="docutils literal notranslate"><span class="pre">IPL_REFLECTIONEFFECTTYPE_HYBRID</span></code>. </p>
 </dd></dl>
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N25IPLReflectionEffectParams2eqE">
-<span id="_CPPv3N25IPLReflectionEffectParams2eqE"></span><span id="_CPPv2N25IPLReflectionEffectParams2eqE"></span><span id="IPLReflectionEffectParams::eq__IPLfloat32A"></span><span class="target" id="struct_i_p_l_reflection_effect_params_1aee2cff47c48b351f32f9570adc9dd44f"></span><a class="reference internal" href="types.html#_CPPv410IPLfloat32" title="IPLfloat32"><span class="n"><span class="pre">IPLfloat32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">eq</span></span></span><span class="p"><span class="pre">[</span></span><span class="m"><span class="pre">3</span></span><span class="p"><span class="pre">]</span></span><a class="headerlink" href="#_CPPv4N25IPLReflectionEffectParams2eqE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N25IPLReflectionEffectParams2eqE"></span><span id="_CPPv2N25IPLReflectionEffectParams2eqE"></span><span id="IPLReflectionEffectParams::eq__IPLfloat32A"></span><span class="target" id="struct_i_p_l_reflection_effect_params_1aee2cff47c48b351f32f9570adc9dd44f"></span><a class="reference internal" href="types.html#_CPPv410IPLfloat32" title="IPLfloat32"><span class="n"><span class="pre">IPLfloat32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">eq</span></span></span><span class="p"><span class="pre">[</span></span><span class="m"><span class="pre">3</span></span><span class="p"><span class="pre">]</span></span><a class="headerlink" href="#_CPPv4N25IPLReflectionEffectParams2eqE" title="Link to this definition"></a><br /></dt>
 <dd><p>3-band EQ coefficients applied to the parametric part to ensure smooth transition. </p>
 <p>For <code class="docutils literal notranslate"><span class="pre">IPL_REFLECTIONEFFECTTYPE_HYBRID</span></code>. </p>
 </dd></dl>
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N25IPLReflectionEffectParams5delayE">
-<span id="_CPPv3N25IPLReflectionEffectParams5delayE"></span><span id="_CPPv2N25IPLReflectionEffectParams5delayE"></span><span id="IPLReflectionEffectParams::delay__IPLint32"></span><span class="target" id="struct_i_p_l_reflection_effect_params_1abe71e06e9bd3e31f43881d7852b02679"></span><a class="reference internal" href="types.html#_CPPv48IPLint32" title="IPLint32"><span class="n"><span class="pre">IPLint32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">delay</span></span></span><a class="headerlink" href="#_CPPv4N25IPLReflectionEffectParams5delayE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N25IPLReflectionEffectParams5delayE"></span><span id="_CPPv2N25IPLReflectionEffectParams5delayE"></span><span id="IPLReflectionEffectParams::delay__IPLint32"></span><span class="target" id="struct_i_p_l_reflection_effect_params_1abe71e06e9bd3e31f43881d7852b02679"></span><a class="reference internal" href="types.html#_CPPv48IPLint32" title="IPLint32"><span class="n"><span class="pre">IPLint32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">delay</span></span></span><a class="headerlink" href="#_CPPv4N25IPLReflectionEffectParams5delayE" title="Link to this definition"></a><br /></dt>
 <dd><p>Samples after which parametric part starts. </p>
 <p>For <code class="docutils literal notranslate"><span class="pre">IPL_REFLECTIONEFFECTTYPE_HYBRID</span></code>. </p>
 </dd></dl>
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N25IPLReflectionEffectParams11numChannelsE">
-<span id="_CPPv3N25IPLReflectionEffectParams11numChannelsE"></span><span id="_CPPv2N25IPLReflectionEffectParams11numChannelsE"></span><span id="IPLReflectionEffectParams::numChannels__IPLint32"></span><span class="target" id="struct_i_p_l_reflection_effect_params_1a3df0be9c0be579048507de45c80aed57"></span><a class="reference internal" href="types.html#_CPPv48IPLint32" title="IPLint32"><span class="n"><span class="pre">IPLint32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">numChannels</span></span></span><a class="headerlink" href="#_CPPv4N25IPLReflectionEffectParams11numChannelsE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N25IPLReflectionEffectParams11numChannelsE"></span><span id="_CPPv2N25IPLReflectionEffectParams11numChannelsE"></span><span id="IPLReflectionEffectParams::numChannels__IPLint32"></span><span class="target" id="struct_i_p_l_reflection_effect_params_1a3df0be9c0be579048507de45c80aed57"></span><a class="reference internal" href="types.html#_CPPv48IPLint32" title="IPLint32"><span class="n"><span class="pre">IPLint32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">numChannels</span></span></span><a class="headerlink" href="#_CPPv4N25IPLReflectionEffectParams11numChannelsE" title="Link to this definition"></a><br /></dt>
 <dd><p>Number of IR channels to process. </p>
 <p>May be less than the number of channels specified when creating the effect, in which case CPU usage will be reduced. </p>
 </dd></dl>
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N25IPLReflectionEffectParams6irSizeE">
-<span id="_CPPv3N25IPLReflectionEffectParams6irSizeE"></span><span id="_CPPv2N25IPLReflectionEffectParams6irSizeE"></span><span id="IPLReflectionEffectParams::irSize__IPLint32"></span><span class="target" id="struct_i_p_l_reflection_effect_params_1a58f861a84f1207106c1563d4b7a7ac68"></span><a class="reference internal" href="types.html#_CPPv48IPLint32" title="IPLint32"><span class="n"><span class="pre">IPLint32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">irSize</span></span></span><a class="headerlink" href="#_CPPv4N25IPLReflectionEffectParams6irSizeE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N25IPLReflectionEffectParams6irSizeE"></span><span id="_CPPv2N25IPLReflectionEffectParams6irSizeE"></span><span id="IPLReflectionEffectParams::irSize__IPLint32"></span><span class="target" id="struct_i_p_l_reflection_effect_params_1a58f861a84f1207106c1563d4b7a7ac68"></span><a class="reference internal" href="types.html#_CPPv48IPLint32" title="IPLint32"><span class="n"><span class="pre">IPLint32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">irSize</span></span></span><a class="headerlink" href="#_CPPv4N25IPLReflectionEffectParams6irSizeE" title="Link to this definition"></a><br /></dt>
 <dd><p>Number of IR samples per channel to process. </p>
 <p>May be less than the number of samples specified when creating the effect, in which case CPU usage will be reduced. </p>
 </dd></dl>
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N25IPLReflectionEffectParams9tanDeviceE">
-<span id="_CPPv3N25IPLReflectionEffectParams9tanDeviceE"></span><span id="_CPPv2N25IPLReflectionEffectParams9tanDeviceE"></span><span id="IPLReflectionEffectParams::tanDevice__IPLTrueAudioNextDevice"></span><span class="target" id="struct_i_p_l_reflection_effect_params_1a7b0114f64f8383f0eccf5a4456255e02"></span><a class="reference internal" href="trueaudio-next.html#_CPPv422IPLTrueAudioNextDevice" title="IPLTrueAudioNextDevice"><span class="n"><span class="pre">IPLTrueAudioNextDevice</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">tanDevice</span></span></span><a class="headerlink" href="#_CPPv4N25IPLReflectionEffectParams9tanDeviceE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N25IPLReflectionEffectParams9tanDeviceE"></span><span id="_CPPv2N25IPLReflectionEffectParams9tanDeviceE"></span><span id="IPLReflectionEffectParams::tanDevice__IPLTrueAudioNextDevice"></span><span class="target" id="struct_i_p_l_reflection_effect_params_1a7b0114f64f8383f0eccf5a4456255e02"></span><a class="reference internal" href="trueaudio-next.html#_CPPv422IPLTrueAudioNextDevice" title="IPLTrueAudioNextDevice"><span class="n"><span class="pre">IPLTrueAudioNextDevice</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">tanDevice</span></span></span><a class="headerlink" href="#_CPPv4N25IPLReflectionEffectParams9tanDeviceE" title="Link to this definition"></a><br /></dt>
 <dd><p>The TrueAudio Next device to use for convolution processing. </p>
 <p>For <code class="docutils literal notranslate"><span class="pre">IPL_REFLECTIONEFFECTTYPE_TAN</span></code>. </p>
 </dd></dl>
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N25IPLReflectionEffectParams7tanSlotE">
-<span id="_CPPv3N25IPLReflectionEffectParams7tanSlotE"></span><span id="_CPPv2N25IPLReflectionEffectParams7tanSlotE"></span><span id="IPLReflectionEffectParams::tanSlot__IPLint32"></span><span class="target" id="struct_i_p_l_reflection_effect_params_1a3716e021369027375881c0a19521678a"></span><a class="reference internal" href="types.html#_CPPv48IPLint32" title="IPLint32"><span class="n"><span class="pre">IPLint32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">tanSlot</span></span></span><a class="headerlink" href="#_CPPv4N25IPLReflectionEffectParams7tanSlotE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N25IPLReflectionEffectParams7tanSlotE"></span><span id="_CPPv2N25IPLReflectionEffectParams7tanSlotE"></span><span id="IPLReflectionEffectParams::tanSlot__IPLint32"></span><span class="target" id="struct_i_p_l_reflection_effect_params_1a3716e021369027375881c0a19521678a"></span><a class="reference internal" href="types.html#_CPPv48IPLint32" title="IPLint32"><span class="n"><span class="pre">IPLint32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">tanSlot</span></span></span><a class="headerlink" href="#_CPPv4N25IPLReflectionEffectParams7tanSlotE" title="Link to this definition"></a><br /></dt>
 <dd><p>The TrueAudio Next slot index to use for convolution processing. </p>
 <p>The slot identifies the IR to use. For <code class="docutils literal notranslate"><span class="pre">IPL_REFLECTIONEFFECTTYPE_TAN</span></code>. </p>
 </dd></dl>
@@ -480,93 +412,76 @@
 </div>
 </dd></dl>
 
-</div>
-<div class="section" id="enumerations">
-<h2>Enumerations<a class="headerlink" href="#enumerations" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="enumerations">
+<h2>Enumerations<a class="headerlink" href="#enumerations" title="Link to this heading"></a></h2>
 <dl class="cpp enum">
 <dt class="sig sig-object cpp" id="_CPPv423IPLReflectionEffectType">
-<span id="_CPPv323IPLReflectionEffectType"></span><span id="_CPPv223IPLReflectionEffectType"></span><span class="target" id="group__reflectioneffect_1gaebb9306aeb34face4bf7974236518f59"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLReflectionEffectType</span></span></span><a class="headerlink" href="#_CPPv423IPLReflectionEffectType" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv323IPLReflectionEffectType"></span><span id="_CPPv223IPLReflectionEffectType"></span><span class="target" id="group__reflectioneffect_1gaebb9306aeb34face4bf7974236518f59"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLReflectionEffectType</span></span></span><a class="headerlink" href="#_CPPv423IPLReflectionEffectType" title="Link to this definition"></a><br /></dt>
 <dd><p>Type of reflection effect algorithm to use. </p>
 <p><em>Values:</em></p>
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N23IPLReflectionEffectType36IPL_REFLECTIONEFFECTTYPE_CONVOLUTIONE">
-<span id="_CPPv3N23IPLReflectionEffectType36IPL_REFLECTIONEFFECTTYPE_CONVOLUTIONE"></span><span id="_CPPv2N23IPLReflectionEffectType36IPL_REFLECTIONEFFECTTYPE_CONVOLUTIONE"></span><span class="target" id="group__reflectioneffect_1ggaebb9306aeb34face4bf7974236518f59ae8c2db5a40cce371d9ff602846de4665"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_REFLECTIONEFFECTTYPE_CONVOLUTION</span></span></span><a class="headerlink" href="#_CPPv4N23IPLReflectionEffectType36IPL_REFLECTIONEFFECTTYPE_CONVOLUTIONE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N23IPLReflectionEffectType36IPL_REFLECTIONEFFECTTYPE_CONVOLUTIONE"></span><span id="_CPPv2N23IPLReflectionEffectType36IPL_REFLECTIONEFFECTTYPE_CONVOLUTIONE"></span><span class="target" id="group__reflectioneffect_1ggaebb9306aeb34face4bf7974236518f59ae8c2db5a40cce371d9ff602846de4665"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_REFLECTIONEFFECTTYPE_CONVOLUTION</span></span></span><a class="headerlink" href="#_CPPv4N23IPLReflectionEffectType36IPL_REFLECTIONEFFECTTYPE_CONVOLUTIONE" title="Link to this definition"></a><br /></dt>
 <dd><p>Multi-channel convolution reverb. </p>
 <p>Reflections reaching the listener are encoded in an Impulse Response (IR), which is a filter that records each reflection as it arrives. This algorithm renders reflections with the most detail, but may result in significant CPU usage. Using a reflection mixer with this algorithm provides a reduction in CPU usage. </p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N23IPLReflectionEffectType35IPL_REFLECTIONEFFECTTYPE_PARAMETRICE">
-<span id="_CPPv3N23IPLReflectionEffectType35IPL_REFLECTIONEFFECTTYPE_PARAMETRICE"></span><span id="_CPPv2N23IPLReflectionEffectType35IPL_REFLECTIONEFFECTTYPE_PARAMETRICE"></span><span class="target" id="group__reflectioneffect_1ggaebb9306aeb34face4bf7974236518f59af41c9f2dc4160279b7a0bb6f5cfb5842"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_REFLECTIONEFFECTTYPE_PARAMETRIC</span></span></span><a class="headerlink" href="#_CPPv4N23IPLReflectionEffectType35IPL_REFLECTIONEFFECTTYPE_PARAMETRICE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N23IPLReflectionEffectType35IPL_REFLECTIONEFFECTTYPE_PARAMETRICE"></span><span id="_CPPv2N23IPLReflectionEffectType35IPL_REFLECTIONEFFECTTYPE_PARAMETRICE"></span><span class="target" id="group__reflectioneffect_1ggaebb9306aeb34face4bf7974236518f59af41c9f2dc4160279b7a0bb6f5cfb5842"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_REFLECTIONEFFECTTYPE_PARAMETRIC</span></span></span><a class="headerlink" href="#_CPPv4N23IPLReflectionEffectType35IPL_REFLECTIONEFFECTTYPE_PARAMETRICE" title="Link to this definition"></a><br /></dt>
 <dd><p>Parametric (or artificial) reverb, using feedback delay networks. </p>
 <p>The reflected sound field is reduced to a few numbers that describe how reflected energy decays over time. This is then used to drive an approximate model of reverberation in an indoor space. This algorithm results in lower CPU usage, but cannot render individual echoes, especially in outdoor spaces. A reflection mixer cannot be used with this algorithm. </p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N23IPLReflectionEffectType31IPL_REFLECTIONEFFECTTYPE_HYBRIDE">
-<span id="_CPPv3N23IPLReflectionEffectType31IPL_REFLECTIONEFFECTTYPE_HYBRIDE"></span><span id="_CPPv2N23IPLReflectionEffectType31IPL_REFLECTIONEFFECTTYPE_HYBRIDE"></span><span class="target" id="group__reflectioneffect_1ggaebb9306aeb34face4bf7974236518f59a405b1af2cfa16b1f766a2496f21f13e9"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_REFLECTIONEFFECTTYPE_HYBRID</span></span></span><a class="headerlink" href="#_CPPv4N23IPLReflectionEffectType31IPL_REFLECTIONEFFECTTYPE_HYBRIDE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N23IPLReflectionEffectType31IPL_REFLECTIONEFFECTTYPE_HYBRIDE"></span><span id="_CPPv2N23IPLReflectionEffectType31IPL_REFLECTIONEFFECTTYPE_HYBRIDE"></span><span class="target" id="group__reflectioneffect_1ggaebb9306aeb34face4bf7974236518f59a405b1af2cfa16b1f766a2496f21f13e9"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_REFLECTIONEFFECTTYPE_HYBRID</span></span></span><a class="headerlink" href="#_CPPv4N23IPLReflectionEffectType31IPL_REFLECTIONEFFECTTYPE_HYBRIDE" title="Link to this definition"></a><br /></dt>
 <dd><p>A hybrid of convolution and parametric reverb. </p>
 <p>The initial portion of the IR is rendered using convolution reverb, but the later part is used to estimate a parametric reverb. The point in the IR where this transition occurs can be controlled. This algorithm allows a trade-off between rendering quality and CPU usage. An reflection mixer cannot be used with this algorithm. </p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N23IPLReflectionEffectType28IPL_REFLECTIONEFFECTTYPE_TANE">
-<span id="_CPPv3N23IPLReflectionEffectType28IPL_REFLECTIONEFFECTTYPE_TANE"></span><span id="_CPPv2N23IPLReflectionEffectType28IPL_REFLECTIONEFFECTTYPE_TANE"></span><span class="target" id="group__reflectioneffect_1ggaebb9306aeb34face4bf7974236518f59a2049564a2983129698c370f77e028b77"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_REFLECTIONEFFECTTYPE_TAN</span></span></span><a class="headerlink" href="#_CPPv4N23IPLReflectionEffectType28IPL_REFLECTIONEFFECTTYPE_TANE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N23IPLReflectionEffectType28IPL_REFLECTIONEFFECTTYPE_TANE"></span><span id="_CPPv2N23IPLReflectionEffectType28IPL_REFLECTIONEFFECTTYPE_TANE"></span><span class="target" id="group__reflectioneffect_1ggaebb9306aeb34face4bf7974236518f59a2049564a2983129698c370f77e028b77"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_REFLECTIONEFFECTTYPE_TAN</span></span></span><a class="headerlink" href="#_CPPv4N23IPLReflectionEffectType28IPL_REFLECTIONEFFECTTYPE_TANE" title="Link to this definition"></a><br /></dt>
 <dd><p>Multi-channel convolution reverb, using AMD TrueAudio Next for GPU acceleration. </p>
 <p>This algorithm is similar to <code class="docutils literal notranslate"><span class="pre">IPL_REFLECTIONEFFECTYPE_CONVOLUTION</span></code>, but uses the GPU instead of the CPU for processing, allowing significantly more sources to be processed. A reflection mixer must be used with this algorithm, because the GPU will process convolution reverb at a single point in your audio processing pipeline. </p>
 </dd></dl>
 
 </dd></dl>
 
-</div>
-</div>
+</section>
+</section>
 
 
            </div>
-           
           </div>
-          <footer>
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="path-effect.html" class="btn btn-neutral float-right" title="Path Effect" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="direct-effect.html" class="btn btn-neutral float-left" title="Direct Effect" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="path-effect.html" class="btn btn-neutral float-right" title="Path Effect" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &#169; Copyright 2017-2023, Valve Corporation.
-
-    </p>
+    <p>&#169; Copyright 2017-2023, Valve Corporation.</p>
   </div>
-    
-    
-    
-    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>

@@ -1,101 +1,50 @@
 
 
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
-  <meta charset="utf-8" />
-  
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  
   <title>Baking &mdash; Steam Audio C API  documentation</title>
-  
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/steamaudio.css?v=b5aaeb06" />
 
   
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/steamaudio.css" type="text/css" />
-
-  
-  
-
-  
-  
-
-  
-
-  
-  <!--[if lt IE 9]>
-    <script src="_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/doctools.js"></script>
-    
-    <script type="text/javascript" src="_static/js/theme.js"></script>
-
-    
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=7f41d439"></script>
+      <script src="_static/doctools.js?v=9a2dae69"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Simulation" href="simulation.html" />
     <link rel="prev" title="Probes" href="probes.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
 
           
-            <a href="index.html">
           
-
-          
+          <a href="index.html">
             
-            <img src="_static/steam-audio-logo.png" class="logo" alt="Logo"/>
-          
+              <img src="_static/steam-audio-logo.png" class="logo" alt="Logo"/>
           </a>
-
-          
-            
-            
-              <div class="version">
-                4.6.0
-              </div>
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
-              <p class="caption"><span class="caption-text">Steam Audio SDK</span></p>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Steam Audio SDK</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="guide.html">Programmer’s Guide</a></li>
@@ -126,9 +75,22 @@
 <li class="toctree-l2"><a class="reference internal" href="path-effect.html">Path Effect</a></li>
 <li class="toctree-l2"><a class="reference internal" href="probes.html">Probes</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Baking</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#functions">Functions</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#structures">Structures</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#enumerations">Enumerations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#functions">Functions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv423iplReflectionsBakerBake10IPLContextP24IPLReflectionsBakeParams19IPLProgressCallbackPv"><code class="docutils literal notranslate"><span class="pre">iplReflectionsBakerBake()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv429iplReflectionsBakerCancelBake10IPLContext"><code class="docutils literal notranslate"><span class="pre">iplReflectionsBakerCancelBake()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv416iplPathBakerBake10IPLContextP17IPLPathBakeParams19IPLProgressCallbackPv"><code class="docutils literal notranslate"><span class="pre">iplPathBakerBake()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv422iplPathBakerCancelBake10IPLContext"><code class="docutils literal notranslate"><span class="pre">iplPathBakerCancelBake()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#structures">Structures</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv424IPLReflectionsBakeParams"><code class="docutils literal notranslate"><span class="pre">IPLReflectionsBakeParams</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv417IPLPathBakeParams"><code class="docutils literal notranslate"><span class="pre">IPLPathBakeParams</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#enumerations">Enumerations</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv423IPLReflectionsBakeFlags"><code class="docutils literal notranslate"><span class="pre">IPLReflectionsBakeFlags</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="simulation.html">Simulation</a></li>
@@ -136,82 +98,41 @@
 </li>
 </ul>
 
-            
-          
         </div>
-        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="index.html">Steam Audio C API</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
-      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-        
-          <li><a href="reference.html">API Reference</a> &raquo;</li>
-        
-      <li>Baking</li>
-    
-    
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="reference.html">API Reference</a></li>
+      <li class="breadcrumb-item active">Baking</li>
       <li class="wy-breadcrumbs-aside">
-        
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
-  <div class="section" id="baking">
-<h1>Baking<a class="headerlink" href="#baking" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="functions">
-<h2>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h2>
+             
+  <section id="baking">
+<h1>Baking<a class="headerlink" href="#baking" title="Link to this heading"></a></h1>
+<section id="functions">
+<h2>Functions<a class="headerlink" href="#functions" title="Link to this heading"></a></h2>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv423iplReflectionsBakerBake10IPLContextP24IPLReflectionsBakeParams19IPLProgressCallbackPv">
-<span id="_CPPv323iplReflectionsBakerBake10IPLContextP24IPLReflectionsBakeParams19IPLProgressCallbackPv"></span><span id="_CPPv223iplReflectionsBakerBake10IPLContextP24IPLReflectionsBakeParams19IPLProgressCallbackPv"></span><span id="iplReflectionsBakerBake__IPLContext.IPLReflectionsBakeParamsP.IPLProgressCallback.voidP"></span><span class="target" id="group__baking_1ga93af9cdc5cf9dcc367d76f891c4024af"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplReflectionsBakerBake</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="context.html#_CPPv410IPLContext" title="IPLContext"><span class="n"><span class="pre">IPLContext</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">context</span></span>, <a class="reference internal" href="#_CPPv424IPLReflectionsBakeParams" title="IPLReflectionsBakeParams"><span class="n"><span class="pre">IPLReflectionsBakeParams</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">params</span></span>, <a class="reference internal" href="types.html#_CPPv419IPLProgressCallback" title="IPLProgressCallback"><span class="n"><span class="pre">IPLProgressCallback</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">progressCallback</span></span>, <span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">userData</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv423iplReflectionsBakerBake10IPLContextP24IPLReflectionsBakeParams19IPLProgressCallbackPv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv323iplReflectionsBakerBake10IPLContextP24IPLReflectionsBakeParams19IPLProgressCallbackPv"></span><span id="_CPPv223iplReflectionsBakerBake10IPLContextP24IPLReflectionsBakeParams19IPLProgressCallbackPv"></span><span id="iplReflectionsBakerBake__IPLContext.IPLReflectionsBakeParamsP.IPLProgressCallback.voidP"></span><span class="target" id="group__baking_1ga93af9cdc5cf9dcc367d76f891c4024af"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplReflectionsBakerBake</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="context.html#_CPPv410IPLContext" title="IPLContext"><span class="n"><span class="pre">IPLContext</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">context</span></span>, <a class="reference internal" href="#_CPPv424IPLReflectionsBakeParams" title="IPLReflectionsBakeParams"><span class="n"><span class="pre">IPLReflectionsBakeParams</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">params</span></span>, <a class="reference internal" href="types.html#_CPPv419IPLProgressCallback" title="IPLProgressCallback"><span class="n"><span class="pre">IPLProgressCallback</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">progressCallback</span></span>, <span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">userData</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv423iplReflectionsBakerBake10IPLContextP24IPLReflectionsBakeParams19IPLProgressCallbackPv" title="Link to this definition"></a><br /></dt>
 <dd><p>Bakes a single layer of reflections data in a probe batch. </p>
 <p>Only one bake can be in progress at any point in time.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>context</strong> – The context used to initialize Steam Audio. </p></li>
 <li><p><strong>params</strong> – Parameters to use for baking reflections data. </p></li>
@@ -224,10 +145,10 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv429iplReflectionsBakerCancelBake10IPLContext">
-<span id="_CPPv329iplReflectionsBakerCancelBake10IPLContext"></span><span id="_CPPv229iplReflectionsBakerCancelBake10IPLContext"></span><span id="iplReflectionsBakerCancelBake__IPLContext"></span><span class="target" id="group__baking_1ga7418d46b276a6f8778a3a9642a81f0b5"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplReflectionsBakerCancelBake</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="context.html#_CPPv410IPLContext" title="IPLContext"><span class="n"><span class="pre">IPLContext</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">context</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv429iplReflectionsBakerCancelBake10IPLContext" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv329iplReflectionsBakerCancelBake10IPLContext"></span><span id="_CPPv229iplReflectionsBakerCancelBake10IPLContext"></span><span id="iplReflectionsBakerCancelBake__IPLContext"></span><span class="target" id="group__baking_1ga7418d46b276a6f8778a3a9642a81f0b5"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplReflectionsBakerCancelBake</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="context.html#_CPPv410IPLContext" title="IPLContext"><span class="n"><span class="pre">IPLContext</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">context</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv429iplReflectionsBakerCancelBake10IPLContext" title="Link to this definition"></a><br /></dt>
 <dd><p>Cancels any running bakes of reflections data. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>context</strong> – The context used to initialize Steam Audio. </p>
 </dd>
 </dl>
@@ -235,11 +156,11 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv416iplPathBakerBake10IPLContextP17IPLPathBakeParams19IPLProgressCallbackPv">
-<span id="_CPPv316iplPathBakerBake10IPLContextP17IPLPathBakeParams19IPLProgressCallbackPv"></span><span id="_CPPv216iplPathBakerBake10IPLContextP17IPLPathBakeParams19IPLProgressCallbackPv"></span><span id="iplPathBakerBake__IPLContext.IPLPathBakeParamsP.IPLProgressCallback.voidP"></span><span class="target" id="group__baking_1ga95765235ec0d51f84e65d3cdc337d709"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplPathBakerBake</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="context.html#_CPPv410IPLContext" title="IPLContext"><span class="n"><span class="pre">IPLContext</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">context</span></span>, <a class="reference internal" href="#_CPPv417IPLPathBakeParams" title="IPLPathBakeParams"><span class="n"><span class="pre">IPLPathBakeParams</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">params</span></span>, <a class="reference internal" href="types.html#_CPPv419IPLProgressCallback" title="IPLProgressCallback"><span class="n"><span class="pre">IPLProgressCallback</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">progressCallback</span></span>, <span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">userData</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv416iplPathBakerBake10IPLContextP17IPLPathBakeParams19IPLProgressCallbackPv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv316iplPathBakerBake10IPLContextP17IPLPathBakeParams19IPLProgressCallbackPv"></span><span id="_CPPv216iplPathBakerBake10IPLContextP17IPLPathBakeParams19IPLProgressCallbackPv"></span><span id="iplPathBakerBake__IPLContext.IPLPathBakeParamsP.IPLProgressCallback.voidP"></span><span class="target" id="group__baking_1ga95765235ec0d51f84e65d3cdc337d709"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplPathBakerBake</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="context.html#_CPPv410IPLContext" title="IPLContext"><span class="n"><span class="pre">IPLContext</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">context</span></span>, <a class="reference internal" href="#_CPPv417IPLPathBakeParams" title="IPLPathBakeParams"><span class="n"><span class="pre">IPLPathBakeParams</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">params</span></span>, <a class="reference internal" href="types.html#_CPPv419IPLProgressCallback" title="IPLProgressCallback"><span class="n"><span class="pre">IPLProgressCallback</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">progressCallback</span></span>, <span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">userData</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv416iplPathBakerBake10IPLContextP17IPLPathBakeParams19IPLProgressCallbackPv" title="Link to this definition"></a><br /></dt>
 <dd><p>Bakes a single layer of pathing data in a probe batch. </p>
 <p>Only one bake can be in progress at any point in time.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>context</strong> – The context used to initialize Steam Audio. </p></li>
 <li><p><strong>params</strong> – Parameters to use for baking pathing data. </p></li>
@@ -252,86 +173,86 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv422iplPathBakerCancelBake10IPLContext">
-<span id="_CPPv322iplPathBakerCancelBake10IPLContext"></span><span id="_CPPv222iplPathBakerCancelBake10IPLContext"></span><span id="iplPathBakerCancelBake__IPLContext"></span><span class="target" id="group__baking_1ga9bc4e92e6a99453808f4ee8f11bba7f7"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplPathBakerCancelBake</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="context.html#_CPPv410IPLContext" title="IPLContext"><span class="n"><span class="pre">IPLContext</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">context</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv422iplPathBakerCancelBake10IPLContext" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv322iplPathBakerCancelBake10IPLContext"></span><span id="_CPPv222iplPathBakerCancelBake10IPLContext"></span><span id="iplPathBakerCancelBake__IPLContext"></span><span class="target" id="group__baking_1ga9bc4e92e6a99453808f4ee8f11bba7f7"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplPathBakerCancelBake</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="context.html#_CPPv410IPLContext" title="IPLContext"><span class="n"><span class="pre">IPLContext</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">context</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv422iplPathBakerCancelBake10IPLContext" title="Link to this definition"></a><br /></dt>
 <dd><p>Cancels any running bakes of pathing data. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>context</strong> – The context used to initialize Steam Audio. </p>
 </dd>
 </dl>
 </dd></dl>
 
-</div>
-<div class="section" id="structures">
-<h2>Structures<a class="headerlink" href="#structures" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="structures">
+<h2>Structures<a class="headerlink" href="#structures" title="Link to this heading"></a></h2>
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv424IPLReflectionsBakeParams">
-<span id="_CPPv324IPLReflectionsBakeParams"></span><span id="_CPPv224IPLReflectionsBakeParams"></span><span id="IPLReflectionsBakeParams"></span><span class="target" id="struct_i_p_l_reflections_bake_params"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLReflectionsBakeParams</span></span></span><a class="headerlink" href="#_CPPv424IPLReflectionsBakeParams" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv324IPLReflectionsBakeParams"></span><span id="_CPPv224IPLReflectionsBakeParams"></span><span id="IPLReflectionsBakeParams"></span><span class="target" id="struct_i_p_l_reflections_bake_params"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLReflectionsBakeParams</span></span></span><a class="headerlink" href="#_CPPv424IPLReflectionsBakeParams" title="Link to this definition"></a><br /></dt>
 <dd><p>Parameters used to control how reflections data is baked. </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N24IPLReflectionsBakeParams5sceneE">
-<span id="_CPPv3N24IPLReflectionsBakeParams5sceneE"></span><span id="_CPPv2N24IPLReflectionsBakeParams5sceneE"></span><span id="IPLReflectionsBakeParams::scene__IPLScene"></span><span class="target" id="struct_i_p_l_reflections_bake_params_1a31a2f49360f782ad1f32063e0dba4845"></span><a class="reference internal" href="scene.html#_CPPv48IPLScene" title="IPLScene"><span class="n"><span class="pre">IPLScene</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">scene</span></span></span><a class="headerlink" href="#_CPPv4N24IPLReflectionsBakeParams5sceneE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N24IPLReflectionsBakeParams5sceneE"></span><span id="_CPPv2N24IPLReflectionsBakeParams5sceneE"></span><span id="IPLReflectionsBakeParams::scene__IPLScene"></span><span class="target" id="struct_i_p_l_reflections_bake_params_1a31a2f49360f782ad1f32063e0dba4845"></span><a class="reference internal" href="scene.html#_CPPv48IPLScene" title="IPLScene"><span class="n"><span class="pre">IPLScene</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">scene</span></span></span><a class="headerlink" href="#_CPPv4N24IPLReflectionsBakeParams5sceneE" title="Link to this definition"></a><br /></dt>
 <dd><p>The scene in which the probes exist. </p>
 </dd></dl>
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N24IPLReflectionsBakeParams10probeBatchE">
-<span id="_CPPv3N24IPLReflectionsBakeParams10probeBatchE"></span><span id="_CPPv2N24IPLReflectionsBakeParams10probeBatchE"></span><span id="IPLReflectionsBakeParams::probeBatch__IPLProbeBatch"></span><span class="target" id="struct_i_p_l_reflections_bake_params_1a5d7bc9d3ca529fbd95a93b6faca6d0d4"></span><a class="reference internal" href="probes.html#_CPPv413IPLProbeBatch" title="IPLProbeBatch"><span class="n"><span class="pre">IPLProbeBatch</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">probeBatch</span></span></span><a class="headerlink" href="#_CPPv4N24IPLReflectionsBakeParams10probeBatchE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N24IPLReflectionsBakeParams10probeBatchE"></span><span id="_CPPv2N24IPLReflectionsBakeParams10probeBatchE"></span><span id="IPLReflectionsBakeParams::probeBatch__IPLProbeBatch"></span><span class="target" id="struct_i_p_l_reflections_bake_params_1a5d7bc9d3ca529fbd95a93b6faca6d0d4"></span><a class="reference internal" href="probes.html#_CPPv413IPLProbeBatch" title="IPLProbeBatch"><span class="n"><span class="pre">IPLProbeBatch</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">probeBatch</span></span></span><a class="headerlink" href="#_CPPv4N24IPLReflectionsBakeParams10probeBatchE" title="Link to this definition"></a><br /></dt>
 <dd><p>A probe batch containing the probes at which reflections data should be baked. </p>
 </dd></dl>
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N24IPLReflectionsBakeParams9sceneTypeE">
-<span id="_CPPv3N24IPLReflectionsBakeParams9sceneTypeE"></span><span id="_CPPv2N24IPLReflectionsBakeParams9sceneTypeE"></span><span id="IPLReflectionsBakeParams::sceneType__IPLSceneType"></span><span class="target" id="struct_i_p_l_reflections_bake_params_1a10bbbea1cc2fffe16bedb0326862ccc9"></span><a class="reference internal" href="scene.html#_CPPv412IPLSceneType" title="IPLSceneType"><span class="n"><span class="pre">IPLSceneType</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">sceneType</span></span></span><a class="headerlink" href="#_CPPv4N24IPLReflectionsBakeParams9sceneTypeE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N24IPLReflectionsBakeParams9sceneTypeE"></span><span id="_CPPv2N24IPLReflectionsBakeParams9sceneTypeE"></span><span id="IPLReflectionsBakeParams::sceneType__IPLSceneType"></span><span class="target" id="struct_i_p_l_reflections_bake_params_1a10bbbea1cc2fffe16bedb0326862ccc9"></span><a class="reference internal" href="scene.html#_CPPv412IPLSceneType" title="IPLSceneType"><span class="n"><span class="pre">IPLSceneType</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">sceneType</span></span></span><a class="headerlink" href="#_CPPv4N24IPLReflectionsBakeParams9sceneTypeE" title="Link to this definition"></a><br /></dt>
 <dd><p>The type of scene being used. </p>
 </dd></dl>
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N24IPLReflectionsBakeParams10identifierE">
-<span id="_CPPv3N24IPLReflectionsBakeParams10identifierE"></span><span id="_CPPv2N24IPLReflectionsBakeParams10identifierE"></span><span id="IPLReflectionsBakeParams::identifier__IPLBakedDataIdentifier"></span><span class="target" id="struct_i_p_l_reflections_bake_params_1a8d34f844bccd8e7a47ec2080d2a8305c"></span><a class="reference internal" href="probes.html#_CPPv422IPLBakedDataIdentifier" title="IPLBakedDataIdentifier"><span class="n"><span class="pre">IPLBakedDataIdentifier</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">identifier</span></span></span><a class="headerlink" href="#_CPPv4N24IPLReflectionsBakeParams10identifierE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N24IPLReflectionsBakeParams10identifierE"></span><span id="_CPPv2N24IPLReflectionsBakeParams10identifierE"></span><span id="IPLReflectionsBakeParams::identifier__IPLBakedDataIdentifier"></span><span class="target" id="struct_i_p_l_reflections_bake_params_1a8d34f844bccd8e7a47ec2080d2a8305c"></span><a class="reference internal" href="probes.html#_CPPv422IPLBakedDataIdentifier" title="IPLBakedDataIdentifier"><span class="n"><span class="pre">IPLBakedDataIdentifier</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">identifier</span></span></span><a class="headerlink" href="#_CPPv4N24IPLReflectionsBakeParams10identifierE" title="Link to this definition"></a><br /></dt>
 <dd><p>An identifier for the data layer that should be baked. </p>
 <p>The identifier determines what data is simulated and stored at each probe. If the probe batch already contains data with this identifier, it will be overwritten. </p>
 </dd></dl>
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N24IPLReflectionsBakeParams9bakeFlagsE">
-<span id="_CPPv3N24IPLReflectionsBakeParams9bakeFlagsE"></span><span id="_CPPv2N24IPLReflectionsBakeParams9bakeFlagsE"></span><span id="IPLReflectionsBakeParams::bakeFlags__IPLReflectionsBakeFlags"></span><span class="target" id="struct_i_p_l_reflections_bake_params_1a164e9d30c7954953060ffd4f53bb3b73"></span><a class="reference internal" href="#_CPPv423IPLReflectionsBakeFlags" title="IPLReflectionsBakeFlags"><span class="n"><span class="pre">IPLReflectionsBakeFlags</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">bakeFlags</span></span></span><a class="headerlink" href="#_CPPv4N24IPLReflectionsBakeParams9bakeFlagsE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N24IPLReflectionsBakeParams9bakeFlagsE"></span><span id="_CPPv2N24IPLReflectionsBakeParams9bakeFlagsE"></span><span id="IPLReflectionsBakeParams::bakeFlags__IPLReflectionsBakeFlags"></span><span class="target" id="struct_i_p_l_reflections_bake_params_1a164e9d30c7954953060ffd4f53bb3b73"></span><a class="reference internal" href="#_CPPv423IPLReflectionsBakeFlags" title="IPLReflectionsBakeFlags"><span class="n"><span class="pre">IPLReflectionsBakeFlags</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">bakeFlags</span></span></span><a class="headerlink" href="#_CPPv4N24IPLReflectionsBakeParams9bakeFlagsE" title="Link to this definition"></a><br /></dt>
 <dd><p>The types of data to save for each probe. </p>
 </dd></dl>
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N24IPLReflectionsBakeParams7numRaysE">
-<span id="_CPPv3N24IPLReflectionsBakeParams7numRaysE"></span><span id="_CPPv2N24IPLReflectionsBakeParams7numRaysE"></span><span id="IPLReflectionsBakeParams::numRays__IPLint32"></span><span class="target" id="struct_i_p_l_reflections_bake_params_1a4517d4473fd884f220a8cdaa06e779fb"></span><a class="reference internal" href="types.html#_CPPv48IPLint32" title="IPLint32"><span class="n"><span class="pre">IPLint32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">numRays</span></span></span><a class="headerlink" href="#_CPPv4N24IPLReflectionsBakeParams7numRaysE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N24IPLReflectionsBakeParams7numRaysE"></span><span id="_CPPv2N24IPLReflectionsBakeParams7numRaysE"></span><span id="IPLReflectionsBakeParams::numRays__IPLint32"></span><span class="target" id="struct_i_p_l_reflections_bake_params_1a4517d4473fd884f220a8cdaa06e779fb"></span><a class="reference internal" href="types.html#_CPPv48IPLint32" title="IPLint32"><span class="n"><span class="pre">IPLint32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">numRays</span></span></span><a class="headerlink" href="#_CPPv4N24IPLReflectionsBakeParams7numRaysE" title="Link to this definition"></a><br /></dt>
 <dd><p>The number of rays to trace from each listener position when baking. </p>
 <p>Increasing this number results in improved accuracy, at the cost of increased bake times. </p>
 </dd></dl>
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N24IPLReflectionsBakeParams17numDiffuseSamplesE">
-<span id="_CPPv3N24IPLReflectionsBakeParams17numDiffuseSamplesE"></span><span id="_CPPv2N24IPLReflectionsBakeParams17numDiffuseSamplesE"></span><span id="IPLReflectionsBakeParams::numDiffuseSamples__IPLint32"></span><span class="target" id="struct_i_p_l_reflections_bake_params_1a8730cf838ae0febc6de13e84150b3813"></span><a class="reference internal" href="types.html#_CPPv48IPLint32" title="IPLint32"><span class="n"><span class="pre">IPLint32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">numDiffuseSamples</span></span></span><a class="headerlink" href="#_CPPv4N24IPLReflectionsBakeParams17numDiffuseSamplesE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N24IPLReflectionsBakeParams17numDiffuseSamplesE"></span><span id="_CPPv2N24IPLReflectionsBakeParams17numDiffuseSamplesE"></span><span id="IPLReflectionsBakeParams::numDiffuseSamples__IPLint32"></span><span class="target" id="struct_i_p_l_reflections_bake_params_1a8730cf838ae0febc6de13e84150b3813"></span><a class="reference internal" href="types.html#_CPPv48IPLint32" title="IPLint32"><span class="n"><span class="pre">IPLint32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">numDiffuseSamples</span></span></span><a class="headerlink" href="#_CPPv4N24IPLReflectionsBakeParams17numDiffuseSamplesE" title="Link to this definition"></a><br /></dt>
 <dd><p>The number of directions to consider when generating diffusely-reflected rays when baking. </p>
 <p>Increasing this number results in slightly improved accuracy of diffuse reflections. </p>
 </dd></dl>
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N24IPLReflectionsBakeParams10numBouncesE">
-<span id="_CPPv3N24IPLReflectionsBakeParams10numBouncesE"></span><span id="_CPPv2N24IPLReflectionsBakeParams10numBouncesE"></span><span id="IPLReflectionsBakeParams::numBounces__IPLint32"></span><span class="target" id="struct_i_p_l_reflections_bake_params_1ace83ed720bf5ceb91447ebe44519327d"></span><a class="reference internal" href="types.html#_CPPv48IPLint32" title="IPLint32"><span class="n"><span class="pre">IPLint32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">numBounces</span></span></span><a class="headerlink" href="#_CPPv4N24IPLReflectionsBakeParams10numBouncesE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N24IPLReflectionsBakeParams10numBouncesE"></span><span id="_CPPv2N24IPLReflectionsBakeParams10numBouncesE"></span><span id="IPLReflectionsBakeParams::numBounces__IPLint32"></span><span class="target" id="struct_i_p_l_reflections_bake_params_1ace83ed720bf5ceb91447ebe44519327d"></span><a class="reference internal" href="types.html#_CPPv48IPLint32" title="IPLint32"><span class="n"><span class="pre">IPLint32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">numBounces</span></span></span><a class="headerlink" href="#_CPPv4N24IPLReflectionsBakeParams10numBouncesE" title="Link to this definition"></a><br /></dt>
 <dd><p>The number of times each ray is reflected off of solid geometry. </p>
 <p>Increasing this number results in longer reverb tails and improved accuracy, at the cost of increased bake times. </p>
 </dd></dl>
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N24IPLReflectionsBakeParams17simulatedDurationE">
-<span id="_CPPv3N24IPLReflectionsBakeParams17simulatedDurationE"></span><span id="_CPPv2N24IPLReflectionsBakeParams17simulatedDurationE"></span><span id="IPLReflectionsBakeParams::simulatedDuration__IPLfloat32"></span><span class="target" id="struct_i_p_l_reflections_bake_params_1abbce4ee3e83a854fb6655ce88876df98"></span><a class="reference internal" href="types.html#_CPPv410IPLfloat32" title="IPLfloat32"><span class="n"><span class="pre">IPLfloat32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">simulatedDuration</span></span></span><a class="headerlink" href="#_CPPv4N24IPLReflectionsBakeParams17simulatedDurationE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N24IPLReflectionsBakeParams17simulatedDurationE"></span><span id="_CPPv2N24IPLReflectionsBakeParams17simulatedDurationE"></span><span id="IPLReflectionsBakeParams::simulatedDuration__IPLfloat32"></span><span class="target" id="struct_i_p_l_reflections_bake_params_1abbce4ee3e83a854fb6655ce88876df98"></span><a class="reference internal" href="types.html#_CPPv410IPLfloat32" title="IPLfloat32"><span class="n"><span class="pre">IPLfloat32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">simulatedDuration</span></span></span><a class="headerlink" href="#_CPPv4N24IPLReflectionsBakeParams17simulatedDurationE" title="Link to this definition"></a><br /></dt>
 <dd><p>The length (in seconds) of the impulse responses to simulate. </p>
 <p>Increasing this number allows the baked data to represent longer reverb tails (and hence larger spaces), at the cost of increased memory usage while baking. </p>
 </dd></dl>
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N24IPLReflectionsBakeParams13savedDurationE">
-<span id="_CPPv3N24IPLReflectionsBakeParams13savedDurationE"></span><span id="_CPPv2N24IPLReflectionsBakeParams13savedDurationE"></span><span id="IPLReflectionsBakeParams::savedDuration__IPLfloat32"></span><span class="target" id="struct_i_p_l_reflections_bake_params_1ad13b42be6c5ad6ae7a4c60fc2f7882e8"></span><a class="reference internal" href="types.html#_CPPv410IPLfloat32" title="IPLfloat32"><span class="n"><span class="pre">IPLfloat32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">savedDuration</span></span></span><a class="headerlink" href="#_CPPv4N24IPLReflectionsBakeParams13savedDurationE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N24IPLReflectionsBakeParams13savedDurationE"></span><span id="_CPPv2N24IPLReflectionsBakeParams13savedDurationE"></span><span id="IPLReflectionsBakeParams::savedDuration__IPLfloat32"></span><span class="target" id="struct_i_p_l_reflections_bake_params_1ad13b42be6c5ad6ae7a4c60fc2f7882e8"></span><a class="reference internal" href="types.html#_CPPv410IPLfloat32" title="IPLfloat32"><span class="n"><span class="pre">IPLfloat32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">savedDuration</span></span></span><a class="headerlink" href="#_CPPv4N24IPLReflectionsBakeParams13savedDurationE" title="Link to this definition"></a><br /></dt>
 <dd><p>The length (in seconds) of the impulse responses to save at each probe. </p>
 <p>Increasing this number allows the baked data to represent longer reverb tails (and hence larger spaces), at the cost of increased disk space usage and memory usage at run-time.</p>
 <p>It may be useful to set <code class="docutils literal notranslate"><span class="pre">savedDuration</span></code> to be less than <code class="docutils literal notranslate"><span class="pre">simulatedDuration</span></code>, especially if you plan to use hybrid reverb for rendering baked reflections. This way, the parametric reverb data is estimated using a longer IR, resulting in more accurate estimation, but only the early part of the IR can be saved for subsequent rendering. </p>
@@ -339,43 +260,43 @@
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N24IPLReflectionsBakeParams5orderE">
-<span id="_CPPv3N24IPLReflectionsBakeParams5orderE"></span><span id="_CPPv2N24IPLReflectionsBakeParams5orderE"></span><span id="IPLReflectionsBakeParams::order__IPLint32"></span><span class="target" id="struct_i_p_l_reflections_bake_params_1a8f0bc3d342c8bf145d3f4fc741f84df9"></span><a class="reference internal" href="types.html#_CPPv48IPLint32" title="IPLint32"><span class="n"><span class="pre">IPLint32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">order</span></span></span><a class="headerlink" href="#_CPPv4N24IPLReflectionsBakeParams5orderE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N24IPLReflectionsBakeParams5orderE"></span><span id="_CPPv2N24IPLReflectionsBakeParams5orderE"></span><span id="IPLReflectionsBakeParams::order__IPLint32"></span><span class="target" id="struct_i_p_l_reflections_bake_params_1a8f0bc3d342c8bf145d3f4fc741f84df9"></span><a class="reference internal" href="types.html#_CPPv48IPLint32" title="IPLint32"><span class="n"><span class="pre">IPLint32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">order</span></span></span><a class="headerlink" href="#_CPPv4N24IPLReflectionsBakeParams5orderE" title="Link to this definition"></a><br /></dt>
 <dd><p>Ambisonic order of the baked IRs. </p>
 </dd></dl>
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N24IPLReflectionsBakeParams10numThreadsE">
-<span id="_CPPv3N24IPLReflectionsBakeParams10numThreadsE"></span><span id="_CPPv2N24IPLReflectionsBakeParams10numThreadsE"></span><span id="IPLReflectionsBakeParams::numThreads__IPLint32"></span><span class="target" id="struct_i_p_l_reflections_bake_params_1a4dc15724c71b1817aaf7ce8ef6135c1e"></span><a class="reference internal" href="types.html#_CPPv48IPLint32" title="IPLint32"><span class="n"><span class="pre">IPLint32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">numThreads</span></span></span><a class="headerlink" href="#_CPPv4N24IPLReflectionsBakeParams10numThreadsE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N24IPLReflectionsBakeParams10numThreadsE"></span><span id="_CPPv2N24IPLReflectionsBakeParams10numThreadsE"></span><span id="IPLReflectionsBakeParams::numThreads__IPLint32"></span><span class="target" id="struct_i_p_l_reflections_bake_params_1a4dc15724c71b1817aaf7ce8ef6135c1e"></span><a class="reference internal" href="types.html#_CPPv48IPLint32" title="IPLint32"><span class="n"><span class="pre">IPLint32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">numThreads</span></span></span><a class="headerlink" href="#_CPPv4N24IPLReflectionsBakeParams10numThreadsE" title="Link to this definition"></a><br /></dt>
 <dd><p>Number of threads to use for baking. </p>
 </dd></dl>
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N24IPLReflectionsBakeParams12rayBatchSizeE">
-<span id="_CPPv3N24IPLReflectionsBakeParams12rayBatchSizeE"></span><span id="_CPPv2N24IPLReflectionsBakeParams12rayBatchSizeE"></span><span id="IPLReflectionsBakeParams::rayBatchSize__IPLint32"></span><span class="target" id="struct_i_p_l_reflections_bake_params_1adb5cfbd14f645db25d0d3f3a3857d891"></span><a class="reference internal" href="types.html#_CPPv48IPLint32" title="IPLint32"><span class="n"><span class="pre">IPLint32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">rayBatchSize</span></span></span><a class="headerlink" href="#_CPPv4N24IPLReflectionsBakeParams12rayBatchSizeE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N24IPLReflectionsBakeParams12rayBatchSizeE"></span><span id="_CPPv2N24IPLReflectionsBakeParams12rayBatchSizeE"></span><span id="IPLReflectionsBakeParams::rayBatchSize__IPLint32"></span><span class="target" id="struct_i_p_l_reflections_bake_params_1adb5cfbd14f645db25d0d3f3a3857d891"></span><a class="reference internal" href="types.html#_CPPv48IPLint32" title="IPLint32"><span class="n"><span class="pre">IPLint32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">rayBatchSize</span></span></span><a class="headerlink" href="#_CPPv4N24IPLReflectionsBakeParams12rayBatchSizeE" title="Link to this definition"></a><br /></dt>
 <dd><p>If using custom ray tracer callbacks, this the number of rays that will be passed to the callbacks every time rays need to be traced. </p>
 </dd></dl>
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N24IPLReflectionsBakeParams21irradianceMinDistanceE">
-<span id="_CPPv3N24IPLReflectionsBakeParams21irradianceMinDistanceE"></span><span id="_CPPv2N24IPLReflectionsBakeParams21irradianceMinDistanceE"></span><span id="IPLReflectionsBakeParams::irradianceMinDistance__IPLfloat32"></span><span class="target" id="struct_i_p_l_reflections_bake_params_1a56bf18dbfbf2e9b69465971ea3a14df8"></span><a class="reference internal" href="types.html#_CPPv410IPLfloat32" title="IPLfloat32"><span class="n"><span class="pre">IPLfloat32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">irradianceMinDistance</span></span></span><a class="headerlink" href="#_CPPv4N24IPLReflectionsBakeParams21irradianceMinDistanceE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N24IPLReflectionsBakeParams21irradianceMinDistanceE"></span><span id="_CPPv2N24IPLReflectionsBakeParams21irradianceMinDistanceE"></span><span id="IPLReflectionsBakeParams::irradianceMinDistance__IPLfloat32"></span><span class="target" id="struct_i_p_l_reflections_bake_params_1a56bf18dbfbf2e9b69465971ea3a14df8"></span><a class="reference internal" href="types.html#_CPPv410IPLfloat32" title="IPLfloat32"><span class="n"><span class="pre">IPLfloat32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">irradianceMinDistance</span></span></span><a class="headerlink" href="#_CPPv4N24IPLReflectionsBakeParams21irradianceMinDistanceE" title="Link to this definition"></a><br /></dt>
 <dd><p>When calculating how much sound energy reaches a surface directly from a source, any source that is closer than <code class="docutils literal notranslate"><span class="pre">irradianceMinDistance</span></code> to the surface is assumed to be at a distance of <code class="docutils literal notranslate"><span class="pre">irradianceMinDistance</span></code>, for the purposes of energy calculations. </p>
 </dd></dl>
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N24IPLReflectionsBakeParams13bakeBatchSizeE">
-<span id="_CPPv3N24IPLReflectionsBakeParams13bakeBatchSizeE"></span><span id="_CPPv2N24IPLReflectionsBakeParams13bakeBatchSizeE"></span><span id="IPLReflectionsBakeParams::bakeBatchSize__IPLint32"></span><span class="target" id="struct_i_p_l_reflections_bake_params_1a959ff45347805af87facd4b3f49ee10d"></span><a class="reference internal" href="types.html#_CPPv48IPLint32" title="IPLint32"><span class="n"><span class="pre">IPLint32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">bakeBatchSize</span></span></span><a class="headerlink" href="#_CPPv4N24IPLReflectionsBakeParams13bakeBatchSizeE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N24IPLReflectionsBakeParams13bakeBatchSizeE"></span><span id="_CPPv2N24IPLReflectionsBakeParams13bakeBatchSizeE"></span><span id="IPLReflectionsBakeParams::bakeBatchSize__IPLint32"></span><span class="target" id="struct_i_p_l_reflections_bake_params_1a959ff45347805af87facd4b3f49ee10d"></span><a class="reference internal" href="types.html#_CPPv48IPLint32" title="IPLint32"><span class="n"><span class="pre">IPLint32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">bakeBatchSize</span></span></span><a class="headerlink" href="#_CPPv4N24IPLReflectionsBakeParams13bakeBatchSizeE" title="Link to this definition"></a><br /></dt>
 <dd><p>If using Radeon Rays or if <code class="docutils literal notranslate"><span class="pre">identifier.variation</span></code> is <code class="docutils literal notranslate"><span class="pre">IPL_BAKEDDATAVARIATION_STATICLISTENER</span></code>, this is the number of probes for which data is baked simultaneously. </p>
 </dd></dl>
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N24IPLReflectionsBakeParams12openCLDeviceE">
-<span id="_CPPv3N24IPLReflectionsBakeParams12openCLDeviceE"></span><span id="_CPPv2N24IPLReflectionsBakeParams12openCLDeviceE"></span><span id="IPLReflectionsBakeParams::openCLDevice__IPLOpenCLDevice"></span><span class="target" id="struct_i_p_l_reflections_bake_params_1af7381122f92e9616941a1c5b69a6ba85"></span><a class="reference internal" href="opencl.html#_CPPv415IPLOpenCLDevice" title="IPLOpenCLDevice"><span class="n"><span class="pre">IPLOpenCLDevice</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">openCLDevice</span></span></span><a class="headerlink" href="#_CPPv4N24IPLReflectionsBakeParams12openCLDeviceE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N24IPLReflectionsBakeParams12openCLDeviceE"></span><span id="_CPPv2N24IPLReflectionsBakeParams12openCLDeviceE"></span><span id="IPLReflectionsBakeParams::openCLDevice__IPLOpenCLDevice"></span><span class="target" id="struct_i_p_l_reflections_bake_params_1af7381122f92e9616941a1c5b69a6ba85"></span><a class="reference internal" href="opencl.html#_CPPv415IPLOpenCLDevice" title="IPLOpenCLDevice"><span class="n"><span class="pre">IPLOpenCLDevice</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">openCLDevice</span></span></span><a class="headerlink" href="#_CPPv4N24IPLReflectionsBakeParams12openCLDeviceE" title="Link to this definition"></a><br /></dt>
 <dd><p>The OpenCL device, if using Radeon Rays. </p>
 </dd></dl>
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N24IPLReflectionsBakeParams16radeonRaysDeviceE">
-<span id="_CPPv3N24IPLReflectionsBakeParams16radeonRaysDeviceE"></span><span id="_CPPv2N24IPLReflectionsBakeParams16radeonRaysDeviceE"></span><span id="IPLReflectionsBakeParams::radeonRaysDevice__IPLRadeonRaysDevice"></span><span class="target" id="struct_i_p_l_reflections_bake_params_1ad6438f682333e23677f449b454f71abe"></span><a class="reference internal" href="radeon-rays.html#_CPPv419IPLRadeonRaysDevice" title="IPLRadeonRaysDevice"><span class="n"><span class="pre">IPLRadeonRaysDevice</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">radeonRaysDevice</span></span></span><a class="headerlink" href="#_CPPv4N24IPLReflectionsBakeParams16radeonRaysDeviceE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N24IPLReflectionsBakeParams16radeonRaysDeviceE"></span><span id="_CPPv2N24IPLReflectionsBakeParams16radeonRaysDeviceE"></span><span id="IPLReflectionsBakeParams::radeonRaysDevice__IPLRadeonRaysDevice"></span><span class="target" id="struct_i_p_l_reflections_bake_params_1ad6438f682333e23677f449b454f71abe"></span><a class="reference internal" href="radeon-rays.html#_CPPv419IPLRadeonRaysDevice" title="IPLRadeonRaysDevice"><span class="n"><span class="pre">IPLRadeonRaysDevice</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">radeonRaysDevice</span></span></span><a class="headerlink" href="#_CPPv4N24IPLReflectionsBakeParams16radeonRaysDeviceE" title="Link to this definition"></a><br /></dt>
 <dd><p>The Radeon Rays device, if using Radeon Rays. </p>
 </dd></dl>
 
@@ -384,142 +305,125 @@
 
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv417IPLPathBakeParams">
-<span id="_CPPv317IPLPathBakeParams"></span><span id="_CPPv217IPLPathBakeParams"></span><span id="IPLPathBakeParams"></span><span class="target" id="struct_i_p_l_path_bake_params"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLPathBakeParams</span></span></span><a class="headerlink" href="#_CPPv417IPLPathBakeParams" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv317IPLPathBakeParams"></span><span id="_CPPv217IPLPathBakeParams"></span><span id="IPLPathBakeParams"></span><span class="target" id="struct_i_p_l_path_bake_params"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLPathBakeParams</span></span></span><a class="headerlink" href="#_CPPv417IPLPathBakeParams" title="Link to this definition"></a><br /></dt>
 <dd><p>Parameters used to control how pathing data is baked. </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N17IPLPathBakeParams5sceneE">
-<span id="_CPPv3N17IPLPathBakeParams5sceneE"></span><span id="_CPPv2N17IPLPathBakeParams5sceneE"></span><span id="IPLPathBakeParams::scene__IPLScene"></span><span class="target" id="struct_i_p_l_path_bake_params_1a31a2f49360f782ad1f32063e0dba4845"></span><a class="reference internal" href="scene.html#_CPPv48IPLScene" title="IPLScene"><span class="n"><span class="pre">IPLScene</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">scene</span></span></span><a class="headerlink" href="#_CPPv4N17IPLPathBakeParams5sceneE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N17IPLPathBakeParams5sceneE"></span><span id="_CPPv2N17IPLPathBakeParams5sceneE"></span><span id="IPLPathBakeParams::scene__IPLScene"></span><span class="target" id="struct_i_p_l_path_bake_params_1a31a2f49360f782ad1f32063e0dba4845"></span><a class="reference internal" href="scene.html#_CPPv48IPLScene" title="IPLScene"><span class="n"><span class="pre">IPLScene</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">scene</span></span></span><a class="headerlink" href="#_CPPv4N17IPLPathBakeParams5sceneE" title="Link to this definition"></a><br /></dt>
 <dd><p>The scene in which the probes exist. </p>
 </dd></dl>
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N17IPLPathBakeParams10probeBatchE">
-<span id="_CPPv3N17IPLPathBakeParams10probeBatchE"></span><span id="_CPPv2N17IPLPathBakeParams10probeBatchE"></span><span id="IPLPathBakeParams::probeBatch__IPLProbeBatch"></span><span class="target" id="struct_i_p_l_path_bake_params_1a5d7bc9d3ca529fbd95a93b6faca6d0d4"></span><a class="reference internal" href="probes.html#_CPPv413IPLProbeBatch" title="IPLProbeBatch"><span class="n"><span class="pre">IPLProbeBatch</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">probeBatch</span></span></span><a class="headerlink" href="#_CPPv4N17IPLPathBakeParams10probeBatchE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N17IPLPathBakeParams10probeBatchE"></span><span id="_CPPv2N17IPLPathBakeParams10probeBatchE"></span><span id="IPLPathBakeParams::probeBatch__IPLProbeBatch"></span><span class="target" id="struct_i_p_l_path_bake_params_1a5d7bc9d3ca529fbd95a93b6faca6d0d4"></span><a class="reference internal" href="probes.html#_CPPv413IPLProbeBatch" title="IPLProbeBatch"><span class="n"><span class="pre">IPLProbeBatch</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">probeBatch</span></span></span><a class="headerlink" href="#_CPPv4N17IPLPathBakeParams10probeBatchE" title="Link to this definition"></a><br /></dt>
 <dd><p>A probe batch containing the probes for which pathing data should be baked. </p>
 </dd></dl>
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N17IPLPathBakeParams10identifierE">
-<span id="_CPPv3N17IPLPathBakeParams10identifierE"></span><span id="_CPPv2N17IPLPathBakeParams10identifierE"></span><span id="IPLPathBakeParams::identifier__IPLBakedDataIdentifier"></span><span class="target" id="struct_i_p_l_path_bake_params_1a8d34f844bccd8e7a47ec2080d2a8305c"></span><a class="reference internal" href="probes.html#_CPPv422IPLBakedDataIdentifier" title="IPLBakedDataIdentifier"><span class="n"><span class="pre">IPLBakedDataIdentifier</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">identifier</span></span></span><a class="headerlink" href="#_CPPv4N17IPLPathBakeParams10identifierE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N17IPLPathBakeParams10identifierE"></span><span id="_CPPv2N17IPLPathBakeParams10identifierE"></span><span id="IPLPathBakeParams::identifier__IPLBakedDataIdentifier"></span><span class="target" id="struct_i_p_l_path_bake_params_1a8d34f844bccd8e7a47ec2080d2a8305c"></span><a class="reference internal" href="probes.html#_CPPv422IPLBakedDataIdentifier" title="IPLBakedDataIdentifier"><span class="n"><span class="pre">IPLBakedDataIdentifier</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">identifier</span></span></span><a class="headerlink" href="#_CPPv4N17IPLPathBakeParams10identifierE" title="Link to this definition"></a><br /></dt>
 <dd><p>An identifier for the data layer that should be baked. </p>
 <p>The identifier determines what data is simulated and stored at each probe. If the probe batch already contains data with this identifier, it will be overwritten. </p>
 </dd></dl>
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N17IPLPathBakeParams10numSamplesE">
-<span id="_CPPv3N17IPLPathBakeParams10numSamplesE"></span><span id="_CPPv2N17IPLPathBakeParams10numSamplesE"></span><span id="IPLPathBakeParams::numSamples__IPLint32"></span><span class="target" id="struct_i_p_l_path_bake_params_1accb5f3eb59993f7a1c2d38af653ac5f6"></span><a class="reference internal" href="types.html#_CPPv48IPLint32" title="IPLint32"><span class="n"><span class="pre">IPLint32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">numSamples</span></span></span><a class="headerlink" href="#_CPPv4N17IPLPathBakeParams10numSamplesE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N17IPLPathBakeParams10numSamplesE"></span><span id="_CPPv2N17IPLPathBakeParams10numSamplesE"></span><span id="IPLPathBakeParams::numSamples__IPLint32"></span><span class="target" id="struct_i_p_l_path_bake_params_1accb5f3eb59993f7a1c2d38af653ac5f6"></span><a class="reference internal" href="types.html#_CPPv48IPLint32" title="IPLint32"><span class="n"><span class="pre">IPLint32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">numSamples</span></span></span><a class="headerlink" href="#_CPPv4N17IPLPathBakeParams10numSamplesE" title="Link to this definition"></a><br /></dt>
 <dd><p>Number of point samples to use around each probe when testing whether one probe can see another. </p>
 <p>To determine if two probes are mutually visible, numSamples * numSamples rays are traced, from each point sample of the first probe, to every other point sample of the second probe. </p>
 </dd></dl>
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N17IPLPathBakeParams6radiusE">
-<span id="_CPPv3N17IPLPathBakeParams6radiusE"></span><span id="_CPPv2N17IPLPathBakeParams6radiusE"></span><span id="IPLPathBakeParams::radius__IPLfloat32"></span><span class="target" id="struct_i_p_l_path_bake_params_1a4d4ab9326cf907c5b099332ba0d5b39e"></span><a class="reference internal" href="types.html#_CPPv410IPLfloat32" title="IPLfloat32"><span class="n"><span class="pre">IPLfloat32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">radius</span></span></span><a class="headerlink" href="#_CPPv4N17IPLPathBakeParams6radiusE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N17IPLPathBakeParams6radiusE"></span><span id="_CPPv2N17IPLPathBakeParams6radiusE"></span><span id="IPLPathBakeParams::radius__IPLfloat32"></span><span class="target" id="struct_i_p_l_path_bake_params_1a4d4ab9326cf907c5b099332ba0d5b39e"></span><a class="reference internal" href="types.html#_CPPv410IPLfloat32" title="IPLfloat32"><span class="n"><span class="pre">IPLfloat32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">radius</span></span></span><a class="headerlink" href="#_CPPv4N17IPLPathBakeParams6radiusE" title="Link to this definition"></a><br /></dt>
 <dd><p>When testing for mutual visibility between a pair of probes, each probe is treated as a sphere of this radius (in meters), and point samples are generated within this sphere. </p>
 </dd></dl>
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N17IPLPathBakeParams9thresholdE">
-<span id="_CPPv3N17IPLPathBakeParams9thresholdE"></span><span id="_CPPv2N17IPLPathBakeParams9thresholdE"></span><span id="IPLPathBakeParams::threshold__IPLfloat32"></span><span class="target" id="struct_i_p_l_path_bake_params_1a68398eb64db979b7fe3c12d52426e9f0"></span><a class="reference internal" href="types.html#_CPPv410IPLfloat32" title="IPLfloat32"><span class="n"><span class="pre">IPLfloat32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">threshold</span></span></span><a class="headerlink" href="#_CPPv4N17IPLPathBakeParams9thresholdE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N17IPLPathBakeParams9thresholdE"></span><span id="_CPPv2N17IPLPathBakeParams9thresholdE"></span><span id="IPLPathBakeParams::threshold__IPLfloat32"></span><span class="target" id="struct_i_p_l_path_bake_params_1a68398eb64db979b7fe3c12d52426e9f0"></span><a class="reference internal" href="types.html#_CPPv410IPLfloat32" title="IPLfloat32"><span class="n"><span class="pre">IPLfloat32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">threshold</span></span></span><a class="headerlink" href="#_CPPv4N17IPLPathBakeParams9thresholdE" title="Link to this definition"></a><br /></dt>
 <dd><p>When tracing rays to test for mutual visibility between a pair of probes, the fraction of rays that are unoccluded must be greater than this threshold for the pair of probes to be considered mutually visible. </p>
 </dd></dl>
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N17IPLPathBakeParams8visRangeE">
-<span id="_CPPv3N17IPLPathBakeParams8visRangeE"></span><span id="_CPPv2N17IPLPathBakeParams8visRangeE"></span><span id="IPLPathBakeParams::visRange__IPLfloat32"></span><span class="target" id="struct_i_p_l_path_bake_params_1a71c6f5cfd79da0a2d7c9f74451ce26cf"></span><a class="reference internal" href="types.html#_CPPv410IPLfloat32" title="IPLfloat32"><span class="n"><span class="pre">IPLfloat32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">visRange</span></span></span><a class="headerlink" href="#_CPPv4N17IPLPathBakeParams8visRangeE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N17IPLPathBakeParams8visRangeE"></span><span id="_CPPv2N17IPLPathBakeParams8visRangeE"></span><span id="IPLPathBakeParams::visRange__IPLfloat32"></span><span class="target" id="struct_i_p_l_path_bake_params_1a71c6f5cfd79da0a2d7c9f74451ce26cf"></span><a class="reference internal" href="types.html#_CPPv410IPLfloat32" title="IPLfloat32"><span class="n"><span class="pre">IPLfloat32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">visRange</span></span></span><a class="headerlink" href="#_CPPv4N17IPLPathBakeParams8visRangeE" title="Link to this definition"></a><br /></dt>
 <dd><p>If the distance between two probes is greater than this value, the probes are not considered mutually visible. </p>
 <p>Increasing this value can result in simpler paths, at the cost of increased bake times. </p>
 </dd></dl>
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N17IPLPathBakeParams9pathRangeE">
-<span id="_CPPv3N17IPLPathBakeParams9pathRangeE"></span><span id="_CPPv2N17IPLPathBakeParams9pathRangeE"></span><span id="IPLPathBakeParams::pathRange__IPLfloat32"></span><span class="target" id="struct_i_p_l_path_bake_params_1ae4381740d12e1c4d08259c2dda5f9ba6"></span><a class="reference internal" href="types.html#_CPPv410IPLfloat32" title="IPLfloat32"><span class="n"><span class="pre">IPLfloat32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">pathRange</span></span></span><a class="headerlink" href="#_CPPv4N17IPLPathBakeParams9pathRangeE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N17IPLPathBakeParams9pathRangeE"></span><span id="_CPPv2N17IPLPathBakeParams9pathRangeE"></span><span id="IPLPathBakeParams::pathRange__IPLfloat32"></span><span class="target" id="struct_i_p_l_path_bake_params_1ae4381740d12e1c4d08259c2dda5f9ba6"></span><a class="reference internal" href="types.html#_CPPv410IPLfloat32" title="IPLfloat32"><span class="n"><span class="pre">IPLfloat32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">pathRange</span></span></span><a class="headerlink" href="#_CPPv4N17IPLPathBakeParams9pathRangeE" title="Link to this definition"></a><br /></dt>
 <dd><p>If the length of the path between two probes is greater than this value, the probes are considered to not have any path between them. </p>
 <p>Increasing this value allows sound to propagate over greater distances, at the cost of increased bake times and memory usage. </p>
 </dd></dl>
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N17IPLPathBakeParams10numThreadsE">
-<span id="_CPPv3N17IPLPathBakeParams10numThreadsE"></span><span id="_CPPv2N17IPLPathBakeParams10numThreadsE"></span><span id="IPLPathBakeParams::numThreads__IPLint32"></span><span class="target" id="struct_i_p_l_path_bake_params_1a4dc15724c71b1817aaf7ce8ef6135c1e"></span><a class="reference internal" href="types.html#_CPPv48IPLint32" title="IPLint32"><span class="n"><span class="pre">IPLint32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">numThreads</span></span></span><a class="headerlink" href="#_CPPv4N17IPLPathBakeParams10numThreadsE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N17IPLPathBakeParams10numThreadsE"></span><span id="_CPPv2N17IPLPathBakeParams10numThreadsE"></span><span id="IPLPathBakeParams::numThreads__IPLint32"></span><span class="target" id="struct_i_p_l_path_bake_params_1a4dc15724c71b1817aaf7ce8ef6135c1e"></span><a class="reference internal" href="types.html#_CPPv48IPLint32" title="IPLint32"><span class="n"><span class="pre">IPLint32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">numThreads</span></span></span><a class="headerlink" href="#_CPPv4N17IPLPathBakeParams10numThreadsE" title="Link to this definition"></a><br /></dt>
 <dd><p>Number of threads to use for baking. </p>
 </dd></dl>
 
 </div>
 </dd></dl>
 
-</div>
-<div class="section" id="enumerations">
-<h2>Enumerations<a class="headerlink" href="#enumerations" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="enumerations">
+<h2>Enumerations<a class="headerlink" href="#enumerations" title="Link to this heading"></a></h2>
 <dl class="cpp enum">
 <dt class="sig sig-object cpp" id="_CPPv423IPLReflectionsBakeFlags">
-<span id="_CPPv323IPLReflectionsBakeFlags"></span><span id="_CPPv223IPLReflectionsBakeFlags"></span><span class="target" id="group__baking_1gadf452c675086c6f42020779dad4f87b8"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLReflectionsBakeFlags</span></span></span><a class="headerlink" href="#_CPPv423IPLReflectionsBakeFlags" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv323IPLReflectionsBakeFlags"></span><span id="_CPPv223IPLReflectionsBakeFlags"></span><span class="target" id="group__baking_1gadf452c675086c6f42020779dad4f87b8"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLReflectionsBakeFlags</span></span></span><a class="headerlink" href="#_CPPv423IPLReflectionsBakeFlags" title="Link to this definition"></a><br /></dt>
 <dd><p>Flags for specifying what types of reflections data to bake. </p>
 <p><em>Values:</em></p>
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N23IPLReflectionsBakeFlags40IPL_REFLECTIONSBAKEFLAGS_BAKECONVOLUTIONE">
-<span id="_CPPv3N23IPLReflectionsBakeFlags40IPL_REFLECTIONSBAKEFLAGS_BAKECONVOLUTIONE"></span><span id="_CPPv2N23IPLReflectionsBakeFlags40IPL_REFLECTIONSBAKEFLAGS_BAKECONVOLUTIONE"></span><span class="target" id="group__baking_1ggadf452c675086c6f42020779dad4f87b8aba270de5a08185cd2a2cd95a681a4123"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_REFLECTIONSBAKEFLAGS_BAKECONVOLUTION</span></span></span><a class="headerlink" href="#_CPPv4N23IPLReflectionsBakeFlags40IPL_REFLECTIONSBAKEFLAGS_BAKECONVOLUTIONE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N23IPLReflectionsBakeFlags40IPL_REFLECTIONSBAKEFLAGS_BAKECONVOLUTIONE"></span><span id="_CPPv2N23IPLReflectionsBakeFlags40IPL_REFLECTIONSBAKEFLAGS_BAKECONVOLUTIONE"></span><span class="target" id="group__baking_1ggadf452c675086c6f42020779dad4f87b8aba270de5a08185cd2a2cd95a681a4123"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_REFLECTIONSBAKEFLAGS_BAKECONVOLUTION</span></span></span><a class="headerlink" href="#_CPPv4N23IPLReflectionsBakeFlags40IPL_REFLECTIONSBAKEFLAGS_BAKECONVOLUTIONE" title="Link to this definition"></a><br /></dt>
 <dd><p>Bake impulse responses for <code class="docutils literal notranslate"><span class="pre">IPL_REFLECTIONEFFECTTYPE_CONVOLUTION</span></code>, <code class="docutils literal notranslate"><span class="pre">IPL_REFLECTIONEFFECTTYPE_HYBRID</span></code>, or <code class="docutils literal notranslate"><span class="pre">IPL_REFLECTIONEFFECTTYPE_TAN</span></code>. </p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N23IPLReflectionsBakeFlags39IPL_REFLECTIONSBAKEFLAGS_BAKEPARAMETRICE">
-<span id="_CPPv3N23IPLReflectionsBakeFlags39IPL_REFLECTIONSBAKEFLAGS_BAKEPARAMETRICE"></span><span id="_CPPv2N23IPLReflectionsBakeFlags39IPL_REFLECTIONSBAKEFLAGS_BAKEPARAMETRICE"></span><span class="target" id="group__baking_1ggadf452c675086c6f42020779dad4f87b8a2dfda7d3043c5950a1f929f4e5e26a85"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_REFLECTIONSBAKEFLAGS_BAKEPARAMETRIC</span></span></span><a class="headerlink" href="#_CPPv4N23IPLReflectionsBakeFlags39IPL_REFLECTIONSBAKEFLAGS_BAKEPARAMETRICE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N23IPLReflectionsBakeFlags39IPL_REFLECTIONSBAKEFLAGS_BAKEPARAMETRICE"></span><span id="_CPPv2N23IPLReflectionsBakeFlags39IPL_REFLECTIONSBAKEFLAGS_BAKEPARAMETRICE"></span><span class="target" id="group__baking_1ggadf452c675086c6f42020779dad4f87b8a2dfda7d3043c5950a1f929f4e5e26a85"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_REFLECTIONSBAKEFLAGS_BAKEPARAMETRIC</span></span></span><a class="headerlink" href="#_CPPv4N23IPLReflectionsBakeFlags39IPL_REFLECTIONSBAKEFLAGS_BAKEPARAMETRICE" title="Link to this definition"></a><br /></dt>
 <dd><p>Bake parametric reverb for <code class="docutils literal notranslate"><span class="pre">IPL_REFLECTIONEFFECTTYPE_PARAMETRIC</span></code> or <code class="docutils literal notranslate"><span class="pre">IPL_REFLECTIONEFFECTTYPE_HYBRID</span></code>. </p>
 </dd></dl>
 
 </dd></dl>
 
-</div>
-</div>
+</section>
+</section>
 
 
            </div>
-           
           </div>
-          <footer>
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="simulation.html" class="btn btn-neutral float-right" title="Simulation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="probes.html" class="btn btn-neutral float-left" title="Probes" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="simulation.html" class="btn btn-neutral float-right" title="Simulation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &#169; Copyright 2017-2023, Valve Corporation.
-
-    </p>
+    <p>&#169; Copyright 2017-2023, Valve Corporation.</p>
   </div>
-    
-    
-    
-    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>

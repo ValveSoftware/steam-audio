@@ -1,101 +1,50 @@
 
 
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
-  <meta charset="utf-8" />
-  
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  
   <title>Geometry &mdash; Steam Audio C API  documentation</title>
-  
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/steamaudio.css?v=b5aaeb06" />
 
   
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/steamaudio.css" type="text/css" />
-
-  
-  
-
-  
-  
-
-  
-
-  
-  <!--[if lt IE 9]>
-    <script src="_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/doctools.js"></script>
-    
-    <script type="text/javascript" src="_static/js/theme.js"></script>
-
-    
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=7f41d439"></script>
+      <script src="_static/doctools.js?v=9a2dae69"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Serialization" href="serialization.html" />
     <link rel="prev" title="Context" href="context.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
 
           
-            <a href="index.html">
           
-
-          
+          <a href="index.html">
             
-            <img src="_static/steam-audio-logo.png" class="logo" alt="Logo"/>
-          
+              <img src="_static/steam-audio-logo.png" class="logo" alt="Logo"/>
           </a>
-
-          
-            
-            
-              <div class="version">
-                4.6.0
-              </div>
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
-              <p class="caption"><span class="caption-text">Steam Audio SDK</span></p>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Steam Audio SDK</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="guide.html">Programmer’s Guide</a></li>
@@ -105,8 +54,18 @@
 <li class="toctree-l2"><a class="reference internal" href="types.html">Basic Data Types</a></li>
 <li class="toctree-l2"><a class="reference internal" href="context.html">Context</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Geometry</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#functions">Functions</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#structures">Structures</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#functions">Functions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv429iplCalculateRelativeDirection10IPLContext10IPLVector310IPLVector310IPLVector310IPLVector3"><code class="docutils literal notranslate"><span class="pre">iplCalculateRelativeDirection()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#structures">Structures</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv410IPLVector3"><code class="docutils literal notranslate"><span class="pre">IPLVector3</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv412IPLMatrix4x4"><code class="docutils literal notranslate"><span class="pre">IPLMatrix4x4</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv46IPLBox"><code class="docutils literal notranslate"><span class="pre">IPLBox</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv49IPLSphere"><code class="docutils literal notranslate"><span class="pre">IPLSphere</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv419IPLCoordinateSpace3"><code class="docutils literal notranslate"><span class="pre">IPLCoordinateSpace3</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="serialization.html">Serialization</a></li>
@@ -135,82 +94,41 @@
 </li>
 </ul>
 
-            
-          
         </div>
-        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="index.html">Steam Audio C API</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
-      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-        
-          <li><a href="reference.html">API Reference</a> &raquo;</li>
-        
-      <li>Geometry</li>
-    
-    
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="reference.html">API Reference</a></li>
+      <li class="breadcrumb-item active">Geometry</li>
       <li class="wy-breadcrumbs-aside">
-        
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
-  <div class="section" id="geometry">
-<h1>Geometry<a class="headerlink" href="#geometry" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="functions">
-<h2>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h2>
+             
+  <section id="geometry">
+<h1>Geometry<a class="headerlink" href="#geometry" title="Link to this heading"></a></h1>
+<section id="functions">
+<h2>Functions<a class="headerlink" href="#functions" title="Link to this heading"></a></h2>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv429iplCalculateRelativeDirection10IPLContext10IPLVector310IPLVector310IPLVector310IPLVector3">
-<span id="_CPPv329iplCalculateRelativeDirection10IPLContext10IPLVector310IPLVector310IPLVector310IPLVector3"></span><span id="_CPPv229iplCalculateRelativeDirection10IPLContext10IPLVector310IPLVector310IPLVector310IPLVector3"></span><span id="iplCalculateRelativeDirection__IPLContext.IPLVector3.IPLVector3.IPLVector3.IPLVector3"></span><span class="target" id="group__geometry_1gac30c01ae753d320486393c763efa7ecd"></span><a class="reference internal" href="#_CPPv410IPLVector3" title="IPLVector3"><span class="n"><span class="pre">IPLVector3</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplCalculateRelativeDirection</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="context.html#_CPPv410IPLContext" title="IPLContext"><span class="n"><span class="pre">IPLContext</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">context</span></span>, <a class="reference internal" href="#_CPPv410IPLVector3" title="IPLVector3"><span class="n"><span class="pre">IPLVector3</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">sourcePosition</span></span>, <a class="reference internal" href="#_CPPv410IPLVector3" title="IPLVector3"><span class="n"><span class="pre">IPLVector3</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">listenerPosition</span></span>, <a class="reference internal" href="#_CPPv410IPLVector3" title="IPLVector3"><span class="n"><span class="pre">IPLVector3</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">listenerAhead</span></span>, <a class="reference internal" href="#_CPPv410IPLVector3" title="IPLVector3"><span class="n"><span class="pre">IPLVector3</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">listenerUp</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv429iplCalculateRelativeDirection10IPLContext10IPLVector310IPLVector310IPLVector310IPLVector3" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv329iplCalculateRelativeDirection10IPLContext10IPLVector310IPLVector310IPLVector310IPLVector3"></span><span id="_CPPv229iplCalculateRelativeDirection10IPLContext10IPLVector310IPLVector310IPLVector310IPLVector3"></span><span id="iplCalculateRelativeDirection__IPLContext.IPLVector3.IPLVector3.IPLVector3.IPLVector3"></span><span class="target" id="group__geometry_1gac30c01ae753d320486393c763efa7ecd"></span><a class="reference internal" href="#_CPPv410IPLVector3" title="IPLVector3"><span class="n"><span class="pre">IPLVector3</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplCalculateRelativeDirection</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="context.html#_CPPv410IPLContext" title="IPLContext"><span class="n"><span class="pre">IPLContext</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">context</span></span>, <a class="reference internal" href="#_CPPv410IPLVector3" title="IPLVector3"><span class="n"><span class="pre">IPLVector3</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">sourcePosition</span></span>, <a class="reference internal" href="#_CPPv410IPLVector3" title="IPLVector3"><span class="n"><span class="pre">IPLVector3</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">listenerPosition</span></span>, <a class="reference internal" href="#_CPPv410IPLVector3" title="IPLVector3"><span class="n"><span class="pre">IPLVector3</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">listenerAhead</span></span>, <a class="reference internal" href="#_CPPv410IPLVector3" title="IPLVector3"><span class="n"><span class="pre">IPLVector3</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">listenerUp</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv429iplCalculateRelativeDirection10IPLContext10IPLVector310IPLVector310IPLVector310IPLVector3" title="Link to this definition"></a><br /></dt>
 <dd><p>Calculates the relative direction from the listener to a sound source. </p>
 <p>The returned direction vector is expressed in the listener’s coordinate system.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>context</strong> – The context used to initialize Steam Audio. </p></li>
 <li><p><strong>sourcePosition</strong> – World-space coordinates of the source. </p></li>
@@ -219,37 +137,37 @@
 <li><p><strong>listenerUp</strong> – World-space unit-length vector pointing up relative to the listener.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>A unit-length vector in the listener’s coordinate space, pointing from the listener to the source. </p>
 </dd>
 </dl>
 </dd></dl>
 
-</div>
-<div class="section" id="structures">
-<h2>Structures<a class="headerlink" href="#structures" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="structures">
+<h2>Structures<a class="headerlink" href="#structures" title="Link to this heading"></a></h2>
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv410IPLVector3">
-<span id="_CPPv310IPLVector3"></span><span id="_CPPv210IPLVector3"></span><span id="IPLVector3"></span><span class="target" id="struct_i_p_l_vector3"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLVector3</span></span></span><a class="headerlink" href="#_CPPv410IPLVector3" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv310IPLVector3"></span><span id="_CPPv210IPLVector3"></span><span id="IPLVector3"></span><span class="target" id="struct_i_p_l_vector3"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLVector3</span></span></span><a class="headerlink" href="#_CPPv410IPLVector3" title="Link to this definition"></a><br /></dt>
 <dd><p>A point or vector in 3D space. </p>
 <p>Steam Audio uses a right-handed coordinate system, with the positive x-axis pointing right, the positive y-axis pointing up, and the negative z-axis pointing ahead. Position and direction data obtained from a game engine or audio engine must be properly transformed before being passed to any Steam Audio API function. </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N10IPLVector31xE">
-<span id="_CPPv3N10IPLVector31xE"></span><span id="_CPPv2N10IPLVector31xE"></span><span id="IPLVector3::x__IPLfloat32"></span><span class="target" id="struct_i_p_l_vector3_1a6158e9f85a82724281a2f98d5ca81f3e"></span><a class="reference internal" href="types.html#_CPPv410IPLfloat32" title="IPLfloat32"><span class="n"><span class="pre">IPLfloat32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">x</span></span></span><a class="headerlink" href="#_CPPv4N10IPLVector31xE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N10IPLVector31xE"></span><span id="_CPPv2N10IPLVector31xE"></span><span id="IPLVector3::x__IPLfloat32"></span><span class="target" id="struct_i_p_l_vector3_1a6158e9f85a82724281a2f98d5ca81f3e"></span><a class="reference internal" href="types.html#_CPPv410IPLfloat32" title="IPLfloat32"><span class="n"><span class="pre">IPLfloat32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">x</span></span></span><a class="headerlink" href="#_CPPv4N10IPLVector31xE" title="Link to this definition"></a><br /></dt>
 <dd><p>The x-coordinate. </p>
 </dd></dl>
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N10IPLVector31yE">
-<span id="_CPPv3N10IPLVector31yE"></span><span id="_CPPv2N10IPLVector31yE"></span><span id="IPLVector3::y__IPLfloat32"></span><span class="target" id="struct_i_p_l_vector3_1ac5c3c9765dd7c72db0377a4de2a75fcd"></span><a class="reference internal" href="types.html#_CPPv410IPLfloat32" title="IPLfloat32"><span class="n"><span class="pre">IPLfloat32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">y</span></span></span><a class="headerlink" href="#_CPPv4N10IPLVector31yE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N10IPLVector31yE"></span><span id="_CPPv2N10IPLVector31yE"></span><span id="IPLVector3::y__IPLfloat32"></span><span class="target" id="struct_i_p_l_vector3_1ac5c3c9765dd7c72db0377a4de2a75fcd"></span><a class="reference internal" href="types.html#_CPPv410IPLfloat32" title="IPLfloat32"><span class="n"><span class="pre">IPLfloat32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">y</span></span></span><a class="headerlink" href="#_CPPv4N10IPLVector31yE" title="Link to this definition"></a><br /></dt>
 <dd><p>The y-coordinate. </p>
 </dd></dl>
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N10IPLVector31zE">
-<span id="_CPPv3N10IPLVector31zE"></span><span id="_CPPv2N10IPLVector31zE"></span><span id="IPLVector3::z__IPLfloat32"></span><span class="target" id="struct_i_p_l_vector3_1a970e43fd19ab708e91945c728cc7acf2"></span><a class="reference internal" href="types.html#_CPPv410IPLfloat32" title="IPLfloat32"><span class="n"><span class="pre">IPLfloat32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">z</span></span></span><a class="headerlink" href="#_CPPv4N10IPLVector31zE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N10IPLVector31zE"></span><span id="_CPPv2N10IPLVector31zE"></span><span id="IPLVector3::z__IPLfloat32"></span><span class="target" id="struct_i_p_l_vector3_1a970e43fd19ab708e91945c728cc7acf2"></span><a class="reference internal" href="types.html#_CPPv410IPLfloat32" title="IPLfloat32"><span class="n"><span class="pre">IPLfloat32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">z</span></span></span><a class="headerlink" href="#_CPPv4N10IPLVector31zE" title="Link to this definition"></a><br /></dt>
 <dd><p>The z-coordinate. </p>
 </dd></dl>
 
@@ -258,13 +176,13 @@
 
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv412IPLMatrix4x4">
-<span id="_CPPv312IPLMatrix4x4"></span><span id="_CPPv212IPLMatrix4x4"></span><span id="IPLMatrix4x4"></span><span class="target" id="struct_i_p_l_matrix4x4"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLMatrix4x4</span></span></span><a class="headerlink" href="#_CPPv412IPLMatrix4x4" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv312IPLMatrix4x4"></span><span id="_CPPv212IPLMatrix4x4"></span><span id="IPLMatrix4x4"></span><span class="target" id="struct_i_p_l_matrix4x4"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLMatrix4x4</span></span></span><a class="headerlink" href="#_CPPv412IPLMatrix4x4" title="Link to this definition"></a><br /></dt>
 <dd><p>A 4x4 matrix used to represent an affine transform. </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N12IPLMatrix4x48elementsE">
-<span id="_CPPv3N12IPLMatrix4x48elementsE"></span><span id="_CPPv2N12IPLMatrix4x48elementsE"></span><span id="IPLMatrix4x4::elements__IPLfloat32AA"></span><span class="target" id="struct_i_p_l_matrix4x4_1a822be05da196962548506070fd37709f"></span><a class="reference internal" href="types.html#_CPPv410IPLfloat32" title="IPLfloat32"><span class="n"><span class="pre">IPLfloat32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">elements</span></span></span><span class="p"><span class="pre">[</span></span><span class="m"><span class="pre">4</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">[</span></span><span class="m"><span class="pre">4</span></span><span class="p"><span class="pre">]</span></span><a class="headerlink" href="#_CPPv4N12IPLMatrix4x48elementsE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N12IPLMatrix4x48elementsE"></span><span id="_CPPv2N12IPLMatrix4x48elementsE"></span><span id="IPLMatrix4x4::elements__IPLfloat32AA"></span><span class="target" id="struct_i_p_l_matrix4x4_1a822be05da196962548506070fd37709f"></span><a class="reference internal" href="types.html#_CPPv410IPLfloat32" title="IPLfloat32"><span class="n"><span class="pre">IPLfloat32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">elements</span></span></span><span class="p"><span class="pre">[</span></span><span class="m"><span class="pre">4</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">[</span></span><span class="m"><span class="pre">4</span></span><span class="p"><span class="pre">]</span></span><a class="headerlink" href="#_CPPv4N12IPLMatrix4x48elementsE" title="Link to this definition"></a><br /></dt>
 <dd><p>Matrix elements, in row-major order. </p>
 </dd></dl>
 
@@ -273,20 +191,20 @@
 
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv46IPLBox">
-<span id="_CPPv36IPLBox"></span><span id="_CPPv26IPLBox"></span><span id="IPLBox"></span><span class="target" id="struct_i_p_l_box"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLBox</span></span></span><a class="headerlink" href="#_CPPv46IPLBox" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv36IPLBox"></span><span id="_CPPv26IPLBox"></span><span id="IPLBox"></span><span class="target" id="struct_i_p_l_box"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLBox</span></span></span><a class="headerlink" href="#_CPPv46IPLBox" title="Link to this definition"></a><br /></dt>
 <dd><p>An axis-aligned box. </p>
 <p>Axis-aligned boxes are used to specify a volume of 3D space. </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N6IPLBox14minCoordinatesE">
-<span id="_CPPv3N6IPLBox14minCoordinatesE"></span><span id="_CPPv2N6IPLBox14minCoordinatesE"></span><span id="IPLBox::minCoordinates__IPLVector3"></span><span class="target" id="struct_i_p_l_box_1a2b1047fda3bb6147fc67a20272f499f5"></span><a class="reference internal" href="#_CPPv410IPLVector3" title="IPLVector3"><span class="n"><span class="pre">IPLVector3</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">minCoordinates</span></span></span><a class="headerlink" href="#_CPPv4N6IPLBox14minCoordinatesE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N6IPLBox14minCoordinatesE"></span><span id="_CPPv2N6IPLBox14minCoordinatesE"></span><span id="IPLBox::minCoordinates__IPLVector3"></span><span class="target" id="struct_i_p_l_box_1a2b1047fda3bb6147fc67a20272f499f5"></span><a class="reference internal" href="#_CPPv410IPLVector3" title="IPLVector3"><span class="n"><span class="pre">IPLVector3</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">minCoordinates</span></span></span><a class="headerlink" href="#_CPPv4N6IPLBox14minCoordinatesE" title="Link to this definition"></a><br /></dt>
 <dd><p>The minimum coordinates of any vertex. </p>
 </dd></dl>
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N6IPLBox14maxCoordinatesE">
-<span id="_CPPv3N6IPLBox14maxCoordinatesE"></span><span id="_CPPv2N6IPLBox14maxCoordinatesE"></span><span id="IPLBox::maxCoordinates__IPLVector3"></span><span class="target" id="struct_i_p_l_box_1a214328c1f7af391ee9920b890bc3e6fe"></span><a class="reference internal" href="#_CPPv410IPLVector3" title="IPLVector3"><span class="n"><span class="pre">IPLVector3</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">maxCoordinates</span></span></span><a class="headerlink" href="#_CPPv4N6IPLBox14maxCoordinatesE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N6IPLBox14maxCoordinatesE"></span><span id="_CPPv2N6IPLBox14maxCoordinatesE"></span><span id="IPLBox::maxCoordinates__IPLVector3"></span><span class="target" id="struct_i_p_l_box_1a214328c1f7af391ee9920b890bc3e6fe"></span><a class="reference internal" href="#_CPPv410IPLVector3" title="IPLVector3"><span class="n"><span class="pre">IPLVector3</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">maxCoordinates</span></span></span><a class="headerlink" href="#_CPPv4N6IPLBox14maxCoordinatesE" title="Link to this definition"></a><br /></dt>
 <dd><p>The maximum coordinates of any vertex. </p>
 </dd></dl>
 
@@ -295,20 +213,20 @@
 
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv49IPLSphere">
-<span id="_CPPv39IPLSphere"></span><span id="_CPPv29IPLSphere"></span><span id="IPLSphere"></span><span class="target" id="struct_i_p_l_sphere"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLSphere</span></span></span><a class="headerlink" href="#_CPPv49IPLSphere" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv39IPLSphere"></span><span id="_CPPv29IPLSphere"></span><span id="IPLSphere"></span><span class="target" id="struct_i_p_l_sphere"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLSphere</span></span></span><a class="headerlink" href="#_CPPv49IPLSphere" title="Link to this definition"></a><br /></dt>
 <dd><p>A sphere. </p>
 <p>Spheres are used to define a region of influence around a point. </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N9IPLSphere6centerE">
-<span id="_CPPv3N9IPLSphere6centerE"></span><span id="_CPPv2N9IPLSphere6centerE"></span><span id="IPLSphere::center__IPLVector3"></span><span class="target" id="struct_i_p_l_sphere_1a2f741870eda68ea5605c252e2b89f32a"></span><a class="reference internal" href="#_CPPv410IPLVector3" title="IPLVector3"><span class="n"><span class="pre">IPLVector3</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">center</span></span></span><a class="headerlink" href="#_CPPv4N9IPLSphere6centerE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N9IPLSphere6centerE"></span><span id="_CPPv2N9IPLSphere6centerE"></span><span id="IPLSphere::center__IPLVector3"></span><span class="target" id="struct_i_p_l_sphere_1a2f741870eda68ea5605c252e2b89f32a"></span><a class="reference internal" href="#_CPPv410IPLVector3" title="IPLVector3"><span class="n"><span class="pre">IPLVector3</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">center</span></span></span><a class="headerlink" href="#_CPPv4N9IPLSphere6centerE" title="Link to this definition"></a><br /></dt>
 <dd><p>The center. </p>
 </dd></dl>
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N9IPLSphere6radiusE">
-<span id="_CPPv3N9IPLSphere6radiusE"></span><span id="_CPPv2N9IPLSphere6radiusE"></span><span id="IPLSphere::radius__IPLfloat32"></span><span class="target" id="struct_i_p_l_sphere_1a4d4ab9326cf907c5b099332ba0d5b39e"></span><a class="reference internal" href="types.html#_CPPv410IPLfloat32" title="IPLfloat32"><span class="n"><span class="pre">IPLfloat32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">radius</span></span></span><a class="headerlink" href="#_CPPv4N9IPLSphere6radiusE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N9IPLSphere6radiusE"></span><span id="_CPPv2N9IPLSphere6radiusE"></span><span id="IPLSphere::radius__IPLfloat32"></span><span class="target" id="struct_i_p_l_sphere_1a4d4ab9326cf907c5b099332ba0d5b39e"></span><a class="reference internal" href="types.html#_CPPv410IPLfloat32" title="IPLfloat32"><span class="n"><span class="pre">IPLfloat32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">radius</span></span></span><a class="headerlink" href="#_CPPv4N9IPLSphere6radiusE" title="Link to this definition"></a><br /></dt>
 <dd><p>The radius. </p>
 </dd></dl>
 
@@ -317,86 +235,69 @@
 
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv419IPLCoordinateSpace3">
-<span id="_CPPv319IPLCoordinateSpace3"></span><span id="_CPPv219IPLCoordinateSpace3"></span><span id="IPLCoordinateSpace3"></span><span class="target" id="struct_i_p_l_coordinate_space3"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLCoordinateSpace3</span></span></span><a class="headerlink" href="#_CPPv419IPLCoordinateSpace3" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv319IPLCoordinateSpace3"></span><span id="_CPPv219IPLCoordinateSpace3"></span><span id="IPLCoordinateSpace3"></span><span class="target" id="struct_i_p_l_coordinate_space3"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLCoordinateSpace3</span></span></span><a class="headerlink" href="#_CPPv419IPLCoordinateSpace3" title="Link to this definition"></a><br /></dt>
 <dd><p>A 3D coordinate system, expressed relative to a canonical coordinate system. </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N19IPLCoordinateSpace35rightE">
-<span id="_CPPv3N19IPLCoordinateSpace35rightE"></span><span id="_CPPv2N19IPLCoordinateSpace35rightE"></span><span id="IPLCoordinateSpace3::right__IPLVector3"></span><span class="target" id="struct_i_p_l_coordinate_space3_1ad0faf3db5050d3abd59e87ce686e1fef"></span><a class="reference internal" href="#_CPPv410IPLVector3" title="IPLVector3"><span class="n"><span class="pre">IPLVector3</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">right</span></span></span><a class="headerlink" href="#_CPPv4N19IPLCoordinateSpace35rightE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N19IPLCoordinateSpace35rightE"></span><span id="_CPPv2N19IPLCoordinateSpace35rightE"></span><span id="IPLCoordinateSpace3::right__IPLVector3"></span><span class="target" id="struct_i_p_l_coordinate_space3_1ad0faf3db5050d3abd59e87ce686e1fef"></span><a class="reference internal" href="#_CPPv410IPLVector3" title="IPLVector3"><span class="n"><span class="pre">IPLVector3</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">right</span></span></span><a class="headerlink" href="#_CPPv4N19IPLCoordinateSpace35rightE" title="Link to this definition"></a><br /></dt>
 <dd><p>Unit vector pointing to the right (local +x axis). </p>
 </dd></dl>
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N19IPLCoordinateSpace32upE">
-<span id="_CPPv3N19IPLCoordinateSpace32upE"></span><span id="_CPPv2N19IPLCoordinateSpace32upE"></span><span id="IPLCoordinateSpace3::up__IPLVector3"></span><span class="target" id="struct_i_p_l_coordinate_space3_1af0ea589e7dbbb21905f7c27ab10535fe"></span><a class="reference internal" href="#_CPPv410IPLVector3" title="IPLVector3"><span class="n"><span class="pre">IPLVector3</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">up</span></span></span><a class="headerlink" href="#_CPPv4N19IPLCoordinateSpace32upE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N19IPLCoordinateSpace32upE"></span><span id="_CPPv2N19IPLCoordinateSpace32upE"></span><span id="IPLCoordinateSpace3::up__IPLVector3"></span><span class="target" id="struct_i_p_l_coordinate_space3_1af0ea589e7dbbb21905f7c27ab10535fe"></span><a class="reference internal" href="#_CPPv410IPLVector3" title="IPLVector3"><span class="n"><span class="pre">IPLVector3</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">up</span></span></span><a class="headerlink" href="#_CPPv4N19IPLCoordinateSpace32upE" title="Link to this definition"></a><br /></dt>
 <dd><p>Unit vector pointing upwards (local +y axis). </p>
 </dd></dl>
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N19IPLCoordinateSpace35aheadE">
-<span id="_CPPv3N19IPLCoordinateSpace35aheadE"></span><span id="_CPPv2N19IPLCoordinateSpace35aheadE"></span><span id="IPLCoordinateSpace3::ahead__IPLVector3"></span><span class="target" id="struct_i_p_l_coordinate_space3_1a8c9350f09650831a5b1120bf7f680df3"></span><a class="reference internal" href="#_CPPv410IPLVector3" title="IPLVector3"><span class="n"><span class="pre">IPLVector3</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ahead</span></span></span><a class="headerlink" href="#_CPPv4N19IPLCoordinateSpace35aheadE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N19IPLCoordinateSpace35aheadE"></span><span id="_CPPv2N19IPLCoordinateSpace35aheadE"></span><span id="IPLCoordinateSpace3::ahead__IPLVector3"></span><span class="target" id="struct_i_p_l_coordinate_space3_1a8c9350f09650831a5b1120bf7f680df3"></span><a class="reference internal" href="#_CPPv410IPLVector3" title="IPLVector3"><span class="n"><span class="pre">IPLVector3</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ahead</span></span></span><a class="headerlink" href="#_CPPv4N19IPLCoordinateSpace35aheadE" title="Link to this definition"></a><br /></dt>
 <dd><p>Unit vector pointing forwards (local -z axis). </p>
 </dd></dl>
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N19IPLCoordinateSpace36originE">
-<span id="_CPPv3N19IPLCoordinateSpace36originE"></span><span id="_CPPv2N19IPLCoordinateSpace36originE"></span><span id="IPLCoordinateSpace3::origin__IPLVector3"></span><span class="target" id="struct_i_p_l_coordinate_space3_1a52e5bc29be05c29094ad511dfb990b6f"></span><a class="reference internal" href="#_CPPv410IPLVector3" title="IPLVector3"><span class="n"><span class="pre">IPLVector3</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">origin</span></span></span><a class="headerlink" href="#_CPPv4N19IPLCoordinateSpace36originE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N19IPLCoordinateSpace36originE"></span><span id="_CPPv2N19IPLCoordinateSpace36originE"></span><span id="IPLCoordinateSpace3::origin__IPLVector3"></span><span class="target" id="struct_i_p_l_coordinate_space3_1a52e5bc29be05c29094ad511dfb990b6f"></span><a class="reference internal" href="#_CPPv410IPLVector3" title="IPLVector3"><span class="n"><span class="pre">IPLVector3</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">origin</span></span></span><a class="headerlink" href="#_CPPv4N19IPLCoordinateSpace36originE" title="Link to this definition"></a><br /></dt>
 <dd><p>The origin, relative to the canonical coordinate system. </p>
 </dd></dl>
 
 </div>
 </dd></dl>
 
-</div>
-</div>
+</section>
+</section>
 
 
            </div>
-           
           </div>
-          <footer>
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="serialization.html" class="btn btn-neutral float-right" title="Serialization" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="context.html" class="btn btn-neutral float-left" title="Context" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="serialization.html" class="btn btn-neutral float-right" title="Serialization" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &#169; Copyright 2017-2023, Valve Corporation.
-
-    </p>
+    <p>&#169; Copyright 2017-2023, Valve Corporation.</p>
   </div>
-    
-    
-    
-    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>

@@ -1,101 +1,50 @@
 
 
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
-  <meta charset="utf-8" />
-  
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  
   <title>Probes &mdash; Steam Audio C API  documentation</title>
-  
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/steamaudio.css?v=b5aaeb06" />
 
   
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/steamaudio.css" type="text/css" />
-
-  
-  
-
-  
-  
-
-  
-
-  
-  <!--[if lt IE 9]>
-    <script src="_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/doctools.js"></script>
-    
-    <script type="text/javascript" src="_static/js/theme.js"></script>
-
-    
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=7f41d439"></script>
+      <script src="_static/doctools.js?v=9a2dae69"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Baking" href="baking.html" />
     <link rel="prev" title="Path Effect" href="path-effect.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
 
           
-            <a href="index.html">
           
-
-          
+          <a href="index.html">
             
-            <img src="_static/steam-audio-logo.png" class="logo" alt="Logo"/>
-          
+              <img src="_static/steam-audio-logo.png" class="logo" alt="Logo"/>
           </a>
-
-          
-            
-            
-              <div class="version">
-                4.6.0
-              </div>
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
-              <p class="caption"><span class="caption-text">Steam Audio SDK</span></p>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Steam Audio SDK</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="guide.html">Programmer’s Guide</a></li>
@@ -125,10 +74,43 @@
 <li class="toctree-l2"><a class="reference internal" href="reflections-effect.html">Reflection Effect</a></li>
 <li class="toctree-l2"><a class="reference internal" href="path-effect.html">Path Effect</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Probes</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#typedefs">Typedefs</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#functions">Functions</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#structures">Structures</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#enumerations">Enumerations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#typedefs">Typedefs</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv413IPLProbeArray"><code class="docutils literal notranslate"><span class="pre">IPLProbeArray</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv413IPLProbeBatch"><code class="docutils literal notranslate"><span class="pre">IPLProbeBatch</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#functions">Functions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv419iplProbeArrayCreate10IPLContextP13IPLProbeArray"><code class="docutils literal notranslate"><span class="pre">iplProbeArrayCreate()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv419iplProbeArrayRetain13IPLProbeArray"><code class="docutils literal notranslate"><span class="pre">iplProbeArrayRetain()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv420iplProbeArrayReleaseP13IPLProbeArray"><code class="docutils literal notranslate"><span class="pre">iplProbeArrayRelease()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv427iplProbeArrayGenerateProbes13IPLProbeArray8IPLSceneP24IPLProbeGenerationParams"><code class="docutils literal notranslate"><span class="pre">iplProbeArrayGenerateProbes()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv425iplProbeArrayGetNumProbes13IPLProbeArray"><code class="docutils literal notranslate"><span class="pre">iplProbeArrayGetNumProbes()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv421iplProbeArrayGetProbe13IPLProbeArray8IPLint32"><code class="docutils literal notranslate"><span class="pre">iplProbeArrayGetProbe()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv419iplProbeBatchCreate10IPLContextP13IPLProbeBatch"><code class="docutils literal notranslate"><span class="pre">iplProbeBatchCreate()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv419iplProbeBatchRetain13IPLProbeBatch"><code class="docutils literal notranslate"><span class="pre">iplProbeBatchRetain()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv420iplProbeBatchReleaseP13IPLProbeBatch"><code class="docutils literal notranslate"><span class="pre">iplProbeBatchRelease()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv417iplProbeBatchLoad10IPLContext19IPLSerializedObjectP13IPLProbeBatch"><code class="docutils literal notranslate"><span class="pre">iplProbeBatchLoad()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv417iplProbeBatchSave13IPLProbeBatch19IPLSerializedObject"><code class="docutils literal notranslate"><span class="pre">iplProbeBatchSave()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv425iplProbeBatchGetNumProbes13IPLProbeBatch"><code class="docutils literal notranslate"><span class="pre">iplProbeBatchGetNumProbes()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv421iplProbeBatchAddProbe13IPLProbeBatch9IPLSphere"><code class="docutils literal notranslate"><span class="pre">iplProbeBatchAddProbe()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv426iplProbeBatchAddProbeArray13IPLProbeBatch13IPLProbeArray"><code class="docutils literal notranslate"><span class="pre">iplProbeBatchAddProbeArray()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv424iplProbeBatchRemoveProbe13IPLProbeBatch8IPLint32"><code class="docutils literal notranslate"><span class="pre">iplProbeBatchRemoveProbe()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv419iplProbeBatchCommit13IPLProbeBatch"><code class="docutils literal notranslate"><span class="pre">iplProbeBatchCommit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv423iplProbeBatchRemoveData13IPLProbeBatchP22IPLBakedDataIdentifier"><code class="docutils literal notranslate"><span class="pre">iplProbeBatchRemoveData()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv424iplProbeBatchGetDataSize13IPLProbeBatchP22IPLBakedDataIdentifier"><code class="docutils literal notranslate"><span class="pre">iplProbeBatchGetDataSize()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#structures">Structures</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv424IPLProbeGenerationParams"><code class="docutils literal notranslate"><span class="pre">IPLProbeGenerationParams</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv422IPLBakedDataIdentifier"><code class="docutils literal notranslate"><span class="pre">IPLBakedDataIdentifier</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#enumerations">Enumerations</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv422IPLProbeGenerationType"><code class="docutils literal notranslate"><span class="pre">IPLProbeGenerationType</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv416IPLBakedDataType"><code class="docutils literal notranslate"><span class="pre">IPLBakedDataType</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv421IPLBakedDataVariation"><code class="docutils literal notranslate"><span class="pre">IPLBakedDataVariation</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="baking.html">Baking</a></li>
@@ -137,104 +119,63 @@
 </li>
 </ul>
 
-            
-          
         </div>
-        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="index.html">Steam Audio C API</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
-      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-        
-          <li><a href="reference.html">API Reference</a> &raquo;</li>
-        
-      <li>Probes</li>
-    
-    
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="reference.html">API Reference</a></li>
+      <li class="breadcrumb-item active">Probes</li>
       <li class="wy-breadcrumbs-aside">
-        
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
-  <div class="section" id="probes">
-<h1>Probes<a class="headerlink" href="#probes" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="typedefs">
-<h2>Typedefs<a class="headerlink" href="#typedefs" title="Permalink to this headline">¶</a></h2>
+             
+  <section id="probes">
+<h1>Probes<a class="headerlink" href="#probes" title="Link to this heading"></a></h1>
+<section id="typedefs">
+<h2>Typedefs<a class="headerlink" href="#typedefs" title="Link to this heading"></a></h2>
 <dl class="cpp type">
 <dt class="sig sig-object cpp" id="_CPPv413IPLProbeArray">
-<span id="_CPPv313IPLProbeArray"></span><span id="_CPPv213IPLProbeArray"></span><span id="IPLProbeArray"></span><span class="target" id="group__probes_1gacc49db2daf623e42267a119fec475f14"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="n"><span class="pre">_IPLProbeArray_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">IPLProbeArray</span></span></span><a class="headerlink" href="#_CPPv413IPLProbeArray" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv313IPLProbeArray"></span><span id="_CPPv213IPLProbeArray"></span><span id="IPLProbeArray"></span><span class="target" id="group__probes_1gacc49db2daf623e42267a119fec475f14"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="n"><span class="pre">_IPLProbeArray_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">IPLProbeArray</span></span></span><a class="headerlink" href="#_CPPv413IPLProbeArray" title="Link to this definition"></a><br /></dt>
 <dd><p>An array of sound probes. </p>
 <p>Each probe has a position and a radius of influence. </p>
 </dd></dl>
 
 <dl class="cpp type">
 <dt class="sig sig-object cpp" id="_CPPv413IPLProbeBatch">
-<span id="_CPPv313IPLProbeBatch"></span><span id="_CPPv213IPLProbeBatch"></span><span id="IPLProbeBatch"></span><span class="target" id="group__probes_1ga24910d8e96da5f30c52c9377349b6932"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="n"><span class="pre">_IPLProbeBatch_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">IPLProbeBatch</span></span></span><a class="headerlink" href="#_CPPv413IPLProbeBatch" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv313IPLProbeBatch"></span><span id="_CPPv213IPLProbeBatch"></span><span id="IPLProbeBatch"></span><span class="target" id="group__probes_1ga24910d8e96da5f30c52c9377349b6932"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="n"><span class="pre">_IPLProbeBatch_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">IPLProbeBatch</span></span></span><a class="headerlink" href="#_CPPv413IPLProbeBatch" title="Link to this definition"></a><br /></dt>
 <dd><p>A batch of sound probes, along with associated data. </p>
 <p>The associated data may include reverb, reflections from a static source position, pathing, and more. This data is loaded and unloaded as a unit, either from disk or over the network. </p>
 </dd></dl>
 
-</div>
-<div class="section" id="functions">
-<h2>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="functions">
+<h2>Functions<a class="headerlink" href="#functions" title="Link to this heading"></a></h2>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv419iplProbeArrayCreate10IPLContextP13IPLProbeArray">
-<span id="_CPPv319iplProbeArrayCreate10IPLContextP13IPLProbeArray"></span><span id="_CPPv219iplProbeArrayCreate10IPLContextP13IPLProbeArray"></span><span id="iplProbeArrayCreate__IPLContext.IPLProbeArrayP"></span><span class="target" id="group__probes_1ga4a5f8b62ec9de3ce68bf5fa86501aee3"></span><a class="reference internal" href="types.html#_CPPv48IPLerror" title="IPLerror"><span class="n"><span class="pre">IPLerror</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplProbeArrayCreate</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="context.html#_CPPv410IPLContext" title="IPLContext"><span class="n"><span class="pre">IPLContext</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">context</span></span>, <a class="reference internal" href="#_CPPv413IPLProbeArray" title="IPLProbeArray"><span class="n"><span class="pre">IPLProbeArray</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">probeArray</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv419iplProbeArrayCreate10IPLContextP13IPLProbeArray" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv319iplProbeArrayCreate10IPLContextP13IPLProbeArray"></span><span id="_CPPv219iplProbeArrayCreate10IPLContextP13IPLProbeArray"></span><span id="iplProbeArrayCreate__IPLContext.IPLProbeArrayP"></span><span class="target" id="group__probes_1ga4a5f8b62ec9de3ce68bf5fa86501aee3"></span><a class="reference internal" href="types.html#_CPPv48IPLerror" title="IPLerror"><span class="n"><span class="pre">IPLerror</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplProbeArrayCreate</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="context.html#_CPPv410IPLContext" title="IPLContext"><span class="n"><span class="pre">IPLContext</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">context</span></span>, <a class="reference internal" href="#_CPPv413IPLProbeArray" title="IPLProbeArray"><span class="n"><span class="pre">IPLProbeArray</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">probeArray</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv419iplProbeArrayCreate10IPLContextP13IPLProbeArray" title="Link to this definition"></a><br /></dt>
 <dd><p>Creates an empty probe array. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>context</strong> – The context used to initialize Steam Audio. </p></li>
 <li><p><strong>probeArray</strong> – [out] The created probe array.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Status code indicating whether or not the operation succeeded. </p>
 </dd>
 </dl>
@@ -242,13 +183,13 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv419iplProbeArrayRetain13IPLProbeArray">
-<span id="_CPPv319iplProbeArrayRetain13IPLProbeArray"></span><span id="_CPPv219iplProbeArrayRetain13IPLProbeArray"></span><span id="iplProbeArrayRetain__IPLProbeArray"></span><span class="target" id="group__probes_1ga81ab315b83d52f2008e27efb65e13b55"></span><a class="reference internal" href="#_CPPv413IPLProbeArray" title="IPLProbeArray"><span class="n"><span class="pre">IPLProbeArray</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplProbeArrayRetain</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv413IPLProbeArray" title="IPLProbeArray"><span class="n"><span class="pre">IPLProbeArray</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">probeArray</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv419iplProbeArrayRetain13IPLProbeArray" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv319iplProbeArrayRetain13IPLProbeArray"></span><span id="_CPPv219iplProbeArrayRetain13IPLProbeArray"></span><span id="iplProbeArrayRetain__IPLProbeArray"></span><span class="target" id="group__probes_1ga81ab315b83d52f2008e27efb65e13b55"></span><a class="reference internal" href="#_CPPv413IPLProbeArray" title="IPLProbeArray"><span class="n"><span class="pre">IPLProbeArray</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplProbeArrayRetain</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv413IPLProbeArray" title="IPLProbeArray"><span class="n"><span class="pre">IPLProbeArray</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">probeArray</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv419iplProbeArrayRetain13IPLProbeArray" title="Link to this definition"></a><br /></dt>
 <dd><p>Retains an additional reference to a probe array. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>probeArray</strong> – The probe array to retain a reference to.</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The additional reference to the probe array. </p>
 </dd>
 </dl>
@@ -256,10 +197,10 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv420iplProbeArrayReleaseP13IPLProbeArray">
-<span id="_CPPv320iplProbeArrayReleaseP13IPLProbeArray"></span><span id="_CPPv220iplProbeArrayReleaseP13IPLProbeArray"></span><span id="iplProbeArrayRelease__IPLProbeArrayP"></span><span class="target" id="group__probes_1ga6122d51fea62165f61ca8c03bef6fac1"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplProbeArrayRelease</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv413IPLProbeArray" title="IPLProbeArray"><span class="n"><span class="pre">IPLProbeArray</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">probeArray</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv420iplProbeArrayReleaseP13IPLProbeArray" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv320iplProbeArrayReleaseP13IPLProbeArray"></span><span id="_CPPv220iplProbeArrayReleaseP13IPLProbeArray"></span><span id="iplProbeArrayRelease__IPLProbeArrayP"></span><span class="target" id="group__probes_1ga6122d51fea62165f61ca8c03bef6fac1"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplProbeArrayRelease</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv413IPLProbeArray" title="IPLProbeArray"><span class="n"><span class="pre">IPLProbeArray</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">probeArray</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv420iplProbeArrayReleaseP13IPLProbeArray" title="Link to this definition"></a><br /></dt>
 <dd><p>Releases a reference to a probe array. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>probeArray</strong> – The probe array to release a reference to. </p>
 </dd>
 </dl>
@@ -267,10 +208,10 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv427iplProbeArrayGenerateProbes13IPLProbeArray8IPLSceneP24IPLProbeGenerationParams">
-<span id="_CPPv327iplProbeArrayGenerateProbes13IPLProbeArray8IPLSceneP24IPLProbeGenerationParams"></span><span id="_CPPv227iplProbeArrayGenerateProbes13IPLProbeArray8IPLSceneP24IPLProbeGenerationParams"></span><span id="iplProbeArrayGenerateProbes__IPLProbeArray.IPLScene.IPLProbeGenerationParamsP"></span><span class="target" id="group__probes_1ga5b2eb54cca07156990f3c7216bbfab51"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplProbeArrayGenerateProbes</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv413IPLProbeArray" title="IPLProbeArray"><span class="n"><span class="pre">IPLProbeArray</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">probeArray</span></span>, <a class="reference internal" href="scene.html#_CPPv48IPLScene" title="IPLScene"><span class="n"><span class="pre">IPLScene</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">scene</span></span>, <a class="reference internal" href="#_CPPv424IPLProbeGenerationParams" title="IPLProbeGenerationParams"><span class="n"><span class="pre">IPLProbeGenerationParams</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">params</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv427iplProbeArrayGenerateProbes13IPLProbeArray8IPLSceneP24IPLProbeGenerationParams" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv327iplProbeArrayGenerateProbes13IPLProbeArray8IPLSceneP24IPLProbeGenerationParams"></span><span id="_CPPv227iplProbeArrayGenerateProbes13IPLProbeArray8IPLSceneP24IPLProbeGenerationParams"></span><span id="iplProbeArrayGenerateProbes__IPLProbeArray.IPLScene.IPLProbeGenerationParamsP"></span><span class="target" id="group__probes_1ga5b2eb54cca07156990f3c7216bbfab51"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplProbeArrayGenerateProbes</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv413IPLProbeArray" title="IPLProbeArray"><span class="n"><span class="pre">IPLProbeArray</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">probeArray</span></span>, <a class="reference internal" href="scene.html#_CPPv48IPLScene" title="IPLScene"><span class="n"><span class="pre">IPLScene</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">scene</span></span>, <a class="reference internal" href="#_CPPv424IPLProbeGenerationParams" title="IPLProbeGenerationParams"><span class="n"><span class="pre">IPLProbeGenerationParams</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">params</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv427iplProbeArrayGenerateProbes13IPLProbeArray8IPLSceneP24IPLProbeGenerationParams" title="Link to this definition"></a><br /></dt>
 <dd><p>Generates probes and adds them to a probe array. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>scene</strong> – The scene in which to generate probes. </p></li>
 <li><p><strong>params</strong> – Parameters to use for generating probes. </p></li>
@@ -282,12 +223,12 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv425iplProbeArrayGetNumProbes13IPLProbeArray">
-<span id="_CPPv325iplProbeArrayGetNumProbes13IPLProbeArray"></span><span id="_CPPv225iplProbeArrayGetNumProbes13IPLProbeArray"></span><span id="iplProbeArrayGetNumProbes__IPLProbeArray"></span><span class="target" id="group__probes_1ga9be916a716251f1b76a8b0a611be374a"></span><a class="reference internal" href="types.html#_CPPv48IPLint32" title="IPLint32"><span class="n"><span class="pre">IPLint32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplProbeArrayGetNumProbes</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv413IPLProbeArray" title="IPLProbeArray"><span class="n"><span class="pre">IPLProbeArray</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">probeArray</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv425iplProbeArrayGetNumProbes13IPLProbeArray" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv325iplProbeArrayGetNumProbes13IPLProbeArray"></span><span id="_CPPv225iplProbeArrayGetNumProbes13IPLProbeArray"></span><span id="iplProbeArrayGetNumProbes__IPLProbeArray"></span><span class="target" id="group__probes_1ga9be916a716251f1b76a8b0a611be374a"></span><a class="reference internal" href="types.html#_CPPv48IPLint32" title="IPLint32"><span class="n"><span class="pre">IPLint32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplProbeArrayGetNumProbes</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv413IPLProbeArray" title="IPLProbeArray"><span class="n"><span class="pre">IPLProbeArray</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">probeArray</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv425iplProbeArrayGetNumProbes13IPLProbeArray" title="Link to this definition"></a><br /></dt>
 <dd><dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>probeArray</strong> – The probe array. </p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The number of probes in a probe array.</p>
 </dd>
 </dl>
@@ -295,15 +236,15 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv421iplProbeArrayGetProbe13IPLProbeArray8IPLint32">
-<span id="_CPPv321iplProbeArrayGetProbe13IPLProbeArray8IPLint32"></span><span id="_CPPv221iplProbeArrayGetProbe13IPLProbeArray8IPLint32"></span><span id="iplProbeArrayGetProbe__IPLProbeArray.IPLint32"></span><span class="target" id="group__probes_1gac23745a8721d294b943628158149bb80"></span><a class="reference internal" href="geometry.html#_CPPv49IPLSphere" title="IPLSphere"><span class="n"><span class="pre">IPLSphere</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplProbeArrayGetProbe</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv413IPLProbeArray" title="IPLProbeArray"><span class="n"><span class="pre">IPLProbeArray</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">probeArray</span></span>, <a class="reference internal" href="types.html#_CPPv48IPLint32" title="IPLint32"><span class="n"><span class="pre">IPLint32</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">index</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv421iplProbeArrayGetProbe13IPLProbeArray8IPLint32" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv321iplProbeArrayGetProbe13IPLProbeArray8IPLint32"></span><span id="_CPPv221iplProbeArrayGetProbe13IPLProbeArray8IPLint32"></span><span id="iplProbeArrayGetProbe__IPLProbeArray.IPLint32"></span><span class="target" id="group__probes_1gac23745a8721d294b943628158149bb80"></span><a class="reference internal" href="geometry.html#_CPPv49IPLSphere" title="IPLSphere"><span class="n"><span class="pre">IPLSphere</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplProbeArrayGetProbe</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv413IPLProbeArray" title="IPLProbeArray"><span class="n"><span class="pre">IPLProbeArray</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">probeArray</span></span>, <a class="reference internal" href="types.html#_CPPv48IPLint32" title="IPLint32"><span class="n"><span class="pre">IPLint32</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">index</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv421iplProbeArrayGetProbe13IPLProbeArray8IPLint32" title="Link to this definition"></a><br /></dt>
 <dd><dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>probeArray</strong> – The probe array. </p></li>
 <li><p><strong>index</strong> – Index of the probe within the array. </p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The probe at a given index in a probe array.</p>
 </dd>
 </dl>
@@ -311,16 +252,16 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv419iplProbeBatchCreate10IPLContextP13IPLProbeBatch">
-<span id="_CPPv319iplProbeBatchCreate10IPLContextP13IPLProbeBatch"></span><span id="_CPPv219iplProbeBatchCreate10IPLContextP13IPLProbeBatch"></span><span id="iplProbeBatchCreate__IPLContext.IPLProbeBatchP"></span><span class="target" id="group__probes_1ga1f1064662db375221b4e35fa6a2d869a"></span><a class="reference internal" href="types.html#_CPPv48IPLerror" title="IPLerror"><span class="n"><span class="pre">IPLerror</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplProbeBatchCreate</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="context.html#_CPPv410IPLContext" title="IPLContext"><span class="n"><span class="pre">IPLContext</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">context</span></span>, <a class="reference internal" href="#_CPPv413IPLProbeBatch" title="IPLProbeBatch"><span class="n"><span class="pre">IPLProbeBatch</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">probeBatch</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv419iplProbeBatchCreate10IPLContextP13IPLProbeBatch" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv319iplProbeBatchCreate10IPLContextP13IPLProbeBatch"></span><span id="_CPPv219iplProbeBatchCreate10IPLContextP13IPLProbeBatch"></span><span id="iplProbeBatchCreate__IPLContext.IPLProbeBatchP"></span><span class="target" id="group__probes_1ga1f1064662db375221b4e35fa6a2d869a"></span><a class="reference internal" href="types.html#_CPPv48IPLerror" title="IPLerror"><span class="n"><span class="pre">IPLerror</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplProbeBatchCreate</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="context.html#_CPPv410IPLContext" title="IPLContext"><span class="n"><span class="pre">IPLContext</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">context</span></span>, <a class="reference internal" href="#_CPPv413IPLProbeBatch" title="IPLProbeBatch"><span class="n"><span class="pre">IPLProbeBatch</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">probeBatch</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv419iplProbeBatchCreate10IPLContextP13IPLProbeBatch" title="Link to this definition"></a><br /></dt>
 <dd><p>Creates an empty probe batch. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>context</strong> – The context used to initialize Steam Audio. </p></li>
 <li><p><strong>probeBatch</strong> – [out] The created probe batch.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Status code indicating whether or not the operation succeeded. </p>
 </dd>
 </dl>
@@ -328,13 +269,13 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv419iplProbeBatchRetain13IPLProbeBatch">
-<span id="_CPPv319iplProbeBatchRetain13IPLProbeBatch"></span><span id="_CPPv219iplProbeBatchRetain13IPLProbeBatch"></span><span id="iplProbeBatchRetain__IPLProbeBatch"></span><span class="target" id="group__probes_1ga856292f827b8d639848dbb9f76218909"></span><a class="reference internal" href="#_CPPv413IPLProbeBatch" title="IPLProbeBatch"><span class="n"><span class="pre">IPLProbeBatch</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplProbeBatchRetain</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv413IPLProbeBatch" title="IPLProbeBatch"><span class="n"><span class="pre">IPLProbeBatch</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">probeBatch</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv419iplProbeBatchRetain13IPLProbeBatch" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv319iplProbeBatchRetain13IPLProbeBatch"></span><span id="_CPPv219iplProbeBatchRetain13IPLProbeBatch"></span><span id="iplProbeBatchRetain__IPLProbeBatch"></span><span class="target" id="group__probes_1ga856292f827b8d639848dbb9f76218909"></span><a class="reference internal" href="#_CPPv413IPLProbeBatch" title="IPLProbeBatch"><span class="n"><span class="pre">IPLProbeBatch</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplProbeBatchRetain</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv413IPLProbeBatch" title="IPLProbeBatch"><span class="n"><span class="pre">IPLProbeBatch</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">probeBatch</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv419iplProbeBatchRetain13IPLProbeBatch" title="Link to this definition"></a><br /></dt>
 <dd><p>Retains an additional reference to a probe batch. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>probeBatch</strong> – The probe batch to retain a reference to.</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The additional reference to the probe batch. </p>
 </dd>
 </dl>
@@ -342,10 +283,10 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv420iplProbeBatchReleaseP13IPLProbeBatch">
-<span id="_CPPv320iplProbeBatchReleaseP13IPLProbeBatch"></span><span id="_CPPv220iplProbeBatchReleaseP13IPLProbeBatch"></span><span id="iplProbeBatchRelease__IPLProbeBatchP"></span><span class="target" id="group__probes_1ga9898fa37087769c5602376058683d064"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplProbeBatchRelease</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv413IPLProbeBatch" title="IPLProbeBatch"><span class="n"><span class="pre">IPLProbeBatch</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">probeBatch</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv420iplProbeBatchReleaseP13IPLProbeBatch" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv320iplProbeBatchReleaseP13IPLProbeBatch"></span><span id="_CPPv220iplProbeBatchReleaseP13IPLProbeBatch"></span><span id="iplProbeBatchRelease__IPLProbeBatchP"></span><span class="target" id="group__probes_1ga9898fa37087769c5602376058683d064"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplProbeBatchRelease</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv413IPLProbeBatch" title="IPLProbeBatch"><span class="n"><span class="pre">IPLProbeBatch</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">probeBatch</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv420iplProbeBatchReleaseP13IPLProbeBatch" title="Link to this definition"></a><br /></dt>
 <dd><p>Releases a reference to a probe batch. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>probeBatch</strong> – The probe batch to release a reference to. </p>
 </dd>
 </dl>
@@ -353,18 +294,18 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv417iplProbeBatchLoad10IPLContext19IPLSerializedObjectP13IPLProbeBatch">
-<span id="_CPPv317iplProbeBatchLoad10IPLContext19IPLSerializedObjectP13IPLProbeBatch"></span><span id="_CPPv217iplProbeBatchLoad10IPLContext19IPLSerializedObjectP13IPLProbeBatch"></span><span id="iplProbeBatchLoad__IPLContext.IPLSerializedObject.IPLProbeBatchP"></span><span class="target" id="group__probes_1gab3b4beaf57685c7f23bbf5d567b26d0e"></span><a class="reference internal" href="types.html#_CPPv48IPLerror" title="IPLerror"><span class="n"><span class="pre">IPLerror</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplProbeBatchLoad</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="context.html#_CPPv410IPLContext" title="IPLContext"><span class="n"><span class="pre">IPLContext</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">context</span></span>, <a class="reference internal" href="serialization.html#_CPPv419IPLSerializedObject" title="IPLSerializedObject"><span class="n"><span class="pre">IPLSerializedObject</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">serializedObject</span></span>, <a class="reference internal" href="#_CPPv413IPLProbeBatch" title="IPLProbeBatch"><span class="n"><span class="pre">IPLProbeBatch</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">probeBatch</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv417iplProbeBatchLoad10IPLContext19IPLSerializedObjectP13IPLProbeBatch" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv317iplProbeBatchLoad10IPLContext19IPLSerializedObjectP13IPLProbeBatch"></span><span id="_CPPv217iplProbeBatchLoad10IPLContext19IPLSerializedObjectP13IPLProbeBatch"></span><span id="iplProbeBatchLoad__IPLContext.IPLSerializedObject.IPLProbeBatchP"></span><span class="target" id="group__probes_1gab3b4beaf57685c7f23bbf5d567b26d0e"></span><a class="reference internal" href="types.html#_CPPv48IPLerror" title="IPLerror"><span class="n"><span class="pre">IPLerror</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplProbeBatchLoad</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="context.html#_CPPv410IPLContext" title="IPLContext"><span class="n"><span class="pre">IPLContext</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">context</span></span>, <a class="reference internal" href="serialization.html#_CPPv419IPLSerializedObject" title="IPLSerializedObject"><span class="n"><span class="pre">IPLSerializedObject</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">serializedObject</span></span>, <a class="reference internal" href="#_CPPv413IPLProbeBatch" title="IPLProbeBatch"><span class="n"><span class="pre">IPLProbeBatch</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">probeBatch</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv417iplProbeBatchLoad10IPLContext19IPLSerializedObjectP13IPLProbeBatch" title="Link to this definition"></a><br /></dt>
 <dd><p>Loads a probe batch from a serialized object. </p>
 <p>Typically, the serialized object will be created from a byte array loaded from disk or over the network.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>context</strong> – The context used to initialize Steam Audio. </p></li>
 <li><p><strong>serializedObject</strong> – The serialized object from which to load the probe batch. </p></li>
 <li><p><strong>probeBatch</strong> – [out] The created probe batch.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Status code indicating whether or not the operation succeeded. </p>
 </dd>
 </dl>
@@ -372,11 +313,11 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv417iplProbeBatchSave13IPLProbeBatch19IPLSerializedObject">
-<span id="_CPPv317iplProbeBatchSave13IPLProbeBatch19IPLSerializedObject"></span><span id="_CPPv217iplProbeBatchSave13IPLProbeBatch19IPLSerializedObject"></span><span id="iplProbeBatchSave__IPLProbeBatch.IPLSerializedObject"></span><span class="target" id="group__probes_1gac6272891e458bdf2d43f3835fc18ad7c"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplProbeBatchSave</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv413IPLProbeBatch" title="IPLProbeBatch"><span class="n"><span class="pre">IPLProbeBatch</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">probeBatch</span></span>, <a class="reference internal" href="serialization.html#_CPPv419IPLSerializedObject" title="IPLSerializedObject"><span class="n"><span class="pre">IPLSerializedObject</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">serializedObject</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv417iplProbeBatchSave13IPLProbeBatch19IPLSerializedObject" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv317iplProbeBatchSave13IPLProbeBatch19IPLSerializedObject"></span><span id="_CPPv217iplProbeBatchSave13IPLProbeBatch19IPLSerializedObject"></span><span id="iplProbeBatchSave__IPLProbeBatch.IPLSerializedObject"></span><span class="target" id="group__probes_1gac6272891e458bdf2d43f3835fc18ad7c"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplProbeBatchSave</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv413IPLProbeBatch" title="IPLProbeBatch"><span class="n"><span class="pre">IPLProbeBatch</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">probeBatch</span></span>, <a class="reference internal" href="serialization.html#_CPPv419IPLSerializedObject" title="IPLSerializedObject"><span class="n"><span class="pre">IPLSerializedObject</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">serializedObject</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv417iplProbeBatchSave13IPLProbeBatch19IPLSerializedObject" title="Link to this definition"></a><br /></dt>
 <dd><p>Saves a probe batch to a serialized object. </p>
 <p>Typically, the serialized object will then be saved to disk.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>probeBatch</strong> – The probe batch to save. </p></li>
 <li><p><strong>serializedObject</strong> – The serialized object into which to save the probe batch. </p></li>
@@ -387,12 +328,12 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv425iplProbeBatchGetNumProbes13IPLProbeBatch">
-<span id="_CPPv325iplProbeBatchGetNumProbes13IPLProbeBatch"></span><span id="_CPPv225iplProbeBatchGetNumProbes13IPLProbeBatch"></span><span id="iplProbeBatchGetNumProbes__IPLProbeBatch"></span><span class="target" id="group__probes_1gac3aa74a30f4688b0db21399968b76e07"></span><a class="reference internal" href="types.html#_CPPv48IPLint32" title="IPLint32"><span class="n"><span class="pre">IPLint32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplProbeBatchGetNumProbes</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv413IPLProbeBatch" title="IPLProbeBatch"><span class="n"><span class="pre">IPLProbeBatch</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">probeBatch</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv425iplProbeBatchGetNumProbes13IPLProbeBatch" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv325iplProbeBatchGetNumProbes13IPLProbeBatch"></span><span id="_CPPv225iplProbeBatchGetNumProbes13IPLProbeBatch"></span><span id="iplProbeBatchGetNumProbes__IPLProbeBatch"></span><span class="target" id="group__probes_1gac3aa74a30f4688b0db21399968b76e07"></span><a class="reference internal" href="types.html#_CPPv48IPLint32" title="IPLint32"><span class="n"><span class="pre">IPLint32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplProbeBatchGetNumProbes</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv413IPLProbeBatch" title="IPLProbeBatch"><span class="n"><span class="pre">IPLProbeBatch</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">probeBatch</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv425iplProbeBatchGetNumProbes13IPLProbeBatch" title="Link to this definition"></a><br /></dt>
 <dd><dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>probeBatch</strong> – The probe batch. </p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The number of probes in a probe batch.</p>
 </dd>
 </dl>
@@ -400,11 +341,11 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv421iplProbeBatchAddProbe13IPLProbeBatch9IPLSphere">
-<span id="_CPPv321iplProbeBatchAddProbe13IPLProbeBatch9IPLSphere"></span><span id="_CPPv221iplProbeBatchAddProbe13IPLProbeBatch9IPLSphere"></span><span id="iplProbeBatchAddProbe__IPLProbeBatch.IPLSphere"></span><span class="target" id="group__probes_1gaebadcab2c67b7c155552906e1df01dbd"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplProbeBatchAddProbe</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv413IPLProbeBatch" title="IPLProbeBatch"><span class="n"><span class="pre">IPLProbeBatch</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">probeBatch</span></span>, <a class="reference internal" href="geometry.html#_CPPv49IPLSphere" title="IPLSphere"><span class="n"><span class="pre">IPLSphere</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">probe</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv421iplProbeBatchAddProbe13IPLProbeBatch9IPLSphere" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv321iplProbeBatchAddProbe13IPLProbeBatch9IPLSphere"></span><span id="_CPPv221iplProbeBatchAddProbe13IPLProbeBatch9IPLSphere"></span><span id="iplProbeBatchAddProbe__IPLProbeBatch.IPLSphere"></span><span class="target" id="group__probes_1gaebadcab2c67b7c155552906e1df01dbd"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplProbeBatchAddProbe</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv413IPLProbeBatch" title="IPLProbeBatch"><span class="n"><span class="pre">IPLProbeBatch</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">probeBatch</span></span>, <a class="reference internal" href="geometry.html#_CPPv49IPLSphere" title="IPLSphere"><span class="n"><span class="pre">IPLSphere</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">probe</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv421iplProbeBatchAddProbe13IPLProbeBatch9IPLSphere" title="Link to this definition"></a><br /></dt>
 <dd><p>Adds a probe to a batch. </p>
 <p>The new probe will be added as the last probe in the batch.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>probeBatch</strong> – The probe batch. </p></li>
 <li><p><strong>probe</strong> – The probe to add. </p></li>
@@ -415,11 +356,11 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv426iplProbeBatchAddProbeArray13IPLProbeBatch13IPLProbeArray">
-<span id="_CPPv326iplProbeBatchAddProbeArray13IPLProbeBatch13IPLProbeArray"></span><span id="_CPPv226iplProbeBatchAddProbeArray13IPLProbeBatch13IPLProbeArray"></span><span id="iplProbeBatchAddProbeArray__IPLProbeBatch.IPLProbeArray"></span><span class="target" id="group__probes_1ga9012ebcab9cd5c1f628a122267bf308c"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplProbeBatchAddProbeArray</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv413IPLProbeBatch" title="IPLProbeBatch"><span class="n"><span class="pre">IPLProbeBatch</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">probeBatch</span></span>, <a class="reference internal" href="#_CPPv413IPLProbeArray" title="IPLProbeArray"><span class="n"><span class="pre">IPLProbeArray</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">probeArray</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv426iplProbeBatchAddProbeArray13IPLProbeBatch13IPLProbeArray" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv326iplProbeBatchAddProbeArray13IPLProbeBatch13IPLProbeArray"></span><span id="_CPPv226iplProbeBatchAddProbeArray13IPLProbeBatch13IPLProbeArray"></span><span id="iplProbeBatchAddProbeArray__IPLProbeBatch.IPLProbeArray"></span><span class="target" id="group__probes_1ga9012ebcab9cd5c1f628a122267bf308c"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplProbeBatchAddProbeArray</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv413IPLProbeBatch" title="IPLProbeBatch"><span class="n"><span class="pre">IPLProbeBatch</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">probeBatch</span></span>, <a class="reference internal" href="#_CPPv413IPLProbeArray" title="IPLProbeArray"><span class="n"><span class="pre">IPLProbeArray</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">probeArray</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv426iplProbeBatchAddProbeArray13IPLProbeBatch13IPLProbeArray" title="Link to this definition"></a><br /></dt>
 <dd><p>Adds every probe in an array to a batch. </p>
 <p>The new probes will be added, in order, at the end of the batch.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>probeBatch</strong> – The probe batch. </p></li>
 <li><p><strong>probeArray</strong> – The probe array containing the probes to add. </p></li>
@@ -430,10 +371,10 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv424iplProbeBatchRemoveProbe13IPLProbeBatch8IPLint32">
-<span id="_CPPv324iplProbeBatchRemoveProbe13IPLProbeBatch8IPLint32"></span><span id="_CPPv224iplProbeBatchRemoveProbe13IPLProbeBatch8IPLint32"></span><span id="iplProbeBatchRemoveProbe__IPLProbeBatch.IPLint32"></span><span class="target" id="group__probes_1ga880b61f1c23fc627304f0fc0690b1895"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplProbeBatchRemoveProbe</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv413IPLProbeBatch" title="IPLProbeBatch"><span class="n"><span class="pre">IPLProbeBatch</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">probeBatch</span></span>, <a class="reference internal" href="types.html#_CPPv48IPLint32" title="IPLint32"><span class="n"><span class="pre">IPLint32</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">index</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv424iplProbeBatchRemoveProbe13IPLProbeBatch8IPLint32" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv324iplProbeBatchRemoveProbe13IPLProbeBatch8IPLint32"></span><span id="_CPPv224iplProbeBatchRemoveProbe13IPLProbeBatch8IPLint32"></span><span id="iplProbeBatchRemoveProbe__IPLProbeBatch.IPLint32"></span><span class="target" id="group__probes_1ga880b61f1c23fc627304f0fc0690b1895"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplProbeBatchRemoveProbe</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv413IPLProbeBatch" title="IPLProbeBatch"><span class="n"><span class="pre">IPLProbeBatch</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">probeBatch</span></span>, <a class="reference internal" href="types.html#_CPPv48IPLint32" title="IPLint32"><span class="n"><span class="pre">IPLint32</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">index</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv424iplProbeBatchRemoveProbe13IPLProbeBatch8IPLint32" title="Link to this definition"></a><br /></dt>
 <dd><p>Removes a probe from a batch. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>probeBatch</strong> – The probe batch. </p></li>
 <li><p><strong>index</strong> – Index of the probe to remove. </p></li>
@@ -444,11 +385,11 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv419iplProbeBatchCommit13IPLProbeBatch">
-<span id="_CPPv319iplProbeBatchCommit13IPLProbeBatch"></span><span id="_CPPv219iplProbeBatchCommit13IPLProbeBatch"></span><span id="iplProbeBatchCommit__IPLProbeBatch"></span><span class="target" id="group__probes_1ga4380c5c52ec75d281f16e8e16063faf8"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplProbeBatchCommit</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv413IPLProbeBatch" title="IPLProbeBatch"><span class="n"><span class="pre">IPLProbeBatch</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">probeBatch</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv419iplProbeBatchCommit13IPLProbeBatch" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv319iplProbeBatchCommit13IPLProbeBatch"></span><span id="_CPPv219iplProbeBatchCommit13IPLProbeBatch"></span><span id="iplProbeBatchCommit__IPLProbeBatch"></span><span class="target" id="group__probes_1ga4380c5c52ec75d281f16e8e16063faf8"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplProbeBatchCommit</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv413IPLProbeBatch" title="IPLProbeBatch"><span class="n"><span class="pre">IPLProbeBatch</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">probeBatch</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv419iplProbeBatchCommit13IPLProbeBatch" title="Link to this definition"></a><br /></dt>
 <dd><p>Commits all changes made to a probe batch since this function was last called (or since the probe batch was first created, if this function was never called). </p>
 <p>This function must be called after adding, removing, or updating any probes in the batch, for the changes to take effect.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>probeBatch</strong> – The probe batch. </p>
 </dd>
 </dl>
@@ -456,10 +397,10 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv423iplProbeBatchRemoveData13IPLProbeBatchP22IPLBakedDataIdentifier">
-<span id="_CPPv323iplProbeBatchRemoveData13IPLProbeBatchP22IPLBakedDataIdentifier"></span><span id="_CPPv223iplProbeBatchRemoveData13IPLProbeBatchP22IPLBakedDataIdentifier"></span><span id="iplProbeBatchRemoveData__IPLProbeBatch.IPLBakedDataIdentifierP"></span><span class="target" id="group__probes_1ga42b3e09b62d113c2220cd3d67191ff97"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplProbeBatchRemoveData</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv413IPLProbeBatch" title="IPLProbeBatch"><span class="n"><span class="pre">IPLProbeBatch</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">probeBatch</span></span>, <a class="reference internal" href="#_CPPv422IPLBakedDataIdentifier" title="IPLBakedDataIdentifier"><span class="n"><span class="pre">IPLBakedDataIdentifier</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">identifier</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv423iplProbeBatchRemoveData13IPLProbeBatchP22IPLBakedDataIdentifier" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv323iplProbeBatchRemoveData13IPLProbeBatchP22IPLBakedDataIdentifier"></span><span id="_CPPv223iplProbeBatchRemoveData13IPLProbeBatchP22IPLBakedDataIdentifier"></span><span id="iplProbeBatchRemoveData__IPLProbeBatch.IPLBakedDataIdentifierP"></span><span class="target" id="group__probes_1ga42b3e09b62d113c2220cd3d67191ff97"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplProbeBatchRemoveData</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv413IPLProbeBatch" title="IPLProbeBatch"><span class="n"><span class="pre">IPLProbeBatch</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">probeBatch</span></span>, <a class="reference internal" href="#_CPPv422IPLBakedDataIdentifier" title="IPLBakedDataIdentifier"><span class="n"><span class="pre">IPLBakedDataIdentifier</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">identifier</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv423iplProbeBatchRemoveData13IPLProbeBatchP22IPLBakedDataIdentifier" title="Link to this definition"></a><br /></dt>
 <dd><p>Deletes a specific layer of data from a probe batch. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>probeBatch</strong> – The probe batch. </p></li>
 <li><p><strong>identifier</strong> – The identifier of the baked data layer to delete. </p></li>
@@ -470,52 +411,52 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv424iplProbeBatchGetDataSize13IPLProbeBatchP22IPLBakedDataIdentifier">
-<span id="_CPPv324iplProbeBatchGetDataSize13IPLProbeBatchP22IPLBakedDataIdentifier"></span><span id="_CPPv224iplProbeBatchGetDataSize13IPLProbeBatchP22IPLBakedDataIdentifier"></span><span id="iplProbeBatchGetDataSize__IPLProbeBatch.IPLBakedDataIdentifierP"></span><span class="target" id="group__probes_1ga5dcb52cfc1104f9ca71f854315ae8928"></span><a class="reference internal" href="types.html#_CPPv47IPLsize" title="IPLsize"><span class="n"><span class="pre">IPLsize</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplProbeBatchGetDataSize</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv413IPLProbeBatch" title="IPLProbeBatch"><span class="n"><span class="pre">IPLProbeBatch</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">probeBatch</span></span>, <a class="reference internal" href="#_CPPv422IPLBakedDataIdentifier" title="IPLBakedDataIdentifier"><span class="n"><span class="pre">IPLBakedDataIdentifier</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">identifier</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv424iplProbeBatchGetDataSize13IPLProbeBatchP22IPLBakedDataIdentifier" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv324iplProbeBatchGetDataSize13IPLProbeBatchP22IPLBakedDataIdentifier"></span><span id="_CPPv224iplProbeBatchGetDataSize13IPLProbeBatchP22IPLBakedDataIdentifier"></span><span id="iplProbeBatchGetDataSize__IPLProbeBatch.IPLBakedDataIdentifierP"></span><span class="target" id="group__probes_1ga5dcb52cfc1104f9ca71f854315ae8928"></span><a class="reference internal" href="types.html#_CPPv47IPLsize" title="IPLsize"><span class="n"><span class="pre">IPLsize</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplProbeBatchGetDataSize</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv413IPLProbeBatch" title="IPLProbeBatch"><span class="n"><span class="pre">IPLProbeBatch</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">probeBatch</span></span>, <a class="reference internal" href="#_CPPv422IPLBakedDataIdentifier" title="IPLBakedDataIdentifier"><span class="n"><span class="pre">IPLBakedDataIdentifier</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">identifier</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv424iplProbeBatchGetDataSize13IPLProbeBatchP22IPLBakedDataIdentifier" title="Link to this definition"></a><br /></dt>
 <dd><dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>probeBatch</strong> – The probe batch. </p></li>
 <li><p><strong>identifier</strong> – The identifier of the baked data layer. </p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The size (in bytes) of a specific baked data layer in a probe batch.</p>
 </dd>
 </dl>
 </dd></dl>
 
-</div>
-<div class="section" id="structures">
-<h2>Structures<a class="headerlink" href="#structures" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="structures">
+<h2>Structures<a class="headerlink" href="#structures" title="Link to this heading"></a></h2>
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv424IPLProbeGenerationParams">
-<span id="_CPPv324IPLProbeGenerationParams"></span><span id="_CPPv224IPLProbeGenerationParams"></span><span id="IPLProbeGenerationParams"></span><span class="target" id="struct_i_p_l_probe_generation_params"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLProbeGenerationParams</span></span></span><a class="headerlink" href="#_CPPv424IPLProbeGenerationParams" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv324IPLProbeGenerationParams"></span><span id="_CPPv224IPLProbeGenerationParams"></span><span id="IPLProbeGenerationParams"></span><span class="target" id="struct_i_p_l_probe_generation_params"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLProbeGenerationParams</span></span></span><a class="headerlink" href="#_CPPv424IPLProbeGenerationParams" title="Link to this definition"></a><br /></dt>
 <dd><p>Settings used to generate probes. </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N24IPLProbeGenerationParams4typeE">
-<span id="_CPPv3N24IPLProbeGenerationParams4typeE"></span><span id="_CPPv2N24IPLProbeGenerationParams4typeE"></span><span id="IPLProbeGenerationParams::type__IPLProbeGenerationType"></span><span class="target" id="struct_i_p_l_probe_generation_params_1a5e900908367f4b4bccd47dc9753b2805"></span><a class="reference internal" href="#_CPPv422IPLProbeGenerationType" title="IPLProbeGenerationType"><span class="n"><span class="pre">IPLProbeGenerationType</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">type</span></span></span><a class="headerlink" href="#_CPPv4N24IPLProbeGenerationParams4typeE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N24IPLProbeGenerationParams4typeE"></span><span id="_CPPv2N24IPLProbeGenerationParams4typeE"></span><span id="IPLProbeGenerationParams::type__IPLProbeGenerationType"></span><span class="target" id="struct_i_p_l_probe_generation_params_1a5e900908367f4b4bccd47dc9753b2805"></span><a class="reference internal" href="#_CPPv422IPLProbeGenerationType" title="IPLProbeGenerationType"><span class="n"><span class="pre">IPLProbeGenerationType</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">type</span></span></span><a class="headerlink" href="#_CPPv4N24IPLProbeGenerationParams4typeE" title="Link to this definition"></a><br /></dt>
 <dd><p>The algorithm to use for generating probes. </p>
 </dd></dl>
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N24IPLProbeGenerationParams7spacingE">
-<span id="_CPPv3N24IPLProbeGenerationParams7spacingE"></span><span id="_CPPv2N24IPLProbeGenerationParams7spacingE"></span><span id="IPLProbeGenerationParams::spacing__IPLfloat32"></span><span class="target" id="struct_i_p_l_probe_generation_params_1aa91864f999fa9b65127ad2805cd6e7fe"></span><a class="reference internal" href="types.html#_CPPv410IPLfloat32" title="IPLfloat32"><span class="n"><span class="pre">IPLfloat32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">spacing</span></span></span><a class="headerlink" href="#_CPPv4N24IPLProbeGenerationParams7spacingE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N24IPLProbeGenerationParams7spacingE"></span><span id="_CPPv2N24IPLProbeGenerationParams7spacingE"></span><span id="IPLProbeGenerationParams::spacing__IPLfloat32"></span><span class="target" id="struct_i_p_l_probe_generation_params_1aa91864f999fa9b65127ad2805cd6e7fe"></span><a class="reference internal" href="types.html#_CPPv410IPLfloat32" title="IPLfloat32"><span class="n"><span class="pre">IPLfloat32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">spacing</span></span></span><a class="headerlink" href="#_CPPv4N24IPLProbeGenerationParams7spacingE" title="Link to this definition"></a><br /></dt>
 <dd><p>Spacing (in meters) between two neighboring probes. </p>
 <p>Only for <code class="docutils literal notranslate"><span class="pre">IPL_PROBEGENERATIONTYPE_UNIFORMFLOOR</span></code>. </p>
 </dd></dl>
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N24IPLProbeGenerationParams6heightE">
-<span id="_CPPv3N24IPLProbeGenerationParams6heightE"></span><span id="_CPPv2N24IPLProbeGenerationParams6heightE"></span><span id="IPLProbeGenerationParams::height__IPLfloat32"></span><span class="target" id="struct_i_p_l_probe_generation_params_1a574fa38f61229fd63eac00fb9de545f9"></span><a class="reference internal" href="types.html#_CPPv410IPLfloat32" title="IPLfloat32"><span class="n"><span class="pre">IPLfloat32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">height</span></span></span><a class="headerlink" href="#_CPPv4N24IPLProbeGenerationParams6heightE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N24IPLProbeGenerationParams6heightE"></span><span id="_CPPv2N24IPLProbeGenerationParams6heightE"></span><span id="IPLProbeGenerationParams::height__IPLfloat32"></span><span class="target" id="struct_i_p_l_probe_generation_params_1a574fa38f61229fd63eac00fb9de545f9"></span><a class="reference internal" href="types.html#_CPPv410IPLfloat32" title="IPLfloat32"><span class="n"><span class="pre">IPLfloat32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">height</span></span></span><a class="headerlink" href="#_CPPv4N24IPLProbeGenerationParams6heightE" title="Link to this definition"></a><br /></dt>
 <dd><p>Height (in meters) above the floor at which probes will be generated. </p>
 <p>Only for <code class="docutils literal notranslate"><span class="pre">IPL_PROBEGENERATIONTYPE_UNIFORMFLOOR</span></code>. </p>
 </dd></dl>
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N24IPLProbeGenerationParams9transformE">
-<span id="_CPPv3N24IPLProbeGenerationParams9transformE"></span><span id="_CPPv2N24IPLProbeGenerationParams9transformE"></span><span id="IPLProbeGenerationParams::transform__IPLMatrix4x4"></span><span class="target" id="struct_i_p_l_probe_generation_params_1a81a45232d1564c84f4ad1485d3c4ada8"></span><a class="reference internal" href="geometry.html#_CPPv412IPLMatrix4x4" title="IPLMatrix4x4"><span class="n"><span class="pre">IPLMatrix4x4</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">transform</span></span></span><a class="headerlink" href="#_CPPv4N24IPLProbeGenerationParams9transformE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N24IPLProbeGenerationParams9transformE"></span><span id="_CPPv2N24IPLProbeGenerationParams9transformE"></span><span id="IPLProbeGenerationParams::transform__IPLMatrix4x4"></span><span class="target" id="struct_i_p_l_probe_generation_params_1a81a45232d1564c84f4ad1485d3c4ada8"></span><a class="reference internal" href="geometry.html#_CPPv412IPLMatrix4x4" title="IPLMatrix4x4"><span class="n"><span class="pre">IPLMatrix4x4</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">transform</span></span></span><a class="headerlink" href="#_CPPv4N24IPLProbeGenerationParams9transformE" title="Link to this definition"></a><br /></dt>
 <dd><p>A transformation matrix that transforms an axis-aligned unit cube, with minimum and maximum vertices at (0, 0, 0) and (1, 1, 1), into a parallelopiped volume. </p>
 <p>Probes will be generated within this volume. </p>
 </dd></dl>
@@ -525,26 +466,26 @@
 
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv422IPLBakedDataIdentifier">
-<span id="_CPPv322IPLBakedDataIdentifier"></span><span id="_CPPv222IPLBakedDataIdentifier"></span><span id="IPLBakedDataIdentifier"></span><span class="target" id="struct_i_p_l_baked_data_identifier"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLBakedDataIdentifier</span></span></span><a class="headerlink" href="#_CPPv422IPLBakedDataIdentifier" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv322IPLBakedDataIdentifier"></span><span id="_CPPv222IPLBakedDataIdentifier"></span><span id="IPLBakedDataIdentifier"></span><span class="target" id="struct_i_p_l_baked_data_identifier"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLBakedDataIdentifier</span></span></span><a class="headerlink" href="#_CPPv422IPLBakedDataIdentifier" title="Link to this definition"></a><br /></dt>
 <dd><p>Identifies a “layer” of data stored in a probe batch. </p>
 <p>Each probe batch may store multiple layers of data, such as reverb, static source reflections, or pathing. Each layer can be accessed using an identifier. </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N22IPLBakedDataIdentifier4typeE">
-<span id="_CPPv3N22IPLBakedDataIdentifier4typeE"></span><span id="_CPPv2N22IPLBakedDataIdentifier4typeE"></span><span id="IPLBakedDataIdentifier::type__IPLBakedDataType"></span><span class="target" id="struct_i_p_l_baked_data_identifier_1a3bfdd0c3a923e17107aeda0ea34a9c04"></span><a class="reference internal" href="#_CPPv416IPLBakedDataType" title="IPLBakedDataType"><span class="n"><span class="pre">IPLBakedDataType</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">type</span></span></span><a class="headerlink" href="#_CPPv4N22IPLBakedDataIdentifier4typeE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N22IPLBakedDataIdentifier4typeE"></span><span id="_CPPv2N22IPLBakedDataIdentifier4typeE"></span><span id="IPLBakedDataIdentifier::type__IPLBakedDataType"></span><span class="target" id="struct_i_p_l_baked_data_identifier_1a3bfdd0c3a923e17107aeda0ea34a9c04"></span><a class="reference internal" href="#_CPPv416IPLBakedDataType" title="IPLBakedDataType"><span class="n"><span class="pre">IPLBakedDataType</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">type</span></span></span><a class="headerlink" href="#_CPPv4N22IPLBakedDataIdentifier4typeE" title="Link to this definition"></a><br /></dt>
 <dd><p>The type of data stored. </p>
 </dd></dl>
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N22IPLBakedDataIdentifier9variationE">
-<span id="_CPPv3N22IPLBakedDataIdentifier9variationE"></span><span id="_CPPv2N22IPLBakedDataIdentifier9variationE"></span><span id="IPLBakedDataIdentifier::variation__IPLBakedDataVariation"></span><span class="target" id="struct_i_p_l_baked_data_identifier_1add339c7c32d942098354c63ac2378b60"></span><a class="reference internal" href="#_CPPv421IPLBakedDataVariation" title="IPLBakedDataVariation"><span class="n"><span class="pre">IPLBakedDataVariation</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">variation</span></span></span><a class="headerlink" href="#_CPPv4N22IPLBakedDataIdentifier9variationE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N22IPLBakedDataIdentifier9variationE"></span><span id="_CPPv2N22IPLBakedDataIdentifier9variationE"></span><span id="IPLBakedDataIdentifier::variation__IPLBakedDataVariation"></span><span class="target" id="struct_i_p_l_baked_data_identifier_1add339c7c32d942098354c63ac2378b60"></span><a class="reference internal" href="#_CPPv421IPLBakedDataVariation" title="IPLBakedDataVariation"><span class="n"><span class="pre">IPLBakedDataVariation</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">variation</span></span></span><a class="headerlink" href="#_CPPv4N22IPLBakedDataIdentifier9variationE" title="Link to this definition"></a><br /></dt>
 <dd><p>The way in which source and listener positions depend on probe position. </p>
 </dd></dl>
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N22IPLBakedDataIdentifier17endpointInfluenceE">
-<span id="_CPPv3N22IPLBakedDataIdentifier17endpointInfluenceE"></span><span id="_CPPv2N22IPLBakedDataIdentifier17endpointInfluenceE"></span><span id="IPLBakedDataIdentifier::endpointInfluence__IPLSphere"></span><span class="target" id="struct_i_p_l_baked_data_identifier_1a3d3712ed6936a7ec9e72a0bc2c4b7e4e"></span><a class="reference internal" href="geometry.html#_CPPv49IPLSphere" title="IPLSphere"><span class="n"><span class="pre">IPLSphere</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">endpointInfluence</span></span></span><a class="headerlink" href="#_CPPv4N22IPLBakedDataIdentifier17endpointInfluenceE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N22IPLBakedDataIdentifier17endpointInfluenceE"></span><span id="_CPPv2N22IPLBakedDataIdentifier17endpointInfluenceE"></span><span id="IPLBakedDataIdentifier::endpointInfluence__IPLSphere"></span><span class="target" id="struct_i_p_l_baked_data_identifier_1a3d3712ed6936a7ec9e72a0bc2c4b7e4e"></span><a class="reference internal" href="geometry.html#_CPPv49IPLSphere" title="IPLSphere"><span class="n"><span class="pre">IPLSphere</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">endpointInfluence</span></span></span><a class="headerlink" href="#_CPPv4N22IPLBakedDataIdentifier17endpointInfluenceE" title="Link to this definition"></a><br /></dt>
 <dd><p>The static source (for <code class="docutils literal notranslate"><span class="pre">IPL_BAKEDDATAVARIATION_STATICSOURCE</span></code>) or static listener (for <code class="docutils literal notranslate"><span class="pre">IPL_BAKEDDATAVARIATION_STATICLISTENER</span></code>) used to generate baked data. </p>
 <p>Baked data is only stored for probes that lie within the radius of this sphere. </p>
 </dd></dl>
@@ -552,23 +493,23 @@
 </div>
 </dd></dl>
 
-</div>
-<div class="section" id="enumerations">
-<h2>Enumerations<a class="headerlink" href="#enumerations" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="enumerations">
+<h2>Enumerations<a class="headerlink" href="#enumerations" title="Link to this heading"></a></h2>
 <dl class="cpp enum">
 <dt class="sig sig-object cpp" id="_CPPv422IPLProbeGenerationType">
-<span id="_CPPv322IPLProbeGenerationType"></span><span id="_CPPv222IPLProbeGenerationType"></span><span class="target" id="group__probes_1gad295b8d1b39629fc045fe2b71c460296"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLProbeGenerationType</span></span></span><a class="headerlink" href="#_CPPv422IPLProbeGenerationType" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv322IPLProbeGenerationType"></span><span id="_CPPv222IPLProbeGenerationType"></span><span class="target" id="group__probes_1gad295b8d1b39629fc045fe2b71c460296"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLProbeGenerationType</span></span></span><a class="headerlink" href="#_CPPv422IPLProbeGenerationType" title="Link to this definition"></a><br /></dt>
 <dd><p>The different algorithms for generating probes. </p>
 <p><em>Values:</em></p>
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N22IPLProbeGenerationType32IPL_PROBEGENERATIONTYPE_CENTROIDE">
-<span id="_CPPv3N22IPLProbeGenerationType32IPL_PROBEGENERATIONTYPE_CENTROIDE"></span><span id="_CPPv2N22IPLProbeGenerationType32IPL_PROBEGENERATIONTYPE_CENTROIDE"></span><span class="target" id="group__probes_1ggad295b8d1b39629fc045fe2b71c460296aa313e90a1391de39c7a0b0c6e78607ae"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_PROBEGENERATIONTYPE_CENTROID</span></span></span><a class="headerlink" href="#_CPPv4N22IPLProbeGenerationType32IPL_PROBEGENERATIONTYPE_CENTROIDE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N22IPLProbeGenerationType32IPL_PROBEGENERATIONTYPE_CENTROIDE"></span><span id="_CPPv2N22IPLProbeGenerationType32IPL_PROBEGENERATIONTYPE_CENTROIDE"></span><span class="target" id="group__probes_1ggad295b8d1b39629fc045fe2b71c460296aa313e90a1391de39c7a0b0c6e78607ae"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_PROBEGENERATIONTYPE_CENTROID</span></span></span><a class="headerlink" href="#_CPPv4N22IPLProbeGenerationType32IPL_PROBEGENERATIONTYPE_CENTROIDE" title="Link to this definition"></a><br /></dt>
 <dd><p>Generates a single probe at the center of the specified box. </p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N22IPLProbeGenerationType36IPL_PROBEGENERATIONTYPE_UNIFORMFLOORE">
-<span id="_CPPv3N22IPLProbeGenerationType36IPL_PROBEGENERATIONTYPE_UNIFORMFLOORE"></span><span id="_CPPv2N22IPLProbeGenerationType36IPL_PROBEGENERATIONTYPE_UNIFORMFLOORE"></span><span class="target" id="group__probes_1ggad295b8d1b39629fc045fe2b71c460296a2ab2be1d2703e8a3676c2f24c438d55d"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_PROBEGENERATIONTYPE_UNIFORMFLOOR</span></span></span><a class="headerlink" href="#_CPPv4N22IPLProbeGenerationType36IPL_PROBEGENERATIONTYPE_UNIFORMFLOORE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N22IPLProbeGenerationType36IPL_PROBEGENERATIONTYPE_UNIFORMFLOORE"></span><span id="_CPPv2N22IPLProbeGenerationType36IPL_PROBEGENERATIONTYPE_UNIFORMFLOORE"></span><span class="target" id="group__probes_1ggad295b8d1b39629fc045fe2b71c460296a2ab2be1d2703e8a3676c2f24c438d55d"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_PROBEGENERATIONTYPE_UNIFORMFLOOR</span></span></span><a class="headerlink" href="#_CPPv4N22IPLProbeGenerationType36IPL_PROBEGENERATIONTYPE_UNIFORMFLOORE" title="Link to this definition"></a><br /></dt>
 <dd><p>Generates probes that are uniformly-spaced, at a fixed height above solid geometry. </p>
 <p>A probe will never be generated above another probe unless there is a solid object between them. The goal is to model floors or terrain, and generate probes that are a fixed height above the floor or terrain, and uniformly-spaced along the horizontal plane. This algorithm is not suitable for scenarios where the listener may fly into a region with no probes; if this happens, the listener will not be influenced by any of the baked data. </p>
 </dd></dl>
@@ -577,19 +518,19 @@
 
 <dl class="cpp enum">
 <dt class="sig sig-object cpp" id="_CPPv416IPLBakedDataType">
-<span id="_CPPv316IPLBakedDataType"></span><span id="_CPPv216IPLBakedDataType"></span><span class="target" id="group__probes_1ga194245f4bd68ca6af9a494f075954002"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLBakedDataType</span></span></span><a class="headerlink" href="#_CPPv416IPLBakedDataType" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv316IPLBakedDataType"></span><span id="_CPPv216IPLBakedDataType"></span><span class="target" id="group__probes_1ga194245f4bd68ca6af9a494f075954002"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLBakedDataType</span></span></span><a class="headerlink" href="#_CPPv416IPLBakedDataType" title="Link to this definition"></a><br /></dt>
 <dd><p>The types of baked data that can be stored in a probe batch. </p>
 <p><em>Values:</em></p>
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N16IPLBakedDataType29IPL_BAKEDDATATYPE_REFLECTIONSE">
-<span id="_CPPv3N16IPLBakedDataType29IPL_BAKEDDATATYPE_REFLECTIONSE"></span><span id="_CPPv2N16IPLBakedDataType29IPL_BAKEDDATATYPE_REFLECTIONSE"></span><span class="target" id="group__probes_1gga194245f4bd68ca6af9a494f075954002abaccb75b94ec6a7c470b99e5a8c657a8"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_BAKEDDATATYPE_REFLECTIONS</span></span></span><a class="headerlink" href="#_CPPv4N16IPLBakedDataType29IPL_BAKEDDATATYPE_REFLECTIONSE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N16IPLBakedDataType29IPL_BAKEDDATATYPE_REFLECTIONSE"></span><span id="_CPPv2N16IPLBakedDataType29IPL_BAKEDDATATYPE_REFLECTIONSE"></span><span class="target" id="group__probes_1gga194245f4bd68ca6af9a494f075954002abaccb75b94ec6a7c470b99e5a8c657a8"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_BAKEDDATATYPE_REFLECTIONS</span></span></span><a class="headerlink" href="#_CPPv4N16IPLBakedDataType29IPL_BAKEDDATATYPE_REFLECTIONSE" title="Link to this definition"></a><br /></dt>
 <dd><p>Reflections. </p>
 <p>The source and listener positions used to compute the reflections data stored at each probe depends on the <code class="docutils literal notranslate"><span class="pre">IPLBakedDataVariation</span></code> selected. </p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N16IPLBakedDataType25IPL_BAKEDDATATYPE_PATHINGE">
-<span id="_CPPv3N16IPLBakedDataType25IPL_BAKEDDATATYPE_PATHINGE"></span><span id="_CPPv2N16IPLBakedDataType25IPL_BAKEDDATATYPE_PATHINGE"></span><span class="target" id="group__probes_1gga194245f4bd68ca6af9a494f075954002a401b029dfc090d72f915dc2249c32d37"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_BAKEDDATATYPE_PATHING</span></span></span><a class="headerlink" href="#_CPPv4N16IPLBakedDataType25IPL_BAKEDDATATYPE_PATHINGE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N16IPLBakedDataType25IPL_BAKEDDATATYPE_PATHINGE"></span><span id="_CPPv2N16IPLBakedDataType25IPL_BAKEDDATATYPE_PATHINGE"></span><span class="target" id="group__probes_1gga194245f4bd68ca6af9a494f075954002a401b029dfc090d72f915dc2249c32d37"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_BAKEDDATATYPE_PATHING</span></span></span><a class="headerlink" href="#_CPPv4N16IPLBakedDataType25IPL_BAKEDDATATYPE_PATHINGE" title="Link to this definition"></a><br /></dt>
 <dd><p>Pathing. </p>
 <p>The probe batch stores data about the shortest paths between any pair of probes in the batch. </p>
 </dd></dl>
@@ -598,88 +539,71 @@
 
 <dl class="cpp enum">
 <dt class="sig sig-object cpp" id="_CPPv421IPLBakedDataVariation">
-<span id="_CPPv321IPLBakedDataVariation"></span><span id="_CPPv221IPLBakedDataVariation"></span><span class="target" id="group__probes_1gaee5c8371fbbee8a5aa7faa95a7159f9f"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLBakedDataVariation</span></span></span><a class="headerlink" href="#_CPPv421IPLBakedDataVariation" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv321IPLBakedDataVariation"></span><span id="_CPPv221IPLBakedDataVariation"></span><span class="target" id="group__probes_1gaee5c8371fbbee8a5aa7faa95a7159f9f"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLBakedDataVariation</span></span></span><a class="headerlink" href="#_CPPv421IPLBakedDataVariation" title="Link to this definition"></a><br /></dt>
 <dd><p>The different ways in which the source and listener positions used to generate baked data can vary as a function of probe position. </p>
 <p><em>Values:</em></p>
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N21IPLBakedDataVariation29IPL_BAKEDDATAVARIATION_REVERBE">
-<span id="_CPPv3N21IPLBakedDataVariation29IPL_BAKEDDATAVARIATION_REVERBE"></span><span id="_CPPv2N21IPLBakedDataVariation29IPL_BAKEDDATAVARIATION_REVERBE"></span><span class="target" id="group__probes_1ggaee5c8371fbbee8a5aa7faa95a7159f9fa643f9436cd9908d0e91ca5eff83e6338"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_BAKEDDATAVARIATION_REVERB</span></span></span><a class="headerlink" href="#_CPPv4N21IPLBakedDataVariation29IPL_BAKEDDATAVARIATION_REVERBE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N21IPLBakedDataVariation29IPL_BAKEDDATAVARIATION_REVERBE"></span><span id="_CPPv2N21IPLBakedDataVariation29IPL_BAKEDDATAVARIATION_REVERBE"></span><span class="target" id="group__probes_1ggaee5c8371fbbee8a5aa7faa95a7159f9fa643f9436cd9908d0e91ca5eff83e6338"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_BAKEDDATAVARIATION_REVERB</span></span></span><a class="headerlink" href="#_CPPv4N21IPLBakedDataVariation29IPL_BAKEDDATAVARIATION_REVERBE" title="Link to this definition"></a><br /></dt>
 <dd><p>At each probe, baked data is calculated with both the source and the listener at the probe position. </p>
 <p>This is useful for modeling traditional reverbs, which depend only on the listener’s position (or only on the source’s position). </p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N21IPLBakedDataVariation35IPL_BAKEDDATAVARIATION_STATICSOURCEE">
-<span id="_CPPv3N21IPLBakedDataVariation35IPL_BAKEDDATAVARIATION_STATICSOURCEE"></span><span id="_CPPv2N21IPLBakedDataVariation35IPL_BAKEDDATAVARIATION_STATICSOURCEE"></span><span class="target" id="group__probes_1ggaee5c8371fbbee8a5aa7faa95a7159f9fa2ae35176e7ce7b31e2ad7270cc8259ca"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_BAKEDDATAVARIATION_STATICSOURCE</span></span></span><a class="headerlink" href="#_CPPv4N21IPLBakedDataVariation35IPL_BAKEDDATAVARIATION_STATICSOURCEE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N21IPLBakedDataVariation35IPL_BAKEDDATAVARIATION_STATICSOURCEE"></span><span id="_CPPv2N21IPLBakedDataVariation35IPL_BAKEDDATAVARIATION_STATICSOURCEE"></span><span class="target" id="group__probes_1ggaee5c8371fbbee8a5aa7faa95a7159f9fa2ae35176e7ce7b31e2ad7270cc8259ca"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_BAKEDDATAVARIATION_STATICSOURCE</span></span></span><a class="headerlink" href="#_CPPv4N21IPLBakedDataVariation35IPL_BAKEDDATAVARIATION_STATICSOURCEE" title="Link to this definition"></a><br /></dt>
 <dd><p>At each probe, baked data is calculated with the source at some fixed position (specified separately), and the listener at the probe position. </p>
 <p>This is used for modeling reflections from a static source to any point within the probe batch. </p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N21IPLBakedDataVariation37IPL_BAKEDDATAVARIATION_STATICLISTENERE">
-<span id="_CPPv3N21IPLBakedDataVariation37IPL_BAKEDDATAVARIATION_STATICLISTENERE"></span><span id="_CPPv2N21IPLBakedDataVariation37IPL_BAKEDDATAVARIATION_STATICLISTENERE"></span><span class="target" id="group__probes_1ggaee5c8371fbbee8a5aa7faa95a7159f9fa540aff98e7496c93fe1c17059ab36ac6"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_BAKEDDATAVARIATION_STATICLISTENER</span></span></span><a class="headerlink" href="#_CPPv4N21IPLBakedDataVariation37IPL_BAKEDDATAVARIATION_STATICLISTENERE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N21IPLBakedDataVariation37IPL_BAKEDDATAVARIATION_STATICLISTENERE"></span><span id="_CPPv2N21IPLBakedDataVariation37IPL_BAKEDDATAVARIATION_STATICLISTENERE"></span><span class="target" id="group__probes_1ggaee5c8371fbbee8a5aa7faa95a7159f9fa540aff98e7496c93fe1c17059ab36ac6"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_BAKEDDATAVARIATION_STATICLISTENER</span></span></span><a class="headerlink" href="#_CPPv4N21IPLBakedDataVariation37IPL_BAKEDDATAVARIATION_STATICLISTENERE" title="Link to this definition"></a><br /></dt>
 <dd><p>At each probe, baked data is calculated with the source at the probe position, and the listener at some fixed position (specified separately). </p>
 <p>This is used for modeling reflections from a moving source to a static listener. </p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N21IPLBakedDataVariation30IPL_BAKEDDATAVARIATION_DYNAMICE">
-<span id="_CPPv3N21IPLBakedDataVariation30IPL_BAKEDDATAVARIATION_DYNAMICE"></span><span id="_CPPv2N21IPLBakedDataVariation30IPL_BAKEDDATAVARIATION_DYNAMICE"></span><span class="target" id="group__probes_1ggaee5c8371fbbee8a5aa7faa95a7159f9faa72d79b33f533e238082e3946488f246"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_BAKEDDATAVARIATION_DYNAMIC</span></span></span><a class="headerlink" href="#_CPPv4N21IPLBakedDataVariation30IPL_BAKEDDATAVARIATION_DYNAMICE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N21IPLBakedDataVariation30IPL_BAKEDDATAVARIATION_DYNAMICE"></span><span id="_CPPv2N21IPLBakedDataVariation30IPL_BAKEDDATAVARIATION_DYNAMICE"></span><span class="target" id="group__probes_1ggaee5c8371fbbee8a5aa7faa95a7159f9faa72d79b33f533e238082e3946488f246"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_BAKEDDATAVARIATION_DYNAMIC</span></span></span><a class="headerlink" href="#_CPPv4N21IPLBakedDataVariation30IPL_BAKEDDATAVARIATION_DYNAMICE" title="Link to this definition"></a><br /></dt>
 <dd><p>Baked data is calculated for each pair of probes. </p>
 <p>For example, this is used for calculating paths between every pair of probes in a batch. </p>
 </dd></dl>
 
 </dd></dl>
 
-</div>
-</div>
+</section>
+</section>
 
 
            </div>
-           
           </div>
-          <footer>
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="baking.html" class="btn btn-neutral float-right" title="Baking" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="path-effect.html" class="btn btn-neutral float-left" title="Path Effect" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="baking.html" class="btn btn-neutral float-right" title="Baking" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &#169; Copyright 2017-2023, Valve Corporation.
-
-    </p>
+    <p>&#169; Copyright 2017-2023, Valve Corporation.</p>
   </div>
-    
-    
-    
-    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>

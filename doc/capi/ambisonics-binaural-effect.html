@@ -1,101 +1,50 @@
 
 
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
-  <meta charset="utf-8" />
-  
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  
   <title>Ambisonics Binaural Effect &mdash; Steam Audio C API  documentation</title>
-  
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/steamaudio.css?v=b5aaeb06" />
 
   
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/steamaudio.css" type="text/css" />
-
-  
-  
-
-  
-  
-
-  
-
-  
-  <!--[if lt IE 9]>
-    <script src="_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/doctools.js"></script>
-    
-    <script type="text/javascript" src="_static/js/theme.js"></script>
-
-    
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=7f41d439"></script>
+      <script src="_static/doctools.js?v=9a2dae69"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Ambisonics Rotation Effect" href="ambisonics-rotation-effect.html" />
     <link rel="prev" title="Ambisonics Panning Effect" href="ambisonics-panning-effect.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
 
           
-            <a href="index.html">
           
-
-          
+          <a href="index.html">
             
-            <img src="_static/steam-audio-logo.png" class="logo" alt="Logo"/>
-          
+              <img src="_static/steam-audio-logo.png" class="logo" alt="Logo"/>
           </a>
-
-          
-            
-            
-              <div class="version">
-                4.6.0
-              </div>
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
-              <p class="caption"><span class="caption-text">Steam Audio SDK</span></p>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Steam Audio SDK</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="guide.html">Programmer’s Guide</a></li>
@@ -119,9 +68,23 @@
 <li class="toctree-l2"><a class="reference internal" href="ambisonics-encode-effect.html">Ambisonics Encode Effect</a></li>
 <li class="toctree-l2"><a class="reference internal" href="ambisonics-panning-effect.html">Ambisonics Panning Effect</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Ambisonics Binaural Effect</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#typedefs">Typedefs</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#functions">Functions</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#structures">Structures</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#typedefs">Typedefs</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv427IPLAmbisonicsBinauralEffect"><code class="docutils literal notranslate"><span class="pre">IPLAmbisonicsBinauralEffect</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#functions">Functions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv433iplAmbisonicsBinauralEffectCreate10IPLContextP16IPLAudioSettingsP35IPLAmbisonicsBinauralEffectSettingsP27IPLAmbisonicsBinauralEffect"><code class="docutils literal notranslate"><span class="pre">iplAmbisonicsBinauralEffectCreate()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv433iplAmbisonicsBinauralEffectRetain27IPLAmbisonicsBinauralEffect"><code class="docutils literal notranslate"><span class="pre">iplAmbisonicsBinauralEffectRetain()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv434iplAmbisonicsBinauralEffectReleaseP27IPLAmbisonicsBinauralEffect"><code class="docutils literal notranslate"><span class="pre">iplAmbisonicsBinauralEffectRelease()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv432iplAmbisonicsBinauralEffectReset27IPLAmbisonicsBinauralEffect"><code class="docutils literal notranslate"><span class="pre">iplAmbisonicsBinauralEffectReset()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv432iplAmbisonicsBinauralEffectApply27IPLAmbisonicsBinauralEffectP33IPLAmbisonicsBinauralEffectParamsP14IPLAudioBufferP14IPLAudioBuffer"><code class="docutils literal notranslate"><span class="pre">iplAmbisonicsBinauralEffectApply()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#structures">Structures</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv435IPLAmbisonicsBinauralEffectSettings"><code class="docutils literal notranslate"><span class="pre">IPLAmbisonicsBinauralEffectSettings</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv433IPLAmbisonicsBinauralEffectParams"><code class="docutils literal notranslate"><span class="pre">IPLAmbisonicsBinauralEffectParams</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="ambisonics-rotation-effect.html">Ambisonics Rotation Effect</a></li>
@@ -136,91 +99,50 @@
 </li>
 </ul>
 
-            
-          
         </div>
-        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="index.html">Steam Audio C API</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
-      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-        
-          <li><a href="reference.html">API Reference</a> &raquo;</li>
-        
-      <li>Ambisonics Binaural Effect</li>
-    
-    
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="reference.html">API Reference</a></li>
+      <li class="breadcrumb-item active">Ambisonics Binaural Effect</li>
       <li class="wy-breadcrumbs-aside">
-        
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
-  <div class="section" id="ambisonics-binaural-effect">
-<h1>Ambisonics Binaural Effect<a class="headerlink" href="#ambisonics-binaural-effect" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="typedefs">
-<h2>Typedefs<a class="headerlink" href="#typedefs" title="Permalink to this headline">¶</a></h2>
+             
+  <section id="ambisonics-binaural-effect">
+<h1>Ambisonics Binaural Effect<a class="headerlink" href="#ambisonics-binaural-effect" title="Link to this heading"></a></h1>
+<section id="typedefs">
+<h2>Typedefs<a class="headerlink" href="#typedefs" title="Link to this heading"></a></h2>
 <dl class="cpp type">
 <dt class="sig sig-object cpp" id="_CPPv427IPLAmbisonicsBinauralEffect">
-<span id="_CPPv327IPLAmbisonicsBinauralEffect"></span><span id="_CPPv227IPLAmbisonicsBinauralEffect"></span><span id="IPLAmbisonicsBinauralEffect"></span><span class="target" id="group__ambisonics_1ga431fa01d980b35d3e1a663e083cd3344"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="n"><span class="pre">_IPLAmbisonicsBinauralEffect_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">IPLAmbisonicsBinauralEffect</span></span></span><a class="headerlink" href="#_CPPv427IPLAmbisonicsBinauralEffect" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv327IPLAmbisonicsBinauralEffect"></span><span id="_CPPv227IPLAmbisonicsBinauralEffect"></span><span id="IPLAmbisonicsBinauralEffect"></span><span class="target" id="group__ambisonics_1ga431fa01d980b35d3e1a663e083cd3344"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="n"><span class="pre">_IPLAmbisonicsBinauralEffect_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">IPLAmbisonicsBinauralEffect</span></span></span><a class="headerlink" href="#_CPPv427IPLAmbisonicsBinauralEffect" title="Link to this definition"></a><br /></dt>
 <dd><p>Renders Ambisonic audio using HRTF-based binaural rendering. </p>
 <p>This results in more immersive spatialization of the Ambisonic audio as compared to using an Ambisonics panning effect, at the cost of slightly increased CPU usage. </p>
 </dd></dl>
 
-</div>
-<div class="section" id="functions">
-<h2>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="functions">
+<h2>Functions<a class="headerlink" href="#functions" title="Link to this heading"></a></h2>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv433iplAmbisonicsBinauralEffectCreate10IPLContextP16IPLAudioSettingsP35IPLAmbisonicsBinauralEffectSettingsP27IPLAmbisonicsBinauralEffect">
-<span id="_CPPv333iplAmbisonicsBinauralEffectCreate10IPLContextP16IPLAudioSettingsP35IPLAmbisonicsBinauralEffectSettingsP27IPLAmbisonicsBinauralEffect"></span><span id="_CPPv233iplAmbisonicsBinauralEffectCreate10IPLContextP16IPLAudioSettingsP35IPLAmbisonicsBinauralEffectSettingsP27IPLAmbisonicsBinauralEffect"></span><span id="iplAmbisonicsBinauralEffectCreate__IPLContext.IPLAudioSettingsP.IPLAmbisonicsBinauralEffectSettingsP.IPLAmbisonicsBinauralEffectP"></span><span class="target" id="group__ambisonics_1ga64015ed3e8872b951feac0def7c067b8"></span><a class="reference internal" href="types.html#_CPPv48IPLerror" title="IPLerror"><span class="n"><span class="pre">IPLerror</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplAmbisonicsBinauralEffectCreate</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="context.html#_CPPv410IPLContext" title="IPLContext"><span class="n"><span class="pre">IPLContext</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">context</span></span>, <a class="reference internal" href="audio-buffers.html#_CPPv416IPLAudioSettings" title="IPLAudioSettings"><span class="n"><span class="pre">IPLAudioSettings</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">audioSettings</span></span>, <a class="reference internal" href="#_CPPv435IPLAmbisonicsBinauralEffectSettings" title="IPLAmbisonicsBinauralEffectSettings"><span class="n"><span class="pre">IPLAmbisonicsBinauralEffectSettings</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">effectSettings</span></span>, <a class="reference internal" href="#_CPPv427IPLAmbisonicsBinauralEffect" title="IPLAmbisonicsBinauralEffect"><span class="n"><span class="pre">IPLAmbisonicsBinauralEffect</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">effect</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv433iplAmbisonicsBinauralEffectCreate10IPLContextP16IPLAudioSettingsP35IPLAmbisonicsBinauralEffectSettingsP27IPLAmbisonicsBinauralEffect" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv333iplAmbisonicsBinauralEffectCreate10IPLContextP16IPLAudioSettingsP35IPLAmbisonicsBinauralEffectSettingsP27IPLAmbisonicsBinauralEffect"></span><span id="_CPPv233iplAmbisonicsBinauralEffectCreate10IPLContextP16IPLAudioSettingsP35IPLAmbisonicsBinauralEffectSettingsP27IPLAmbisonicsBinauralEffect"></span><span id="iplAmbisonicsBinauralEffectCreate__IPLContext.IPLAudioSettingsP.IPLAmbisonicsBinauralEffectSettingsP.IPLAmbisonicsBinauralEffectP"></span><span class="target" id="group__ambisonics_1ga64015ed3e8872b951feac0def7c067b8"></span><a class="reference internal" href="types.html#_CPPv48IPLerror" title="IPLerror"><span class="n"><span class="pre">IPLerror</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplAmbisonicsBinauralEffectCreate</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="context.html#_CPPv410IPLContext" title="IPLContext"><span class="n"><span class="pre">IPLContext</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">context</span></span>, <a class="reference internal" href="audio-buffers.html#_CPPv416IPLAudioSettings" title="IPLAudioSettings"><span class="n"><span class="pre">IPLAudioSettings</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">audioSettings</span></span>, <a class="reference internal" href="#_CPPv435IPLAmbisonicsBinauralEffectSettings" title="IPLAmbisonicsBinauralEffectSettings"><span class="n"><span class="pre">IPLAmbisonicsBinauralEffectSettings</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">effectSettings</span></span>, <a class="reference internal" href="#_CPPv427IPLAmbisonicsBinauralEffect" title="IPLAmbisonicsBinauralEffect"><span class="n"><span class="pre">IPLAmbisonicsBinauralEffect</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">effect</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv433iplAmbisonicsBinauralEffectCreate10IPLContextP16IPLAudioSettingsP35IPLAmbisonicsBinauralEffectSettingsP27IPLAmbisonicsBinauralEffect" title="Link to this definition"></a><br /></dt>
 <dd><p>Creates an Ambisonics binaural effect. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>context</strong> – The context used to initialize Steam Audio. </p></li>
 <li><p><strong>audioSettings</strong> – Global audio processing settings. </p></li>
@@ -228,7 +150,7 @@
 <li><p><strong>effect</strong> – [out] The created Ambisonics binaural effect.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Status code indicating whether or not the operation succeeded. </p>
 </dd>
 </dl>
@@ -236,13 +158,13 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv433iplAmbisonicsBinauralEffectRetain27IPLAmbisonicsBinauralEffect">
-<span id="_CPPv333iplAmbisonicsBinauralEffectRetain27IPLAmbisonicsBinauralEffect"></span><span id="_CPPv233iplAmbisonicsBinauralEffectRetain27IPLAmbisonicsBinauralEffect"></span><span id="iplAmbisonicsBinauralEffectRetain__IPLAmbisonicsBinauralEffect"></span><span class="target" id="group__ambisonics_1gaf96172a830023c4befb0ce2a6a5d8dcb"></span><a class="reference internal" href="#_CPPv427IPLAmbisonicsBinauralEffect" title="IPLAmbisonicsBinauralEffect"><span class="n"><span class="pre">IPLAmbisonicsBinauralEffect</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplAmbisonicsBinauralEffectRetain</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv427IPLAmbisonicsBinauralEffect" title="IPLAmbisonicsBinauralEffect"><span class="n"><span class="pre">IPLAmbisonicsBinauralEffect</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">effect</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv433iplAmbisonicsBinauralEffectRetain27IPLAmbisonicsBinauralEffect" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv333iplAmbisonicsBinauralEffectRetain27IPLAmbisonicsBinauralEffect"></span><span id="_CPPv233iplAmbisonicsBinauralEffectRetain27IPLAmbisonicsBinauralEffect"></span><span id="iplAmbisonicsBinauralEffectRetain__IPLAmbisonicsBinauralEffect"></span><span class="target" id="group__ambisonics_1gaf96172a830023c4befb0ce2a6a5d8dcb"></span><a class="reference internal" href="#_CPPv427IPLAmbisonicsBinauralEffect" title="IPLAmbisonicsBinauralEffect"><span class="n"><span class="pre">IPLAmbisonicsBinauralEffect</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplAmbisonicsBinauralEffectRetain</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv427IPLAmbisonicsBinauralEffect" title="IPLAmbisonicsBinauralEffect"><span class="n"><span class="pre">IPLAmbisonicsBinauralEffect</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">effect</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv433iplAmbisonicsBinauralEffectRetain27IPLAmbisonicsBinauralEffect" title="Link to this definition"></a><br /></dt>
 <dd><p>Retains an additional reference to an Ambisonics binaural effect. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>effect</strong> – The Ambisonics binaural effect to retain a reference to.</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The additional reference to the Ambisonics binaural effect. </p>
 </dd>
 </dl>
@@ -250,10 +172,10 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv434iplAmbisonicsBinauralEffectReleaseP27IPLAmbisonicsBinauralEffect">
-<span id="_CPPv334iplAmbisonicsBinauralEffectReleaseP27IPLAmbisonicsBinauralEffect"></span><span id="_CPPv234iplAmbisonicsBinauralEffectReleaseP27IPLAmbisonicsBinauralEffect"></span><span id="iplAmbisonicsBinauralEffectRelease__IPLAmbisonicsBinauralEffectP"></span><span class="target" id="group__ambisonics_1gae93a3b01e68cc7b228ff79b7cadc22b6"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplAmbisonicsBinauralEffectRelease</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv427IPLAmbisonicsBinauralEffect" title="IPLAmbisonicsBinauralEffect"><span class="n"><span class="pre">IPLAmbisonicsBinauralEffect</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">effect</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv434iplAmbisonicsBinauralEffectReleaseP27IPLAmbisonicsBinauralEffect" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv334iplAmbisonicsBinauralEffectReleaseP27IPLAmbisonicsBinauralEffect"></span><span id="_CPPv234iplAmbisonicsBinauralEffectReleaseP27IPLAmbisonicsBinauralEffect"></span><span id="iplAmbisonicsBinauralEffectRelease__IPLAmbisonicsBinauralEffectP"></span><span class="target" id="group__ambisonics_1gae93a3b01e68cc7b228ff79b7cadc22b6"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplAmbisonicsBinauralEffectRelease</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv427IPLAmbisonicsBinauralEffect" title="IPLAmbisonicsBinauralEffect"><span class="n"><span class="pre">IPLAmbisonicsBinauralEffect</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">effect</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv434iplAmbisonicsBinauralEffectReleaseP27IPLAmbisonicsBinauralEffect" title="Link to this definition"></a><br /></dt>
 <dd><p>Releases a reference to an Ambisonics binaural effect. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>effect</strong> – The Ambisonics binaural effect to release a reference to. </p>
 </dd>
 </dl>
@@ -261,10 +183,10 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv432iplAmbisonicsBinauralEffectReset27IPLAmbisonicsBinauralEffect">
-<span id="_CPPv332iplAmbisonicsBinauralEffectReset27IPLAmbisonicsBinauralEffect"></span><span id="_CPPv232iplAmbisonicsBinauralEffectReset27IPLAmbisonicsBinauralEffect"></span><span id="iplAmbisonicsBinauralEffectReset__IPLAmbisonicsBinauralEffect"></span><span class="target" id="group__ambisonics_1ga7e802fb4326020002695fe510347ef45"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplAmbisonicsBinauralEffectReset</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv427IPLAmbisonicsBinauralEffect" title="IPLAmbisonicsBinauralEffect"><span class="n"><span class="pre">IPLAmbisonicsBinauralEffect</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">effect</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv432iplAmbisonicsBinauralEffectReset27IPLAmbisonicsBinauralEffect" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv332iplAmbisonicsBinauralEffectReset27IPLAmbisonicsBinauralEffect"></span><span id="_CPPv232iplAmbisonicsBinauralEffectReset27IPLAmbisonicsBinauralEffect"></span><span id="iplAmbisonicsBinauralEffectReset__IPLAmbisonicsBinauralEffect"></span><span class="target" id="group__ambisonics_1ga7e802fb4326020002695fe510347ef45"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplAmbisonicsBinauralEffectReset</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv427IPLAmbisonicsBinauralEffect" title="IPLAmbisonicsBinauralEffect"><span class="n"><span class="pre">IPLAmbisonicsBinauralEffect</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">effect</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv432iplAmbisonicsBinauralEffectReset27IPLAmbisonicsBinauralEffect" title="Link to this definition"></a><br /></dt>
 <dd><p>Resets the internal processing state of an Ambisonics binaural effect. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>effect</strong> – The Ambisonics binaural effect to reset. </p>
 </dd>
 </dl>
@@ -272,11 +194,11 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv432iplAmbisonicsBinauralEffectApply27IPLAmbisonicsBinauralEffectP33IPLAmbisonicsBinauralEffectParamsP14IPLAudioBufferP14IPLAudioBuffer">
-<span id="_CPPv332iplAmbisonicsBinauralEffectApply27IPLAmbisonicsBinauralEffectP33IPLAmbisonicsBinauralEffectParamsP14IPLAudioBufferP14IPLAudioBuffer"></span><span id="_CPPv232iplAmbisonicsBinauralEffectApply27IPLAmbisonicsBinauralEffectP33IPLAmbisonicsBinauralEffectParamsP14IPLAudioBufferP14IPLAudioBuffer"></span><span id="iplAmbisonicsBinauralEffectApply__IPLAmbisonicsBinauralEffect.IPLAmbisonicsBinauralEffectParamsP.IPLAudioBufferP.IPLAudioBufferP"></span><span class="target" id="group__ambisonics_1ga1c89f60af6af1e490bd91865eadb2d99"></span><a class="reference internal" href="audio-buffers.html#_CPPv419IPLAudioEffectState" title="IPLAudioEffectState"><span class="n"><span class="pre">IPLAudioEffectState</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplAmbisonicsBinauralEffectApply</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv427IPLAmbisonicsBinauralEffect" title="IPLAmbisonicsBinauralEffect"><span class="n"><span class="pre">IPLAmbisonicsBinauralEffect</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">effect</span></span>, <a class="reference internal" href="#_CPPv433IPLAmbisonicsBinauralEffectParams" title="IPLAmbisonicsBinauralEffectParams"><span class="n"><span class="pre">IPLAmbisonicsBinauralEffectParams</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">params</span></span>, <a class="reference internal" href="audio-buffers.html#_CPPv414IPLAudioBuffer" title="IPLAudioBuffer"><span class="n"><span class="pre">IPLAudioBuffer</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">in</span></span>, <a class="reference internal" href="audio-buffers.html#_CPPv414IPLAudioBuffer" title="IPLAudioBuffer"><span class="n"><span class="pre">IPLAudioBuffer</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">out</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv432iplAmbisonicsBinauralEffectApply27IPLAmbisonicsBinauralEffectP33IPLAmbisonicsBinauralEffectParamsP14IPLAudioBufferP14IPLAudioBuffer" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv332iplAmbisonicsBinauralEffectApply27IPLAmbisonicsBinauralEffectP33IPLAmbisonicsBinauralEffectParamsP14IPLAudioBufferP14IPLAudioBuffer"></span><span id="_CPPv232iplAmbisonicsBinauralEffectApply27IPLAmbisonicsBinauralEffectP33IPLAmbisonicsBinauralEffectParamsP14IPLAudioBufferP14IPLAudioBuffer"></span><span id="iplAmbisonicsBinauralEffectApply__IPLAmbisonicsBinauralEffect.IPLAmbisonicsBinauralEffectParamsP.IPLAudioBufferP.IPLAudioBufferP"></span><span class="target" id="group__ambisonics_1ga1c89f60af6af1e490bd91865eadb2d99"></span><a class="reference internal" href="audio-buffers.html#_CPPv419IPLAudioEffectState" title="IPLAudioEffectState"><span class="n"><span class="pre">IPLAudioEffectState</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplAmbisonicsBinauralEffectApply</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv427IPLAmbisonicsBinauralEffect" title="IPLAmbisonicsBinauralEffect"><span class="n"><span class="pre">IPLAmbisonicsBinauralEffect</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">effect</span></span>, <a class="reference internal" href="#_CPPv433IPLAmbisonicsBinauralEffectParams" title="IPLAmbisonicsBinauralEffectParams"><span class="n"><span class="pre">IPLAmbisonicsBinauralEffectParams</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">params</span></span>, <a class="reference internal" href="audio-buffers.html#_CPPv414IPLAudioBuffer" title="IPLAudioBuffer"><span class="n"><span class="pre">IPLAudioBuffer</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">in</span></span>, <a class="reference internal" href="audio-buffers.html#_CPPv414IPLAudioBuffer" title="IPLAudioBuffer"><span class="n"><span class="pre">IPLAudioBuffer</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">out</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv432iplAmbisonicsBinauralEffectApply27IPLAmbisonicsBinauralEffectP33IPLAmbisonicsBinauralEffectParamsP14IPLAudioBufferP14IPLAudioBuffer" title="Link to this definition"></a><br /></dt>
 <dd><p>Applies an Ambisonics binaural effect to an audio buffer. </p>
 <p>This effect CANNOT be applied in-place.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>effect</strong> – The Ambisonics binaural effect to apply. </p></li>
 <li><p><strong>params</strong> – Parameters for applying the effect. </p></li>
@@ -284,30 +206,30 @@
 <li><p><strong>out</strong> – The output audio buffer. Must have 2 channels.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">IPL_AUDIOEFFECTSTATE_TAILREMAINING</span></code> if any tail samples remain in the effect’s internal buffers, or <code class="docutils literal notranslate"><span class="pre">IPL_AUDIOEFFECTSTATE_TAILCOMPLETE</span></code> otherwise. </p>
 </dd>
 </dl>
 </dd></dl>
 
-</div>
-<div class="section" id="structures">
-<h2>Structures<a class="headerlink" href="#structures" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="structures">
+<h2>Structures<a class="headerlink" href="#structures" title="Link to this heading"></a></h2>
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv435IPLAmbisonicsBinauralEffectSettings">
-<span id="_CPPv335IPLAmbisonicsBinauralEffectSettings"></span><span id="_CPPv235IPLAmbisonicsBinauralEffectSettings"></span><span id="IPLAmbisonicsBinauralEffectSettings"></span><span class="target" id="struct_i_p_l_ambisonics_binaural_effect_settings"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLAmbisonicsBinauralEffectSettings</span></span></span><a class="headerlink" href="#_CPPv435IPLAmbisonicsBinauralEffectSettings" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv335IPLAmbisonicsBinauralEffectSettings"></span><span id="_CPPv235IPLAmbisonicsBinauralEffectSettings"></span><span id="IPLAmbisonicsBinauralEffectSettings"></span><span class="target" id="struct_i_p_l_ambisonics_binaural_effect_settings"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLAmbisonicsBinauralEffectSettings</span></span></span><a class="headerlink" href="#_CPPv435IPLAmbisonicsBinauralEffectSettings" title="Link to this definition"></a><br /></dt>
 <dd><p>Settings used to create an Ambisonics binaural effect. </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N35IPLAmbisonicsBinauralEffectSettings4hrtfE">
-<span id="_CPPv3N35IPLAmbisonicsBinauralEffectSettings4hrtfE"></span><span id="_CPPv2N35IPLAmbisonicsBinauralEffectSettings4hrtfE"></span><span id="IPLAmbisonicsBinauralEffectSettings::hrtf__IPLHRTF"></span><span class="target" id="struct_i_p_l_ambisonics_binaural_effect_settings_1afdfe641bbcb9a02f2350ea7b4a997482"></span><a class="reference internal" href="hrtf.html#_CPPv47IPLHRTF" title="IPLHRTF"><span class="n"><span class="pre">IPLHRTF</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">hrtf</span></span></span><a class="headerlink" href="#_CPPv4N35IPLAmbisonicsBinauralEffectSettings4hrtfE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N35IPLAmbisonicsBinauralEffectSettings4hrtfE"></span><span id="_CPPv2N35IPLAmbisonicsBinauralEffectSettings4hrtfE"></span><span id="IPLAmbisonicsBinauralEffectSettings::hrtf__IPLHRTF"></span><span class="target" id="struct_i_p_l_ambisonics_binaural_effect_settings_1afdfe641bbcb9a02f2350ea7b4a997482"></span><a class="reference internal" href="hrtf.html#_CPPv47IPLHRTF" title="IPLHRTF"><span class="n"><span class="pre">IPLHRTF</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">hrtf</span></span></span><a class="headerlink" href="#_CPPv4N35IPLAmbisonicsBinauralEffectSettings4hrtfE" title="Link to this definition"></a><br /></dt>
 <dd><p>The HRTF to use. </p>
 </dd></dl>
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N35IPLAmbisonicsBinauralEffectSettings8maxOrderE">
-<span id="_CPPv3N35IPLAmbisonicsBinauralEffectSettings8maxOrderE"></span><span id="_CPPv2N35IPLAmbisonicsBinauralEffectSettings8maxOrderE"></span><span id="IPLAmbisonicsBinauralEffectSettings::maxOrder__IPLint32"></span><span class="target" id="struct_i_p_l_ambisonics_binaural_effect_settings_1a51ad17576848f04fd5c9ddac74b7bd05"></span><a class="reference internal" href="types.html#_CPPv48IPLint32" title="IPLint32"><span class="n"><span class="pre">IPLint32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">maxOrder</span></span></span><a class="headerlink" href="#_CPPv4N35IPLAmbisonicsBinauralEffectSettings8maxOrderE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N35IPLAmbisonicsBinauralEffectSettings8maxOrderE"></span><span id="_CPPv2N35IPLAmbisonicsBinauralEffectSettings8maxOrderE"></span><span id="IPLAmbisonicsBinauralEffectSettings::maxOrder__IPLint32"></span><span class="target" id="struct_i_p_l_ambisonics_binaural_effect_settings_1a51ad17576848f04fd5c9ddac74b7bd05"></span><a class="reference internal" href="types.html#_CPPv48IPLint32" title="IPLint32"><span class="n"><span class="pre">IPLint32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">maxOrder</span></span></span><a class="headerlink" href="#_CPPv4N35IPLAmbisonicsBinauralEffectSettings8maxOrderE" title="Link to this definition"></a><br /></dt>
 <dd><p>The maximum Ambisonics order that will be used by input audio buffers. </p>
 </dd></dl>
 
@@ -316,19 +238,19 @@
 
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv433IPLAmbisonicsBinauralEffectParams">
-<span id="_CPPv333IPLAmbisonicsBinauralEffectParams"></span><span id="_CPPv233IPLAmbisonicsBinauralEffectParams"></span><span id="IPLAmbisonicsBinauralEffectParams"></span><span class="target" id="struct_i_p_l_ambisonics_binaural_effect_params"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLAmbisonicsBinauralEffectParams</span></span></span><a class="headerlink" href="#_CPPv433IPLAmbisonicsBinauralEffectParams" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv333IPLAmbisonicsBinauralEffectParams"></span><span id="_CPPv233IPLAmbisonicsBinauralEffectParams"></span><span id="IPLAmbisonicsBinauralEffectParams"></span><span class="target" id="struct_i_p_l_ambisonics_binaural_effect_params"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLAmbisonicsBinauralEffectParams</span></span></span><a class="headerlink" href="#_CPPv433IPLAmbisonicsBinauralEffectParams" title="Link to this definition"></a><br /></dt>
 <dd><p>Parameters for applying an Ambisonics binaural effect to an audio buffer. </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N33IPLAmbisonicsBinauralEffectParams4hrtfE">
-<span id="_CPPv3N33IPLAmbisonicsBinauralEffectParams4hrtfE"></span><span id="_CPPv2N33IPLAmbisonicsBinauralEffectParams4hrtfE"></span><span id="IPLAmbisonicsBinauralEffectParams::hrtf__IPLHRTF"></span><span class="target" id="struct_i_p_l_ambisonics_binaural_effect_params_1afdfe641bbcb9a02f2350ea7b4a997482"></span><a class="reference internal" href="hrtf.html#_CPPv47IPLHRTF" title="IPLHRTF"><span class="n"><span class="pre">IPLHRTF</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">hrtf</span></span></span><a class="headerlink" href="#_CPPv4N33IPLAmbisonicsBinauralEffectParams4hrtfE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N33IPLAmbisonicsBinauralEffectParams4hrtfE"></span><span id="_CPPv2N33IPLAmbisonicsBinauralEffectParams4hrtfE"></span><span id="IPLAmbisonicsBinauralEffectParams::hrtf__IPLHRTF"></span><span class="target" id="struct_i_p_l_ambisonics_binaural_effect_params_1afdfe641bbcb9a02f2350ea7b4a997482"></span><a class="reference internal" href="hrtf.html#_CPPv47IPLHRTF" title="IPLHRTF"><span class="n"><span class="pre">IPLHRTF</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">hrtf</span></span></span><a class="headerlink" href="#_CPPv4N33IPLAmbisonicsBinauralEffectParams4hrtfE" title="Link to this definition"></a><br /></dt>
 <dd><p>The HRTF to use. </p>
 </dd></dl>
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N33IPLAmbisonicsBinauralEffectParams5orderE">
-<span id="_CPPv3N33IPLAmbisonicsBinauralEffectParams5orderE"></span><span id="_CPPv2N33IPLAmbisonicsBinauralEffectParams5orderE"></span><span id="IPLAmbisonicsBinauralEffectParams::order__IPLint32"></span><span class="target" id="struct_i_p_l_ambisonics_binaural_effect_params_1a8f0bc3d342c8bf145d3f4fc741f84df9"></span><a class="reference internal" href="types.html#_CPPv48IPLint32" title="IPLint32"><span class="n"><span class="pre">IPLint32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">order</span></span></span><a class="headerlink" href="#_CPPv4N33IPLAmbisonicsBinauralEffectParams5orderE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N33IPLAmbisonicsBinauralEffectParams5orderE"></span><span id="_CPPv2N33IPLAmbisonicsBinauralEffectParams5orderE"></span><span id="IPLAmbisonicsBinauralEffectParams::order__IPLint32"></span><span class="target" id="struct_i_p_l_ambisonics_binaural_effect_params_1a8f0bc3d342c8bf145d3f4fc741f84df9"></span><a class="reference internal" href="types.html#_CPPv48IPLint32" title="IPLint32"><span class="n"><span class="pre">IPLint32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">order</span></span></span><a class="headerlink" href="#_CPPv4N33IPLAmbisonicsBinauralEffectParams5orderE" title="Link to this definition"></a><br /></dt>
 <dd><p>Ambisonic order of the input buffer. </p>
 <p>May be less than the <code class="docutils literal notranslate"><span class="pre">maxOrder</span></code> specified when creating the effect, in which case the effect will process fewer input channels, reducing CPU usage. </p>
 </dd></dl>
@@ -336,55 +258,38 @@
 </div>
 </dd></dl>
 
-</div>
-</div>
+</section>
+</section>
 
 
            </div>
-           
           </div>
-          <footer>
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="ambisonics-rotation-effect.html" class="btn btn-neutral float-right" title="Ambisonics Rotation Effect" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="ambisonics-panning-effect.html" class="btn btn-neutral float-left" title="Ambisonics Panning Effect" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="ambisonics-rotation-effect.html" class="btn btn-neutral float-right" title="Ambisonics Rotation Effect" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &#169; Copyright 2017-2023, Valve Corporation.
-
-    </p>
+    <p>&#169; Copyright 2017-2023, Valve Corporation.</p>
   </div>
-    
-    
-    
-    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>

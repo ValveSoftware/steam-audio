@@ -1,101 +1,50 @@
 
 
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
-  <meta charset="utf-8" />
-  
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  
   <title>Context &mdash; Steam Audio C API  documentation</title>
-  
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/steamaudio.css?v=b5aaeb06" />
 
   
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/steamaudio.css" type="text/css" />
-
-  
-  
-
-  
-  
-
-  
-
-  
-  <!--[if lt IE 9]>
-    <script src="_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/doctools.js"></script>
-    
-    <script type="text/javascript" src="_static/js/theme.js"></script>
-
-    
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=7f41d439"></script>
+      <script src="_static/doctools.js?v=9a2dae69"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Geometry" href="geometry.html" />
     <link rel="prev" title="Basic Data Types" href="types.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
 
           
-            <a href="index.html">
           
-
-          
+          <a href="index.html">
             
-            <img src="_static/steam-audio-logo.png" class="logo" alt="Logo"/>
-          
+              <img src="_static/steam-audio-logo.png" class="logo" alt="Logo"/>
           </a>
-
-          
-            
-            
-              <div class="version">
-                4.6.0
-              </div>
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
-              <p class="caption"><span class="caption-text">Steam Audio SDK</span></p>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Steam Audio SDK</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="guide.html">Programmer’s Guide</a></li>
@@ -104,11 +53,32 @@
 <li class="toctree-l1 current"><a class="reference internal" href="reference.html">API Reference</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="types.html">Basic Data Types</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Context</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#typedefs">Typedefs</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#functions">Functions</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#structures">Structures</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#enumerations">Enumerations</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#callbacks">Callbacks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#typedefs">Typedefs</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv410IPLContext"><code class="docutils literal notranslate"><span class="pre">IPLContext</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#functions">Functions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv416iplContextCreateP18IPLContextSettingsP10IPLContext"><code class="docutils literal notranslate"><span class="pre">iplContextCreate()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv416iplContextRetain10IPLContext"><code class="docutils literal notranslate"><span class="pre">iplContextRetain()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv417iplContextReleaseP10IPLContext"><code class="docutils literal notranslate"><span class="pre">iplContextRelease()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#structures">Structures</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv418IPLContextSettings"><code class="docutils literal notranslate"><span class="pre">IPLContextSettings</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#enumerations">Enumerations</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv411IPLLogLevel"><code class="docutils literal notranslate"><span class="pre">IPLLogLevel</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv412IPLSIMDLevel"><code class="docutils literal notranslate"><span class="pre">IPLSIMDLevel</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv415IPLContextFlags"><code class="docutils literal notranslate"><span class="pre">IPLContextFlags</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#callbacks">Callbacks</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv414IPLLogFunction"><code class="docutils literal notranslate"><span class="pre">IPLLogFunction</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv419IPLAllocateFunction"><code class="docutils literal notranslate"><span class="pre">IPLAllocateFunction</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv415IPLFreeFunction"><code class="docutils literal notranslate"><span class="pre">IPLFreeFunction</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="geometry.html">Geometry</a></li>
@@ -138,98 +108,57 @@
 </li>
 </ul>
 
-            
-          
         </div>
-        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="index.html">Steam Audio C API</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
-      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-        
-          <li><a href="reference.html">API Reference</a> &raquo;</li>
-        
-      <li>Context</li>
-    
-    
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="reference.html">API Reference</a></li>
+      <li class="breadcrumb-item active">Context</li>
       <li class="wy-breadcrumbs-aside">
-        
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
-  <div class="section" id="context">
-<h1>Context<a class="headerlink" href="#context" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="typedefs">
-<h2>Typedefs<a class="headerlink" href="#typedefs" title="Permalink to this headline">¶</a></h2>
+             
+  <section id="context">
+<h1>Context<a class="headerlink" href="#context" title="Link to this heading"></a></h1>
+<section id="typedefs">
+<h2>Typedefs<a class="headerlink" href="#typedefs" title="Link to this heading"></a></h2>
 <dl class="cpp type">
 <dt class="sig sig-object cpp" id="_CPPv410IPLContext">
-<span id="_CPPv310IPLContext"></span><span id="_CPPv210IPLContext"></span><span id="IPLContext"></span><span class="target" id="group__context_1ga0482b7a86a8918119c8cec05c7976f1f"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="n"><span class="pre">_IPLContext_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">IPLContext</span></span></span><a class="headerlink" href="#_CPPv410IPLContext" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv310IPLContext"></span><span id="_CPPv210IPLContext"></span><span id="IPLContext"></span><span class="target" id="group__context_1ga0482b7a86a8918119c8cec05c7976f1f"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="n"><span class="pre">_IPLContext_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">IPLContext</span></span></span><a class="headerlink" href="#_CPPv410IPLContext" title="Link to this definition"></a><br /></dt>
 <dd><p>A context object, which controls low-level operations of Steam Audio. </p>
 <p>Typically, a context is specified once during the execution of the client program, before calling any other API functions. </p>
 </dd></dl>
 
-</div>
-<div class="section" id="functions">
-<h2>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="functions">
+<h2>Functions<a class="headerlink" href="#functions" title="Link to this heading"></a></h2>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv416iplContextCreateP18IPLContextSettingsP10IPLContext">
-<span id="_CPPv316iplContextCreateP18IPLContextSettingsP10IPLContext"></span><span id="_CPPv216iplContextCreateP18IPLContextSettingsP10IPLContext"></span><span id="iplContextCreate__IPLContextSettingsP.IPLContextP"></span><span class="target" id="group__context_1ga3de9ad166e9708324c5c22ab17c57c0c"></span><a class="reference internal" href="types.html#_CPPv48IPLerror" title="IPLerror"><span class="n"><span class="pre">IPLerror</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplContextCreate</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv418IPLContextSettings" title="IPLContextSettings"><span class="n"><span class="pre">IPLContextSettings</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">settings</span></span>, <a class="reference internal" href="#_CPPv410IPLContext" title="IPLContext"><span class="n"><span class="pre">IPLContext</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">context</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv416iplContextCreateP18IPLContextSettingsP10IPLContext" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv316iplContextCreateP18IPLContextSettingsP10IPLContext"></span><span id="_CPPv216iplContextCreateP18IPLContextSettingsP10IPLContext"></span><span id="iplContextCreate__IPLContextSettingsP.IPLContextP"></span><span class="target" id="group__context_1ga3de9ad166e9708324c5c22ab17c57c0c"></span><a class="reference internal" href="types.html#_CPPv48IPLerror" title="IPLerror"><span class="n"><span class="pre">IPLerror</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplContextCreate</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv418IPLContextSettings" title="IPLContextSettings"><span class="n"><span class="pre">IPLContextSettings</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">settings</span></span>, <a class="reference internal" href="#_CPPv410IPLContext" title="IPLContext"><span class="n"><span class="pre">IPLContext</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">context</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv416iplContextCreateP18IPLContextSettingsP10IPLContext" title="Link to this definition"></a><br /></dt>
 <dd><p>Creates a context object. </p>
 <p>A context must be created before creating any other API objects.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>settings</strong> – Pointer to the <code class="docutils literal notranslate"><a class="reference internal" href="#struct_i_p_l_context_settings"><span class="std std-ref"><span class="pre">IPLContextSettings</span></span></a></code> struct that specifies context creation parameters. </p></li>
 <li><p><strong>context</strong> – [out] Handle to the created context object.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Status code indicating whether or not the operation succeeded. </p>
 </dd>
 </dl>
@@ -237,14 +166,14 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv416iplContextRetain10IPLContext">
-<span id="_CPPv316iplContextRetain10IPLContext"></span><span id="_CPPv216iplContextRetain10IPLContext"></span><span id="iplContextRetain__IPLContext"></span><span class="target" id="group__context_1ga512b16889c00ffe8dbeb025516e613e3"></span><a class="reference internal" href="#_CPPv410IPLContext" title="IPLContext"><span class="n"><span class="pre">IPLContext</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplContextRetain</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv410IPLContext" title="IPLContext"><span class="n"><span class="pre">IPLContext</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">context</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv416iplContextRetain10IPLContext" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv316iplContextRetain10IPLContext"></span><span id="_CPPv216iplContextRetain10IPLContext"></span><span id="iplContextRetain__IPLContext"></span><span class="target" id="group__context_1ga512b16889c00ffe8dbeb025516e613e3"></span><a class="reference internal" href="#_CPPv410IPLContext" title="IPLContext"><span class="n"><span class="pre">IPLContext</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplContextRetain</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv410IPLContext" title="IPLContext"><span class="n"><span class="pre">IPLContext</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">context</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv416iplContextRetain10IPLContext" title="Link to this definition"></a><br /></dt>
 <dd><p>Retains an additional reference to a context. </p>
 <p>The context will not be destroyed until all references are released.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>context</strong> – The context to retain a reference to.</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The additional reference to the context. </p>
 </dd>
 </dl>
@@ -252,97 +181,97 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv417iplContextReleaseP10IPLContext">
-<span id="_CPPv317iplContextReleaseP10IPLContext"></span><span id="_CPPv217iplContextReleaseP10IPLContext"></span><span id="iplContextRelease__IPLContextP"></span><span class="target" id="group__context_1ga247d2d38b44caf87886b32fec28ee2b7"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplContextRelease</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv410IPLContext" title="IPLContext"><span class="n"><span class="pre">IPLContext</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">context</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv417iplContextReleaseP10IPLContext" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv317iplContextReleaseP10IPLContext"></span><span id="_CPPv217iplContextReleaseP10IPLContext"></span><span id="iplContextRelease__IPLContextP"></span><span class="target" id="group__context_1ga247d2d38b44caf87886b32fec28ee2b7"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplContextRelease</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv410IPLContext" title="IPLContext"><span class="n"><span class="pre">IPLContext</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">context</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv417iplContextReleaseP10IPLContext" title="Link to this definition"></a><br /></dt>
 <dd><p>Releases a reference to a context. </p>
 <p>The context will not be destroyed until all references are released.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>context</strong> – [in, out] The context to release. </p>
 </dd>
 </dl>
 </dd></dl>
 
-</div>
-<div class="section" id="structures">
-<h2>Structures<a class="headerlink" href="#structures" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="structures">
+<h2>Structures<a class="headerlink" href="#structures" title="Link to this heading"></a></h2>
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv418IPLContextSettings">
-<span id="_CPPv318IPLContextSettings"></span><span id="_CPPv218IPLContextSettings"></span><span id="IPLContextSettings"></span><span class="target" id="struct_i_p_l_context_settings"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLContextSettings</span></span></span><a class="headerlink" href="#_CPPv418IPLContextSettings" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv318IPLContextSettings"></span><span id="_CPPv218IPLContextSettings"></span><span id="IPLContextSettings"></span><span class="target" id="struct_i_p_l_context_settings"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLContextSettings</span></span></span><a class="headerlink" href="#_CPPv418IPLContextSettings" title="Link to this definition"></a><br /></dt>
 <dd><p>Settings used to create a context object. </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N18IPLContextSettings7versionE">
-<span id="_CPPv3N18IPLContextSettings7versionE"></span><span id="_CPPv2N18IPLContextSettings7versionE"></span><span id="IPLContextSettings::version__IPLuint32"></span><span class="target" id="struct_i_p_l_context_settings_1a1086b076309bd69ae0076bf852d5833a"></span><a class="reference internal" href="types.html#_CPPv49IPLuint32" title="IPLuint32"><span class="n"><span class="pre">IPLuint32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">version</span></span></span><a class="headerlink" href="#_CPPv4N18IPLContextSettings7versionE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N18IPLContextSettings7versionE"></span><span id="_CPPv2N18IPLContextSettings7versionE"></span><span id="IPLContextSettings::version__IPLuint32"></span><span class="target" id="struct_i_p_l_context_settings_1a1086b076309bd69ae0076bf852d5833a"></span><a class="reference internal" href="types.html#_CPPv49IPLuint32" title="IPLuint32"><span class="n"><span class="pre">IPLuint32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">version</span></span></span><a class="headerlink" href="#_CPPv4N18IPLContextSettings7versionE" title="Link to this definition"></a><br /></dt>
 <dd><p>The API version used by the caller. </p>
 <p>Context creation will fail if <code class="docutils literal notranslate"><span class="pre">phonon.dll</span></code> does not implement a compatible version of the API. Typically, this should be set to <code class="docutils literal notranslate"><span class="pre">STEAMAUDIO_VERSION</span></code>. </p>
 </dd></dl>
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N18IPLContextSettings11logCallbackE">
-<span id="_CPPv3N18IPLContextSettings11logCallbackE"></span><span id="_CPPv2N18IPLContextSettings11logCallbackE"></span><span id="IPLContextSettings::logCallback__IPLLogFunction"></span><span class="target" id="struct_i_p_l_context_settings_1adbb4d3b5636089431bdbc52a985a72fc"></span><a class="reference internal" href="#_CPPv414IPLLogFunction" title="IPLLogFunction"><span class="n"><span class="pre">IPLLogFunction</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">logCallback</span></span></span><a class="headerlink" href="#_CPPv4N18IPLContextSettings11logCallbackE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N18IPLContextSettings11logCallbackE"></span><span id="_CPPv2N18IPLContextSettings11logCallbackE"></span><span id="IPLContextSettings::logCallback__IPLLogFunction"></span><span class="target" id="struct_i_p_l_context_settings_1adbb4d3b5636089431bdbc52a985a72fc"></span><a class="reference internal" href="#_CPPv414IPLLogFunction" title="IPLLogFunction"><span class="n"><span class="pre">IPLLogFunction</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">logCallback</span></span></span><a class="headerlink" href="#_CPPv4N18IPLContextSettings11logCallbackE" title="Link to this definition"></a><br /></dt>
 <dd><p>(Optional) If non-NULL, Steam Audio will call this function to record log messages generated by certain operations. </p>
 </dd></dl>
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N18IPLContextSettings16allocateCallbackE">
-<span id="_CPPv3N18IPLContextSettings16allocateCallbackE"></span><span id="_CPPv2N18IPLContextSettings16allocateCallbackE"></span><span id="IPLContextSettings::allocateCallback__IPLAllocateFunction"></span><span class="target" id="struct_i_p_l_context_settings_1a3547d5d88392d5d94eaa30b15c32d363"></span><a class="reference internal" href="#_CPPv419IPLAllocateFunction" title="IPLAllocateFunction"><span class="n"><span class="pre">IPLAllocateFunction</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">allocateCallback</span></span></span><a class="headerlink" href="#_CPPv4N18IPLContextSettings16allocateCallbackE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N18IPLContextSettings16allocateCallbackE"></span><span id="_CPPv2N18IPLContextSettings16allocateCallbackE"></span><span id="IPLContextSettings::allocateCallback__IPLAllocateFunction"></span><span class="target" id="struct_i_p_l_context_settings_1a3547d5d88392d5d94eaa30b15c32d363"></span><a class="reference internal" href="#_CPPv419IPLAllocateFunction" title="IPLAllocateFunction"><span class="n"><span class="pre">IPLAllocateFunction</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">allocateCallback</span></span></span><a class="headerlink" href="#_CPPv4N18IPLContextSettings16allocateCallbackE" title="Link to this definition"></a><br /></dt>
 <dd><p>(Optional) If non-NULL, Steam Audio will call this function whenever it needs to allocate memory. </p>
 </dd></dl>
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N18IPLContextSettings12freeCallbackE">
-<span id="_CPPv3N18IPLContextSettings12freeCallbackE"></span><span id="_CPPv2N18IPLContextSettings12freeCallbackE"></span><span id="IPLContextSettings::freeCallback__IPLFreeFunction"></span><span class="target" id="struct_i_p_l_context_settings_1a334794dd2b5e2b58816b9d04aeed4ec6"></span><a class="reference internal" href="#_CPPv415IPLFreeFunction" title="IPLFreeFunction"><span class="n"><span class="pre">IPLFreeFunction</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">freeCallback</span></span></span><a class="headerlink" href="#_CPPv4N18IPLContextSettings12freeCallbackE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N18IPLContextSettings12freeCallbackE"></span><span id="_CPPv2N18IPLContextSettings12freeCallbackE"></span><span id="IPLContextSettings::freeCallback__IPLFreeFunction"></span><span class="target" id="struct_i_p_l_context_settings_1a334794dd2b5e2b58816b9d04aeed4ec6"></span><a class="reference internal" href="#_CPPv415IPLFreeFunction" title="IPLFreeFunction"><span class="n"><span class="pre">IPLFreeFunction</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">freeCallback</span></span></span><a class="headerlink" href="#_CPPv4N18IPLContextSettings12freeCallbackE" title="Link to this definition"></a><br /></dt>
 <dd><p>(Optional) If non-NULL, Steam Audio will call this function whenever it needs to free memory. </p>
 </dd></dl>
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N18IPLContextSettings9simdLevelE">
-<span id="_CPPv3N18IPLContextSettings9simdLevelE"></span><span id="_CPPv2N18IPLContextSettings9simdLevelE"></span><span id="IPLContextSettings::simdLevel__IPLSIMDLevel"></span><span class="target" id="struct_i_p_l_context_settings_1a55c3a5902cb86175772f6371d8d06b5e"></span><a class="reference internal" href="#_CPPv412IPLSIMDLevel" title="IPLSIMDLevel"><span class="n"><span class="pre">IPLSIMDLevel</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">simdLevel</span></span></span><a class="headerlink" href="#_CPPv4N18IPLContextSettings9simdLevelE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N18IPLContextSettings9simdLevelE"></span><span id="_CPPv2N18IPLContextSettings9simdLevelE"></span><span id="IPLContextSettings::simdLevel__IPLSIMDLevel"></span><span class="target" id="struct_i_p_l_context_settings_1a55c3a5902cb86175772f6371d8d06b5e"></span><a class="reference internal" href="#_CPPv412IPLSIMDLevel" title="IPLSIMDLevel"><span class="n"><span class="pre">IPLSIMDLevel</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">simdLevel</span></span></span><a class="headerlink" href="#_CPPv4N18IPLContextSettings9simdLevelE" title="Link to this definition"></a><br /></dt>
 <dd><p>The maximum SIMD instruction set level that Steam Audio should use. </p>
 <p>Steam Audio automatically chooses the best instruction set to use based on the user’s CPU, but you can prevent it from using certain newer instruction sets using this parameter. For example, with some workloads, AVX512 instructions consume enough power that the CPU clock speed will be throttled, resulting in lower performance than expected. If you observe this in your application, set this parameter to <code class="docutils literal notranslate"><span class="pre">IPL_SIMDLEVEL_AVX2</span></code> or lower. </p>
 </dd></dl>
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N18IPLContextSettings5flagsE">
-<span id="_CPPv3N18IPLContextSettings5flagsE"></span><span id="_CPPv2N18IPLContextSettings5flagsE"></span><span id="IPLContextSettings::flags__IPLContextFlags"></span><span class="target" id="struct_i_p_l_context_settings_1ac033215a7cdfcc642def74127de71b03"></span><a class="reference internal" href="#_CPPv415IPLContextFlags" title="IPLContextFlags"><span class="n"><span class="pre">IPLContextFlags</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">flags</span></span></span><a class="headerlink" href="#_CPPv4N18IPLContextSettings5flagsE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N18IPLContextSettings5flagsE"></span><span id="_CPPv2N18IPLContextSettings5flagsE"></span><span id="IPLContextSettings::flags__IPLContextFlags"></span><span class="target" id="struct_i_p_l_context_settings_1ac033215a7cdfcc642def74127de71b03"></span><a class="reference internal" href="#_CPPv415IPLContextFlags" title="IPLContextFlags"><span class="n"><span class="pre">IPLContextFlags</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">flags</span></span></span><a class="headerlink" href="#_CPPv4N18IPLContextSettings5flagsE" title="Link to this definition"></a><br /></dt>
 <dd><p>Additional flags for modifying the behavior of the created context. </p>
 </dd></dl>
 
 </div>
 </dd></dl>
 
-</div>
-<div class="section" id="enumerations">
-<h2>Enumerations<a class="headerlink" href="#enumerations" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="enumerations">
+<h2>Enumerations<a class="headerlink" href="#enumerations" title="Link to this heading"></a></h2>
 <dl class="cpp enum">
 <dt class="sig sig-object cpp" id="_CPPv411IPLLogLevel">
-<span id="_CPPv311IPLLogLevel"></span><span id="_CPPv211IPLLogLevel"></span><span class="target" id="group__context_1gaec816389554a9a18f5dd813d536c646b"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLLogLevel</span></span></span><a class="headerlink" href="#_CPPv411IPLLogLevel" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv311IPLLogLevel"></span><span id="_CPPv211IPLLogLevel"></span><span class="target" id="group__context_1gaec816389554a9a18f5dd813d536c646b"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLLogLevel</span></span></span><a class="headerlink" href="#_CPPv411IPLLogLevel" title="Link to this definition"></a><br /></dt>
 <dd><p>Severity levels of log messages generated by Steam Audio. </p>
 <p><em>Values:</em></p>
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N11IPLLogLevel17IPL_LOGLEVEL_INFOE">
-<span id="_CPPv3N11IPLLogLevel17IPL_LOGLEVEL_INFOE"></span><span id="_CPPv2N11IPLLogLevel17IPL_LOGLEVEL_INFOE"></span><span class="target" id="group__context_1ggaec816389554a9a18f5dd813d536c646bacb32ff3a92339709fe9ec185e28901a0"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_LOGLEVEL_INFO</span></span></span><a class="headerlink" href="#_CPPv4N11IPLLogLevel17IPL_LOGLEVEL_INFOE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N11IPLLogLevel17IPL_LOGLEVEL_INFOE"></span><span id="_CPPv2N11IPLLogLevel17IPL_LOGLEVEL_INFOE"></span><span class="target" id="group__context_1ggaec816389554a9a18f5dd813d536c646bacb32ff3a92339709fe9ec185e28901a0"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_LOGLEVEL_INFO</span></span></span><a class="headerlink" href="#_CPPv4N11IPLLogLevel17IPL_LOGLEVEL_INFOE" title="Link to this definition"></a><br /></dt>
 <dd><p>A normal, informational message. </p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N11IPLLogLevel20IPL_LOGLEVEL_WARNINGE">
-<span id="_CPPv3N11IPLLogLevel20IPL_LOGLEVEL_WARNINGE"></span><span id="_CPPv2N11IPLLogLevel20IPL_LOGLEVEL_WARNINGE"></span><span class="target" id="group__context_1ggaec816389554a9a18f5dd813d536c646baa3fd89c0a91e97378dd03b3c7ffdce23"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_LOGLEVEL_WARNING</span></span></span><a class="headerlink" href="#_CPPv4N11IPLLogLevel20IPL_LOGLEVEL_WARNINGE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N11IPLLogLevel20IPL_LOGLEVEL_WARNINGE"></span><span id="_CPPv2N11IPLLogLevel20IPL_LOGLEVEL_WARNINGE"></span><span class="target" id="group__context_1ggaec816389554a9a18f5dd813d536c646baa3fd89c0a91e97378dd03b3c7ffdce23"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_LOGLEVEL_WARNING</span></span></span><a class="headerlink" href="#_CPPv4N11IPLLogLevel20IPL_LOGLEVEL_WARNINGE" title="Link to this definition"></a><br /></dt>
 <dd><p>A warning. </p>
 <p>The operation that generated this message may not work as expected. </p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N11IPLLogLevel18IPL_LOGLEVEL_ERRORE">
-<span id="_CPPv3N11IPLLogLevel18IPL_LOGLEVEL_ERRORE"></span><span id="_CPPv2N11IPLLogLevel18IPL_LOGLEVEL_ERRORE"></span><span class="target" id="group__context_1ggaec816389554a9a18f5dd813d536c646ba4d112ad5378b6d0035372828165d8132"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_LOGLEVEL_ERROR</span></span></span><a class="headerlink" href="#_CPPv4N11IPLLogLevel18IPL_LOGLEVEL_ERRORE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N11IPLLogLevel18IPL_LOGLEVEL_ERRORE"></span><span id="_CPPv2N11IPLLogLevel18IPL_LOGLEVEL_ERRORE"></span><span class="target" id="group__context_1ggaec816389554a9a18f5dd813d536c646ba4d112ad5378b6d0035372828165d8132"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_LOGLEVEL_ERROR</span></span></span><a class="headerlink" href="#_CPPv4N11IPLLogLevel18IPL_LOGLEVEL_ERRORE" title="Link to this definition"></a><br /></dt>
 <dd><p>An error. </p>
 <p>The operation that generated this message failed. </p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N11IPLLogLevel18IPL_LOGLEVEL_DEBUGE">
-<span id="_CPPv3N11IPLLogLevel18IPL_LOGLEVEL_DEBUGE"></span><span id="_CPPv2N11IPLLogLevel18IPL_LOGLEVEL_DEBUGE"></span><span class="target" id="group__context_1ggaec816389554a9a18f5dd813d536c646bac8cb5fb8667eb344e36ec8a379f4e2d2"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_LOGLEVEL_DEBUG</span></span></span><a class="headerlink" href="#_CPPv4N11IPLLogLevel18IPL_LOGLEVEL_DEBUGE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N11IPLLogLevel18IPL_LOGLEVEL_DEBUGE"></span><span id="_CPPv2N11IPLLogLevel18IPL_LOGLEVEL_DEBUGE"></span><span class="target" id="group__context_1ggaec816389554a9a18f5dd813d536c646bac8cb5fb8667eb344e36ec8a379f4e2d2"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_LOGLEVEL_DEBUG</span></span></span><a class="headerlink" href="#_CPPv4N11IPLLogLevel18IPL_LOGLEVEL_DEBUGE" title="Link to this definition"></a><br /></dt>
 <dd><p>A detailed message intended for debugging purposes only. </p>
 </dd></dl>
 
@@ -350,47 +279,47 @@
 
 <dl class="cpp enum">
 <dt class="sig sig-object cpp" id="_CPPv412IPLSIMDLevel">
-<span id="_CPPv312IPLSIMDLevel"></span><span id="_CPPv212IPLSIMDLevel"></span><span class="target" id="group__context_1ga449c0d81bf0ae61e1e2f4c5ef8a540a5"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLSIMDLevel</span></span></span><a class="headerlink" href="#_CPPv412IPLSIMDLevel" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv312IPLSIMDLevel"></span><span id="_CPPv212IPLSIMDLevel"></span><span class="target" id="group__context_1ga449c0d81bf0ae61e1e2f4c5ef8a540a5"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLSIMDLevel</span></span></span><a class="headerlink" href="#_CPPv412IPLSIMDLevel" title="Link to this definition"></a><br /></dt>
 <dd><p>SIMD instruction sets that Steam Audio can attempt to use. </p>
 <p><em>Values:</em></p>
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N12IPLSIMDLevel18IPL_SIMDLEVEL_SSE2E">
-<span id="_CPPv3N12IPLSIMDLevel18IPL_SIMDLEVEL_SSE2E"></span><span id="_CPPv2N12IPLSIMDLevel18IPL_SIMDLEVEL_SSE2E"></span><span class="target" id="group__context_1gga449c0d81bf0ae61e1e2f4c5ef8a540a5af6c3394918a852c5ff4979cfa9630591"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_SIMDLEVEL_SSE2</span></span></span><a class="headerlink" href="#_CPPv4N12IPLSIMDLevel18IPL_SIMDLEVEL_SSE2E" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N12IPLSIMDLevel18IPL_SIMDLEVEL_SSE2E"></span><span id="_CPPv2N12IPLSIMDLevel18IPL_SIMDLEVEL_SSE2E"></span><span class="target" id="group__context_1gga449c0d81bf0ae61e1e2f4c5ef8a540a5af6c3394918a852c5ff4979cfa9630591"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_SIMDLEVEL_SSE2</span></span></span><a class="headerlink" href="#_CPPv4N12IPLSIMDLevel18IPL_SIMDLEVEL_SSE2E" title="Link to this definition"></a><br /></dt>
 <dd><p>Intel Streaming SIMD Extensions 2. </p>
 <p>Up to 4 simultaneous floating-point operations. </p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N12IPLSIMDLevel18IPL_SIMDLEVEL_SSE4E">
-<span id="_CPPv3N12IPLSIMDLevel18IPL_SIMDLEVEL_SSE4E"></span><span id="_CPPv2N12IPLSIMDLevel18IPL_SIMDLEVEL_SSE4E"></span><span class="target" id="group__context_1gga449c0d81bf0ae61e1e2f4c5ef8a540a5a3b2c9bf99d0bca761dd957e3d5dc4eb6"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_SIMDLEVEL_SSE4</span></span></span><a class="headerlink" href="#_CPPv4N12IPLSIMDLevel18IPL_SIMDLEVEL_SSE4E" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N12IPLSIMDLevel18IPL_SIMDLEVEL_SSE4E"></span><span id="_CPPv2N12IPLSIMDLevel18IPL_SIMDLEVEL_SSE4E"></span><span class="target" id="group__context_1gga449c0d81bf0ae61e1e2f4c5ef8a540a5a3b2c9bf99d0bca761dd957e3d5dc4eb6"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_SIMDLEVEL_SSE4</span></span></span><a class="headerlink" href="#_CPPv4N12IPLSIMDLevel18IPL_SIMDLEVEL_SSE4E" title="Link to this definition"></a><br /></dt>
 <dd><p>Intel Streaming SIMD Extensions 4.2 or older. </p>
 <p>Up to 4 simultaneous floating-point operations. </p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N12IPLSIMDLevel17IPL_SIMDLEVEL_AVXE">
-<span id="_CPPv3N12IPLSIMDLevel17IPL_SIMDLEVEL_AVXE"></span><span id="_CPPv2N12IPLSIMDLevel17IPL_SIMDLEVEL_AVXE"></span><span class="target" id="group__context_1gga449c0d81bf0ae61e1e2f4c5ef8a540a5a8967852ac0a6a47aaea534a89eab4a1a"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_SIMDLEVEL_AVX</span></span></span><a class="headerlink" href="#_CPPv4N12IPLSIMDLevel17IPL_SIMDLEVEL_AVXE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N12IPLSIMDLevel17IPL_SIMDLEVEL_AVXE"></span><span id="_CPPv2N12IPLSIMDLevel17IPL_SIMDLEVEL_AVXE"></span><span class="target" id="group__context_1gga449c0d81bf0ae61e1e2f4c5ef8a540a5a8967852ac0a6a47aaea534a89eab4a1a"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_SIMDLEVEL_AVX</span></span></span><a class="headerlink" href="#_CPPv4N12IPLSIMDLevel17IPL_SIMDLEVEL_AVXE" title="Link to this definition"></a><br /></dt>
 <dd><p>Intel Advanced Vector Extensions or older. </p>
 <p>Up to 8 simultaneous floating-point operations. </p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N12IPLSIMDLevel18IPL_SIMDLEVEL_AVX2E">
-<span id="_CPPv3N12IPLSIMDLevel18IPL_SIMDLEVEL_AVX2E"></span><span id="_CPPv2N12IPLSIMDLevel18IPL_SIMDLEVEL_AVX2E"></span><span class="target" id="group__context_1gga449c0d81bf0ae61e1e2f4c5ef8a540a5aa4b0a95840aa4ce68fd1b62801ab46c5"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_SIMDLEVEL_AVX2</span></span></span><a class="headerlink" href="#_CPPv4N12IPLSIMDLevel18IPL_SIMDLEVEL_AVX2E" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N12IPLSIMDLevel18IPL_SIMDLEVEL_AVX2E"></span><span id="_CPPv2N12IPLSIMDLevel18IPL_SIMDLEVEL_AVX2E"></span><span class="target" id="group__context_1gga449c0d81bf0ae61e1e2f4c5ef8a540a5aa4b0a95840aa4ce68fd1b62801ab46c5"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_SIMDLEVEL_AVX2</span></span></span><a class="headerlink" href="#_CPPv4N12IPLSIMDLevel18IPL_SIMDLEVEL_AVX2E" title="Link to this definition"></a><br /></dt>
 <dd><p>Intel Advanced Vector Extensions 2 or older. </p>
 <p>Up to 8 simultaneous floating-point operations. </p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N12IPLSIMDLevel20IPL_SIMDLEVEL_AVX512E">
-<span id="_CPPv3N12IPLSIMDLevel20IPL_SIMDLEVEL_AVX512E"></span><span id="_CPPv2N12IPLSIMDLevel20IPL_SIMDLEVEL_AVX512E"></span><span class="target" id="group__context_1gga449c0d81bf0ae61e1e2f4c5ef8a540a5abea0d8f6689daa49d22ff49872efe32b"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_SIMDLEVEL_AVX512</span></span></span><a class="headerlink" href="#_CPPv4N12IPLSIMDLevel20IPL_SIMDLEVEL_AVX512E" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N12IPLSIMDLevel20IPL_SIMDLEVEL_AVX512E"></span><span id="_CPPv2N12IPLSIMDLevel20IPL_SIMDLEVEL_AVX512E"></span><span class="target" id="group__context_1gga449c0d81bf0ae61e1e2f4c5ef8a540a5abea0d8f6689daa49d22ff49872efe32b"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_SIMDLEVEL_AVX512</span></span></span><a class="headerlink" href="#_CPPv4N12IPLSIMDLevel20IPL_SIMDLEVEL_AVX512E" title="Link to this definition"></a><br /></dt>
 <dd><p>Intel Advanced Vector Extensions 512 or older. </p>
 <p>Up to 16 simultaneous floating-point operations. </p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N12IPLSIMDLevel18IPL_SIMDLEVEL_NEONE">
-<span id="_CPPv3N12IPLSIMDLevel18IPL_SIMDLEVEL_NEONE"></span><span id="_CPPv2N12IPLSIMDLevel18IPL_SIMDLEVEL_NEONE"></span><span class="target" id="group__context_1gga449c0d81bf0ae61e1e2f4c5ef8a540a5a34f4595f28bbcea981c1c6a4cd70c7cc"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_SIMDLEVEL_NEON</span></span></span><a class="headerlink" href="#_CPPv4N12IPLSIMDLevel18IPL_SIMDLEVEL_NEONE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N12IPLSIMDLevel18IPL_SIMDLEVEL_NEONE"></span><span id="_CPPv2N12IPLSIMDLevel18IPL_SIMDLEVEL_NEONE"></span><span class="target" id="group__context_1gga449c0d81bf0ae61e1e2f4c5ef8a540a5a34f4595f28bbcea981c1c6a4cd70c7cc"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_SIMDLEVEL_NEON</span></span></span><a class="headerlink" href="#_CPPv4N12IPLSIMDLevel18IPL_SIMDLEVEL_NEONE" title="Link to this definition"></a><br /></dt>
 <dd><p>ARM NEON. </p>
 <p>Up to 4 simultaneous floating-point operations. </p>
 </dd></dl>
@@ -399,121 +328,104 @@
 
 <dl class="cpp enum">
 <dt class="sig sig-object cpp" id="_CPPv415IPLContextFlags">
-<span id="_CPPv315IPLContextFlags"></span><span id="_CPPv215IPLContextFlags"></span><span class="target" id="group__context_1gaefd9fc5e972a64f042fa5dd8bb08bcf3"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLContextFlags</span></span></span><a class="headerlink" href="#_CPPv415IPLContextFlags" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv315IPLContextFlags"></span><span id="_CPPv215IPLContextFlags"></span><span class="target" id="group__context_1gaefd9fc5e972a64f042fa5dd8bb08bcf3"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLContextFlags</span></span></span><a class="headerlink" href="#_CPPv415IPLContextFlags" title="Link to this definition"></a><br /></dt>
 <dd><p>Additional flags for modifying the behavior of a Steam Audio context. </p>
 <p><em>Values:</em></p>
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N15IPLContextFlags27IPL_CONTEXTFLAGS_VALIDATIONE">
-<span id="_CPPv3N15IPLContextFlags27IPL_CONTEXTFLAGS_VALIDATIONE"></span><span id="_CPPv2N15IPLContextFlags27IPL_CONTEXTFLAGS_VALIDATIONE"></span><span class="target" id="group__context_1ggaefd9fc5e972a64f042fa5dd8bb08bcf3abc5fff073d746acba7dbd570d8a31f12"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_CONTEXTFLAGS_VALIDATION</span></span></span><a class="headerlink" href="#_CPPv4N15IPLContextFlags27IPL_CONTEXTFLAGS_VALIDATIONE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N15IPLContextFlags27IPL_CONTEXTFLAGS_VALIDATIONE"></span><span id="_CPPv2N15IPLContextFlags27IPL_CONTEXTFLAGS_VALIDATIONE"></span><span class="target" id="group__context_1ggaefd9fc5e972a64f042fa5dd8bb08bcf3abc5fff073d746acba7dbd570d8a31f12"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_CONTEXTFLAGS_VALIDATION</span></span></span><a class="headerlink" href="#_CPPv4N15IPLContextFlags27IPL_CONTEXTFLAGS_VALIDATIONE" title="Link to this definition"></a><br /></dt>
 <dd><p>All API functions perform extra validation checks. </p>
 <p>NOTE: This imposes a significant performance penalty. </p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N15IPLContextFlags28IPL_CONTEXTFLAGS_FORCE_32BITE">
-<span id="_CPPv3N15IPLContextFlags28IPL_CONTEXTFLAGS_FORCE_32BITE"></span><span id="_CPPv2N15IPLContextFlags28IPL_CONTEXTFLAGS_FORCE_32BITE"></span><span class="target" id="group__context_1ggaefd9fc5e972a64f042fa5dd8bb08bcf3abbda8cbc15414558a2e1a97ec0dad865"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_CONTEXTFLAGS_FORCE_32BIT</span></span></span><a class="headerlink" href="#_CPPv4N15IPLContextFlags28IPL_CONTEXTFLAGS_FORCE_32BITE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N15IPLContextFlags28IPL_CONTEXTFLAGS_FORCE_32BITE"></span><span id="_CPPv2N15IPLContextFlags28IPL_CONTEXTFLAGS_FORCE_32BITE"></span><span class="target" id="group__context_1ggaefd9fc5e972a64f042fa5dd8bb08bcf3abbda8cbc15414558a2e1a97ec0dad865"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_CONTEXTFLAGS_FORCE_32BIT</span></span></span><a class="headerlink" href="#_CPPv4N15IPLContextFlags28IPL_CONTEXTFLAGS_FORCE_32BITE" title="Link to this definition"></a><br /></dt>
 <dd><p>Force this enum to be 32 bits in size. </p>
 </dd></dl>
 
 </dd></dl>
 
-</div>
-<div class="section" id="callbacks">
-<h2>Callbacks<a class="headerlink" href="#callbacks" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="callbacks">
+<h2>Callbacks<a class="headerlink" href="#callbacks" title="Link to this heading"></a></h2>
 <dl class="cpp type">
 <dt class="sig sig-object cpp" id="_CPPv414IPLLogFunction">
-<span id="_CPPv314IPLLogFunction"></span><span id="_CPPv214IPLLogFunction"></span><span id="IPLLogFunction"></span><span class="target" id="group__context_1ga5ea21aa7a13a257c1698b8a894d9187e"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">IPLLogFunction</span></span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">(</span></span><a class="reference internal" href="#_CPPv411IPLLogLevel" title="IPLLogLevel"><span class="n"><span class="pre">IPLLogLevel</span></span></a><span class="w"> </span><span class="n"><span class="pre">level</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">message</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#_CPPv414IPLLogFunction" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv314IPLLogFunction"></span><span id="_CPPv214IPLLogFunction"></span><span id="IPLLogFunction"></span><span class="target" id="group__context_1ga5ea21aa7a13a257c1698b8a894d9187e"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">IPLLogFunction</span></span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">(</span></span><a class="reference internal" href="#_CPPv411IPLLogLevel" title="IPLLogLevel"><span class="n"><span class="pre">IPLLogLevel</span></span></a><span class="w"> </span><span class="n"><span class="pre">level</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">message</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#_CPPv414IPLLogFunction" title="Link to this definition"></a><br /></dt>
 <dd><p>Prototype of a callback that logs a message generated by Steam Audio. </p>
 <p>This may be implemented in any suitable way, such as appending to a log file, displaying a dialog box, etc. The default behavior is to print to <code class="docutils literal notranslate"><span class="pre">stdout</span></code>.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>level</strong> – The severity level of the message. </p></li>
-<li><p><strong>message</strong> – The message to log. </p></li>
-</ul>
+<dt class="field-odd">Param level<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The severity level of the message. </p>
+</dd>
+<dt class="field-even">Param message<span class="colon">:</span></dt>
+<dd class="field-even"><p>The message to log. </p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="cpp type">
 <dt class="sig sig-object cpp" id="_CPPv419IPLAllocateFunction">
-<span id="_CPPv319IPLAllocateFunction"></span><span id="_CPPv219IPLAllocateFunction"></span><span id="IPLAllocateFunction"></span><span class="target" id="group__context_1ga736c05fd4480e0ad15e86ee49f3e8012"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">IPLAllocateFunction</span></span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">(</span></span><a class="reference internal" href="types.html#_CPPv47IPLsize" title="IPLsize"><span class="n"><span class="pre">IPLsize</span></span></a><span class="w"> </span><span class="n"><span class="pre">size</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="types.html#_CPPv47IPLsize" title="IPLsize"><span class="n"><span class="pre">IPLsize</span></span></a><span class="w"> </span><span class="n"><span class="pre">alignment</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#_CPPv419IPLAllocateFunction" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv319IPLAllocateFunction"></span><span id="_CPPv219IPLAllocateFunction"></span><span id="IPLAllocateFunction"></span><span class="target" id="group__context_1ga736c05fd4480e0ad15e86ee49f3e8012"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">IPLAllocateFunction</span></span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">(</span></span><a class="reference internal" href="types.html#_CPPv47IPLsize" title="IPLsize"><span class="n"><span class="pre">IPLsize</span></span></a><span class="w"> </span><span class="n"><span class="pre">size</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="types.html#_CPPv47IPLsize" title="IPLsize"><span class="n"><span class="pre">IPLsize</span></span></a><span class="w"> </span><span class="n"><span class="pre">alignment</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#_CPPv419IPLAllocateFunction" title="Link to this definition"></a><br /></dt>
 <dd><p>Prototype of a callback that allocates memory. </p>
 <p>This is usually specified to let Steam Audio use a custom memory allocator. The default behavior is to use the OS-dependent aligned version of <code class="docutils literal notranslate"><span class="pre">malloc</span></code>.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>size</strong> – The number of bytes to allocate. </p></li>
-<li><p><strong>alignment</strong> – The alignment (in bytes) of the start address of the allocated memory.</p></li>
-</ul>
+<dt class="field-odd">Param size<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The number of bytes to allocate. </p>
 </dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Pointer to the allocated block of memory, or <code class="docutils literal notranslate"><span class="pre">NULL</span></code> if allocation failed. </p>
+<dt class="field-even">Param alignment<span class="colon">:</span></dt>
+<dd class="field-even"><p>The alignment (in bytes) of the start address of the allocated memory.</p>
+</dd>
+<dt class="field-odd">Return<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Pointer to the allocated block of memory, or <code class="docutils literal notranslate"><span class="pre">NULL</span></code> if allocation failed. </p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="cpp type">
 <dt class="sig sig-object cpp" id="_CPPv415IPLFreeFunction">
-<span id="_CPPv315IPLFreeFunction"></span><span id="_CPPv215IPLFreeFunction"></span><span id="IPLFreeFunction"></span><span class="target" id="group__context_1gaea4f8ad59a1578e92a305a1b28f37839"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">IPLFreeFunction</span></span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">(</span></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">memoryBlock</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#_CPPv415IPLFreeFunction" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv315IPLFreeFunction"></span><span id="_CPPv215IPLFreeFunction"></span><span id="IPLFreeFunction"></span><span class="target" id="group__context_1gaea4f8ad59a1578e92a305a1b28f37839"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">IPLFreeFunction</span></span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">(</span></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">memoryBlock</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#_CPPv415IPLFreeFunction" title="Link to this definition"></a><br /></dt>
 <dd><p>Prototype of a callback that frees a block of memory. </p>
 <p>This is usually specified when using a custom memory allocator with Steam Audio. The default behavior is to use the OS-dependent aligned version of <code class="docutils literal notranslate"><span class="pre">free</span></code>.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>memoryBlock</strong> – Pointer to the block of memory. </p>
+<dt class="field-odd">Param memoryBlock<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Pointer to the block of memory. </p>
 </dd>
 </dl>
 </dd></dl>
 
-</div>
-</div>
+</section>
+</section>
 
 
            </div>
-           
           </div>
-          <footer>
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="geometry.html" class="btn btn-neutral float-right" title="Geometry" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="types.html" class="btn btn-neutral float-left" title="Basic Data Types" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="geometry.html" class="btn btn-neutral float-right" title="Geometry" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &#169; Copyright 2017-2023, Valve Corporation.
-
-    </p>
+    <p>&#169; Copyright 2017-2023, Valve Corporation.</p>
   </div>
-    
-    
-    
-    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>

@@ -1,101 +1,50 @@
 
 
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
-  <meta charset="utf-8" />
-  
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  
   <title>OpenCL &mdash; Steam Audio C API  documentation</title>
-  
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/steamaudio.css?v=b5aaeb06" />
 
   
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/steamaudio.css" type="text/css" />
-
-  
-  
-
-  
-  
-
-  
-
-  
-  <!--[if lt IE 9]>
-    <script src="_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/doctools.js"></script>
-    
-    <script type="text/javascript" src="_static/js/theme.js"></script>
-
-    
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=7f41d439"></script>
+      <script src="_static/doctools.js?v=9a2dae69"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Radeon Rays" href="radeon-rays.html" />
     <link rel="prev" title="Embree" href="embree.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
 
           
-            <a href="index.html">
           
-
-          
+          <a href="index.html">
             
-            <img src="_static/steam-audio-logo.png" class="logo" alt="Logo"/>
-          
+              <img src="_static/steam-audio-logo.png" class="logo" alt="Logo"/>
           </a>
-
-          
-            
-            
-              <div class="version">
-                4.6.0
-              </div>
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
-              <p class="caption"><span class="caption-text">Steam Audio SDK</span></p>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Steam Audio SDK</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="guide.html">Programmer’s Guide</a></li>
@@ -108,10 +57,32 @@
 <li class="toctree-l2"><a class="reference internal" href="serialization.html">Serialization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="embree.html">Embree</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">OpenCL</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#typedefs">Typedefs</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#functions">Functions</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#structures">Structures</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#enumerations">Enumerations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#typedefs">Typedefs</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv419IPLOpenCLDeviceList"><code class="docutils literal notranslate"><span class="pre">IPLOpenCLDeviceList</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv415IPLOpenCLDevice"><code class="docutils literal notranslate"><span class="pre">IPLOpenCLDevice</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#functions">Functions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv425iplOpenCLDeviceListCreate10IPLContextP23IPLOpenCLDeviceSettingsP19IPLOpenCLDeviceList"><code class="docutils literal notranslate"><span class="pre">iplOpenCLDeviceListCreate()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv425iplOpenCLDeviceListRetain19IPLOpenCLDeviceList"><code class="docutils literal notranslate"><span class="pre">iplOpenCLDeviceListRetain()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv426iplOpenCLDeviceListReleaseP19IPLOpenCLDeviceList"><code class="docutils literal notranslate"><span class="pre">iplOpenCLDeviceListRelease()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv432iplOpenCLDeviceListGetNumDevices19IPLOpenCLDeviceList"><code class="docutils literal notranslate"><span class="pre">iplOpenCLDeviceListGetNumDevices()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv432iplOpenCLDeviceListGetDeviceDesc19IPLOpenCLDeviceList8IPLint32P19IPLOpenCLDeviceDesc"><code class="docutils literal notranslate"><span class="pre">iplOpenCLDeviceListGetDeviceDesc()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv421iplOpenCLDeviceCreate10IPLContext19IPLOpenCLDeviceList8IPLint32P15IPLOpenCLDevice"><code class="docutils literal notranslate"><span class="pre">iplOpenCLDeviceCreate()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv433iplOpenCLDeviceCreateFromExisting10IPLContextPvPvP15IPLOpenCLDevice"><code class="docutils literal notranslate"><span class="pre">iplOpenCLDeviceCreateFromExisting()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv421iplOpenCLDeviceRetain15IPLOpenCLDevice"><code class="docutils literal notranslate"><span class="pre">iplOpenCLDeviceRetain()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv422iplOpenCLDeviceReleaseP15IPLOpenCLDevice"><code class="docutils literal notranslate"><span class="pre">iplOpenCLDeviceRelease()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#structures">Structures</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv423IPLOpenCLDeviceSettings"><code class="docutils literal notranslate"><span class="pre">IPLOpenCLDeviceSettings</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv419IPLOpenCLDeviceDesc"><code class="docutils literal notranslate"><span class="pre">IPLOpenCLDeviceDesc</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#enumerations">Enumerations</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv419IPLOpenCLDeviceType"><code class="docutils literal notranslate"><span class="pre">IPLOpenCLDeviceType</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="radeon-rays.html">Radeon Rays</a></li>
@@ -137,106 +108,65 @@
 </li>
 </ul>
 
-            
-          
         </div>
-        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="index.html">Steam Audio C API</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
-      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-        
-          <li><a href="reference.html">API Reference</a> &raquo;</li>
-        
-      <li>OpenCL</li>
-    
-    
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="reference.html">API Reference</a></li>
+      <li class="breadcrumb-item active">OpenCL</li>
       <li class="wy-breadcrumbs-aside">
-        
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
-  <div class="section" id="opencl">
-<h1>OpenCL<a class="headerlink" href="#opencl" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="typedefs">
-<h2>Typedefs<a class="headerlink" href="#typedefs" title="Permalink to this headline">¶</a></h2>
+             
+  <section id="opencl">
+<h1>OpenCL<a class="headerlink" href="#opencl" title="Link to this heading"></a></h1>
+<section id="typedefs">
+<h2>Typedefs<a class="headerlink" href="#typedefs" title="Link to this heading"></a></h2>
 <dl class="cpp type">
 <dt class="sig sig-object cpp" id="_CPPv419IPLOpenCLDeviceList">
-<span id="_CPPv319IPLOpenCLDeviceList"></span><span id="_CPPv219IPLOpenCLDeviceList"></span><span id="IPLOpenCLDeviceList"></span><span class="target" id="group__opencl_1gaa14ad25a907a979eb6729e82f8b766ca"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="n"><span class="pre">_IPLOpenCLDeviceList_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">IPLOpenCLDeviceList</span></span></span><a class="headerlink" href="#_CPPv419IPLOpenCLDeviceList" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv319IPLOpenCLDeviceList"></span><span id="_CPPv219IPLOpenCLDeviceList"></span><span id="IPLOpenCLDeviceList"></span><span class="target" id="group__opencl_1gaa14ad25a907a979eb6729e82f8b766ca"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="n"><span class="pre">_IPLOpenCLDeviceList_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">IPLOpenCLDeviceList</span></span></span><a class="headerlink" href="#_CPPv419IPLOpenCLDeviceList" title="Link to this definition"></a><br /></dt>
 <dd><p>Provides a list of OpenCL devices available on the user’s system. </p>
 <p>Use this to enumerate the available OpenCL devices, inspect their capabilities, and select the most suitable one for your application’s needs. </p>
 </dd></dl>
 
 <dl class="cpp type">
 <dt class="sig sig-object cpp" id="_CPPv415IPLOpenCLDevice">
-<span id="_CPPv315IPLOpenCLDevice"></span><span id="_CPPv215IPLOpenCLDevice"></span><span id="IPLOpenCLDevice"></span><span class="target" id="group__opencl_1ga2c8152366752680862b69e39fe73a471"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="n"><span class="pre">_IPLOpenCLDevice_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">IPLOpenCLDevice</span></span></span><a class="headerlink" href="#_CPPv415IPLOpenCLDevice" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv315IPLOpenCLDevice"></span><span id="_CPPv215IPLOpenCLDevice"></span><span id="IPLOpenCLDevice"></span><span class="target" id="group__opencl_1ga2c8152366752680862b69e39fe73a471"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="n"><span class="pre">_IPLOpenCLDevice_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">IPLOpenCLDevice</span></span></span><a class="headerlink" href="#_CPPv415IPLOpenCLDevice" title="Link to this definition"></a><br /></dt>
 <dd><p>Application-wide state for OpenCL. </p>
 <p>An OpenCL device must be created before using any of Steam Audio’s Radeon Rays or TrueAudio Next functionality. In terms of the OpenCL API, this object encapsulates a <code class="docutils literal notranslate"><span class="pre">cl_context</span></code> object, along with up to 2 <code class="docutils literal notranslate"><span class="pre">cl_command_queue</span></code> objects. </p>
 </dd></dl>
 
-</div>
-<div class="section" id="functions">
-<h2>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="functions">
+<h2>Functions<a class="headerlink" href="#functions" title="Link to this heading"></a></h2>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv425iplOpenCLDeviceListCreate10IPLContextP23IPLOpenCLDeviceSettingsP19IPLOpenCLDeviceList">
-<span id="_CPPv325iplOpenCLDeviceListCreate10IPLContextP23IPLOpenCLDeviceSettingsP19IPLOpenCLDeviceList"></span><span id="_CPPv225iplOpenCLDeviceListCreate10IPLContextP23IPLOpenCLDeviceSettingsP19IPLOpenCLDeviceList"></span><span id="iplOpenCLDeviceListCreate__IPLContext.IPLOpenCLDeviceSettingsP.IPLOpenCLDeviceListP"></span><span class="target" id="group__opencl_1gac4fed0e6d6b149a5ecc1096de5203a23"></span><a class="reference internal" href="types.html#_CPPv48IPLerror" title="IPLerror"><span class="n"><span class="pre">IPLerror</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplOpenCLDeviceListCreate</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="context.html#_CPPv410IPLContext" title="IPLContext"><span class="n"><span class="pre">IPLContext</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">context</span></span>, <a class="reference internal" href="#_CPPv423IPLOpenCLDeviceSettings" title="IPLOpenCLDeviceSettings"><span class="n"><span class="pre">IPLOpenCLDeviceSettings</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">settings</span></span>, <a class="reference internal" href="#_CPPv419IPLOpenCLDeviceList" title="IPLOpenCLDeviceList"><span class="n"><span class="pre">IPLOpenCLDeviceList</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">deviceList</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv425iplOpenCLDeviceListCreate10IPLContextP23IPLOpenCLDeviceSettingsP19IPLOpenCLDeviceList" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv325iplOpenCLDeviceListCreate10IPLContextP23IPLOpenCLDeviceSettingsP19IPLOpenCLDeviceList"></span><span id="_CPPv225iplOpenCLDeviceListCreate10IPLContextP23IPLOpenCLDeviceSettingsP19IPLOpenCLDeviceList"></span><span id="iplOpenCLDeviceListCreate__IPLContext.IPLOpenCLDeviceSettingsP.IPLOpenCLDeviceListP"></span><span class="target" id="group__opencl_1gac4fed0e6d6b149a5ecc1096de5203a23"></span><a class="reference internal" href="types.html#_CPPv48IPLerror" title="IPLerror"><span class="n"><span class="pre">IPLerror</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplOpenCLDeviceListCreate</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="context.html#_CPPv410IPLContext" title="IPLContext"><span class="n"><span class="pre">IPLContext</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">context</span></span>, <a class="reference internal" href="#_CPPv423IPLOpenCLDeviceSettings" title="IPLOpenCLDeviceSettings"><span class="n"><span class="pre">IPLOpenCLDeviceSettings</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">settings</span></span>, <a class="reference internal" href="#_CPPv419IPLOpenCLDeviceList" title="IPLOpenCLDeviceList"><span class="n"><span class="pre">IPLOpenCLDeviceList</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">deviceList</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv425iplOpenCLDeviceListCreate10IPLContextP23IPLOpenCLDeviceSettingsP19IPLOpenCLDeviceList" title="Link to this definition"></a><br /></dt>
 <dd><p>Creates an OpenCL device list. </p>
 <p>This involves listing all available OpenCL devices on the user’s system.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>context</strong> – The context used to initialize Steam Audio. </p></li>
 <li><p><strong>settings</strong> – The requirements that all listed OpenCL devices must satisfy. </p></li>
 <li><p><strong>deviceList</strong> – [out] The created OpenCL device list.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Status code indicating whether or not the operation succeeded. </p>
 </dd>
 </dl>
@@ -244,13 +174,13 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv425iplOpenCLDeviceListRetain19IPLOpenCLDeviceList">
-<span id="_CPPv325iplOpenCLDeviceListRetain19IPLOpenCLDeviceList"></span><span id="_CPPv225iplOpenCLDeviceListRetain19IPLOpenCLDeviceList"></span><span id="iplOpenCLDeviceListRetain__IPLOpenCLDeviceList"></span><span class="target" id="group__opencl_1gabf43de6df826b2da451b42c57bcaed3d"></span><a class="reference internal" href="#_CPPv419IPLOpenCLDeviceList" title="IPLOpenCLDeviceList"><span class="n"><span class="pre">IPLOpenCLDeviceList</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplOpenCLDeviceListRetain</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv419IPLOpenCLDeviceList" title="IPLOpenCLDeviceList"><span class="n"><span class="pre">IPLOpenCLDeviceList</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">deviceList</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv425iplOpenCLDeviceListRetain19IPLOpenCLDeviceList" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv325iplOpenCLDeviceListRetain19IPLOpenCLDeviceList"></span><span id="_CPPv225iplOpenCLDeviceListRetain19IPLOpenCLDeviceList"></span><span id="iplOpenCLDeviceListRetain__IPLOpenCLDeviceList"></span><span class="target" id="group__opencl_1gabf43de6df826b2da451b42c57bcaed3d"></span><a class="reference internal" href="#_CPPv419IPLOpenCLDeviceList" title="IPLOpenCLDeviceList"><span class="n"><span class="pre">IPLOpenCLDeviceList</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplOpenCLDeviceListRetain</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv419IPLOpenCLDeviceList" title="IPLOpenCLDeviceList"><span class="n"><span class="pre">IPLOpenCLDeviceList</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">deviceList</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv425iplOpenCLDeviceListRetain19IPLOpenCLDeviceList" title="Link to this definition"></a><br /></dt>
 <dd><p>Retains an additional reference to an OpenCL device list. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>deviceList</strong> – The OpenCL device list to retain a reference to.</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The additional reference to the OpenCL device list. </p>
 </dd>
 </dl>
@@ -258,10 +188,10 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv426iplOpenCLDeviceListReleaseP19IPLOpenCLDeviceList">
-<span id="_CPPv326iplOpenCLDeviceListReleaseP19IPLOpenCLDeviceList"></span><span id="_CPPv226iplOpenCLDeviceListReleaseP19IPLOpenCLDeviceList"></span><span id="iplOpenCLDeviceListRelease__IPLOpenCLDeviceListP"></span><span class="target" id="group__opencl_1ga5d42265f693c5d3213648a60e2b3dd4a"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplOpenCLDeviceListRelease</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv419IPLOpenCLDeviceList" title="IPLOpenCLDeviceList"><span class="n"><span class="pre">IPLOpenCLDeviceList</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">deviceList</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv426iplOpenCLDeviceListReleaseP19IPLOpenCLDeviceList" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv326iplOpenCLDeviceListReleaseP19IPLOpenCLDeviceList"></span><span id="_CPPv226iplOpenCLDeviceListReleaseP19IPLOpenCLDeviceList"></span><span id="iplOpenCLDeviceListRelease__IPLOpenCLDeviceListP"></span><span class="target" id="group__opencl_1ga5d42265f693c5d3213648a60e2b3dd4a"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplOpenCLDeviceListRelease</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv419IPLOpenCLDeviceList" title="IPLOpenCLDeviceList"><span class="n"><span class="pre">IPLOpenCLDeviceList</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">deviceList</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv426iplOpenCLDeviceListReleaseP19IPLOpenCLDeviceList" title="Link to this definition"></a><br /></dt>
 <dd><p>Releases a reference to an OpenCL device list. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>deviceList</strong> – The OpenCL device list to release a reference to. </p>
 </dd>
 </dl>
@@ -269,12 +199,12 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv432iplOpenCLDeviceListGetNumDevices19IPLOpenCLDeviceList">
-<span id="_CPPv332iplOpenCLDeviceListGetNumDevices19IPLOpenCLDeviceList"></span><span id="_CPPv232iplOpenCLDeviceListGetNumDevices19IPLOpenCLDeviceList"></span><span id="iplOpenCLDeviceListGetNumDevices__IPLOpenCLDeviceList"></span><span class="target" id="group__opencl_1gab6128ac5c96f172ede38e5cfaad7b242"></span><a class="reference internal" href="types.html#_CPPv48IPLint32" title="IPLint32"><span class="n"><span class="pre">IPLint32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplOpenCLDeviceListGetNumDevices</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv419IPLOpenCLDeviceList" title="IPLOpenCLDeviceList"><span class="n"><span class="pre">IPLOpenCLDeviceList</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">deviceList</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv432iplOpenCLDeviceListGetNumDevices19IPLOpenCLDeviceList" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv332iplOpenCLDeviceListGetNumDevices19IPLOpenCLDeviceList"></span><span id="_CPPv232iplOpenCLDeviceListGetNumDevices19IPLOpenCLDeviceList"></span><span id="iplOpenCLDeviceListGetNumDevices__IPLOpenCLDeviceList"></span><span class="target" id="group__opencl_1gab6128ac5c96f172ede38e5cfaad7b242"></span><a class="reference internal" href="types.html#_CPPv48IPLint32" title="IPLint32"><span class="n"><span class="pre">IPLint32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplOpenCLDeviceListGetNumDevices</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv419IPLOpenCLDeviceList" title="IPLOpenCLDeviceList"><span class="n"><span class="pre">IPLOpenCLDeviceList</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">deviceList</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv432iplOpenCLDeviceListGetNumDevices19IPLOpenCLDeviceList" title="Link to this definition"></a><br /></dt>
 <dd><dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>deviceList</strong> – The OpenCL device list. </p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The number of devices in an OpenCL device list.</p>
 </dd>
 </dl>
@@ -282,10 +212,10 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv432iplOpenCLDeviceListGetDeviceDesc19IPLOpenCLDeviceList8IPLint32P19IPLOpenCLDeviceDesc">
-<span id="_CPPv332iplOpenCLDeviceListGetDeviceDesc19IPLOpenCLDeviceList8IPLint32P19IPLOpenCLDeviceDesc"></span><span id="_CPPv232iplOpenCLDeviceListGetDeviceDesc19IPLOpenCLDeviceList8IPLint32P19IPLOpenCLDeviceDesc"></span><span id="iplOpenCLDeviceListGetDeviceDesc__IPLOpenCLDeviceList.IPLint32.IPLOpenCLDeviceDescP"></span><span class="target" id="group__opencl_1ga052393e4063adda32e09b11b7bd53b5f"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplOpenCLDeviceListGetDeviceDesc</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv419IPLOpenCLDeviceList" title="IPLOpenCLDeviceList"><span class="n"><span class="pre">IPLOpenCLDeviceList</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">deviceList</span></span>, <a class="reference internal" href="types.html#_CPPv48IPLint32" title="IPLint32"><span class="n"><span class="pre">IPLint32</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">index</span></span>, <a class="reference internal" href="#_CPPv419IPLOpenCLDeviceDesc" title="IPLOpenCLDeviceDesc"><span class="n"><span class="pre">IPLOpenCLDeviceDesc</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">deviceDesc</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv432iplOpenCLDeviceListGetDeviceDesc19IPLOpenCLDeviceList8IPLint32P19IPLOpenCLDeviceDesc" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv332iplOpenCLDeviceListGetDeviceDesc19IPLOpenCLDeviceList8IPLint32P19IPLOpenCLDeviceDesc"></span><span id="_CPPv232iplOpenCLDeviceListGetDeviceDesc19IPLOpenCLDeviceList8IPLint32P19IPLOpenCLDeviceDesc"></span><span id="iplOpenCLDeviceListGetDeviceDesc__IPLOpenCLDeviceList.IPLint32.IPLOpenCLDeviceDescP"></span><span class="target" id="group__opencl_1ga052393e4063adda32e09b11b7bd53b5f"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplOpenCLDeviceListGetDeviceDesc</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv419IPLOpenCLDeviceList" title="IPLOpenCLDeviceList"><span class="n"><span class="pre">IPLOpenCLDeviceList</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">deviceList</span></span>, <a class="reference internal" href="types.html#_CPPv48IPLint32" title="IPLint32"><span class="n"><span class="pre">IPLint32</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">index</span></span>, <a class="reference internal" href="#_CPPv419IPLOpenCLDeviceDesc" title="IPLOpenCLDeviceDesc"><span class="n"><span class="pre">IPLOpenCLDeviceDesc</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">deviceDesc</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv432iplOpenCLDeviceListGetDeviceDesc19IPLOpenCLDeviceList8IPLint32P19IPLOpenCLDeviceDesc" title="Link to this definition"></a><br /></dt>
 <dd><p>Retrieves information about a specific device in an OpenCL device list. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>deviceList</strong> – The OpenCL device list. </p></li>
 <li><p><strong>index</strong> – The index of the device within the list. </p></li>
@@ -297,11 +227,11 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv421iplOpenCLDeviceCreate10IPLContext19IPLOpenCLDeviceList8IPLint32P15IPLOpenCLDevice">
-<span id="_CPPv321iplOpenCLDeviceCreate10IPLContext19IPLOpenCLDeviceList8IPLint32P15IPLOpenCLDevice"></span><span id="_CPPv221iplOpenCLDeviceCreate10IPLContext19IPLOpenCLDeviceList8IPLint32P15IPLOpenCLDevice"></span><span id="iplOpenCLDeviceCreate__IPLContext.IPLOpenCLDeviceList.IPLint32.IPLOpenCLDeviceP"></span><span class="target" id="group__opencl_1ga72af676a620b5b6b3d4214e0d4c36763"></span><a class="reference internal" href="types.html#_CPPv48IPLerror" title="IPLerror"><span class="n"><span class="pre">IPLerror</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplOpenCLDeviceCreate</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="context.html#_CPPv410IPLContext" title="IPLContext"><span class="n"><span class="pre">IPLContext</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">context</span></span>, <a class="reference internal" href="#_CPPv419IPLOpenCLDeviceList" title="IPLOpenCLDeviceList"><span class="n"><span class="pre">IPLOpenCLDeviceList</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">deviceList</span></span>, <a class="reference internal" href="types.html#_CPPv48IPLint32" title="IPLint32"><span class="n"><span class="pre">IPLint32</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">index</span></span>, <a class="reference internal" href="#_CPPv415IPLOpenCLDevice" title="IPLOpenCLDevice"><span class="n"><span class="pre">IPLOpenCLDevice</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">device</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv421iplOpenCLDeviceCreate10IPLContext19IPLOpenCLDeviceList8IPLint32P15IPLOpenCLDevice" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv321iplOpenCLDeviceCreate10IPLContext19IPLOpenCLDeviceList8IPLint32P15IPLOpenCLDevice"></span><span id="_CPPv221iplOpenCLDeviceCreate10IPLContext19IPLOpenCLDeviceList8IPLint32P15IPLOpenCLDevice"></span><span id="iplOpenCLDeviceCreate__IPLContext.IPLOpenCLDeviceList.IPLint32.IPLOpenCLDeviceP"></span><span class="target" id="group__opencl_1ga72af676a620b5b6b3d4214e0d4c36763"></span><a class="reference internal" href="types.html#_CPPv48IPLerror" title="IPLerror"><span class="n"><span class="pre">IPLerror</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplOpenCLDeviceCreate</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="context.html#_CPPv410IPLContext" title="IPLContext"><span class="n"><span class="pre">IPLContext</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">context</span></span>, <a class="reference internal" href="#_CPPv419IPLOpenCLDeviceList" title="IPLOpenCLDeviceList"><span class="n"><span class="pre">IPLOpenCLDeviceList</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">deviceList</span></span>, <a class="reference internal" href="types.html#_CPPv48IPLint32" title="IPLint32"><span class="n"><span class="pre">IPLint32</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">index</span></span>, <a class="reference internal" href="#_CPPv415IPLOpenCLDevice" title="IPLOpenCLDevice"><span class="n"><span class="pre">IPLOpenCLDevice</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">device</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv421iplOpenCLDeviceCreate10IPLContext19IPLOpenCLDeviceList8IPLint32P15IPLOpenCLDevice" title="Link to this definition"></a><br /></dt>
 <dd><p>Creates an OpenCL device. </p>
 <p>The device is specified as an index into an OpenCL device list.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>context</strong> – The context used to initialize Steam Audio. </p></li>
 <li><p><strong>deviceList</strong> – The OpenCL device list. </p></li>
@@ -309,7 +239,7 @@
 <li><p><strong>device</strong> – [out] The created OpenCL device.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Status code indicating whether or not the operation succeeded. </p>
 </dd>
 </dl>
@@ -317,11 +247,11 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv433iplOpenCLDeviceCreateFromExisting10IPLContextPvPvP15IPLOpenCLDevice">
-<span id="_CPPv333iplOpenCLDeviceCreateFromExisting10IPLContextPvPvP15IPLOpenCLDevice"></span><span id="_CPPv233iplOpenCLDeviceCreateFromExisting10IPLContextPvPvP15IPLOpenCLDevice"></span><span id="iplOpenCLDeviceCreateFromExisting__IPLContext.voidP.voidP.IPLOpenCLDeviceP"></span><span class="target" id="group__opencl_1ga89b9884d1a34538576135755dbd6075b"></span><a class="reference internal" href="types.html#_CPPv48IPLerror" title="IPLerror"><span class="n"><span class="pre">IPLerror</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplOpenCLDeviceCreateFromExisting</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="context.html#_CPPv410IPLContext" title="IPLContext"><span class="n"><span class="pre">IPLContext</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">context</span></span>, <span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">convolutionQueue</span></span>, <span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">irUpdateQueue</span></span>, <a class="reference internal" href="#_CPPv415IPLOpenCLDevice" title="IPLOpenCLDevice"><span class="n"><span class="pre">IPLOpenCLDevice</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">device</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv433iplOpenCLDeviceCreateFromExisting10IPLContextPvPvP15IPLOpenCLDevice" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv333iplOpenCLDeviceCreateFromExisting10IPLContextPvPvP15IPLOpenCLDevice"></span><span id="_CPPv233iplOpenCLDeviceCreateFromExisting10IPLContextPvPvP15IPLOpenCLDevice"></span><span id="iplOpenCLDeviceCreateFromExisting__IPLContext.voidP.voidP.IPLOpenCLDeviceP"></span><span class="target" id="group__opencl_1ga89b9884d1a34538576135755dbd6075b"></span><a class="reference internal" href="types.html#_CPPv48IPLerror" title="IPLerror"><span class="n"><span class="pre">IPLerror</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplOpenCLDeviceCreateFromExisting</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="context.html#_CPPv410IPLContext" title="IPLContext"><span class="n"><span class="pre">IPLContext</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">context</span></span>, <span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">convolutionQueue</span></span>, <span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">irUpdateQueue</span></span>, <a class="reference internal" href="#_CPPv415IPLOpenCLDevice" title="IPLOpenCLDevice"><span class="n"><span class="pre">IPLOpenCLDevice</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">device</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv433iplOpenCLDeviceCreateFromExisting10IPLContextPvPvP15IPLOpenCLDevice" title="Link to this definition"></a><br /></dt>
 <dd><p>Creates an OpenCL device from an existing OpenCL device created by your application. </p>
 <p>Steam Audio will use up to two command queues that you provide for enqueuing OpenCL computations.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>context</strong> – The context used to initialize Steam Audio. </p></li>
 <li><p><strong>convolutionQueue</strong> – The <code class="docutils literal notranslate"><span class="pre">cl_command_queue</span></code> to use for enqueueing convolution work. </p></li>
@@ -329,7 +259,7 @@
 <li><p><strong>device</strong> – [out] The created OpenCL device.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Status code indicating whether or not the operation succeeded. </p>
 </dd>
 </dl>
@@ -337,13 +267,13 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv421iplOpenCLDeviceRetain15IPLOpenCLDevice">
-<span id="_CPPv321iplOpenCLDeviceRetain15IPLOpenCLDevice"></span><span id="_CPPv221iplOpenCLDeviceRetain15IPLOpenCLDevice"></span><span id="iplOpenCLDeviceRetain__IPLOpenCLDevice"></span><span class="target" id="group__opencl_1ga2d7a34b75c3e93826622842037dc828c"></span><a class="reference internal" href="#_CPPv415IPLOpenCLDevice" title="IPLOpenCLDevice"><span class="n"><span class="pre">IPLOpenCLDevice</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplOpenCLDeviceRetain</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv415IPLOpenCLDevice" title="IPLOpenCLDevice"><span class="n"><span class="pre">IPLOpenCLDevice</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">device</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv421iplOpenCLDeviceRetain15IPLOpenCLDevice" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv321iplOpenCLDeviceRetain15IPLOpenCLDevice"></span><span id="_CPPv221iplOpenCLDeviceRetain15IPLOpenCLDevice"></span><span id="iplOpenCLDeviceRetain__IPLOpenCLDevice"></span><span class="target" id="group__opencl_1ga2d7a34b75c3e93826622842037dc828c"></span><a class="reference internal" href="#_CPPv415IPLOpenCLDevice" title="IPLOpenCLDevice"><span class="n"><span class="pre">IPLOpenCLDevice</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplOpenCLDeviceRetain</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv415IPLOpenCLDevice" title="IPLOpenCLDevice"><span class="n"><span class="pre">IPLOpenCLDevice</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">device</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv421iplOpenCLDeviceRetain15IPLOpenCLDevice" title="Link to this definition"></a><br /></dt>
 <dd><p>Retains an additional reference to an OpenCL device. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>device</strong> – The OpenCL device to retain a reference to.</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The additional reference to the OpenCL device. </p>
 </dd>
 </dl>
@@ -351,34 +281,34 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv422iplOpenCLDeviceReleaseP15IPLOpenCLDevice">
-<span id="_CPPv322iplOpenCLDeviceReleaseP15IPLOpenCLDevice"></span><span id="_CPPv222iplOpenCLDeviceReleaseP15IPLOpenCLDevice"></span><span id="iplOpenCLDeviceRelease__IPLOpenCLDeviceP"></span><span class="target" id="group__opencl_1ga402e0c8913ba69b8a1a7bfef555f1c17"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplOpenCLDeviceRelease</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv415IPLOpenCLDevice" title="IPLOpenCLDevice"><span class="n"><span class="pre">IPLOpenCLDevice</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">device</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv422iplOpenCLDeviceReleaseP15IPLOpenCLDevice" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv322iplOpenCLDeviceReleaseP15IPLOpenCLDevice"></span><span id="_CPPv222iplOpenCLDeviceReleaseP15IPLOpenCLDevice"></span><span id="iplOpenCLDeviceRelease__IPLOpenCLDeviceP"></span><span class="target" id="group__opencl_1ga402e0c8913ba69b8a1a7bfef555f1c17"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplOpenCLDeviceRelease</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv415IPLOpenCLDevice" title="IPLOpenCLDevice"><span class="n"><span class="pre">IPLOpenCLDevice</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">device</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv422iplOpenCLDeviceReleaseP15IPLOpenCLDevice" title="Link to this definition"></a><br /></dt>
 <dd><p>Releases a reference to an OpenCL device. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>device</strong> – The OpenCL device to release a reference to. </p>
 </dd>
 </dl>
 </dd></dl>
 
-</div>
-<div class="section" id="structures">
-<h2>Structures<a class="headerlink" href="#structures" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="structures">
+<h2>Structures<a class="headerlink" href="#structures" title="Link to this heading"></a></h2>
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv423IPLOpenCLDeviceSettings">
-<span id="_CPPv323IPLOpenCLDeviceSettings"></span><span id="_CPPv223IPLOpenCLDeviceSettings"></span><span id="IPLOpenCLDeviceSettings"></span><span class="target" id="struct_i_p_l_open_c_l_device_settings"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLOpenCLDeviceSettings</span></span></span><a class="headerlink" href="#_CPPv423IPLOpenCLDeviceSettings" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv323IPLOpenCLDeviceSettings"></span><span id="_CPPv223IPLOpenCLDeviceSettings"></span><span id="IPLOpenCLDeviceSettings"></span><span class="target" id="struct_i_p_l_open_c_l_device_settings"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLOpenCLDeviceSettings</span></span></span><a class="headerlink" href="#_CPPv423IPLOpenCLDeviceSettings" title="Link to this definition"></a><br /></dt>
 <dd><p>Specifies requirements that an OpenCL device must meet in order to be considered when listing OpenCL devices. </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N23IPLOpenCLDeviceSettings4typeE">
-<span id="_CPPv3N23IPLOpenCLDeviceSettings4typeE"></span><span id="_CPPv2N23IPLOpenCLDeviceSettings4typeE"></span><span id="IPLOpenCLDeviceSettings::type__IPLOpenCLDeviceType"></span><span class="target" id="struct_i_p_l_open_c_l_device_settings_1ae1afb392d281398812b3ab97e441e3b8"></span><a class="reference internal" href="#_CPPv419IPLOpenCLDeviceType" title="IPLOpenCLDeviceType"><span class="n"><span class="pre">IPLOpenCLDeviceType</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">type</span></span></span><a class="headerlink" href="#_CPPv4N23IPLOpenCLDeviceSettings4typeE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N23IPLOpenCLDeviceSettings4typeE"></span><span id="_CPPv2N23IPLOpenCLDeviceSettings4typeE"></span><span id="IPLOpenCLDeviceSettings::type__IPLOpenCLDeviceType"></span><span class="target" id="struct_i_p_l_open_c_l_device_settings_1ae1afb392d281398812b3ab97e441e3b8"></span><a class="reference internal" href="#_CPPv419IPLOpenCLDeviceType" title="IPLOpenCLDeviceType"><span class="n"><span class="pre">IPLOpenCLDeviceType</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">type</span></span></span><a class="headerlink" href="#_CPPv4N23IPLOpenCLDeviceSettings4typeE" title="Link to this definition"></a><br /></dt>
 <dd><p>The type of device. </p>
 <p>Set to <code class="docutils literal notranslate"><span class="pre">IPL_OPENCLDEVICETYPE_ANY</span></code> to consider all available devices. </p>
 </dd></dl>
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N23IPLOpenCLDeviceSettings15numCUsToReserveE">
-<span id="_CPPv3N23IPLOpenCLDeviceSettings15numCUsToReserveE"></span><span id="_CPPv2N23IPLOpenCLDeviceSettings15numCUsToReserveE"></span><span id="IPLOpenCLDeviceSettings::numCUsToReserve__IPLint32"></span><span class="target" id="struct_i_p_l_open_c_l_device_settings_1a413a1d86942b1fe65d6ff9d82044ff7e"></span><a class="reference internal" href="types.html#_CPPv48IPLint32" title="IPLint32"><span class="n"><span class="pre">IPLint32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">numCUsToReserve</span></span></span><a class="headerlink" href="#_CPPv4N23IPLOpenCLDeviceSettings15numCUsToReserveE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N23IPLOpenCLDeviceSettings15numCUsToReserveE"></span><span id="_CPPv2N23IPLOpenCLDeviceSettings15numCUsToReserveE"></span><span id="IPLOpenCLDeviceSettings::numCUsToReserve__IPLint32"></span><span class="target" id="struct_i_p_l_open_c_l_device_settings_1a413a1d86942b1fe65d6ff9d82044ff7e"></span><a class="reference internal" href="types.html#_CPPv48IPLint32" title="IPLint32"><span class="n"><span class="pre">IPLint32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">numCUsToReserve</span></span></span><a class="headerlink" href="#_CPPv4N23IPLOpenCLDeviceSettings15numCUsToReserveE" title="Link to this definition"></a><br /></dt>
 <dd><p>The number of GPU compute units (CUs) that should be reserved for use by Steam Audio. </p>
 <p>If set to a non-zero value, then a GPU will be included in the device list only if it can reserve at least this many CUs. Set to 0 to indicate that Steam Audio can use the entire GPU, in which case all available GPUs will be considered.</p>
 <p>Ignored if <code class="docutils literal notranslate"><span class="pre">type</span></code> is <code class="docutils literal notranslate"><span class="pre">IPL_OPENCLDEVICETYPE_CPU</span></code>. </p>
@@ -386,7 +316,7 @@
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N23IPLOpenCLDeviceSettings22fractionCUsForIRUpdateE">
-<span id="_CPPv3N23IPLOpenCLDeviceSettings22fractionCUsForIRUpdateE"></span><span id="_CPPv2N23IPLOpenCLDeviceSettings22fractionCUsForIRUpdateE"></span><span id="IPLOpenCLDeviceSettings::fractionCUsForIRUpdate__IPLfloat32"></span><span class="target" id="struct_i_p_l_open_c_l_device_settings_1ae8daf3f73c5f1e6d0437f14e6cb35f3d"></span><a class="reference internal" href="types.html#_CPPv410IPLfloat32" title="IPLfloat32"><span class="n"><span class="pre">IPLfloat32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">fractionCUsForIRUpdate</span></span></span><a class="headerlink" href="#_CPPv4N23IPLOpenCLDeviceSettings22fractionCUsForIRUpdateE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N23IPLOpenCLDeviceSettings22fractionCUsForIRUpdateE"></span><span id="_CPPv2N23IPLOpenCLDeviceSettings22fractionCUsForIRUpdateE"></span><span id="IPLOpenCLDeviceSettings::fractionCUsForIRUpdate__IPLfloat32"></span><span class="target" id="struct_i_p_l_open_c_l_device_settings_1ae8daf3f73c5f1e6d0437f14e6cb35f3d"></span><a class="reference internal" href="types.html#_CPPv410IPLfloat32" title="IPLfloat32"><span class="n"><span class="pre">IPLfloat32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">fractionCUsForIRUpdate</span></span></span><a class="headerlink" href="#_CPPv4N23IPLOpenCLDeviceSettings22fractionCUsForIRUpdateE" title="Link to this definition"></a><br /></dt>
 <dd><p>The fraction of reserved CUs that should be used for impulse response (IR) update. </p>
 <p>IR update includes: a) ray tracing using Radeon Rays to simulate sound propagation, and/or b) pre-transformation of IRs for convolution using TrueAudio Next. Steam Audio will only list GPU devices that are able to subdivide the reserved CUs as per this value. The value must be between 0 and 1.</p>
 <p>For example, if <code class="docutils literal notranslate"><span class="pre">numCUsToReserve</span></code> is <code class="docutils literal notranslate"><span class="pre">8</span></code>, and <code class="docutils literal notranslate"><span class="pre">fractionCUsForIRUpdate</span></code> is <code class="docutils literal notranslate"><span class="pre">0.5f</span></code>, then 4 CUs will be used for IR update and 4 CUs will be used for convolution. Below are typical scenarios:</p>
@@ -401,7 +331,7 @@
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N23IPLOpenCLDeviceSettings11requiresTANE">
-<span id="_CPPv3N23IPLOpenCLDeviceSettings11requiresTANE"></span><span id="_CPPv2N23IPLOpenCLDeviceSettings11requiresTANE"></span><span id="IPLOpenCLDeviceSettings::requiresTAN__IPLbool"></span><span class="target" id="struct_i_p_l_open_c_l_device_settings_1ae711e47d035f5a2b5e4273e87d8c89a6"></span><a class="reference internal" href="types.html#_CPPv47IPLbool" title="IPLbool"><span class="n"><span class="pre">IPLbool</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">requiresTAN</span></span></span><a class="headerlink" href="#_CPPv4N23IPLOpenCLDeviceSettings11requiresTANE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N23IPLOpenCLDeviceSettings11requiresTANE"></span><span id="_CPPv2N23IPLOpenCLDeviceSettings11requiresTANE"></span><span id="IPLOpenCLDeviceSettings::requiresTAN__IPLbool"></span><span class="target" id="struct_i_p_l_open_c_l_device_settings_1ae711e47d035f5a2b5e4273e87d8c89a6"></span><a class="reference internal" href="types.html#_CPPv47IPLbool" title="IPLbool"><span class="n"><span class="pre">IPLbool</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">requiresTAN</span></span></span><a class="headerlink" href="#_CPPv4N23IPLOpenCLDeviceSettings11requiresTANE" title="Link to this definition"></a><br /></dt>
 <dd><p>If <code class="docutils literal notranslate"><span class="pre">IPL_TRUE</span></code>, then the GPU device must support TrueAudio Next. </p>
 <p>It is not necessary to set this to <code class="docutils literal notranslate"><span class="pre">IPL_TRUE</span></code> if <code class="docutils literal notranslate"><span class="pre">numCUsToReserve</span></code> or <code class="docutils literal notranslate"><span class="pre">fractionCUsForIRUpdate</span></code> are set to non-zero values. </p>
 </dd></dl>
@@ -411,91 +341,91 @@
 
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv419IPLOpenCLDeviceDesc">
-<span id="_CPPv319IPLOpenCLDeviceDesc"></span><span id="_CPPv219IPLOpenCLDeviceDesc"></span><span id="IPLOpenCLDeviceDesc"></span><span class="target" id="struct_i_p_l_open_c_l_device_desc"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLOpenCLDeviceDesc</span></span></span><a class="headerlink" href="#_CPPv419IPLOpenCLDeviceDesc" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv319IPLOpenCLDeviceDesc"></span><span id="_CPPv219IPLOpenCLDeviceDesc"></span><span id="IPLOpenCLDeviceDesc"></span><span class="target" id="struct_i_p_l_open_c_l_device_desc"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLOpenCLDeviceDesc</span></span></span><a class="headerlink" href="#_CPPv419IPLOpenCLDeviceDesc" title="Link to this definition"></a><br /></dt>
 <dd><p>Describes the properties of an OpenCL device. </p>
 <p>This information can be used to select the most suitable device for your application. </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N19IPLOpenCLDeviceDesc8platformE">
-<span id="_CPPv3N19IPLOpenCLDeviceDesc8platformE"></span><span id="_CPPv2N19IPLOpenCLDeviceDesc8platformE"></span><span id="IPLOpenCLDeviceDesc::platform__voidP"></span><span class="target" id="struct_i_p_l_open_c_l_device_desc_1af2a492e39d35ae2cb4e523f9c63d790f"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">platform</span></span></span><a class="headerlink" href="#_CPPv4N19IPLOpenCLDeviceDesc8platformE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N19IPLOpenCLDeviceDesc8platformE"></span><span id="_CPPv2N19IPLOpenCLDeviceDesc8platformE"></span><span id="IPLOpenCLDeviceDesc::platform__voidP"></span><span class="target" id="struct_i_p_l_open_c_l_device_desc_1af2a492e39d35ae2cb4e523f9c63d790f"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">platform</span></span></span><a class="headerlink" href="#_CPPv4N19IPLOpenCLDeviceDesc8platformE" title="Link to this definition"></a><br /></dt>
 <dd><p>The OpenCL platform id. </p>
 <p>Can be cast to <code class="docutils literal notranslate"><span class="pre">cl_platform_id</span></code>. </p>
 </dd></dl>
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N19IPLOpenCLDeviceDesc12platformNameE">
-<span id="_CPPv3N19IPLOpenCLDeviceDesc12platformNameE"></span><span id="_CPPv2N19IPLOpenCLDeviceDesc12platformNameE"></span><span id="IPLOpenCLDeviceDesc::platformName__IPLstring"></span><span class="target" id="struct_i_p_l_open_c_l_device_desc_1a6055ad8f985d49176816aa68a7950b6d"></span><a class="reference internal" href="types.html#_CPPv49IPLstring" title="IPLstring"><span class="n"><span class="pre">IPLstring</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">platformName</span></span></span><a class="headerlink" href="#_CPPv4N19IPLOpenCLDeviceDesc12platformNameE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N19IPLOpenCLDeviceDesc12platformNameE"></span><span id="_CPPv2N19IPLOpenCLDeviceDesc12platformNameE"></span><span id="IPLOpenCLDeviceDesc::platformName__IPLstring"></span><span class="target" id="struct_i_p_l_open_c_l_device_desc_1a6055ad8f985d49176816aa68a7950b6d"></span><a class="reference internal" href="types.html#_CPPv49IPLstring" title="IPLstring"><span class="n"><span class="pre">IPLstring</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">platformName</span></span></span><a class="headerlink" href="#_CPPv4N19IPLOpenCLDeviceDesc12platformNameE" title="Link to this definition"></a><br /></dt>
 <dd><p>The OpenCL platform name. </p>
 </dd></dl>
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N19IPLOpenCLDeviceDesc14platformVendorE">
-<span id="_CPPv3N19IPLOpenCLDeviceDesc14platformVendorE"></span><span id="_CPPv2N19IPLOpenCLDeviceDesc14platformVendorE"></span><span id="IPLOpenCLDeviceDesc::platformVendor__IPLstring"></span><span class="target" id="struct_i_p_l_open_c_l_device_desc_1abfe64100238ffface52b1c87d3931e38"></span><a class="reference internal" href="types.html#_CPPv49IPLstring" title="IPLstring"><span class="n"><span class="pre">IPLstring</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">platformVendor</span></span></span><a class="headerlink" href="#_CPPv4N19IPLOpenCLDeviceDesc14platformVendorE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N19IPLOpenCLDeviceDesc14platformVendorE"></span><span id="_CPPv2N19IPLOpenCLDeviceDesc14platformVendorE"></span><span id="IPLOpenCLDeviceDesc::platformVendor__IPLstring"></span><span class="target" id="struct_i_p_l_open_c_l_device_desc_1abfe64100238ffface52b1c87d3931e38"></span><a class="reference internal" href="types.html#_CPPv49IPLstring" title="IPLstring"><span class="n"><span class="pre">IPLstring</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">platformVendor</span></span></span><a class="headerlink" href="#_CPPv4N19IPLOpenCLDeviceDesc14platformVendorE" title="Link to this definition"></a><br /></dt>
 <dd><p>The OpenCL platform vendor’s name. </p>
 </dd></dl>
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N19IPLOpenCLDeviceDesc15platformVersionE">
-<span id="_CPPv3N19IPLOpenCLDeviceDesc15platformVersionE"></span><span id="_CPPv2N19IPLOpenCLDeviceDesc15platformVersionE"></span><span id="IPLOpenCLDeviceDesc::platformVersion__IPLstring"></span><span class="target" id="struct_i_p_l_open_c_l_device_desc_1abd7c26eb302cefce14945c97dfc57c7c"></span><a class="reference internal" href="types.html#_CPPv49IPLstring" title="IPLstring"><span class="n"><span class="pre">IPLstring</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">platformVersion</span></span></span><a class="headerlink" href="#_CPPv4N19IPLOpenCLDeviceDesc15platformVersionE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N19IPLOpenCLDeviceDesc15platformVersionE"></span><span id="_CPPv2N19IPLOpenCLDeviceDesc15platformVersionE"></span><span id="IPLOpenCLDeviceDesc::platformVersion__IPLstring"></span><span class="target" id="struct_i_p_l_open_c_l_device_desc_1abd7c26eb302cefce14945c97dfc57c7c"></span><a class="reference internal" href="types.html#_CPPv49IPLstring" title="IPLstring"><span class="n"><span class="pre">IPLstring</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">platformVersion</span></span></span><a class="headerlink" href="#_CPPv4N19IPLOpenCLDeviceDesc15platformVersionE" title="Link to this definition"></a><br /></dt>
 <dd><p>The OpenCL platform version. </p>
 </dd></dl>
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N19IPLOpenCLDeviceDesc6deviceE">
-<span id="_CPPv3N19IPLOpenCLDeviceDesc6deviceE"></span><span id="_CPPv2N19IPLOpenCLDeviceDesc6deviceE"></span><span id="IPLOpenCLDeviceDesc::device__voidP"></span><span class="target" id="struct_i_p_l_open_c_l_device_desc_1abd28c0efe479c17c1476917841e26ea8"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">device</span></span></span><a class="headerlink" href="#_CPPv4N19IPLOpenCLDeviceDesc6deviceE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N19IPLOpenCLDeviceDesc6deviceE"></span><span id="_CPPv2N19IPLOpenCLDeviceDesc6deviceE"></span><span id="IPLOpenCLDeviceDesc::device__voidP"></span><span class="target" id="struct_i_p_l_open_c_l_device_desc_1abd28c0efe479c17c1476917841e26ea8"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">device</span></span></span><a class="headerlink" href="#_CPPv4N19IPLOpenCLDeviceDesc6deviceE" title="Link to this definition"></a><br /></dt>
 <dd><p>The OpenCL device id. </p>
 <p>Can be cast to <code class="docutils literal notranslate"><span class="pre">cl_device_id</span></code>. </p>
 </dd></dl>
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N19IPLOpenCLDeviceDesc10deviceNameE">
-<span id="_CPPv3N19IPLOpenCLDeviceDesc10deviceNameE"></span><span id="_CPPv2N19IPLOpenCLDeviceDesc10deviceNameE"></span><span id="IPLOpenCLDeviceDesc::deviceName__IPLstring"></span><span class="target" id="struct_i_p_l_open_c_l_device_desc_1aa3ccfabb59210f206b95b3197b1cd2b8"></span><a class="reference internal" href="types.html#_CPPv49IPLstring" title="IPLstring"><span class="n"><span class="pre">IPLstring</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">deviceName</span></span></span><a class="headerlink" href="#_CPPv4N19IPLOpenCLDeviceDesc10deviceNameE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N19IPLOpenCLDeviceDesc10deviceNameE"></span><span id="_CPPv2N19IPLOpenCLDeviceDesc10deviceNameE"></span><span id="IPLOpenCLDeviceDesc::deviceName__IPLstring"></span><span class="target" id="struct_i_p_l_open_c_l_device_desc_1aa3ccfabb59210f206b95b3197b1cd2b8"></span><a class="reference internal" href="types.html#_CPPv49IPLstring" title="IPLstring"><span class="n"><span class="pre">IPLstring</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">deviceName</span></span></span><a class="headerlink" href="#_CPPv4N19IPLOpenCLDeviceDesc10deviceNameE" title="Link to this definition"></a><br /></dt>
 <dd><p>The OpenCL device name. </p>
 </dd></dl>
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N19IPLOpenCLDeviceDesc12deviceVendorE">
-<span id="_CPPv3N19IPLOpenCLDeviceDesc12deviceVendorE"></span><span id="_CPPv2N19IPLOpenCLDeviceDesc12deviceVendorE"></span><span id="IPLOpenCLDeviceDesc::deviceVendor__IPLstring"></span><span class="target" id="struct_i_p_l_open_c_l_device_desc_1aa5665ca98224d3c2d2a3f9643126f7ba"></span><a class="reference internal" href="types.html#_CPPv49IPLstring" title="IPLstring"><span class="n"><span class="pre">IPLstring</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">deviceVendor</span></span></span><a class="headerlink" href="#_CPPv4N19IPLOpenCLDeviceDesc12deviceVendorE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N19IPLOpenCLDeviceDesc12deviceVendorE"></span><span id="_CPPv2N19IPLOpenCLDeviceDesc12deviceVendorE"></span><span id="IPLOpenCLDeviceDesc::deviceVendor__IPLstring"></span><span class="target" id="struct_i_p_l_open_c_l_device_desc_1aa5665ca98224d3c2d2a3f9643126f7ba"></span><a class="reference internal" href="types.html#_CPPv49IPLstring" title="IPLstring"><span class="n"><span class="pre">IPLstring</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">deviceVendor</span></span></span><a class="headerlink" href="#_CPPv4N19IPLOpenCLDeviceDesc12deviceVendorE" title="Link to this definition"></a><br /></dt>
 <dd><p>The OpenCL device vendor’s name. </p>
 </dd></dl>
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N19IPLOpenCLDeviceDesc13deviceVersionE">
-<span id="_CPPv3N19IPLOpenCLDeviceDesc13deviceVersionE"></span><span id="_CPPv2N19IPLOpenCLDeviceDesc13deviceVersionE"></span><span id="IPLOpenCLDeviceDesc::deviceVersion__IPLstring"></span><span class="target" id="struct_i_p_l_open_c_l_device_desc_1ac6e8b0888147681e2ff73864b35b2573"></span><a class="reference internal" href="types.html#_CPPv49IPLstring" title="IPLstring"><span class="n"><span class="pre">IPLstring</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">deviceVersion</span></span></span><a class="headerlink" href="#_CPPv4N19IPLOpenCLDeviceDesc13deviceVersionE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N19IPLOpenCLDeviceDesc13deviceVersionE"></span><span id="_CPPv2N19IPLOpenCLDeviceDesc13deviceVersionE"></span><span id="IPLOpenCLDeviceDesc::deviceVersion__IPLstring"></span><span class="target" id="struct_i_p_l_open_c_l_device_desc_1ac6e8b0888147681e2ff73864b35b2573"></span><a class="reference internal" href="types.html#_CPPv49IPLstring" title="IPLstring"><span class="n"><span class="pre">IPLstring</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">deviceVersion</span></span></span><a class="headerlink" href="#_CPPv4N19IPLOpenCLDeviceDesc13deviceVersionE" title="Link to this definition"></a><br /></dt>
 <dd><p>The OpenCL device version. </p>
 </dd></dl>
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N19IPLOpenCLDeviceDesc4typeE">
-<span id="_CPPv3N19IPLOpenCLDeviceDesc4typeE"></span><span id="_CPPv2N19IPLOpenCLDeviceDesc4typeE"></span><span id="IPLOpenCLDeviceDesc::type__IPLOpenCLDeviceType"></span><span class="target" id="struct_i_p_l_open_c_l_device_desc_1ae1afb392d281398812b3ab97e441e3b8"></span><a class="reference internal" href="#_CPPv419IPLOpenCLDeviceType" title="IPLOpenCLDeviceType"><span class="n"><span class="pre">IPLOpenCLDeviceType</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">type</span></span></span><a class="headerlink" href="#_CPPv4N19IPLOpenCLDeviceDesc4typeE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N19IPLOpenCLDeviceDesc4typeE"></span><span id="_CPPv2N19IPLOpenCLDeviceDesc4typeE"></span><span id="IPLOpenCLDeviceDesc::type__IPLOpenCLDeviceType"></span><span class="target" id="struct_i_p_l_open_c_l_device_desc_1ae1afb392d281398812b3ab97e441e3b8"></span><a class="reference internal" href="#_CPPv419IPLOpenCLDeviceType" title="IPLOpenCLDeviceType"><span class="n"><span class="pre">IPLOpenCLDeviceType</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">type</span></span></span><a class="headerlink" href="#_CPPv4N19IPLOpenCLDeviceDesc4typeE" title="Link to this definition"></a><br /></dt>
 <dd><p>The type of OpenCL device. </p>
 </dd></dl>
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N19IPLOpenCLDeviceDesc17numConvolutionCUsE">
-<span id="_CPPv3N19IPLOpenCLDeviceDesc17numConvolutionCUsE"></span><span id="_CPPv2N19IPLOpenCLDeviceDesc17numConvolutionCUsE"></span><span id="IPLOpenCLDeviceDesc::numConvolutionCUs__IPLint32"></span><span class="target" id="struct_i_p_l_open_c_l_device_desc_1a4b09be525772d265b821bfaad565d15c"></span><a class="reference internal" href="types.html#_CPPv48IPLint32" title="IPLint32"><span class="n"><span class="pre">IPLint32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">numConvolutionCUs</span></span></span><a class="headerlink" href="#_CPPv4N19IPLOpenCLDeviceDesc17numConvolutionCUsE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N19IPLOpenCLDeviceDesc17numConvolutionCUsE"></span><span id="_CPPv2N19IPLOpenCLDeviceDesc17numConvolutionCUsE"></span><span id="IPLOpenCLDeviceDesc::numConvolutionCUs__IPLint32"></span><span class="target" id="struct_i_p_l_open_c_l_device_desc_1a4b09be525772d265b821bfaad565d15c"></span><a class="reference internal" href="types.html#_CPPv48IPLint32" title="IPLint32"><span class="n"><span class="pre">IPLint32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">numConvolutionCUs</span></span></span><a class="headerlink" href="#_CPPv4N19IPLOpenCLDeviceDesc17numConvolutionCUsE" title="Link to this definition"></a><br /></dt>
 <dd><p>The number of CUs reserved for convolution. </p>
 <p>May be <code class="docutils literal notranslate"><span class="pre">0</span></code> if CU reservation is not supported. </p>
 </dd></dl>
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N19IPLOpenCLDeviceDesc14numIRUpdateCUsE">
-<span id="_CPPv3N19IPLOpenCLDeviceDesc14numIRUpdateCUsE"></span><span id="_CPPv2N19IPLOpenCLDeviceDesc14numIRUpdateCUsE"></span><span id="IPLOpenCLDeviceDesc::numIRUpdateCUs__IPLint32"></span><span class="target" id="struct_i_p_l_open_c_l_device_desc_1a21af6c8b93084222acd0c2bdefee1cbd"></span><a class="reference internal" href="types.html#_CPPv48IPLint32" title="IPLint32"><span class="n"><span class="pre">IPLint32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">numIRUpdateCUs</span></span></span><a class="headerlink" href="#_CPPv4N19IPLOpenCLDeviceDesc14numIRUpdateCUsE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N19IPLOpenCLDeviceDesc14numIRUpdateCUsE"></span><span id="_CPPv2N19IPLOpenCLDeviceDesc14numIRUpdateCUsE"></span><span id="IPLOpenCLDeviceDesc::numIRUpdateCUs__IPLint32"></span><span class="target" id="struct_i_p_l_open_c_l_device_desc_1a21af6c8b93084222acd0c2bdefee1cbd"></span><a class="reference internal" href="types.html#_CPPv48IPLint32" title="IPLint32"><span class="n"><span class="pre">IPLint32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">numIRUpdateCUs</span></span></span><a class="headerlink" href="#_CPPv4N19IPLOpenCLDeviceDesc14numIRUpdateCUsE" title="Link to this definition"></a><br /></dt>
 <dd><p>The number of CUs reserved for IR update. </p>
 <p>May be <code class="docutils literal notranslate"><span class="pre">0</span></code> if CU reservation is not supported. </p>
 </dd></dl>
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N19IPLOpenCLDeviceDesc11granularityE">
-<span id="_CPPv3N19IPLOpenCLDeviceDesc11granularityE"></span><span id="_CPPv2N19IPLOpenCLDeviceDesc11granularityE"></span><span id="IPLOpenCLDeviceDesc::granularity__IPLint32"></span><span class="target" id="struct_i_p_l_open_c_l_device_desc_1a9acbc6f6363796b32dc7a0ea9ebedd61"></span><a class="reference internal" href="types.html#_CPPv48IPLint32" title="IPLint32"><span class="n"><span class="pre">IPLint32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">granularity</span></span></span><a class="headerlink" href="#_CPPv4N19IPLOpenCLDeviceDesc11granularityE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N19IPLOpenCLDeviceDesc11granularityE"></span><span id="_CPPv2N19IPLOpenCLDeviceDesc11granularityE"></span><span id="IPLOpenCLDeviceDesc::granularity__IPLint32"></span><span class="target" id="struct_i_p_l_open_c_l_device_desc_1a9acbc6f6363796b32dc7a0ea9ebedd61"></span><a class="reference internal" href="types.html#_CPPv48IPLint32" title="IPLint32"><span class="n"><span class="pre">IPLint32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">granularity</span></span></span><a class="headerlink" href="#_CPPv4N19IPLOpenCLDeviceDesc11granularityE" title="Link to this definition"></a><br /></dt>
 <dd><p>The CU reservation granularity. </p>
 <p>CUs can only be reserved on this device in multiples of this number. </p>
 </dd></dl>
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N19IPLOpenCLDeviceDesc9perfScoreE">
-<span id="_CPPv3N19IPLOpenCLDeviceDesc9perfScoreE"></span><span id="_CPPv2N19IPLOpenCLDeviceDesc9perfScoreE"></span><span id="IPLOpenCLDeviceDesc::perfScore__IPLfloat32"></span><span class="target" id="struct_i_p_l_open_c_l_device_desc_1aa8913ad3f7ef2ee90a0d91e4a1a5d1e2"></span><a class="reference internal" href="types.html#_CPPv410IPLfloat32" title="IPLfloat32"><span class="n"><span class="pre">IPLfloat32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">perfScore</span></span></span><a class="headerlink" href="#_CPPv4N19IPLOpenCLDeviceDesc9perfScoreE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N19IPLOpenCLDeviceDesc9perfScoreE"></span><span id="_CPPv2N19IPLOpenCLDeviceDesc9perfScoreE"></span><span id="IPLOpenCLDeviceDesc::perfScore__IPLfloat32"></span><span class="target" id="struct_i_p_l_open_c_l_device_desc_1aa8913ad3f7ef2ee90a0d91e4a1a5d1e2"></span><a class="reference internal" href="types.html#_CPPv410IPLfloat32" title="IPLfloat32"><span class="n"><span class="pre">IPLfloat32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">perfScore</span></span></span><a class="headerlink" href="#_CPPv4N19IPLOpenCLDeviceDesc9perfScoreE" title="Link to this definition"></a><br /></dt>
 <dd><p>A relative performance score of a single CU of this device. </p>
 <p>Only applicable to supported AMD GPUs. </p>
 </dd></dl>
@@ -503,83 +433,66 @@
 </div>
 </dd></dl>
 
-</div>
-<div class="section" id="enumerations">
-<h2>Enumerations<a class="headerlink" href="#enumerations" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="enumerations">
+<h2>Enumerations<a class="headerlink" href="#enumerations" title="Link to this heading"></a></h2>
 <dl class="cpp enum">
 <dt class="sig sig-object cpp" id="_CPPv419IPLOpenCLDeviceType">
-<span id="_CPPv319IPLOpenCLDeviceType"></span><span id="_CPPv219IPLOpenCLDeviceType"></span><span class="target" id="group__opencl_1gab1b531faf5ea37b684c3f6fe3facd98a"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLOpenCLDeviceType</span></span></span><a class="headerlink" href="#_CPPv419IPLOpenCLDeviceType" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv319IPLOpenCLDeviceType"></span><span id="_CPPv219IPLOpenCLDeviceType"></span><span class="target" id="group__opencl_1gab1b531faf5ea37b684c3f6fe3facd98a"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLOpenCLDeviceType</span></span></span><a class="headerlink" href="#_CPPv419IPLOpenCLDeviceType" title="Link to this definition"></a><br /></dt>
 <dd><p>The type of devices to include when listing OpenCL devices. </p>
 <p><em>Values:</em></p>
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N19IPLOpenCLDeviceType24IPL_OPENCLDEVICETYPE_ANYE">
-<span id="_CPPv3N19IPLOpenCLDeviceType24IPL_OPENCLDEVICETYPE_ANYE"></span><span id="_CPPv2N19IPLOpenCLDeviceType24IPL_OPENCLDEVICETYPE_ANYE"></span><span class="target" id="group__opencl_1ggab1b531faf5ea37b684c3f6fe3facd98aabfef46b91e0680a99324f8e851dc8236"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_OPENCLDEVICETYPE_ANY</span></span></span><a class="headerlink" href="#_CPPv4N19IPLOpenCLDeviceType24IPL_OPENCLDEVICETYPE_ANYE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N19IPLOpenCLDeviceType24IPL_OPENCLDEVICETYPE_ANYE"></span><span id="_CPPv2N19IPLOpenCLDeviceType24IPL_OPENCLDEVICETYPE_ANYE"></span><span class="target" id="group__opencl_1ggab1b531faf5ea37b684c3f6fe3facd98aabfef46b91e0680a99324f8e851dc8236"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_OPENCLDEVICETYPE_ANY</span></span></span><a class="headerlink" href="#_CPPv4N19IPLOpenCLDeviceType24IPL_OPENCLDEVICETYPE_ANYE" title="Link to this definition"></a><br /></dt>
 <dd><p>List both CPU and GPU devices. </p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N19IPLOpenCLDeviceType24IPL_OPENCLDEVICETYPE_CPUE">
-<span id="_CPPv3N19IPLOpenCLDeviceType24IPL_OPENCLDEVICETYPE_CPUE"></span><span id="_CPPv2N19IPLOpenCLDeviceType24IPL_OPENCLDEVICETYPE_CPUE"></span><span class="target" id="group__opencl_1ggab1b531faf5ea37b684c3f6fe3facd98aa4e9988172d0d05c035e9e635408f5705"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_OPENCLDEVICETYPE_CPU</span></span></span><a class="headerlink" href="#_CPPv4N19IPLOpenCLDeviceType24IPL_OPENCLDEVICETYPE_CPUE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N19IPLOpenCLDeviceType24IPL_OPENCLDEVICETYPE_CPUE"></span><span id="_CPPv2N19IPLOpenCLDeviceType24IPL_OPENCLDEVICETYPE_CPUE"></span><span class="target" id="group__opencl_1ggab1b531faf5ea37b684c3f6fe3facd98aa4e9988172d0d05c035e9e635408f5705"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_OPENCLDEVICETYPE_CPU</span></span></span><a class="headerlink" href="#_CPPv4N19IPLOpenCLDeviceType24IPL_OPENCLDEVICETYPE_CPUE" title="Link to this definition"></a><br /></dt>
 <dd><p>Only list CPU devices. </p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N19IPLOpenCLDeviceType24IPL_OPENCLDEVICETYPE_GPUE">
-<span id="_CPPv3N19IPLOpenCLDeviceType24IPL_OPENCLDEVICETYPE_GPUE"></span><span id="_CPPv2N19IPLOpenCLDeviceType24IPL_OPENCLDEVICETYPE_GPUE"></span><span class="target" id="group__opencl_1ggab1b531faf5ea37b684c3f6fe3facd98aa05560e19145e08511cd97f08d0498466"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_OPENCLDEVICETYPE_GPU</span></span></span><a class="headerlink" href="#_CPPv4N19IPLOpenCLDeviceType24IPL_OPENCLDEVICETYPE_GPUE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N19IPLOpenCLDeviceType24IPL_OPENCLDEVICETYPE_GPUE"></span><span id="_CPPv2N19IPLOpenCLDeviceType24IPL_OPENCLDEVICETYPE_GPUE"></span><span class="target" id="group__opencl_1ggab1b531faf5ea37b684c3f6fe3facd98aa05560e19145e08511cd97f08d0498466"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_OPENCLDEVICETYPE_GPU</span></span></span><a class="headerlink" href="#_CPPv4N19IPLOpenCLDeviceType24IPL_OPENCLDEVICETYPE_GPUE" title="Link to this definition"></a><br /></dt>
 <dd><p>Only list GPU devices. </p>
 </dd></dl>
 
 </dd></dl>
 
-</div>
-</div>
+</section>
+</section>
 
 
            </div>
-           
           </div>
-          <footer>
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="radeon-rays.html" class="btn btn-neutral float-right" title="Radeon Rays" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="embree.html" class="btn btn-neutral float-left" title="Embree" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="radeon-rays.html" class="btn btn-neutral float-right" title="Radeon Rays" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &#169; Copyright 2017-2023, Valve Corporation.
-
-    </p>
+    <p>&#169; Copyright 2017-2023, Valve Corporation.</p>
   </div>
-    
-    
-    
-    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>

@@ -1,101 +1,50 @@
 
 
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
-  <meta charset="utf-8" />
-  
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  
   <title>Radeon Rays &mdash; Steam Audio C API  documentation</title>
-  
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/steamaudio.css?v=b5aaeb06" />
 
   
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/steamaudio.css" type="text/css" />
-
-  
-  
-
-  
-  
-
-  
-
-  
-  <!--[if lt IE 9]>
-    <script src="_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/doctools.js"></script>
-    
-    <script type="text/javascript" src="_static/js/theme.js"></script>
-
-    
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=7f41d439"></script>
+      <script src="_static/doctools.js?v=9a2dae69"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="TrueAudio Next" href="trueaudio-next.html" />
     <link rel="prev" title="OpenCL" href="opencl.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
 
           
-            <a href="index.html">
           
-
-          
+          <a href="index.html">
             
-            <img src="_static/steam-audio-logo.png" class="logo" alt="Logo"/>
-          
+              <img src="_static/steam-audio-logo.png" class="logo" alt="Logo"/>
           </a>
-
-          
-            
-            
-              <div class="version">
-                4.6.0
-              </div>
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
-              <p class="caption"><span class="caption-text">Steam Audio SDK</span></p>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Steam Audio SDK</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="guide.html">Programmer’s Guide</a></li>
@@ -109,9 +58,20 @@
 <li class="toctree-l2"><a class="reference internal" href="embree.html">Embree</a></li>
 <li class="toctree-l2"><a class="reference internal" href="opencl.html">OpenCL</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Radeon Rays</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#typedefs">Typedefs</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#functions">Functions</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#structures">Structures</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#typedefs">Typedefs</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv419IPLRadeonRaysDevice"><code class="docutils literal notranslate"><span class="pre">IPLRadeonRaysDevice</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#functions">Functions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv425iplRadeonRaysDeviceCreate15IPLOpenCLDeviceP27IPLRadeonRaysDeviceSettingsP19IPLRadeonRaysDevice"><code class="docutils literal notranslate"><span class="pre">iplRadeonRaysDeviceCreate()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv425iplRadeonRaysDeviceRetain19IPLRadeonRaysDevice"><code class="docutils literal notranslate"><span class="pre">iplRadeonRaysDeviceRetain()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv426iplRadeonRaysDeviceReleaseP19IPLRadeonRaysDevice"><code class="docutils literal notranslate"><span class="pre">iplRadeonRaysDeviceRelease()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#structures">Structures</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv427IPLRadeonRaysDeviceSettings"><code class="docutils literal notranslate"><span class="pre">IPLRadeonRaysDeviceSettings</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="trueaudio-next.html">TrueAudio Next</a></li>
@@ -136,98 +96,57 @@
 </li>
 </ul>
 
-            
-          
         </div>
-        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="index.html">Steam Audio C API</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
-      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-        
-          <li><a href="reference.html">API Reference</a> &raquo;</li>
-        
-      <li>Radeon Rays</li>
-    
-    
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="reference.html">API Reference</a></li>
+      <li class="breadcrumb-item active">Radeon Rays</li>
       <li class="wy-breadcrumbs-aside">
-        
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
-  <div class="section" id="radeon-rays">
-<h1>Radeon Rays<a class="headerlink" href="#radeon-rays" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="typedefs">
-<h2>Typedefs<a class="headerlink" href="#typedefs" title="Permalink to this headline">¶</a></h2>
+             
+  <section id="radeon-rays">
+<h1>Radeon Rays<a class="headerlink" href="#radeon-rays" title="Link to this heading"></a></h1>
+<section id="typedefs">
+<h2>Typedefs<a class="headerlink" href="#typedefs" title="Link to this heading"></a></h2>
 <dl class="cpp type">
 <dt class="sig sig-object cpp" id="_CPPv419IPLRadeonRaysDevice">
-<span id="_CPPv319IPLRadeonRaysDevice"></span><span id="_CPPv219IPLRadeonRaysDevice"></span><span id="IPLRadeonRaysDevice"></span><span class="target" id="group__radeonrays_1ga3cd110d083415b1a4ce031566164ed39"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="n"><span class="pre">_IPLRadeonRaysDevice_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">IPLRadeonRaysDevice</span></span></span><a class="headerlink" href="#_CPPv419IPLRadeonRaysDevice" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv319IPLRadeonRaysDevice"></span><span id="_CPPv219IPLRadeonRaysDevice"></span><span id="IPLRadeonRaysDevice"></span><span class="target" id="group__radeonrays_1ga3cd110d083415b1a4ce031566164ed39"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="n"><span class="pre">_IPLRadeonRaysDevice_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">IPLRadeonRaysDevice</span></span></span><a class="headerlink" href="#_CPPv419IPLRadeonRaysDevice" title="Link to this definition"></a><br /></dt>
 <dd><p>Application-wide state for the Radeon Rays ray tracer. </p>
 <p>A Radeon Rays device must be created before using any of Steam Audio’s Radeon Rays ray tracing functionality. In terms of the Radeon Rays API, this object encapsulates a <code class="docutils literal notranslate"><span class="pre">RadeonRays::IntersectionApi</span></code> object. </p>
 </dd></dl>
 
-</div>
-<div class="section" id="functions">
-<h2>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="functions">
+<h2>Functions<a class="headerlink" href="#functions" title="Link to this heading"></a></h2>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv425iplRadeonRaysDeviceCreate15IPLOpenCLDeviceP27IPLRadeonRaysDeviceSettingsP19IPLRadeonRaysDevice">
-<span id="_CPPv325iplRadeonRaysDeviceCreate15IPLOpenCLDeviceP27IPLRadeonRaysDeviceSettingsP19IPLRadeonRaysDevice"></span><span id="_CPPv225iplRadeonRaysDeviceCreate15IPLOpenCLDeviceP27IPLRadeonRaysDeviceSettingsP19IPLRadeonRaysDevice"></span><span id="iplRadeonRaysDeviceCreate__IPLOpenCLDevice.IPLRadeonRaysDeviceSettingsP.IPLRadeonRaysDeviceP"></span><span class="target" id="group__radeonrays_1ga3e91830fe8272c508ab28689172b211f"></span><a class="reference internal" href="types.html#_CPPv48IPLerror" title="IPLerror"><span class="n"><span class="pre">IPLerror</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplRadeonRaysDeviceCreate</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="opencl.html#_CPPv415IPLOpenCLDevice" title="IPLOpenCLDevice"><span class="n"><span class="pre">IPLOpenCLDevice</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">openCLDevice</span></span>, <a class="reference internal" href="#_CPPv427IPLRadeonRaysDeviceSettings" title="IPLRadeonRaysDeviceSettings"><span class="n"><span class="pre">IPLRadeonRaysDeviceSettings</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">settings</span></span>, <a class="reference internal" href="#_CPPv419IPLRadeonRaysDevice" title="IPLRadeonRaysDevice"><span class="n"><span class="pre">IPLRadeonRaysDevice</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">rrDevice</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv425iplRadeonRaysDeviceCreate15IPLOpenCLDeviceP27IPLRadeonRaysDeviceSettingsP19IPLRadeonRaysDevice" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv325iplRadeonRaysDeviceCreate15IPLOpenCLDeviceP27IPLRadeonRaysDeviceSettingsP19IPLRadeonRaysDevice"></span><span id="_CPPv225iplRadeonRaysDeviceCreate15IPLOpenCLDeviceP27IPLRadeonRaysDeviceSettingsP19IPLRadeonRaysDevice"></span><span id="iplRadeonRaysDeviceCreate__IPLOpenCLDevice.IPLRadeonRaysDeviceSettingsP.IPLRadeonRaysDeviceP"></span><span class="target" id="group__radeonrays_1ga3e91830fe8272c508ab28689172b211f"></span><a class="reference internal" href="types.html#_CPPv48IPLerror" title="IPLerror"><span class="n"><span class="pre">IPLerror</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplRadeonRaysDeviceCreate</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="opencl.html#_CPPv415IPLOpenCLDevice" title="IPLOpenCLDevice"><span class="n"><span class="pre">IPLOpenCLDevice</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">openCLDevice</span></span>, <a class="reference internal" href="#_CPPv427IPLRadeonRaysDeviceSettings" title="IPLRadeonRaysDeviceSettings"><span class="n"><span class="pre">IPLRadeonRaysDeviceSettings</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">settings</span></span>, <a class="reference internal" href="#_CPPv419IPLRadeonRaysDevice" title="IPLRadeonRaysDevice"><span class="n"><span class="pre">IPLRadeonRaysDevice</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">rrDevice</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv425iplRadeonRaysDeviceCreate15IPLOpenCLDeviceP27IPLRadeonRaysDeviceSettingsP19IPLRadeonRaysDevice" title="Link to this definition"></a><br /></dt>
 <dd><p>Creates a Radeon Rays device. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>openCLDevice</strong> – The OpenCL device to use for running Radeon Rays. </p></li>
 <li><p><strong>settings</strong> – The settings to use when creating the Radeon Rays device. </p></li>
 <li><p><strong>rrDevice</strong> – [out] The created Radeon Rays device.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Status code indicating whether or not the operation succeeded. </p>
 </dd>
 </dl>
@@ -235,13 +154,13 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv425iplRadeonRaysDeviceRetain19IPLRadeonRaysDevice">
-<span id="_CPPv325iplRadeonRaysDeviceRetain19IPLRadeonRaysDevice"></span><span id="_CPPv225iplRadeonRaysDeviceRetain19IPLRadeonRaysDevice"></span><span id="iplRadeonRaysDeviceRetain__IPLRadeonRaysDevice"></span><span class="target" id="group__radeonrays_1gae89ab4a200e56ff869a9b1cfca106848"></span><a class="reference internal" href="#_CPPv419IPLRadeonRaysDevice" title="IPLRadeonRaysDevice"><span class="n"><span class="pre">IPLRadeonRaysDevice</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplRadeonRaysDeviceRetain</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv419IPLRadeonRaysDevice" title="IPLRadeonRaysDevice"><span class="n"><span class="pre">IPLRadeonRaysDevice</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">device</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv425iplRadeonRaysDeviceRetain19IPLRadeonRaysDevice" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv325iplRadeonRaysDeviceRetain19IPLRadeonRaysDevice"></span><span id="_CPPv225iplRadeonRaysDeviceRetain19IPLRadeonRaysDevice"></span><span id="iplRadeonRaysDeviceRetain__IPLRadeonRaysDevice"></span><span class="target" id="group__radeonrays_1gae89ab4a200e56ff869a9b1cfca106848"></span><a class="reference internal" href="#_CPPv419IPLRadeonRaysDevice" title="IPLRadeonRaysDevice"><span class="n"><span class="pre">IPLRadeonRaysDevice</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplRadeonRaysDeviceRetain</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv419IPLRadeonRaysDevice" title="IPLRadeonRaysDevice"><span class="n"><span class="pre">IPLRadeonRaysDevice</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">device</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv425iplRadeonRaysDeviceRetain19IPLRadeonRaysDevice" title="Link to this definition"></a><br /></dt>
 <dd><p>Retains an additional reference to a Radeon Rays device. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>device</strong> – The Radeon Rays device to retain a reference to.</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The additional reference to the Radeon Rays device. </p>
 </dd>
 </dl>
@@ -249,81 +168,64 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv426iplRadeonRaysDeviceReleaseP19IPLRadeonRaysDevice">
-<span id="_CPPv326iplRadeonRaysDeviceReleaseP19IPLRadeonRaysDevice"></span><span id="_CPPv226iplRadeonRaysDeviceReleaseP19IPLRadeonRaysDevice"></span><span id="iplRadeonRaysDeviceRelease__IPLRadeonRaysDeviceP"></span><span class="target" id="group__radeonrays_1gaf7affec5145f22ea171245ce642288d4"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplRadeonRaysDeviceRelease</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv419IPLRadeonRaysDevice" title="IPLRadeonRaysDevice"><span class="n"><span class="pre">IPLRadeonRaysDevice</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">device</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv426iplRadeonRaysDeviceReleaseP19IPLRadeonRaysDevice" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv326iplRadeonRaysDeviceReleaseP19IPLRadeonRaysDevice"></span><span id="_CPPv226iplRadeonRaysDeviceReleaseP19IPLRadeonRaysDevice"></span><span id="iplRadeonRaysDeviceRelease__IPLRadeonRaysDeviceP"></span><span class="target" id="group__radeonrays_1gaf7affec5145f22ea171245ce642288d4"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplRadeonRaysDeviceRelease</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv419IPLRadeonRaysDevice" title="IPLRadeonRaysDevice"><span class="n"><span class="pre">IPLRadeonRaysDevice</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">device</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv426iplRadeonRaysDeviceReleaseP19IPLRadeonRaysDevice" title="Link to this definition"></a><br /></dt>
 <dd><p>Releases a reference to a Radeon Rays device. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>device</strong> – The Radeon Rays device to release a reference to. </p>
 </dd>
 </dl>
 </dd></dl>
 
-</div>
-<div class="section" id="structures">
-<h2>Structures<a class="headerlink" href="#structures" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="structures">
+<h2>Structures<a class="headerlink" href="#structures" title="Link to this heading"></a></h2>
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv427IPLRadeonRaysDeviceSettings">
-<span id="_CPPv327IPLRadeonRaysDeviceSettings"></span><span id="_CPPv227IPLRadeonRaysDeviceSettings"></span><span id="IPLRadeonRaysDeviceSettings"></span><span class="target" id="struct_i_p_l_radeon_rays_device_settings"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLRadeonRaysDeviceSettings</span></span></span><a class="headerlink" href="#_CPPv427IPLRadeonRaysDeviceSettings" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv327IPLRadeonRaysDeviceSettings"></span><span id="_CPPv227IPLRadeonRaysDeviceSettings"></span><span id="IPLRadeonRaysDeviceSettings"></span><span class="target" id="struct_i_p_l_radeon_rays_device_settings"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLRadeonRaysDeviceSettings</span></span></span><a class="headerlink" href="#_CPPv427IPLRadeonRaysDeviceSettings" title="Link to this definition"></a><br /></dt>
 <dd><p>Settings used to create a Radeon Rays device. </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N27IPLRadeonRaysDeviceSettings8reservedE">
-<span id="_CPPv3N27IPLRadeonRaysDeviceSettings8reservedE"></span><span id="_CPPv2N27IPLRadeonRaysDeviceSettings8reservedE"></span><span id="IPLRadeonRaysDeviceSettings::reserved__IPLbyte"></span><span class="target" id="struct_i_p_l_radeon_rays_device_settings_1af27e331c66a766da1432ec82ea9bdd2d"></span><a class="reference internal" href="types.html#_CPPv47IPLbyte" title="IPLbyte"><span class="n"><span class="pre">IPLbyte</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">reserved</span></span></span><a class="headerlink" href="#_CPPv4N27IPLRadeonRaysDeviceSettings8reservedE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N27IPLRadeonRaysDeviceSettings8reservedE"></span><span id="_CPPv2N27IPLRadeonRaysDeviceSettings8reservedE"></span><span id="IPLRadeonRaysDeviceSettings::reserved__IPLbyte"></span><span class="target" id="struct_i_p_l_radeon_rays_device_settings_1af27e331c66a766da1432ec82ea9bdd2d"></span><a class="reference internal" href="types.html#_CPPv47IPLbyte" title="IPLbyte"><span class="n"><span class="pre">IPLbyte</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">reserved</span></span></span><a class="headerlink" href="#_CPPv4N27IPLRadeonRaysDeviceSettings8reservedE" title="Link to this definition"></a><br /></dt>
 <dd></dd></dl>
 
 </div>
 </dd></dl>
 
-</div>
-</div>
+</section>
+</section>
 
 
            </div>
-           
           </div>
-          <footer>
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="trueaudio-next.html" class="btn btn-neutral float-right" title="TrueAudio Next" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="opencl.html" class="btn btn-neutral float-left" title="OpenCL" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="trueaudio-next.html" class="btn btn-neutral float-right" title="TrueAudio Next" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &#169; Copyright 2017-2023, Valve Corporation.
-
-    </p>
+    <p>&#169; Copyright 2017-2023, Valve Corporation.</p>
   </div>
-    
-    
-    
-    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>

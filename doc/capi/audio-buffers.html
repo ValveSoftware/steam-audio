@@ -1,101 +1,50 @@
 
 
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
-  <meta charset="utf-8" />
-  
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  
   <title>Audio Buffers &mdash; Steam Audio C API  documentation</title>
-  
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/steamaudio.css?v=b5aaeb06" />
 
   
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/steamaudio.css" type="text/css" />
-
-  
-  
-
-  
-  
-
-  
-
-  
-  <!--[if lt IE 9]>
-    <script src="_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/doctools.js"></script>
-    
-    <script type="text/javascript" src="_static/js/theme.js"></script>
-
-    
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=7f41d439"></script>
+      <script src="_static/doctools.js?v=9a2dae69"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="HRTF" href="hrtf.html" />
     <link rel="prev" title="Scene" href="scene.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
 
           
-            <a href="index.html">
           
-
-          
+          <a href="index.html">
             
-            <img src="_static/steam-audio-logo.png" class="logo" alt="Logo"/>
-          
+              <img src="_static/steam-audio-logo.png" class="logo" alt="Logo"/>
           </a>
-
-          
-            
-            
-              <div class="version">
-                4.6.0
-              </div>
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
-              <p class="caption"><span class="caption-text">Steam Audio SDK</span></p>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Steam Audio SDK</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="guide.html">Programmer’s Guide</a></li>
@@ -112,9 +61,28 @@
 <li class="toctree-l2"><a class="reference internal" href="trueaudio-next.html">TrueAudio Next</a></li>
 <li class="toctree-l2"><a class="reference internal" href="scene.html">Scene</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Audio Buffers</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#functions">Functions</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#structures">Structures</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#enumerations">Enumerations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#functions">Functions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv422iplAudioBufferAllocate10IPLContext8IPLint328IPLint32P14IPLAudioBuffer"><code class="docutils literal notranslate"><span class="pre">iplAudioBufferAllocate()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv418iplAudioBufferFree10IPLContextP14IPLAudioBuffer"><code class="docutils literal notranslate"><span class="pre">iplAudioBufferFree()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv424iplAudioBufferInterleave10IPLContextP14IPLAudioBufferP10IPLfloat32"><code class="docutils literal notranslate"><span class="pre">iplAudioBufferInterleave()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv426iplAudioBufferDeinterleave10IPLContextP10IPLfloat32P14IPLAudioBuffer"><code class="docutils literal notranslate"><span class="pre">iplAudioBufferDeinterleave()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv417iplAudioBufferMix10IPLContextP14IPLAudioBufferP14IPLAudioBuffer"><code class="docutils literal notranslate"><span class="pre">iplAudioBufferMix()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv421iplAudioBufferDownmix10IPLContextP14IPLAudioBufferP14IPLAudioBuffer"><code class="docutils literal notranslate"><span class="pre">iplAudioBufferDownmix()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv431iplAudioBufferConvertAmbisonics10IPLContext17IPLAmbisonicsType17IPLAmbisonicsTypeP14IPLAudioBufferP14IPLAudioBuffer"><code class="docutils literal notranslate"><span class="pre">iplAudioBufferConvertAmbisonics()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#structures">Structures</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv416IPLSpeakerLayout"><code class="docutils literal notranslate"><span class="pre">IPLSpeakerLayout</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv416IPLAudioSettings"><code class="docutils literal notranslate"><span class="pre">IPLAudioSettings</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv414IPLAudioBuffer"><code class="docutils literal notranslate"><span class="pre">IPLAudioBuffer</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#enumerations">Enumerations</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv420IPLSpeakerLayoutType"><code class="docutils literal notranslate"><span class="pre">IPLSpeakerLayoutType</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv417IPLAmbisonicsType"><code class="docutils literal notranslate"><span class="pre">IPLAmbisonicsType</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv419IPLAudioEffectState"><code class="docutils literal notranslate"><span class="pre">IPLAudioEffectState</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="hrtf.html">HRTF</a></li>
@@ -136,83 +104,42 @@
 </li>
 </ul>
 
-            
-          
         </div>
-        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="index.html">Steam Audio C API</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
-      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-        
-          <li><a href="reference.html">API Reference</a> &raquo;</li>
-        
-      <li>Audio Buffers</li>
-    
-    
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="reference.html">API Reference</a></li>
+      <li class="breadcrumb-item active">Audio Buffers</li>
       <li class="wy-breadcrumbs-aside">
-        
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
-  <div class="section" id="audio-buffers">
-<h1>Audio Buffers<a class="headerlink" href="#audio-buffers" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="functions">
-<h2>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h2>
+             
+  <section id="audio-buffers">
+<h1>Audio Buffers<a class="headerlink" href="#audio-buffers" title="Link to this heading"></a></h1>
+<section id="functions">
+<h2>Functions<a class="headerlink" href="#functions" title="Link to this heading"></a></h2>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv422iplAudioBufferAllocate10IPLContext8IPLint328IPLint32P14IPLAudioBuffer">
-<span id="_CPPv322iplAudioBufferAllocate10IPLContext8IPLint328IPLint32P14IPLAudioBuffer"></span><span id="_CPPv222iplAudioBufferAllocate10IPLContext8IPLint328IPLint32P14IPLAudioBuffer"></span><span id="iplAudioBufferAllocate__IPLContext.IPLint32.IPLint32.IPLAudioBufferP"></span><span class="target" id="group__audiobuffers_1ga02395a1a5626d1587794072047890d33"></span><a class="reference internal" href="types.html#_CPPv48IPLerror" title="IPLerror"><span class="n"><span class="pre">IPLerror</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplAudioBufferAllocate</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="context.html#_CPPv410IPLContext" title="IPLContext"><span class="n"><span class="pre">IPLContext</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">context</span></span>, <a class="reference internal" href="types.html#_CPPv48IPLint32" title="IPLint32"><span class="n"><span class="pre">IPLint32</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">numChannels</span></span>, <a class="reference internal" href="types.html#_CPPv48IPLint32" title="IPLint32"><span class="n"><span class="pre">IPLint32</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">numSamples</span></span>, <a class="reference internal" href="#_CPPv414IPLAudioBuffer" title="IPLAudioBuffer"><span class="n"><span class="pre">IPLAudioBuffer</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">audioBuffer</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv422iplAudioBufferAllocate10IPLContext8IPLint328IPLint32P14IPLAudioBuffer" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv322iplAudioBufferAllocate10IPLContext8IPLint328IPLint32P14IPLAudioBuffer"></span><span id="_CPPv222iplAudioBufferAllocate10IPLContext8IPLint328IPLint32P14IPLAudioBuffer"></span><span id="iplAudioBufferAllocate__IPLContext.IPLint32.IPLint32.IPLAudioBufferP"></span><span class="target" id="group__audiobuffers_1ga02395a1a5626d1587794072047890d33"></span><a class="reference internal" href="types.html#_CPPv48IPLerror" title="IPLerror"><span class="n"><span class="pre">IPLerror</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplAudioBufferAllocate</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="context.html#_CPPv410IPLContext" title="IPLContext"><span class="n"><span class="pre">IPLContext</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">context</span></span>, <a class="reference internal" href="types.html#_CPPv48IPLint32" title="IPLint32"><span class="n"><span class="pre">IPLint32</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">numChannels</span></span>, <a class="reference internal" href="types.html#_CPPv48IPLint32" title="IPLint32"><span class="n"><span class="pre">IPLint32</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">numSamples</span></span>, <a class="reference internal" href="#_CPPv414IPLAudioBuffer" title="IPLAudioBuffer"><span class="n"><span class="pre">IPLAudioBuffer</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">audioBuffer</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv422iplAudioBufferAllocate10IPLContext8IPLint328IPLint32P14IPLAudioBuffer" title="Link to this definition"></a><br /></dt>
 <dd><p>Allocates an audio buffer. </p>
 <p>All audio buffers are uncompressed PCM with 32-bit floating-point samples.</p>
 <p>Internally, all audio buffers are stored deinterleaved for performance reasons. If your audio engine provides interleaved audio buffers, you must use <code class="docutils literal notranslate"><span class="pre">iplAudioBufferInterleave</span></code> and <code class="docutils literal notranslate"><span class="pre">iplAudioBufferDeinterleave</span></code> to explicitly convert to/from deinterleaved format. If your audio engine provides deinterleaved audio buffers, you can pass them directly using <code class="docutils literal notranslate"><a class="reference internal" href="#struct_i_p_l_audio_buffer"><span class="std std-ref"><span class="pre">IPLAudioBuffer</span></span></a></code>, thus avoiding the processing and memory overhead of an extra audio buffer.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>context</strong> – The context used to initialize Steam Audio. </p></li>
 <li><p><strong>numChannels</strong> – Number of channels. </p></li>
@@ -220,7 +147,7 @@
 <li><p><strong>audioBuffer</strong> – The audio buffer to allocate.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Status code indicating whether or not the operation succeeded. </p>
 </dd>
 </dl>
@@ -228,10 +155,10 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv418iplAudioBufferFree10IPLContextP14IPLAudioBuffer">
-<span id="_CPPv318iplAudioBufferFree10IPLContextP14IPLAudioBuffer"></span><span id="_CPPv218iplAudioBufferFree10IPLContextP14IPLAudioBuffer"></span><span id="iplAudioBufferFree__IPLContext.IPLAudioBufferP"></span><span class="target" id="group__audiobuffers_1ga349e90e8aa4dd60d5bdde797c0c4c402"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplAudioBufferFree</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="context.html#_CPPv410IPLContext" title="IPLContext"><span class="n"><span class="pre">IPLContext</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">context</span></span>, <a class="reference internal" href="#_CPPv414IPLAudioBuffer" title="IPLAudioBuffer"><span class="n"><span class="pre">IPLAudioBuffer</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">audioBuffer</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv418iplAudioBufferFree10IPLContextP14IPLAudioBuffer" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv318iplAudioBufferFree10IPLContextP14IPLAudioBuffer"></span><span id="_CPPv218iplAudioBufferFree10IPLContextP14IPLAudioBuffer"></span><span id="iplAudioBufferFree__IPLContext.IPLAudioBufferP"></span><span class="target" id="group__audiobuffers_1ga349e90e8aa4dd60d5bdde797c0c4c402"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplAudioBufferFree</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="context.html#_CPPv410IPLContext" title="IPLContext"><span class="n"><span class="pre">IPLContext</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">context</span></span>, <a class="reference internal" href="#_CPPv414IPLAudioBuffer" title="IPLAudioBuffer"><span class="n"><span class="pre">IPLAudioBuffer</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">audioBuffer</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv418iplAudioBufferFree10IPLContextP14IPLAudioBuffer" title="Link to this definition"></a><br /></dt>
 <dd><p>Frees an audio buffer. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>context</strong> – The context used to initialize Steam Audio. </p></li>
 <li><p><strong>audioBuffer</strong> – The audio buffer to free. </p></li>
@@ -242,10 +169,10 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv424iplAudioBufferInterleave10IPLContextP14IPLAudioBufferP10IPLfloat32">
-<span id="_CPPv324iplAudioBufferInterleave10IPLContextP14IPLAudioBufferP10IPLfloat32"></span><span id="_CPPv224iplAudioBufferInterleave10IPLContextP14IPLAudioBufferP10IPLfloat32"></span><span id="iplAudioBufferInterleave__IPLContext.IPLAudioBufferP.IPLfloat32P"></span><span class="target" id="group__audiobuffers_1ga19cede3875d11a1d19db94cef48a0482"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplAudioBufferInterleave</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="context.html#_CPPv410IPLContext" title="IPLContext"><span class="n"><span class="pre">IPLContext</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">context</span></span>, <a class="reference internal" href="#_CPPv414IPLAudioBuffer" title="IPLAudioBuffer"><span class="n"><span class="pre">IPLAudioBuffer</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">src</span></span>, <a class="reference internal" href="types.html#_CPPv410IPLfloat32" title="IPLfloat32"><span class="n"><span class="pre">IPLfloat32</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">dst</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv424iplAudioBufferInterleave10IPLContextP14IPLAudioBufferP10IPLfloat32" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv324iplAudioBufferInterleave10IPLContextP14IPLAudioBufferP10IPLfloat32"></span><span id="_CPPv224iplAudioBufferInterleave10IPLContextP14IPLAudioBufferP10IPLfloat32"></span><span id="iplAudioBufferInterleave__IPLContext.IPLAudioBufferP.IPLfloat32P"></span><span class="target" id="group__audiobuffers_1ga19cede3875d11a1d19db94cef48a0482"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplAudioBufferInterleave</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="context.html#_CPPv410IPLContext" title="IPLContext"><span class="n"><span class="pre">IPLContext</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">context</span></span>, <a class="reference internal" href="#_CPPv414IPLAudioBuffer" title="IPLAudioBuffer"><span class="n"><span class="pre">IPLAudioBuffer</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">src</span></span>, <a class="reference internal" href="types.html#_CPPv410IPLfloat32" title="IPLfloat32"><span class="n"><span class="pre">IPLfloat32</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">dst</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv424iplAudioBufferInterleave10IPLContextP14IPLAudioBufferP10IPLfloat32" title="Link to this definition"></a><br /></dt>
 <dd><p>Reads samples from an audio buffer and interleaves them into a user-provided array. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>context</strong> – The context used to initialize Steam Audio. </p></li>
 <li><p><strong>src</strong> – The audio buffer to read from. </p></li>
@@ -257,10 +184,10 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv426iplAudioBufferDeinterleave10IPLContextP10IPLfloat32P14IPLAudioBuffer">
-<span id="_CPPv326iplAudioBufferDeinterleave10IPLContextP10IPLfloat32P14IPLAudioBuffer"></span><span id="_CPPv226iplAudioBufferDeinterleave10IPLContextP10IPLfloat32P14IPLAudioBuffer"></span><span id="iplAudioBufferDeinterleave__IPLContext.IPLfloat32P.IPLAudioBufferP"></span><span class="target" id="group__audiobuffers_1ga61ea73f07be312c21c16b853404dcbdf"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplAudioBufferDeinterleave</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="context.html#_CPPv410IPLContext" title="IPLContext"><span class="n"><span class="pre">IPLContext</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">context</span></span>, <a class="reference internal" href="types.html#_CPPv410IPLfloat32" title="IPLfloat32"><span class="n"><span class="pre">IPLfloat32</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">src</span></span>, <a class="reference internal" href="#_CPPv414IPLAudioBuffer" title="IPLAudioBuffer"><span class="n"><span class="pre">IPLAudioBuffer</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">dst</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv426iplAudioBufferDeinterleave10IPLContextP10IPLfloat32P14IPLAudioBuffer" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv326iplAudioBufferDeinterleave10IPLContextP10IPLfloat32P14IPLAudioBuffer"></span><span id="_CPPv226iplAudioBufferDeinterleave10IPLContextP10IPLfloat32P14IPLAudioBuffer"></span><span id="iplAudioBufferDeinterleave__IPLContext.IPLfloat32P.IPLAudioBufferP"></span><span class="target" id="group__audiobuffers_1ga61ea73f07be312c21c16b853404dcbdf"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplAudioBufferDeinterleave</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="context.html#_CPPv410IPLContext" title="IPLContext"><span class="n"><span class="pre">IPLContext</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">context</span></span>, <a class="reference internal" href="types.html#_CPPv410IPLfloat32" title="IPLfloat32"><span class="n"><span class="pre">IPLfloat32</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">src</span></span>, <a class="reference internal" href="#_CPPv414IPLAudioBuffer" title="IPLAudioBuffer"><span class="n"><span class="pre">IPLAudioBuffer</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">dst</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv426iplAudioBufferDeinterleave10IPLContextP10IPLfloat32P14IPLAudioBuffer" title="Link to this definition"></a><br /></dt>
 <dd><p>Writes interleaved samples from a user-provided array into an audio buffer. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>context</strong> – The context used to initialize Steam Audio. </p></li>
 <li><p><strong>src</strong> – The interleaved array to read from. </p></li>
@@ -272,11 +199,11 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv417iplAudioBufferMix10IPLContextP14IPLAudioBufferP14IPLAudioBuffer">
-<span id="_CPPv317iplAudioBufferMix10IPLContextP14IPLAudioBufferP14IPLAudioBuffer"></span><span id="_CPPv217iplAudioBufferMix10IPLContextP14IPLAudioBufferP14IPLAudioBuffer"></span><span id="iplAudioBufferMix__IPLContext.IPLAudioBufferP.IPLAudioBufferP"></span><span class="target" id="group__audiobuffers_1ga73c31fd887de1818174e487c7d1a4ce6"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplAudioBufferMix</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="context.html#_CPPv410IPLContext" title="IPLContext"><span class="n"><span class="pre">IPLContext</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">context</span></span>, <a class="reference internal" href="#_CPPv414IPLAudioBuffer" title="IPLAudioBuffer"><span class="n"><span class="pre">IPLAudioBuffer</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">in</span></span>, <a class="reference internal" href="#_CPPv414IPLAudioBuffer" title="IPLAudioBuffer"><span class="n"><span class="pre">IPLAudioBuffer</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">mix</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv417iplAudioBufferMix10IPLContextP14IPLAudioBufferP14IPLAudioBuffer" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv317iplAudioBufferMix10IPLContextP14IPLAudioBufferP14IPLAudioBuffer"></span><span id="_CPPv217iplAudioBufferMix10IPLContextP14IPLAudioBufferP14IPLAudioBuffer"></span><span id="iplAudioBufferMix__IPLContext.IPLAudioBufferP.IPLAudioBufferP"></span><span class="target" id="group__audiobuffers_1ga73c31fd887de1818174e487c7d1a4ce6"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplAudioBufferMix</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="context.html#_CPPv410IPLContext" title="IPLContext"><span class="n"><span class="pre">IPLContext</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">context</span></span>, <a class="reference internal" href="#_CPPv414IPLAudioBuffer" title="IPLAudioBuffer"><span class="n"><span class="pre">IPLAudioBuffer</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">in</span></span>, <a class="reference internal" href="#_CPPv414IPLAudioBuffer" title="IPLAudioBuffer"><span class="n"><span class="pre">IPLAudioBuffer</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">mix</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv417iplAudioBufferMix10IPLContextP14IPLAudioBufferP14IPLAudioBuffer" title="Link to this definition"></a><br /></dt>
 <dd><p>Mixes one audio buffer into another. </p>
 <p>Both audio buffers must have the same number of channels and samples.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>context</strong> – The context used to initialize Steam Audio. </p></li>
 <li><p><strong>in</strong> – The source audio buffer. </p></li>
@@ -288,12 +215,12 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv421iplAudioBufferDownmix10IPLContextP14IPLAudioBufferP14IPLAudioBuffer">
-<span id="_CPPv321iplAudioBufferDownmix10IPLContextP14IPLAudioBufferP14IPLAudioBuffer"></span><span id="_CPPv221iplAudioBufferDownmix10IPLContextP14IPLAudioBufferP14IPLAudioBuffer"></span><span id="iplAudioBufferDownmix__IPLContext.IPLAudioBufferP.IPLAudioBufferP"></span><span class="target" id="group__audiobuffers_1ga9919a891cbaf2537c23711cba112728d"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplAudioBufferDownmix</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="context.html#_CPPv410IPLContext" title="IPLContext"><span class="n"><span class="pre">IPLContext</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">context</span></span>, <a class="reference internal" href="#_CPPv414IPLAudioBuffer" title="IPLAudioBuffer"><span class="n"><span class="pre">IPLAudioBuffer</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">in</span></span>, <a class="reference internal" href="#_CPPv414IPLAudioBuffer" title="IPLAudioBuffer"><span class="n"><span class="pre">IPLAudioBuffer</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">out</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv421iplAudioBufferDownmix10IPLContextP14IPLAudioBufferP14IPLAudioBuffer" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv321iplAudioBufferDownmix10IPLContextP14IPLAudioBufferP14IPLAudioBuffer"></span><span id="_CPPv221iplAudioBufferDownmix10IPLContextP14IPLAudioBufferP14IPLAudioBuffer"></span><span id="iplAudioBufferDownmix__IPLContext.IPLAudioBufferP.IPLAudioBufferP"></span><span class="target" id="group__audiobuffers_1ga9919a891cbaf2537c23711cba112728d"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplAudioBufferDownmix</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="context.html#_CPPv410IPLContext" title="IPLContext"><span class="n"><span class="pre">IPLContext</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">context</span></span>, <a class="reference internal" href="#_CPPv414IPLAudioBuffer" title="IPLAudioBuffer"><span class="n"><span class="pre">IPLAudioBuffer</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">in</span></span>, <a class="reference internal" href="#_CPPv414IPLAudioBuffer" title="IPLAudioBuffer"><span class="n"><span class="pre">IPLAudioBuffer</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">out</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv421iplAudioBufferDownmix10IPLContextP14IPLAudioBufferP14IPLAudioBuffer" title="Link to this definition"></a><br /></dt>
 <dd><p>Downmixes a multi-channel audio buffer into a mono audio buffer. </p>
 <p>Both audio buffers must have the same number of samples.</p>
 <p>Downmixing is performed by summing up the source channels and dividing the result by the number of source channels. If this is not the desired downmixing behavior, we recommend that downmixing be performed manually.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>context</strong> – The context used to initialize Steam Audio. </p></li>
 <li><p><strong>in</strong> – The source audio buffer. </p></li>
@@ -305,13 +232,13 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv431iplAudioBufferConvertAmbisonics10IPLContext17IPLAmbisonicsType17IPLAmbisonicsTypeP14IPLAudioBufferP14IPLAudioBuffer">
-<span id="_CPPv331iplAudioBufferConvertAmbisonics10IPLContext17IPLAmbisonicsType17IPLAmbisonicsTypeP14IPLAudioBufferP14IPLAudioBuffer"></span><span id="_CPPv231iplAudioBufferConvertAmbisonics10IPLContext17IPLAmbisonicsType17IPLAmbisonicsTypeP14IPLAudioBufferP14IPLAudioBuffer"></span><span id="iplAudioBufferConvertAmbisonics__IPLContext.IPLAmbisonicsType.IPLAmbisonicsType.IPLAudioBufferP.IPLAudioBufferP"></span><span class="target" id="group__audiobuffers_1gaf56ae5ac50a96348ceaa8ab16a40b806"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplAudioBufferConvertAmbisonics</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="context.html#_CPPv410IPLContext" title="IPLContext"><span class="n"><span class="pre">IPLContext</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">context</span></span>, <a class="reference internal" href="#_CPPv417IPLAmbisonicsType" title="IPLAmbisonicsType"><span class="n"><span class="pre">IPLAmbisonicsType</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">inType</span></span>, <a class="reference internal" href="#_CPPv417IPLAmbisonicsType" title="IPLAmbisonicsType"><span class="n"><span class="pre">IPLAmbisonicsType</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">outType</span></span>, <a class="reference internal" href="#_CPPv414IPLAudioBuffer" title="IPLAudioBuffer"><span class="n"><span class="pre">IPLAudioBuffer</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">in</span></span>, <a class="reference internal" href="#_CPPv414IPLAudioBuffer" title="IPLAudioBuffer"><span class="n"><span class="pre">IPLAudioBuffer</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">out</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv431iplAudioBufferConvertAmbisonics10IPLContext17IPLAmbisonicsType17IPLAmbisonicsTypeP14IPLAudioBufferP14IPLAudioBuffer" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv331iplAudioBufferConvertAmbisonics10IPLContext17IPLAmbisonicsType17IPLAmbisonicsTypeP14IPLAudioBufferP14IPLAudioBuffer"></span><span id="_CPPv231iplAudioBufferConvertAmbisonics10IPLContext17IPLAmbisonicsType17IPLAmbisonicsTypeP14IPLAudioBufferP14IPLAudioBuffer"></span><span id="iplAudioBufferConvertAmbisonics__IPLContext.IPLAmbisonicsType.IPLAmbisonicsType.IPLAudioBufferP.IPLAudioBufferP"></span><span class="target" id="group__audiobuffers_1gaf56ae5ac50a96348ceaa8ab16a40b806"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplAudioBufferConvertAmbisonics</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="context.html#_CPPv410IPLContext" title="IPLContext"><span class="n"><span class="pre">IPLContext</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">context</span></span>, <a class="reference internal" href="#_CPPv417IPLAmbisonicsType" title="IPLAmbisonicsType"><span class="n"><span class="pre">IPLAmbisonicsType</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">inType</span></span>, <a class="reference internal" href="#_CPPv417IPLAmbisonicsType" title="IPLAmbisonicsType"><span class="n"><span class="pre">IPLAmbisonicsType</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">outType</span></span>, <a class="reference internal" href="#_CPPv414IPLAudioBuffer" title="IPLAudioBuffer"><span class="n"><span class="pre">IPLAudioBuffer</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">in</span></span>, <a class="reference internal" href="#_CPPv414IPLAudioBuffer" title="IPLAudioBuffer"><span class="n"><span class="pre">IPLAudioBuffer</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">out</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv431iplAudioBufferConvertAmbisonics10IPLContext17IPLAmbisonicsType17IPLAmbisonicsTypeP14IPLAudioBufferP14IPLAudioBuffer" title="Link to this definition"></a><br /></dt>
 <dd><p>Converts an Ambisonic audio buffer from one Ambisonic format to another. </p>
 <p>Both audio buffers must have the same number of samples.</p>
 <p>This conversion can be applied in-place, i.e., <code class="docutils literal notranslate"><span class="pre">in</span></code> and <code class="docutils literal notranslate"><span class="pre">out</span></code> can be the same audio buffer.</p>
 <p>Steam Audio’s “native” Ambisonic format is N3D, so for best performance, keep all Ambisonic data in N3D format except when exchanging data with your audio engine.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>context</strong> – The context used to initialize Steam Audio. </p></li>
 <li><p><strong>inType</strong> – Ambisonic format of <code class="docutils literal notranslate"><span class="pre">in</span></code>. </p></li>
@@ -323,31 +250,31 @@
 </dl>
 </dd></dl>
 
-</div>
-<div class="section" id="structures">
-<h2>Structures<a class="headerlink" href="#structures" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="structures">
+<h2>Structures<a class="headerlink" href="#structures" title="Link to this heading"></a></h2>
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv416IPLSpeakerLayout">
-<span id="_CPPv316IPLSpeakerLayout"></span><span id="_CPPv216IPLSpeakerLayout"></span><span id="IPLSpeakerLayout"></span><span class="target" id="struct_i_p_l_speaker_layout"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLSpeakerLayout</span></span></span><a class="headerlink" href="#_CPPv416IPLSpeakerLayout" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv316IPLSpeakerLayout"></span><span id="_CPPv216IPLSpeakerLayout"></span><span id="IPLSpeakerLayout"></span><span class="target" id="struct_i_p_l_speaker_layout"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLSpeakerLayout</span></span></span><a class="headerlink" href="#_CPPv416IPLSpeakerLayout" title="Link to this definition"></a><br /></dt>
 <dd><p>Describes a standard or custom speaker layout. </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N16IPLSpeakerLayout4typeE">
-<span id="_CPPv3N16IPLSpeakerLayout4typeE"></span><span id="_CPPv2N16IPLSpeakerLayout4typeE"></span><span id="IPLSpeakerLayout::type__IPLSpeakerLayoutType"></span><span class="target" id="struct_i_p_l_speaker_layout_1a2b30c1f7c10c79e8efbd7dc65c47bd5a"></span><a class="reference internal" href="#_CPPv420IPLSpeakerLayoutType" title="IPLSpeakerLayoutType"><span class="n"><span class="pre">IPLSpeakerLayoutType</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">type</span></span></span><a class="headerlink" href="#_CPPv4N16IPLSpeakerLayout4typeE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N16IPLSpeakerLayout4typeE"></span><span id="_CPPv2N16IPLSpeakerLayout4typeE"></span><span id="IPLSpeakerLayout::type__IPLSpeakerLayoutType"></span><span class="target" id="struct_i_p_l_speaker_layout_1a2b30c1f7c10c79e8efbd7dc65c47bd5a"></span><a class="reference internal" href="#_CPPv420IPLSpeakerLayoutType" title="IPLSpeakerLayoutType"><span class="n"><span class="pre">IPLSpeakerLayoutType</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">type</span></span></span><a class="headerlink" href="#_CPPv4N16IPLSpeakerLayout4typeE" title="Link to this definition"></a><br /></dt>
 <dd><p>See <code class="docutils literal notranslate"><span class="pre">IPLSpeakerLayoutType</span></code>. </p>
 </dd></dl>
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N16IPLSpeakerLayout11numSpeakersE">
-<span id="_CPPv3N16IPLSpeakerLayout11numSpeakersE"></span><span id="_CPPv2N16IPLSpeakerLayout11numSpeakersE"></span><span id="IPLSpeakerLayout::numSpeakers__IPLint32"></span><span class="target" id="struct_i_p_l_speaker_layout_1a8c5425aeb4f09d870438fd810156fc9f"></span><a class="reference internal" href="types.html#_CPPv48IPLint32" title="IPLint32"><span class="n"><span class="pre">IPLint32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">numSpeakers</span></span></span><a class="headerlink" href="#_CPPv4N16IPLSpeakerLayout11numSpeakersE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N16IPLSpeakerLayout11numSpeakersE"></span><span id="_CPPv2N16IPLSpeakerLayout11numSpeakersE"></span><span id="IPLSpeakerLayout::numSpeakers__IPLint32"></span><span class="target" id="struct_i_p_l_speaker_layout_1a8c5425aeb4f09d870438fd810156fc9f"></span><a class="reference internal" href="types.html#_CPPv48IPLint32" title="IPLint32"><span class="n"><span class="pre">IPLint32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">numSpeakers</span></span></span><a class="headerlink" href="#_CPPv4N16IPLSpeakerLayout11numSpeakersE" title="Link to this definition"></a><br /></dt>
 <dd><p>Number of speakers. </p>
 <p>Only for IPL_SPEAKERLAYOUTTYPE_CUSTOM. </p>
 </dd></dl>
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N16IPLSpeakerLayout8speakersE">
-<span id="_CPPv3N16IPLSpeakerLayout8speakersE"></span><span id="_CPPv2N16IPLSpeakerLayout8speakersE"></span><span id="IPLSpeakerLayout::speakers__IPLVector3P"></span><span class="target" id="struct_i_p_l_speaker_layout_1a31e457a86f6a6b08ed7ac44375e7b79b"></span><a class="reference internal" href="geometry.html#_CPPv410IPLVector3" title="IPLVector3"><span class="n"><span class="pre">IPLVector3</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">speakers</span></span></span><a class="headerlink" href="#_CPPv4N16IPLSpeakerLayout8speakersE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N16IPLSpeakerLayout8speakersE"></span><span id="_CPPv2N16IPLSpeakerLayout8speakersE"></span><span id="IPLSpeakerLayout::speakers__IPLVector3P"></span><span class="target" id="struct_i_p_l_speaker_layout_1a31e457a86f6a6b08ed7ac44375e7b79b"></span><a class="reference internal" href="geometry.html#_CPPv410IPLVector3" title="IPLVector3"><span class="n"><span class="pre">IPLVector3</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">speakers</span></span></span><a class="headerlink" href="#_CPPv4N16IPLSpeakerLayout8speakersE" title="Link to this definition"></a><br /></dt>
 <dd><p>Array of unit-length directions for each speaker. </p>
 <p>Only for IPL_SPEAKERLAYOUTTYPE_CUSTOM. </p>
 </dd></dl>
@@ -357,19 +284,19 @@
 
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv416IPLAudioSettings">
-<span id="_CPPv316IPLAudioSettings"></span><span id="_CPPv216IPLAudioSettings"></span><span id="IPLAudioSettings"></span><span class="target" id="struct_i_p_l_audio_settings"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLAudioSettings</span></span></span><a class="headerlink" href="#_CPPv416IPLAudioSettings" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv316IPLAudioSettings"></span><span id="_CPPv216IPLAudioSettings"></span><span id="IPLAudioSettings"></span><span class="target" id="struct_i_p_l_audio_settings"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLAudioSettings</span></span></span><a class="headerlink" href="#_CPPv416IPLAudioSettings" title="Link to this definition"></a><br /></dt>
 <dd><p>Global settings for audio signal processing. </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N16IPLAudioSettings12samplingRateE">
-<span id="_CPPv3N16IPLAudioSettings12samplingRateE"></span><span id="_CPPv2N16IPLAudioSettings12samplingRateE"></span><span id="IPLAudioSettings::samplingRate__IPLint32"></span><span class="target" id="struct_i_p_l_audio_settings_1a2b81c828d28baf3f53a4e39385eae42f"></span><a class="reference internal" href="types.html#_CPPv48IPLint32" title="IPLint32"><span class="n"><span class="pre">IPLint32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">samplingRate</span></span></span><a class="headerlink" href="#_CPPv4N16IPLAudioSettings12samplingRateE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N16IPLAudioSettings12samplingRateE"></span><span id="_CPPv2N16IPLAudioSettings12samplingRateE"></span><span id="IPLAudioSettings::samplingRate__IPLint32"></span><span class="target" id="struct_i_p_l_audio_settings_1a2b81c828d28baf3f53a4e39385eae42f"></span><a class="reference internal" href="types.html#_CPPv48IPLint32" title="IPLint32"><span class="n"><span class="pre">IPLint32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">samplingRate</span></span></span><a class="headerlink" href="#_CPPv4N16IPLAudioSettings12samplingRateE" title="Link to this definition"></a><br /></dt>
 <dd><p>Sampling rate, in Hz. </p>
 </dd></dl>
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N16IPLAudioSettings9frameSizeE">
-<span id="_CPPv3N16IPLAudioSettings9frameSizeE"></span><span id="_CPPv2N16IPLAudioSettings9frameSizeE"></span><span id="IPLAudioSettings::frameSize__IPLint32"></span><span class="target" id="struct_i_p_l_audio_settings_1a585c33529103fcfd1cef24179f8f6bee"></span><a class="reference internal" href="types.html#_CPPv48IPLint32" title="IPLint32"><span class="n"><span class="pre">IPLint32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">frameSize</span></span></span><a class="headerlink" href="#_CPPv4N16IPLAudioSettings9frameSizeE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N16IPLAudioSettings9frameSizeE"></span><span id="_CPPv2N16IPLAudioSettings9frameSizeE"></span><span id="IPLAudioSettings::frameSize__IPLint32"></span><span class="target" id="struct_i_p_l_audio_settings_1a585c33529103fcfd1cef24179f8f6bee"></span><a class="reference internal" href="types.html#_CPPv48IPLint32" title="IPLint32"><span class="n"><span class="pre">IPLint32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">frameSize</span></span></span><a class="headerlink" href="#_CPPv4N16IPLAudioSettings9frameSizeE" title="Link to this definition"></a><br /></dt>
 <dd><p>Frame size, in samples. </p>
 <p>Independent of number of channels. </p>
 </dd></dl>
@@ -379,26 +306,26 @@
 
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv414IPLAudioBuffer">
-<span id="_CPPv314IPLAudioBuffer"></span><span id="_CPPv214IPLAudioBuffer"></span><span id="IPLAudioBuffer"></span><span class="target" id="struct_i_p_l_audio_buffer"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLAudioBuffer</span></span></span><a class="headerlink" href="#_CPPv414IPLAudioBuffer" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv314IPLAudioBuffer"></span><span id="_CPPv214IPLAudioBuffer"></span><span id="IPLAudioBuffer"></span><span class="target" id="struct_i_p_l_audio_buffer"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLAudioBuffer</span></span></span><a class="headerlink" href="#_CPPv414IPLAudioBuffer" title="Link to this definition"></a><br /></dt>
 <dd><p>Describes an audio buffer. </p>
 <p>All audio buffers passed to Steam Audio must be deinterleaved. </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N14IPLAudioBuffer11numChannelsE">
-<span id="_CPPv3N14IPLAudioBuffer11numChannelsE"></span><span id="_CPPv2N14IPLAudioBuffer11numChannelsE"></span><span id="IPLAudioBuffer::numChannels__IPLint32"></span><span class="target" id="struct_i_p_l_audio_buffer_1a3df0be9c0be579048507de45c80aed57"></span><a class="reference internal" href="types.html#_CPPv48IPLint32" title="IPLint32"><span class="n"><span class="pre">IPLint32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">numChannels</span></span></span><a class="headerlink" href="#_CPPv4N14IPLAudioBuffer11numChannelsE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N14IPLAudioBuffer11numChannelsE"></span><span id="_CPPv2N14IPLAudioBuffer11numChannelsE"></span><span id="IPLAudioBuffer::numChannels__IPLint32"></span><span class="target" id="struct_i_p_l_audio_buffer_1a3df0be9c0be579048507de45c80aed57"></span><a class="reference internal" href="types.html#_CPPv48IPLint32" title="IPLint32"><span class="n"><span class="pre">IPLint32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">numChannels</span></span></span><a class="headerlink" href="#_CPPv4N14IPLAudioBuffer11numChannelsE" title="Link to this definition"></a><br /></dt>
 <dd><p>Number of channels. </p>
 </dd></dl>
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N14IPLAudioBuffer10numSamplesE">
-<span id="_CPPv3N14IPLAudioBuffer10numSamplesE"></span><span id="_CPPv2N14IPLAudioBuffer10numSamplesE"></span><span id="IPLAudioBuffer::numSamples__IPLint32"></span><span class="target" id="struct_i_p_l_audio_buffer_1accb5f3eb59993f7a1c2d38af653ac5f6"></span><a class="reference internal" href="types.html#_CPPv48IPLint32" title="IPLint32"><span class="n"><span class="pre">IPLint32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">numSamples</span></span></span><a class="headerlink" href="#_CPPv4N14IPLAudioBuffer10numSamplesE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N14IPLAudioBuffer10numSamplesE"></span><span id="_CPPv2N14IPLAudioBuffer10numSamplesE"></span><span id="IPLAudioBuffer::numSamples__IPLint32"></span><span class="target" id="struct_i_p_l_audio_buffer_1accb5f3eb59993f7a1c2d38af653ac5f6"></span><a class="reference internal" href="types.html#_CPPv48IPLint32" title="IPLint32"><span class="n"><span class="pre">IPLint32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">numSamples</span></span></span><a class="headerlink" href="#_CPPv4N14IPLAudioBuffer10numSamplesE" title="Link to this definition"></a><br /></dt>
 <dd><p>Number of samples per channel. </p>
 </dd></dl>
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N14IPLAudioBuffer4dataE">
-<span id="_CPPv3N14IPLAudioBuffer4dataE"></span><span id="_CPPv2N14IPLAudioBuffer4dataE"></span><span id="IPLAudioBuffer::data__IPLfloat32PP"></span><span class="target" id="struct_i_p_l_audio_buffer_1a86c95bf4bfcb15274b3701ad165961ba"></span><a class="reference internal" href="types.html#_CPPv410IPLfloat32" title="IPLfloat32"><span class="n"><span class="pre">IPLfloat32</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">data</span></span></span><a class="headerlink" href="#_CPPv4N14IPLAudioBuffer4dataE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N14IPLAudioBuffer4dataE"></span><span id="_CPPv2N14IPLAudioBuffer4dataE"></span><span id="IPLAudioBuffer::data__IPLfloat32PP"></span><span class="target" id="struct_i_p_l_audio_buffer_1a86c95bf4bfcb15274b3701ad165961ba"></span><a class="reference internal" href="types.html#_CPPv410IPLfloat32" title="IPLfloat32"><span class="n"><span class="pre">IPLfloat32</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">data</span></span></span><a class="headerlink" href="#_CPPv4N14IPLAudioBuffer4dataE" title="Link to this definition"></a><br /></dt>
 <dd><p>Array of pointers to sample data for each channel. </p>
 <p>Allocation of sample data is up to the user. </p>
 </dd></dl>
@@ -406,47 +333,47 @@
 </div>
 </dd></dl>
 
-</div>
-<div class="section" id="enumerations">
-<h2>Enumerations<a class="headerlink" href="#enumerations" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="enumerations">
+<h2>Enumerations<a class="headerlink" href="#enumerations" title="Link to this heading"></a></h2>
 <dl class="cpp enum">
 <dt class="sig sig-object cpp" id="_CPPv420IPLSpeakerLayoutType">
-<span id="_CPPv320IPLSpeakerLayoutType"></span><span id="_CPPv220IPLSpeakerLayoutType"></span><span class="target" id="group__audiobuffers_1gaa451141538c51f9cac34b165c153467f"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLSpeakerLayoutType</span></span></span><a class="headerlink" href="#_CPPv420IPLSpeakerLayoutType" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv320IPLSpeakerLayoutType"></span><span id="_CPPv220IPLSpeakerLayoutType"></span><span class="target" id="group__audiobuffers_1gaa451141538c51f9cac34b165c153467f"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLSpeakerLayoutType</span></span></span><a class="headerlink" href="#_CPPv420IPLSpeakerLayoutType" title="Link to this definition"></a><br /></dt>
 <dd><p>Supported speaker layouts. </p>
 <p><em>Values:</em></p>
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N20IPLSpeakerLayoutType26IPL_SPEAKERLAYOUTTYPE_MONOE">
-<span id="_CPPv3N20IPLSpeakerLayoutType26IPL_SPEAKERLAYOUTTYPE_MONOE"></span><span id="_CPPv2N20IPLSpeakerLayoutType26IPL_SPEAKERLAYOUTTYPE_MONOE"></span><span class="target" id="group__audiobuffers_1ggaa451141538c51f9cac34b165c153467faf3f3acdab127243e8f23c6c25844e9e4"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_SPEAKERLAYOUTTYPE_MONO</span></span></span><a class="headerlink" href="#_CPPv4N20IPLSpeakerLayoutType26IPL_SPEAKERLAYOUTTYPE_MONOE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N20IPLSpeakerLayoutType26IPL_SPEAKERLAYOUTTYPE_MONOE"></span><span id="_CPPv2N20IPLSpeakerLayoutType26IPL_SPEAKERLAYOUTTYPE_MONOE"></span><span class="target" id="group__audiobuffers_1ggaa451141538c51f9cac34b165c153467faf3f3acdab127243e8f23c6c25844e9e4"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_SPEAKERLAYOUTTYPE_MONO</span></span></span><a class="headerlink" href="#_CPPv4N20IPLSpeakerLayoutType26IPL_SPEAKERLAYOUTTYPE_MONOE" title="Link to this definition"></a><br /></dt>
 <dd><p>Mono. </p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N20IPLSpeakerLayoutType28IPL_SPEAKERLAYOUTTYPE_STEREOE">
-<span id="_CPPv3N20IPLSpeakerLayoutType28IPL_SPEAKERLAYOUTTYPE_STEREOE"></span><span id="_CPPv2N20IPLSpeakerLayoutType28IPL_SPEAKERLAYOUTTYPE_STEREOE"></span><span class="target" id="group__audiobuffers_1ggaa451141538c51f9cac34b165c153467fa4fe62b6691cf331a19aa8c8ee1aa4955"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_SPEAKERLAYOUTTYPE_STEREO</span></span></span><a class="headerlink" href="#_CPPv4N20IPLSpeakerLayoutType28IPL_SPEAKERLAYOUTTYPE_STEREOE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N20IPLSpeakerLayoutType28IPL_SPEAKERLAYOUTTYPE_STEREOE"></span><span id="_CPPv2N20IPLSpeakerLayoutType28IPL_SPEAKERLAYOUTTYPE_STEREOE"></span><span class="target" id="group__audiobuffers_1ggaa451141538c51f9cac34b165c153467fa4fe62b6691cf331a19aa8c8ee1aa4955"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_SPEAKERLAYOUTTYPE_STEREO</span></span></span><a class="headerlink" href="#_CPPv4N20IPLSpeakerLayoutType28IPL_SPEAKERLAYOUTTYPE_STEREOE" title="Link to this definition"></a><br /></dt>
 <dd><p>Stereo (left, right). </p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N20IPLSpeakerLayoutType34IPL_SPEAKERLAYOUTTYPE_QUADRAPHONICE">
-<span id="_CPPv3N20IPLSpeakerLayoutType34IPL_SPEAKERLAYOUTTYPE_QUADRAPHONICE"></span><span id="_CPPv2N20IPLSpeakerLayoutType34IPL_SPEAKERLAYOUTTYPE_QUADRAPHONICE"></span><span class="target" id="group__audiobuffers_1ggaa451141538c51f9cac34b165c153467fab7c4c9547ad5a1ae3071487da607900a"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_SPEAKERLAYOUTTYPE_QUADRAPHONIC</span></span></span><a class="headerlink" href="#_CPPv4N20IPLSpeakerLayoutType34IPL_SPEAKERLAYOUTTYPE_QUADRAPHONICE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N20IPLSpeakerLayoutType34IPL_SPEAKERLAYOUTTYPE_QUADRAPHONICE"></span><span id="_CPPv2N20IPLSpeakerLayoutType34IPL_SPEAKERLAYOUTTYPE_QUADRAPHONICE"></span><span class="target" id="group__audiobuffers_1ggaa451141538c51f9cac34b165c153467fab7c4c9547ad5a1ae3071487da607900a"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_SPEAKERLAYOUTTYPE_QUADRAPHONIC</span></span></span><a class="headerlink" href="#_CPPv4N20IPLSpeakerLayoutType34IPL_SPEAKERLAYOUTTYPE_QUADRAPHONICE" title="Link to this definition"></a><br /></dt>
 <dd><p>Front left, front right, rear left, rear right. </p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N20IPLSpeakerLayoutType34IPL_SPEAKERLAYOUTTYPE_SURROUND_5_1E">
-<span id="_CPPv3N20IPLSpeakerLayoutType34IPL_SPEAKERLAYOUTTYPE_SURROUND_5_1E"></span><span id="_CPPv2N20IPLSpeakerLayoutType34IPL_SPEAKERLAYOUTTYPE_SURROUND_5_1E"></span><span class="target" id="group__audiobuffers_1ggaa451141538c51f9cac34b165c153467fae18dd26542b3215154054b19f3af876b"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_SPEAKERLAYOUTTYPE_SURROUND_5_1</span></span></span><a class="headerlink" href="#_CPPv4N20IPLSpeakerLayoutType34IPL_SPEAKERLAYOUTTYPE_SURROUND_5_1E" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N20IPLSpeakerLayoutType34IPL_SPEAKERLAYOUTTYPE_SURROUND_5_1E"></span><span id="_CPPv2N20IPLSpeakerLayoutType34IPL_SPEAKERLAYOUTTYPE_SURROUND_5_1E"></span><span class="target" id="group__audiobuffers_1ggaa451141538c51f9cac34b165c153467fae18dd26542b3215154054b19f3af876b"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_SPEAKERLAYOUTTYPE_SURROUND_5_1</span></span></span><a class="headerlink" href="#_CPPv4N20IPLSpeakerLayoutType34IPL_SPEAKERLAYOUTTYPE_SURROUND_5_1E" title="Link to this definition"></a><br /></dt>
 <dd><p>Front left, front right, front center, LFE, rear left, rear right. </p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N20IPLSpeakerLayoutType34IPL_SPEAKERLAYOUTTYPE_SURROUND_7_1E">
-<span id="_CPPv3N20IPLSpeakerLayoutType34IPL_SPEAKERLAYOUTTYPE_SURROUND_7_1E"></span><span id="_CPPv2N20IPLSpeakerLayoutType34IPL_SPEAKERLAYOUTTYPE_SURROUND_7_1E"></span><span class="target" id="group__audiobuffers_1ggaa451141538c51f9cac34b165c153467face6e2178676089b9610a170163ef40d1"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_SPEAKERLAYOUTTYPE_SURROUND_7_1</span></span></span><a class="headerlink" href="#_CPPv4N20IPLSpeakerLayoutType34IPL_SPEAKERLAYOUTTYPE_SURROUND_7_1E" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N20IPLSpeakerLayoutType34IPL_SPEAKERLAYOUTTYPE_SURROUND_7_1E"></span><span id="_CPPv2N20IPLSpeakerLayoutType34IPL_SPEAKERLAYOUTTYPE_SURROUND_7_1E"></span><span class="target" id="group__audiobuffers_1ggaa451141538c51f9cac34b165c153467face6e2178676089b9610a170163ef40d1"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_SPEAKERLAYOUTTYPE_SURROUND_7_1</span></span></span><a class="headerlink" href="#_CPPv4N20IPLSpeakerLayoutType34IPL_SPEAKERLAYOUTTYPE_SURROUND_7_1E" title="Link to this definition"></a><br /></dt>
 <dd><p>Front left, front right, front center, LFE, rear left, rear right, side left, side right. </p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N20IPLSpeakerLayoutType28IPL_SPEAKERLAYOUTTYPE_CUSTOME">
-<span id="_CPPv3N20IPLSpeakerLayoutType28IPL_SPEAKERLAYOUTTYPE_CUSTOME"></span><span id="_CPPv2N20IPLSpeakerLayoutType28IPL_SPEAKERLAYOUTTYPE_CUSTOME"></span><span class="target" id="group__audiobuffers_1ggaa451141538c51f9cac34b165c153467fa6474ff3be0504de70c367e0c9c6cdc99"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_SPEAKERLAYOUTTYPE_CUSTOM</span></span></span><a class="headerlink" href="#_CPPv4N20IPLSpeakerLayoutType28IPL_SPEAKERLAYOUTTYPE_CUSTOME" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N20IPLSpeakerLayoutType28IPL_SPEAKERLAYOUTTYPE_CUSTOME"></span><span id="_CPPv2N20IPLSpeakerLayoutType28IPL_SPEAKERLAYOUTTYPE_CUSTOME"></span><span class="target" id="group__audiobuffers_1ggaa451141538c51f9cac34b165c153467fa6474ff3be0504de70c367e0c9c6cdc99"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_SPEAKERLAYOUTTYPE_CUSTOM</span></span></span><a class="headerlink" href="#_CPPv4N20IPLSpeakerLayoutType28IPL_SPEAKERLAYOUTTYPE_CUSTOME" title="Link to this definition"></a><br /></dt>
 <dd><p>User-defined speaker layout. </p>
 <p>See <code class="docutils literal notranslate"><a class="reference internal" href="#struct_i_p_l_speaker_layout"><span class="std std-ref"><span class="pre">IPLSpeakerLayout</span></span></a></code>. </p>
 </dd></dl>
@@ -455,25 +382,25 @@
 
 <dl class="cpp enum">
 <dt class="sig sig-object cpp" id="_CPPv417IPLAmbisonicsType">
-<span id="_CPPv317IPLAmbisonicsType"></span><span id="_CPPv217IPLAmbisonicsType"></span><span class="target" id="group__audiobuffers_1gad6d29954f364f7ad8ec7b60b2ec2da23"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLAmbisonicsType</span></span></span><a class="headerlink" href="#_CPPv417IPLAmbisonicsType" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv317IPLAmbisonicsType"></span><span id="_CPPv217IPLAmbisonicsType"></span><span class="target" id="group__audiobuffers_1gad6d29954f364f7ad8ec7b60b2ec2da23"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLAmbisonicsType</span></span></span><a class="headerlink" href="#_CPPv417IPLAmbisonicsType" title="Link to this definition"></a><br /></dt>
 <dd><p>Supported channel ordering and normalization schemes for Ambisonic audio. </p>
 <p><em>Values:</em></p>
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N17IPLAmbisonicsType22IPL_AMBISONICSTYPE_N3DE">
-<span id="_CPPv3N17IPLAmbisonicsType22IPL_AMBISONICSTYPE_N3DE"></span><span id="_CPPv2N17IPLAmbisonicsType22IPL_AMBISONICSTYPE_N3DE"></span><span class="target" id="group__audiobuffers_1ggad6d29954f364f7ad8ec7b60b2ec2da23a21f985c8b8ec8f2f035a34c8f9c788bd"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_AMBISONICSTYPE_N3D</span></span></span><a class="headerlink" href="#_CPPv4N17IPLAmbisonicsType22IPL_AMBISONICSTYPE_N3DE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N17IPLAmbisonicsType22IPL_AMBISONICSTYPE_N3DE"></span><span id="_CPPv2N17IPLAmbisonicsType22IPL_AMBISONICSTYPE_N3DE"></span><span class="target" id="group__audiobuffers_1ggad6d29954f364f7ad8ec7b60b2ec2da23a21f985c8b8ec8f2f035a34c8f9c788bd"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_AMBISONICSTYPE_N3D</span></span></span><a class="headerlink" href="#_CPPv4N17IPLAmbisonicsType22IPL_AMBISONICSTYPE_N3DE" title="Link to this definition"></a><br /></dt>
 <dd><p>ACN channel ordering, orthonormal spherical harmonics. </p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N17IPLAmbisonicsType23IPL_AMBISONICSTYPE_SN3DE">
-<span id="_CPPv3N17IPLAmbisonicsType23IPL_AMBISONICSTYPE_SN3DE"></span><span id="_CPPv2N17IPLAmbisonicsType23IPL_AMBISONICSTYPE_SN3DE"></span><span class="target" id="group__audiobuffers_1ggad6d29954f364f7ad8ec7b60b2ec2da23aa24d0f714c06a071685780ffbf3bfcaf"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_AMBISONICSTYPE_SN3D</span></span></span><a class="headerlink" href="#_CPPv4N17IPLAmbisonicsType23IPL_AMBISONICSTYPE_SN3DE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N17IPLAmbisonicsType23IPL_AMBISONICSTYPE_SN3DE"></span><span id="_CPPv2N17IPLAmbisonicsType23IPL_AMBISONICSTYPE_SN3DE"></span><span class="target" id="group__audiobuffers_1ggad6d29954f364f7ad8ec7b60b2ec2da23aa24d0f714c06a071685780ffbf3bfcaf"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_AMBISONICSTYPE_SN3D</span></span></span><a class="headerlink" href="#_CPPv4N17IPLAmbisonicsType23IPL_AMBISONICSTYPE_SN3DE" title="Link to this definition"></a><br /></dt>
 <dd><p>ACN channel ordering, semi-normalized spherical harmonics. </p>
 <p>AmbiX format. </p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N17IPLAmbisonicsType23IPL_AMBISONICSTYPE_FUMAE">
-<span id="_CPPv3N17IPLAmbisonicsType23IPL_AMBISONICSTYPE_FUMAE"></span><span id="_CPPv2N17IPLAmbisonicsType23IPL_AMBISONICSTYPE_FUMAE"></span><span class="target" id="group__audiobuffers_1ggad6d29954f364f7ad8ec7b60b2ec2da23aa04e340cd43cf856b64a13e20deb057c"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_AMBISONICSTYPE_FUMA</span></span></span><a class="headerlink" href="#_CPPv4N17IPLAmbisonicsType23IPL_AMBISONICSTYPE_FUMAE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N17IPLAmbisonicsType23IPL_AMBISONICSTYPE_FUMAE"></span><span id="_CPPv2N17IPLAmbisonicsType23IPL_AMBISONICSTYPE_FUMAE"></span><span class="target" id="group__audiobuffers_1ggad6d29954f364f7ad8ec7b60b2ec2da23aa04e340cd43cf856b64a13e20deb057c"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_AMBISONICSTYPE_FUMA</span></span></span><a class="headerlink" href="#_CPPv4N17IPLAmbisonicsType23IPL_AMBISONICSTYPE_FUMAE" title="Link to this definition"></a><br /></dt>
 <dd><p>Furse-Malham (B-format). </p>
 </dd></dl>
 
@@ -481,72 +408,55 @@
 
 <dl class="cpp enum">
 <dt class="sig sig-object cpp" id="_CPPv419IPLAudioEffectState">
-<span id="_CPPv319IPLAudioEffectState"></span><span id="_CPPv219IPLAudioEffectState"></span><span class="target" id="group__audiobuffers_1ga6b2a1362eef15186e417e5d793771eae"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLAudioEffectState</span></span></span><a class="headerlink" href="#_CPPv419IPLAudioEffectState" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv319IPLAudioEffectState"></span><span id="_CPPv219IPLAudioEffectState"></span><span class="target" id="group__audiobuffers_1ga6b2a1362eef15186e417e5d793771eae"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLAudioEffectState</span></span></span><a class="headerlink" href="#_CPPv419IPLAudioEffectState" title="Link to this definition"></a><br /></dt>
 <dd><p>States that an audio effect can be left in after processing a frame of audio. </p>
 <p><em>Values:</em></p>
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N19IPLAudioEffectState34IPL_AUDIOEFFECTSTATE_TAILREMAININGE">
-<span id="_CPPv3N19IPLAudioEffectState34IPL_AUDIOEFFECTSTATE_TAILREMAININGE"></span><span id="_CPPv2N19IPLAudioEffectState34IPL_AUDIOEFFECTSTATE_TAILREMAININGE"></span><span class="target" id="group__audiobuffers_1gga6b2a1362eef15186e417e5d793771eaeac3daee37f6ac165a5aa588e094b3b174"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_AUDIOEFFECTSTATE_TAILREMAINING</span></span></span><a class="headerlink" href="#_CPPv4N19IPLAudioEffectState34IPL_AUDIOEFFECTSTATE_TAILREMAININGE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N19IPLAudioEffectState34IPL_AUDIOEFFECTSTATE_TAILREMAININGE"></span><span id="_CPPv2N19IPLAudioEffectState34IPL_AUDIOEFFECTSTATE_TAILREMAININGE"></span><span class="target" id="group__audiobuffers_1gga6b2a1362eef15186e417e5d793771eaeac3daee37f6ac165a5aa588e094b3b174"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_AUDIOEFFECTSTATE_TAILREMAINING</span></span></span><a class="headerlink" href="#_CPPv4N19IPLAudioEffectState34IPL_AUDIOEFFECTSTATE_TAILREMAININGE" title="Link to this definition"></a><br /></dt>
 <dd><p>One or more samples of tail remain in the effect’s internal buffers. </p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N19IPLAudioEffectState33IPL_AUDIOEFFECTSTATE_TAILCOMPLETEE">
-<span id="_CPPv3N19IPLAudioEffectState33IPL_AUDIOEFFECTSTATE_TAILCOMPLETEE"></span><span id="_CPPv2N19IPLAudioEffectState33IPL_AUDIOEFFECTSTATE_TAILCOMPLETEE"></span><span class="target" id="group__audiobuffers_1gga6b2a1362eef15186e417e5d793771eaea509407e0e486914cb0f90fc0f790537b"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_AUDIOEFFECTSTATE_TAILCOMPLETE</span></span></span><a class="headerlink" href="#_CPPv4N19IPLAudioEffectState33IPL_AUDIOEFFECTSTATE_TAILCOMPLETEE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N19IPLAudioEffectState33IPL_AUDIOEFFECTSTATE_TAILCOMPLETEE"></span><span id="_CPPv2N19IPLAudioEffectState33IPL_AUDIOEFFECTSTATE_TAILCOMPLETEE"></span><span class="target" id="group__audiobuffers_1gga6b2a1362eef15186e417e5d793771eaea509407e0e486914cb0f90fc0f790537b"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_AUDIOEFFECTSTATE_TAILCOMPLETE</span></span></span><a class="headerlink" href="#_CPPv4N19IPLAudioEffectState33IPL_AUDIOEFFECTSTATE_TAILCOMPLETEE" title="Link to this definition"></a><br /></dt>
 <dd><p>No tail remains in the effect’s internal buffers. </p>
 </dd></dl>
 
 </dd></dl>
 
-</div>
-</div>
+</section>
+</section>
 
 
            </div>
-           
           </div>
-          <footer>
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="hrtf.html" class="btn btn-neutral float-right" title="HRTF" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="scene.html" class="btn btn-neutral float-left" title="Scene" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="hrtf.html" class="btn btn-neutral float-right" title="HRTF" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &#169; Copyright 2017-2023, Valve Corporation.
-
-    </p>
+    <p>&#169; Copyright 2017-2023, Valve Corporation.</p>
   </div>
-    
-    
-    
-    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>

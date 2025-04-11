@@ -1,101 +1,50 @@
 
 
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
-  <meta charset="utf-8" />
-  
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  
   <title>Embree &mdash; Steam Audio C API  documentation</title>
-  
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/steamaudio.css?v=b5aaeb06" />
 
   
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/steamaudio.css" type="text/css" />
-
-  
-  
-
-  
-  
-
-  
-
-  
-  <!--[if lt IE 9]>
-    <script src="_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/doctools.js"></script>
-    
-    <script type="text/javascript" src="_static/js/theme.js"></script>
-
-    
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=7f41d439"></script>
+      <script src="_static/doctools.js?v=9a2dae69"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="OpenCL" href="opencl.html" />
     <link rel="prev" title="Serialization" href="serialization.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
 
           
-            <a href="index.html">
           
-
-          
+          <a href="index.html">
             
-            <img src="_static/steam-audio-logo.png" class="logo" alt="Logo"/>
-          
+              <img src="_static/steam-audio-logo.png" class="logo" alt="Logo"/>
           </a>
-
-          
-            
-            
-              <div class="version">
-                4.6.0
-              </div>
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
-              <p class="caption"><span class="caption-text">Steam Audio SDK</span></p>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Steam Audio SDK</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="guide.html">Programmer’s Guide</a></li>
@@ -107,9 +56,20 @@
 <li class="toctree-l2"><a class="reference internal" href="geometry.html">Geometry</a></li>
 <li class="toctree-l2"><a class="reference internal" href="serialization.html">Serialization</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Embree</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#typedefs">Typedefs</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#functions">Functions</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#structures">Structures</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#typedefs">Typedefs</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv415IPLEmbreeDevice"><code class="docutils literal notranslate"><span class="pre">IPLEmbreeDevice</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#functions">Functions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv421iplEmbreeDeviceCreate10IPLContextP23IPLEmbreeDeviceSettingsP15IPLEmbreeDevice"><code class="docutils literal notranslate"><span class="pre">iplEmbreeDeviceCreate()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv421iplEmbreeDeviceRetain15IPLEmbreeDevice"><code class="docutils literal notranslate"><span class="pre">iplEmbreeDeviceRetain()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv422iplEmbreeDeviceReleaseP15IPLEmbreeDevice"><code class="docutils literal notranslate"><span class="pre">iplEmbreeDeviceRelease()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#structures">Structures</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv423IPLEmbreeDeviceSettings"><code class="docutils literal notranslate"><span class="pre">IPLEmbreeDeviceSettings</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="opencl.html">OpenCL</a></li>
@@ -136,98 +96,57 @@
 </li>
 </ul>
 
-            
-          
         </div>
-        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="index.html">Steam Audio C API</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
-      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-        
-          <li><a href="reference.html">API Reference</a> &raquo;</li>
-        
-      <li>Embree</li>
-    
-    
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="reference.html">API Reference</a></li>
+      <li class="breadcrumb-item active">Embree</li>
       <li class="wy-breadcrumbs-aside">
-        
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
-  <div class="section" id="embree">
-<h1>Embree<a class="headerlink" href="#embree" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="typedefs">
-<h2>Typedefs<a class="headerlink" href="#typedefs" title="Permalink to this headline">¶</a></h2>
+             
+  <section id="embree">
+<h1>Embree<a class="headerlink" href="#embree" title="Link to this heading"></a></h1>
+<section id="typedefs">
+<h2>Typedefs<a class="headerlink" href="#typedefs" title="Link to this heading"></a></h2>
 <dl class="cpp type">
 <dt class="sig sig-object cpp" id="_CPPv415IPLEmbreeDevice">
-<span id="_CPPv315IPLEmbreeDevice"></span><span id="_CPPv215IPLEmbreeDevice"></span><span id="IPLEmbreeDevice"></span><span class="target" id="group__embree_1gae0bb7c18ab4d1f624fb7ba82d47c2344"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="n"><span class="pre">_IPLEmbreeDevice_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">IPLEmbreeDevice</span></span></span><a class="headerlink" href="#_CPPv415IPLEmbreeDevice" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv315IPLEmbreeDevice"></span><span id="_CPPv215IPLEmbreeDevice"></span><span id="IPLEmbreeDevice"></span><span class="target" id="group__embree_1gae0bb7c18ab4d1f624fb7ba82d47c2344"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="n"><span class="pre">_IPLEmbreeDevice_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">IPLEmbreeDevice</span></span></span><a class="headerlink" href="#_CPPv415IPLEmbreeDevice" title="Link to this definition"></a><br /></dt>
 <dd><p>Application-wide state for the Embree ray tracer. </p>
 <p>An Embree device must be created before using any of Steam Audio’s Embree ray tracing functionality. In terms of the Embree API, this object encapsulates an <code class="docutils literal notranslate"><span class="pre">RTCDevice</span></code> object. </p>
 </dd></dl>
 
-</div>
-<div class="section" id="functions">
-<h2>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="functions">
+<h2>Functions<a class="headerlink" href="#functions" title="Link to this heading"></a></h2>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv421iplEmbreeDeviceCreate10IPLContextP23IPLEmbreeDeviceSettingsP15IPLEmbreeDevice">
-<span id="_CPPv321iplEmbreeDeviceCreate10IPLContextP23IPLEmbreeDeviceSettingsP15IPLEmbreeDevice"></span><span id="_CPPv221iplEmbreeDeviceCreate10IPLContextP23IPLEmbreeDeviceSettingsP15IPLEmbreeDevice"></span><span id="iplEmbreeDeviceCreate__IPLContext.IPLEmbreeDeviceSettingsP.IPLEmbreeDeviceP"></span><span class="target" id="group__embree_1ga09e5eb23f807c6753f124c4f63a5fadf"></span><a class="reference internal" href="types.html#_CPPv48IPLerror" title="IPLerror"><span class="n"><span class="pre">IPLerror</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplEmbreeDeviceCreate</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="context.html#_CPPv410IPLContext" title="IPLContext"><span class="n"><span class="pre">IPLContext</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">context</span></span>, <a class="reference internal" href="#_CPPv423IPLEmbreeDeviceSettings" title="IPLEmbreeDeviceSettings"><span class="n"><span class="pre">IPLEmbreeDeviceSettings</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">settings</span></span>, <a class="reference internal" href="#_CPPv415IPLEmbreeDevice" title="IPLEmbreeDevice"><span class="n"><span class="pre">IPLEmbreeDevice</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">device</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv421iplEmbreeDeviceCreate10IPLContextP23IPLEmbreeDeviceSettingsP15IPLEmbreeDevice" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv321iplEmbreeDeviceCreate10IPLContextP23IPLEmbreeDeviceSettingsP15IPLEmbreeDevice"></span><span id="_CPPv221iplEmbreeDeviceCreate10IPLContextP23IPLEmbreeDeviceSettingsP15IPLEmbreeDevice"></span><span id="iplEmbreeDeviceCreate__IPLContext.IPLEmbreeDeviceSettingsP.IPLEmbreeDeviceP"></span><span class="target" id="group__embree_1ga09e5eb23f807c6753f124c4f63a5fadf"></span><a class="reference internal" href="types.html#_CPPv48IPLerror" title="IPLerror"><span class="n"><span class="pre">IPLerror</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplEmbreeDeviceCreate</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="context.html#_CPPv410IPLContext" title="IPLContext"><span class="n"><span class="pre">IPLContext</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">context</span></span>, <a class="reference internal" href="#_CPPv423IPLEmbreeDeviceSettings" title="IPLEmbreeDeviceSettings"><span class="n"><span class="pre">IPLEmbreeDeviceSettings</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">settings</span></span>, <a class="reference internal" href="#_CPPv415IPLEmbreeDevice" title="IPLEmbreeDevice"><span class="n"><span class="pre">IPLEmbreeDevice</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">device</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv421iplEmbreeDeviceCreate10IPLContextP23IPLEmbreeDeviceSettingsP15IPLEmbreeDevice" title="Link to this definition"></a><br /></dt>
 <dd><p>Creates an Embree device. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>context</strong> – The context used to initialize Steam Audio. </p></li>
 <li><p><strong>settings</strong> – The settings to use when creating the Embree device. </p></li>
 <li><p><strong>device</strong> – [out] The created Embree device.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Status code indicating whether or not the operation succeeded. </p>
 </dd>
 </dl>
@@ -235,13 +154,13 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv421iplEmbreeDeviceRetain15IPLEmbreeDevice">
-<span id="_CPPv321iplEmbreeDeviceRetain15IPLEmbreeDevice"></span><span id="_CPPv221iplEmbreeDeviceRetain15IPLEmbreeDevice"></span><span id="iplEmbreeDeviceRetain__IPLEmbreeDevice"></span><span class="target" id="group__embree_1ga545ae31b29dd85c782c38f75f6974e1e"></span><a class="reference internal" href="#_CPPv415IPLEmbreeDevice" title="IPLEmbreeDevice"><span class="n"><span class="pre">IPLEmbreeDevice</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplEmbreeDeviceRetain</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv415IPLEmbreeDevice" title="IPLEmbreeDevice"><span class="n"><span class="pre">IPLEmbreeDevice</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">device</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv421iplEmbreeDeviceRetain15IPLEmbreeDevice" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv321iplEmbreeDeviceRetain15IPLEmbreeDevice"></span><span id="_CPPv221iplEmbreeDeviceRetain15IPLEmbreeDevice"></span><span id="iplEmbreeDeviceRetain__IPLEmbreeDevice"></span><span class="target" id="group__embree_1ga545ae31b29dd85c782c38f75f6974e1e"></span><a class="reference internal" href="#_CPPv415IPLEmbreeDevice" title="IPLEmbreeDevice"><span class="n"><span class="pre">IPLEmbreeDevice</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplEmbreeDeviceRetain</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv415IPLEmbreeDevice" title="IPLEmbreeDevice"><span class="n"><span class="pre">IPLEmbreeDevice</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">device</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv421iplEmbreeDeviceRetain15IPLEmbreeDevice" title="Link to this definition"></a><br /></dt>
 <dd><p>Retains an additional reference to an Embree device. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>device</strong> – The Embree device to retain a reference to.</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The additional reference to the Embree device. </p>
 </dd>
 </dl>
@@ -249,81 +168,64 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv422iplEmbreeDeviceReleaseP15IPLEmbreeDevice">
-<span id="_CPPv322iplEmbreeDeviceReleaseP15IPLEmbreeDevice"></span><span id="_CPPv222iplEmbreeDeviceReleaseP15IPLEmbreeDevice"></span><span id="iplEmbreeDeviceRelease__IPLEmbreeDeviceP"></span><span class="target" id="group__embree_1ga9c45c856591280dc33e68b13924df5b4"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplEmbreeDeviceRelease</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv415IPLEmbreeDevice" title="IPLEmbreeDevice"><span class="n"><span class="pre">IPLEmbreeDevice</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">device</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv422iplEmbreeDeviceReleaseP15IPLEmbreeDevice" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv322iplEmbreeDeviceReleaseP15IPLEmbreeDevice"></span><span id="_CPPv222iplEmbreeDeviceReleaseP15IPLEmbreeDevice"></span><span id="iplEmbreeDeviceRelease__IPLEmbreeDeviceP"></span><span class="target" id="group__embree_1ga9c45c856591280dc33e68b13924df5b4"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplEmbreeDeviceRelease</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv415IPLEmbreeDevice" title="IPLEmbreeDevice"><span class="n"><span class="pre">IPLEmbreeDevice</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">device</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv422iplEmbreeDeviceReleaseP15IPLEmbreeDevice" title="Link to this definition"></a><br /></dt>
 <dd><p>Releases a reference to an Embree device. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>device</strong> – The Embree device to release a reference to. </p>
 </dd>
 </dl>
 </dd></dl>
 
-</div>
-<div class="section" id="structures">
-<h2>Structures<a class="headerlink" href="#structures" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="structures">
+<h2>Structures<a class="headerlink" href="#structures" title="Link to this heading"></a></h2>
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv423IPLEmbreeDeviceSettings">
-<span id="_CPPv323IPLEmbreeDeviceSettings"></span><span id="_CPPv223IPLEmbreeDeviceSettings"></span><span id="IPLEmbreeDeviceSettings"></span><span class="target" id="struct_i_p_l_embree_device_settings"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLEmbreeDeviceSettings</span></span></span><a class="headerlink" href="#_CPPv423IPLEmbreeDeviceSettings" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv323IPLEmbreeDeviceSettings"></span><span id="_CPPv223IPLEmbreeDeviceSettings"></span><span id="IPLEmbreeDeviceSettings"></span><span class="target" id="struct_i_p_l_embree_device_settings"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLEmbreeDeviceSettings</span></span></span><a class="headerlink" href="#_CPPv423IPLEmbreeDeviceSettings" title="Link to this definition"></a><br /></dt>
 <dd><p>Settings used to create an Embree device. </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N23IPLEmbreeDeviceSettings8reservedE">
-<span id="_CPPv3N23IPLEmbreeDeviceSettings8reservedE"></span><span id="_CPPv2N23IPLEmbreeDeviceSettings8reservedE"></span><span id="IPLEmbreeDeviceSettings::reserved__IPLbyte"></span><span class="target" id="struct_i_p_l_embree_device_settings_1af27e331c66a766da1432ec82ea9bdd2d"></span><a class="reference internal" href="types.html#_CPPv47IPLbyte" title="IPLbyte"><span class="n"><span class="pre">IPLbyte</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">reserved</span></span></span><a class="headerlink" href="#_CPPv4N23IPLEmbreeDeviceSettings8reservedE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N23IPLEmbreeDeviceSettings8reservedE"></span><span id="_CPPv2N23IPLEmbreeDeviceSettings8reservedE"></span><span id="IPLEmbreeDeviceSettings::reserved__IPLbyte"></span><span class="target" id="struct_i_p_l_embree_device_settings_1af27e331c66a766da1432ec82ea9bdd2d"></span><a class="reference internal" href="types.html#_CPPv47IPLbyte" title="IPLbyte"><span class="n"><span class="pre">IPLbyte</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">reserved</span></span></span><a class="headerlink" href="#_CPPv4N23IPLEmbreeDeviceSettings8reservedE" title="Link to this definition"></a><br /></dt>
 <dd></dd></dl>
 
 </div>
 </dd></dl>
 
-</div>
-</div>
+</section>
+</section>
 
 
            </div>
-           
           </div>
-          <footer>
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="opencl.html" class="btn btn-neutral float-right" title="OpenCL" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="serialization.html" class="btn btn-neutral float-left" title="Serialization" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="opencl.html" class="btn btn-neutral float-right" title="OpenCL" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &#169; Copyright 2017-2023, Valve Corporation.
-
-    </p>
+    <p>&#169; Copyright 2017-2023, Valve Corporation.</p>
   </div>
-    
-    
-    
-    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>

@@ -1,101 +1,50 @@
 
 
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
-  <meta charset="utf-8" />
-  
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  
   <title>Binaural Effect &mdash; Steam Audio C API  documentation</title>
-  
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/steamaudio.css?v=b5aaeb06" />
 
   
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/steamaudio.css" type="text/css" />
-
-  
-  
-
-  
-  
-
-  
-
-  
-  <!--[if lt IE 9]>
-    <script src="_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/doctools.js"></script>
-    
-    <script type="text/javascript" src="_static/js/theme.js"></script>
-
-    
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=7f41d439"></script>
+      <script src="_static/doctools.js?v=9a2dae69"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Virtual Surround Effect" href="virtual-surround-effect.html" />
     <link rel="prev" title="Panning Effect" href="panning-effect.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
 
           
-            <a href="index.html">
           
-
-          
+          <a href="index.html">
             
-            <img src="_static/steam-audio-logo.png" class="logo" alt="Logo"/>
-          
+              <img src="_static/steam-audio-logo.png" class="logo" alt="Logo"/>
           </a>
-
-          
-            
-            
-              <div class="version">
-                4.6.0
-              </div>
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
-              <p class="caption"><span class="caption-text">Steam Audio SDK</span></p>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Steam Audio SDK</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="guide.html">Programmer’s Guide</a></li>
@@ -115,10 +64,27 @@
 <li class="toctree-l2"><a class="reference internal" href="hrtf.html">HRTF</a></li>
 <li class="toctree-l2"><a class="reference internal" href="panning-effect.html">Panning Effect</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Binaural Effect</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#typedefs">Typedefs</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#functions">Functions</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#structures">Structures</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#enumerations">Enumerations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#typedefs">Typedefs</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv417IPLBinauralEffect"><code class="docutils literal notranslate"><span class="pre">IPLBinauralEffect</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#functions">Functions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv423iplBinauralEffectCreate10IPLContextP16IPLAudioSettingsP25IPLBinauralEffectSettingsP17IPLBinauralEffect"><code class="docutils literal notranslate"><span class="pre">iplBinauralEffectCreate()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv423iplBinauralEffectRetain17IPLBinauralEffect"><code class="docutils literal notranslate"><span class="pre">iplBinauralEffectRetain()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv424iplBinauralEffectReleaseP17IPLBinauralEffect"><code class="docutils literal notranslate"><span class="pre">iplBinauralEffectRelease()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv422iplBinauralEffectReset17IPLBinauralEffect"><code class="docutils literal notranslate"><span class="pre">iplBinauralEffectReset()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv422iplBinauralEffectApply17IPLBinauralEffectP23IPLBinauralEffectParamsP14IPLAudioBufferP14IPLAudioBuffer"><code class="docutils literal notranslate"><span class="pre">iplBinauralEffectApply()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#structures">Structures</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv425IPLBinauralEffectSettings"><code class="docutils literal notranslate"><span class="pre">IPLBinauralEffectSettings</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv423IPLBinauralEffectParams"><code class="docutils literal notranslate"><span class="pre">IPLBinauralEffectParams</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#enumerations">Enumerations</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv420IPLHRTFInterpolation"><code class="docutils literal notranslate"><span class="pre">IPLHRTFInterpolation</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="virtual-surround-effect.html">Virtual Surround Effect</a></li>
@@ -137,91 +103,50 @@
 </li>
 </ul>
 
-            
-          
         </div>
-        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="index.html">Steam Audio C API</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
-      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-        
-          <li><a href="reference.html">API Reference</a> &raquo;</li>
-        
-      <li>Binaural Effect</li>
-    
-    
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="reference.html">API Reference</a></li>
+      <li class="breadcrumb-item active">Binaural Effect</li>
       <li class="wy-breadcrumbs-aside">
-        
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
-  <div class="section" id="binaural-effect">
-<h1>Binaural Effect<a class="headerlink" href="#binaural-effect" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="typedefs">
-<h2>Typedefs<a class="headerlink" href="#typedefs" title="Permalink to this headline">¶</a></h2>
+             
+  <section id="binaural-effect">
+<h1>Binaural Effect<a class="headerlink" href="#binaural-effect" title="Link to this heading"></a></h1>
+<section id="typedefs">
+<h2>Typedefs<a class="headerlink" href="#typedefs" title="Link to this heading"></a></h2>
 <dl class="cpp type">
 <dt class="sig sig-object cpp" id="_CPPv417IPLBinauralEffect">
-<span id="_CPPv317IPLBinauralEffect"></span><span id="_CPPv217IPLBinauralEffect"></span><span id="IPLBinauralEffect"></span><span class="target" id="group__binauraleffect_1gaee8561e093d6b13de58eb7b91fea4d95"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="n"><span class="pre">_IPLBinauralEffect_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">IPLBinauralEffect</span></span></span><a class="headerlink" href="#_CPPv417IPLBinauralEffect" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv317IPLBinauralEffect"></span><span id="_CPPv217IPLBinauralEffect"></span><span id="IPLBinauralEffect"></span><span class="target" id="group__binauraleffect_1gaee8561e093d6b13de58eb7b91fea4d95"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="n"><span class="pre">_IPLBinauralEffect_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">IPLBinauralEffect</span></span></span><a class="headerlink" href="#_CPPv417IPLBinauralEffect" title="Link to this definition"></a><br /></dt>
 <dd><p>Spatializes a point source using an HRTF, based on the 3D position of the source relative to the listener. </p>
 <p>The source audio can be 1- or 2-channel; in either case all input channels are spatialized from the same position. </p>
 </dd></dl>
 
-</div>
-<div class="section" id="functions">
-<h2>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="functions">
+<h2>Functions<a class="headerlink" href="#functions" title="Link to this heading"></a></h2>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv423iplBinauralEffectCreate10IPLContextP16IPLAudioSettingsP25IPLBinauralEffectSettingsP17IPLBinauralEffect">
-<span id="_CPPv323iplBinauralEffectCreate10IPLContextP16IPLAudioSettingsP25IPLBinauralEffectSettingsP17IPLBinauralEffect"></span><span id="_CPPv223iplBinauralEffectCreate10IPLContextP16IPLAudioSettingsP25IPLBinauralEffectSettingsP17IPLBinauralEffect"></span><span id="iplBinauralEffectCreate__IPLContext.IPLAudioSettingsP.IPLBinauralEffectSettingsP.IPLBinauralEffectP"></span><span class="target" id="group__binauraleffect_1ga548c63492ff489ceeced0a0860808291"></span><a class="reference internal" href="types.html#_CPPv48IPLerror" title="IPLerror"><span class="n"><span class="pre">IPLerror</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplBinauralEffectCreate</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="context.html#_CPPv410IPLContext" title="IPLContext"><span class="n"><span class="pre">IPLContext</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">context</span></span>, <a class="reference internal" href="audio-buffers.html#_CPPv416IPLAudioSettings" title="IPLAudioSettings"><span class="n"><span class="pre">IPLAudioSettings</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">audioSettings</span></span>, <a class="reference internal" href="#_CPPv425IPLBinauralEffectSettings" title="IPLBinauralEffectSettings"><span class="n"><span class="pre">IPLBinauralEffectSettings</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">effectSettings</span></span>, <a class="reference internal" href="#_CPPv417IPLBinauralEffect" title="IPLBinauralEffect"><span class="n"><span class="pre">IPLBinauralEffect</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">effect</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv423iplBinauralEffectCreate10IPLContextP16IPLAudioSettingsP25IPLBinauralEffectSettingsP17IPLBinauralEffect" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv323iplBinauralEffectCreate10IPLContextP16IPLAudioSettingsP25IPLBinauralEffectSettingsP17IPLBinauralEffect"></span><span id="_CPPv223iplBinauralEffectCreate10IPLContextP16IPLAudioSettingsP25IPLBinauralEffectSettingsP17IPLBinauralEffect"></span><span id="iplBinauralEffectCreate__IPLContext.IPLAudioSettingsP.IPLBinauralEffectSettingsP.IPLBinauralEffectP"></span><span class="target" id="group__binauraleffect_1ga548c63492ff489ceeced0a0860808291"></span><a class="reference internal" href="types.html#_CPPv48IPLerror" title="IPLerror"><span class="n"><span class="pre">IPLerror</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplBinauralEffectCreate</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="context.html#_CPPv410IPLContext" title="IPLContext"><span class="n"><span class="pre">IPLContext</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">context</span></span>, <a class="reference internal" href="audio-buffers.html#_CPPv416IPLAudioSettings" title="IPLAudioSettings"><span class="n"><span class="pre">IPLAudioSettings</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">audioSettings</span></span>, <a class="reference internal" href="#_CPPv425IPLBinauralEffectSettings" title="IPLBinauralEffectSettings"><span class="n"><span class="pre">IPLBinauralEffectSettings</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">effectSettings</span></span>, <a class="reference internal" href="#_CPPv417IPLBinauralEffect" title="IPLBinauralEffect"><span class="n"><span class="pre">IPLBinauralEffect</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">effect</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv423iplBinauralEffectCreate10IPLContextP16IPLAudioSettingsP25IPLBinauralEffectSettingsP17IPLBinauralEffect" title="Link to this definition"></a><br /></dt>
 <dd><p>Creates a binaural effect. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>context</strong> – The context used to initialize Steam Audio. </p></li>
 <li><p><strong>audioSettings</strong> – Global audio processing settings. </p></li>
@@ -229,7 +154,7 @@
 <li><p><strong>effect</strong> – [out] The created binaural effect.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Status code indicating whether or not the operation succeeded. </p>
 </dd>
 </dl>
@@ -237,13 +162,13 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv423iplBinauralEffectRetain17IPLBinauralEffect">
-<span id="_CPPv323iplBinauralEffectRetain17IPLBinauralEffect"></span><span id="_CPPv223iplBinauralEffectRetain17IPLBinauralEffect"></span><span id="iplBinauralEffectRetain__IPLBinauralEffect"></span><span class="target" id="group__binauraleffect_1ga78a3c81205de0dad74025e179d7ae9a0"></span><a class="reference internal" href="#_CPPv417IPLBinauralEffect" title="IPLBinauralEffect"><span class="n"><span class="pre">IPLBinauralEffect</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplBinauralEffectRetain</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv417IPLBinauralEffect" title="IPLBinauralEffect"><span class="n"><span class="pre">IPLBinauralEffect</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">effect</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv423iplBinauralEffectRetain17IPLBinauralEffect" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv323iplBinauralEffectRetain17IPLBinauralEffect"></span><span id="_CPPv223iplBinauralEffectRetain17IPLBinauralEffect"></span><span id="iplBinauralEffectRetain__IPLBinauralEffect"></span><span class="target" id="group__binauraleffect_1ga78a3c81205de0dad74025e179d7ae9a0"></span><a class="reference internal" href="#_CPPv417IPLBinauralEffect" title="IPLBinauralEffect"><span class="n"><span class="pre">IPLBinauralEffect</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplBinauralEffectRetain</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv417IPLBinauralEffect" title="IPLBinauralEffect"><span class="n"><span class="pre">IPLBinauralEffect</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">effect</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv423iplBinauralEffectRetain17IPLBinauralEffect" title="Link to this definition"></a><br /></dt>
 <dd><p>Retains an additional reference to a binaural effect. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>effect</strong> – The binaural effect to retain a reference to.</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The additional reference to the binaural effect. </p>
 </dd>
 </dl>
@@ -251,10 +176,10 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv424iplBinauralEffectReleaseP17IPLBinauralEffect">
-<span id="_CPPv324iplBinauralEffectReleaseP17IPLBinauralEffect"></span><span id="_CPPv224iplBinauralEffectReleaseP17IPLBinauralEffect"></span><span id="iplBinauralEffectRelease__IPLBinauralEffectP"></span><span class="target" id="group__binauraleffect_1ga3a012b018330acdcdbf7c78a8d1586e0"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplBinauralEffectRelease</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv417IPLBinauralEffect" title="IPLBinauralEffect"><span class="n"><span class="pre">IPLBinauralEffect</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">effect</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv424iplBinauralEffectReleaseP17IPLBinauralEffect" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv324iplBinauralEffectReleaseP17IPLBinauralEffect"></span><span id="_CPPv224iplBinauralEffectReleaseP17IPLBinauralEffect"></span><span id="iplBinauralEffectRelease__IPLBinauralEffectP"></span><span class="target" id="group__binauraleffect_1ga3a012b018330acdcdbf7c78a8d1586e0"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplBinauralEffectRelease</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv417IPLBinauralEffect" title="IPLBinauralEffect"><span class="n"><span class="pre">IPLBinauralEffect</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">effect</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv424iplBinauralEffectReleaseP17IPLBinauralEffect" title="Link to this definition"></a><br /></dt>
 <dd><p>Releases a reference to a binaural effect. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>effect</strong> – The binaural effect to release a reference to. </p>
 </dd>
 </dl>
@@ -262,10 +187,10 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv422iplBinauralEffectReset17IPLBinauralEffect">
-<span id="_CPPv322iplBinauralEffectReset17IPLBinauralEffect"></span><span id="_CPPv222iplBinauralEffectReset17IPLBinauralEffect"></span><span id="iplBinauralEffectReset__IPLBinauralEffect"></span><span class="target" id="group__binauraleffect_1ga03bb7f85909279932c3cbf0bcb63988f"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplBinauralEffectReset</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv417IPLBinauralEffect" title="IPLBinauralEffect"><span class="n"><span class="pre">IPLBinauralEffect</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">effect</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv422iplBinauralEffectReset17IPLBinauralEffect" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv322iplBinauralEffectReset17IPLBinauralEffect"></span><span id="_CPPv222iplBinauralEffectReset17IPLBinauralEffect"></span><span id="iplBinauralEffectReset__IPLBinauralEffect"></span><span class="target" id="group__binauraleffect_1ga03bb7f85909279932c3cbf0bcb63988f"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplBinauralEffectReset</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv417IPLBinauralEffect" title="IPLBinauralEffect"><span class="n"><span class="pre">IPLBinauralEffect</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">effect</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv422iplBinauralEffectReset17IPLBinauralEffect" title="Link to this definition"></a><br /></dt>
 <dd><p>Resets the internal processing state of a binaural effect. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>effect</strong> – The binaural effect to reset. </p>
 </dd>
 </dl>
@@ -273,11 +198,11 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv422iplBinauralEffectApply17IPLBinauralEffectP23IPLBinauralEffectParamsP14IPLAudioBufferP14IPLAudioBuffer">
-<span id="_CPPv322iplBinauralEffectApply17IPLBinauralEffectP23IPLBinauralEffectParamsP14IPLAudioBufferP14IPLAudioBuffer"></span><span id="_CPPv222iplBinauralEffectApply17IPLBinauralEffectP23IPLBinauralEffectParamsP14IPLAudioBufferP14IPLAudioBuffer"></span><span id="iplBinauralEffectApply__IPLBinauralEffect.IPLBinauralEffectParamsP.IPLAudioBufferP.IPLAudioBufferP"></span><span class="target" id="group__binauraleffect_1gab287d445f6596990d101ebdfa92d10a0"></span><a class="reference internal" href="audio-buffers.html#_CPPv419IPLAudioEffectState" title="IPLAudioEffectState"><span class="n"><span class="pre">IPLAudioEffectState</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplBinauralEffectApply</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv417IPLBinauralEffect" title="IPLBinauralEffect"><span class="n"><span class="pre">IPLBinauralEffect</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">effect</span></span>, <a class="reference internal" href="#_CPPv423IPLBinauralEffectParams" title="IPLBinauralEffectParams"><span class="n"><span class="pre">IPLBinauralEffectParams</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">params</span></span>, <a class="reference internal" href="audio-buffers.html#_CPPv414IPLAudioBuffer" title="IPLAudioBuffer"><span class="n"><span class="pre">IPLAudioBuffer</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">in</span></span>, <a class="reference internal" href="audio-buffers.html#_CPPv414IPLAudioBuffer" title="IPLAudioBuffer"><span class="n"><span class="pre">IPLAudioBuffer</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">out</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv422iplBinauralEffectApply17IPLBinauralEffectP23IPLBinauralEffectParamsP14IPLAudioBufferP14IPLAudioBuffer" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv322iplBinauralEffectApply17IPLBinauralEffectP23IPLBinauralEffectParamsP14IPLAudioBufferP14IPLAudioBuffer"></span><span id="_CPPv222iplBinauralEffectApply17IPLBinauralEffectP23IPLBinauralEffectParamsP14IPLAudioBufferP14IPLAudioBuffer"></span><span id="iplBinauralEffectApply__IPLBinauralEffect.IPLBinauralEffectParamsP.IPLAudioBufferP.IPLAudioBufferP"></span><span class="target" id="group__binauraleffect_1gab287d445f6596990d101ebdfa92d10a0"></span><a class="reference internal" href="audio-buffers.html#_CPPv419IPLAudioEffectState" title="IPLAudioEffectState"><span class="n"><span class="pre">IPLAudioEffectState</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplBinauralEffectApply</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv417IPLBinauralEffect" title="IPLBinauralEffect"><span class="n"><span class="pre">IPLBinauralEffect</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">effect</span></span>, <a class="reference internal" href="#_CPPv423IPLBinauralEffectParams" title="IPLBinauralEffectParams"><span class="n"><span class="pre">IPLBinauralEffectParams</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">params</span></span>, <a class="reference internal" href="audio-buffers.html#_CPPv414IPLAudioBuffer" title="IPLAudioBuffer"><span class="n"><span class="pre">IPLAudioBuffer</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">in</span></span>, <a class="reference internal" href="audio-buffers.html#_CPPv414IPLAudioBuffer" title="IPLAudioBuffer"><span class="n"><span class="pre">IPLAudioBuffer</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">out</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv422iplBinauralEffectApply17IPLBinauralEffectP23IPLBinauralEffectParamsP14IPLAudioBufferP14IPLAudioBuffer" title="Link to this definition"></a><br /></dt>
 <dd><p>Applies a binaural effect to an audio buffer. </p>
 <p>This effect CANNOT be applied in-place.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>effect</strong> – The binaural effect to apply. </p></li>
 <li><p><strong>params</strong> – Parameters for applying the effect. </p></li>
@@ -285,24 +210,24 @@
 <li><p><strong>out</strong> – The output audio buffer. Must be 2-channel.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">IPL_AUDIOEFFECTSTATE_TAILREMAINING</span></code> if any tail samples remain in the effect’s internal buffers, or <code class="docutils literal notranslate"><span class="pre">IPL_AUDIOEFFECTSTATE_TAILCOMPLETE</span></code> otherwise. </p>
 </dd>
 </dl>
 </dd></dl>
 
-</div>
-<div class="section" id="structures">
-<h2>Structures<a class="headerlink" href="#structures" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="structures">
+<h2>Structures<a class="headerlink" href="#structures" title="Link to this heading"></a></h2>
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv425IPLBinauralEffectSettings">
-<span id="_CPPv325IPLBinauralEffectSettings"></span><span id="_CPPv225IPLBinauralEffectSettings"></span><span id="IPLBinauralEffectSettings"></span><span class="target" id="struct_i_p_l_binaural_effect_settings"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLBinauralEffectSettings</span></span></span><a class="headerlink" href="#_CPPv425IPLBinauralEffectSettings" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv325IPLBinauralEffectSettings"></span><span id="_CPPv225IPLBinauralEffectSettings"></span><span id="IPLBinauralEffectSettings"></span><span class="target" id="struct_i_p_l_binaural_effect_settings"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLBinauralEffectSettings</span></span></span><a class="headerlink" href="#_CPPv425IPLBinauralEffectSettings" title="Link to this definition"></a><br /></dt>
 <dd><p>Settings used to create a binaural effect. </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N25IPLBinauralEffectSettings4hrtfE">
-<span id="_CPPv3N25IPLBinauralEffectSettings4hrtfE"></span><span id="_CPPv2N25IPLBinauralEffectSettings4hrtfE"></span><span id="IPLBinauralEffectSettings::hrtf__IPLHRTF"></span><span class="target" id="struct_i_p_l_binaural_effect_settings_1afdfe641bbcb9a02f2350ea7b4a997482"></span><a class="reference internal" href="hrtf.html#_CPPv47IPLHRTF" title="IPLHRTF"><span class="n"><span class="pre">IPLHRTF</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">hrtf</span></span></span><a class="headerlink" href="#_CPPv4N25IPLBinauralEffectSettings4hrtfE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N25IPLBinauralEffectSettings4hrtfE"></span><span id="_CPPv2N25IPLBinauralEffectSettings4hrtfE"></span><span id="IPLBinauralEffectSettings::hrtf__IPLHRTF"></span><span class="target" id="struct_i_p_l_binaural_effect_settings_1afdfe641bbcb9a02f2350ea7b4a997482"></span><a class="reference internal" href="hrtf.html#_CPPv47IPLHRTF" title="IPLHRTF"><span class="n"><span class="pre">IPLHRTF</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">hrtf</span></span></span><a class="headerlink" href="#_CPPv4N25IPLBinauralEffectSettings4hrtfE" title="Link to this definition"></a><br /></dt>
 <dd><p>The HRTF to use. </p>
 </dd></dl>
 
@@ -311,38 +236,38 @@
 
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv423IPLBinauralEffectParams">
-<span id="_CPPv323IPLBinauralEffectParams"></span><span id="_CPPv223IPLBinauralEffectParams"></span><span id="IPLBinauralEffectParams"></span><span class="target" id="struct_i_p_l_binaural_effect_params"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLBinauralEffectParams</span></span></span><a class="headerlink" href="#_CPPv423IPLBinauralEffectParams" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv323IPLBinauralEffectParams"></span><span id="_CPPv223IPLBinauralEffectParams"></span><span id="IPLBinauralEffectParams"></span><span class="target" id="struct_i_p_l_binaural_effect_params"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLBinauralEffectParams</span></span></span><a class="headerlink" href="#_CPPv423IPLBinauralEffectParams" title="Link to this definition"></a><br /></dt>
 <dd><p>Parameters for applying a binaural effect to an audio buffer. </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N23IPLBinauralEffectParams9directionE">
-<span id="_CPPv3N23IPLBinauralEffectParams9directionE"></span><span id="_CPPv2N23IPLBinauralEffectParams9directionE"></span><span id="IPLBinauralEffectParams::direction__IPLVector3"></span><span class="target" id="struct_i_p_l_binaural_effect_params_1a6d6d43ed60cddbbc9a71b9e83b073db5"></span><a class="reference internal" href="geometry.html#_CPPv410IPLVector3" title="IPLVector3"><span class="n"><span class="pre">IPLVector3</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">direction</span></span></span><a class="headerlink" href="#_CPPv4N23IPLBinauralEffectParams9directionE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N23IPLBinauralEffectParams9directionE"></span><span id="_CPPv2N23IPLBinauralEffectParams9directionE"></span><span id="IPLBinauralEffectParams::direction__IPLVector3"></span><span class="target" id="struct_i_p_l_binaural_effect_params_1a6d6d43ed60cddbbc9a71b9e83b073db5"></span><a class="reference internal" href="geometry.html#_CPPv410IPLVector3" title="IPLVector3"><span class="n"><span class="pre">IPLVector3</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">direction</span></span></span><a class="headerlink" href="#_CPPv4N23IPLBinauralEffectParams9directionE" title="Link to this definition"></a><br /></dt>
 <dd><p>Unit vector pointing from the listener towards the source. </p>
 </dd></dl>
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N23IPLBinauralEffectParams13interpolationE">
-<span id="_CPPv3N23IPLBinauralEffectParams13interpolationE"></span><span id="_CPPv2N23IPLBinauralEffectParams13interpolationE"></span><span id="IPLBinauralEffectParams::interpolation__IPLHRTFInterpolation"></span><span class="target" id="struct_i_p_l_binaural_effect_params_1aed18e3c5590755ed870bcd8988c0e858"></span><a class="reference internal" href="#_CPPv420IPLHRTFInterpolation" title="IPLHRTFInterpolation"><span class="n"><span class="pre">IPLHRTFInterpolation</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">interpolation</span></span></span><a class="headerlink" href="#_CPPv4N23IPLBinauralEffectParams13interpolationE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N23IPLBinauralEffectParams13interpolationE"></span><span id="_CPPv2N23IPLBinauralEffectParams13interpolationE"></span><span id="IPLBinauralEffectParams::interpolation__IPLHRTFInterpolation"></span><span class="target" id="struct_i_p_l_binaural_effect_params_1aed18e3c5590755ed870bcd8988c0e858"></span><a class="reference internal" href="#_CPPv420IPLHRTFInterpolation" title="IPLHRTFInterpolation"><span class="n"><span class="pre">IPLHRTFInterpolation</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">interpolation</span></span></span><a class="headerlink" href="#_CPPv4N23IPLBinauralEffectParams13interpolationE" title="Link to this definition"></a><br /></dt>
 <dd><p>The interpolation technique to use. </p>
 </dd></dl>
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N23IPLBinauralEffectParams12spatialBlendE">
-<span id="_CPPv3N23IPLBinauralEffectParams12spatialBlendE"></span><span id="_CPPv2N23IPLBinauralEffectParams12spatialBlendE"></span><span id="IPLBinauralEffectParams::spatialBlend__IPLfloat32"></span><span class="target" id="struct_i_p_l_binaural_effect_params_1ad2ef98ae26561f776416093445272597"></span><a class="reference internal" href="types.html#_CPPv410IPLfloat32" title="IPLfloat32"><span class="n"><span class="pre">IPLfloat32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">spatialBlend</span></span></span><a class="headerlink" href="#_CPPv4N23IPLBinauralEffectParams12spatialBlendE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N23IPLBinauralEffectParams12spatialBlendE"></span><span id="_CPPv2N23IPLBinauralEffectParams12spatialBlendE"></span><span id="IPLBinauralEffectParams::spatialBlend__IPLfloat32"></span><span class="target" id="struct_i_p_l_binaural_effect_params_1ad2ef98ae26561f776416093445272597"></span><a class="reference internal" href="types.html#_CPPv410IPLfloat32" title="IPLfloat32"><span class="n"><span class="pre">IPLfloat32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">spatialBlend</span></span></span><a class="headerlink" href="#_CPPv4N23IPLBinauralEffectParams12spatialBlendE" title="Link to this definition"></a><br /></dt>
 <dd><p>Amount to blend input audio with spatialized audio. </p>
 <p>When set to 0, output audio is not spatialized at all and is close to input audio. If set to 1, output audio is fully spatialized. </p>
 </dd></dl>
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N23IPLBinauralEffectParams4hrtfE">
-<span id="_CPPv3N23IPLBinauralEffectParams4hrtfE"></span><span id="_CPPv2N23IPLBinauralEffectParams4hrtfE"></span><span id="IPLBinauralEffectParams::hrtf__IPLHRTF"></span><span class="target" id="struct_i_p_l_binaural_effect_params_1afdfe641bbcb9a02f2350ea7b4a997482"></span><a class="reference internal" href="hrtf.html#_CPPv47IPLHRTF" title="IPLHRTF"><span class="n"><span class="pre">IPLHRTF</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">hrtf</span></span></span><a class="headerlink" href="#_CPPv4N23IPLBinauralEffectParams4hrtfE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N23IPLBinauralEffectParams4hrtfE"></span><span id="_CPPv2N23IPLBinauralEffectParams4hrtfE"></span><span id="IPLBinauralEffectParams::hrtf__IPLHRTF"></span><span class="target" id="struct_i_p_l_binaural_effect_params_1afdfe641bbcb9a02f2350ea7b4a997482"></span><a class="reference internal" href="hrtf.html#_CPPv47IPLHRTF" title="IPLHRTF"><span class="n"><span class="pre">IPLHRTF</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">hrtf</span></span></span><a class="headerlink" href="#_CPPv4N23IPLBinauralEffectParams4hrtfE" title="Link to this definition"></a><br /></dt>
 <dd><p>The HRTF to use. </p>
 </dd></dl>
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N23IPLBinauralEffectParams10peakDelaysE">
-<span id="_CPPv3N23IPLBinauralEffectParams10peakDelaysE"></span><span id="_CPPv2N23IPLBinauralEffectParams10peakDelaysE"></span><span id="IPLBinauralEffectParams::peakDelays__IPLfloat32P"></span><span class="target" id="struct_i_p_l_binaural_effect_params_1afd8bf654ff38da5ba2cd54d7920895e8"></span><a class="reference internal" href="types.html#_CPPv410IPLfloat32" title="IPLfloat32"><span class="n"><span class="pre">IPLfloat32</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">peakDelays</span></span></span><a class="headerlink" href="#_CPPv4N23IPLBinauralEffectParams10peakDelaysE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N23IPLBinauralEffectParams10peakDelaysE"></span><span id="_CPPv2N23IPLBinauralEffectParams10peakDelaysE"></span><span id="IPLBinauralEffectParams::peakDelays__IPLfloat32P"></span><span class="target" id="struct_i_p_l_binaural_effect_params_1afd8bf654ff38da5ba2cd54d7920895e8"></span><a class="reference internal" href="types.html#_CPPv410IPLfloat32" title="IPLfloat32"><span class="n"><span class="pre">IPLfloat32</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">peakDelays</span></span></span><a class="headerlink" href="#_CPPv4N23IPLBinauralEffectParams10peakDelaysE" title="Link to this definition"></a><br /></dt>
 <dd><p>Base address of an array into which to write the left- and right-ear peak delays for the HRTF used to spatialize the input audio. </p>
 <p>Memory for this array must be allocated and managed by the caller. Can be NULL, in which case peak delays will not be written. </p>
 </dd></dl>
@@ -350,80 +275,63 @@
 </div>
 </dd></dl>
 
-</div>
-<div class="section" id="enumerations">
-<h2>Enumerations<a class="headerlink" href="#enumerations" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="enumerations">
+<h2>Enumerations<a class="headerlink" href="#enumerations" title="Link to this heading"></a></h2>
 <dl class="cpp enum">
 <dt class="sig sig-object cpp" id="_CPPv420IPLHRTFInterpolation">
-<span id="_CPPv320IPLHRTFInterpolation"></span><span id="_CPPv220IPLHRTFInterpolation"></span><span class="target" id="group__binauraleffect_1ga88d5975b3294d504293048bcea458f64"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLHRTFInterpolation</span></span></span><a class="headerlink" href="#_CPPv420IPLHRTFInterpolation" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv320IPLHRTFInterpolation"></span><span id="_CPPv220IPLHRTFInterpolation"></span><span class="target" id="group__binauraleffect_1ga88d5975b3294d504293048bcea458f64"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLHRTFInterpolation</span></span></span><a class="headerlink" href="#_CPPv420IPLHRTFInterpolation" title="Link to this definition"></a><br /></dt>
 <dd><p>Techniques for interpolating HRTF data. </p>
 <p>This is used when rendering a point source whose position relative to the listener is not contained in the measured HRTF data. </p>
 <p><em>Values:</em></p>
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N20IPLHRTFInterpolation29IPL_HRTFINTERPOLATION_NEARESTE">
-<span id="_CPPv3N20IPLHRTFInterpolation29IPL_HRTFINTERPOLATION_NEARESTE"></span><span id="_CPPv2N20IPLHRTFInterpolation29IPL_HRTFINTERPOLATION_NEARESTE"></span><span class="target" id="group__binauraleffect_1gga88d5975b3294d504293048bcea458f64a4ea0fb2ab0361b8c7636e98f3564c683"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_HRTFINTERPOLATION_NEAREST</span></span></span><a class="headerlink" href="#_CPPv4N20IPLHRTFInterpolation29IPL_HRTFINTERPOLATION_NEARESTE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N20IPLHRTFInterpolation29IPL_HRTFINTERPOLATION_NEARESTE"></span><span id="_CPPv2N20IPLHRTFInterpolation29IPL_HRTFINTERPOLATION_NEARESTE"></span><span class="target" id="group__binauraleffect_1gga88d5975b3294d504293048bcea458f64a4ea0fb2ab0361b8c7636e98f3564c683"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_HRTFINTERPOLATION_NEAREST</span></span></span><a class="headerlink" href="#_CPPv4N20IPLHRTFInterpolation29IPL_HRTFINTERPOLATION_NEARESTE" title="Link to this definition"></a><br /></dt>
 <dd><p>Nearest-neighbor filtering, i.e., no interpolation. </p>
 <p>Selects the measurement location that is closest to the source’s actual location. </p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N20IPLHRTFInterpolation30IPL_HRTFINTERPOLATION_BILINEARE">
-<span id="_CPPv3N20IPLHRTFInterpolation30IPL_HRTFINTERPOLATION_BILINEARE"></span><span id="_CPPv2N20IPLHRTFInterpolation30IPL_HRTFINTERPOLATION_BILINEARE"></span><span class="target" id="group__binauraleffect_1gga88d5975b3294d504293048bcea458f64ad7ddb6850251ca2c0dc5282202cc31bd"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_HRTFINTERPOLATION_BILINEAR</span></span></span><a class="headerlink" href="#_CPPv4N20IPLHRTFInterpolation30IPL_HRTFINTERPOLATION_BILINEARE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N20IPLHRTFInterpolation30IPL_HRTFINTERPOLATION_BILINEARE"></span><span id="_CPPv2N20IPLHRTFInterpolation30IPL_HRTFINTERPOLATION_BILINEARE"></span><span class="target" id="group__binauraleffect_1gga88d5975b3294d504293048bcea458f64ad7ddb6850251ca2c0dc5282202cc31bd"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_HRTFINTERPOLATION_BILINEAR</span></span></span><a class="headerlink" href="#_CPPv4N20IPLHRTFInterpolation30IPL_HRTFINTERPOLATION_BILINEARE" title="Link to this definition"></a><br /></dt>
 <dd><p>Bilinear filtering. </p>
 <p>Incurs a relatively high CPU overhead as compared to nearest-neighbor filtering, so use this for sounds where it has a significant benefit. Typically, bilinear filtering is most useful for wide-band noise-like sounds, such as radio static, mechanical noise, fire, etc. </p>
 </dd></dl>
 
 </dd></dl>
 
-</div>
-</div>
+</section>
+</section>
 
 
            </div>
-           
           </div>
-          <footer>
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="virtual-surround-effect.html" class="btn btn-neutral float-right" title="Virtual Surround Effect" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="panning-effect.html" class="btn btn-neutral float-left" title="Panning Effect" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="virtual-surround-effect.html" class="btn btn-neutral float-right" title="Virtual Surround Effect" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &#169; Copyright 2017-2023, Valve Corporation.
-
-    </p>
+    <p>&#169; Copyright 2017-2023, Valve Corporation.</p>
   </div>
-    
-    
-    
-    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>
