@@ -2231,9 +2231,9 @@ IPLAPI IPLAmbisonicsDecodeEffect IPLCALL iplAmbisonicsDecodeEffectRetain(IPLAmbi
 */
 IPLAPI void IPLCALL iplAmbisonicsDecodeEffectRelease(IPLAmbisonicsDecodeEffect* effect);
 
-/** Resets the internal processing state of an Ambisonics rotation effect.
+/** Resets the internal processing state of an Ambisonics decode effect.
 
-    \param  effect  The Ambisonics rotation effect to reset.
+    \param  effect  The Ambisonics decode effect to reset.
 */
 IPLAPI void IPLCALL iplAmbisonicsDecodeEffectReset(IPLAmbisonicsDecodeEffect effect);
 

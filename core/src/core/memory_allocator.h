@@ -154,10 +154,15 @@ bool operator!=(const allocator<T1>&,
 // unique_ptr<T>
 // --------------------------------------------------------------------------------------------------------------------
 
+template <typename T>
 struct deleter
 {
-    template <typename T>
-    void operator()(T* p)
+    deleter() = default;
+
+    template <typename U, std::enable_if_t<std::is_convertible<U*, T*>::value, int> = 0>
+    deleter(const deleter<U>&) {}
+
+    void operator()(T* p) const
     {
         p->~T();
         gMemory().free(p);
@@ -165,14 +170,37 @@ struct deleter
 };
 
 template <typename T>
-using unique_ptr = std::unique_ptr<T, deleter>;
+struct deleter<T[]>
+{
+    size_t N = 1;
+
+    deleter() = default;
+
+    deleter(size_t N) : N(N) {}
+
+    template <typename U, std::enable_if_t<std::is_convertible<U(*)[], T(*)[]>::value, int> = 0>
+    deleter(const deleter<U[]>&) {}
+
+    template <typename U, std::enable_if_t<std::is_convertible<U(*)[], T(*)[]>::value, int> = 0>
+    void operator()(U* p) const
+    {
+        for (int i = 0; i < N; ++i)
+        {
+            (&p[i])->~U();
+        }
+        gMemory().free(p);
+    }
+};
+
+template <typename T>
+using unique_ptr = std::unique_ptr<T, deleter<T>>;
 
 template <typename T, typename... Args>
 typename std::enable_if<!std::is_array<T>::value, ipl::unique_ptr<T>>::type make_unique(Args&&... args)
 {
     auto p = reinterpret_cast<T*>(gMemory().allocate(sizeof(T), Memory::kDefaultAlignment));
     new (p) T(std::forward<Args>(args)...);
-    return ipl::unique_ptr<T>(p, deleter());
+    return ipl::unique_ptr<T>(p, deleter<T>());
 }
 
 template <typename T, typename... Args>
@@ -186,7 +214,7 @@ typename std::enable_if<std::is_array<T>::value && std::extent<T>::value == 0, i
         new (&p[i]) E();
     }
 
-    return ipl::unique_ptr<T>(p, deleter());
+    return ipl::unique_ptr<T>(p, deleter<T>(size));
 }
 
 

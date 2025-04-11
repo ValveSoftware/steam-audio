@@ -71,6 +71,10 @@ public:
 
     void reset();
 
+    static void copy(const OverlapSaveFIR& src, OverlapSaveFIR& dst);
+
+    static void swap(OverlapSaveFIR& a, OverlapSaveFIR& b);
+
 private:
     Array<complex_t, 3> mData;
 };
@@ -124,6 +128,14 @@ struct OverlapSaveConvolutionEffectParams
     int numSamples = 0;
 };
 
+struct OverlapSaveConvolutionEffectDirectParams
+{
+    const OverlapSaveFIR* fftIR = nullptr;
+    bool fftIRUpdated = false;
+    int numChannels = 0;
+    int numSamples = 0;
+};
+
 struct OverlapSaveConvolutionMixerParams
 {
     int numChannels = 0;
@@ -146,6 +158,10 @@ public:
     AudioEffectState apply(const OverlapSaveConvolutionEffectParams& params,
                            const AudioBuffer& in,
                            OverlapSaveConvolutionMixer& mixer);
+
+    AudioEffectState apply(const OverlapSaveConvolutionEffectDirectParams& params, const AudioBuffer& in, AudioBuffer& out);
+    
+    bool apply(const OverlapSaveConvolutionEffectDirectParams& params, const AudioBuffer& in);
 
     AudioEffectState tail(AudioBuffer& out);
 

@@ -110,6 +110,7 @@ struct PathingSimulationState
     Array<float> sh;
     Vector3f direction;
     float distanceRatio;
+    float totalDeviation;
 };
 
 struct PathingSimulationOutputs
@@ -118,6 +119,7 @@ struct PathingSimulationOutputs
     Array<float> sh;
     Vector3f direction;
     float distanceRatio;
+    float totalDeviation;
 };
 
 class SimulationData

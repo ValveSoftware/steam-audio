@@ -86,6 +86,11 @@ void EnergyField::copyFrom(const EnergyField& other)
     }
 }
 
+void EnergyField::swap(EnergyField& a, EnergyField& b)
+{
+    a.mData.swap(b.mData);
+}
+
 void EnergyField::add(const EnergyField& in1,
                       const EnergyField& in2,
                       EnergyField& out)

@@ -118,6 +118,7 @@ ITEST(pathing)
     Array<float>* coeffs[2] = {&readCoeffs, &writeCoeffs};
     Vector3f avgDirection(.0f, .0f, .0f);
     float distanceRatio = 1.0f;
+    float pathingDeviation = .0f;
     std::mutex mutex;
     std::atomic<bool> newDataWritten = false;
     const char* dragOptions[] = { "None", "Source", "Listener" };
@@ -143,7 +144,8 @@ ITEST(pathing)
 
         ImGui::Combo("Drag Options", &selectedDragOption, dragOptions, IM_ARRAYSIZE(dragOptions));
 		ImGui::Checkbox("Show Mesh", &showMesh);
-        ImGui::Text("Distance Ratio: %.4f", distanceRatio );
+        ImGui::Text("Distance Ratio: %.4f", distanceRatio);
+        ImGui::Text("Total Deviation: %.4f", pathingDeviation);
         ImGui::Checkbox("Interpolate All Source Probes", &PathSimulator::sEnablePathsFromAllSourceProbes);
         ImGui::Checkbox("Enable Validation", &enableValidation);
         ImGui::Checkbox("Find Alternate Paths", &findAlternatePaths);
@@ -229,7 +231,7 @@ ITEST(pathing)
 
                 pathSimulator.findPaths(sourcePosition, listener, *scene, *probeBatch, sourceProbes, listenerProbes, kProbeVisRadius,
                     kProbeVisThreshold, kProbeVisRangeRealTime, kOrder, enableValidation, findAlternatePaths, true, true,
-                    eqGains[1]->data(), coeffs[1]->data(), &avgDirection, &distanceRatio,
+                    eqGains[1]->data(), coeffs[1]->data(), &avgDirection, &distanceRatio, &pathingDeviation,
                     enablePathVisualization ? visualizeValidationRay : (ValidationRayVisualizationCallback) nullptr, &visState);
 
                 newDataWritten = true;

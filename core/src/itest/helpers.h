@@ -19,6 +19,8 @@
 #include <audio_buffer.h>
 #include <hrtf_database.h>
 #include <scene_factory.h>
+#include <impulse_response_factory.h>
+
 using namespace ipl;
 
 std::shared_ptr<HRTFDatabase> loadHRTF(shared_ptr<Context> context,
@@ -41,3 +43,7 @@ std::shared_ptr<IScene> loadMesh(shared_ptr<Context> context,
 								 shared_ptr<ipl::RadeonRaysDevice> radeonRays = nullptr);
 
 std::vector<std::string> listMeshFileNames(const std::string& subdirectory);
+
+unique_ptr<ImpulseResponse> loadIR(const char* fileName);
+
+std::string getPathToFile(std::string file_name);

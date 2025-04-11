@@ -63,6 +63,7 @@ public:
                    float* coeffs,
                    Vector3f* avgDirection = nullptr,
                    float* distanceRatio = nullptr,
+                   float* totalDeviation = nullptr,
                    ValidationRayVisualizationCallback validationRayVisualization = nullptr,
                    void* userData = nullptr,
                    bool forceDirectOcclusion = false);
@@ -132,7 +133,7 @@ private:
                         void* userData) const;
 
     // Given a set of SoundPaths describing multiple paths that reach the listener, and corresponding weights,
-    // calculates the SH and EQ coefficients describing the total sound field.
+    // calculates the SH coefficients describing the total sound field.
     static void calcAmbisonicsCoeffsForPaths(const Vector3f& source,
                                              const Vector3f& listener,
                                              const ProbeBatch& probes,
@@ -142,8 +143,18 @@ private:
                                              const SoundPath* paths,
                                              const float* weights,
                                              int order,
-                                             float* eqGains,
                                              float* coeffs);
+
+    // Given a set of SoundPaths describing multiple paths that reach the listener, and corresponding weights,
+    // calculates weighted EQ and total deviation of the paths.
+    static void calcEQForPaths(const ProbeBatch& probes,
+                               int* starts,
+                               int* ends,
+                               int numPaths,
+                               const SoundPath* paths,
+                               const float* weights,
+                               float* eqGains,
+                               float* totalDeviation);
 
     // Given a set of SoundPaths describing multiple paths that reach the listener, and corresponding weights,
     // calculates average direction of the paths.

@@ -250,3 +250,64 @@ std::vector<std::string> listMeshFileNames(const std::string& subdirectory)
 
     return meshFileNames;
 }
+
+unique_ptr<ImpulseResponse> loadIR(const char* fileName)
+{
+    unsigned int numChannels = 0;
+    drwav_uint64 numSamples = 0;
+    unsigned int samplingRate = 0;
+    float* samples = drwav_open_file_and_read_pcm_frames_f32(fileName, &numChannels, &samplingRate, &numSamples, nullptr);
+    gLog().message(MessageSeverity::Info, "Loaded IR from %s: %d channels, %d samples, %d Hz sampling rate.",
+        fileName, numChannels, numSamples, samplingRate);
+
+    float duration = static_cast<float>(numSamples) / static_cast<float>(samplingRate);
+    int order = static_cast<int>(sqrt(numChannels)) - 1;
+    unique_ptr<ImpulseResponse> ir = make_unique<ImpulseResponse>(duration, order, samplingRate);
+
+    for (int i = 0, index = 0; i < numSamples; ++i)
+    {
+        for (int j = 0; j < (int)numChannels; ++j, ++index)
+        {
+            (*ir)[j][i] = samples[index];
+        }
+    }
+
+    drwav_free(samples, nullptr);
+
+    return std::move(ir);
+}
+
+std::string getPathToFile(std::string file_name)
+{
+    char current_dir[MAX_PATH] = { 0 };
+    char orig_dir[MAX_PATH] = { 0 };
+    GetCurrentDirectoryA(MAX_PATH, current_dir);
+    GetCurrentDirectoryA(MAX_PATH, orig_dir);
+
+    while (true)
+    {
+        std::string path = std::string(current_dir) + "\\" + file_name;
+
+        FILE* file = fopen(path.c_str(), "r");
+        if (file)
+        {
+            fclose(file);
+            SetCurrentDirectoryA(orig_dir);
+            return path;
+        }
+        else
+        {
+            char* last_slash = strrchr(current_dir, '\\');
+            if (last_slash)
+            {
+                *last_slash = '\0';
+                SetCurrentDirectoryA(current_dir);
+            }
+            else
+            {
+                printf("Unable to find file: %s\n", file_name.c_str());
+                exit(1);
+            }
+        }
+    }
+}

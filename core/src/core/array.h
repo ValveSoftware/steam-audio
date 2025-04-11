@@ -147,6 +147,17 @@ public:
     {
         memset(flatData(), 0, totalSize() * sizeof(T));
     }
+
+    void swap(Array<T, N>& other)
+    {
+        std::swap(mSize, other.mSize);
+        mElements.swap(other.mElements);
+        mPointers.swap(other.mPointers);
+        for (auto i = 0; i < N; ++i)
+        {
+            std::swap(mSizes[i], other.mSizes[i]);
+        }
+    }
 };
 
 // Base case specialization of Array<T, N> for the case of 1D arrays (N = 1).
@@ -222,6 +233,12 @@ public:
     void zero()
     {
         memset(flatData(), 0, totalSize() * sizeof(T));
+    }
+
+    void swap(Array<T, 1>& other)
+    {
+        std::swap(mSize, other.mSize);
+        mElements.swap(other.mElements);
     }
 };
 

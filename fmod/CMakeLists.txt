@@ -14,7 +14,7 @@
 
 cmake_minimum_required(VERSION 3.17)
 
-project(Phonon VERSION 4.6.0)
+project(Phonon VERSION 4.6.1)
 
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_MODULE_PATH "${CMAKE_HOME_DIRECTORY}/build")
@@ -184,7 +184,9 @@ find_package(FMOD REQUIRED)
 
 find_package(SteamAudio REQUIRED)
 
+include(SteamAudioHelpers)
 if (STEAMAUDIOFMOD_BUILD_DOCS)
+    get_host_bin_subdir(IPL_BIN_SUBDIR)
     set(Doxygen_ROOT ${CMAKE_HOME_DIRECTORY}/../core/deps/doxygen/bin/${IPL_BIN_SUBDIR})
     set(DOXYGEN_SKIP_DOT TRUE)
     find_package(Doxygen)

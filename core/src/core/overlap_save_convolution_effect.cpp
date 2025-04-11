@@ -44,6 +44,26 @@ void OverlapSaveFIR::reset()
     memset(mData.flatData(), 0, mData.totalSize() * sizeof(complex_t));
 }
 
+void OverlapSaveFIR::copy(const OverlapSaveFIR& src, OverlapSaveFIR& dst)
+{
+    auto numChannelsToCopy = std::min(src.numChannels(), dst.numChannels());
+    auto numBlocksToCopy = std::min(src.numBlocks(), dst.numBlocks());
+    auto numSpectrumSamplesToCopy = std::min(src.numSpectrumSamples(), dst.numSpectrumSamples());
+
+    for (auto i = 0; i < numChannelsToCopy; ++i)
+    {
+        for (auto j = 0; j < numBlocksToCopy; ++j)
+        {
+            memcpy(dst.mData[i][j], src.mData[i][j], numSpectrumSamplesToCopy * sizeof(complex_t));
+        }
+    }
+}
+
+void OverlapSaveFIR::swap(OverlapSaveFIR& a, OverlapSaveFIR& b)
+{
+    a.mData.swap(b.mData);
+}
+
 
 // --------------------------------------------------------------------------------------------------------------------
 // OverlapSavePartitioner
@@ -213,6 +233,103 @@ bool OverlapSaveConvolutionEffect::apply(const OverlapSaveConvolutionEffectParam
         }
 
         mPrevFFTIR.swap(params.fftIR->readBuffer);
+    }
+    else
+    {
+        mFFTWet.zero();
+        for (auto i = 0; i < params.numChannels; ++i)
+        {
+            for (auto j = 0; j < numBlocks; ++j)
+            {
+                auto index = static_cast<int>((mDryBlockIndex + j) % mFFTDryBlocks.size(0));
+                ArrayMath::multiplyAccumulate(static_cast<int>(mFFTDryBlocks.size(1)), mFFTDryBlocks[index], (*mPrevFFTIR)[i][j], mFFTWet[i]);
+            }
+        }
+    }
+
+    mNumTailBlocksRemaining = numBlocks - 1;
+
+    return crossfade;
+}
+
+AudioEffectState OverlapSaveConvolutionEffect::apply(const OverlapSaveConvolutionEffectDirectParams& params, const AudioBuffer& in, AudioBuffer& out)
+{
+    assert(in.numSamples() == out.numSamples());
+    assert(in.numChannels() == 1);
+    assert(out.numChannels() == mNumChannels);
+
+    PROFILE_FUNCTION();
+
+    auto crossfade = apply(params, in);
+
+    for (auto i = 0; i < params.numChannels; ++i)
+    {
+        mFFT.applyInverse(mFFTWet[i], mWet[i]);
+    }
+
+    if (crossfade)
+    {
+        for (auto i = 0; i < params.numChannels; ++i)
+        {
+            mFFT.applyInverse(mPrevFFTWet[i], mPrevWet[i]);
+
+            for (auto j = 0; j < mFrameSize; ++j)
+            {
+                auto weight = static_cast<float>(j) / static_cast<float>(mFrameSize);
+                mWet[i][j + mFrameSize] = (1.0f - weight) * mPrevWet[i][j + mFrameSize] + weight * mWet[i][j + mFrameSize];
+            }
+        }
+    }
+
+    out.makeSilent();
+
+    for (auto i = 0; i < params.numChannels; ++i)
+    {
+        memcpy(out[i], &mWet[i][mFrameSize], mFrameSize * sizeof(float));
+    }
+
+    return (mNumTailBlocksRemaining > 0) ? AudioEffectState::TailRemaining : AudioEffectState::TailComplete;
+}
+
+bool OverlapSaveConvolutionEffect::apply(const OverlapSaveConvolutionEffectDirectParams& params, const AudioBuffer& in)
+{
+    memcpy(&mDryBlock[0], &mDryBlock[mFrameSize], mFrameSize * sizeof(float));
+    memcpy(&mDryBlock[mFrameSize], in[0], mFrameSize * sizeof(float));
+
+    --mDryBlockIndex;
+    if (mDryBlockIndex < 0)
+    {
+        mDryBlockIndex = static_cast<int>(mFFTDryBlocks.size(0)) - 1;
+    }
+
+    mFFT.applyForward(mDryBlock.data(), mFFTDryBlocks[mDryBlockIndex]);
+
+    auto numBlocks = OverlapSaveConvolutionEffect::numBlocks(mFrameSize, mIRSize);
+
+    auto crossfade = params.fftIRUpdated;
+    if (crossfade)
+    {
+        mFFTWet.zero();
+        for (auto i = 0; i < params.numChannels; ++i)
+        {
+            for (auto j = 0; j < numBlocks; ++j)
+            {
+                auto index = static_cast<int>((mDryBlockIndex + j) % mFFTDryBlocks.size(0));
+                ArrayMath::multiplyAccumulate(static_cast<int>(mFFTDryBlocks.size(1)), mFFTDryBlocks[index], (*params.fftIR)[i][j], mFFTWet[i]);
+            }
+        }
+
+        mPrevFFTWet.zero();
+        for (auto i = 0; i < params.numChannels; ++i)
+        {
+            for (auto j = 0; j < numBlocks; ++j)
+            {
+                auto index = static_cast<int>((mDryBlockIndex + j) % mFFTDryBlocks.size(0));
+                ArrayMath::multiplyAccumulate(static_cast<int>(mFFTDryBlocks.size(1)), mFFTDryBlocks[index], (*mPrevFFTIR)[i][j], mPrevFFTWet[i]);
+            }
+        }
+
+        OverlapSaveFIR::swap(*mPrevFFTIR, (OverlapSaveFIR&) *params.fftIR);
     }
     else
     {

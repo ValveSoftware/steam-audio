@@ -56,6 +56,72 @@ void HybridReverbEffect::reset()
     mDelayEffectState = AudioEffectState::TailComplete;
 }
 
+AudioEffectState HybridReverbEffect::apply(const HybridReverbEffectDirectParams& params, const AudioBuffer& in, AudioBuffer& out)
+{
+    assert(in.numSamples() == out.numSamples());
+    assert(in.numChannels() == 1);
+
+    PROFILE_FUNCTION();
+
+    if (params.fftIR)
+    {
+        OverlapSaveConvolutionEffectDirectParams overlapSaveParams{};
+        overlapSaveParams.fftIR = params.fftIR;
+        overlapSaveParams.fftIRUpdated = params.fftIRUpdated;
+        overlapSaveParams.numChannels = params.numChannels;
+        overlapSaveParams.numSamples = params.numSamples;
+
+        mConvolutionEffectState = mConvolutionEffect.apply(overlapSaveParams, in, out);
+    }
+    else
+    {
+        out.makeSilent();
+        mConvolutionEffectState = AudioEffectState::TailComplete;
+    }
+
+    float _eqCoeffs[Bands::kNumBands] = {params.eqCoeffs[0], params.eqCoeffs[1], params.eqCoeffs[2]};
+    auto gain = 16.0f;
+    EQEffect::normalizeGains(_eqCoeffs, gain);
+
+    DelayEffectParams delayParams{};
+    delayParams.delayInSamples = params.delay;
+
+    mDelayEffectState = mDelayEffect.apply(delayParams, in, mDelayTemp);
+
+    EQEffectParams eqParams{};
+    eqParams.gains = _eqCoeffs;
+
+    mEQEffectState = mEQEffect.apply(eqParams, mDelayTemp, mEQTemp);
+
+    GainEffectParams gainParams{};
+    gainParams.gain = gain;
+
+    mGainEffectState = mGainEffect.apply(gainParams, mEQTemp, mGainTemp);
+
+    ReverbEffectParams reverbParams{};
+    reverbParams.reverb = params.reverb;
+
+    mParametricEffectState = mParametricEffect.apply(reverbParams, mGainTemp, mReverbTemp);
+
+    auto scalar = SphericalHarmonics::evaluate(0, 0, Vector3f{});
+    ArrayMath::scale(mFrameSize, mReverbTemp[0], scalar, mReverbTemp[0]);
+
+    ArrayMath::add(mFrameSize, out[0], mReverbTemp[0], out[0]);
+
+    if (mConvolutionEffectState == AudioEffectState::TailRemaining ||
+        mParametricEffectState == AudioEffectState::TailRemaining ||
+        mEQEffectState == AudioEffectState::TailRemaining ||
+        mGainEffectState == AudioEffectState::TailRemaining ||
+        mDelayEffectState == AudioEffectState::TailRemaining)
+    {
+        return AudioEffectState::TailRemaining;
+    }
+    else
+    {
+        return AudioEffectState::TailComplete;
+    }
+}
+
 AudioEffectState HybridReverbEffect::apply(const HybridReverbEffectParams& params,
                                            const AudioBuffer& in,
                                            AudioBuffer& out)

@@ -140,6 +140,7 @@ bool PathSimulator::findPaths(const Vector3f& source,
                               float* coeffs,
                               Vector3f* avgDirection,
                               float* distanceRatio,
+                              float* totalDeviation,
                               ValidationRayVisualizationCallback validationRayVisualization,
                               void* userData,
                               bool forceDirectOcclusion)
@@ -200,8 +201,9 @@ bool PathSimulator::findPaths(const Vector3f& source,
         ++numPaths;
     }
 
-    calcAmbisonicsCoeffsForPaths(source, listener, probes, starts, ends, numPaths, paths, pathWeights, order,
-                                 eqGains, coeffs);
+    calcAmbisonicsCoeffsForPaths(source, listener, probes, starts, ends, numPaths, paths, pathWeights, order, coeffs);
+
+    calcEQForPaths(probes, starts, ends, numPaths, paths, pathWeights, eqGains, totalDeviation);
 
     calcAverageDirectionForPaths(source, listener, probes, starts, ends, numPaths, paths, pathWeights, avgDirection);
 
@@ -487,8 +489,6 @@ void PathSimulator::calcDeviationTerm(float deviation,
 
 // For any single SoundPath, we project the corresponding virtual source into Ambisonics and scale the resulting SH
 // coefficients by a distance attenuation factor. The SH coefficients for all paths are weighted and summed.
-//
-// EQ coefficients are averaged.
 void PathSimulator::calcAmbisonicsCoeffsForPaths(const Vector3f& source,
                                                  const Vector3f& listener,
                                                  const ProbeBatch& probes,
@@ -498,67 +498,9 @@ void PathSimulator::calcAmbisonicsCoeffsForPaths(const Vector3f& source,
                                                  const SoundPath* paths,
                                                  const float* weights,
                                                  int order,
-                                                 float* eqGains,
                                                  float* coeffs)
 {
     PROFILE_FUNCTION();
-
-    if (eqGains)
-    {
-        memset(eqGains, 0, Bands::kNumBands * sizeof(float));
-        auto numValidPaths = 0;
-
-        for (auto i = 0; i < numPaths; ++i)
-        {
-            if (!paths[i].isValid())
-                continue;
-
-            if (starts[i] >= 0 && ends[i] >= 0)
-            {
-                float deviationTerm[Bands::kNumBands];
-                calcDeviationTerm(std::max(1e-6f, paths[i].deviation(probes, starts[i], ends[i])), deviationTerm);
-
-                float deviationTermReference[Bands::kNumBands];
-                calcDeviationTerm(1e-6f, deviationTermReference);
-                for (auto j = 0; j < Bands::kNumBands; ++j)
-                {
-                    deviationTerm[j] /= deviationTermReference[j];
-                }
-
-                auto overallGain = 1.0f;
-                EQEffect::normalizeGains(deviationTerm, overallGain);
-
-                for (auto j = 0; j < Bands::kNumBands; ++j)
-                {
-                    eqGains[j] += (overallGain * deviationTerm[j]);
-                }
-            }
-            else
-            {
-                for (auto j = 0; j < Bands::kNumBands; ++j)
-                {
-                    eqGains[j] += 1.0f;
-                }
-            }
-
-            ++numValidPaths;
-        }
-
-        if (numValidPaths > 0)
-        {
-            for (auto i = 0; i < Bands::kNumBands; ++i)
-            {
-                eqGains[i] /= numValidPaths;
-            }
-        }
-        else
-        {
-            for (auto i = 0; i < Bands::kNumBands; ++i)
-            {
-                eqGains[i] = 1.0f;
-            }
-        }
-    }
 
     if (coeffs)
     {
@@ -592,6 +534,85 @@ void PathSimulator::calcAmbisonicsCoeffsForPaths(const Vector3f& source,
         }
     }
 }
+
+void PathSimulator::calcEQForPaths(const ProbeBatch& probes,
+                                   int* starts,
+                                   int* ends,
+                                   int numPaths,
+                                   const SoundPath* paths,
+                                   const float* weights,
+                                   float* eqGains,
+                                   float* totalDeviation)
+{
+    PROFILE_FUNCTION();
+
+    if (eqGains)
+    {
+        memset(eqGains, 0, Bands::kNumBands * sizeof(float));
+        auto numValidPaths = 0;
+
+        for (auto i = 0; i < numPaths; ++i)
+        {
+            if (!paths[i].isValid())
+                continue;
+
+            if (starts[i] >= 0 && ends[i] >= 0)
+            {
+                float deviationTerm[Bands::kNumBands];
+                calcDeviationTerm(std::max(1e-6f, paths[i].deviation(probes, starts[i], ends[i])), deviationTerm);
+
+                float deviationTermReference[Bands::kNumBands];
+                calcDeviationTerm(1e-6f, deviationTermReference);
+                for (auto j = 0; j < Bands::kNumBands; ++j)
+                {
+                    deviationTerm[j] /= deviationTermReference[j];
+                }
+
+                auto overallGain = 1.0f;
+                EQEffect::normalizeGains(deviationTerm, overallGain);
+
+                for (auto j = 0; j < Bands::kNumBands; ++j)
+                {
+                    eqGains[j] += (weights[i] * overallGain * deviationTerm[j]);
+                }
+            }
+            else
+            {
+                for (auto j = 0; j < Bands::kNumBands; ++j)
+                {
+                    eqGains[j] += weights[i];
+                }
+            }
+
+            ++numValidPaths;
+        }
+
+        if (numValidPaths == 0)
+        {
+            for (auto i = 0; i < Bands::kNumBands; ++i)
+            {
+                eqGains[i] = 1.0f;
+            }
+        }
+    }
+
+    if (totalDeviation)
+    {
+        *totalDeviation = .0f;
+
+        for (auto i = 0; i < numPaths; ++i)
+        {
+            if (!paths[i].isValid())
+                continue;
+
+            if (starts[i] >= 0 && ends[i] >= 0)
+            {
+                *totalDeviation += weights[i] * paths[i].deviation(probes, starts[i], ends[i]);
+            }
+        }
+    }
+}
+
 
 void PathSimulator::calcAverageDirectionForPaths(const Vector3f& source,
                                                  const Vector3f& listener,

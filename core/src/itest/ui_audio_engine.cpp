@@ -73,6 +73,65 @@ UIAudioEngine::~UIAudioEngine()
 	Pa_Terminate();
 }
 
+AudioBuffer* UIAudioEngine::load(std::string& fileName, unsigned int* outSamplingRate)
+{
+	unsigned int numChannels = 0;
+	unsigned int samplingRate = 0;
+	drwav_uint64 numSamples = 0;
+	auto samples = drwav_open_file_and_read_pcm_frames_f32(fileName.c_str(), &numChannels, &samplingRate, &numSamples, nullptr);
+
+	if (!samples)
+		return nullptr;
+
+	unique_ptr<AudioBuffer> audioClip;
+	audioClip = make_unique<AudioBuffer>(numChannels, static_cast<int>(numSamples));
+	audioClip->write(samples);
+
+	drwav_free(samples, nullptr);
+
+	if (outSamplingRate)
+		*outSamplingRate = samplingRate;
+
+	return audioClip.release();
+}
+
+void UIAudioEngine::save(const float* flatdata, int numChannels, int numSamples, int samplingRate, const std::string& filePath)
+{
+	drwav_data_format format;
+	format.container = drwav_container_riff;		// RIFF container (standard WAV)
+	format.format = DR_WAVE_FORMAT_IEEE_FLOAT;		// 32-bit float
+	format.channels = numChannels;
+	format.sampleRate = samplingRate;
+	format.bitsPerSample = 32;
+
+	drwav wavWriter;
+	if (!drwav_init_file_write(&wavWriter, filePath.c_str(), &format, nullptr))
+	{
+		printf("Error: Failed to open %s for writing.\n", filePath.c_str());
+		return;
+	}
+
+	const unsigned int totalSamples = numSamples * numChannels;
+	float* interleavedData = new float[totalSamples];
+	for (int i = 0, k = 0; i < numSamples; ++i)
+	{
+		for (int j = 0; j < numChannels; ++j, ++k)
+		{
+			interleavedData[k] = flatdata[j * numSamples + i];
+		}
+	}
+
+	drwav_uint64 framesWritten = drwav_write_pcm_frames(&wavWriter, numSamples, interleavedData);
+	if (framesWritten != numSamples)
+	{
+		printf("Warning: All frames not written to the file %s.\n", filePath.c_str());
+	}
+
+	drwav_uninit(&wavWriter);
+	delete[] interleavedData;
+	printf("Saved file: %s\n", filePath.c_str());
+}
+
 void UIAudioEngine::play(int index)
 {
 	if (mPlaying)
@@ -80,13 +139,11 @@ void UIAudioEngine::play(int index)
 
 	auto fileName = kAudioClipsDirectory + mAudioClips[index];
 
-	unsigned int numChannels = 0;
-	unsigned int samplingRate = 0;
-	drwav_uint64 numSamples = 0;
-	auto samples = drwav_open_file_and_read_pcm_frames_f32(fileName.c_str(), &numChannels, &samplingRate, &numSamples, nullptr);
-	mAudioClip = make_unique<AudioBuffer>(numChannels, static_cast<int>(numSamples));
-	mAudioClip->write(samples);
-	drwav_free(samples, nullptr);
+	AudioBuffer* buffer = load(fileName);
+	if (!buffer)
+		return;
+
+	mAudioClip = ipl::unique_ptr<AudioBuffer>(buffer);
 	mPlayCursor = 0;
 
 	Pa_StartStream(mStream);

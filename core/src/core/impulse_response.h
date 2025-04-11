@@ -66,6 +66,16 @@ public:
 
     virtual void reset();
 
+    static void copy(const ImpulseResponse& src, ImpulseResponse& dst);
+
+    static void swap(ImpulseResponse& a, ImpulseResponse& b);
+
+    static void add(const ImpulseResponse& in1, const ImpulseResponse& in2, ImpulseResponse& out);
+
+    static void scale(const ImpulseResponse& in, float scalar, ImpulseResponse& out);
+
+    static void scaleAccumulate(const ImpulseResponse& in, float scalar, ImpulseResponse& out);
+
 protected:
     Array<float, 2> mData;
 };

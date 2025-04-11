@@ -54,6 +54,17 @@ struct HybridReverbEffectParams
     int numSamples = 0;
 };
 
+struct HybridReverbEffectDirectParams
+{
+    const OverlapSaveFIR* fftIR = nullptr;
+    bool fftIRUpdated = false;
+    const Reverb* reverb = nullptr;
+    const float* eqCoeffs = nullptr;
+    int delay = 0;
+    int numChannels = 0;
+    int numSamples = 0;
+};
+
 class HybridReverbEffect
 {
 public:
@@ -65,6 +76,8 @@ public:
     AudioEffectState apply(const HybridReverbEffectParams& params,
                            const AudioBuffer& in,
                            AudioBuffer& out);
+
+    AudioEffectState apply(const HybridReverbEffectDirectParams& params, const AudioBuffer& in, AudioBuffer& out);
 
     AudioEffectState tail(AudioBuffer& out);
 

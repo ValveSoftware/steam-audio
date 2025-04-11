@@ -42,6 +42,9 @@ public:
 
 	void stop();
 
+	static AudioBuffer* load(std::string& filePath, unsigned int* outSamplingRate = nullptr);
+	static void save(const float* flatdata, int numChannels, int numSamples, int samplingRate, const std::string& filePath);
+
 	std::vector<std::string> mAudioClips;
 	std::vector<const char*> mAudioClipsStr;
 

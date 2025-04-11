@@ -88,6 +88,8 @@ public:
 
     void copyFrom(const EnergyField& other);
 
+    static void swap(EnergyField& a, EnergyField& b);
+
     static void add(const EnergyField& in1,
                     const EnergyField& in2,
                     EnergyField& out);

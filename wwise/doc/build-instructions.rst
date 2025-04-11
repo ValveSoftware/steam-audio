@@ -69,18 +69,6 @@ To build the documentation, you will need:
 -   Doxygen 1.9 or later (https://www.doxygen.nl)
 -   Breathe (https://breathe.readthedocs.io)
 
-Preparing the repository
-^^^^^^^^^^^^^^^^^^^^^^^^
-
-After cloning the Steam Audio Git repository, the first step is to download the Steam Audio API libraries and
-place them in the correct locations in the Git repository. To do this, run the following from a command
-prompt in the ``wwise`` directory of the repository::
-
-    $ python setup.py
-
-This will download the appropriate release of the Steam Audio API from GitHub, extract it, and place the files
-in the appropriate locations.
-
 Building using the build script
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
