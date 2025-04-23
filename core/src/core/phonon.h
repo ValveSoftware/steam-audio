@@ -3742,12 +3742,16 @@ IPLAPI void IPLCALL iplSourceRelease(IPLSource* source);
 
 /** Adds a source to the set of sources processed by a simulator in subsequent simulations.
 
+    Call \c iplSimulatorCommit after calling this function for the changes to take effect.
+
     \param  simulator   The simulator being used.
     \param  source      The source to add.
 */
 IPLAPI void IPLCALL iplSourceAdd(IPLSource source, IPLSimulator simulator);
 
 /** Removes a source from the set of sources processed by a simulator in subsequent simulations.
+
+    Call \c iplSimulatorCommit after calling this function for the changes to take effect.
 
     \param  simulator   The simulator being used.
     \param  source      The source to remove.
