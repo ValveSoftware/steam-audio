@@ -14,6 +14,8 @@ Functions
 .. doxygenfunction:: iplAmbisonicsPanningEffectRelease
 .. doxygenfunction:: iplAmbisonicsPanningEffectReset
 .. doxygenfunction:: iplAmbisonicsPanningEffectApply
+.. doxygenfunction:: iplAmbisonicsPanningEffectGetTail
+.. doxygenfunction:: iplAmbisonicsPanningEffectGetTailSize
 
 Structures
 ^^^^^^^^^^

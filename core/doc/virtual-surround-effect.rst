@@ -14,6 +14,8 @@ Functions
 .. doxygenfunction:: iplVirtualSurroundEffectRelease
 .. doxygenfunction:: iplVirtualSurroundEffectReset
 .. doxygenfunction:: iplVirtualSurroundEffectApply
+.. doxygenfunction:: iplVirtualSurroundEffectGetTail
+.. doxygenfunction:: iplVirtualSurroundEffectGetTailSize
 
 Structures
 ^^^^^^^^^^

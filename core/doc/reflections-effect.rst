@@ -16,6 +16,8 @@ Functions
 .. doxygenfunction:: iplReflectionEffectRelease
 .. doxygenfunction:: iplReflectionEffectReset
 .. doxygenfunction:: iplReflectionEffectApply
+.. doxygenfunction:: iplReflectionEffectGetTail
+.. doxygenfunction:: iplReflectionEffectGetTailSize
 .. doxygenfunction:: iplReflectionMixerCreate
 .. doxygenfunction:: iplReflectionMixerRetain
 .. doxygenfunction:: iplReflectionMixerRelease

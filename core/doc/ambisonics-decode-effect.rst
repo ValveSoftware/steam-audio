@@ -14,6 +14,8 @@ Functions
 .. doxygenfunction:: iplAmbisonicsDecodeEffectRelease
 .. doxygenfunction:: iplAmbisonicsDecodeEffectReset
 .. doxygenfunction:: iplAmbisonicsDecodeEffectApply
+.. doxygenfunction:: iplAmbisonicsDecodeEffectGetTail
+.. doxygenfunction:: iplAmbisonicsDecodeEffectGetTailSize
 
 Structures
 ^^^^^^^^^^

@@ -14,6 +14,8 @@ Functions
 .. doxygenfunction:: iplDirectEffectRelease
 .. doxygenfunction:: iplDirectEffectReset
 .. doxygenfunction:: iplDirectEffectApply
+.. doxygenfunction:: iplDirectEffectGetTail
+.. doxygenfunction:: iplDirectEffectGetTailSize
 
 Structures
 ^^^^^^^^^^

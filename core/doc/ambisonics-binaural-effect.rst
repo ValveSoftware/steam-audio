@@ -14,6 +14,8 @@ Functions
 .. doxygenfunction:: iplAmbisonicsBinauralEffectRelease
 .. doxygenfunction:: iplAmbisonicsBinauralEffectReset
 .. doxygenfunction:: iplAmbisonicsBinauralEffectApply
+.. doxygenfunction:: iplAmbisonicsBinauralEffectGetTail
+.. doxygenfunction:: iplAmbisonicsBinauralEffectGetTailSize
 
 Structures
 ^^^^^^^^^^

@@ -14,6 +14,8 @@ Functions
 .. doxygenfunction:: iplAmbisonicsRotationEffectRelease
 .. doxygenfunction:: iplAmbisonicsRotationEffectReset
 .. doxygenfunction:: iplAmbisonicsRotationEffectApply
+.. doxygenfunction:: iplAmbisonicsRotationEffectGetTail
+.. doxygenfunction:: iplAmbisonicsRotationEffectGetTailSize
 
 Structures
 ^^^^^^^^^^

@@ -14,6 +14,8 @@ Functions
 .. doxygenfunction:: iplPathEffectRelease
 .. doxygenfunction:: iplPathEffectReset
 .. doxygenfunction:: iplPathEffectApply
+.. doxygenfunction:: iplPathEffectGetTail
+.. doxygenfunction:: iplPathEffectGetTailSize
 
 Structures
 ^^^^^^^^^^
