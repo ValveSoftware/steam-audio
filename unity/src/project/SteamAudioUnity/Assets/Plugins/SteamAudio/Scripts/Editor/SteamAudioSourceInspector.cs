@@ -217,11 +217,13 @@ namespace SteamAudio
                                 EditorGUILayout.PropertyField(mTransmissionMid);
                             }
                         }
-                        else if ((TransmissionInput) mTransmissionInput.enumValueIndex == TransmissionInput.SimulationDefined)
-                        {
-                            EditorGUILayout.PropertyField(mTransmissionRays);
-                        }
                     }
+                }
+
+                if (!audioEngineIsUnity ||
+                    (TransmissionInput) mTransmissionInput.enumValueIndex == TransmissionInput.SimulationDefined)
+                {
+                    EditorGUILayout.PropertyField(mTransmissionRays);
                 }
             }
 
