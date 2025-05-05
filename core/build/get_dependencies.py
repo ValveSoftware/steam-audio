@@ -528,6 +528,7 @@ def configure_cmake(name, cmake_layers, platform, cmake, vs_version, ndk_path, e
     elif platform == 'osx':
         cmake_args += ['-G', 'Xcode']
         cmake_args += ['-DCMAKE_OSX_ARCHITECTURES=x86_64;arm64']
+        cmake_args += ['-DCMAKE_POLICY_VERSION_MINIMUM=3.5']
     elif platform == 'android-armv7':
         cmake_args += ['-G', 'Unix Makefiles']
         cmake_args += ['-DCMAKE_TOOLCHAIN_FILE=' + toolchain('android_armv7')]
