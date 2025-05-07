@@ -45,8 +45,6 @@ namespace SteamAudio
             {
                 mAudioSource.SetSpatializerFloat(index, -1);
             }
-            
-            mAudioSource.SetSpatializerFloat(index, -1);
 
             if (mSteamAudioSource)
             {
