@@ -40,6 +40,12 @@ namespace SteamAudio
         public override void Destroy()
         {
             var index = 28;
+
+            if (mAudioSource != null)
+            {
+                mAudioSource.SetSpatializerFloat(index, -1);
+            }
+            
             mAudioSource.SetSpatializerFloat(index, -1);
 
             if (mSteamAudioSource)
