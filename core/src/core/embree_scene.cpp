@@ -396,7 +396,7 @@ void EmbreeScene::dumpObj(const string& fileName) const
         for (auto j = 0; j < staticMeshes[i]->numVertices(); ++j)
         {
             auto vertex = Vector4f(vertices[4 * j + 0], vertices[4 * j + 1], vertices[4 * j + 2], 1.0f);
-            auto transformedVertex = transforms[i].transposedCopy() * vertex;
+            auto transformedVertex = transforms[i] * vertex;
             fprintf(objFile, "v %f %f %f\n", transformedVertex.elements[0], transformedVertex.elements[1],
                     transformedVertex.elements[2]);
         }

@@ -356,7 +356,7 @@ void Scene::dumpObj(const string& fileName) const
         for (auto k = 0; k < _staticMesh.numVertices(); ++k)
         {
             const auto& vertex = _staticMesh.mesh().vertex(k);
-            auto transformedVertex = transforms[i].transposedCopy() * Vector4f(vertex.x(), vertex.y(), vertex.z(), 1.0f);
+            auto transformedVertex = transforms[i] * Vector4f(vertex.x(), vertex.y(), vertex.z(), 1.0f);
             fprintf(objFile, "v %f %f %f\n", transformedVertex.elements[0], transformedVertex.elements[1], transformedVertex.elements[2]);
         }
 

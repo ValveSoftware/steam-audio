@@ -38,23 +38,20 @@ InstancedMesh::InstancedMesh(shared_ptr<Scene> subScene,
         mNumTriangles += staticMesh->numTriangles();
     }
 
-    mTransform = mTransform.transposedCopy();
     inverse(mTransform, mInverseTransform);
 }
 
 void InstancedMesh::updateTransform(const IScene& scene,
                                     const Matrix4x4f& transform)
 {
-    auto transpose = transform.transposedCopy();
-
     // If the elements of the transform matrix have changed, consider this instanced mesh to have changed since the
     // last call to commit().
-    if (memcmp(transpose.elements, mTransform.elements, 16 * sizeof(float)) != 0)
+    if (memcmp(transform.elements, mTransform.elements, 16 * sizeof(float)) != 0)
     {
         mHasChanged = true;
     }
 
-    mTransform = transpose;
+    mTransform = transform;
     inverse(mTransform, mInverseTransform);
 }
 

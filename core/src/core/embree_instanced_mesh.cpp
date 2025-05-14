@@ -68,7 +68,7 @@ void EmbreeInstancedMesh::updateTransform(const IScene& scene,
     }
 
     mTransform = transform;
-    rtcSetTransform2(_scene.scene(), mInstanceIndex, RTC_MATRIX_ROW_MAJOR, mTransform.elements, 0);
+    rtcSetTransform2(_scene.scene(), mInstanceIndex, RTC_MATRIX_COLUMN_MAJOR, mTransform.elements, 0);
 }
 
 void EmbreeInstancedMesh::commit(const IScene& scene)

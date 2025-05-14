@@ -163,7 +163,7 @@ namespace SteamAudio
             probeGenerationParams.type = placementStrategy;
             probeGenerationParams.spacing = horizontalSpacing;
             probeGenerationParams.height = heightAboveFloor;
-            probeGenerationParams.transform = Common.TransposeMatrix(Common.ConvertTransform(gameObject.transform)); // Probe generation requires a transposed matrix.
+            probeGenerationParams.transform = Common.ConvertTransform(gameObject.transform);
 
             probeArray.GenerateProbes(scene, probeGenerationParams);
 

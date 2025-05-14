@@ -64,7 +64,7 @@ void CProbeArray::generateProbes(IScene* scene,
     if (!scene || !params)
         return;
 
-    const auto& _transform = *reinterpret_cast<Matrix4x4f*>(&params->transform);
+    auto _transform = reinterpret_cast<Matrix4x4f&>(params->transform).transposedCopy();
     auto _type = static_cast<ProbeGenerationType>(params->type);
 
     auto _scene = reinterpret_cast<CScene*>(scene)->mHandle.get();
