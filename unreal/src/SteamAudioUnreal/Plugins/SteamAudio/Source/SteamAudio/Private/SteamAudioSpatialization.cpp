@@ -16,6 +16,7 @@
 
 #include "SteamAudioSpatialization.h"
 #include "Components/AudioComponent.h"
+#include "GameFramework/Actor.h"
 #include "HAL/UnrealMemory.h"
 #include "SteamAudioCommon.h"
 #include "SteamAudioManager.h"
@@ -44,7 +45,9 @@ FSteamAudioSpatializationSource::FSteamAudioSpatializationSource()
     , SpatializedPathingBuffer()
     , OutBuffer()
     , PrevOrder(-1)
-{}
+{
+    PathingCoeffs.Reserve(16);
+}
 
 FSteamAudioSpatializationSource::~FSteamAudioSpatializationSource()
 {
@@ -212,6 +215,8 @@ void FSteamAudioSpatializationPlugin::OnInitSource(const uint32 SourceId, const 
         {
             UE_LOG(LogSteamAudio, Error, TEXT("Unable to create pathing effect. [%d]"), Status);
         }
+
+        Source.PathingCoeffs.SetNumZeroed(CalcNumChannelsForAmbisonicOrder(PathingSettings.maxOrder));
     }
 
     if ((!Source.AmbisonicsDecodeEffect || Source.PrevOrder != SimulationSettings.maxOrder) && Source.HRTF)
@@ -347,6 +352,11 @@ void FSteamAudioSpatializationPlugin::ProcessAudio(const FAudioPluginSourceInput
 
             IPLSimulationOutputs Outputs = SteamAudioSourceComponent->GetOutputs(static_cast<IPLSimulationFlags>(IPL_SIMULATIONFLAGS_REFLECTIONS | IPL_SIMULATIONFLAGS_PATHING));
 
+            if (Outputs.pathing.shCoeffs)
+            {
+                FMemory::Memcpy(Source.PathingCoeffs.GetData(), Outputs.pathing.shCoeffs, Source.PathingCoeffs.Num() * sizeof(float));
+            }
+
             for (int i = 0; i < InBuffer.numSamples; ++i)
             {
                 Source.PathingInputBuffer.data[0][i] = Source.PathingMixLevel * InBuffer.data[0][i];
@@ -357,6 +367,12 @@ void FSteamAudioSpatializationPlugin::ProcessAudio(const FAudioPluginSourceInput
             PathingParams.binaural = Source.bApplyHRTFToPathing ? IPL_TRUE : IPL_FALSE;
             PathingParams.hrtf = Source.HRTF;
             PathingParams.listener = FSteamAudioModule::GetManager().GetListenerCoordinates();
+
+            PathingParams.shCoeffs = Source.PathingCoeffs.GetData();
+            for (int i = 0; i < 3; i++)
+            {
+                PathingParams.eqCoeffs[i] = FMath::Max(PathingParams.eqCoeffs[i], 0.1f);
+            }
 
             iplPathEffectApply(Source.PathEffect, &PathingParams, &Source.PathingInputBuffer, &Source.SpatializedPathingBuffer);
 

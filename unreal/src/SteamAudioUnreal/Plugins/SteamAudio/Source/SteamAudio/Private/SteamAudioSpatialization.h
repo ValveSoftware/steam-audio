@@ -69,6 +69,8 @@ struct FSteamAudioSpatializationSource
 
     int PrevOrder;
 
+    TArray<float> PathingCoeffs;
+
     void Reset();
 
     void ClearBuffers();
