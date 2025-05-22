@@ -192,7 +192,7 @@ extern "C" {
 /**
  *  DSP parameters for the "Steam Audio Spatializer" effect.
 */
-typedef enum IPL_SPATIALIZE_PARAMS
+typedef enum IPLSpatializerParams
 {
     /**
      *  **Type**: `FMOD_DSP_PARAMETER_TYPE_DATA`
@@ -551,12 +551,12 @@ typedef enum IPL_SPATIALIZE_PARAMS
 
     /** The number of parameters in this effect. */
     IPL_SPATIALIZE_NUM_PARAMS
-} IPL_SPATIALIZE_PARAMS;
+} IPLSpatializerParams;
 
 /**
  *  DSP parameters for the "Steam Audio Reverb" effect.
  */
-typedef enum IPL_REVERB_PARAMS
+typedef enum IPLReverbParams
 {
     /**
      *  **Type**: `FMOD_DSP_PARAMETER_TYPE_BOOL`
@@ -581,12 +581,12 @@ typedef enum IPL_REVERB_PARAMS
 
     /** The number of parameters in this effect. */
     IPL_REVERB_NUM_PARAMS
-} IPL_REVERB_PARAMS;
+} IPLReverbParams;
 
 /**
  *  DSP parameters for the "Steam Audio Mixer Return" effect.
  */
-typedef enum IPL_MIXRETURN_PARAMS
+typedef enum IPLMixerReturnParams
 {
     /**
      *  **Type**: `FMOD_DSP_PARAMETER_TYPE_BOOL`
@@ -611,7 +611,7 @@ typedef enum IPL_MIXRETURN_PARAMS
 
     /** The number of parameters in this effect. */
     IPL_MIXRETURN_NUM_PARAMS
-} IPL_MIXRETURN_PARAMS;
+} IPLMixerReturnParams;
 
 // This function is called by FMOD Studio when it loads plugins. It returns metadata that describes all of the
 // effects implemented in this DLL.

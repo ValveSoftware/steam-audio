@@ -15,6 +15,6 @@ Functions
 DSP Parameters
 ^^^^^^^^^^^^^^
 
-.. doxygenenum:: IPL_SPATIALIZE_PARAMS
-.. doxygenenum:: IPL_REVERB_PARAMS
-.. doxygenenum:: IPL_MIXRETURN_PARAMS
+.. doxygenenum:: IPLSpatializerParams
+.. doxygenenum:: IPLReverbParams
+.. doxygenenum:: IPLMixerReturnParams
