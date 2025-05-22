@@ -20,53 +20,24 @@ namespace SteamAudioFMOD {
 
 namespace ReverbEffect {
 
-/**
- *  DSP parameters for the "Steam Audio Reverb" effect.
- */
-enum Params
-{
-    /**
-     *  **Type**: `FMOD_DSP_PARAMETER_TYPE_BOOL`
-     *
-     *  If true, applies HRTF-based 3D audio rendering to reverb. Results in an improvement in spatialization quality
-     *  when using convolution or hybrid reverb, at the cost of slightly increased CPU usage.
-     */
-    BINAURAL,
-
-    /**
-     *  **Type**: `FMOD_DSP_PARAMETER_TYPE_INT`
-     *
-     *  **Range**: 0 to 2.
-     *
-     *  Controls the output format.
-     *
-     *  - `0`: Output will be the format in FMOD's mixer.
-     *  - `1`: Output will be the format from FMOD's final output.
-     *  - `2`: Output will be the format from the event's input.
-     */
-    OUTPUT_FORMAT,
-
-    /** The number of parameters in this effect. */
-    NUM_PARAMS
-};
 
 FMOD_DSP_PARAMETER_DESC gParams[] = {
     { FMOD_DSP_PARAMETER_TYPE_BOOL, "Binaural", "", "Spatialize reflected sound using HRTF." },
     { FMOD_DSP_PARAMETER_TYPE_INT, "OutputFormat", "", "Output Format" },
 };
 
-FMOD_DSP_PARAMETER_DESC* gParamsArray[NUM_PARAMS];
+FMOD_DSP_PARAMETER_DESC* gParamsArray[IPL_REVERB_NUM_PARAMS];
 const char* gOutputFormatValues[] = { "From Mixer", "From Final Out", "From Input" };
 
 void initParamDescs()
 {
-    for (auto i = 0; i < NUM_PARAMS; ++i)
+    for (auto i = 0; i < IPL_REVERB_NUM_PARAMS; ++i)
     {
         gParamsArray[i] = &gParams[i];
     }
 
-    gParams[BINAURAL].booldesc = {false};
-    gParams[OUTPUT_FORMAT].intdesc = { 0, 2, 0, false, gOutputFormatValues };
+    gParams[IPL_REVERB_BINAURAL].booldesc = {false};
+    gParams[IPL_REVERB_OUTPUT_FORMAT].intdesc = { 0, 2, 0, false, gOutputFormatValues };
 }
 
 struct State
@@ -251,7 +222,7 @@ FMOD_RESULT F_CALL getBool(FMOD_DSP_STATE* state,
 
     switch (index)
     {
-    case BINAURAL:
+    case IPL_REVERB_BINAURAL:
         *value = effect->binaural;
         break;
     default:
@@ -269,7 +240,7 @@ FMOD_RESULT F_CALL setBool(FMOD_DSP_STATE* state,
 
     switch (index)
     {
-    case BINAURAL:
+    case IPL_REVERB_BINAURAL:
         effect->binaural = value;
         break;
     default:
@@ -288,7 +259,7 @@ FMOD_RESULT F_CALL getInt(FMOD_DSP_STATE* state,
 
     switch (index)
     {
-    case OUTPUT_FORMAT:
+    case IPL_REVERB_OUTPUT_FORMAT:
         *value = static_cast<int>(effect->outputFormat);
         break;
     default:
@@ -306,7 +277,7 @@ FMOD_RESULT F_CALL setInt(FMOD_DSP_STATE* state,
 
     switch (index)
     {
-    case OUTPUT_FORMAT:
+    case IPL_REVERB_OUTPUT_FORMAT:
         effect->outputFormat = static_cast<ParameterSpeakerFormatType>(value);
         break;
     default:
@@ -432,7 +403,7 @@ FMOD_DSP_DESCRIPTION gReverbEffect
     nullptr,
     ReverbEffect::process,
     nullptr,
-    ReverbEffect::NUM_PARAMS,
+    IPL_REVERB_NUM_PARAMS,
     ReverbEffect::gParamsArray,
     nullptr,
     ReverbEffect::setInt,

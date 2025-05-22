@@ -28,370 +28,6 @@ extern std::shared_ptr<SourceManager> gSourceManager;
 
 namespace SpatializeEffect {
 
-/**
- *  DSP parameters for the "Steam Audio Spatializer" effect.
- */
-enum Params
-{
-    /**
-     *  **Type**: `FMOD_DSP_PARAMETER_TYPE_DATA`
-     *
-     *  World-space position of the source. Automatically written by FMOD Studio.
-     */
-    SOURCE_POSITION,
-
-    /**
-     *  **Type**: `FMOD_DSP_PARAMETER_TYPE_DATA`
-     *
-     *  Overall linear gain of this effect. Automatically read by FMOD Studio.
-     */
-    OVERALL_GAIN,
-
-    /**
-     *  **Type**: `FMOD_DSP_PARAMETER_TYPE_INT`
-     *
-     *  **Range**: 0 to 2.
-     *
-     *  How to render distance attenuation.
-     *
-     *  -   `0`: Don't render distance attenuation.
-     *  -   `1`: Use a distance attenuation value calculated using the default physics-based model.
-     *  -   `2`: Use a distance attenuation value calculated using the curve specified in the FMOD Studio UI.
-     */
-    APPLY_DISTANCEATTENUATION,
-
-    /**
-     *  **Type**: `FMOD_DSP_PARAMETER_TYPE_INT`
-     *
-     *  **Range**: 0 to 2.
-     *
-     *  How to render air absorption.
-     *
-     *  -   `0`: Don't render air absorption.
-     *  -   `1`: Use air absorption values calculated using the default exponential decay model.
-     *  -   `2`: Use air absorption values specified in the \c AIRABSORPTION_LOW, \c AIRABSORPTION_MID, and
-     *           \c AIRABSORPTION_HIGH parameters.
-     */
-    APPLY_AIRABSORPTION,
-
-    /**
-     *  **Type**: `FMOD_DSP_PARAMETER_TYPE_INT`
-     *
-     *  **Range**: 0 to 2.
-     *
-     *  How to render directivity.
-     *
-     *  -   `0`: Don't render directivity.
-     *  -   `1`: Use a directivity value calculated using the default dipole model, driven by the
-     *           \c DIRECTIVITY_DIPOLEWEIGHT and \c DIRECTIVITY_DIPOLEPOWER parameters.
-     *  -   `2`: Use the directivity value specified in the \c DIRECTIVITY parameter.
-     */
-    APPLY_DIRECTIVITY,
-
-    /**
-     *  **Type**: `FMOD_DSP_PARAMETER_TYPE_INT`
-     *
-     *  **Range**: 0 to 2.
-     *
-     *  How to render occlusion.
-     *
-     *  -   `0`: Don't render occlusion.
-     *  -   `1`: Use the occlusion value calculated by the game engine using simulation, and provided via the
-     *           \c SIMULATION_OUTPUTS parameter.
-     *  -   `2`: Use the occlusion value specified in the \c OCCLUSION parameter.
-     */
-    APPLY_OCCLUSION,
-
-    /**
-     *  **Type**: `FMOD_DSP_PARAMETER_TYPE_INT`
-     *
-     *  **Range**: 0 to 2.
-     *
-     *  How to render transmission.
-     *
-     *  -   `0`: Don't render transmission.
-     *  -   `1`: Use the transmission values calculated by the game engine using simulation, and provided via the
-     *           \c SIMULATION_OUTPUTS parameter.
-     *  -   `2`: Use the transmission values specified in the \c TRANSMISSION_LOW, \c TRANSMISSION_MID, and
-     *           \c TRANSMISSION_HIGH parameters.
-     */
-    APPLY_TRANSMISSION,
-
-    /**
-     *  **Type**: `FMOD_DSP_PARAMETER_TYPE_BOOL`
-     *
-     *  If true, reflections are rendered, using the data calculated by the game engine using simulation, and provided
-     *  via the \c SIMULATION_OUTPUTS parameter.
-     */
-    APPLY_REFLECTIONS,
-
-    /**
-     *  **Type**: `FMOD_DSP_PARAMETER_TYPE_BOOL`
-     *
-     *  If true, pathing is rendered, using the data calculated by the game engine using simulation, and provided
-     *  via the \c SIMULATION_OUTPUTS parameter.
-     */
-    APPLY_PATHING,
-
-    /**
-     *  **Type**: `FMOD_DSP_PARAMETER_TYPE_INT`
-     *
-     *  **Range**: 0 to 1.
-     *
-     *  Controls how HRTFs are interpolated when the source moves relative to the listener.
-     *
-     *  - `0`: Nearest-neighbor interpolation.
-     *  - `1`: Bilinear interpolation.
-     */
-    HRTF_INTERPOLATION,
-
-    /**
-     *  **Type**: `FMOD_DSP_PARAMETER_TYPE_FLOAT`
-     *
-     *  Not currently used.
-     */
-    DISTANCEATTENUATION,
-
-    /**
-     *  **Type**: `FMOD_DSP_PARAMETER_TYPE_INT`
-     *
-     *  **Range**: 0 to 4.
-     *
-     *  Type of distance attenuation curve preset to use when \c APPLY_DISTANCEATTENUATION is \c 1.
-     *
-     *  - `0`: Linear squared rolloff.
-     *  - `1`: Linear rolloff.
-     *  - `2`: Inverse rolloff.
-     *  - `3`: Inverse squared rolloff.
-     *  - `4`: Custom rolloff.
-     */
-    DISTANCEATTENUATION_ROLLOFFTYPE,
-
-    /**
-     *  **Type**: `FMOD_DSP_PARAMETER_TYPE_FLOAT`
-     *
-     *  **Range**: 0 to 10000.
-     *
-     *  Minimum distance value for the distance attenuation curve.
-     */
-    DISTANCEATTENUATION_MINDISTANCE,
-
-    /**
-     *  **Type**: `FMOD_DSP_PARAMETER_TYPE_FLOAT`
-     *
-     *  **Range**: 0 to 10000.
-     *
-     *  Maximum distance value for the distance attenuation curve.
-     */
-    DISTANCEATTENUATION_MAXDISTANCE,
-
-    /**
-     *  **Type**: `FMOD_DSP_PARAMETER_TYPE_FLOAT`
-     *
-     *  **Range**: 0 to 1.
-     *
-     *  The low frequency (up to 800 Hz) EQ value for air absorption. Only used if \c APPLY_AIRABSORPTION is set to
-     *  \c 2. 0 = low frequencies are completely attenuated, 1 = low frequencies are not attenuated at all.
-     */
-    AIRABSORPTION_LOW,
-
-    /**
-     *  **Type**: `FMOD_DSP_PARAMETER_TYPE_FLOAT`
-     *
-     *  **Range**: 0 to 1.
-     *
-     *  The middle frequency (800 Hz - 8 kHz) EQ value for air absorption. Only used if \c APPLY_AIRABSORPTION is set
-     *  to \c 2. 0 = middle frequencies are completely attenuated, 1 = middle frequencies are not attenuated at all.
-     */
-    AIRABSORPTION_MID,
-
-    /**
-     *  **Type**: `FMOD_DSP_PARAMETER_TYPE_FLOAT`
-     *
-     *  **Range**: 0 to 1.
-     *
-     *  The high frequency (8 kHz and above) EQ value for air absorption. Only used if \c APPLY_AIRABSORPTION is set to
-     *  \c 2. 0 = high frequencies are completely attenuated, 1 = high frequencies are not attenuated at all.
-     */
-    AIRABSORPTION_HIGH,
-
-    /**
-     *  **Type**: `FMOD_DSP_PARAMETER_TYPE_FLOAT`
-     *
-     *  **Range**: 0 to 1.
-     *
-     *  The directivity attenuation value. Only used if \c APPLY_DIRECTIVITY is set to \c 2. 0 = sound is completely
-     *  attenuated, 1 = sound is not attenuated at all.
-     */
-    DIRECTIVITY,
-
-    /**
-     *  **Type**: `FMOD_DSP_PARAMETER_TYPE_FLOAT`
-     *
-     *  **Range**: 0 to 1.
-     *
-     *  Blends between monopole (omnidirectional) and dipole directivity patterns. 0 = pure monopole (sound is emitted
-     *  in all directions with equal intensity), 1 = pure dipole (sound is focused to the front and back of the source).
-     *  At 0.5, the source has a cardioid directivity, with most of the sound emitted to the front of the source. Only
-     *  used if \c APPLY_DIRECTIVITY is set to \c 1.
-     */
-    DIRECTIVITY_DIPOLEWEIGHT,
-
-    /**
-     *  **Type**: `FMOD_DSP_PARAMETER_TYPE_FLOAT`
-     *
-     *  **Range**: 0 to 4.
-     *
-     *  Controls how focused the dipole directivity is. Higher values result in sharper directivity patterns. Only used
-     *  if \c APPLY_DIRECTIVITY is set to \c 1.
-     */
-    DIRECTIVITY_DIPOLEPOWER,
-
-    /**
-     *  **Type**: `FMOD_DSP_PARAMETER_TYPE_FLOAT`
-     *
-     *  **Range**: 0 to 1.
-     *
-     *  The occlusion attenuation value. Only used if \c APPLY_OCCLUSION is set to \c 2. 0 = sound is completely
-     *  attenuated, 1 = sound is not attenuated at all.
-     */
-    OCCLUSION,
-
-    /**
-     *  **Type**: `FMOD_DSP_PARAMETER_TYPE_INT`
-     *
-     *  **Range**: 0 to 1.
-     *
-     *  Specifies how the transmission filter is applied.
-     *
-     * - `0`: Transmission is modeled as a single attenuation factor.
-     * - `1`: Transmission is modeled as a 3-band EQ.
-     */
-    TRANSMISSION_TYPE,
-
-    /**
-     *  **Type**: `FMOD_DSP_PARAMETER_TYPE_FLOAT`
-     *
-     *  **Range**: 0 to 1.
-     *
-     *  The low frequency (up to 800 Hz) EQ value for transmission. Only used if \c APPLY_TRANSMISSION is set to \c 2.
-     *  0 = low frequencies are completely attenuated, 1 = low frequencies are not attenuated at all.
-     */
-    TRANSMISSION_LOW,
-
-    /**
-     *  **Type**: `FMOD_DSP_PARAMETER_TYPE_FLOAT`
-     *
-     *  **Range**: 0 to 1.
-     *
-     *  The middle frequency (800 Hz to 8 kHz) EQ value for transmission. Only used if \c APPLY_TRANSMISSION is set to
-     *  \c 2. 0 = middle frequencies are completely attenuated, 1 = middle frequencies are not attenuated at all.
-     */
-    TRANSMISSION_MID,
-
-    /**
-     *  **Type**: `FMOD_DSP_PARAMETER_TYPE_FLOAT`
-     *
-     *  **Range**: 0 to 1.
-     *
-     *  The high frequency (8 kHz and above) EQ value for transmission. Only used if \c APPLY_TRANSMISSION is set to
-     *  \c 2. 0 = high frequencies are completely attenuated, 1 = high frequencies are not attenuated at all.
-     */
-    TRANSMISSION_HIGH,
-
-    /**
-     *  **Type**: `FMOD_DSP_PARAMETER_TYPE_FLOAT`
-     *
-     *  **Range**: 0 to 1.
-     *
-     *  The contribution of the direct sound path to the overall mix for this event. Lower values reduce the
-     *  contribution more.
-     */
-    DIRECT_MIXLEVEL,
-
-    /**
-     *  **Type**: `FMOD_DSP_PARAMETER_TYPE_BOOL`
-     *
-     *  If true, applies HRTF-based 3D audio rendering to reflections. Results in an improvement in spatialization
-     *  quality when using convolution or hybrid reverb, at the cost of slightly increased CPU usage.
-     */
-    REFLECTIONS_BINAURAL,
-
-    /**
-     *  **Type**: `FMOD_DSP_PARAMETER_TYPE_FLOAT`
-     *
-     *  **Range**: 0 to 10.
-     *
-     *  The contribution of reflections to the overall mix for this event. Lower values reduce the contribution more.
-     */
-    REFLECTIONS_MIXLEVEL,
-
-    /**
-     *  **Type**: `FMOD_DSP_PARAMETER_TYPE_BOOL`
-     *
-     *  If true, applies HRTF-based 3D audio rendering to pathing. Results in an improvement in spatialization
-     *  quality, at the cost of slightly increased CPU usage.
-     */
-    PATHING_BINAURAL,
-
-    /**
-     *  **Type**: `FMOD_DSP_PARAMETER_TYPE_FLOAT`
-     *
-     *  **Range**: 0 to 10.
-     *
-     *  The contribution of pathing to the overall mix for this event. Lower values reduce the contribution more.
-     */
-    PATHING_MIXLEVEL,
-
-    /**
-     *  **Type**: `FMOD_DSP_PARAMETER_TYPE_DATA`
-     *
-     *  **DEPRECATED**
-     *
-     *  Pointer to the `IPLSimulationOutputs` structure containing simulation results.
-     */
-    SIMULATION_OUTPUTS,
-
-    /**
-     *  **Type**: `FMOD_DSP_PARAMETER_TYPE_BOOL`
-     *
-     *  If true, applies HRTF-based 3D audio rendering to the direct sound path. Otherwise, sound is panned based on
-     *  the speaker configuration.
-     */
-    DIRECT_BINAURAL,
-
-    /**
-     *  **Type**: `FMOD_DSP_PARAMETER_TYPE_DATA`
-     *
-     *  (FMOD Studio 2.02+) The event's min/max distance range. Automatically set by FMOD Studio.
-     */
-    DISTANCE_ATTENUATION_RANGE,
-
-    /**
-     *  **Type**: `FMOD_DSP_PARAMETER_TYPE_INT`
-     *
-     *  Handle of the `IPLSource` object to use for obtaining simulation results. The handle can
-     *  be obtained by calling `iplFMODAddSource`.
-     */
-    SIMULATION_OUTPUTS_HANDLE,
-    
-    /**
-     *  **Type**: `FMOD_DSP_PARAMETER_TYPE_INT`
-     *
-     *  **Range**: 0 to 2.
-     *
-     *  Controls the output format.
-     *
-     *  - `0`: Output will be the format in FMOD's mixer.
-     *  - `1`: Output will be the format from FMOD's final output.
-     *  - `2`: Output will be the format from the event's input.
-     */
-    OUTPUT_FORMAT,
-
-    /** The number of parameters in this effect. */
-    NUM_PARAMS
-};
-
 FMOD_DSP_PARAMETER_DESC gParams[] = {
     { FMOD_DSP_PARAMETER_TYPE_DATA, "SourcePos", "", "Position of the source." },
     { FMOD_DSP_PARAMETER_TYPE_DATA, "OverallGain", "", "Overall gain." },
@@ -430,7 +66,7 @@ FMOD_DSP_PARAMETER_DESC gParams[] = {
     { FMOD_DSP_PARAMETER_TYPE_INT, "OutputFormat", "", "Output Format" },
 };
 
-FMOD_DSP_PARAMETER_DESC* gParamsArray[NUM_PARAMS];
+FMOD_DSP_PARAMETER_DESC* gParamsArray[IPL_SPATIALIZE_NUM_PARAMS];
 
 const char* gParameterApplyTypeValues[] = {"Off", "Simulation-Defined", "User-Defined"};
 const char* gDistanceAttenuationTypeValues[] = {"Off", "Physics-Based", "Curve-Driven"};
@@ -441,46 +77,46 @@ const char* gOutputFormatValues[] = {"From Mixer", "From Final Out", "From Input
 
 void initParamDescs()
 {
-    for (auto i = 0; i < NUM_PARAMS; ++i)
+    for (auto i = 0; i < IPL_SPATIALIZE_NUM_PARAMS; ++i)
     {
         gParamsArray[i] = &gParams[i];
     }
 
-    gParams[SOURCE_POSITION].datadesc = {FMOD_DSP_PARAMETER_DATA_TYPE_3DATTRIBUTES};
-    gParams[OVERALL_GAIN].datadesc = {FMOD_DSP_PARAMETER_DATA_TYPE_OVERALLGAIN};
-    gParams[APPLY_DISTANCEATTENUATION].intdesc = {0, 2, 0, false, gDistanceAttenuationTypeValues};
-    gParams[APPLY_AIRABSORPTION].intdesc = {0, 2, 0, false, gParameterApplyTypeValues};
-    gParams[APPLY_DIRECTIVITY].intdesc = {0, 2, 0, false, gParameterApplyTypeValues};
-    gParams[APPLY_OCCLUSION].intdesc = {0, 2, 0, false, gParameterApplyTypeValues};
-    gParams[APPLY_TRANSMISSION].intdesc = {0, 2, 0, false, gParameterApplyTypeValues};
-    gParams[APPLY_REFLECTIONS].booldesc = {false};
-    gParams[APPLY_PATHING].booldesc = {false};
-    gParams[HRTF_INTERPOLATION].intdesc = {0, 1, 0, false, gHRTFInterpolationValues};
-    gParams[DISTANCEATTENUATION].floatdesc = {0.0f, 1.0f, 1.0f};
-    gParams[DISTANCEATTENUATION_ROLLOFFTYPE].intdesc = {0, 4, 2, false, gRolloffTypeValues};
-    gParams[DISTANCEATTENUATION_MINDISTANCE].floatdesc = {0.0f, 10000.0f, 1.0f};
-    gParams[DISTANCEATTENUATION_MAXDISTANCE].floatdesc = {0.0f, 10000.0f, 20.0f};
-    gParams[AIRABSORPTION_LOW].floatdesc = {0.0f, 1.0f, 1.0f};
-    gParams[AIRABSORPTION_MID].floatdesc = {0.0f, 1.0f, 1.0f};
-    gParams[AIRABSORPTION_HIGH].floatdesc = {0.0f, 1.0f, 1.0f};
-    gParams[DIRECTIVITY].floatdesc = {0.0f, 1.0f, 1.0f};
-    gParams[DIRECTIVITY_DIPOLEWEIGHT].floatdesc = {0.0f, 1.0f, 1.0f};
-    gParams[DIRECTIVITY_DIPOLEPOWER].floatdesc = {1.0f, 4.0f, 1.0f};
-    gParams[OCCLUSION].floatdesc = {0.0f, 1.0f, 1.0f};
-    gParams[TRANSMISSION_TYPE].intdesc = {0, 1, 0, false, gTransmissionTypeValues};
-    gParams[TRANSMISSION_LOW].floatdesc = {0.0f, 1.0f, 1.0f};
-    gParams[TRANSMISSION_MID].floatdesc = {0.0f, 1.0f, 1.0f};
-    gParams[TRANSMISSION_HIGH].floatdesc = {0.0f, 1.0f, 1.0f};
-    gParams[DIRECT_MIXLEVEL].floatdesc = {0.0f, 1.0f, 1.0f};
-    gParams[REFLECTIONS_BINAURAL].booldesc = {false};
-    gParams[REFLECTIONS_MIXLEVEL].floatdesc = {0.0f, 10.0f, 1.0f};
-    gParams[PATHING_BINAURAL].booldesc = {false};
-    gParams[PATHING_MIXLEVEL].floatdesc = {0.0f, 10.0f, 1.0f};
-    gParams[SIMULATION_OUTPUTS].datadesc = {FMOD_DSP_PARAMETER_DATA_TYPE_USER};
-    gParams[DIRECT_BINAURAL].booldesc = {true};
-    gParams[DISTANCE_ATTENUATION_RANGE].datadesc = {FMOD_DSP_PARAMETER_DATA_TYPE_ATTENUATION_RANGE};
-    gParams[SIMULATION_OUTPUTS_HANDLE].intdesc = {-1, 10000, -1};
-    gParams[OUTPUT_FORMAT].intdesc = {0, 2, 0, false, gOutputFormatValues};
+    gParams[IPL_SPATIALIZE_SOURCE_POSITION].datadesc = {FMOD_DSP_PARAMETER_DATA_TYPE_3DATTRIBUTES};
+    gParams[IPL_SPATIALIZE_OVERALL_GAIN].datadesc = {FMOD_DSP_PARAMETER_DATA_TYPE_OVERALLGAIN};
+    gParams[IPL_SPATIALIZE_APPLY_DISTANCEATTENUATION].intdesc = {0, 2, 0, false, gDistanceAttenuationTypeValues};
+    gParams[IPL_SPATIALIZE_APPLY_AIRABSORPTION].intdesc = {0, 2, 0, false, gParameterApplyTypeValues};
+    gParams[IPL_SPATIALIZE_APPLY_DIRECTIVITY].intdesc = {0, 2, 0, false, gParameterApplyTypeValues};
+    gParams[IPL_SPATIALIZE_APPLY_OCCLUSION].intdesc = {0, 2, 0, false, gParameterApplyTypeValues};
+    gParams[IPL_SPATIALIZE_APPLY_TRANSMISSION].intdesc = {0, 2, 0, false, gParameterApplyTypeValues};
+    gParams[IPL_SPATIALIZE_APPLY_REFLECTIONS].booldesc = {false};
+    gParams[IPL_SPATIALIZE_APPLY_PATHING].booldesc = {false};
+    gParams[IPL_SPATIALIZE_HRTF_INTERPOLATION].intdesc = {0, 1, 0, false, gHRTFInterpolationValues};
+    gParams[IPL_SPATIALIZE_DISTANCEATTENUATION].floatdesc = {0.0f, 1.0f, 1.0f};
+    gParams[IPL_SPATIALIZE_DISTANCEATTENUATION_ROLLOFFTYPE].intdesc = {0, 4, 2, false, gRolloffTypeValues};
+    gParams[IPL_SPATIALIZE_DISTANCEATTENUATION_MINDISTANCE].floatdesc = {0.0f, 10000.0f, 1.0f};
+    gParams[IPL_SPATIALIZE_DISTANCEATTENUATION_MAXDISTANCE].floatdesc = {0.0f, 10000.0f, 20.0f};
+    gParams[IPL_SPATIALIZE_AIRABSORPTION_LOW].floatdesc = {0.0f, 1.0f, 1.0f};
+    gParams[IPL_SPATIALIZE_AIRABSORPTION_MID].floatdesc = {0.0f, 1.0f, 1.0f};
+    gParams[IPL_SPATIALIZE_AIRABSORPTION_HIGH].floatdesc = {0.0f, 1.0f, 1.0f};
+    gParams[IPL_SPATIALIZE_DIRECTIVITY].floatdesc = {0.0f, 1.0f, 1.0f};
+    gParams[IPL_SPATIALIZE_DIRECTIVITY_DIPOLEWEIGHT].floatdesc = {0.0f, 1.0f, 1.0f};
+    gParams[IPL_SPATIALIZE_DIRECTIVITY_DIPOLEPOWER].floatdesc = {1.0f, 4.0f, 1.0f};
+    gParams[IPL_SPATIALIZE_OCCLUSION].floatdesc = {0.0f, 1.0f, 1.0f};
+    gParams[IPL_SPATIALIZE_TRANSMISSION_TYPE].intdesc = {0, 1, 0, false, gTransmissionTypeValues};
+    gParams[IPL_SPATIALIZE_TRANSMISSION_LOW].floatdesc = {0.0f, 1.0f, 1.0f};
+    gParams[IPL_SPATIALIZE_TRANSMISSION_MID].floatdesc = {0.0f, 1.0f, 1.0f};
+    gParams[IPL_SPATIALIZE_TRANSMISSION_HIGH].floatdesc = {0.0f, 1.0f, 1.0f};
+    gParams[IPL_SPATIALIZE_DIRECT_MIXLEVEL].floatdesc = {0.0f, 1.0f, 1.0f};
+    gParams[IPL_SPATIALIZE_REFLECTIONS_BINAURAL].booldesc = {false};
+    gParams[IPL_SPATIALIZE_REFLECTIONS_MIXLEVEL].floatdesc = {0.0f, 10.0f, 1.0f};
+    gParams[IPL_SPATIALIZE_PATHING_BINAURAL].booldesc = {false};
+    gParams[IPL_SPATIALIZE_PATHING_MIXLEVEL].floatdesc = {0.0f, 10.0f, 1.0f};
+    gParams[IPL_SPATIALIZE_SIMULATION_OUTPUTS].datadesc = {FMOD_DSP_PARAMETER_DATA_TYPE_USER};
+    gParams[IPL_SPATIALIZE_DIRECT_BINAURAL].booldesc = {true};
+    gParams[IPL_SPATIALIZE_DISTANCE_ATTENUATION_RANGE].datadesc = {FMOD_DSP_PARAMETER_DATA_TYPE_ATTENUATION_RANGE};
+    gParams[IPL_SPATIALIZE_SIMULATION_OUTPUTS_HANDLE].intdesc = {-1, 10000, -1};
+    gParams[IPL_SPATIALIZE_OUTPUT_FORMAT].intdesc = {0, 2, 0, false, gOutputFormatValues};
 }
 
 struct State
@@ -859,19 +495,19 @@ FMOD_RESULT F_CALL getBool(FMOD_DSP_STATE* state,
 
     switch (index)
     {
-    case DIRECT_BINAURAL:
+    case IPL_SPATIALIZE_DIRECT_BINAURAL:
         *value = effect->directBinaural;
         break;
-    case APPLY_REFLECTIONS:
+    case IPL_SPATIALIZE_APPLY_REFLECTIONS:
         *value = effect->applyReflections;
         break;
-    case APPLY_PATHING:
+    case IPL_SPATIALIZE_APPLY_PATHING:
         *value = effect->applyPathing;
         break;
-    case REFLECTIONS_BINAURAL:
+    case IPL_SPATIALIZE_REFLECTIONS_BINAURAL:
         *value = effect->reflectionsBinaural;
         break;
-    case PATHING_BINAURAL:
+    case IPL_SPATIALIZE_PATHING_BINAURAL:
         *value = effect->pathingBinaural;
         break;
     default:
@@ -890,34 +526,34 @@ FMOD_RESULT F_CALL getInt(FMOD_DSP_STATE* state,
 
     switch (index)
     {
-    case APPLY_DISTANCEATTENUATION:
+    case IPL_SPATIALIZE_APPLY_DISTANCEATTENUATION:
         *value = static_cast<int>(effect->applyDistanceAttenuation);
         break;
-    case APPLY_AIRABSORPTION:
+    case IPL_SPATIALIZE_APPLY_AIRABSORPTION:
         *value = static_cast<int>(effect->applyAirAbsorption);
         break;
-    case APPLY_DIRECTIVITY:
+    case IPL_SPATIALIZE_APPLY_DIRECTIVITY:
         *value = static_cast<int>(effect->applyDirectivity);
         break;
-    case APPLY_OCCLUSION:
+    case IPL_SPATIALIZE_APPLY_OCCLUSION:
         *value = static_cast<int>(effect->applyOcclusion);
         break;
-    case APPLY_TRANSMISSION:
+    case IPL_SPATIALIZE_APPLY_TRANSMISSION:
         *value = static_cast<int>(effect->applyTransmission);
         break;
-    case HRTF_INTERPOLATION:
+    case IPL_SPATIALIZE_HRTF_INTERPOLATION:
         *value = static_cast<int>(effect->hrtfInterpolation);
         break;
-    case DISTANCEATTENUATION_ROLLOFFTYPE:
+    case IPL_SPATIALIZE_DISTANCEATTENUATION_ROLLOFFTYPE:
         *value = static_cast<int>(effect->distanceAttenuationRolloffType);
         break;
-    case TRANSMISSION_TYPE:
+    case IPL_SPATIALIZE_TRANSMISSION_TYPE:
         *value = static_cast<int>(effect->transmissionType);
         break;
-    case SIMULATION_OUTPUTS_HANDLE:
+    case IPL_SPATIALIZE_SIMULATION_OUTPUTS_HANDLE:
         *value = -1;
         break;
-    case OUTPUT_FORMAT:
+    case IPL_SPATIALIZE_OUTPUT_FORMAT:
         *value = static_cast<int>(effect->outputFormat);
         break;
     default:
@@ -936,52 +572,52 @@ FMOD_RESULT F_CALL getFloat(FMOD_DSP_STATE* state,
 
     switch (index)
     {
-    case DISTANCEATTENUATION:
+    case IPL_SPATIALIZE_DISTANCEATTENUATION:
         *value = effect->distanceAttenuation;
         break;
-    case DISTANCEATTENUATION_MINDISTANCE:
+    case IPL_SPATIALIZE_DISTANCEATTENUATION_MINDISTANCE:
         *value = effect->distanceAttenuationMinDistance;
         break;
-    case DISTANCEATTENUATION_MAXDISTANCE:
+    case IPL_SPATIALIZE_DISTANCEATTENUATION_MAXDISTANCE:
         *value = effect->distanceAttenuationMaxDistance;
         break;
-    case AIRABSORPTION_LOW:
+    case IPL_SPATIALIZE_AIRABSORPTION_LOW:
         *value = effect->airAbsorption[0];
         break;
-    case AIRABSORPTION_MID:
+    case IPL_SPATIALIZE_AIRABSORPTION_MID:
         *value = effect->airAbsorption[1];
         break;
-    case AIRABSORPTION_HIGH:
+    case IPL_SPATIALIZE_AIRABSORPTION_HIGH:
         *value = effect->airAbsorption[2];
         break;
-    case DIRECTIVITY:
+    case IPL_SPATIALIZE_DIRECTIVITY:
         *value = effect->directivity;
         break;
-    case DIRECTIVITY_DIPOLEWEIGHT:
+    case IPL_SPATIALIZE_DIRECTIVITY_DIPOLEWEIGHT:
         *value = effect->dipoleWeight;
         break;
-    case DIRECTIVITY_DIPOLEPOWER:
+    case IPL_SPATIALIZE_DIRECTIVITY_DIPOLEPOWER:
         *value = effect->dipolePower;
         break;
-    case OCCLUSION:
+    case IPL_SPATIALIZE_OCCLUSION:
         *value = effect->occlusion;
         break;
-    case TRANSMISSION_LOW:
+    case IPL_SPATIALIZE_TRANSMISSION_LOW:
         *value = effect->transmission[0];
         break;
-    case TRANSMISSION_MID:
+    case IPL_SPATIALIZE_TRANSMISSION_MID:
         *value = effect->transmission[1];
         break;
-    case TRANSMISSION_HIGH:
+    case IPL_SPATIALIZE_TRANSMISSION_HIGH:
         *value = effect->transmission[2];
         break;
-    case DIRECT_MIXLEVEL:
+    case IPL_SPATIALIZE_DIRECT_MIXLEVEL:
         *value = effect->directMixLevel;
         break;
-    case REFLECTIONS_MIXLEVEL:
+    case IPL_SPATIALIZE_REFLECTIONS_MIXLEVEL:
         *value = effect->reflectionsMixLevel;
         break;
-    case PATHING_MIXLEVEL:
+    case IPL_SPATIALIZE_PATHING_MIXLEVEL:
         *value = effect->pathingMixLevel;
         break;
     default:
@@ -1001,7 +637,7 @@ FMOD_RESULT F_CALL getData(FMOD_DSP_STATE* state,
 
     switch (index)
     {
-    case OVERALL_GAIN:
+    case IPL_SPATIALIZE_OVERALL_GAIN:
         *value = static_cast<void*>(&effect->overallGain);
         *length = sizeof(effect->overallGain);
         break;
@@ -1020,19 +656,19 @@ FMOD_RESULT F_CALL setBool(FMOD_DSP_STATE* state,
 
     switch (index)
     {
-    case DIRECT_BINAURAL:
+    case IPL_SPATIALIZE_DIRECT_BINAURAL:
         effect->directBinaural = value;
         break;
-    case APPLY_REFLECTIONS:
+    case IPL_SPATIALIZE_APPLY_REFLECTIONS:
         effect->applyReflections = value;
         break;
-    case APPLY_PATHING:
+    case IPL_SPATIALIZE_APPLY_PATHING:
         effect->applyPathing = value;
         break;
-    case REFLECTIONS_BINAURAL:
+    case IPL_SPATIALIZE_REFLECTIONS_BINAURAL:
         effect->reflectionsBinaural = value;
         break;
-    case PATHING_BINAURAL:
+    case IPL_SPATIALIZE_PATHING_BINAURAL:
         effect->pathingBinaural = value;
         break;
     default:
@@ -1067,37 +703,37 @@ FMOD_RESULT F_CALL setInt(FMOD_DSP_STATE* state,
 
     switch (index)
     {
-    case APPLY_DISTANCEATTENUATION:
+    case IPL_SPATIALIZE_APPLY_DISTANCEATTENUATION:
         effect->applyDistanceAttenuation = static_cast<ParameterApplyType>(value);
         break;
-    case APPLY_AIRABSORPTION:
+    case IPL_SPATIALIZE_APPLY_AIRABSORPTION:
         effect->applyAirAbsorption = static_cast<ParameterApplyType>(value);
         break;
-    case APPLY_DIRECTIVITY:
+    case IPL_SPATIALIZE_APPLY_DIRECTIVITY:
         effect->applyDirectivity = static_cast<ParameterApplyType>(value);
         break;
-    case APPLY_OCCLUSION:
+    case IPL_SPATIALIZE_APPLY_OCCLUSION:
         effect->applyOcclusion = static_cast<ParameterApplyType>(value);
         break;
-    case APPLY_TRANSMISSION:
+    case IPL_SPATIALIZE_APPLY_TRANSMISSION:
         effect->applyTransmission = static_cast<ParameterApplyType>(value);
         break;
-    case HRTF_INTERPOLATION:
+    case IPL_SPATIALIZE_HRTF_INTERPOLATION:
         effect->hrtfInterpolation = static_cast<IPLHRTFInterpolation>(value);
         break;
-    case DISTANCEATTENUATION_ROLLOFFTYPE:
+    case IPL_SPATIALIZE_DISTANCEATTENUATION_ROLLOFFTYPE:
         effect->distanceAttenuationRolloffType = static_cast<FMOD_DSP_PAN_3D_ROLLOFF_TYPE>(value);
         break;
-    case TRANSMISSION_TYPE:
+    case IPL_SPATIALIZE_TRANSMISSION_TYPE:
         effect->transmissionType = static_cast<IPLTransmissionType>(value);
         break;
-    case SIMULATION_OUTPUTS_HANDLE:
+    case IPL_SPATIALIZE_SIMULATION_OUTPUTS_HANDLE:
         if (gSourceManager)
         {
             setSource(state, gSourceManager->getSource(value));
         }
         break;
-    case OUTPUT_FORMAT:
+    case IPL_SPATIALIZE_OUTPUT_FORMAT:
         effect->outputFormat = static_cast<ParameterSpeakerFormatType>(value);
         break;
     default:
@@ -1115,52 +751,52 @@ FMOD_RESULT F_CALL setFloat(FMOD_DSP_STATE* state,
 
     switch (index)
     {
-    case DISTANCEATTENUATION:
+    case IPL_SPATIALIZE_DISTANCEATTENUATION:
         effect->distanceAttenuation = value;
         break;
-    case DISTANCEATTENUATION_MINDISTANCE:
+    case IPL_SPATIALIZE_DISTANCEATTENUATION_MINDISTANCE:
         effect->distanceAttenuationMinDistance = value;
         break;
-    case DISTANCEATTENUATION_MAXDISTANCE:
+    case IPL_SPATIALIZE_DISTANCEATTENUATION_MAXDISTANCE:
         effect->distanceAttenuationMaxDistance = value;
         break;
-    case AIRABSORPTION_LOW:
+    case IPL_SPATIALIZE_AIRABSORPTION_LOW:
         effect->airAbsorption[0] = value;
         break;
-    case AIRABSORPTION_MID:
+    case IPL_SPATIALIZE_AIRABSORPTION_MID:
         effect->airAbsorption[1] = value;
         break;
-    case AIRABSORPTION_HIGH:
+    case IPL_SPATIALIZE_AIRABSORPTION_HIGH:
         effect->airAbsorption[2] = value;
         break;
-    case DIRECTIVITY:
+    case IPL_SPATIALIZE_DIRECTIVITY:
         effect->directivity = value;
         break;
-    case DIRECTIVITY_DIPOLEWEIGHT:
+    case IPL_SPATIALIZE_DIRECTIVITY_DIPOLEWEIGHT:
         effect->dipoleWeight = value;
         break;
-    case DIRECTIVITY_DIPOLEPOWER:
+    case IPL_SPATIALIZE_DIRECTIVITY_DIPOLEPOWER:
         effect->dipolePower = value;
         break;
-    case OCCLUSION:
+    case IPL_SPATIALIZE_OCCLUSION:
         effect->occlusion = value;
         break;
-    case TRANSMISSION_LOW:
+    case IPL_SPATIALIZE_TRANSMISSION_LOW:
         effect->transmission[0] = value;
         break;
-    case TRANSMISSION_MID:
+    case IPL_SPATIALIZE_TRANSMISSION_MID:
         effect->transmission[1] = value;
         break;
-    case TRANSMISSION_HIGH:
+    case IPL_SPATIALIZE_TRANSMISSION_HIGH:
         effect->transmission[2] = value;
         break;
-    case DIRECT_MIXLEVEL:
+    case IPL_SPATIALIZE_DIRECT_MIXLEVEL:
         effect->directMixLevel = value;
         break;
-    case REFLECTIONS_MIXLEVEL:
+    case IPL_SPATIALIZE_REFLECTIONS_MIXLEVEL:
         effect->reflectionsMixLevel = value;
         break;
-    case PATHING_MIXLEVEL:
+    case IPL_SPATIALIZE_PATHING_MIXLEVEL:
         effect->pathingMixLevel = value;
         break;
     default:
@@ -1181,12 +817,12 @@ FMOD_RESULT F_CALL setData(FMOD_DSP_STATE* state,
 
     switch (index)
     {
-    case SOURCE_POSITION:
+    case IPL_SPATIALIZE_SOURCE_POSITION:
         memcpy(&effect->source, value, length);
         break;
-    case SIMULATION_OUTPUTS:
+    case IPL_SPATIALIZE_SIMULATION_OUTPUTS:
         break;
-    case DISTANCE_ATTENUATION_RANGE:
+    case IPL_SPATIALIZE_DISTANCE_ATTENUATION_RANGE:
         memcpy(&effect->attenuationRange, value, length);
         effect->attenuationRangeSet = true;
         break;
@@ -1543,7 +1179,7 @@ FMOD_DSP_DESCRIPTION gSpatializeEffect =
     nullptr,
     SpatializeEffect::process,
     nullptr,
-    SpatializeEffect::NUM_PARAMS,
+    IPL_SPATIALIZE_NUM_PARAMS,
     SpatializeEffect::gParamsArray,
     SpatializeEffect::setFloat,
     SpatializeEffect::setInt,

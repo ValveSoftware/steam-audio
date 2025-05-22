@@ -15,6 +15,6 @@ Functions
 DSP Parameters
 ^^^^^^^^^^^^^^
 
-.. doxygenenum:: SteamAudioFMOD::SpatializeEffect::Params
-.. doxygenenum:: SteamAudioFMOD::ReverbEffect::Params
-.. doxygenenum:: SteamAudioFMOD::MixerReturnEffect::Params
+.. doxygenenum:: IPL_SPATIALIZE_PARAMS
+.. doxygenenum:: IPL_REVERB_PARAMS
+.. doxygenenum:: IPL_MIXRETURN_PARAMS
