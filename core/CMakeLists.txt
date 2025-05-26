@@ -114,6 +114,7 @@ if (IPL_OS_WINDOWS AND IPL_CPU_X64)
     option(STEAMAUDIO_ENABLE_TRUEAUDIONEXT "Enable AMD TrueAudio Next support for GPU-accelerated convolution." ON)
 endif()
 
+option(STEAMAUDIO_ENABLE_DJFFT "Enable DJFFT for FFT operations." ON)
 
 #
 # COMPILER FLAGS
@@ -251,6 +252,9 @@ if (STEAMAUDIO_ENABLE_FFTS)
         set(STEAMAUDIO_ENABLE_FFTS OFF)
     endif()
 endif()
+if (STEAMAUDIO_ENABLE_DJFFT)
+    set(FFT_LIBRARY "DJFFT")
+endif ()
 
 if (NOT FFT_LIBRARY)
     find_package(PFFFT REQUIRED)
