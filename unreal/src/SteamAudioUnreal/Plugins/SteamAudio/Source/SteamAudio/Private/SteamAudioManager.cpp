@@ -705,7 +705,8 @@ void FSteamAudioManager::Tick(float DeltaTime)
 
         ThreadPoolIdle = false;
 
-        AsyncPool(*ThreadPool, [this]
+        if (OpenCLDevice)
+        AsyncPool(*ThreadPool, [this] // May cause a crash when OpenCL device is not initialized
         {
             iplSimulatorRunReflections(Simulator);
             iplSimulatorRunPathing(Simulator);
