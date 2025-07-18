@@ -85,6 +85,18 @@ enum class EHRTFNormType : uint8
 
 class USOFAFile;
 
+USTRUCT(BlueprintType)
+struct FPhysMatToSteamAudioMatTable_Value
+{
+    GENERATED_USTRUCT_BODY()
+
+public:
+    UPROPERTY(EditAnywhere, meta = (AllowedClasses = "/Script/SteamAudio.SteamAudioMaterial"))
+    FSoftObjectPath SteamAudioMaterial;
+};
+
+using PhysMatToSteamAudioMatTableType = TMap<FSoftObjectPath, FPhysMatToSteamAudioMatTable_Value>;
+
 /**
  * Used to store a copy of the current Steam Audio settings upon initialization, with Unreal plugin types replaced by
  * their corresponding Steam Audio API types.
@@ -97,6 +109,9 @@ struct FSteamAudioSettings
     IPLMaterial DefaultMeshMaterial;
     IPLMaterial DefaultLandscapeMaterial;
     IPLMaterial DefaultBSPMaterial;
+    bool bNeedToSetupDefaultMaterial;
+    IPLMaterial DefaultAudioGeometryMaterial;
+    PhysMatToSteamAudioMatTableType* PhysMatToSteamAudioMatTable;
     IPLSceneType SceneType;
     int MaxOcclusionSamples;
     int RealTimeRays;
@@ -175,6 +190,15 @@ public:
     /** Reference to the Steam Audio Material asset to use as the default material for BSP geometry. */
     UPROPERTY(GlobalConfig, EditAnywhere, Category = SceneExportSettings, meta = (AllowedClasses = "/Script/SteamAudio.SteamAudioMaterial", DisplayName = "Default BSP Material"))
     FSoftObjectPath DefaultBSPMaterial;
+
+    UPROPERTY(GlobalConfig, EditAnywhere, Category = SteamAudioGeometrySettings)
+    bool bNeedToSetupDefaultMaterial = true;
+
+    UPROPERTY(GlobalConfig, EditAnywhere, Category = SteamAudioGeometrySettings, meta = (AllowedClasses = "/Script/SteamAudio.SteamAudioMaterial", EditCondition = "bNeedToSetupDefaultMaterial"))
+    FSoftObjectPath DefaultAudioGeometryMaterial;
+
+    UPROPERTY(GlobalConfig, EditAnywhere, Category = SteamAudioGeometrySettings, meta = (AllowedClasses = "/Script/PhysicsCore.PhysicalMaterial"))
+    TMap<FSoftObjectPath, FPhysMatToSteamAudioMatTable_Value> PhysMatToSteamAudioMatTable;
 
     UPROPERTY(GlobalConfig, EditAnywhere, Category = RayTracerSettings)
     ESceneType SceneType;

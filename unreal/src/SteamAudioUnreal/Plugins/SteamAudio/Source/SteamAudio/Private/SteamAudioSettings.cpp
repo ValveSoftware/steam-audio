@@ -79,6 +79,9 @@ FSteamAudioSettings USteamAudioSettings::GetSettings() const
     Settings.DefaultMeshMaterial = GetMaterialForAsset(DefaultMeshMaterial);
     Settings.DefaultLandscapeMaterial = GetMaterialForAsset(DefaultLandscapeMaterial);
     Settings.DefaultBSPMaterial = GetMaterialForAsset(DefaultBSPMaterial);
+    Settings.bNeedToSetupDefaultMaterial = bNeedToSetupDefaultMaterial;
+    Settings.DefaultAudioGeometryMaterial = GetMaterialForAsset(DefaultAudioGeometryMaterial);
+    Settings.PhysMatToSteamAudioMatTable = const_cast<PhysMatToSteamAudioMatTableType*>(&PhysMatToSteamAudioMatTable);
     Settings.SceneType = static_cast<IPLSceneType>(SceneType);
     Settings.MaxOcclusionSamples = MaxOcclusionSamples;
     Settings.RealTimeRays = RealTimeRays;

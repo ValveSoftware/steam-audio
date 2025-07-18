@@ -265,17 +265,20 @@ void FSteamAudioEditorModule::OnAddGeometryComponentToStaticMeshes()
 {
     UWorld* World = GEditor->GetLevelViewportClients()[0]->GetWorld();
 
+    auto SteamAudioSettings = GetDefault<USteamAudioSettings>();
     for (TActorIterator<AActor> It(World); It; ++It)
     {
         TArray<UStaticMeshComponent*> StaticMeshComponents;
         It->GetComponents<UStaticMeshComponent>(StaticMeshComponents);
 
         bool bCanAffectAudio = false;
+        UStaticMeshComponent* LastStaticMeshComponent = nullptr;
         for (UStaticMeshComponent* StaticMeshComponent : StaticMeshComponents)
         {
             // Check if this static mesh can affect audio.
             if (StaticMeshComponent && StaticMeshComponent->IsValidLowLevel() && !StaticMeshComponent->IsVisualizationComponent())
             {
+                LastStaticMeshComponent = StaticMeshComponent;
                 bCanAffectAudio = true;
                 break;
             }
@@ -289,6 +292,16 @@ void FSteamAudioEditorModule::OnAddGeometryComponentToStaticMeshes()
                 GeometryComponent = NewObject<USteamAudioGeometryComponent>(*It);
                 GeometryComponent->RegisterComponent();
                 It->AddInstanceComponent(GeometryComponent);
+
+                auto SteamAudioMat = SteamAudioSettings->PhysMatToSteamAudioMatTable.Find(LastStaticMeshComponent->GetBodyInstance()->GetSimplePhysicalMaterial());
+                if (SteamAudioMat)
+                {
+                    GeometryComponent->Material = SteamAudioMat->SteamAudioMaterial;
+                }
+                else if (SteamAudioSettings->bNeedToSetupDefaultMaterial)
+                {
+                    GeometryComponent->Material = SteamAudioSettings->DefaultAudioGeometryMaterial;
+                }
             }
         }
     }
