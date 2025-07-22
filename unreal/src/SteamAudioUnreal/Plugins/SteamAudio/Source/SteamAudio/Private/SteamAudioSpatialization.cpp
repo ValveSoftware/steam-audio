@@ -292,6 +292,15 @@ void FSteamAudioSpatializationPlugin::OnReleaseSource(const uint32 SourceId)
 
 void FSteamAudioSpatializationPlugin::ProcessAudio(const FAudioPluginSourceInputData& InputData, FAudioPluginSourceOutputData& OutputData)
 {
+    if (!FSteamAudioModule::GetManager().IsSteamAudioEnabled())
+    {
+        for (int32 i = 0; i < OutputData.AudioBuffer.Num(); ++i)
+        {
+            OutputData.AudioBuffer[i] = (*InputData.AudioBuffer)[i];
+        }
+        return;
+    }
+
     FSteamAudioSpatializationSource& Source = Sources[InputData.SourceId];
 
     float* InBufferData = InputData.AudioBuffer->GetData();

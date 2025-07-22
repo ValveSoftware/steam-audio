@@ -93,6 +93,11 @@ FSteamAudioManager::~FSteamAudioManager()
     ShutDownSteamAudio();
 }
 
+void FSteamAudioManager::SetSteamAudioEnabled(bool bNewIsSteamAudioEnabled)
+{
+    bIsSteamAudioEnabled = bNewIsSteamAudioEnabled;
+}
+
 IPLCoordinateSpace3 FSteamAudioManager::GetListenerCoordinates()
 {
     IPLCoordinateSpace3 ListenerCoordinates{};
