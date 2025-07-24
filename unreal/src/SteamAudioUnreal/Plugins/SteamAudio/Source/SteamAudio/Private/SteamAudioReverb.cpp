@@ -532,6 +532,11 @@ void FSteamAudioReverbSubmixPlugin::LazyInit()
         Context = iplContextRetain(SteamAudio::FSteamAudioModule::GetManager().GetContext());
     }
 
+    if (!ReverbPlugin)
+    {
+        ReverbPlugin = StaticCast<SteamAudio::FSteamAudioReverbPlugin*>(GEngine->GetAudioDeviceManager()->GetMainAudioDeviceRaw()->ReverbPluginInterface.Get());
+    }
+
     IPLAudioSettings AudioSettings = ReverbPlugin->GetAudioSettings();
 
     if (!HRTF)
