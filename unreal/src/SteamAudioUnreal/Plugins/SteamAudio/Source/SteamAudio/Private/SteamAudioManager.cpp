@@ -93,6 +93,11 @@ FSteamAudioManager::~FSteamAudioManager()
     ShutDownSteamAudio();
 }
 
+void FSteamAudioManager::SetSteamAudioEnabled(bool bNewIsSteamAudioEnabled)
+{
+    bIsSteamAudioEnabled = bNewIsSteamAudioEnabled;
+}
+
 IPLCoordinateSpace3 FSteamAudioManager::GetListenerCoordinates()
 {
     IPLCoordinateSpace3 ListenerCoordinates{};
@@ -239,7 +244,7 @@ bool FSteamAudioManager::InitializeSteamAudio(EManagerInitReason Reason)
 
         IPLOpenCLDeviceList OpenCLDeviceList = nullptr;
         IPLerror Status = iplOpenCLDeviceListCreate(Context, &OpenCLDeviceSettings, &OpenCLDeviceList);
-        if (Status != IPL_STATUS_SUCCESS)
+        if (Status == IPL_STATUS_SUCCESS)
         {
             int NumDevices = iplOpenCLDeviceListGetNumDevices(OpenCLDeviceList);
 
