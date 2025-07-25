@@ -298,9 +298,9 @@ void FSteamAudioEditorModule::OnAddGeometryComponentToStaticMeshes()
                 {
                     GeometryComponent->Material = SteamAudioMat->SteamAudioMaterial;
                 }
-                else if (SteamAudioSettings->bNeedToSetupDefaultMaterial)
+                else
                 {
-                    GeometryComponent->Material = SteamAudioSettings->DefaultAudioGeometryMaterial;
+                    GeometryComponent->Material = SteamAudioSettings->DefaultMeshMaterial;
                 }
             }
         }
