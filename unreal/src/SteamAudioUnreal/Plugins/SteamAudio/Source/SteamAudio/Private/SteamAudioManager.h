@@ -144,6 +144,9 @@ public:
     void RemoveListener(USteamAudioListenerComponent* Listener);
 
 private:
+    /** a cached value indicating whether OpenCL should be initialized */
+    bool bShouldInitOpenCL = false;
+
     /** If equal false, then Steam Audio plugins do not affect the sound */
     bool bIsSteamAudioEnabled = true;
 

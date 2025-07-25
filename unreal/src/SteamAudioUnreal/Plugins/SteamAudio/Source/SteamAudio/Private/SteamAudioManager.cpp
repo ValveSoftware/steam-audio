@@ -218,7 +218,7 @@ bool FSteamAudioManager::InitializeSteamAudio(EManagerInitReason Reason)
     bool bShouldInitEmbree = (Reason == EManagerInitReason::BAKING || Reason == EManagerInitReason::PLAYING) && (ConfiguredSceneType == IPL_SCENETYPE_EMBREE);
     bool bShouldInitRadeonRays = (Reason == EManagerInitReason::BAKING || Reason == EManagerInitReason::PLAYING) && (ConfiguredSceneType == IPL_SCENETYPE_RADEONRAYS);
     bool bShouldInitTrueAudioNext = (Reason == EManagerInitReason::PLAYING) && (ConfiguredReflectionEffectType == IPL_REFLECTIONEFFECTTYPE_TAN);
-    bool bShouldInitOpenCL = (bShouldInitRadeonRays || bShouldInitTrueAudioNext);
+    bShouldInitOpenCL = (bShouldInitRadeonRays || bShouldInitTrueAudioNext);
 
     if (bShouldInitEmbree)
     {
@@ -710,7 +710,8 @@ void FSteamAudioManager::Tick(float DeltaTime)
 
         ThreadPoolIdle = false;
 
-        AsyncPool(*ThreadPool, [this]
+        if (!bShouldInitOpenCL || (bShouldInitOpenCL && OpenCLDevice))
+        AsyncPool(*ThreadPool, [this] // May cause a crash when OpenCL device is not initialized
         {
             iplSimulatorRunReflections(Simulator);
             iplSimulatorRunPathing(Simulator);
