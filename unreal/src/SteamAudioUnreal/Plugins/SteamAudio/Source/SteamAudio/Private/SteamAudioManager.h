@@ -138,6 +138,9 @@ public:
     void RemoveListener(USteamAudioListenerComponent* Listener);
 
 private:
+    /** a cached value indicating whether OpenCL should be initialized */
+    bool bShouldInitOpenCL = false;
+
     /** The scene type we were actually able to initialize. */
     IPLSceneType ActualSceneType;
 
