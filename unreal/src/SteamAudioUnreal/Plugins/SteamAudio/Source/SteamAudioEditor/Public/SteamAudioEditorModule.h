@@ -61,6 +61,7 @@ private:
 
     void RegisterComponentVisualizer(FName ComponentClassName, TSharedPtr<FComponentVisualizer> Visualizer);
 
+    void OnSelectActorsWithGeometryComponent();
     void OnAddGeometryComponentToStaticMeshes();
     void OnRemoveGeometryComponentFromStaticMeshes();
     void OnExportStaticGeometry();

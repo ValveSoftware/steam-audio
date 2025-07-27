@@ -158,6 +158,12 @@ void FSteamAudioEditorModule::StartupModule()
 
                     MenuBuilder.BeginSection("GeometryTagging", NSLOCTEXT("SteamAudio", "MenuGeometryTagging", "Geometry Tagging"));
                     MenuBuilder.AddMenuEntry(
+                        NSLOCTEXT("SteamAudio", "MenuAddAllActors", "Select All Actors with Geometry Component"),
+                        NSLOCTEXT("SteamAudio", "MenuAddAllActorsTooltip", "Allows to select all actors that contain a Geometry Component."),
+                        FSlateIcon(),
+                        FUIAction(FExecuteAction::CreateRaw(this, &FSteamAudioEditorModule::OnSelectActorsWithGeometryComponent))
+                    );
+                    MenuBuilder.AddMenuEntry(
                         NSLOCTEXT("SteamAudio", "MenuAddAllActors", "Add Geometry Component to all Actors"),
                         NSLOCTEXT("SteamAudio", "MenuAddAllActorsTooltip", "Add the Steam Audio Geometry component to all actors with static geometry."),
                         FSlateIcon(),
@@ -258,6 +264,20 @@ void FSteamAudioEditorModule::RegisterComponentVisualizer(FName ComponentClassNa
     if (Visualizer.IsValid())
     {
         Visualizer->OnRegister();
+    }
+}
+
+void FSteamAudioEditorModule::OnSelectActorsWithGeometryComponent()
+{
+    UWorld* World = GEditor->GetLevelViewportClients()[0]->GetWorld();
+
+    GEditor->SelectNone(false, true);
+    for (TActorIterator<AActor> It(World); It; ++It)
+    {
+        if (It->FindComponentByClass<USteamAudioGeometryComponent>())
+        {
+            GEditor->SelectActor(*It, true, false);
+        }
     }
 }
 
