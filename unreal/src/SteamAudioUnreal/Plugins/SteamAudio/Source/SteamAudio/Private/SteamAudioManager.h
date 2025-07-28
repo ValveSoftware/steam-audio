@@ -98,6 +98,9 @@ public:
     FSteamAudioSettings GetSteamAudioSettings() const { return SteamAudioSettings; }
     bool IsInitialized() const { return bInitializationSucceded; }
 
+    /** Updates the iplStaticMesh data. */
+    void UpdateStaticMesh();
+
     /** Initializes the HRTF. */
     bool InitHRTF(IPLAudioSettings& AudioSettings);
 

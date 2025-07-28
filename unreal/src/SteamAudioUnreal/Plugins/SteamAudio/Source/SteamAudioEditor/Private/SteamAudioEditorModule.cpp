@@ -299,6 +299,7 @@ void FSteamAudioEditorModule::OnAddGeometryComponentToStaticMeshes()
             if (StaticMeshComponent && StaticMeshComponent->IsValidLowLevel() && !StaticMeshComponent->IsVisualizationComponent())
             {
                 LastStaticMeshComponent = StaticMeshComponent;
+                StaticMeshComponent->GetStaticMesh()->bAllowCPUAccess = true; // Used to update iplStaticMesh in Runime in the build
                 bCanAffectAudio = true;
                 break;
             }
