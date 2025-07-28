@@ -28,6 +28,7 @@ author = 'Valve Corporation'
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
+    'breathe'
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -60,3 +61,9 @@ html_css_files = [
 html_theme_options = {
     'logo_only': True
 }
+
+
+# -- Options for Breathe -----------------------------------------------------
+
+breathe_default_project = 'SteamAudioUnity'
+breathe_default_members = ('members', 'undoc-members')
