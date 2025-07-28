@@ -62,7 +62,7 @@ Occlusion
 
     -   *Off*. Occlusion is not applied.
 
-    -   *Simulation-Defined*. Occlusion is applied. The occlusion value must be supplied by the game engine via the ``SIMULATION_OUTPUTS`` DSP parameter.
+    -   *Simulation-Defined*. Occlusion is applied. The occlusion value must be supplied by the game engine via the ``IPL_SPATIALIZE_SIMULATION_OUTPUTS_HANDLE`` DSP parameter.
 
     -   *User-Defined*. Uses the **Occlusion Value** dial to control occlusion. The occlusion value will *not* automatically change based on surrounding geometry. You are expected to control the **Occlusion Value** dial using a parameter to achieve this effect. This option is intended for integrating your own occlusion model with Steam Audio.
 
@@ -74,7 +74,7 @@ Transmission
 
     -   *Off*. Transmission is not applied.
 
-    -   *Simulation-Defined*. Transmission is applied. The transmission filter EQ values must be supplied by the game engine via the ``SIMULATION_OUTPUTS`` DSP parameter.
+    -   *Simulation-Defined*. Transmission is applied. The transmission filter EQ values must be supplied by the game engine via the ``IPL_SPATIALIZE_SIMULATION_OUTPUTS_HANDLE`` DSP parameter.
 
     -   *User-Defined*. Uses the **Transmission Low**, **Transmission Mid**, and **Transmission High** dials to control transmission. The transmission values will *not* automatically change based on surrounding geometry. You are expected to control the dials using a parameter to achieve this effect. This option is intended for integrating your own occlusion and transmission model with Steam Audio.
 
@@ -98,7 +98,7 @@ Direct Mix Level
     The contribution of the direct sound path to the overall mix for this event. Lower values reduce the contribution more.
 
 Reflections
-    If enabled, reflections reaching the listener from the source will be applied to the event. The reflections data must be specified via the ``SIMULATION_OUTPUTS`` DSP parameter.
+    If enabled, reflections reaching the listener from the source will be applied to the event. The reflections data must be specified via the ``IPL_SPATIALIZE_SIMULATION_OUTPUTS_HANDLE`` DSP parameter.
 
 Apply HRTF To Reflections
     If checked, applies HRTF-based 3D audio rendering to reflections. Results in an improvement in spatialization quality when using convolution or hybrid reverb, at the cost of slightly increased CPU usage. Default: off.
@@ -107,7 +107,7 @@ Reflections Mix Level
     The contribution of reflections to the overall mix for this event. Lower values reduce the contribution more.
 
 Pathing
-    If checked, shortest paths taken by sound as it propagates from the source to the listener will be simulated, and appropriate spatialization will be applied to the event for these indirect paths. The pathing data must be specified via the ``SIMULATION_OUTPUTS`` DSP parameter.
+    If checked, shortest paths taken by sound as it propagates from the source to the listener will be simulated, and appropriate spatialization will be applied to the event for these indirect paths. The pathing data must be specified via the ``IPL_SPATIALIZE_SIMULATION_OUTPUTS_HANDLE`` DSP parameter.
 
 Apply HRTF To Pathing
     If checked, applies HRTF-based 3D audio rendering to pathing. Results in an improvement in spatialization quality, at the cost of slightly increased CPU usage. Default: off.

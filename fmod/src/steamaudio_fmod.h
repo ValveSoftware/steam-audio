@@ -669,10 +669,34 @@ F_EXPORT void F_CALL iplFMODSetSimulationSettings(IPLSimulationSettings simulati
  */
 F_EXPORT void F_CALL iplFMODSetReverbSource(IPLSource reverbSource);
 
+/**
+ *  Registers an \c IPLSource object for use by Steam Audio DSP effects in the audio thread. Calling this
+ *  function causes the audio engine DSP plugin to retain a reference to the \c IPLSource.
+ * 
+ *  \param[in]  source      The \c IPLSource object used by the game engine for simulation (occlusion, reflections,
+ *                          pathing, etc.) for a given sound source. The Steam Audio Spatializer effect will use
+ *                          this object to retrieve simulation results, (e.g., occlusion values).
+ * 
+ *  \return     An integer handle that can be used to identify the \c IPLSource. This should be passed to
+ *              Steam Audio Spatializer effects via the \c IPL_SPATIALIZE_SIMULATION_OUTPUTS_HANDLE parameter.
+ */
 F_EXPORT IPLint32 F_CALL iplFMODAddSource(IPLSource source);
 
+/**
+ *  Unregisters the \c IPLSource with the given handle, so the Steam Audio DSP effects can no longer use it.
+ *  Calling this function causes the audio engine DSP plugin to release its reference to the \c IPLSource
+ *  with the given handle.
+ * 
+ *  \param[in]  handle      The handle corresponding to the \c IPLSource that should be unregistered.
+ */
 F_EXPORT void F_CALL iplFMODRemoveSource(IPLint32 handle);
 
+/**
+ *  Specifies whether HRTF-based binaural rendering should be globally disabled in all Steam Audio DSP effects.
+ *  If disabled, Steam Audio will use a simpler panning algorithm.
+ * 
+ *  \param[in]  disabled    Whether or not HRTF-based binaural rendering should be disabled.
+ */
 F_EXPORT void F_CALL iplFMODSetHRTFDisabled(bool disabled);
 
 }
