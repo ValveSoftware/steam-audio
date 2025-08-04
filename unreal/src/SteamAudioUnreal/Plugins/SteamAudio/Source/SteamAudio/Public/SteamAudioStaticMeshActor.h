@@ -43,6 +43,8 @@ public:
 
     void UpdateStaticMesh();
 
+    void UpdateStaticMeshMaterial(AActor* RefreshableActor);
+
 protected:
     /**
      * Inherited from UActorComponent

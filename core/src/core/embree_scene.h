@@ -126,6 +126,8 @@ public:
 
     virtual void dumpObj(const string& fileName) const override;
 
+    virtual void SetStaticMeshMaterial(IStaticMesh* staticMesh, Material* NewMaterial, int index) override;
+
 private:
     shared_ptr<EmbreeDevice> mEmbree;
     RTCScene mScene;

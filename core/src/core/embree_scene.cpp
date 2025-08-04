@@ -426,6 +426,20 @@ void EmbreeScene::dumpObj(const string& fileName) const
     fclose(objFile);
 }
 
+void EmbreeScene::SetStaticMeshMaterial(IStaticMesh* staticMesh, Material* NewMaterial, int index)
+{
+    auto embreeStaticMesh = reinterpret_cast<EmbreeStaticMesh*>(staticMesh);
+    for (const auto& curStaticMesh : mStaticMeshes[0])
+    {
+        if (curStaticMesh.get() == embreeStaticMesh)
+        {
+            *const_cast<Material*>(embreeStaticMesh->materials() + index) = *NewMaterial;
+            break;
+        }
+    }
+    commit();
+}
+
 }
 
 #endif

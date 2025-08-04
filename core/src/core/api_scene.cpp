@@ -192,6 +192,13 @@ IPLerror CScene::createInstancedMesh(IPLInstancedMeshSettings* settings,
     return IPL_STATUS_SUCCESS;
 }
 
+void CScene::SetStaticMeshMaterial(IPLStaticMesh staticMesh, IPLMaterial* NewMaterial, int index)
+{
+    mHandle.get().get()->SetStaticMeshMaterial(reinterpret_cast<ipl::IStaticMesh*>(reinterpret_cast<CStaticMesh*>(staticMesh)->mHandle.get().get())
+        , reinterpret_cast<ipl::Material*>(NewMaterial)
+        , index);
+}
+
 
 // --------------------------------------------------------------------------------------------------------------------
 // CStaticMesh

@@ -105,6 +105,17 @@ void FSteamAudioManager::UpdateStaticMesh()
     }
 }
 
+void FSteamAudioManager::UpdateStaticMeshMaterial(AStaticMeshActor* StaticMeshActor)
+{
+    UWorld* World = GEngine->GetCurrentPlayWorld();
+    ULevel* Level = World->GetCurrentLevel();
+    auto SteamAudioStaticMeshActor = ASteamAudioStaticMeshActor::FindInLevel(World, Level);
+    if (SteamAudioStaticMeshActor)
+    {
+        SteamAudioStaticMeshActor->UpdateStaticMeshMaterial(StaticMeshActor);
+    }
+}
+
 void FSteamAudioManager::SetSteamAudioEnabled(bool bNewIsSteamAudioEnabled)
 {
     bIsSteamAudioEnabled = bNewIsSteamAudioEnabled;

@@ -80,6 +80,16 @@ void ASteamAudioStaticMeshActor::UpdateStaticMesh()
     }
 }
 
+void ASteamAudioStaticMeshActor::UpdateStaticMeshMaterial(AActor* RefreshableActor)
+{
+    if (Scene && StaticMesh)
+    {
+        UWorld* World = GEngine->GetCurrentPlayWorld();
+        ULevel* Level = World->GetCurrentLevel();
+        SteamAudio::UpdateStaticMeshMaterial(World, Level, StaticMesh, RefreshableActor);
+    }
+}
+
 ASteamAudioStaticMeshActor* ASteamAudioStaticMeshActor::FindInLevel(UWorld* World, ULevel* Level)
 {
     check(World);

@@ -853,7 +853,7 @@ bool ExportDynamicObject(USteamAudioDynamicObjectComponent* DynamicObject, FStri
 // Scene Load/Unload
 // ---------------------------------------------------------------------------------------------------------------------
 
-void UpdateStaticGeometryForLevel(UWorld* World, ULevel* Level, IPLStaticMesh& OldStaticMesh)
+void UpdateStaticGeometryForLevel(UWorld* World, ULevel* Level, IPLStaticMesh OldStaticMesh)
 {
     check(World);
     check(Level);
@@ -922,6 +922,60 @@ void UpdateStaticGeometryForLevel(UWorld* World, ULevel* Level, IPLStaticMesh& O
             iplStaticMeshRemove(OldStaticMesh, Scene);
             iplSceneCommit(Scene);
             OldStaticMesh = StaticMesh;
+        });
+}
+
+void UpdateStaticMeshMaterial(UWorld* World, ULevel* Level, IPLStaticMesh StaticMesh, AActor* RefreshableActor)
+{
+    check(World);
+    check(Level);
+
+    Async(EAsyncExecution::Thread, [World, Level, StaticMesh, RefreshableActor]()
+        {
+            IPLMaterial SteamAudioMaterial;
+            int32 ActorIndex;
+            TArray<AActor*> Actors;
+            bool bExportSucceeded = RunInGameThread<bool>([&]()
+                {
+                    GetActorsForStaticGeometryExport(World, Level, Actors, true);
+                    for (int32 i = 0; i < Actors.Num(); ++i)
+                    {
+                        AActor* Actor = Actors[i];
+                        if (Actor->IsA<AStaticMeshActor>() && Actor == RefreshableActor)
+                        {
+                            FSoftObjectPath MaterialAsset = GetMaterialAssetForActor(Actor);
+                            if (!MaterialAsset.IsValid())
+                            {
+                                MaterialAsset = GetDefault<USteamAudioSettings>()->DefaultMeshMaterial;
+                            }
+
+                            USteamAudioMaterial* Material = Cast<USteamAudioMaterial>(MaterialAsset.TryLoad());
+                            if (!Material)
+                            {
+                                return false;
+                            }
+
+                            SteamAudioMaterial.absorption[0] = Material->AbsorptionLow;
+                            SteamAudioMaterial.absorption[1] = Material->AbsorptionMid;
+                            SteamAudioMaterial.absorption[2] = Material->AbsorptionHigh;
+                            SteamAudioMaterial.scattering = Material->Scattering;
+                            SteamAudioMaterial.transmission[0] = Material->TransmissionLow;
+                            SteamAudioMaterial.transmission[1] = Material->TransmissionMid;
+                            SteamAudioMaterial.transmission[2] = Material->TransmissionHigh;
+                            ActorIndex = i;
+
+                            return true;
+                        }
+                    }
+
+                    return false;
+                });
+
+            if (!bExportSucceeded)
+                return;
+
+            FSteamAudioManager& Manager = FSteamAudioModule::GetManager();
+            iplStaticMeshMaterialSet(StaticMesh, Manager.GetScene(), &SteamAudioMaterial, ActorIndex);
         });
 }
 
