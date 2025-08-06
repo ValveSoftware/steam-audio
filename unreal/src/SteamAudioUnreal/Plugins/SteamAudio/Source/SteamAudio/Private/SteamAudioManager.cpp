@@ -25,6 +25,7 @@
 #include "SteamAudioScene.h"
 #include "SteamAudioSettings.h"
 #include "SteamAudioSourceComponent.h"
+#include "SteamAudioStaticMeshActor.h"
 #include "SOFAFile.h"
 
 namespace SteamAudio {
@@ -91,6 +92,28 @@ FSteamAudioManager::FSteamAudioManager()
 FSteamAudioManager::~FSteamAudioManager()
 {
     ShutDownSteamAudio();
+}
+
+void FSteamAudioManager::UpdateStaticMesh()
+{
+    UWorld* World = GEngine->GetCurrentPlayWorld();
+    ULevel* Level = World->GetCurrentLevel();
+    auto StaticMeshActor = ASteamAudioStaticMeshActor::FindInLevel(World, Level);
+    if (StaticMeshActor)
+    {
+        StaticMeshActor->UpdateStaticMesh();
+    }
+}
+
+void FSteamAudioManager::UpdateStaticMeshMaterial(AStaticMeshActor* StaticMeshActor)
+{
+    UWorld* World = GEngine->GetCurrentPlayWorld();
+    ULevel* Level = World->GetCurrentLevel();
+    auto SteamAudioStaticMeshActor = ASteamAudioStaticMeshActor::FindInLevel(World, Level);
+    if (SteamAudioStaticMeshActor)
+    {
+        SteamAudioStaticMeshActor->UpdateStaticMeshMaterial(StaticMeshActor);
+    }
 }
 
 void FSteamAudioManager::SetSteamAudioEnabled(bool bNewIsSteamAudioEnabled)

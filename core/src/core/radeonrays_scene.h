@@ -103,6 +103,12 @@ public:
     virtual void dumpObj(const string& fileName) const override
     {}
 
+    virtual void SetStaticMeshMaterial(IStaticMesh* staticMesh, Material* NewMaterial, int index) override
+    {
+        if (mCPUScene)
+            mCPUScene->SetStaticMeshMaterial(staticMesh, NewMaterial, index);
+    }
+
     const list<shared_ptr<IStaticMesh>>& staticMeshes() const
     {
         return mStaticMeshes;

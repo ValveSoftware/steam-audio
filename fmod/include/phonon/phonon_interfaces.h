@@ -286,6 +286,8 @@ public:
 
     virtual IPLerror createInstancedMesh(IPLInstancedMeshSettings* settings,
                                          IInstancedMesh** instancedMesh) = 0;
+
+    virtual void SetStaticMeshMaterial(IPLStaticMesh staticMesh, IPLMaterial* NewMaterial, int index) { }
 };
 
 class IStaticMesh
@@ -1005,6 +1007,14 @@ void IPLCALL iplStaticMeshAdd(IPLStaticMesh staticMesh, IPLScene scene)
         return;
 
     reinterpret_cast<api::IStaticMesh*>(staticMesh)->add(reinterpret_cast<api::IScene*>(scene));
+}
+
+void IPLCALL iplStaticMeshMaterialSet(IPLStaticMesh staticMesh, IPLScene scene, IPLMaterial* NewMaterial, int index)
+{
+    if (!staticMesh)
+        return;
+    
+    reinterpret_cast<api::IScene*>(scene)->SetStaticMeshMaterial(staticMesh, NewMaterial, index);
 }
 
 void IPLCALL iplStaticMeshRemove(IPLStaticMesh staticMesh, IPLScene scene)

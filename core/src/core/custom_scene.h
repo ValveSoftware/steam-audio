@@ -136,6 +136,9 @@ public:
     virtual void dumpObj(const string& fileName) const override
     {}
 
+    virtual void SetStaticMeshMaterial(IStaticMesh* staticMesh, Material* NewMaterial, int index) override
+    { }
+
 private:
     ClosestHitCallback mClosestHitCallback;
     AnyHitCallback mAnyHitCallback;
