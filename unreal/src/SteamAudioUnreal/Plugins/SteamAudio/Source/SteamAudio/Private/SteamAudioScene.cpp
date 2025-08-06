@@ -853,7 +853,7 @@ bool ExportDynamicObject(USteamAudioDynamicObjectComponent* DynamicObject, FStri
 // Scene Load/Unload
 // ---------------------------------------------------------------------------------------------------------------------
 
-void UpdateStaticGeometryForLevel(UWorld* World, ULevel* Level, IPLStaticMesh OldStaticMesh)
+void UpdateStaticGeometryForLevel(UWorld* World, ULevel* Level, IPLStaticMesh& OldStaticMesh)
 {
     check(World);
     check(Level);

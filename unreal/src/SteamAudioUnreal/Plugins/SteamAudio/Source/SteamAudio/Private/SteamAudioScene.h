@@ -55,7 +55,7 @@ bool STEAMAUDIO_API ExportDynamicObject(USteamAudioDynamicObjectComponent* Dynam
 /**
  * Loads the geometry and material data in the active iplStaticMesh object.
  */
-void STEAMAUDIO_API UpdateStaticGeometryForLevel(UWorld* World, ULevel* Level, IPLStaticMesh OldStaticMesh);
+void STEAMAUDIO_API UpdateStaticGeometryForLevel(UWorld* World, ULevel* Level, IPLStaticMesh& OldStaticMesh);
 
 /**
  * Loads the material data of specified StaticMeshActor in the iplStaticMesh object.
