@@ -141,6 +141,7 @@
 <ul class="simple">
 <li><p>Python (<a class="reference external" href="https://www.python.org">https://www.python.org</a>)</p></li>
 <li><p>CMake 3.17 or later (<a class="reference external" href="https://cmake.org">https://cmake.org</a>)</p></li>
+<li><p>FMOD Studio SDK (<a class="reference external" href="https://www.fmod.com/download#fmodengine">https://www.fmod.com/download#fmodengine</a>)</p></li>
 </ul>
 <p>To build the Windows plugin, you will need:</p>
 <ul class="simple">
@@ -187,6 +188,10 @@ in the appropriate locations.</p>
 </section>
 <section id="building-using-the-build-script">
 <h3>Building using the build script<a class="headerlink" href="#building-using-the-build-script" title="Link to this heading"></a></h3>
+<p>Before building the plugin, you must set the <cite>FMODROOT</cite> environment variable to point to the directory into which you extracted or installed the FMOD Studio SDK:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ set FMODROOT=/path/to/fmod
+</pre></div>
+</div>
 <p>To build the plugin, run the following from a command prompt in the <code class="docutils literal notranslate"><span class="pre">fmod</span></code> directory of the repository:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ cd build
 $ python build.py

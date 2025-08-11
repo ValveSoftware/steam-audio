@@ -133,7 +133,7 @@
 <dt>Occlusion</dt><dd><p>Specifies how occlusion is simulated and applied to the event.</p>
 <ul class="simple">
 <li><p><em>Off</em>. Occlusion is not applied.</p></li>
-<li><p><em>Simulation-Defined</em>. Occlusion is applied. The occlusion value must be supplied by the game engine via the <code class="docutils literal notranslate"><span class="pre">SIMULATION_OUTPUTS</span></code> DSP parameter.</p></li>
+<li><p><em>Simulation-Defined</em>. Occlusion is applied. The occlusion value must be supplied by the game engine via the <code class="docutils literal notranslate"><span class="pre">IPL_SPATIALIZE_SIMULATION_OUTPUTS_HANDLE</span></code> DSP parameter.</p></li>
 <li><p><em>User-Defined</em>. Uses the <strong>Occlusion Value</strong> dial to control occlusion. The occlusion value will <em>not</em> automatically change based on surrounding geometry. You are expected to control the <strong>Occlusion Value</strong> dial using a parameter to achieve this effect. This option is intended for integrating your own occlusion model with Steam Audio.</p></li>
 </ul>
 </dd>
@@ -142,7 +142,7 @@
 <dt>Transmission</dt><dd><p>Specifies how transmission is simulated and applied to the event.</p>
 <ul class="simple">
 <li><p><em>Off</em>. Transmission is not applied.</p></li>
-<li><p><em>Simulation-Defined</em>. Transmission is applied. The transmission filter EQ values must be supplied by the game engine via the <code class="docutils literal notranslate"><span class="pre">SIMULATION_OUTPUTS</span></code> DSP parameter.</p></li>
+<li><p><em>Simulation-Defined</em>. Transmission is applied. The transmission filter EQ values must be supplied by the game engine via the <code class="docutils literal notranslate"><span class="pre">IPL_SPATIALIZE_SIMULATION_OUTPUTS_HANDLE</span></code> DSP parameter.</p></li>
 <li><p><em>User-Defined</em>. Uses the <strong>Transmission Low</strong>, <strong>Transmission Mid</strong>, and <strong>Transmission High</strong> dials to control transmission. The transmission values will <em>not</em> automatically change based on surrounding geometry. You are expected to control the dials using a parameter to achieve this effect. This option is intended for integrating your own occlusion and transmission model with Steam Audio.</p></li>
 </ul>
 </dd>
@@ -160,13 +160,13 @@
 </dd>
 <dt>Direct Mix Level</dt><dd><p>The contribution of the direct sound path to the overall mix for this event. Lower values reduce the contribution more.</p>
 </dd>
-<dt>Reflections</dt><dd><p>If enabled, reflections reaching the listener from the source will be applied to the event. The reflections data must be specified via the <code class="docutils literal notranslate"><span class="pre">SIMULATION_OUTPUTS</span></code> DSP parameter.</p>
+<dt>Reflections</dt><dd><p>If enabled, reflections reaching the listener from the source will be applied to the event. The reflections data must be specified via the <code class="docutils literal notranslate"><span class="pre">IPL_SPATIALIZE_SIMULATION_OUTPUTS_HANDLE</span></code> DSP parameter.</p>
 </dd>
 <dt>Apply HRTF To Reflections</dt><dd><p>If checked, applies HRTF-based 3D audio rendering to reflections. Results in an improvement in spatialization quality when using convolution or hybrid reverb, at the cost of slightly increased CPU usage. Default: off.</p>
 </dd>
 <dt>Reflections Mix Level</dt><dd><p>The contribution of reflections to the overall mix for this event. Lower values reduce the contribution more.</p>
 </dd>
-<dt>Pathing</dt><dd><p>If checked, shortest paths taken by sound as it propagates from the source to the listener will be simulated, and appropriate spatialization will be applied to the event for these indirect paths. The pathing data must be specified via the <code class="docutils literal notranslate"><span class="pre">SIMULATION_OUTPUTS</span></code> DSP parameter.</p>
+<dt>Pathing</dt><dd><p>If checked, shortest paths taken by sound as it propagates from the source to the listener will be simulated, and appropriate spatialization will be applied to the event for these indirect paths. The pathing data must be specified via the <code class="docutils literal notranslate"><span class="pre">IPL_SPATIALIZE_SIMULATION_OUTPUTS_HANDLE</span></code> DSP parameter.</p>
 </dd>
 <dt>Apply HRTF To Pathing</dt><dd><p>If checked, applies HRTF-based 3D audio rendering to pathing. Results in an improvement in spatialization quality, at the cost of slightly increased CPU usage. Default: off.</p>
 </dd>

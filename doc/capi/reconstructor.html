@@ -1,0 +1,319 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Reconstructor &mdash; Steam Audio C API  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/steamaudio.css?v=b5aaeb06" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=7f41d439"></script>
+      <script src="_static/doctools.js?v=9a2dae69"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Impulse Response" href="impulse-response.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html">
+            
+              <img src="_static/steam-audio-logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Steam Audio SDK</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guide.html">Programmer’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="build-instructions.html">Build Instructions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="integration.html">Integrating Steam Audio</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="reference.html">API Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="types.html">Basic Data Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="context.html">Context</a></li>
+<li class="toctree-l2"><a class="reference internal" href="geometry.html">Geometry</a></li>
+<li class="toctree-l2"><a class="reference internal" href="serialization.html">Serialization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="embree.html">Embree</a></li>
+<li class="toctree-l2"><a class="reference internal" href="opencl.html">OpenCL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="radeon-rays.html">Radeon Rays</a></li>
+<li class="toctree-l2"><a class="reference internal" href="trueaudio-next.html">TrueAudio Next</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scene.html">Scene</a></li>
+<li class="toctree-l2"><a class="reference internal" href="audio-buffers.html">Audio Buffers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hrtf.html">HRTF</a></li>
+<li class="toctree-l2"><a class="reference internal" href="panning-effect.html">Panning Effect</a></li>
+<li class="toctree-l2"><a class="reference internal" href="binaural-effect.html">Binaural Effect</a></li>
+<li class="toctree-l2"><a class="reference internal" href="virtual-surround-effect.html">Virtual Surround Effect</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ambisonics-encode-effect.html">Ambisonics Encode Effect</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ambisonics-panning-effect.html">Ambisonics Panning Effect</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ambisonics-binaural-effect.html">Ambisonics Binaural Effect</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ambisonics-rotation-effect.html">Ambisonics Rotation Effect</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ambisonics-decode-effect.html">Ambisonics Decode Effect</a></li>
+<li class="toctree-l2"><a class="reference internal" href="direct-effect.html">Direct Effect</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reflections-effect.html">Reflection Effect</a></li>
+<li class="toctree-l2"><a class="reference internal" href="path-effect.html">Path Effect</a></li>
+<li class="toctree-l2"><a class="reference internal" href="probes.html">Probes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="baking.html">Baking</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simulation.html">Simulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="energy-field.html">Energy Field</a></li>
+<li class="toctree-l2"><a class="reference internal" href="impulse-response.html">Impulse Response</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Reconstructor</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#typedefs">Typedefs</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv416IPLReconstructor"><code class="docutils literal notranslate"><span class="pre">IPLReconstructor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#functions">Functions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv422iplReconstructorCreate10IPLContextP24IPLReconstructorSettingsP16IPLReconstructor"><code class="docutils literal notranslate"><span class="pre">iplReconstructorCreate()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv422iplReconstructorRetain16IPLReconstructor"><code class="docutils literal notranslate"><span class="pre">iplReconstructorRetain()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv423iplReconstructorReleaseP16IPLReconstructor"><code class="docutils literal notranslate"><span class="pre">iplReconstructorRelease()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv427iplReconstructorReconstruct16IPLReconstructor8IPLint32P22IPLReconstructorInputsP28IPLReconstructorSharedInputsP23IPLReconstructorOutputs"><code class="docutils literal notranslate"><span class="pre">iplReconstructorReconstruct()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#structures">Structures</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv424IPLReconstructorSettings"><code class="docutils literal notranslate"><span class="pre">IPLReconstructorSettings</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv422IPLReconstructorInputs"><code class="docutils literal notranslate"><span class="pre">IPLReconstructorInputs</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv428IPLReconstructorSharedInputs"><code class="docutils literal notranslate"><span class="pre">IPLReconstructorSharedInputs</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv423IPLReconstructorOutputs"><code class="docutils literal notranslate"><span class="pre">IPLReconstructorOutputs</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Steam Audio C API</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="reference.html">API Reference</a></li>
+      <li class="breadcrumb-item active">Reconstructor</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="reconstructor">
+<h1>Reconstructor<a class="headerlink" href="#reconstructor" title="Link to this heading"></a></h1>
+<section id="typedefs">
+<h2>Typedefs<a class="headerlink" href="#typedefs" title="Link to this heading"></a></h2>
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv416IPLReconstructor">
+<span id="_CPPv316IPLReconstructor"></span><span id="_CPPv216IPLReconstructor"></span><span id="IPLReconstructor"></span><span class="target" id="group__reconstructor_1gada6e527dd74b9397c82ee1377a044db1"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="n"><span class="pre">_IPLReconstructor_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">IPLReconstructor</span></span></span><a class="headerlink" href="#_CPPv416IPLReconstructor" title="Link to this definition"></a><br /></dt>
+<dd><p>An object that can convert energy fields to impulse responses. </p>
+<p>Energy fields are typically much smaller in size than impulse responses, and therefore are used when storing baked reflections or reverb in a probe batch, but impulse responses are what is needed at runtime for convolution. </p>
+</dd></dl>
+
+</section>
+<section id="functions">
+<h2>Functions<a class="headerlink" href="#functions" title="Link to this heading"></a></h2>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv422iplReconstructorCreate10IPLContextP24IPLReconstructorSettingsP16IPLReconstructor">
+<span id="_CPPv322iplReconstructorCreate10IPLContextP24IPLReconstructorSettingsP16IPLReconstructor"></span><span id="_CPPv222iplReconstructorCreate10IPLContextP24IPLReconstructorSettingsP16IPLReconstructor"></span><span id="iplReconstructorCreate__IPLContext.IPLReconstructorSettingsP.IPLReconstructorP"></span><span class="target" id="group__reconstructor_1gaefbd18e027ed5e78de3123e1f5a23963"></span><a class="reference internal" href="types.html#_CPPv48IPLerror" title="IPLerror"><span class="n"><span class="pre">IPLerror</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplReconstructorCreate</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="context.html#_CPPv410IPLContext" title="IPLContext"><span class="n"><span class="pre">IPLContext</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">context</span></span>, <a class="reference internal" href="#_CPPv424IPLReconstructorSettings" title="IPLReconstructorSettings"><span class="n"><span class="pre">IPLReconstructorSettings</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">settings</span></span>, <a class="reference internal" href="#_CPPv416IPLReconstructor" title="IPLReconstructor"><span class="n"><span class="pre">IPLReconstructor</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">reconstructor</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv422iplReconstructorCreate10IPLContextP24IPLReconstructorSettingsP16IPLReconstructor" title="Link to this definition"></a><br /></dt>
+<dd><p>Creates a reconstructor. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>context</strong> – The context used to initialize Steam Audio. </p></li>
+<li><p><strong>settings</strong> – The settings to use when creating the reconstructor. </p></li>
+<li><p><strong>reconstructor</strong> – [out] The created reconstructor.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Status code indicating whether or not the operation succeeded. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv422iplReconstructorRetain16IPLReconstructor">
+<span id="_CPPv322iplReconstructorRetain16IPLReconstructor"></span><span id="_CPPv222iplReconstructorRetain16IPLReconstructor"></span><span id="iplReconstructorRetain__IPLReconstructor"></span><span class="target" id="group__reconstructor_1ga7738beed2e3f8e89adf900f83e8bfe67"></span><a class="reference internal" href="#_CPPv416IPLReconstructor" title="IPLReconstructor"><span class="n"><span class="pre">IPLReconstructor</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplReconstructorRetain</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv416IPLReconstructor" title="IPLReconstructor"><span class="n"><span class="pre">IPLReconstructor</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">reconstructor</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv422iplReconstructorRetain16IPLReconstructor" title="Link to this definition"></a><br /></dt>
+<dd><p>Retains an additional reference to a reconstructor. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>reconstructor</strong> – The reconstructor to retain a reference to.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The additional reference to the reconstructor. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv423iplReconstructorReleaseP16IPLReconstructor">
+<span id="_CPPv323iplReconstructorReleaseP16IPLReconstructor"></span><span id="_CPPv223iplReconstructorReleaseP16IPLReconstructor"></span><span id="iplReconstructorRelease__IPLReconstructorP"></span><span class="target" id="group__reconstructor_1gaf0386e827b3e977ba4d04b742442205a"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplReconstructorRelease</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv416IPLReconstructor" title="IPLReconstructor"><span class="n"><span class="pre">IPLReconstructor</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">reconstructor</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv423iplReconstructorReleaseP16IPLReconstructor" title="Link to this definition"></a><br /></dt>
+<dd><p>Releases a reference to a reconstructor. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>reconstructor</strong> – The reconstructor to release a reference to. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv427iplReconstructorReconstruct16IPLReconstructor8IPLint32P22IPLReconstructorInputsP28IPLReconstructorSharedInputsP23IPLReconstructorOutputs">
+<span id="_CPPv327iplReconstructorReconstruct16IPLReconstructor8IPLint32P22IPLReconstructorInputsP28IPLReconstructorSharedInputsP23IPLReconstructorOutputs"></span><span id="_CPPv227iplReconstructorReconstruct16IPLReconstructor8IPLint32P22IPLReconstructorInputsP28IPLReconstructorSharedInputsP23IPLReconstructorOutputs"></span><span id="iplReconstructorReconstruct__IPLReconstructor.IPLint32.IPLReconstructorInputsP.IPLReconstructorSharedInputsP.IPLReconstructorOutputsP"></span><span class="target" id="group__reconstructor_1ga42e21b4cb5b9b85bb2aeb421893620bf"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplReconstructorReconstruct</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv416IPLReconstructor" title="IPLReconstructor"><span class="n"><span class="pre">IPLReconstructor</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">reconstructor</span></span>, <a class="reference internal" href="types.html#_CPPv48IPLint32" title="IPLint32"><span class="n"><span class="pre">IPLint32</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">numInputs</span></span>, <a class="reference internal" href="#_CPPv422IPLReconstructorInputs" title="IPLReconstructorInputs"><span class="n"><span class="pre">IPLReconstructorInputs</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">inputs</span></span>, <a class="reference internal" href="#_CPPv428IPLReconstructorSharedInputs" title="IPLReconstructorSharedInputs"><span class="n"><span class="pre">IPLReconstructorSharedInputs</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">sharedInputs</span></span>, <a class="reference internal" href="#_CPPv423IPLReconstructorOutputs" title="IPLReconstructorOutputs"><span class="n"><span class="pre">IPLReconstructorOutputs</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">outputs</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv427iplReconstructorReconstruct16IPLReconstructor8IPLint32P22IPLReconstructorInputsP28IPLReconstructorSharedInputsP23IPLReconstructorOutputs" title="Link to this definition"></a><br /></dt>
+<dd><p>Reconstructs one or more impulse responses as a single batch of work. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>reconstructor</strong> – The reconstructor to use. </p></li>
+<li><p><strong>numInputs</strong> – The number of impulse responses to reconstruct. </p></li>
+<li><p><strong>inputs</strong> – Pointer to <code class="docutils literal notranslate"><span class="pre">numInputs</span></code> input structures, each describing a single energy field from which to reconstruct a corresponding impulse response. </p></li>
+<li><p><strong>sharedInputs</strong> – Pointer to a single shared input structure, describing common inputs used across all impulse response reconstruction operations in this call. </p></li>
+<li><p><strong>outputs</strong> – Pointer to <code class="docutils literal notranslate"><span class="pre">numInputs</span></code> output structures, each describing a single impulse response object into which to write the corresponding reconstructed impulse response. </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="structures">
+<h2>Structures<a class="headerlink" href="#structures" title="Link to this heading"></a></h2>
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv424IPLReconstructorSettings">
+<span id="_CPPv324IPLReconstructorSettings"></span><span id="_CPPv224IPLReconstructorSettings"></span><span id="IPLReconstructorSettings"></span><span class="target" id="struct_i_p_l_reconstructor_settings"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLReconstructorSettings</span></span></span><a class="headerlink" href="#_CPPv424IPLReconstructorSettings" title="Link to this definition"></a><br /></dt>
+<dd><p>Settings used to create a reconstructor. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N24IPLReconstructorSettings11maxDurationE">
+<span id="_CPPv3N24IPLReconstructorSettings11maxDurationE"></span><span id="_CPPv2N24IPLReconstructorSettings11maxDurationE"></span><span id="IPLReconstructorSettings::maxDuration__IPLfloat32"></span><span class="target" id="struct_i_p_l_reconstructor_settings_1a6690e4e48c1b97a01816f947e336d083"></span><a class="reference internal" href="types.html#_CPPv410IPLfloat32" title="IPLfloat32"><span class="n"><span class="pre">IPLfloat32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">maxDuration</span></span></span><a class="headerlink" href="#_CPPv4N24IPLReconstructorSettings11maxDurationE" title="Link to this definition"></a><br /></dt>
+<dd><p>The largest possible duration (in seconds) of any impulse response that will be reconstructed using this reconstructor. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N24IPLReconstructorSettings8maxOrderE">
+<span id="_CPPv3N24IPLReconstructorSettings8maxOrderE"></span><span id="_CPPv2N24IPLReconstructorSettings8maxOrderE"></span><span id="IPLReconstructorSettings::maxOrder__IPLint32"></span><span class="target" id="struct_i_p_l_reconstructor_settings_1a51ad17576848f04fd5c9ddac74b7bd05"></span><a class="reference internal" href="types.html#_CPPv48IPLint32" title="IPLint32"><span class="n"><span class="pre">IPLint32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">maxOrder</span></span></span><a class="headerlink" href="#_CPPv4N24IPLReconstructorSettings8maxOrderE" title="Link to this definition"></a><br /></dt>
+<dd><p>The largest possible Ambisonic order of any impulse response that will be reconstructed using this reconstructor. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N24IPLReconstructorSettings12samplingRateE">
+<span id="_CPPv3N24IPLReconstructorSettings12samplingRateE"></span><span id="_CPPv2N24IPLReconstructorSettings12samplingRateE"></span><span id="IPLReconstructorSettings::samplingRate__IPLint32"></span><span class="target" id="struct_i_p_l_reconstructor_settings_1a2b81c828d28baf3f53a4e39385eae42f"></span><a class="reference internal" href="types.html#_CPPv48IPLint32" title="IPLint32"><span class="n"><span class="pre">IPLint32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">samplingRate</span></span></span><a class="headerlink" href="#_CPPv4N24IPLReconstructorSettings12samplingRateE" title="Link to this definition"></a><br /></dt>
+<dd><p>The sampling rate of impulse responses reconstructed using this reconstructor. </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv422IPLReconstructorInputs">
+<span id="_CPPv322IPLReconstructorInputs"></span><span id="_CPPv222IPLReconstructorInputs"></span><span id="IPLReconstructorInputs"></span><span class="target" id="struct_i_p_l_reconstructor_inputs"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLReconstructorInputs</span></span></span><a class="headerlink" href="#_CPPv422IPLReconstructorInputs" title="Link to this definition"></a><br /></dt>
+<dd><p>The inputs for a single reconstruction operation. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N22IPLReconstructorInputs11energyFieldE">
+<span id="_CPPv3N22IPLReconstructorInputs11energyFieldE"></span><span id="_CPPv2N22IPLReconstructorInputs11energyFieldE"></span><span id="IPLReconstructorInputs::energyField__IPLEnergyField"></span><span class="target" id="struct_i_p_l_reconstructor_inputs_1a2ba9a092d0caa1088619845e7e2ab5fd"></span><a class="reference internal" href="energy-field.html#_CPPv414IPLEnergyField" title="IPLEnergyField"><span class="n"><span class="pre">IPLEnergyField</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">energyField</span></span></span><a class="headerlink" href="#_CPPv4N22IPLReconstructorInputs11energyFieldE" title="Link to this definition"></a><br /></dt>
+<dd><p>The energy field from which to reconstruct an impulse response. </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv428IPLReconstructorSharedInputs">
+<span id="_CPPv328IPLReconstructorSharedInputs"></span><span id="_CPPv228IPLReconstructorSharedInputs"></span><span id="IPLReconstructorSharedInputs"></span><span class="target" id="struct_i_p_l_reconstructor_shared_inputs"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLReconstructorSharedInputs</span></span></span><a class="headerlink" href="#_CPPv428IPLReconstructorSharedInputs" title="Link to this definition"></a><br /></dt>
+<dd><p>Inputs common to all reconstruction operations specified in a single call to <code class="docutils literal notranslate"><span class="pre">iplReconstructorReconstruct</span></code>. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N28IPLReconstructorSharedInputs8durationE">
+<span id="_CPPv3N28IPLReconstructorSharedInputs8durationE"></span><span id="_CPPv2N28IPLReconstructorSharedInputs8durationE"></span><span id="IPLReconstructorSharedInputs::duration__IPLfloat32"></span><span class="target" id="struct_i_p_l_reconstructor_shared_inputs_1aeda5a21fb3c88f8f9185a228686e29f8"></span><a class="reference internal" href="types.html#_CPPv410IPLfloat32" title="IPLfloat32"><span class="n"><span class="pre">IPLfloat32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">duration</span></span></span><a class="headerlink" href="#_CPPv4N28IPLReconstructorSharedInputs8durationE" title="Link to this definition"></a><br /></dt>
+<dd><p>Duration of impulse responses to reconstruct. </p>
+<p>Must be less than or equal to <code class="docutils literal notranslate"><span class="pre">maxDuration</span></code> specified in <code class="docutils literal notranslate"><a class="reference internal" href="#struct_i_p_l_reconstructor_settings"><span class="std std-ref"><span class="pre">IPLReconstructorSettings</span></span></a></code>. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N28IPLReconstructorSharedInputs5orderE">
+<span id="_CPPv3N28IPLReconstructorSharedInputs5orderE"></span><span id="_CPPv2N28IPLReconstructorSharedInputs5orderE"></span><span id="IPLReconstructorSharedInputs::order__IPLint32"></span><span class="target" id="struct_i_p_l_reconstructor_shared_inputs_1a8f0bc3d342c8bf145d3f4fc741f84df9"></span><a class="reference internal" href="types.html#_CPPv48IPLint32" title="IPLint32"><span class="n"><span class="pre">IPLint32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">order</span></span></span><a class="headerlink" href="#_CPPv4N28IPLReconstructorSharedInputs5orderE" title="Link to this definition"></a><br /></dt>
+<dd><p>Ambisonic order of impulse responses to reconstruct. </p>
+<p>Must be less than or equal to <code class="docutils literal notranslate"><span class="pre">maxOrder</span></code> specified in <code class="docutils literal notranslate"><a class="reference internal" href="#struct_i_p_l_reconstructor_settings"><span class="std std-ref"><span class="pre">IPLReconstructorSettings</span></span></a></code>. </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv423IPLReconstructorOutputs">
+<span id="_CPPv323IPLReconstructorOutputs"></span><span id="_CPPv223IPLReconstructorOutputs"></span><span id="IPLReconstructorOutputs"></span><span class="target" id="struct_i_p_l_reconstructor_outputs"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLReconstructorOutputs</span></span></span><a class="headerlink" href="#_CPPv423IPLReconstructorOutputs" title="Link to this definition"></a><br /></dt>
+<dd><p>The outputs for a single reconstruction operation. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N23IPLReconstructorOutputs15impulseResponseE">
+<span id="_CPPv3N23IPLReconstructorOutputs15impulseResponseE"></span><span id="_CPPv2N23IPLReconstructorOutputs15impulseResponseE"></span><span id="IPLReconstructorOutputs::impulseResponse__IPLImpulseResponse"></span><span class="target" id="struct_i_p_l_reconstructor_outputs_1a71a5b9b22ce7ef90cb0e2b428fc10e73"></span><a class="reference internal" href="impulse-response.html#_CPPv418IPLImpulseResponse" title="IPLImpulseResponse"><span class="n"><span class="pre">IPLImpulseResponse</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">impulseResponse</span></span></span><a class="headerlink" href="#_CPPv4N23IPLReconstructorOutputs15impulseResponseE" title="Link to this definition"></a><br /></dt>
+<dd><p>The impulse response object into which the reconstructed impulse repsonse should be stored. </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="impulse-response.html" class="btn btn-neutral float-left" title="Impulse Response" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2017-2023, Valve Corporation.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

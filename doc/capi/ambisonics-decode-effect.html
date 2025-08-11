@@ -80,6 +80,8 @@
 <li class="toctree-l4"><a class="reference internal" href="#_CPPv432iplAmbisonicsDecodeEffectReleaseP25IPLAmbisonicsDecodeEffect"><code class="docutils literal notranslate"><span class="pre">iplAmbisonicsDecodeEffectRelease()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#_CPPv430iplAmbisonicsDecodeEffectReset25IPLAmbisonicsDecodeEffect"><code class="docutils literal notranslate"><span class="pre">iplAmbisonicsDecodeEffectReset()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#_CPPv430iplAmbisonicsDecodeEffectApply25IPLAmbisonicsDecodeEffectP31IPLAmbisonicsDecodeEffectParamsP14IPLAudioBufferP14IPLAudioBuffer"><code class="docutils literal notranslate"><span class="pre">iplAmbisonicsDecodeEffectApply()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv432iplAmbisonicsDecodeEffectGetTail25IPLAmbisonicsDecodeEffectP14IPLAudioBuffer"><code class="docutils literal notranslate"><span class="pre">iplAmbisonicsDecodeEffectGetTail()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv436iplAmbisonicsDecodeEffectGetTailSize25IPLAmbisonicsDecodeEffect"><code class="docutils literal notranslate"><span class="pre">iplAmbisonicsDecodeEffectGetTailSize()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#structures">Structures</a><ul>
@@ -95,6 +97,9 @@
 <li class="toctree-l2"><a class="reference internal" href="probes.html">Probes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="baking.html">Baking</a></li>
 <li class="toctree-l2"><a class="reference internal" href="simulation.html">Simulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="energy-field.html">Energy Field</a></li>
+<li class="toctree-l2"><a class="reference internal" href="impulse-response.html">Impulse Response</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reconstructor.html">Reconstructor</a></li>
 </ul>
 </li>
 </ul>
@@ -208,6 +213,39 @@
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">IPL_AUDIOEFFECTSTATE_TAILREMAINING</span></code> if any tail samples remain in the effect’s internal buffers, or <code class="docutils literal notranslate"><span class="pre">IPL_AUDIOEFFECTSTATE_TAILCOMPLETE</span></code> otherwise. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv432iplAmbisonicsDecodeEffectGetTail25IPLAmbisonicsDecodeEffectP14IPLAudioBuffer">
+<span id="_CPPv332iplAmbisonicsDecodeEffectGetTail25IPLAmbisonicsDecodeEffectP14IPLAudioBuffer"></span><span id="_CPPv232iplAmbisonicsDecodeEffectGetTail25IPLAmbisonicsDecodeEffectP14IPLAudioBuffer"></span><span id="iplAmbisonicsDecodeEffectGetTail__IPLAmbisonicsDecodeEffect.IPLAudioBufferP"></span><span class="target" id="group__ambisonicsdecode_1ga7a4c7077e41cae180bc4270585888023"></span><a class="reference internal" href="audio-buffers.html#_CPPv419IPLAudioEffectState" title="IPLAudioEffectState"><span class="n"><span class="pre">IPLAudioEffectState</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplAmbisonicsDecodeEffectGetTail</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv425IPLAmbisonicsDecodeEffect" title="IPLAmbisonicsDecodeEffect"><span class="n"><span class="pre">IPLAmbisonicsDecodeEffect</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">effect</span></span>, <a class="reference internal" href="audio-buffers.html#_CPPv414IPLAudioBuffer" title="IPLAudioBuffer"><span class="n"><span class="pre">IPLAudioBuffer</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">out</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv432iplAmbisonicsDecodeEffectGetTail25IPLAmbisonicsDecodeEffectP14IPLAudioBuffer" title="Link to this definition"></a><br /></dt>
+<dd><p>Retrieves a single frame of tail samples from an Ambisonics decode effect’s internal buffers. </p>
+<p>After the input to the Ambisonics decode effect has stopped, this function must be called instead of <code class="docutils literal notranslate"><span class="pre">iplAmbisonicsDecodeEffectApply</span></code> until the return value indicates that no more tail samples remain.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>effect</strong> – The Ambisonics decode effect. </p></li>
+<li><p><strong>out</strong> – The output audio buffer. Must have as many channels as needed for the speaker layout specified when creating the effect (if using panning) or 2 channels (if using binaural rendering).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">IPL_AUDIOEFFECTSTATE_TAILREMAINING</span></code> if any tail samples remain in the effect’s internal buffers, or <code class="docutils literal notranslate"><span class="pre">IPL_AUDIOEFFECTSTATE_TAILCOMPLETE</span></code> otherwise. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv436iplAmbisonicsDecodeEffectGetTailSize25IPLAmbisonicsDecodeEffect">
+<span id="_CPPv336iplAmbisonicsDecodeEffectGetTailSize25IPLAmbisonicsDecodeEffect"></span><span id="_CPPv236iplAmbisonicsDecodeEffectGetTailSize25IPLAmbisonicsDecodeEffect"></span><span id="iplAmbisonicsDecodeEffectGetTailSize__IPLAmbisonicsDecodeEffect"></span><span class="target" id="group__ambisonicsdecode_1gacb075baf4f7afb37fcf03a4339a17c83"></span><a class="reference internal" href="types.html#_CPPv48IPLint32" title="IPLint32"><span class="n"><span class="pre">IPLint32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplAmbisonicsDecodeEffectGetTailSize</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv425IPLAmbisonicsDecodeEffect" title="IPLAmbisonicsDecodeEffect"><span class="n"><span class="pre">IPLAmbisonicsDecodeEffect</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">effect</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv436iplAmbisonicsDecodeEffectGetTailSize25IPLAmbisonicsDecodeEffect" title="Link to this definition"></a><br /></dt>
+<dd><p>Returns the number of tail samples remaining in an Ambisonics decode effect’s internal buffers. </p>
+<p>Tail samples are audio samples that should be played even after the input to the effect has stopped playing and no further input samples are available.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>effect</strong> – The Ambisonics decode effect.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The number of tail samples remaining. </p>
 </dd>
 </dl>
 </dd></dl>

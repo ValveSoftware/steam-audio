@@ -81,6 +81,8 @@
 <li class="toctree-l4"><a class="reference internal" href="#_CPPv422iplDirectEffectReleaseP15IPLDirectEffect"><code class="docutils literal notranslate"><span class="pre">iplDirectEffectRelease()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#_CPPv420iplDirectEffectReset15IPLDirectEffect"><code class="docutils literal notranslate"><span class="pre">iplDirectEffectReset()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#_CPPv420iplDirectEffectApply15IPLDirectEffectP21IPLDirectEffectParamsP14IPLAudioBufferP14IPLAudioBuffer"><code class="docutils literal notranslate"><span class="pre">iplDirectEffectApply()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv422iplDirectEffectGetTail15IPLDirectEffectP14IPLAudioBuffer"><code class="docutils literal notranslate"><span class="pre">iplDirectEffectGetTail()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv426iplDirectEffectGetTailSize15IPLDirectEffect"><code class="docutils literal notranslate"><span class="pre">iplDirectEffectGetTailSize()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#structures">Structures</a><ul>
@@ -100,6 +102,9 @@
 <li class="toctree-l2"><a class="reference internal" href="probes.html">Probes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="baking.html">Baking</a></li>
 <li class="toctree-l2"><a class="reference internal" href="simulation.html">Simulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="energy-field.html">Energy Field</a></li>
+<li class="toctree-l2"><a class="reference internal" href="impulse-response.html">Impulse Response</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reconstructor.html">Reconstructor</a></li>
 </ul>
 </li>
 </ul>
@@ -216,6 +221,39 @@
 </dl>
 </dd></dl>
 
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv422iplDirectEffectGetTail15IPLDirectEffectP14IPLAudioBuffer">
+<span id="_CPPv322iplDirectEffectGetTail15IPLDirectEffectP14IPLAudioBuffer"></span><span id="_CPPv222iplDirectEffectGetTail15IPLDirectEffectP14IPLAudioBuffer"></span><span id="iplDirectEffectGetTail__IPLDirectEffect.IPLAudioBufferP"></span><span class="target" id="group__directeffect_1ga87b545454d1b73ff2f9d744e3cf17fd3"></span><a class="reference internal" href="audio-buffers.html#_CPPv419IPLAudioEffectState" title="IPLAudioEffectState"><span class="n"><span class="pre">IPLAudioEffectState</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplDirectEffectGetTail</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv415IPLDirectEffect" title="IPLDirectEffect"><span class="n"><span class="pre">IPLDirectEffect</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">effect</span></span>, <a class="reference internal" href="audio-buffers.html#_CPPv414IPLAudioBuffer" title="IPLAudioBuffer"><span class="n"><span class="pre">IPLAudioBuffer</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">out</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv422iplDirectEffectGetTail15IPLDirectEffectP14IPLAudioBuffer" title="Link to this definition"></a><br /></dt>
+<dd><p>Retrieves a single frame of tail samples from a direct effect’s internal buffers. </p>
+<p>After the input to the direct effect has stopped, this function must be called instead of <code class="docutils literal notranslate"><span class="pre">iplDirectEffectApply</span></code> until the return value indicates that no more tail samples remain.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>effect</strong> – The direct effect. </p></li>
+<li><p><strong>out</strong> – The output audio buffer. Must have as many channels as specified when creating the effect.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">IPL_AUDIOEFFECTSTATE_TAILREMAINING</span></code> if any tail samples remain in the effect’s internal buffers, or <code class="docutils literal notranslate"><span class="pre">IPL_AUDIOEFFECTSTATE_TAILCOMPLETE</span></code> otherwise. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv426iplDirectEffectGetTailSize15IPLDirectEffect">
+<span id="_CPPv326iplDirectEffectGetTailSize15IPLDirectEffect"></span><span id="_CPPv226iplDirectEffectGetTailSize15IPLDirectEffect"></span><span id="iplDirectEffectGetTailSize__IPLDirectEffect"></span><span class="target" id="group__directeffect_1ga623c05d235be2f433a99fb27284c591e"></span><a class="reference internal" href="types.html#_CPPv48IPLint32" title="IPLint32"><span class="n"><span class="pre">IPLint32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplDirectEffectGetTailSize</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv415IPLDirectEffect" title="IPLDirectEffect"><span class="n"><span class="pre">IPLDirectEffect</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">effect</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv426iplDirectEffectGetTailSize15IPLDirectEffect" title="Link to this definition"></a><br /></dt>
+<dd><p>Returns the number of tail samples remaining in a direct effect’s internal buffers. </p>
+<p>Tail samples are audio samples that should be played even after the input to the effect has stopped playing and no further input samples are available.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>effect</strong> – The direct effect.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The number of tail samples remaining. </p>
+</dd>
+</dl>
+</dd></dl>
+
 </section>
 <section id="structures">
 <h2>Structures<a class="headerlink" href="#structures" title="Link to this heading"></a></h2>
@@ -260,7 +298,7 @@
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N21IPLDirectEffectParams13airAbsorptionE">
-<span id="_CPPv3N21IPLDirectEffectParams13airAbsorptionE"></span><span id="_CPPv2N21IPLDirectEffectParams13airAbsorptionE"></span><span id="IPLDirectEffectParams::airAbsorption__IPLfloat32A"></span><span class="target" id="struct_i_p_l_direct_effect_params_1a647c0f3f570b20ba3e6dfbd4483d3376"></span><a class="reference internal" href="types.html#_CPPv410IPLfloat32" title="IPLfloat32"><span class="n"><span class="pre">IPLfloat32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">airAbsorption</span></span></span><span class="p"><span class="pre">[</span></span><span class="m"><span class="pre">3</span></span><span class="p"><span class="pre">]</span></span><a class="headerlink" href="#_CPPv4N21IPLDirectEffectParams13airAbsorptionE" title="Link to this definition"></a><br /></dt>
+<span id="_CPPv3N21IPLDirectEffectParams13airAbsorptionE"></span><span id="_CPPv2N21IPLDirectEffectParams13airAbsorptionE"></span><span id="IPLDirectEffectParams::airAbsorption__IPLfloat32A"></span><span class="target" id="struct_i_p_l_direct_effect_params_1a2f97a7d7375673dfa2e98ca11a022efc"></span><a class="reference internal" href="types.html#_CPPv410IPLfloat32" title="IPLfloat32"><span class="n"><span class="pre">IPLfloat32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">airAbsorption</span></span></span><span class="p"><span class="pre">[</span></span><span class="n"><span class="pre">IPL_NUM_BANDS</span></span><span class="p"><span class="pre">]</span></span><a class="headerlink" href="#_CPPv4N21IPLDirectEffectParams13airAbsorptionE" title="Link to this definition"></a><br /></dt>
 <dd><p>3-band EQ coefficients for air absorption, each between 0 and 1. </p>
 </dd></dl>
 
@@ -278,7 +316,7 @@
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N21IPLDirectEffectParams12transmissionE">
-<span id="_CPPv3N21IPLDirectEffectParams12transmissionE"></span><span id="_CPPv2N21IPLDirectEffectParams12transmissionE"></span><span id="IPLDirectEffectParams::transmission__IPLfloat32A"></span><span class="target" id="struct_i_p_l_direct_effect_params_1ac5cc1eac71b99a73f157d39faf589322"></span><a class="reference internal" href="types.html#_CPPv410IPLfloat32" title="IPLfloat32"><span class="n"><span class="pre">IPLfloat32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">transmission</span></span></span><span class="p"><span class="pre">[</span></span><span class="m"><span class="pre">3</span></span><span class="p"><span class="pre">]</span></span><a class="headerlink" href="#_CPPv4N21IPLDirectEffectParams12transmissionE" title="Link to this definition"></a><br /></dt>
+<span id="_CPPv3N21IPLDirectEffectParams12transmissionE"></span><span id="_CPPv2N21IPLDirectEffectParams12transmissionE"></span><span id="IPLDirectEffectParams::transmission__IPLfloat32A"></span><span class="target" id="struct_i_p_l_direct_effect_params_1a2575253cd5d29e0d07b83e1da71d39d1"></span><a class="reference internal" href="types.html#_CPPv410IPLfloat32" title="IPLfloat32"><span class="n"><span class="pre">IPLfloat32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">transmission</span></span></span><span class="p"><span class="pre">[</span></span><span class="n"><span class="pre">IPL_NUM_BANDS</span></span><span class="p"><span class="pre">]</span></span><a class="headerlink" href="#_CPPv4N21IPLDirectEffectParams12transmissionE" title="Link to this definition"></a><br /></dt>
 <dd><p>3-band EQ coefficients for transmission, each between 0 and 1. </p>
 </dd></dl>
 

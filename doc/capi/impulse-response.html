@@ -1,0 +1,416 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Impulse Response &mdash; Steam Audio C API  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/steamaudio.css?v=b5aaeb06" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=7f41d439"></script>
+      <script src="_static/doctools.js?v=9a2dae69"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Reconstructor" href="reconstructor.html" />
+    <link rel="prev" title="Energy Field" href="energy-field.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html">
+            
+              <img src="_static/steam-audio-logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Steam Audio SDK</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guide.html">Programmer’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="build-instructions.html">Build Instructions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="integration.html">Integrating Steam Audio</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="reference.html">API Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="types.html">Basic Data Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="context.html">Context</a></li>
+<li class="toctree-l2"><a class="reference internal" href="geometry.html">Geometry</a></li>
+<li class="toctree-l2"><a class="reference internal" href="serialization.html">Serialization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="embree.html">Embree</a></li>
+<li class="toctree-l2"><a class="reference internal" href="opencl.html">OpenCL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="radeon-rays.html">Radeon Rays</a></li>
+<li class="toctree-l2"><a class="reference internal" href="trueaudio-next.html">TrueAudio Next</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scene.html">Scene</a></li>
+<li class="toctree-l2"><a class="reference internal" href="audio-buffers.html">Audio Buffers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hrtf.html">HRTF</a></li>
+<li class="toctree-l2"><a class="reference internal" href="panning-effect.html">Panning Effect</a></li>
+<li class="toctree-l2"><a class="reference internal" href="binaural-effect.html">Binaural Effect</a></li>
+<li class="toctree-l2"><a class="reference internal" href="virtual-surround-effect.html">Virtual Surround Effect</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ambisonics-encode-effect.html">Ambisonics Encode Effect</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ambisonics-panning-effect.html">Ambisonics Panning Effect</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ambisonics-binaural-effect.html">Ambisonics Binaural Effect</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ambisonics-rotation-effect.html">Ambisonics Rotation Effect</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ambisonics-decode-effect.html">Ambisonics Decode Effect</a></li>
+<li class="toctree-l2"><a class="reference internal" href="direct-effect.html">Direct Effect</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reflections-effect.html">Reflection Effect</a></li>
+<li class="toctree-l2"><a class="reference internal" href="path-effect.html">Path Effect</a></li>
+<li class="toctree-l2"><a class="reference internal" href="probes.html">Probes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="baking.html">Baking</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simulation.html">Simulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="energy-field.html">Energy Field</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Impulse Response</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#typedefs">Typedefs</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv418IPLImpulseResponse"><code class="docutils literal notranslate"><span class="pre">IPLImpulseResponse</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#functions">Functions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv424iplImpulseResponseCreate10IPLContextP26IPLImpulseResponseSettingsP18IPLImpulseResponse"><code class="docutils literal notranslate"><span class="pre">iplImpulseResponseCreate()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv424iplImpulseResponseRetain18IPLImpulseResponse"><code class="docutils literal notranslate"><span class="pre">iplImpulseResponseRetain()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv425iplImpulseResponseReleaseP18IPLImpulseResponse"><code class="docutils literal notranslate"><span class="pre">iplImpulseResponseRelease()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv432iplImpulseResponseGetNumChannels18IPLImpulseResponse"><code class="docutils literal notranslate"><span class="pre">iplImpulseResponseGetNumChannels()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv431iplImpulseResponseGetNumSamples18IPLImpulseResponse"><code class="docutils literal notranslate"><span class="pre">iplImpulseResponseGetNumSamples()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv425iplImpulseResponseGetData18IPLImpulseResponse"><code class="docutils literal notranslate"><span class="pre">iplImpulseResponseGetData()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv428iplImpulseResponseGetChannel18IPLImpulseResponsei"><code class="docutils literal notranslate"><span class="pre">iplImpulseResponseGetChannel()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv423iplImpulseResponseReset18IPLImpulseResponse"><code class="docutils literal notranslate"><span class="pre">iplImpulseResponseReset()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv422iplImpulseResponseCopy18IPLImpulseResponse18IPLImpulseResponse"><code class="docutils literal notranslate"><span class="pre">iplImpulseResponseCopy()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv422iplImpulseResponseSwap18IPLImpulseResponse18IPLImpulseResponse"><code class="docutils literal notranslate"><span class="pre">iplImpulseResponseSwap()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv421iplImpulseResponseAdd18IPLImpulseResponse18IPLImpulseResponse18IPLImpulseResponse"><code class="docutils literal notranslate"><span class="pre">iplImpulseResponseAdd()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv423iplImpulseResponseScale18IPLImpulseResponse10IPLfloat3218IPLImpulseResponse"><code class="docutils literal notranslate"><span class="pre">iplImpulseResponseScale()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv428iplImpulseResponseScaleAccum18IPLImpulseResponse10IPLfloat3218IPLImpulseResponse"><code class="docutils literal notranslate"><span class="pre">iplImpulseResponseScaleAccum()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#structures">Structures</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv426IPLImpulseResponseSettings"><code class="docutils literal notranslate"><span class="pre">IPLImpulseResponseSettings</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="reconstructor.html">Reconstructor</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Steam Audio C API</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="reference.html">API Reference</a></li>
+      <li class="breadcrumb-item active">Impulse Response</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="impulse-response">
+<h1>Impulse Response<a class="headerlink" href="#impulse-response" title="Link to this heading"></a></h1>
+<section id="typedefs">
+<h2>Typedefs<a class="headerlink" href="#typedefs" title="Link to this heading"></a></h2>
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv418IPLImpulseResponse">
+<span id="_CPPv318IPLImpulseResponse"></span><span id="_CPPv218IPLImpulseResponse"></span><span id="IPLImpulseResponse"></span><span class="target" id="group__impulseresponse_1ga61b4a8c4615f12e102b32e65ba208009"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="n"><span class="pre">_IPLImpulseResponse_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">IPLImpulseResponse</span></span></span><a class="headerlink" href="#_CPPv418IPLImpulseResponse" title="Link to this definition"></a><br /></dt>
+<dd><p>An impulse response. </p>
+<p>Impulse responses are represented in Ambisonics to allow for directional variation of propagated sound.</p>
+<p>Impulse response data is stored as a 2D array of size #channels * #samples, in row-major order. </p>
+</dd></dl>
+
+</section>
+<section id="functions">
+<h2>Functions<a class="headerlink" href="#functions" title="Link to this heading"></a></h2>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv424iplImpulseResponseCreate10IPLContextP26IPLImpulseResponseSettingsP18IPLImpulseResponse">
+<span id="_CPPv324iplImpulseResponseCreate10IPLContextP26IPLImpulseResponseSettingsP18IPLImpulseResponse"></span><span id="_CPPv224iplImpulseResponseCreate10IPLContextP26IPLImpulseResponseSettingsP18IPLImpulseResponse"></span><span id="iplImpulseResponseCreate__IPLContext.IPLImpulseResponseSettingsP.IPLImpulseResponseP"></span><span class="target" id="group__impulseresponse_1ga30abc7d09fdf115858afe9b256733ae9"></span><a class="reference internal" href="types.html#_CPPv48IPLerror" title="IPLerror"><span class="n"><span class="pre">IPLerror</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplImpulseResponseCreate</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="context.html#_CPPv410IPLContext" title="IPLContext"><span class="n"><span class="pre">IPLContext</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">context</span></span>, <a class="reference internal" href="#_CPPv426IPLImpulseResponseSettings" title="IPLImpulseResponseSettings"><span class="n"><span class="pre">IPLImpulseResponseSettings</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">settings</span></span>, <a class="reference internal" href="#_CPPv418IPLImpulseResponse" title="IPLImpulseResponse"><span class="n"><span class="pre">IPLImpulseResponse</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">impulseResponse</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv424iplImpulseResponseCreate10IPLContextP26IPLImpulseResponseSettingsP18IPLImpulseResponse" title="Link to this definition"></a><br /></dt>
+<dd><p>Creates an impulse response. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>context</strong> – The context used to initialize Steam Audio. </p></li>
+<li><p><strong>settings</strong> – The settings to use when creating the impulse response. </p></li>
+<li><p><strong>impulseResponse</strong> – [out] The created impulse response.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Status code indicating whether or not the operation succeeded. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv424iplImpulseResponseRetain18IPLImpulseResponse">
+<span id="_CPPv324iplImpulseResponseRetain18IPLImpulseResponse"></span><span id="_CPPv224iplImpulseResponseRetain18IPLImpulseResponse"></span><span id="iplImpulseResponseRetain__IPLImpulseResponse"></span><span class="target" id="group__impulseresponse_1ga8fcd01d69d53a26b82d9d4f36b889087"></span><a class="reference internal" href="#_CPPv418IPLImpulseResponse" title="IPLImpulseResponse"><span class="n"><span class="pre">IPLImpulseResponse</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplImpulseResponseRetain</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv418IPLImpulseResponse" title="IPLImpulseResponse"><span class="n"><span class="pre">IPLImpulseResponse</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">impulseResponse</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv424iplImpulseResponseRetain18IPLImpulseResponse" title="Link to this definition"></a><br /></dt>
+<dd><p>Retains an additional reference to an impulse response. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>impulseResponse</strong> – The impulse response to retain a reference to.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The additional reference to the impulse response. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv425iplImpulseResponseReleaseP18IPLImpulseResponse">
+<span id="_CPPv325iplImpulseResponseReleaseP18IPLImpulseResponse"></span><span id="_CPPv225iplImpulseResponseReleaseP18IPLImpulseResponse"></span><span id="iplImpulseResponseRelease__IPLImpulseResponseP"></span><span class="target" id="group__impulseresponse_1ga54c8751f76602b1a84cd133c206871cf"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplImpulseResponseRelease</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv418IPLImpulseResponse" title="IPLImpulseResponse"><span class="n"><span class="pre">IPLImpulseResponse</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">impulseResponse</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv425iplImpulseResponseReleaseP18IPLImpulseResponse" title="Link to this definition"></a><br /></dt>
+<dd><p>Releases a reference to an impulse response. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>impulseResponse</strong> – The impulse response to release a reference to. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv432iplImpulseResponseGetNumChannels18IPLImpulseResponse">
+<span id="_CPPv332iplImpulseResponseGetNumChannels18IPLImpulseResponse"></span><span id="_CPPv232iplImpulseResponseGetNumChannels18IPLImpulseResponse"></span><span id="iplImpulseResponseGetNumChannels__IPLImpulseResponse"></span><span class="target" id="group__impulseresponse_1gaa523597ac68fd29a18b35a8f21b579a9"></span><a class="reference internal" href="types.html#_CPPv48IPLint32" title="IPLint32"><span class="n"><span class="pre">IPLint32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplImpulseResponseGetNumChannels</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv418IPLImpulseResponse" title="IPLImpulseResponse"><span class="n"><span class="pre">IPLImpulseResponse</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">impulseResponse</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv432iplImpulseResponseGetNumChannels18IPLImpulseResponse" title="Link to this definition"></a><br /></dt>
+<dd><p>Returns the number of channels in the impulse response. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>impulseResponse</strong> – The impulse response.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The number of channels in the impulse response. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv431iplImpulseResponseGetNumSamples18IPLImpulseResponse">
+<span id="_CPPv331iplImpulseResponseGetNumSamples18IPLImpulseResponse"></span><span id="_CPPv231iplImpulseResponseGetNumSamples18IPLImpulseResponse"></span><span id="iplImpulseResponseGetNumSamples__IPLImpulseResponse"></span><span class="target" id="group__impulseresponse_1ga9d1b5fa7c76b070e28c38855f6359bc0"></span><a class="reference internal" href="types.html#_CPPv48IPLint32" title="IPLint32"><span class="n"><span class="pre">IPLint32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplImpulseResponseGetNumSamples</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv418IPLImpulseResponse" title="IPLImpulseResponse"><span class="n"><span class="pre">IPLImpulseResponse</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">impulseResponse</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv431iplImpulseResponseGetNumSamples18IPLImpulseResponse" title="Link to this definition"></a><br /></dt>
+<dd><p>Returns the number of samples in the impulse response. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>impulseResponse</strong> – The impulse response.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The number of samples in the impulse response. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv425iplImpulseResponseGetData18IPLImpulseResponse">
+<span id="_CPPv325iplImpulseResponseGetData18IPLImpulseResponse"></span><span id="_CPPv225iplImpulseResponseGetData18IPLImpulseResponse"></span><span id="iplImpulseResponseGetData__IPLImpulseResponse"></span><span class="target" id="group__impulseresponse_1ga93193d0c8e4d1e3076aa5dba2f9b4c04"></span><a class="reference internal" href="types.html#_CPPv410IPLfloat32" title="IPLfloat32"><span class="n"><span class="pre">IPLfloat32</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">iplImpulseResponseGetData</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv418IPLImpulseResponse" title="IPLImpulseResponse"><span class="n"><span class="pre">IPLImpulseResponse</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">impulseResponse</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv425iplImpulseResponseGetData18IPLImpulseResponse" title="Link to this definition"></a><br /></dt>
+<dd><p>Returns a pointer to the data stored in the impulse response. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>impulseResponse</strong> – The impulse response.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Pointer to #channels * #samples IPLfloat32 values stored in the impulse response, in row-major order. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv428iplImpulseResponseGetChannel18IPLImpulseResponsei">
+<span id="_CPPv328iplImpulseResponseGetChannel18IPLImpulseResponsei"></span><span id="_CPPv228iplImpulseResponseGetChannel18IPLImpulseResponsei"></span><span id="iplImpulseResponseGetChannel__IPLImpulseResponse.i"></span><span class="target" id="group__impulseresponse_1gac636a7b0bf307e1aebdcd4ef3a8defde"></span><a class="reference internal" href="types.html#_CPPv410IPLfloat32" title="IPLfloat32"><span class="n"><span class="pre">IPLfloat32</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">iplImpulseResponseGetChannel</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv418IPLImpulseResponse" title="IPLImpulseResponse"><span class="n"><span class="pre">IPLImpulseResponse</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">impulseResponse</span></span>, <span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">channelIndex</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv428iplImpulseResponseGetChannel18IPLImpulseResponsei" title="Link to this definition"></a><br /></dt>
+<dd><p>Returns a pointer to the data stored in the impulse response for the given channel. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>impulseResponse</strong> – The impulse response. </p></li>
+<li><p><strong>channelIndex</strong> – Index of the channel.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Pointer to #samples IPLfloat32 values stored in the impulse response for the given channel, in row-major order. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv423iplImpulseResponseReset18IPLImpulseResponse">
+<span id="_CPPv323iplImpulseResponseReset18IPLImpulseResponse"></span><span id="_CPPv223iplImpulseResponseReset18IPLImpulseResponse"></span><span id="iplImpulseResponseReset__IPLImpulseResponse"></span><span class="target" id="group__impulseresponse_1ga4e4cdcae20c939f4a1042a5f44b32931"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplImpulseResponseReset</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv418IPLImpulseResponse" title="IPLImpulseResponse"><span class="n"><span class="pre">IPLImpulseResponse</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">impulseResponse</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv423iplImpulseResponseReset18IPLImpulseResponse" title="Link to this definition"></a><br /></dt>
+<dd><p>Resets all values stored in an impulse response to zero. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>impulseResponse</strong> – The impulse response. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv422iplImpulseResponseCopy18IPLImpulseResponse18IPLImpulseResponse">
+<span id="_CPPv322iplImpulseResponseCopy18IPLImpulseResponse18IPLImpulseResponse"></span><span id="_CPPv222iplImpulseResponseCopy18IPLImpulseResponse18IPLImpulseResponse"></span><span id="iplImpulseResponseCopy__IPLImpulseResponse.IPLImpulseResponse"></span><span class="target" id="group__impulseresponse_1gaf128f06e50ab43299c97dd27bd841df8"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplImpulseResponseCopy</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv418IPLImpulseResponse" title="IPLImpulseResponse"><span class="n"><span class="pre">IPLImpulseResponse</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">src</span></span>, <a class="reference internal" href="#_CPPv418IPLImpulseResponse" title="IPLImpulseResponse"><span class="n"><span class="pre">IPLImpulseResponse</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">dst</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv422iplImpulseResponseCopy18IPLImpulseResponse18IPLImpulseResponse" title="Link to this definition"></a><br /></dt>
+<dd><p>Copies data from one impulse response into another. </p>
+<p>If the source and destination impulse responses have different numbers of channels, only the smaller of the two numbers of channels will be copied.</p>
+<p>If the source and destination impulse responses have different numbers of samples, only the smaller of the two numbers of samples will be copied.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>src</strong> – The source impulse response. </p></li>
+<li><p><strong>dst</strong> – The destination impulse response. </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv422iplImpulseResponseSwap18IPLImpulseResponse18IPLImpulseResponse">
+<span id="_CPPv322iplImpulseResponseSwap18IPLImpulseResponse18IPLImpulseResponse"></span><span id="_CPPv222iplImpulseResponseSwap18IPLImpulseResponse18IPLImpulseResponse"></span><span id="iplImpulseResponseSwap__IPLImpulseResponse.IPLImpulseResponse"></span><span class="target" id="group__impulseresponse_1gaa57ac31940581619cfed29cdc540d1e2"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplImpulseResponseSwap</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv418IPLImpulseResponse" title="IPLImpulseResponse"><span class="n"><span class="pre">IPLImpulseResponse</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">ir1</span></span>, <a class="reference internal" href="#_CPPv418IPLImpulseResponse" title="IPLImpulseResponse"><span class="n"><span class="pre">IPLImpulseResponse</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">ir2</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv422iplImpulseResponseSwap18IPLImpulseResponse18IPLImpulseResponse" title="Link to this definition"></a><br /></dt>
+<dd><p>Swaps the data contained in one impulse response with the data contained in another impulse response. </p>
+<p>The two impulse responses may contain different numbers of channels or samples.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>a</strong> – The first impulse response. </p></li>
+<li><p><strong>b</strong> – The second impulse response. </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv421iplImpulseResponseAdd18IPLImpulseResponse18IPLImpulseResponse18IPLImpulseResponse">
+<span id="_CPPv321iplImpulseResponseAdd18IPLImpulseResponse18IPLImpulseResponse18IPLImpulseResponse"></span><span id="_CPPv221iplImpulseResponseAdd18IPLImpulseResponse18IPLImpulseResponse18IPLImpulseResponse"></span><span id="iplImpulseResponseAdd__IPLImpulseResponse.IPLImpulseResponse.IPLImpulseResponse"></span><span class="target" id="group__impulseresponse_1ga8d4900300c1240fb33f96c9c38784567"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplImpulseResponseAdd</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv418IPLImpulseResponse" title="IPLImpulseResponse"><span class="n"><span class="pre">IPLImpulseResponse</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">in1</span></span>, <a class="reference internal" href="#_CPPv418IPLImpulseResponse" title="IPLImpulseResponse"><span class="n"><span class="pre">IPLImpulseResponse</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">in2</span></span>, <a class="reference internal" href="#_CPPv418IPLImpulseResponse" title="IPLImpulseResponse"><span class="n"><span class="pre">IPLImpulseResponse</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">out</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv421iplImpulseResponseAdd18IPLImpulseResponse18IPLImpulseResponse18IPLImpulseResponse" title="Link to this definition"></a><br /></dt>
+<dd><p>Adds the values stored in two impulse responses, and stores the result in a third impulse response. </p>
+<p>If the impulse responses have different numbers of channels, only the smallest of the three numbers of channels will be added.</p>
+<p>If the impulse responses have different numbers of samples, only the smallest of the three numbers of samples will be added.</p>
+<p>This function can be used for in-place addition, i.e. <code class="docutils literal notranslate"><span class="pre">out</span></code> may be equal to <code class="docutils literal notranslate"><span class="pre">in1</span></code> or <code class="docutils literal notranslate"><span class="pre">in2</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>in1</strong> – The first input impulse response. </p></li>
+<li><p><strong>in2</strong> – The second input impulse response. </p></li>
+<li><p><strong>out</strong> – The output impulse response. </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv423iplImpulseResponseScale18IPLImpulseResponse10IPLfloat3218IPLImpulseResponse">
+<span id="_CPPv323iplImpulseResponseScale18IPLImpulseResponse10IPLfloat3218IPLImpulseResponse"></span><span id="_CPPv223iplImpulseResponseScale18IPLImpulseResponse10IPLfloat3218IPLImpulseResponse"></span><span id="iplImpulseResponseScale__IPLImpulseResponse.IPLfloat32.IPLImpulseResponse"></span><span class="target" id="group__impulseresponse_1gacd836e18e65ebad9f02ab4d533bb636a"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplImpulseResponseScale</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv418IPLImpulseResponse" title="IPLImpulseResponse"><span class="n"><span class="pre">IPLImpulseResponse</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">in</span></span>, <a class="reference internal" href="types.html#_CPPv410IPLfloat32" title="IPLfloat32"><span class="n"><span class="pre">IPLfloat32</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">scalar</span></span>, <a class="reference internal" href="#_CPPv418IPLImpulseResponse" title="IPLImpulseResponse"><span class="n"><span class="pre">IPLImpulseResponse</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">out</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv423iplImpulseResponseScale18IPLImpulseResponse10IPLfloat3218IPLImpulseResponse" title="Link to this definition"></a><br /></dt>
+<dd><p>Scales the values stored in an impulse response by a scalar, and stores the result in a second impulse response. </p>
+<p>If the impulse responses have different numbers of channels, only the smallest of the two numbers of channels will be scaled.</p>
+<p>If the impulse responses have different numbers of samples, only the smallest of the two numbers of samples will be scaled.</p>
+<p>This function can be used for in-place scaling, i.e. <code class="docutils literal notranslate"><span class="pre">out</span></code> may be equal to <code class="docutils literal notranslate"><span class="pre">in</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>in</strong> – The input impulse response. </p></li>
+<li><p><strong>scalar</strong> – The scalar value. </p></li>
+<li><p><strong>out</strong> – The output impulse response. </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv428iplImpulseResponseScaleAccum18IPLImpulseResponse10IPLfloat3218IPLImpulseResponse">
+<span id="_CPPv328iplImpulseResponseScaleAccum18IPLImpulseResponse10IPLfloat3218IPLImpulseResponse"></span><span id="_CPPv228iplImpulseResponseScaleAccum18IPLImpulseResponse10IPLfloat3218IPLImpulseResponse"></span><span id="iplImpulseResponseScaleAccum__IPLImpulseResponse.IPLfloat32.IPLImpulseResponse"></span><span class="target" id="group__impulseresponse_1gae8f5d5a70a5333087ee2f829467cdb87"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplImpulseResponseScaleAccum</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv418IPLImpulseResponse" title="IPLImpulseResponse"><span class="n"><span class="pre">IPLImpulseResponse</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">in</span></span>, <a class="reference internal" href="types.html#_CPPv410IPLfloat32" title="IPLfloat32"><span class="n"><span class="pre">IPLfloat32</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">scalar</span></span>, <a class="reference internal" href="#_CPPv418IPLImpulseResponse" title="IPLImpulseResponse"><span class="n"><span class="pre">IPLImpulseResponse</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">out</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv428iplImpulseResponseScaleAccum18IPLImpulseResponse10IPLfloat3218IPLImpulseResponse" title="Link to this definition"></a><br /></dt>
+<dd><p>Scales the values stored in an impulse response by a scalar, and adds the result to a second impulse response. </p>
+<p>If the impulse responses have different numbers of channels, only the smallest of the two numbers of channels will be added.</p>
+<p>If the impulse responses have different numbers of samples, only the smallest of the two numbers of samples will be added.</p>
+<p>This function can be used for in-place operation, i.e. <code class="docutils literal notranslate"><span class="pre">out</span></code> may be equal to <code class="docutils literal notranslate"><span class="pre">in</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>in</strong> – The input impulse response. </p></li>
+<li><p><strong>scalar</strong> – The scalar value. </p></li>
+<li><p><strong>out</strong> – The output impulse response. </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="structures">
+<h2>Structures<a class="headerlink" href="#structures" title="Link to this heading"></a></h2>
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv426IPLImpulseResponseSettings">
+<span id="_CPPv326IPLImpulseResponseSettings"></span><span id="_CPPv226IPLImpulseResponseSettings"></span><span id="IPLImpulseResponseSettings"></span><span class="target" id="struct_i_p_l_impulse_response_settings"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLImpulseResponseSettings</span></span></span><a class="headerlink" href="#_CPPv426IPLImpulseResponseSettings" title="Link to this definition"></a><br /></dt>
+<dd><p>Settings used to create an impulse response. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N26IPLImpulseResponseSettings8durationE">
+<span id="_CPPv3N26IPLImpulseResponseSettings8durationE"></span><span id="_CPPv2N26IPLImpulseResponseSettings8durationE"></span><span id="IPLImpulseResponseSettings::duration__IPLfloat32"></span><span class="target" id="struct_i_p_l_impulse_response_settings_1aeda5a21fb3c88f8f9185a228686e29f8"></span><a class="reference internal" href="types.html#_CPPv410IPLfloat32" title="IPLfloat32"><span class="n"><span class="pre">IPLfloat32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">duration</span></span></span><a class="headerlink" href="#_CPPv4N26IPLImpulseResponseSettings8durationE" title="Link to this definition"></a><br /></dt>
+<dd><p>Total duration (in seconds) of the impulse response. </p>
+<p>This determines the number of samples in each channel. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N26IPLImpulseResponseSettings5orderE">
+<span id="_CPPv3N26IPLImpulseResponseSettings5orderE"></span><span id="_CPPv2N26IPLImpulseResponseSettings5orderE"></span><span id="IPLImpulseResponseSettings::order__IPLint32"></span><span class="target" id="struct_i_p_l_impulse_response_settings_1a8f0bc3d342c8bf145d3f4fc741f84df9"></span><a class="reference internal" href="types.html#_CPPv48IPLint32" title="IPLint32"><span class="n"><span class="pre">IPLint32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">order</span></span></span><a class="headerlink" href="#_CPPv4N26IPLImpulseResponseSettings5orderE" title="Link to this definition"></a><br /></dt>
+<dd><p>The Ambisonic order. </p>
+<p>This determines the number of channels. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N26IPLImpulseResponseSettings12samplingRateE">
+<span id="_CPPv3N26IPLImpulseResponseSettings12samplingRateE"></span><span id="_CPPv2N26IPLImpulseResponseSettings12samplingRateE"></span><span id="IPLImpulseResponseSettings::samplingRate__IPLint32"></span><span class="target" id="struct_i_p_l_impulse_response_settings_1a2b81c828d28baf3f53a4e39385eae42f"></span><a class="reference internal" href="types.html#_CPPv48IPLint32" title="IPLint32"><span class="n"><span class="pre">IPLint32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">samplingRate</span></span></span><a class="headerlink" href="#_CPPv4N26IPLImpulseResponseSettings12samplingRateE" title="Link to this definition"></a><br /></dt>
+<dd><p>The sampling rate. </p>
+<p>This, together with the duration, determines the number of samples in each channel. </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="energy-field.html" class="btn btn-neutral float-left" title="Energy Field" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="reconstructor.html" class="btn btn-neutral float-right" title="Reconstructor" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2017-2023, Valve Corporation.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

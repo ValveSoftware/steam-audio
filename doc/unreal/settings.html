@@ -105,6 +105,16 @@
 </dd>
 <dt>Default BSP Material</dt><dd><p>The material to use for BSP geometry.</p>
 </dd>
+<dt>Physics Material To Steam Audio Material Mapping</dt><dd><p>Specifies an optional mapping from physics material to Steam Audio materials, so Static Mesh actors that already have a given physics material can automatically be tagged with the corresponding Steam Audio material during scene export.</p>
+<img alt="_images/material-mapping.png" src="_images/material-mapping.png" />
+<p>Use the <strong>+</strong> button to add a new mapping from a physics material to a Steam Audio material. Set <strong>Key</strong> to the physics material, and <strong>Value</strong> to the corresponding Steam Audio material.</p>
+<p>Steam Audio uses the following procedure to determine which Steam Audio material to apply to a given Steam Audio Geometry component:</p>
+<ol class="arabic simple">
+<li><p>If the Steam Audio Geometry component specifies a Steam Audio material explicitly, that material is used.</p></li>
+<li><p>Otherwise, if the Static Mesh uses a physics material that is mapped to a Steam Audio material, that material is used.</p></li>
+<li><p>Otherwise, the <strong>Default Mesh Material</strong> is used.</p></li>
+</ol>
+</dd>
 <dt>Scene Type</dt><dd><p>Specifies the ray tracing implementation to use for simulations.</p>
 <ul class="simple">
 <li><p><em>Default</em>. Steam Audio’s built-in ray tracer. Runs on all platforms that Steam Audio supports.</p></li>

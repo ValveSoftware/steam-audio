@@ -20,6 +20,7 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Energy Field" href="energy-field.html" />
     <link rel="prev" title="Baking" href="baking.html" /> 
 </head>
 
@@ -108,6 +109,7 @@
 <li class="toctree-l4"><a class="reference internal" href="#_CPPv427IPLDistanceAttenuationModel"><code class="docutils literal notranslate"><span class="pre">IPLDistanceAttenuationModel</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#_CPPv421IPLAirAbsorptionModel"><code class="docutils literal notranslate"><span class="pre">IPLAirAbsorptionModel</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#_CPPv414IPLDirectivity"><code class="docutils literal notranslate"><span class="pre">IPLDirectivity</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv417IPLDeviationModel"><code class="docutils literal notranslate"><span class="pre">IPLDeviationModel</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#_CPPv421IPLSimulationSettings"><code class="docutils literal notranslate"><span class="pre">IPLSimulationSettings</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#_CPPv417IPLSourceSettings"><code class="docutils literal notranslate"><span class="pre">IPLSourceSettings</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#_CPPv419IPLSimulationInputs"><code class="docutils literal notranslate"><span class="pre">IPLSimulationInputs</span></code></a></li>
@@ -121,17 +123,22 @@
 <li class="toctree-l4"><a class="reference internal" href="#_CPPv431IPLDistanceAttenuationModelType"><code class="docutils literal notranslate"><span class="pre">IPLDistanceAttenuationModelType</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#_CPPv425IPLAirAbsorptionModelType"><code class="docutils literal notranslate"><span class="pre">IPLAirAbsorptionModelType</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#_CPPv416IPLOcclusionType"><code class="docutils literal notranslate"><span class="pre">IPLOcclusionType</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv421IPLDeviationModelType"><code class="docutils literal notranslate"><span class="pre">IPLDeviationModelType</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#callbacks">Callbacks</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#_CPPv430IPLDistanceAttenuationCallback"><code class="docutils literal notranslate"><span class="pre">IPLDistanceAttenuationCallback</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#_CPPv424IPLAirAbsorptionCallback"><code class="docutils literal notranslate"><span class="pre">IPLAirAbsorptionCallback</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#_CPPv422IPLDirectivityCallback"><code class="docutils literal notranslate"><span class="pre">IPLDirectivityCallback</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv420IPLDeviationCallback"><code class="docutils literal notranslate"><span class="pre">IPLDeviationCallback</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#_CPPv431IPLPathingVisualizationCallback"><code class="docutils literal notranslate"><span class="pre">IPLPathingVisualizationCallback</span></code></a></li>
 </ul>
 </li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="energy-field.html">Energy Field</a></li>
+<li class="toctree-l2"><a class="reference internal" href="impulse-response.html">Impulse Response</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reconstructor.html">Reconstructor</a></li>
 </ul>
 </li>
 </ul>
@@ -283,6 +290,7 @@
 <dt class="sig sig-object cpp" id="_CPPv412iplSourceAdd9IPLSource12IPLSimulator">
 <span id="_CPPv312iplSourceAdd9IPLSource12IPLSimulator"></span><span id="_CPPv212iplSourceAdd9IPLSource12IPLSimulator"></span><span id="iplSourceAdd__IPLSource.IPLSimulator"></span><span class="target" id="group__simulation_1gadefa90a3fe8c8792ab34fb62ae3c23c4"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplSourceAdd</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv49IPLSource" title="IPLSource"><span class="n"><span class="pre">IPLSource</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">source</span></span>, <a class="reference internal" href="#_CPPv412IPLSimulator" title="IPLSimulator"><span class="n"><span class="pre">IPLSimulator</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">simulator</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv412iplSourceAdd9IPLSource12IPLSimulator" title="Link to this definition"></a><br /></dt>
 <dd><p>Adds a source to the set of sources processed by a simulator in subsequent simulations. </p>
+<p>Call <code class="docutils literal notranslate"><span class="pre">iplSimulatorCommit</span></code> after calling this function for the changes to take effect.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -297,6 +305,7 @@
 <dt class="sig sig-object cpp" id="_CPPv415iplSourceRemove9IPLSource12IPLSimulator">
 <span id="_CPPv315iplSourceRemove9IPLSource12IPLSimulator"></span><span id="_CPPv215iplSourceRemove9IPLSource12IPLSimulator"></span><span id="iplSourceRemove__IPLSource.IPLSimulator"></span><span class="target" id="group__simulation_1ga1abe00213ca7caf8448646820e7c0704"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplSourceRemove</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv49IPLSource" title="IPLSource"><span class="n"><span class="pre">IPLSource</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">source</span></span>, <a class="reference internal" href="#_CPPv412IPLSimulator" title="IPLSimulator"><span class="n"><span class="pre">IPLSimulator</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">simulator</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv415iplSourceRemove9IPLSource12IPLSimulator" title="Link to this definition"></a><br /></dt>
 <dd><p>Removes a source from the set of sources processed by a simulator in subsequent simulations. </p>
+<p>Call <code class="docutils literal notranslate"><span class="pre">iplSimulatorCommit</span></code> after calling this function for the changes to take effect.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -554,7 +563,7 @@
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N21IPLAirAbsorptionModel12coefficientsE">
-<span id="_CPPv3N21IPLAirAbsorptionModel12coefficientsE"></span><span id="_CPPv2N21IPLAirAbsorptionModel12coefficientsE"></span><span id="IPLAirAbsorptionModel::coefficients__IPLfloat32A"></span><span class="target" id="struct_i_p_l_air_absorption_model_1a7fe685b7f0c7c49498c3621b68629294"></span><a class="reference internal" href="types.html#_CPPv410IPLfloat32" title="IPLfloat32"><span class="n"><span class="pre">IPLfloat32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">coefficients</span></span></span><span class="p"><span class="pre">[</span></span><span class="m"><span class="pre">3</span></span><span class="p"><span class="pre">]</span></span><a class="headerlink" href="#_CPPv4N21IPLAirAbsorptionModel12coefficientsE" title="Link to this definition"></a><br /></dt>
+<span id="_CPPv3N21IPLAirAbsorptionModel12coefficientsE"></span><span id="_CPPv2N21IPLAirAbsorptionModel12coefficientsE"></span><span id="IPLAirAbsorptionModel::coefficients__IPLfloat32A"></span><span class="target" id="struct_i_p_l_air_absorption_model_1a0e74f2de407851968816c1600b48d0ed"></span><a class="reference internal" href="types.html#_CPPv410IPLfloat32" title="IPLfloat32"><span class="n"><span class="pre">IPLfloat32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">coefficients</span></span></span><span class="p"><span class="pre">[</span></span><span class="n"><span class="pre">IPL_NUM_BANDS</span></span><span class="p"><span class="pre">]</span></span><a class="headerlink" href="#_CPPv4N21IPLAirAbsorptionModel12coefficientsE" title="Link to this definition"></a><br /></dt>
 <dd><p>The exponential falloff coefficients to use when <code class="docutils literal notranslate"><span class="pre">type</span></code> is <code class="docutils literal notranslate"><span class="pre">IPL_AIRABSORPTIONTYPE_EXPONENTIAL</span></code>. </p>
 </dd></dl>
 
@@ -612,6 +621,34 @@
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N14IPLDirectivity8userDataE">
 <span id="_CPPv3N14IPLDirectivity8userDataE"></span><span id="_CPPv2N14IPLDirectivity8userDataE"></span><span id="IPLDirectivity::userData__voidP"></span><span class="target" id="struct_i_p_l_directivity_1a2e294dd14122c554baa0665072b4ca7a"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">userData</span></span></span><a class="headerlink" href="#_CPPv4N14IPLDirectivity8userDataE" title="Link to this definition"></a><br /></dt>
+<dd><p>Pointer to arbitrary data that will be provided to the <code class="docutils literal notranslate"><span class="pre">callback</span></code> function whenever it is called. </p>
+<p>May be <code class="docutils literal notranslate"><span class="pre">NULL</span></code>. </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv417IPLDeviationModel">
+<span id="_CPPv317IPLDeviationModel"></span><span id="_CPPv217IPLDeviationModel"></span><span id="IPLDeviationModel"></span><span class="target" id="struct_i_p_l_deviation_model"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLDeviationModel</span></span></span><a class="headerlink" href="#_CPPv417IPLDeviationModel" title="Link to this definition"></a><br /></dt>
+<dd><p>A deviation model that can be used for modeling frequency-dependent attenuation of sound as it bends along the path from the source to the listener. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N17IPLDeviationModel4typeE">
+<span id="_CPPv3N17IPLDeviationModel4typeE"></span><span id="_CPPv2N17IPLDeviationModel4typeE"></span><span id="IPLDeviationModel::type__IPLDeviationModelType"></span><span class="target" id="struct_i_p_l_deviation_model_1a48f9143e032c5164ca747e7d0d05495a"></span><a class="reference internal" href="#_CPPv421IPLDeviationModelType" title="IPLDeviationModelType"><span class="n"><span class="pre">IPLDeviationModelType</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">type</span></span></span><a class="headerlink" href="#_CPPv4N17IPLDeviationModel4typeE" title="Link to this definition"></a><br /></dt>
+<dd><p>The type of deviation model to use. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N17IPLDeviationModel8callbackE">
+<span id="_CPPv3N17IPLDeviationModel8callbackE"></span><span id="_CPPv2N17IPLDeviationModel8callbackE"></span><span id="IPLDeviationModel::callback__IPLDeviationCallback"></span><span class="target" id="struct_i_p_l_deviation_model_1a0ad79121a353f0828c9f907d039899d7"></span><a class="reference internal" href="#_CPPv420IPLDeviationCallback" title="IPLDeviationCallback"><span class="n"><span class="pre">IPLDeviationCallback</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">callback</span></span></span><a class="headerlink" href="#_CPPv4N17IPLDeviationModel8callbackE" title="Link to this definition"></a><br /></dt>
+<dd><p>When <code class="docutils literal notranslate"><span class="pre">type</span></code> is <code class="docutils literal notranslate"><span class="pre">IPL_DEVIATIONTYPE_CALLBACK</span></code>, this function will be called whenever Steam Audio needs to evaluate deviation-based attenuation. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N17IPLDeviationModel8userDataE">
+<span id="_CPPv3N17IPLDeviationModel8userDataE"></span><span id="_CPPv2N17IPLDeviationModel8userDataE"></span><span id="IPLDeviationModel::userData__voidP"></span><span class="target" id="struct_i_p_l_deviation_model_1a2e294dd14122c554baa0665072b4ca7a"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">userData</span></span></span><a class="headerlink" href="#_CPPv4N17IPLDeviationModel8userDataE" title="Link to this definition"></a><br /></dt>
 <dd><p>Pointer to arbitrary data that will be provided to the <code class="docutils literal notranslate"><span class="pre">callback</span></code> function whenever it is called. </p>
 <p>May be <code class="docutils literal notranslate"><span class="pre">NULL</span></code>. </p>
 </dd></dl>
@@ -819,7 +856,7 @@
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N19IPLSimulationInputs11reverbScaleE">
-<span id="_CPPv3N19IPLSimulationInputs11reverbScaleE"></span><span id="_CPPv2N19IPLSimulationInputs11reverbScaleE"></span><span id="IPLSimulationInputs::reverbScale__IPLfloat32A"></span><span class="target" id="struct_i_p_l_simulation_inputs_1acf722f969cf8a89c002baea34fcc54ee"></span><a class="reference internal" href="types.html#_CPPv410IPLfloat32" title="IPLfloat32"><span class="n"><span class="pre">IPLfloat32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">reverbScale</span></span></span><span class="p"><span class="pre">[</span></span><span class="m"><span class="pre">3</span></span><span class="p"><span class="pre">]</span></span><a class="headerlink" href="#_CPPv4N19IPLSimulationInputs11reverbScaleE" title="Link to this definition"></a><br /></dt>
+<span id="_CPPv3N19IPLSimulationInputs11reverbScaleE"></span><span id="_CPPv2N19IPLSimulationInputs11reverbScaleE"></span><span id="IPLSimulationInputs::reverbScale__IPLfloat32A"></span><span class="target" id="struct_i_p_l_simulation_inputs_1a5d31f84e442a9c7a99d1ab0e30414d6e"></span><a class="reference internal" href="types.html#_CPPv410IPLfloat32" title="IPLfloat32"><span class="n"><span class="pre">IPLfloat32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">reverbScale</span></span></span><span class="p"><span class="pre">[</span></span><span class="n"><span class="pre">IPL_NUM_BANDS</span></span><span class="p"><span class="pre">]</span></span><a class="headerlink" href="#_CPPv4N19IPLSimulationInputs11reverbScaleE" title="Link to this definition"></a><br /></dt>
 <dd><p>If using parametric or hybrid reverb for rendering reflections, the reverb decay times for each frequency band are scaled by these values. </p>
 <p>Set to <code class="docutils literal notranslate"><span class="pre">{1.0f</span></code>, 1.0f, 1.0f} to use the simulated values without modification. </p>
 </dd></dl>
@@ -900,6 +937,13 @@
 <span id="_CPPv3N19IPLSimulationInputs19numTransmissionRaysE"></span><span id="_CPPv2N19IPLSimulationInputs19numTransmissionRaysE"></span><span id="IPLSimulationInputs::numTransmissionRays__IPLint32"></span><span class="target" id="struct_i_p_l_simulation_inputs_1a318a49a292723ea6cbc8936006fd9527"></span><a class="reference internal" href="types.html#_CPPv48IPLint32" title="IPLint32"><span class="n"><span class="pre">IPLint32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">numTransmissionRays</span></span></span><a class="headerlink" href="#_CPPv4N19IPLSimulationInputs19numTransmissionRaysE" title="Link to this definition"></a><br /></dt>
 <dd><p>If simulating transmission, this is the maximum number of surfaces, starting from the closest surface to the listener, whose transmission coefficients will be considered when calculating the total amount of sound transmitted. </p>
 <p>Increasing this value will result in more accurate results when multiple surfaces lie between the source and the listener, at the cost of increased CPU usage. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N19IPLSimulationInputs14deviationModelE">
+<span id="_CPPv3N19IPLSimulationInputs14deviationModelE"></span><span id="_CPPv2N19IPLSimulationInputs14deviationModelE"></span><span id="IPLSimulationInputs::deviationModel__IPLDeviationModelP"></span><span class="target" id="struct_i_p_l_simulation_inputs_1a83306ce0328b7b54689134035ea39407"></span><a class="reference internal" href="#_CPPv417IPLDeviationModel" title="IPLDeviationModel"><span class="n"><span class="pre">IPLDeviationModel</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">deviationModel</span></span></span><a class="headerlink" href="#_CPPv4N19IPLSimulationInputs14deviationModelE" title="Link to this definition"></a><br /></dt>
+<dd><p>The deviation model to use for this source. </p>
+<p>Only used when simulating pathing. </p>
 </dd></dl>
 
 </div>
@@ -1136,6 +1180,26 @@
 
 </dd></dl>
 
+<dl class="cpp enum">
+<dt class="sig sig-object cpp" id="_CPPv421IPLDeviationModelType">
+<span id="_CPPv321IPLDeviationModelType"></span><span id="_CPPv221IPLDeviationModelType"></span><span class="target" id="group__simulation_1ga219e978fa8334e971e0d331cc77ac9e3"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLDeviationModelType</span></span></span><a class="headerlink" href="#_CPPv421IPLDeviationModelType" title="Link to this definition"></a><br /></dt>
+<dd><p>The types of deviation model that can be used. </p>
+<p><em>Values:</em></p>
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N21IPLDeviationModelType25IPL_DEVIATIONTYPE_DEFAULTE">
+<span id="_CPPv3N21IPLDeviationModelType25IPL_DEVIATIONTYPE_DEFAULTE"></span><span id="_CPPv2N21IPLDeviationModelType25IPL_DEVIATIONTYPE_DEFAULTE"></span><span class="target" id="group__simulation_1gga219e978fa8334e971e0d331cc77ac9e3adcc8096f14d23382aab55817eb4430fb"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_DEVIATIONTYPE_DEFAULT</span></span></span><a class="headerlink" href="#_CPPv4N21IPLDeviationModelType25IPL_DEVIATIONTYPE_DEFAULTE" title="Link to this definition"></a><br /></dt>
+<dd><p>The default deviation model. </p>
+<p>This is a physics-based model, based on the Uniform Theory of Diffraction, with various additional assumptions. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N21IPLDeviationModelType26IPL_DEVIATIONTYPE_CALLBACKE">
+<span id="_CPPv3N21IPLDeviationModelType26IPL_DEVIATIONTYPE_CALLBACKE"></span><span id="_CPPv2N21IPLDeviationModelType26IPL_DEVIATIONTYPE_CALLBACKE"></span><span class="target" id="group__simulation_1gga219e978fa8334e971e0d331cc77ac9e3a2be85aec942bc911d39a3b18d7c37704"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_DEVIATIONTYPE_CALLBACK</span></span></span><a class="headerlink" href="#_CPPv4N21IPLDeviationModelType26IPL_DEVIATIONTYPE_CALLBACKE" title="Link to this definition"></a><br /></dt>
+<dd><p>An arbitrary deviation model, defined by a callback function. </p>
+</dd></dl>
+
+</dd></dl>
+
 </section>
 <section id="callbacks">
 <h2>Callbacks<a class="headerlink" href="#callbacks" title="Link to this heading"></a></h2>
@@ -1194,6 +1258,26 @@
 </dd></dl>
 
 <dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv420IPLDeviationCallback">
+<span id="_CPPv320IPLDeviationCallback"></span><span id="_CPPv220IPLDeviationCallback"></span><span id="IPLDeviationCallback"></span><span class="target" id="group__simulation_1ga9084dc8eb09f652eea4d453008894956"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">IPLDeviationCallback</span></span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">(</span></span><a class="reference internal" href="types.html#_CPPv410IPLfloat32" title="IPLfloat32"><span class="n"><span class="pre">IPLfloat32</span></span></a><span class="w"> </span><span class="n"><span class="pre">angle</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="types.html#_CPPv48IPLint32" title="IPLint32"><span class="n"><span class="pre">IPLint32</span></span></a><span class="w"> </span><span class="n"><span class="pre">band</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">userData</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#_CPPv420IPLDeviationCallback" title="Link to this definition"></a><br /></dt>
+<dd><p>Callback for calculating how much to attenuate sound in a given frequency band based on the angle of deviation when the sound path bends around a corner as it propagated from the source to the listener. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Param angle<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>[in]</strong> Angle (in radians) that the sound path deviates (bends) by. </p>
+</dd>
+<dt class="field-even">Param band<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>[in]</strong> Index of the frequency band for which to calculate air absorption. </p>
+</dd>
+<dt class="field-odd">Param userData<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>[in]</strong> Pointer to the arbitrary data specified in the <code class="docutils literal notranslate"><a class="reference internal" href="#struct_i_p_l_deviation_model"><span class="std std-ref"><span class="pre">IPLDeviationModel</span></span></a></code>.</p>
+</dd>
+<dt class="field-even">Return<span class="colon">:</span></dt>
+<dd class="field-even"><p>The frequency-dependent attenuation to apply, between <code class="docutils literal notranslate"><span class="pre">0</span></code> and <code class="docutils literal notranslate"><span class="pre">1</span></code>. <code class="docutils literal notranslate"><span class="pre">0</span></code> = sound in the frequency band <code class="docutils literal notranslate"><span class="pre">band</span></code> is not audible; <code class="docutils literal notranslate"><span class="pre">1</span></code> = sound in the frequency band <code class="docutils literal notranslate"><span class="pre">band</span></code> is not attenuated. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp type">
 <dt class="sig sig-object cpp" id="_CPPv431IPLPathingVisualizationCallback">
 <span id="_CPPv331IPLPathingVisualizationCallback"></span><span id="_CPPv231IPLPathingVisualizationCallback"></span><span id="IPLPathingVisualizationCallback"></span><span class="target" id="group__simulation_1ga5a3c7fdf08d7333cd6a1dcd41d09a316"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">IPLPathingVisualizationCallback</span></span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">(</span></span><a class="reference internal" href="geometry.html#_CPPv410IPLVector3" title="IPLVector3"><span class="n"><span class="pre">IPLVector3</span></span></a><span class="w"> </span><span class="n"><span class="pre">from</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="geometry.html#_CPPv410IPLVector3" title="IPLVector3"><span class="n"><span class="pre">IPLVector3</span></span></a><span class="w"> </span><span class="n"><span class="pre">to</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="types.html#_CPPv47IPLbool" title="IPLbool"><span class="n"><span class="pre">IPLbool</span></span></a><span class="w"> </span><span class="n"><span class="pre">occluded</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">userData</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#_CPPv431IPLPathingVisualizationCallback" title="Link to this definition"></a><br /></dt>
 <dd><p>Callback for visualizing valid path segments during call to <code class="docutils literal notranslate"><span class="pre">iplSimulatorRunPathing</span></code>. </p>
@@ -1222,6 +1306,7 @@
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="baking.html" class="btn btn-neutral float-left" title="Baking" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="energy-field.html" class="btn btn-neutral float-right" title="Energy Field" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

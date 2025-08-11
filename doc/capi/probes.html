@@ -98,6 +98,8 @@
 <li class="toctree-l4"><a class="reference internal" href="#_CPPv419iplProbeBatchCommit13IPLProbeBatch"><code class="docutils literal notranslate"><span class="pre">iplProbeBatchCommit()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#_CPPv423iplProbeBatchRemoveData13IPLProbeBatchP22IPLBakedDataIdentifier"><code class="docutils literal notranslate"><span class="pre">iplProbeBatchRemoveData()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#_CPPv424iplProbeBatchGetDataSize13IPLProbeBatchP22IPLBakedDataIdentifier"><code class="docutils literal notranslate"><span class="pre">iplProbeBatchGetDataSize()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv427iplProbeBatchGetEnergyField13IPLProbeBatchP22IPLBakedDataIdentifier8IPLint3214IPLEnergyField"><code class="docutils literal notranslate"><span class="pre">iplProbeBatchGetEnergyField()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv422iplProbeBatchGetReverb13IPLProbeBatchP22IPLBakedDataIdentifier8IPLint32P10IPLfloat32"><code class="docutils literal notranslate"><span class="pre">iplProbeBatchGetReverb()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#structures">Structures</a><ul>
@@ -115,6 +117,9 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="baking.html">Baking</a></li>
 <li class="toctree-l2"><a class="reference internal" href="simulation.html">Simulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="energy-field.html">Energy Field</a></li>
+<li class="toctree-l2"><a class="reference internal" href="impulse-response.html">Impulse Response</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reconstructor.html">Reconstructor</a></li>
 </ul>
 </li>
 </ul>
@@ -421,6 +426,38 @@
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The size (in bytes) of a specific baked data layer in a probe batch.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv427iplProbeBatchGetEnergyField13IPLProbeBatchP22IPLBakedDataIdentifier8IPLint3214IPLEnergyField">
+<span id="_CPPv327iplProbeBatchGetEnergyField13IPLProbeBatchP22IPLBakedDataIdentifier8IPLint3214IPLEnergyField"></span><span id="_CPPv227iplProbeBatchGetEnergyField13IPLProbeBatchP22IPLBakedDataIdentifier8IPLint3214IPLEnergyField"></span><span id="iplProbeBatchGetEnergyField__IPLProbeBatch.IPLBakedDataIdentifierP.IPLint32.IPLEnergyField"></span><span class="target" id="group__probes_1ga96ee63f474da267b31ca536f74d8084d"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplProbeBatchGetEnergyField</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv413IPLProbeBatch" title="IPLProbeBatch"><span class="n"><span class="pre">IPLProbeBatch</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">probeBatch</span></span>, <a class="reference internal" href="#_CPPv422IPLBakedDataIdentifier" title="IPLBakedDataIdentifier"><span class="n"><span class="pre">IPLBakedDataIdentifier</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">identifier</span></span>, <a class="reference internal" href="types.html#_CPPv48IPLint32" title="IPLint32"><span class="n"><span class="pre">IPLint32</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">probeIndex</span></span>, <a class="reference internal" href="energy-field.html#_CPPv414IPLEnergyField" title="IPLEnergyField"><span class="n"><span class="pre">IPLEnergyField</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">energyField</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv427iplProbeBatchGetEnergyField13IPLProbeBatchP22IPLBakedDataIdentifier8IPLint3214IPLEnergyField" title="Link to this definition"></a><br /></dt>
+<dd><p>Retrieves a single energy field in a specific baked data layer of a specific probe in a probe batch. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>probeBatch</strong> – The probe batch. </p></li>
+<li><p><strong>identifier</strong> – The identifier of the baked data layer. </p></li>
+<li><p><strong>probeIndex</strong> – The index of the probe. </p></li>
+<li><p><strong>energyField</strong> – The energy field into which to copy the baked energy field. </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv422iplProbeBatchGetReverb13IPLProbeBatchP22IPLBakedDataIdentifier8IPLint32P10IPLfloat32">
+<span id="_CPPv322iplProbeBatchGetReverb13IPLProbeBatchP22IPLBakedDataIdentifier8IPLint32P10IPLfloat32"></span><span id="_CPPv222iplProbeBatchGetReverb13IPLProbeBatchP22IPLBakedDataIdentifier8IPLint32P10IPLfloat32"></span><span id="iplProbeBatchGetReverb__IPLProbeBatch.IPLBakedDataIdentifierP.IPLint32.IPLfloat32P"></span><span class="target" id="group__probes_1gac75c0d127ffe0a7462e6dcb8a1cfd766"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplProbeBatchGetReverb</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv413IPLProbeBatch" title="IPLProbeBatch"><span class="n"><span class="pre">IPLProbeBatch</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">probeBatch</span></span>, <a class="reference internal" href="#_CPPv422IPLBakedDataIdentifier" title="IPLBakedDataIdentifier"><span class="n"><span class="pre">IPLBakedDataIdentifier</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">identifier</span></span>, <a class="reference internal" href="types.html#_CPPv48IPLint32" title="IPLint32"><span class="n"><span class="pre">IPLint32</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">probeIndex</span></span>, <a class="reference internal" href="types.html#_CPPv410IPLfloat32" title="IPLfloat32"><span class="n"><span class="pre">IPLfloat32</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">reverbTimes</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv422iplProbeBatchGetReverb13IPLProbeBatchP22IPLBakedDataIdentifier8IPLint32P10IPLfloat32" title="Link to this definition"></a><br /></dt>
+<dd><p>Retrieves a single array of parametric reverb times in a specific baked data layer of a specific probe in a probe batch. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>probeBatch</strong> – The probe batch. </p></li>
+<li><p><strong>identifier</strong> – The identifier of the baked data layer. </p></li>
+<li><p><strong>probeIndex</strong> – The index of the probe. </p></li>
+<li><p><strong>reverbTimes</strong> – Pointer to an array containing at least 3 IPLfloat32 values, into which the baked reverb times will be copied. </p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>

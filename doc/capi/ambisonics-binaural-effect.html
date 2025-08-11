@@ -78,6 +78,8 @@
 <li class="toctree-l4"><a class="reference internal" href="#_CPPv434iplAmbisonicsBinauralEffectReleaseP27IPLAmbisonicsBinauralEffect"><code class="docutils literal notranslate"><span class="pre">iplAmbisonicsBinauralEffectRelease()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#_CPPv432iplAmbisonicsBinauralEffectReset27IPLAmbisonicsBinauralEffect"><code class="docutils literal notranslate"><span class="pre">iplAmbisonicsBinauralEffectReset()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#_CPPv432iplAmbisonicsBinauralEffectApply27IPLAmbisonicsBinauralEffectP33IPLAmbisonicsBinauralEffectParamsP14IPLAudioBufferP14IPLAudioBuffer"><code class="docutils literal notranslate"><span class="pre">iplAmbisonicsBinauralEffectApply()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv434iplAmbisonicsBinauralEffectGetTail27IPLAmbisonicsBinauralEffectP14IPLAudioBuffer"><code class="docutils literal notranslate"><span class="pre">iplAmbisonicsBinauralEffectGetTail()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv438iplAmbisonicsBinauralEffectGetTailSize27IPLAmbisonicsBinauralEffect"><code class="docutils literal notranslate"><span class="pre">iplAmbisonicsBinauralEffectGetTailSize()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#structures">Structures</a><ul>
@@ -95,6 +97,9 @@
 <li class="toctree-l2"><a class="reference internal" href="probes.html">Probes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="baking.html">Baking</a></li>
 <li class="toctree-l2"><a class="reference internal" href="simulation.html">Simulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="energy-field.html">Energy Field</a></li>
+<li class="toctree-l2"><a class="reference internal" href="impulse-response.html">Impulse Response</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reconstructor.html">Reconstructor</a></li>
 </ul>
 </li>
 </ul>
@@ -208,6 +213,39 @@
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">IPL_AUDIOEFFECTSTATE_TAILREMAINING</span></code> if any tail samples remain in the effect’s internal buffers, or <code class="docutils literal notranslate"><span class="pre">IPL_AUDIOEFFECTSTATE_TAILCOMPLETE</span></code> otherwise. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv434iplAmbisonicsBinauralEffectGetTail27IPLAmbisonicsBinauralEffectP14IPLAudioBuffer">
+<span id="_CPPv334iplAmbisonicsBinauralEffectGetTail27IPLAmbisonicsBinauralEffectP14IPLAudioBuffer"></span><span id="_CPPv234iplAmbisonicsBinauralEffectGetTail27IPLAmbisonicsBinauralEffectP14IPLAudioBuffer"></span><span id="iplAmbisonicsBinauralEffectGetTail__IPLAmbisonicsBinauralEffect.IPLAudioBufferP"></span><span class="target" id="group__ambisonics_1gab5acbfc02e0388d88b7e81b185c385ac"></span><a class="reference internal" href="audio-buffers.html#_CPPv419IPLAudioEffectState" title="IPLAudioEffectState"><span class="n"><span class="pre">IPLAudioEffectState</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplAmbisonicsBinauralEffectGetTail</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv427IPLAmbisonicsBinauralEffect" title="IPLAmbisonicsBinauralEffect"><span class="n"><span class="pre">IPLAmbisonicsBinauralEffect</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">effect</span></span>, <a class="reference internal" href="audio-buffers.html#_CPPv414IPLAudioBuffer" title="IPLAudioBuffer"><span class="n"><span class="pre">IPLAudioBuffer</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">out</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv434iplAmbisonicsBinauralEffectGetTail27IPLAmbisonicsBinauralEffectP14IPLAudioBuffer" title="Link to this definition"></a><br /></dt>
+<dd><p>Retrieves a single frame of tail samples from an Ambisonics binaural effect’s internal buffers. </p>
+<p>After the input to the Ambisonics binaural effect has stopped, this function must be called instead of <code class="docutils literal notranslate"><span class="pre">iplAmbisonicsBinauralEffectApply</span></code> until the return value indicates that no more tail samples remain.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>effect</strong> – The Ambisonics binaural effect. </p></li>
+<li><p><strong>out</strong> – The output audio buffer. Must have 2 channels.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">IPL_AUDIOEFFECTSTATE_TAILREMAINING</span></code> if any tail samples remain in the effect’s internal buffers, or <code class="docutils literal notranslate"><span class="pre">IPL_AUDIOEFFECTSTATE_TAILCOMPLETE</span></code> otherwise. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv438iplAmbisonicsBinauralEffectGetTailSize27IPLAmbisonicsBinauralEffect">
+<span id="_CPPv338iplAmbisonicsBinauralEffectGetTailSize27IPLAmbisonicsBinauralEffect"></span><span id="_CPPv238iplAmbisonicsBinauralEffectGetTailSize27IPLAmbisonicsBinauralEffect"></span><span id="iplAmbisonicsBinauralEffectGetTailSize__IPLAmbisonicsBinauralEffect"></span><span class="target" id="group__ambisonics_1ga7cd5c7c5544e4e5b5941925f9ddc396c"></span><a class="reference internal" href="types.html#_CPPv48IPLint32" title="IPLint32"><span class="n"><span class="pre">IPLint32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplAmbisonicsBinauralEffectGetTailSize</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv427IPLAmbisonicsBinauralEffect" title="IPLAmbisonicsBinauralEffect"><span class="n"><span class="pre">IPLAmbisonicsBinauralEffect</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">effect</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv438iplAmbisonicsBinauralEffectGetTailSize27IPLAmbisonicsBinauralEffect" title="Link to this definition"></a><br /></dt>
+<dd><p>Returns the number of tail samples remaining in an Ambisonics binaural effect’s internal buffers. </p>
+<p>Tail samples are audio samples that should be played even after the input to the effect has stopped playing and no further input samples are available.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>effect</strong> – The Ambisonics binaural effect.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The number of tail samples remaining. </p>
 </dd>
 </dl>
 </dd></dl>

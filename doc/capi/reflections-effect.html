@@ -84,6 +84,8 @@
 <li class="toctree-l4"><a class="reference internal" href="#_CPPv426iplReflectionEffectReleaseP19IPLReflectionEffect"><code class="docutils literal notranslate"><span class="pre">iplReflectionEffectRelease()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#_CPPv424iplReflectionEffectReset19IPLReflectionEffect"><code class="docutils literal notranslate"><span class="pre">iplReflectionEffectReset()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#_CPPv424iplReflectionEffectApply19IPLReflectionEffectP25IPLReflectionEffectParamsP14IPLAudioBufferP14IPLAudioBuffer18IPLReflectionMixer"><code class="docutils literal notranslate"><span class="pre">iplReflectionEffectApply()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv426iplReflectionEffectGetTail19IPLReflectionEffectP14IPLAudioBuffer18IPLReflectionMixer"><code class="docutils literal notranslate"><span class="pre">iplReflectionEffectGetTail()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv430iplReflectionEffectGetTailSize19IPLReflectionEffect"><code class="docutils literal notranslate"><span class="pre">iplReflectionEffectGetTailSize()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#_CPPv424iplReflectionMixerCreate10IPLContextP16IPLAudioSettingsP27IPLReflectionEffectSettingsP18IPLReflectionMixer"><code class="docutils literal notranslate"><span class="pre">iplReflectionMixerCreate()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#_CPPv424iplReflectionMixerRetain18IPLReflectionMixer"><code class="docutils literal notranslate"><span class="pre">iplReflectionMixerRetain()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#_CPPv425iplReflectionMixerReleaseP18IPLReflectionMixer"><code class="docutils literal notranslate"><span class="pre">iplReflectionMixerRelease()</span></code></a></li>
@@ -106,6 +108,9 @@
 <li class="toctree-l2"><a class="reference internal" href="probes.html">Probes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="baking.html">Baking</a></li>
 <li class="toctree-l2"><a class="reference internal" href="simulation.html">Simulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="energy-field.html">Energy Field</a></li>
+<li class="toctree-l2"><a class="reference internal" href="impulse-response.html">Impulse Response</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reconstructor.html">Reconstructor</a></li>
 </ul>
 </li>
 </ul>
@@ -239,6 +244,40 @@
 </dd></dl>
 
 <dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv426iplReflectionEffectGetTail19IPLReflectionEffectP14IPLAudioBuffer18IPLReflectionMixer">
+<span id="_CPPv326iplReflectionEffectGetTail19IPLReflectionEffectP14IPLAudioBuffer18IPLReflectionMixer"></span><span id="_CPPv226iplReflectionEffectGetTail19IPLReflectionEffectP14IPLAudioBuffer18IPLReflectionMixer"></span><span id="iplReflectionEffectGetTail__IPLReflectionEffect.IPLAudioBufferP.IPLReflectionMixer"></span><span class="target" id="group__reflectioneffect_1ga21b11fd911577aa5e38e5a628518908b"></span><a class="reference internal" href="audio-buffers.html#_CPPv419IPLAudioEffectState" title="IPLAudioEffectState"><span class="n"><span class="pre">IPLAudioEffectState</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplReflectionEffectGetTail</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv419IPLReflectionEffect" title="IPLReflectionEffect"><span class="n"><span class="pre">IPLReflectionEffect</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">effect</span></span>, <a class="reference internal" href="audio-buffers.html#_CPPv414IPLAudioBuffer" title="IPLAudioBuffer"><span class="n"><span class="pre">IPLAudioBuffer</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">out</span></span>, <a class="reference internal" href="#_CPPv418IPLReflectionMixer" title="IPLReflectionMixer"><span class="n"><span class="pre">IPLReflectionMixer</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">mixer</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv426iplReflectionEffectGetTail19IPLReflectionEffectP14IPLAudioBuffer18IPLReflectionMixer" title="Link to this definition"></a><br /></dt>
+<dd><p>Retrieves a single frame of tail samples from a reflection effect’s internal buffers. </p>
+<p>After the input to the reflection effect has stopped, this function must be called instead of <code class="docutils literal notranslate"><span class="pre">iplReflectionEffectApply</span></code> until the return value indicates that no more tail samples remain.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>effect</strong> – The reflection effect. </p></li>
+<li><p><strong>out</strong> – The output audio buffer. Must have as many channels as the impulse response specified when creating the effect (for convolution, hybrid, and TAN) or at least 1 channel (for parametric). </p></li>
+<li><p><strong>mixer</strong> – If this is non-null, then the tail samples will be mixed into the given mixer object instead of being returned in the <code class="docutils literal notranslate"><span class="pre">out</span></code> parameter. The mixed output can be retrieved elsewhere in the audio pipeline using <code class="docutils literal notranslate"><span class="pre">iplReflectionMixerApply</span></code>. This can have a performance benefit if using convolution. If using TAN, specifying a mixer is required.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">IPL_AUDIOEFFECTSTATE_TAILREMAINING</span></code> if any tail samples remain in the effect’s internal buffers, or <code class="docutils literal notranslate"><span class="pre">IPL_AUDIOEFFECTSTATE_TAILCOMPLETE</span></code> otherwise. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv430iplReflectionEffectGetTailSize19IPLReflectionEffect">
+<span id="_CPPv330iplReflectionEffectGetTailSize19IPLReflectionEffect"></span><span id="_CPPv230iplReflectionEffectGetTailSize19IPLReflectionEffect"></span><span id="iplReflectionEffectGetTailSize__IPLReflectionEffect"></span><span class="target" id="group__reflectioneffect_1gabbad38ef4e8da84a05f0764d71e2797e"></span><a class="reference internal" href="types.html#_CPPv48IPLint32" title="IPLint32"><span class="n"><span class="pre">IPLint32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplReflectionEffectGetTailSize</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv419IPLReflectionEffect" title="IPLReflectionEffect"><span class="n"><span class="pre">IPLReflectionEffect</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">effect</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv430iplReflectionEffectGetTailSize19IPLReflectionEffect" title="Link to this definition"></a><br /></dt>
+<dd><p>Returns the number of tail samples remaining in a reflection effect’s internal buffers. </p>
+<p>Tail samples are audio samples that should be played even after the input to the effect has stopped playing and no further input samples are available.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>effect</strong> – The reflection effect.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The number of tail samples remaining. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv424iplReflectionMixerCreate10IPLContextP16IPLAudioSettingsP27IPLReflectionEffectSettingsP18IPLReflectionMixer">
 <span id="_CPPv324iplReflectionMixerCreate10IPLContextP16IPLAudioSettingsP27IPLReflectionEffectSettingsP18IPLReflectionMixer"></span><span id="_CPPv224iplReflectionMixerCreate10IPLContextP16IPLAudioSettingsP27IPLReflectionEffectSettingsP18IPLReflectionMixer"></span><span id="iplReflectionMixerCreate__IPLContext.IPLAudioSettingsP.IPLReflectionEffectSettingsP.IPLReflectionMixerP"></span><span class="target" id="group__reflectioneffect_1ga3a8d4f3d5d1e4852c0ac3ef81c880d2e"></span><a class="reference internal" href="types.html#_CPPv48IPLerror" title="IPLerror"><span class="n"><span class="pre">IPLerror</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplReflectionMixerCreate</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="context.html#_CPPv410IPLContext" title="IPLContext"><span class="n"><span class="pre">IPLContext</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">context</span></span>, <a class="reference internal" href="audio-buffers.html#_CPPv416IPLAudioSettings" title="IPLAudioSettings"><span class="n"><span class="pre">IPLAudioSettings</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">audioSettings</span></span>, <a class="reference internal" href="#_CPPv427IPLReflectionEffectSettings" title="IPLReflectionEffectSettings"><span class="n"><span class="pre">IPLReflectionEffectSettings</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">effectSettings</span></span>, <a class="reference internal" href="#_CPPv418IPLReflectionMixer" title="IPLReflectionMixer"><span class="n"><span class="pre">IPLReflectionMixer</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">mixer</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv424iplReflectionMixerCreate10IPLContextP16IPLAudioSettingsP27IPLReflectionEffectSettingsP18IPLReflectionMixer" title="Link to this definition"></a><br /></dt>
 <dd><p>Creates a reflection effect mixer. </p>
@@ -362,14 +401,14 @@
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N25IPLReflectionEffectParams11reverbTimesE">
-<span id="_CPPv3N25IPLReflectionEffectParams11reverbTimesE"></span><span id="_CPPv2N25IPLReflectionEffectParams11reverbTimesE"></span><span id="IPLReflectionEffectParams::reverbTimes__IPLfloat32A"></span><span class="target" id="struct_i_p_l_reflection_effect_params_1a5a18a1274f78debd823c2b48f2d8cbb1"></span><a class="reference internal" href="types.html#_CPPv410IPLfloat32" title="IPLfloat32"><span class="n"><span class="pre">IPLfloat32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">reverbTimes</span></span></span><span class="p"><span class="pre">[</span></span><span class="m"><span class="pre">3</span></span><span class="p"><span class="pre">]</span></span><a class="headerlink" href="#_CPPv4N25IPLReflectionEffectParams11reverbTimesE" title="Link to this definition"></a><br /></dt>
+<span id="_CPPv3N25IPLReflectionEffectParams11reverbTimesE"></span><span id="_CPPv2N25IPLReflectionEffectParams11reverbTimesE"></span><span id="IPLReflectionEffectParams::reverbTimes__IPLfloat32A"></span><span class="target" id="struct_i_p_l_reflection_effect_params_1ae5e84aa5599ddb4fac8262ffbe8ae6d0"></span><a class="reference internal" href="types.html#_CPPv410IPLfloat32" title="IPLfloat32"><span class="n"><span class="pre">IPLfloat32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">reverbTimes</span></span></span><span class="p"><span class="pre">[</span></span><span class="n"><span class="pre">IPL_NUM_BANDS</span></span><span class="p"><span class="pre">]</span></span><a class="headerlink" href="#_CPPv4N25IPLReflectionEffectParams11reverbTimesE" title="Link to this definition"></a><br /></dt>
 <dd><p>3-band reverb decay times (RT60). </p>
 <p>For <code class="docutils literal notranslate"><span class="pre">IPL_REFLECTIONEFFECTTYPE_PARAMETRIC</span></code> or <code class="docutils literal notranslate"><span class="pre">IPL_REFLECTIONEFFECTTYPE_HYBRID</span></code>. </p>
 </dd></dl>
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N25IPLReflectionEffectParams2eqE">
-<span id="_CPPv3N25IPLReflectionEffectParams2eqE"></span><span id="_CPPv2N25IPLReflectionEffectParams2eqE"></span><span id="IPLReflectionEffectParams::eq__IPLfloat32A"></span><span class="target" id="struct_i_p_l_reflection_effect_params_1aee2cff47c48b351f32f9570adc9dd44f"></span><a class="reference internal" href="types.html#_CPPv410IPLfloat32" title="IPLfloat32"><span class="n"><span class="pre">IPLfloat32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">eq</span></span></span><span class="p"><span class="pre">[</span></span><span class="m"><span class="pre">3</span></span><span class="p"><span class="pre">]</span></span><a class="headerlink" href="#_CPPv4N25IPLReflectionEffectParams2eqE" title="Link to this definition"></a><br /></dt>
+<span id="_CPPv3N25IPLReflectionEffectParams2eqE"></span><span id="_CPPv2N25IPLReflectionEffectParams2eqE"></span><span id="IPLReflectionEffectParams::eq__IPLfloat32A"></span><span class="target" id="struct_i_p_l_reflection_effect_params_1a27511b0e901c2f975ab0372f0743096a"></span><a class="reference internal" href="types.html#_CPPv410IPLfloat32" title="IPLfloat32"><span class="n"><span class="pre">IPLfloat32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">eq</span></span></span><span class="p"><span class="pre">[</span></span><span class="n"><span class="pre">IPL_NUM_BANDS</span></span><span class="p"><span class="pre">]</span></span><a class="headerlink" href="#_CPPv4N25IPLReflectionEffectParams2eqE" title="Link to this definition"></a><br /></dt>
 <dd><p>3-band EQ coefficients applied to the parametric part to ensure smooth transition. </p>
 <p>For <code class="docutils literal notranslate"><span class="pre">IPL_REFLECTIONEFFECTTYPE_HYBRID</span></code>. </p>
 </dd></dl>

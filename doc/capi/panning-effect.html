@@ -73,6 +73,8 @@
 <li class="toctree-l4"><a class="reference internal" href="#_CPPv423iplPanningEffectReleaseP16IPLPanningEffect"><code class="docutils literal notranslate"><span class="pre">iplPanningEffectRelease()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#_CPPv421iplPanningEffectReset16IPLPanningEffect"><code class="docutils literal notranslate"><span class="pre">iplPanningEffectReset()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#_CPPv421iplPanningEffectApply16IPLPanningEffectP22IPLPanningEffectParamsP14IPLAudioBufferP14IPLAudioBuffer"><code class="docutils literal notranslate"><span class="pre">iplPanningEffectApply()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv423iplPanningEffectGetTail16IPLPanningEffectP14IPLAudioBuffer"><code class="docutils literal notranslate"><span class="pre">iplPanningEffectGetTail()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv427iplPanningEffectGetTailSize16IPLPanningEffect"><code class="docutils literal notranslate"><span class="pre">iplPanningEffectGetTailSize()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#structures">Structures</a><ul>
@@ -95,6 +97,9 @@
 <li class="toctree-l2"><a class="reference internal" href="probes.html">Probes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="baking.html">Baking</a></li>
 <li class="toctree-l2"><a class="reference internal" href="simulation.html">Simulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="energy-field.html">Energy Field</a></li>
+<li class="toctree-l2"><a class="reference internal" href="impulse-response.html">Impulse Response</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reconstructor.html">Reconstructor</a></li>
 </ul>
 </li>
 </ul>
@@ -207,6 +212,39 @@
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">IPL_AUDIOEFFECTSTATE_TAILCOMPLETE</span></code> to indicate that this effect does not generate any tail samples. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv423iplPanningEffectGetTail16IPLPanningEffectP14IPLAudioBuffer">
+<span id="_CPPv323iplPanningEffectGetTail16IPLPanningEffectP14IPLAudioBuffer"></span><span id="_CPPv223iplPanningEffectGetTail16IPLPanningEffectP14IPLAudioBuffer"></span><span id="iplPanningEffectGetTail__IPLPanningEffect.IPLAudioBufferP"></span><span class="target" id="group__panningeffect_1gad9a8bcecc4d4a7b131e672b7e484f5f9"></span><a class="reference internal" href="audio-buffers.html#_CPPv419IPLAudioEffectState" title="IPLAudioEffectState"><span class="n"><span class="pre">IPLAudioEffectState</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplPanningEffectGetTail</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv416IPLPanningEffect" title="IPLPanningEffect"><span class="n"><span class="pre">IPLPanningEffect</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">effect</span></span>, <a class="reference internal" href="audio-buffers.html#_CPPv414IPLAudioBuffer" title="IPLAudioBuffer"><span class="n"><span class="pre">IPLAudioBuffer</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">out</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv423iplPanningEffectGetTail16IPLPanningEffectP14IPLAudioBuffer" title="Link to this definition"></a><br /></dt>
+<dd><p>Retrieves a single frame of tail samples from a panning effect’s internal buffers. </p>
+<p>After the input to the panning effect has stopped, this function must be called instead of <code class="docutils literal notranslate"><span class="pre">iplPanningEffectApply</span></code> until the return value indicates that no more tail samples remain.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>effect</strong> – The panning effect. </p></li>
+<li><p><strong>out</strong> – The output audio buffer. Must have as many channels as needed for the speaker layout specified when creating the panning effect. For example, if the speaker layout is <code class="docutils literal notranslate"><span class="pre">IPL_SPEAKERLAYOUTTYPE_SURROUND_5_1</span></code>, the output buffer must contain 6 channels.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">IPL_AUDIOEFFECTSTATE_TAILREMAINING</span></code> if any tail samples remain in the effect’s internal buffers, or <code class="docutils literal notranslate"><span class="pre">IPL_AUDIOEFFECTSTATE_TAILCOMPLETE</span></code> otherwise. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv427iplPanningEffectGetTailSize16IPLPanningEffect">
+<span id="_CPPv327iplPanningEffectGetTailSize16IPLPanningEffect"></span><span id="_CPPv227iplPanningEffectGetTailSize16IPLPanningEffect"></span><span id="iplPanningEffectGetTailSize__IPLPanningEffect"></span><span class="target" id="group__panningeffect_1gab3c69cf21e8a141ff9c2021c1f9d1d55"></span><a class="reference internal" href="types.html#_CPPv48IPLint32" title="IPLint32"><span class="n"><span class="pre">IPLint32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplPanningEffectGetTailSize</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv416IPLPanningEffect" title="IPLPanningEffect"><span class="n"><span class="pre">IPLPanningEffect</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">effect</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv427iplPanningEffectGetTailSize16IPLPanningEffect" title="Link to this definition"></a><br /></dt>
+<dd><p>Returns the number of tail samples remaining in a panning effect’s internal buffers. </p>
+<p>Tail samples are audio samples that should be played even after the input to the effect has stopped playing and no further input samples are available.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>effect</strong> – The panning effect.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The number of tail samples remaining. </p>
 </dd>
 </dl>
 </dd></dl>

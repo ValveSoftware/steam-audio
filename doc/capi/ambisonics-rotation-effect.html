@@ -79,6 +79,8 @@
 <li class="toctree-l4"><a class="reference internal" href="#_CPPv434iplAmbisonicsRotationEffectReleaseP27IPLAmbisonicsRotationEffect"><code class="docutils literal notranslate"><span class="pre">iplAmbisonicsRotationEffectRelease()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#_CPPv432iplAmbisonicsRotationEffectReset27IPLAmbisonicsRotationEffect"><code class="docutils literal notranslate"><span class="pre">iplAmbisonicsRotationEffectReset()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#_CPPv432iplAmbisonicsRotationEffectApply27IPLAmbisonicsRotationEffectP33IPLAmbisonicsRotationEffectParamsP14IPLAudioBufferP14IPLAudioBuffer"><code class="docutils literal notranslate"><span class="pre">iplAmbisonicsRotationEffectApply()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv434iplAmbisonicsRotationEffectGetTail27IPLAmbisonicsRotationEffectP14IPLAudioBuffer"><code class="docutils literal notranslate"><span class="pre">iplAmbisonicsRotationEffectGetTail()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv438iplAmbisonicsRotationEffectGetTailSize27IPLAmbisonicsRotationEffect"><code class="docutils literal notranslate"><span class="pre">iplAmbisonicsRotationEffectGetTailSize()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#structures">Structures</a><ul>
@@ -95,6 +97,9 @@
 <li class="toctree-l2"><a class="reference internal" href="probes.html">Probes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="baking.html">Baking</a></li>
 <li class="toctree-l2"><a class="reference internal" href="simulation.html">Simulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="energy-field.html">Energy Field</a></li>
+<li class="toctree-l2"><a class="reference internal" href="impulse-response.html">Impulse Response</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reconstructor.html">Reconstructor</a></li>
 </ul>
 </li>
 </ul>
@@ -208,6 +213,39 @@
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">IPL_AUDIOEFFECTSTATE_TAILCOMPLETE</span></code> to indicate that this effect does not generate any tail samples. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv434iplAmbisonicsRotationEffectGetTail27IPLAmbisonicsRotationEffectP14IPLAudioBuffer">
+<span id="_CPPv334iplAmbisonicsRotationEffectGetTail27IPLAmbisonicsRotationEffectP14IPLAudioBuffer"></span><span id="_CPPv234iplAmbisonicsRotationEffectGetTail27IPLAmbisonicsRotationEffectP14IPLAudioBuffer"></span><span id="iplAmbisonicsRotationEffectGetTail__IPLAmbisonicsRotationEffect.IPLAudioBufferP"></span><span class="target" id="group__ambisonicsrotation_1ga46a67e5e8ea6306b4c0cd824a7c7d9a5"></span><a class="reference internal" href="audio-buffers.html#_CPPv419IPLAudioEffectState" title="IPLAudioEffectState"><span class="n"><span class="pre">IPLAudioEffectState</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplAmbisonicsRotationEffectGetTail</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv427IPLAmbisonicsRotationEffect" title="IPLAmbisonicsRotationEffect"><span class="n"><span class="pre">IPLAmbisonicsRotationEffect</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">effect</span></span>, <a class="reference internal" href="audio-buffers.html#_CPPv414IPLAudioBuffer" title="IPLAudioBuffer"><span class="n"><span class="pre">IPLAudioBuffer</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">out</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv434iplAmbisonicsRotationEffectGetTail27IPLAmbisonicsRotationEffectP14IPLAudioBuffer" title="Link to this definition"></a><br /></dt>
+<dd><p>Retrieves a single frame of tail samples from an Ambisonics rotation effect’s internal buffers. </p>
+<p>After the input to the Ambisonics rotation effect has stopped, this function must be called instead of <code class="docutils literal notranslate"><span class="pre">iplAmbisonicsRotationEffectApply</span></code> until the return value indicates that no more tail samples remain.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>effect</strong> – The Ambisonics rotation effect. </p></li>
+<li><p><strong>out</strong> – The output audio buffer. Must have as many channels as needed for the Ambisonics order specified when creating the effect.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">IPL_AUDIOEFFECTSTATE_TAILREMAINING</span></code> if any tail samples remain in the effect’s internal buffers, or <code class="docutils literal notranslate"><span class="pre">IPL_AUDIOEFFECTSTATE_TAILCOMPLETE</span></code> otherwise. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv438iplAmbisonicsRotationEffectGetTailSize27IPLAmbisonicsRotationEffect">
+<span id="_CPPv338iplAmbisonicsRotationEffectGetTailSize27IPLAmbisonicsRotationEffect"></span><span id="_CPPv238iplAmbisonicsRotationEffectGetTailSize27IPLAmbisonicsRotationEffect"></span><span id="iplAmbisonicsRotationEffectGetTailSize__IPLAmbisonicsRotationEffect"></span><span class="target" id="group__ambisonicsrotation_1gaba78aa7d1ce88646f98803a11c19b47f"></span><a class="reference internal" href="types.html#_CPPv48IPLint32" title="IPLint32"><span class="n"><span class="pre">IPLint32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplAmbisonicsRotationEffectGetTailSize</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv427IPLAmbisonicsRotationEffect" title="IPLAmbisonicsRotationEffect"><span class="n"><span class="pre">IPLAmbisonicsRotationEffect</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">effect</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv438iplAmbisonicsRotationEffectGetTailSize27IPLAmbisonicsRotationEffect" title="Link to this definition"></a><br /></dt>
+<dd><p>Returns the number of tail samples remaining in an Ambisonics rotation effect’s internal buffers. </p>
+<p>Tail samples are audio samples that should be played even after the input to the effect has stopped playing and no further input samples are available.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>effect</strong> – The Ambisonics rotation effect.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The number of tail samples remaining. </p>
 </dd>
 </dl>
 </dd></dl>

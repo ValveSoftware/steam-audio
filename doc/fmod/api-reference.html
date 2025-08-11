@@ -56,11 +56,19 @@
 <li class="toctree-l4"><a class="reference internal" href="#_CPPv417iplFMODInitialize10IPLContext"><code class="docutils literal notranslate"><span class="pre">iplFMODInitialize()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#_CPPv416iplFMODTerminatev"><code class="docutils literal notranslate"><span class="pre">iplFMODTerminate()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#_CPPv414iplFMODSetHRTF7IPLHRTF"><code class="docutils literal notranslate"><span class="pre">iplFMODSetHRTF()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv422iplFMODSetHRTFDisabledb"><code class="docutils literal notranslate"><span class="pre">iplFMODSetHRTFDisabled()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#_CPPv428iplFMODSetSimulationSettings21IPLSimulationSettings"><code class="docutils literal notranslate"><span class="pre">iplFMODSetSimulationSettings()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#_CPPv422iplFMODSetReverbSource9IPLSource"><code class="docutils literal notranslate"><span class="pre">iplFMODSetReverbSource()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv416iplFMODAddSource9IPLSource"><code class="docutils literal notranslate"><span class="pre">iplFMODAddSource()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv419iplFMODRemoveSource8IPLint32"><code class="docutils literal notranslate"><span class="pre">iplFMODRemoveSource()</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="#dsp-parameters">DSP Parameters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#dsp-parameters">DSP Parameters</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv420IPLSpatializerParams"><code class="docutils literal notranslate"><span class="pre">IPLSpatializerParams</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv415IPLReverbParams"><code class="docutils literal notranslate"><span class="pre">IPLReverbParams</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv420IPLMixerReturnParams"><code class="docutils literal notranslate"><span class="pre">IPLMixerReturnParams</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -142,6 +150,18 @@
 </dd></dl>
 
 <dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv422iplFMODSetHRTFDisabledb">
+<span id="_CPPv322iplFMODSetHRTFDisabledb"></span><span id="_CPPv222iplFMODSetHRTFDisabledb"></span><span id="iplFMODSetHRTFDisabled__b"></span><span class="target" id="steamaudio__fmod_8h_1a2aba9aef5069698a331867e12e4241bb"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplFMODSetHRTFDisabled</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">disabled</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv422iplFMODSetHRTFDisabledb" title="Link to this definition"></a><br /></dt>
+<dd><p>Specifies whether HRTF-based binaural rendering should be globally disabled in all Steam Audio DSP effects. </p>
+<p>If disabled, Steam Audio will use a simpler panning algorithm.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>disabled</strong> – <strong>[in]</strong> Whether or not HRTF-based binaural rendering should be disabled. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv428iplFMODSetSimulationSettings21IPLSimulationSettings">
 <span id="_CPPv328iplFMODSetSimulationSettings21IPLSimulationSettings"></span><span id="_CPPv228iplFMODSetSimulationSettings21IPLSimulationSettings"></span><span id="iplFMODSetSimulationSettings__IPLSimulationSettings"></span><span class="target" id="steamaudio__fmod_8h_1a6b300ef4262129edb50b3143d20a65a7"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplFMODSetSimulationSettings</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">IPLSimulationSettings</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">simulationSettings</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv428iplFMODSetSimulationSettings21IPLSimulationSettings" title="Link to this definition"></a><br /></dt>
 <dd><p>Specifies the simulation settings used by the game engine for simulating direct and/or indirect sound propagation. </p>
@@ -165,21 +185,446 @@
 </dl>
 </dd></dl>
 
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv416iplFMODAddSource9IPLSource">
+<span id="_CPPv316iplFMODAddSource9IPLSource"></span><span id="_CPPv216iplFMODAddSource9IPLSource"></span><span id="iplFMODAddSource__IPLSource"></span><span class="target" id="steamaudio__fmod_8h_1a6ab660a34d47884a42da74c66acb98f3"></span><span class="n"><span class="pre">IPLint32</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplFMODAddSource</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">IPLSource</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">source</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv416iplFMODAddSource9IPLSource" title="Link to this definition"></a><br /></dt>
+<dd><p>Registers an <code class="docutils literal notranslate"><span class="pre">IPLSource</span></code> object for use by Steam Audio DSP effects in the audio thread. </p>
+<p>Calling this function causes the audio engine DSP plugin to retain a reference to the <code class="docutils literal notranslate"><span class="pre">IPLSource</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>source</strong> – <strong>[in]</strong> The <code class="docutils literal notranslate"><span class="pre">IPLSource</span></code> object used by the game engine for simulation (occlusion, reflections, pathing, etc.) for a given sound source. The Steam Audio Spatializer effect will use this object to retrieve simulation results, (e.g., occlusion values).</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>An integer handle that can be used to identify the <code class="docutils literal notranslate"><span class="pre">IPLSource</span></code>. This should be passed to Steam Audio Spatializer effects via the <code class="docutils literal notranslate"><span class="pre">IPL_SPATIALIZE_SIMULATION_OUTPUTS_HANDLE</span></code> parameter. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv419iplFMODRemoveSource8IPLint32">
+<span id="_CPPv319iplFMODRemoveSource8IPLint32"></span><span id="_CPPv219iplFMODRemoveSource8IPLint32"></span><span id="iplFMODRemoveSource__IPLint32"></span><span class="target" id="steamaudio__fmod_8h_1aabbee044745185f950e7c567502e170c"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplFMODRemoveSource</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">IPLint32</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">handle</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv419iplFMODRemoveSource8IPLint32" title="Link to this definition"></a><br /></dt>
+<dd><p>Unregisters the <code class="docutils literal notranslate"><span class="pre">IPLSource</span></code> with the given handle, so the Steam Audio DSP effects can no longer use it. </p>
+<p>Calling this function causes the audio engine DSP plugin to release its reference to the <code class="docutils literal notranslate"><span class="pre">IPLSource</span></code> with the given handle.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>handle</strong> – <strong>[in]</strong> The handle corresponding to the <code class="docutils literal notranslate"><span class="pre">IPLSource</span></code> that should be unregistered. </p>
+</dd>
+</dl>
+</dd></dl>
+
 </section>
 <section id="dsp-parameters">
 <h2>DSP Parameters<a class="headerlink" href="#dsp-parameters" title="Link to this heading"></a></h2>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>doxygenenum: Cannot find enum “SpatializeEffect::Params” in doxygen xml output for project “SteamAudioFMOD” from directory: C:/buildworker/phonon_rel_win64/build/fmod/build/windows-vs2019-x64/doc/xml</p>
-</div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>doxygenenum: Cannot find enum “ReverbEffect::Params” in doxygen xml output for project “SteamAudioFMOD” from directory: C:/buildworker/phonon_rel_win64/build/fmod/build/windows-vs2019-x64/doc/xml</p>
-</div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>doxygenenum: Cannot find enum “MixerReturnEffect::Params” in doxygen xml output for project “SteamAudioFMOD” from directory: C:/buildworker/phonon_rel_win64/build/fmod/build/windows-vs2019-x64/doc/xml</p>
-</div>
+<dl class="cpp enum">
+<dt class="sig sig-object cpp" id="_CPPv420IPLSpatializerParams">
+<span id="_CPPv320IPLSpatializerParams"></span><span id="_CPPv220IPLSpatializerParams"></span><span class="target" id="steamaudio__fmod_8h_1a26afe642f29efe40689e51a7adfebfbd"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLSpatializerParams</span></span></span><a class="headerlink" href="#_CPPv420IPLSpatializerParams" title="Link to this definition"></a><br /></dt>
+<dd><p>DSP parameters for the “Steam Audio Spatializer” effect. </p>
+<p><em>Values:</em></p>
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N20IPLSpatializerParams30IPL_SPATIALIZE_SOURCE_POSITIONE">
+<span id="_CPPv3N20IPLSpatializerParams30IPL_SPATIALIZE_SOURCE_POSITIONE"></span><span id="_CPPv2N20IPLSpatializerParams30IPL_SPATIALIZE_SOURCE_POSITIONE"></span><span class="target" id="steamaudio__fmod_8h_1a26afe642f29efe40689e51a7adfebfbdac6b608ca8d9ca4f70d5b0dc45cdc0ddd"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_SPATIALIZE_SOURCE_POSITION</span></span></span><a class="headerlink" href="#_CPPv4N20IPLSpatializerParams30IPL_SPATIALIZE_SOURCE_POSITIONE" title="Link to this definition"></a><br /></dt>
+<dd><p><strong>Type</strong>: <code class="docutils literal notranslate"><span class="pre">FMOD_DSP_PARAMETER_TYPE_DATA</span></code></p>
+<p>World-space position of the source. Automatically written by FMOD Studio. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N20IPLSpatializerParams27IPL_SPATIALIZE_OVERALL_GAINE">
+<span id="_CPPv3N20IPLSpatializerParams27IPL_SPATIALIZE_OVERALL_GAINE"></span><span id="_CPPv2N20IPLSpatializerParams27IPL_SPATIALIZE_OVERALL_GAINE"></span><span class="target" id="steamaudio__fmod_8h_1a26afe642f29efe40689e51a7adfebfbdaf48a970bf16e73bb56cc8c80a123529a"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_SPATIALIZE_OVERALL_GAIN</span></span></span><a class="headerlink" href="#_CPPv4N20IPLSpatializerParams27IPL_SPATIALIZE_OVERALL_GAINE" title="Link to this definition"></a><br /></dt>
+<dd><p><strong>Type</strong>: <code class="docutils literal notranslate"><span class="pre">FMOD_DSP_PARAMETER_TYPE_DATA</span></code></p>
+<p>Overall linear gain of this effect. Automatically read by FMOD Studio. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N20IPLSpatializerParams40IPL_SPATIALIZE_APPLY_DISTANCEATTENUATIONE">
+<span id="_CPPv3N20IPLSpatializerParams40IPL_SPATIALIZE_APPLY_DISTANCEATTENUATIONE"></span><span id="_CPPv2N20IPLSpatializerParams40IPL_SPATIALIZE_APPLY_DISTANCEATTENUATIONE"></span><span class="target" id="steamaudio__fmod_8h_1a26afe642f29efe40689e51a7adfebfbdae812aa920900b3b17535109e9ff690b1"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_SPATIALIZE_APPLY_DISTANCEATTENUATION</span></span></span><a class="headerlink" href="#_CPPv4N20IPLSpatializerParams40IPL_SPATIALIZE_APPLY_DISTANCEATTENUATIONE" title="Link to this definition"></a><br /></dt>
+<dd><p><strong>Type</strong>: <code class="docutils literal notranslate"><span class="pre">FMOD_DSP_PARAMETER_TYPE_INT</span></code></p>
+<p><strong>Range</strong>: 0 to 2.</p>
+<p>How to render distance attenuation.</p>
+<p><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">0</span></code>: Don’t render distance attenuation.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">1</span></code>: Use a distance attenuation value calculated using the default physics-based model.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">2</span></code>: Use a distance attenuation value calculated using the curve specified in the FMOD Studio UI. </p></li>
+</ul>
+</p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N20IPLSpatializerParams34IPL_SPATIALIZE_APPLY_AIRABSORPTIONE">
+<span id="_CPPv3N20IPLSpatializerParams34IPL_SPATIALIZE_APPLY_AIRABSORPTIONE"></span><span id="_CPPv2N20IPLSpatializerParams34IPL_SPATIALIZE_APPLY_AIRABSORPTIONE"></span><span class="target" id="steamaudio__fmod_8h_1a26afe642f29efe40689e51a7adfebfbda737e75c04d3f5f46c5e4fa0aaa7fe4a1"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_SPATIALIZE_APPLY_AIRABSORPTION</span></span></span><a class="headerlink" href="#_CPPv4N20IPLSpatializerParams34IPL_SPATIALIZE_APPLY_AIRABSORPTIONE" title="Link to this definition"></a><br /></dt>
+<dd><p><strong>Type</strong>: <code class="docutils literal notranslate"><span class="pre">FMOD_DSP_PARAMETER_TYPE_INT</span></code></p>
+<p><strong>Range</strong>: 0 to 2.</p>
+<p>How to render air absorption.</p>
+<p><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">0</span></code>: Don’t render air absorption.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">1</span></code>: Use air absorption values calculated using the default exponential decay model.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">2</span></code>: Use air absorption values specified in the <code class="docutils literal notranslate"><span class="pre">AIRABSORPTION_LOW</span></code>, <code class="docutils literal notranslate"><span class="pre">AIRABSORPTION_MID</span></code>, and <code class="docutils literal notranslate"><span class="pre">AIRABSORPTION_HIGH</span></code> parameters. </p></li>
+</ul>
+</p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N20IPLSpatializerParams32IPL_SPATIALIZE_APPLY_DIRECTIVITYE">
+<span id="_CPPv3N20IPLSpatializerParams32IPL_SPATIALIZE_APPLY_DIRECTIVITYE"></span><span id="_CPPv2N20IPLSpatializerParams32IPL_SPATIALIZE_APPLY_DIRECTIVITYE"></span><span class="target" id="steamaudio__fmod_8h_1a26afe642f29efe40689e51a7adfebfbda0880ea53daf401b58a219e6a96840ac9"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_SPATIALIZE_APPLY_DIRECTIVITY</span></span></span><a class="headerlink" href="#_CPPv4N20IPLSpatializerParams32IPL_SPATIALIZE_APPLY_DIRECTIVITYE" title="Link to this definition"></a><br /></dt>
+<dd><p><strong>Type</strong>: <code class="docutils literal notranslate"><span class="pre">FMOD_DSP_PARAMETER_TYPE_INT</span></code></p>
+<p><strong>Range</strong>: 0 to 2.</p>
+<p>How to render directivity.</p>
+<p><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">0</span></code>: Don’t render directivity.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">1</span></code>: Use a directivity value calculated using the default dipole model, driven by the <code class="docutils literal notranslate"><span class="pre">DIRECTIVITY_DIPOLEWEIGHT</span></code> and <code class="docutils literal notranslate"><span class="pre">DIRECTIVITY_DIPOLEPOWER</span></code> parameters.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">2</span></code>: Use the directivity value specified in the <code class="docutils literal notranslate"><span class="pre">DIRECTIVITY</span></code> parameter. </p></li>
+</ul>
+</p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N20IPLSpatializerParams30IPL_SPATIALIZE_APPLY_OCCLUSIONE">
+<span id="_CPPv3N20IPLSpatializerParams30IPL_SPATIALIZE_APPLY_OCCLUSIONE"></span><span id="_CPPv2N20IPLSpatializerParams30IPL_SPATIALIZE_APPLY_OCCLUSIONE"></span><span class="target" id="steamaudio__fmod_8h_1a26afe642f29efe40689e51a7adfebfbdac989cf8e1a407163b785e1a3ed5c7709"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_SPATIALIZE_APPLY_OCCLUSION</span></span></span><a class="headerlink" href="#_CPPv4N20IPLSpatializerParams30IPL_SPATIALIZE_APPLY_OCCLUSIONE" title="Link to this definition"></a><br /></dt>
+<dd><p><strong>Type</strong>: <code class="docutils literal notranslate"><span class="pre">FMOD_DSP_PARAMETER_TYPE_INT</span></code></p>
+<p><strong>Range</strong>: 0 to 2.</p>
+<p>How to render occlusion.</p>
+<p><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">0</span></code>: Don’t render occlusion.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">1</span></code>: Use the occlusion value calculated by the game engine using simulation, and provided via the <code class="docutils literal notranslate"><span class="pre">SIMULATION_OUTPUTS</span></code> parameter.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">2</span></code>: Use the occlusion value specified in the <code class="docutils literal notranslate"><span class="pre">OCCLUSION</span></code> parameter. </p></li>
+</ul>
+</p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N20IPLSpatializerParams33IPL_SPATIALIZE_APPLY_TRANSMISSIONE">
+<span id="_CPPv3N20IPLSpatializerParams33IPL_SPATIALIZE_APPLY_TRANSMISSIONE"></span><span id="_CPPv2N20IPLSpatializerParams33IPL_SPATIALIZE_APPLY_TRANSMISSIONE"></span><span class="target" id="steamaudio__fmod_8h_1a26afe642f29efe40689e51a7adfebfbda9f0683bb651ac6db59f56561d85fb4df"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_SPATIALIZE_APPLY_TRANSMISSION</span></span></span><a class="headerlink" href="#_CPPv4N20IPLSpatializerParams33IPL_SPATIALIZE_APPLY_TRANSMISSIONE" title="Link to this definition"></a><br /></dt>
+<dd><p><strong>Type</strong>: <code class="docutils literal notranslate"><span class="pre">FMOD_DSP_PARAMETER_TYPE_INT</span></code></p>
+<p><strong>Range</strong>: 0 to 2.</p>
+<p>How to render transmission.</p>
+<p><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">0</span></code>: Don’t render transmission.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">1</span></code>: Use the transmission values calculated by the game engine using simulation, and provided via the <code class="docutils literal notranslate"><span class="pre">SIMULATION_OUTPUTS</span></code> parameter.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">2</span></code>: Use the transmission values specified in the <code class="docutils literal notranslate"><span class="pre">TRANSMISSION_LOW</span></code>, <code class="docutils literal notranslate"><span class="pre">TRANSMISSION_MID</span></code>, and <code class="docutils literal notranslate"><span class="pre">TRANSMISSION_HIGH</span></code> parameters. </p></li>
+</ul>
+</p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N20IPLSpatializerParams32IPL_SPATIALIZE_APPLY_REFLECTIONSE">
+<span id="_CPPv3N20IPLSpatializerParams32IPL_SPATIALIZE_APPLY_REFLECTIONSE"></span><span id="_CPPv2N20IPLSpatializerParams32IPL_SPATIALIZE_APPLY_REFLECTIONSE"></span><span class="target" id="steamaudio__fmod_8h_1a26afe642f29efe40689e51a7adfebfbda854aaf61f135e3461dcbf8ee2f4a4322"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_SPATIALIZE_APPLY_REFLECTIONS</span></span></span><a class="headerlink" href="#_CPPv4N20IPLSpatializerParams32IPL_SPATIALIZE_APPLY_REFLECTIONSE" title="Link to this definition"></a><br /></dt>
+<dd><p><strong>Type</strong>: <code class="docutils literal notranslate"><span class="pre">FMOD_DSP_PARAMETER_TYPE_BOOL</span></code></p>
+<p>If true, reflections are rendered, using the data calculated by the game engine using simulation, and provided via the <code class="docutils literal notranslate"><span class="pre">SIMULATION_OUTPUTS</span></code> parameter. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N20IPLSpatializerParams28IPL_SPATIALIZE_APPLY_PATHINGE">
+<span id="_CPPv3N20IPLSpatializerParams28IPL_SPATIALIZE_APPLY_PATHINGE"></span><span id="_CPPv2N20IPLSpatializerParams28IPL_SPATIALIZE_APPLY_PATHINGE"></span><span class="target" id="steamaudio__fmod_8h_1a26afe642f29efe40689e51a7adfebfbda7f47e23a532b5adde7451640a28c8ce1"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_SPATIALIZE_APPLY_PATHING</span></span></span><a class="headerlink" href="#_CPPv4N20IPLSpatializerParams28IPL_SPATIALIZE_APPLY_PATHINGE" title="Link to this definition"></a><br /></dt>
+<dd><p><strong>Type</strong>: <code class="docutils literal notranslate"><span class="pre">FMOD_DSP_PARAMETER_TYPE_BOOL</span></code></p>
+<p>If true, pathing is rendered, using the data calculated by the game engine using simulation, and provided via the <code class="docutils literal notranslate"><span class="pre">SIMULATION_OUTPUTS</span></code> parameter. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N20IPLSpatializerParams33IPL_SPATIALIZE_HRTF_INTERPOLATIONE">
+<span id="_CPPv3N20IPLSpatializerParams33IPL_SPATIALIZE_HRTF_INTERPOLATIONE"></span><span id="_CPPv2N20IPLSpatializerParams33IPL_SPATIALIZE_HRTF_INTERPOLATIONE"></span><span class="target" id="steamaudio__fmod_8h_1a26afe642f29efe40689e51a7adfebfbda749478754f6de38fce7b6028d9580af4"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_SPATIALIZE_HRTF_INTERPOLATION</span></span></span><a class="headerlink" href="#_CPPv4N20IPLSpatializerParams33IPL_SPATIALIZE_HRTF_INTERPOLATIONE" title="Link to this definition"></a><br /></dt>
+<dd><p><strong>Type</strong>: <code class="docutils literal notranslate"><span class="pre">FMOD_DSP_PARAMETER_TYPE_INT</span></code></p>
+<p><strong>Range</strong>: 0 to 1.</p>
+<p>Controls how HRTFs are interpolated when the source moves relative to the listener.</p>
+<p><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">0</span></code>: Nearest-neighbor interpolation.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">1</span></code>: Bilinear interpolation. </p></li>
+</ul>
+</p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N20IPLSpatializerParams34IPL_SPATIALIZE_DISTANCEATTENUATIONE">
+<span id="_CPPv3N20IPLSpatializerParams34IPL_SPATIALIZE_DISTANCEATTENUATIONE"></span><span id="_CPPv2N20IPLSpatializerParams34IPL_SPATIALIZE_DISTANCEATTENUATIONE"></span><span class="target" id="steamaudio__fmod_8h_1a26afe642f29efe40689e51a7adfebfbda57c987974d46fb783ec60a9d926358f2"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_SPATIALIZE_DISTANCEATTENUATION</span></span></span><a class="headerlink" href="#_CPPv4N20IPLSpatializerParams34IPL_SPATIALIZE_DISTANCEATTENUATIONE" title="Link to this definition"></a><br /></dt>
+<dd><p><strong>Type</strong>: <code class="docutils literal notranslate"><span class="pre">FMOD_DSP_PARAMETER_TYPE_FLOAT</span></code></p>
+<p>Not currently used. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N20IPLSpatializerParams46IPL_SPATIALIZE_DISTANCEATTENUATION_ROLLOFFTYPEE">
+<span id="_CPPv3N20IPLSpatializerParams46IPL_SPATIALIZE_DISTANCEATTENUATION_ROLLOFFTYPEE"></span><span id="_CPPv2N20IPLSpatializerParams46IPL_SPATIALIZE_DISTANCEATTENUATION_ROLLOFFTYPEE"></span><span class="target" id="steamaudio__fmod_8h_1a26afe642f29efe40689e51a7adfebfbdacd087b00fd601b924420757f10d437ef"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_SPATIALIZE_DISTANCEATTENUATION_ROLLOFFTYPE</span></span></span><a class="headerlink" href="#_CPPv4N20IPLSpatializerParams46IPL_SPATIALIZE_DISTANCEATTENUATION_ROLLOFFTYPEE" title="Link to this definition"></a><br /></dt>
+<dd><p><strong>Type</strong>: <code class="docutils literal notranslate"><span class="pre">FMOD_DSP_PARAMETER_TYPE_INT</span></code></p>
+<p><strong>Range</strong>: 0 to 4.</p>
+<p>Type of distance attenuation curve preset to use when <code class="docutils literal notranslate"><span class="pre">APPLY_DISTANCEATTENUATION</span></code> is <code class="docutils literal notranslate"><span class="pre">1</span></code>.</p>
+<p><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">0</span></code>: Linear squared rolloff.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">1</span></code>: Linear rolloff.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">2</span></code>: Inverse rolloff.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">3</span></code>: Inverse squared rolloff.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">4</span></code>: Custom rolloff. </p></li>
+</ul>
+</p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N20IPLSpatializerParams46IPL_SPATIALIZE_DISTANCEATTENUATION_MINDISTANCEE">
+<span id="_CPPv3N20IPLSpatializerParams46IPL_SPATIALIZE_DISTANCEATTENUATION_MINDISTANCEE"></span><span id="_CPPv2N20IPLSpatializerParams46IPL_SPATIALIZE_DISTANCEATTENUATION_MINDISTANCEE"></span><span class="target" id="steamaudio__fmod_8h_1a26afe642f29efe40689e51a7adfebfbda828e26bbdd030fc6ef22b6b90be33541"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_SPATIALIZE_DISTANCEATTENUATION_MINDISTANCE</span></span></span><a class="headerlink" href="#_CPPv4N20IPLSpatializerParams46IPL_SPATIALIZE_DISTANCEATTENUATION_MINDISTANCEE" title="Link to this definition"></a><br /></dt>
+<dd><p><strong>Type</strong>: <code class="docutils literal notranslate"><span class="pre">FMOD_DSP_PARAMETER_TYPE_FLOAT</span></code></p>
+<p><strong>Range</strong>: 0 to 10000.</p>
+<p>Minimum distance value for the distance attenuation curve. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N20IPLSpatializerParams46IPL_SPATIALIZE_DISTANCEATTENUATION_MAXDISTANCEE">
+<span id="_CPPv3N20IPLSpatializerParams46IPL_SPATIALIZE_DISTANCEATTENUATION_MAXDISTANCEE"></span><span id="_CPPv2N20IPLSpatializerParams46IPL_SPATIALIZE_DISTANCEATTENUATION_MAXDISTANCEE"></span><span class="target" id="steamaudio__fmod_8h_1a26afe642f29efe40689e51a7adfebfbda9d10cb3af0c03cd674d6b52869e367db"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_SPATIALIZE_DISTANCEATTENUATION_MAXDISTANCE</span></span></span><a class="headerlink" href="#_CPPv4N20IPLSpatializerParams46IPL_SPATIALIZE_DISTANCEATTENUATION_MAXDISTANCEE" title="Link to this definition"></a><br /></dt>
+<dd><p><strong>Type</strong>: <code class="docutils literal notranslate"><span class="pre">FMOD_DSP_PARAMETER_TYPE_FLOAT</span></code></p>
+<p><strong>Range</strong>: 0 to 10000.</p>
+<p>Maximum distance value for the distance attenuation curve. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N20IPLSpatializerParams32IPL_SPATIALIZE_AIRABSORPTION_LOWE">
+<span id="_CPPv3N20IPLSpatializerParams32IPL_SPATIALIZE_AIRABSORPTION_LOWE"></span><span id="_CPPv2N20IPLSpatializerParams32IPL_SPATIALIZE_AIRABSORPTION_LOWE"></span><span class="target" id="steamaudio__fmod_8h_1a26afe642f29efe40689e51a7adfebfbda1c87c46644098efe591842071ba99bb1"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_SPATIALIZE_AIRABSORPTION_LOW</span></span></span><a class="headerlink" href="#_CPPv4N20IPLSpatializerParams32IPL_SPATIALIZE_AIRABSORPTION_LOWE" title="Link to this definition"></a><br /></dt>
+<dd><p><strong>Type</strong>: <code class="docutils literal notranslate"><span class="pre">FMOD_DSP_PARAMETER_TYPE_FLOAT</span></code></p>
+<p><strong>Range</strong>: 0 to 1.</p>
+<p>The low frequency (up to 800 Hz) EQ value for air absorption. Only used if <code class="docutils literal notranslate"><span class="pre">APPLY_AIRABSORPTION</span></code> is set to <code class="docutils literal notranslate"><span class="pre">2</span></code>. 0 = low frequencies are completely attenuated, 1 = low frequencies are not attenuated at all. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N20IPLSpatializerParams32IPL_SPATIALIZE_AIRABSORPTION_MIDE">
+<span id="_CPPv3N20IPLSpatializerParams32IPL_SPATIALIZE_AIRABSORPTION_MIDE"></span><span id="_CPPv2N20IPLSpatializerParams32IPL_SPATIALIZE_AIRABSORPTION_MIDE"></span><span class="target" id="steamaudio__fmod_8h_1a26afe642f29efe40689e51a7adfebfbda2ba5adaacda8710f2c7c45b9f459d51b"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_SPATIALIZE_AIRABSORPTION_MID</span></span></span><a class="headerlink" href="#_CPPv4N20IPLSpatializerParams32IPL_SPATIALIZE_AIRABSORPTION_MIDE" title="Link to this definition"></a><br /></dt>
+<dd><p><strong>Type</strong>: <code class="docutils literal notranslate"><span class="pre">FMOD_DSP_PARAMETER_TYPE_FLOAT</span></code></p>
+<p><strong>Range</strong>: 0 to 1.</p>
+<p>The middle frequency (800 Hz - 8 kHz) EQ value for air absorption. Only used if <code class="docutils literal notranslate"><span class="pre">APPLY_AIRABSORPTION</span></code> is set to <code class="docutils literal notranslate"><span class="pre">2</span></code>. 0 = middle frequencies are completely attenuated, 1 = middle frequencies are not attenuated at all. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N20IPLSpatializerParams33IPL_SPATIALIZE_AIRABSORPTION_HIGHE">
+<span id="_CPPv3N20IPLSpatializerParams33IPL_SPATIALIZE_AIRABSORPTION_HIGHE"></span><span id="_CPPv2N20IPLSpatializerParams33IPL_SPATIALIZE_AIRABSORPTION_HIGHE"></span><span class="target" id="steamaudio__fmod_8h_1a26afe642f29efe40689e51a7adfebfbdae347770bdcb331fe5ba2beed9b929990"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_SPATIALIZE_AIRABSORPTION_HIGH</span></span></span><a class="headerlink" href="#_CPPv4N20IPLSpatializerParams33IPL_SPATIALIZE_AIRABSORPTION_HIGHE" title="Link to this definition"></a><br /></dt>
+<dd><p><strong>Type</strong>: <code class="docutils literal notranslate"><span class="pre">FMOD_DSP_PARAMETER_TYPE_FLOAT</span></code></p>
+<p><strong>Range</strong>: 0 to 1.</p>
+<p>The high frequency (8 kHz and above) EQ value for air absorption. Only used if <code class="docutils literal notranslate"><span class="pre">APPLY_AIRABSORPTION</span></code> is set to <code class="docutils literal notranslate"><span class="pre">2</span></code>. 0 = high frequencies are completely attenuated, 1 = high frequencies are not attenuated at all. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N20IPLSpatializerParams26IPL_SPATIALIZE_DIRECTIVITYE">
+<span id="_CPPv3N20IPLSpatializerParams26IPL_SPATIALIZE_DIRECTIVITYE"></span><span id="_CPPv2N20IPLSpatializerParams26IPL_SPATIALIZE_DIRECTIVITYE"></span><span class="target" id="steamaudio__fmod_8h_1a26afe642f29efe40689e51a7adfebfbda7c43dea3243a9794504a6c0ef1402b50"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_SPATIALIZE_DIRECTIVITY</span></span></span><a class="headerlink" href="#_CPPv4N20IPLSpatializerParams26IPL_SPATIALIZE_DIRECTIVITYE" title="Link to this definition"></a><br /></dt>
+<dd><p><strong>Type</strong>: <code class="docutils literal notranslate"><span class="pre">FMOD_DSP_PARAMETER_TYPE_FLOAT</span></code></p>
+<p><strong>Range</strong>: 0 to 1.</p>
+<p>The directivity attenuation value. Only used if <code class="docutils literal notranslate"><span class="pre">APPLY_DIRECTIVITY</span></code> is set to <code class="docutils literal notranslate"><span class="pre">2</span></code>. 0 = sound is completely attenuated, 1 = sound is not attenuated at all. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N20IPLSpatializerParams39IPL_SPATIALIZE_DIRECTIVITY_DIPOLEWEIGHTE">
+<span id="_CPPv3N20IPLSpatializerParams39IPL_SPATIALIZE_DIRECTIVITY_DIPOLEWEIGHTE"></span><span id="_CPPv2N20IPLSpatializerParams39IPL_SPATIALIZE_DIRECTIVITY_DIPOLEWEIGHTE"></span><span class="target" id="steamaudio__fmod_8h_1a26afe642f29efe40689e51a7adfebfbdabd49c58a1bb67e6d0fe9a865ca084c62"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_SPATIALIZE_DIRECTIVITY_DIPOLEWEIGHT</span></span></span><a class="headerlink" href="#_CPPv4N20IPLSpatializerParams39IPL_SPATIALIZE_DIRECTIVITY_DIPOLEWEIGHTE" title="Link to this definition"></a><br /></dt>
+<dd><p><strong>Type</strong>: <code class="docutils literal notranslate"><span class="pre">FMOD_DSP_PARAMETER_TYPE_FLOAT</span></code></p>
+<p><strong>Range</strong>: 0 to 1.</p>
+<p>Blends between monopole (omnidirectional) and dipole directivity patterns. 0 = pure monopole (sound is emitted in all directions with equal intensity), 1 = pure dipole (sound is focused to the front and back of the source). At 0.5, the source has a cardioid directivity, with most of the sound emitted to the front of the source. Only used if <code class="docutils literal notranslate"><span class="pre">APPLY_DIRECTIVITY</span></code> is set to <code class="docutils literal notranslate"><span class="pre">1</span></code>. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N20IPLSpatializerParams38IPL_SPATIALIZE_DIRECTIVITY_DIPOLEPOWERE">
+<span id="_CPPv3N20IPLSpatializerParams38IPL_SPATIALIZE_DIRECTIVITY_DIPOLEPOWERE"></span><span id="_CPPv2N20IPLSpatializerParams38IPL_SPATIALIZE_DIRECTIVITY_DIPOLEPOWERE"></span><span class="target" id="steamaudio__fmod_8h_1a26afe642f29efe40689e51a7adfebfbda2b457549ca1e4eaea1998e7b84dff7ba"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_SPATIALIZE_DIRECTIVITY_DIPOLEPOWER</span></span></span><a class="headerlink" href="#_CPPv4N20IPLSpatializerParams38IPL_SPATIALIZE_DIRECTIVITY_DIPOLEPOWERE" title="Link to this definition"></a><br /></dt>
+<dd><p><strong>Type</strong>: <code class="docutils literal notranslate"><span class="pre">FMOD_DSP_PARAMETER_TYPE_FLOAT</span></code></p>
+<p><strong>Range</strong>: 0 to 4.</p>
+<p>Controls how focused the dipole directivity is. Higher values result in sharper directivity patterns. Only used if <code class="docutils literal notranslate"><span class="pre">APPLY_DIRECTIVITY</span></code> is set to <code class="docutils literal notranslate"><span class="pre">1</span></code>. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N20IPLSpatializerParams24IPL_SPATIALIZE_OCCLUSIONE">
+<span id="_CPPv3N20IPLSpatializerParams24IPL_SPATIALIZE_OCCLUSIONE"></span><span id="_CPPv2N20IPLSpatializerParams24IPL_SPATIALIZE_OCCLUSIONE"></span><span class="target" id="steamaudio__fmod_8h_1a26afe642f29efe40689e51a7adfebfbda814b5bdd674fb25cfbd6b62c524fb980"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_SPATIALIZE_OCCLUSION</span></span></span><a class="headerlink" href="#_CPPv4N20IPLSpatializerParams24IPL_SPATIALIZE_OCCLUSIONE" title="Link to this definition"></a><br /></dt>
+<dd><p><strong>Type</strong>: <code class="docutils literal notranslate"><span class="pre">FMOD_DSP_PARAMETER_TYPE_FLOAT</span></code></p>
+<p><strong>Range</strong>: 0 to 1.</p>
+<p>The occlusion attenuation value. Only used if <code class="docutils literal notranslate"><span class="pre">APPLY_OCCLUSION</span></code> is set to <code class="docutils literal notranslate"><span class="pre">2</span></code>. 0 = sound is completely attenuated, 1 = sound is not attenuated at all. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N20IPLSpatializerParams32IPL_SPATIALIZE_TRANSMISSION_TYPEE">
+<span id="_CPPv3N20IPLSpatializerParams32IPL_SPATIALIZE_TRANSMISSION_TYPEE"></span><span id="_CPPv2N20IPLSpatializerParams32IPL_SPATIALIZE_TRANSMISSION_TYPEE"></span><span class="target" id="steamaudio__fmod_8h_1a26afe642f29efe40689e51a7adfebfbda2dd858e79092aae945ce8367e190a941"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_SPATIALIZE_TRANSMISSION_TYPE</span></span></span><a class="headerlink" href="#_CPPv4N20IPLSpatializerParams32IPL_SPATIALIZE_TRANSMISSION_TYPEE" title="Link to this definition"></a><br /></dt>
+<dd><p><strong>Type</strong>: <code class="docutils literal notranslate"><span class="pre">FMOD_DSP_PARAMETER_TYPE_INT</span></code></p>
+<p><strong>Range</strong>: 0 to 1.</p>
+<p>Specifies how the transmission filter is applied.</p>
+<p><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">0</span></code>: Transmission is modeled as a single attenuation factor.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">1</span></code>: Transmission is modeled as a 3-band EQ. </p></li>
+</ul>
+</p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N20IPLSpatializerParams31IPL_SPATIALIZE_TRANSMISSION_LOWE">
+<span id="_CPPv3N20IPLSpatializerParams31IPL_SPATIALIZE_TRANSMISSION_LOWE"></span><span id="_CPPv2N20IPLSpatializerParams31IPL_SPATIALIZE_TRANSMISSION_LOWE"></span><span class="target" id="steamaudio__fmod_8h_1a26afe642f29efe40689e51a7adfebfbdaef6b0690ded82678241f6a41eda2d143"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_SPATIALIZE_TRANSMISSION_LOW</span></span></span><a class="headerlink" href="#_CPPv4N20IPLSpatializerParams31IPL_SPATIALIZE_TRANSMISSION_LOWE" title="Link to this definition"></a><br /></dt>
+<dd><p><strong>Type</strong>: <code class="docutils literal notranslate"><span class="pre">FMOD_DSP_PARAMETER_TYPE_FLOAT</span></code></p>
+<p><strong>Range</strong>: 0 to 1.</p>
+<p>The low frequency (up to 800 Hz) EQ value for transmission. Only used if <code class="docutils literal notranslate"><span class="pre">APPLY_TRANSMISSION</span></code> is set to <code class="docutils literal notranslate"><span class="pre">2</span></code>. 0 = low frequencies are completely attenuated, 1 = low frequencies are not attenuated at all. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N20IPLSpatializerParams31IPL_SPATIALIZE_TRANSMISSION_MIDE">
+<span id="_CPPv3N20IPLSpatializerParams31IPL_SPATIALIZE_TRANSMISSION_MIDE"></span><span id="_CPPv2N20IPLSpatializerParams31IPL_SPATIALIZE_TRANSMISSION_MIDE"></span><span class="target" id="steamaudio__fmod_8h_1a26afe642f29efe40689e51a7adfebfbdaefa1a6dbf4795f048aa5d95083b12482"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_SPATIALIZE_TRANSMISSION_MID</span></span></span><a class="headerlink" href="#_CPPv4N20IPLSpatializerParams31IPL_SPATIALIZE_TRANSMISSION_MIDE" title="Link to this definition"></a><br /></dt>
+<dd><p><strong>Type</strong>: <code class="docutils literal notranslate"><span class="pre">FMOD_DSP_PARAMETER_TYPE_FLOAT</span></code></p>
+<p><strong>Range</strong>: 0 to 1.</p>
+<p>The middle frequency (800 Hz to 8 kHz) EQ value for transmission. Only used if <code class="docutils literal notranslate"><span class="pre">APPLY_TRANSMISSION</span></code> is set to <code class="docutils literal notranslate"><span class="pre">2</span></code>. 0 = middle frequencies are completely attenuated, 1 = middle frequencies are not attenuated at all. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N20IPLSpatializerParams32IPL_SPATIALIZE_TRANSMISSION_HIGHE">
+<span id="_CPPv3N20IPLSpatializerParams32IPL_SPATIALIZE_TRANSMISSION_HIGHE"></span><span id="_CPPv2N20IPLSpatializerParams32IPL_SPATIALIZE_TRANSMISSION_HIGHE"></span><span class="target" id="steamaudio__fmod_8h_1a26afe642f29efe40689e51a7adfebfbda9c15ae29ddbf17e6bf15fdb413aee11b"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_SPATIALIZE_TRANSMISSION_HIGH</span></span></span><a class="headerlink" href="#_CPPv4N20IPLSpatializerParams32IPL_SPATIALIZE_TRANSMISSION_HIGHE" title="Link to this definition"></a><br /></dt>
+<dd><p><strong>Type</strong>: <code class="docutils literal notranslate"><span class="pre">FMOD_DSP_PARAMETER_TYPE_FLOAT</span></code></p>
+<p><strong>Range</strong>: 0 to 1.</p>
+<p>The high frequency (8 kHz and above) EQ value for transmission. Only used if <code class="docutils literal notranslate"><span class="pre">APPLY_TRANSMISSION</span></code> is set to <code class="docutils literal notranslate"><span class="pre">2</span></code>. 0 = high frequencies are completely attenuated, 1 = high frequencies are not attenuated at all. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N20IPLSpatializerParams30IPL_SPATIALIZE_DIRECT_MIXLEVELE">
+<span id="_CPPv3N20IPLSpatializerParams30IPL_SPATIALIZE_DIRECT_MIXLEVELE"></span><span id="_CPPv2N20IPLSpatializerParams30IPL_SPATIALIZE_DIRECT_MIXLEVELE"></span><span class="target" id="steamaudio__fmod_8h_1a26afe642f29efe40689e51a7adfebfbda3c9e514c2faa8f714286dd0aac78c1f6"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_SPATIALIZE_DIRECT_MIXLEVEL</span></span></span><a class="headerlink" href="#_CPPv4N20IPLSpatializerParams30IPL_SPATIALIZE_DIRECT_MIXLEVELE" title="Link to this definition"></a><br /></dt>
+<dd><p><strong>Type</strong>: <code class="docutils literal notranslate"><span class="pre">FMOD_DSP_PARAMETER_TYPE_FLOAT</span></code></p>
+<p><strong>Range</strong>: 0 to 1.</p>
+<p>The contribution of the direct sound path to the overall mix for this event. Lower values reduce the contribution more. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N20IPLSpatializerParams35IPL_SPATIALIZE_REFLECTIONS_BINAURALE">
+<span id="_CPPv3N20IPLSpatializerParams35IPL_SPATIALIZE_REFLECTIONS_BINAURALE"></span><span id="_CPPv2N20IPLSpatializerParams35IPL_SPATIALIZE_REFLECTIONS_BINAURALE"></span><span class="target" id="steamaudio__fmod_8h_1a26afe642f29efe40689e51a7adfebfbda1af8e83dc00380e1e601a65e1bcb0bb7"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_SPATIALIZE_REFLECTIONS_BINAURAL</span></span></span><a class="headerlink" href="#_CPPv4N20IPLSpatializerParams35IPL_SPATIALIZE_REFLECTIONS_BINAURALE" title="Link to this definition"></a><br /></dt>
+<dd><p><strong>Type</strong>: <code class="docutils literal notranslate"><span class="pre">FMOD_DSP_PARAMETER_TYPE_BOOL</span></code></p>
+<p>If true, applies HRTF-based 3D audio rendering to reflections. Results in an improvement in spatialization quality when using convolution or hybrid reverb, at the cost of slightly increased CPU usage. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N20IPLSpatializerParams35IPL_SPATIALIZE_REFLECTIONS_MIXLEVELE">
+<span id="_CPPv3N20IPLSpatializerParams35IPL_SPATIALIZE_REFLECTIONS_MIXLEVELE"></span><span id="_CPPv2N20IPLSpatializerParams35IPL_SPATIALIZE_REFLECTIONS_MIXLEVELE"></span><span class="target" id="steamaudio__fmod_8h_1a26afe642f29efe40689e51a7adfebfbdaf4a44304a5dd1a4a9e8a2ce6e2aa8dcb"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_SPATIALIZE_REFLECTIONS_MIXLEVEL</span></span></span><a class="headerlink" href="#_CPPv4N20IPLSpatializerParams35IPL_SPATIALIZE_REFLECTIONS_MIXLEVELE" title="Link to this definition"></a><br /></dt>
+<dd><p><strong>Type</strong>: <code class="docutils literal notranslate"><span class="pre">FMOD_DSP_PARAMETER_TYPE_FLOAT</span></code></p>
+<p><strong>Range</strong>: 0 to 10.</p>
+<p>The contribution of reflections to the overall mix for this event. Lower values reduce the contribution more. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N20IPLSpatializerParams31IPL_SPATIALIZE_PATHING_BINAURALE">
+<span id="_CPPv3N20IPLSpatializerParams31IPL_SPATIALIZE_PATHING_BINAURALE"></span><span id="_CPPv2N20IPLSpatializerParams31IPL_SPATIALIZE_PATHING_BINAURALE"></span><span class="target" id="steamaudio__fmod_8h_1a26afe642f29efe40689e51a7adfebfbdaab512194861ba53649dea1255fc88bd1"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_SPATIALIZE_PATHING_BINAURAL</span></span></span><a class="headerlink" href="#_CPPv4N20IPLSpatializerParams31IPL_SPATIALIZE_PATHING_BINAURALE" title="Link to this definition"></a><br /></dt>
+<dd><p><strong>Type</strong>: <code class="docutils literal notranslate"><span class="pre">FMOD_DSP_PARAMETER_TYPE_BOOL</span></code></p>
+<p>If true, applies HRTF-based 3D audio rendering to pathing. Results in an improvement in spatialization quality, at the cost of slightly increased CPU usage. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N20IPLSpatializerParams31IPL_SPATIALIZE_PATHING_MIXLEVELE">
+<span id="_CPPv3N20IPLSpatializerParams31IPL_SPATIALIZE_PATHING_MIXLEVELE"></span><span id="_CPPv2N20IPLSpatializerParams31IPL_SPATIALIZE_PATHING_MIXLEVELE"></span><span class="target" id="steamaudio__fmod_8h_1a26afe642f29efe40689e51a7adfebfbdaf0eac0278d2dc6b730975c7bb8e0b485"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_SPATIALIZE_PATHING_MIXLEVEL</span></span></span><a class="headerlink" href="#_CPPv4N20IPLSpatializerParams31IPL_SPATIALIZE_PATHING_MIXLEVELE" title="Link to this definition"></a><br /></dt>
+<dd><p><strong>Type</strong>: <code class="docutils literal notranslate"><span class="pre">FMOD_DSP_PARAMETER_TYPE_FLOAT</span></code></p>
+<p><strong>Range</strong>: 0 to 10.</p>
+<p>The contribution of pathing to the overall mix for this event. Lower values reduce the contribution more. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N20IPLSpatializerParams33IPL_SPATIALIZE_SIMULATION_OUTPUTSE">
+<span id="_CPPv3N20IPLSpatializerParams33IPL_SPATIALIZE_SIMULATION_OUTPUTSE"></span><span id="_CPPv2N20IPLSpatializerParams33IPL_SPATIALIZE_SIMULATION_OUTPUTSE"></span><span class="target" id="steamaudio__fmod_8h_1a26afe642f29efe40689e51a7adfebfbda5785ebcd1576c57d58bcdedff3bae90b"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_SPATIALIZE_SIMULATION_OUTPUTS</span></span></span><a class="headerlink" href="#_CPPv4N20IPLSpatializerParams33IPL_SPATIALIZE_SIMULATION_OUTPUTSE" title="Link to this definition"></a><br /></dt>
+<dd><p><strong>Type</strong>: <code class="docutils literal notranslate"><span class="pre">FMOD_DSP_PARAMETER_TYPE_DATA</span></code></p>
+<p><strong>DEPRECATED</strong></p>
+<p>Pointer to the <code class="docutils literal notranslate"><span class="pre">IPLSimulationOutputs</span></code> structure containing simulation results. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N20IPLSpatializerParams30IPL_SPATIALIZE_DIRECT_BINAURALE">
+<span id="_CPPv3N20IPLSpatializerParams30IPL_SPATIALIZE_DIRECT_BINAURALE"></span><span id="_CPPv2N20IPLSpatializerParams30IPL_SPATIALIZE_DIRECT_BINAURALE"></span><span class="target" id="steamaudio__fmod_8h_1a26afe642f29efe40689e51a7adfebfbda308a700c7d7742a844bf9ca083c0acfd"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_SPATIALIZE_DIRECT_BINAURAL</span></span></span><a class="headerlink" href="#_CPPv4N20IPLSpatializerParams30IPL_SPATIALIZE_DIRECT_BINAURALE" title="Link to this definition"></a><br /></dt>
+<dd><p><strong>Type</strong>: <code class="docutils literal notranslate"><span class="pre">FMOD_DSP_PARAMETER_TYPE_BOOL</span></code></p>
+<p>If true, applies HRTF-based 3D audio rendering to the direct sound path. Otherwise, sound is panned based on the speaker configuration. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N20IPLSpatializerParams41IPL_SPATIALIZE_DISTANCE_ATTENUATION_RANGEE">
+<span id="_CPPv3N20IPLSpatializerParams41IPL_SPATIALIZE_DISTANCE_ATTENUATION_RANGEE"></span><span id="_CPPv2N20IPLSpatializerParams41IPL_SPATIALIZE_DISTANCE_ATTENUATION_RANGEE"></span><span class="target" id="steamaudio__fmod_8h_1a26afe642f29efe40689e51a7adfebfbdac85233e77e8a25fedeb1fd58ae4be53e"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_SPATIALIZE_DISTANCE_ATTENUATION_RANGE</span></span></span><a class="headerlink" href="#_CPPv4N20IPLSpatializerParams41IPL_SPATIALIZE_DISTANCE_ATTENUATION_RANGEE" title="Link to this definition"></a><br /></dt>
+<dd><p><strong>Type</strong>: <code class="docutils literal notranslate"><span class="pre">FMOD_DSP_PARAMETER_TYPE_DATA</span></code></p>
+<p>(FMOD Studio 2.02+) The event’s min/max distance range. Automatically set by FMOD Studio. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N20IPLSpatializerParams40IPL_SPATIALIZE_SIMULATION_OUTPUTS_HANDLEE">
+<span id="_CPPv3N20IPLSpatializerParams40IPL_SPATIALIZE_SIMULATION_OUTPUTS_HANDLEE"></span><span id="_CPPv2N20IPLSpatializerParams40IPL_SPATIALIZE_SIMULATION_OUTPUTS_HANDLEE"></span><span class="target" id="steamaudio__fmod_8h_1a26afe642f29efe40689e51a7adfebfbdabcace1548d43ed0dd946426058595603"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_SPATIALIZE_SIMULATION_OUTPUTS_HANDLE</span></span></span><a class="headerlink" href="#_CPPv4N20IPLSpatializerParams40IPL_SPATIALIZE_SIMULATION_OUTPUTS_HANDLEE" title="Link to this definition"></a><br /></dt>
+<dd><p><strong>Type</strong>: <code class="docutils literal notranslate"><span class="pre">FMOD_DSP_PARAMETER_TYPE_INT</span></code></p>
+<p>Handle of the <code class="docutils literal notranslate"><span class="pre">IPLSource</span></code> object to use for obtaining simulation results. The handle can be obtained by calling <code class="docutils literal notranslate"><span class="pre">iplFMODAddSource</span></code>. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N20IPLSpatializerParams28IPL_SPATIALIZE_OUTPUT_FORMATE">
+<span id="_CPPv3N20IPLSpatializerParams28IPL_SPATIALIZE_OUTPUT_FORMATE"></span><span id="_CPPv2N20IPLSpatializerParams28IPL_SPATIALIZE_OUTPUT_FORMATE"></span><span class="target" id="steamaudio__fmod_8h_1a26afe642f29efe40689e51a7adfebfbdaf5b0887f602272c547238eec45e02c79"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_SPATIALIZE_OUTPUT_FORMAT</span></span></span><a class="headerlink" href="#_CPPv4N20IPLSpatializerParams28IPL_SPATIALIZE_OUTPUT_FORMATE" title="Link to this definition"></a><br /></dt>
+<dd><p><strong>Type</strong>: <code class="docutils literal notranslate"><span class="pre">FMOD_DSP_PARAMETER_TYPE_INT</span></code></p>
+<p><strong>Range</strong>: 0 to 2.</p>
+<p>Controls the output format.</p>
+<p><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">0</span></code>: Output will be the format in FMOD’s mixer.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">1</span></code>: Output will be the format from FMOD’s final output.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">2</span></code>: Output will be the format from the event’s input. </p></li>
+</ul>
+</p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N20IPLSpatializerParams35IPL_SPATIALIZE_NORMALIZE_PATHING_EQE">
+<span id="_CPPv3N20IPLSpatializerParams35IPL_SPATIALIZE_NORMALIZE_PATHING_EQE"></span><span id="_CPPv2N20IPLSpatializerParams35IPL_SPATIALIZE_NORMALIZE_PATHING_EQE"></span><span class="target" id="steamaudio__fmod_8h_1a26afe642f29efe40689e51a7adfebfbda2620781abba42c7af347cbfee572d609"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_SPATIALIZE_NORMALIZE_PATHING_EQ</span></span></span><a class="headerlink" href="#_CPPv4N20IPLSpatializerParams35IPL_SPATIALIZE_NORMALIZE_PATHING_EQE" title="Link to this definition"></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N20IPLSpatializerParams25IPL_SPATIALIZE_NUM_PARAMSE">
+<span id="_CPPv3N20IPLSpatializerParams25IPL_SPATIALIZE_NUM_PARAMSE"></span><span id="_CPPv2N20IPLSpatializerParams25IPL_SPATIALIZE_NUM_PARAMSE"></span><span class="target" id="steamaudio__fmod_8h_1a26afe642f29efe40689e51a7adfebfbda4789b7a4ba46d89e33165fd5a01bc015"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_SPATIALIZE_NUM_PARAMS</span></span></span><a class="headerlink" href="#_CPPv4N20IPLSpatializerParams25IPL_SPATIALIZE_NUM_PARAMSE" title="Link to this definition"></a><br /></dt>
+<dd><p>The number of parameters in this effect. </p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="cpp enum">
+<dt class="sig sig-object cpp" id="_CPPv415IPLReverbParams">
+<span id="_CPPv315IPLReverbParams"></span><span id="_CPPv215IPLReverbParams"></span><span class="target" id="steamaudio__fmod_8h_1a0d398b873f89114a294b0515e1d2e5f9"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLReverbParams</span></span></span><a class="headerlink" href="#_CPPv415IPLReverbParams" title="Link to this definition"></a><br /></dt>
+<dd><p>DSP parameters for the “Steam Audio Reverb” effect. </p>
+<p><em>Values:</em></p>
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N15IPLReverbParams19IPL_REVERB_BINAURALE">
+<span id="_CPPv3N15IPLReverbParams19IPL_REVERB_BINAURALE"></span><span id="_CPPv2N15IPLReverbParams19IPL_REVERB_BINAURALE"></span><span class="target" id="steamaudio__fmod_8h_1a0d398b873f89114a294b0515e1d2e5f9a3bc2f43dfe17769dcfedbad18d539703"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_REVERB_BINAURAL</span></span></span><a class="headerlink" href="#_CPPv4N15IPLReverbParams19IPL_REVERB_BINAURALE" title="Link to this definition"></a><br /></dt>
+<dd><p><strong>Type</strong>: <code class="docutils literal notranslate"><span class="pre">FMOD_DSP_PARAMETER_TYPE_BOOL</span></code></p>
+<p>If true, applies HRTF-based 3D audio rendering to reverb. Results in an improvement in spatialization quality when using convolution or hybrid reverb, at the cost of slightly increased CPU usage. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N15IPLReverbParams24IPL_REVERB_OUTPUT_FORMATE">
+<span id="_CPPv3N15IPLReverbParams24IPL_REVERB_OUTPUT_FORMATE"></span><span id="_CPPv2N15IPLReverbParams24IPL_REVERB_OUTPUT_FORMATE"></span><span class="target" id="steamaudio__fmod_8h_1a0d398b873f89114a294b0515e1d2e5f9aede79c5ba61d343cca63240874ccc067"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_REVERB_OUTPUT_FORMAT</span></span></span><a class="headerlink" href="#_CPPv4N15IPLReverbParams24IPL_REVERB_OUTPUT_FORMATE" title="Link to this definition"></a><br /></dt>
+<dd><p><strong>Type</strong>: <code class="docutils literal notranslate"><span class="pre">FMOD_DSP_PARAMETER_TYPE_INT</span></code></p>
+<p><strong>Range</strong>: 0 to 2.</p>
+<p>Controls the output format.</p>
+<p><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">0</span></code>: Output will be the format in FMOD’s mixer.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">1</span></code>: Output will be the format from FMOD’s final output.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">2</span></code>: Output will be the format from the event’s input. </p></li>
+</ul>
+</p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N15IPLReverbParams21IPL_REVERB_NUM_PARAMSE">
+<span id="_CPPv3N15IPLReverbParams21IPL_REVERB_NUM_PARAMSE"></span><span id="_CPPv2N15IPLReverbParams21IPL_REVERB_NUM_PARAMSE"></span><span class="target" id="steamaudio__fmod_8h_1a0d398b873f89114a294b0515e1d2e5f9a25246172415da987d354f87b45cdc9b9"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_REVERB_NUM_PARAMS</span></span></span><a class="headerlink" href="#_CPPv4N15IPLReverbParams21IPL_REVERB_NUM_PARAMSE" title="Link to this definition"></a><br /></dt>
+<dd><p>The number of parameters in this effect. </p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="cpp enum">
+<dt class="sig sig-object cpp" id="_CPPv420IPLMixerReturnParams">
+<span id="_CPPv320IPLMixerReturnParams"></span><span id="_CPPv220IPLMixerReturnParams"></span><span class="target" id="steamaudio__fmod_8h_1ad256eef8d7bc819c34719d230d96eb58"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLMixerReturnParams</span></span></span><a class="headerlink" href="#_CPPv420IPLMixerReturnParams" title="Link to this definition"></a><br /></dt>
+<dd><p>DSP parameters for the “Steam Audio Mixer Return” effect. </p>
+<p><em>Values:</em></p>
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N20IPLMixerReturnParams22IPL_MIXRETURN_BINAURALE">
+<span id="_CPPv3N20IPLMixerReturnParams22IPL_MIXRETURN_BINAURALE"></span><span id="_CPPv2N20IPLMixerReturnParams22IPL_MIXRETURN_BINAURALE"></span><span class="target" id="steamaudio__fmod_8h_1ad256eef8d7bc819c34719d230d96eb58ae5010aa6be67f3b82ca893ee3a60592b"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_MIXRETURN_BINAURAL</span></span></span><a class="headerlink" href="#_CPPv4N20IPLMixerReturnParams22IPL_MIXRETURN_BINAURALE" title="Link to this definition"></a><br /></dt>
+<dd><p><strong>Type</strong>: <code class="docutils literal notranslate"><span class="pre">FMOD_DSP_PARAMETER_TYPE_BOOL</span></code></p>
+<p>If true, applies HRTF-based 3D audio rendering to mixed reflected sound. Results in an improvement in spatialization quality, at the cost of slightly increased CPU usage. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N20IPLMixerReturnParams27IPL_MIXRETURN_OUTPUT_FORMATE">
+<span id="_CPPv3N20IPLMixerReturnParams27IPL_MIXRETURN_OUTPUT_FORMATE"></span><span id="_CPPv2N20IPLMixerReturnParams27IPL_MIXRETURN_OUTPUT_FORMATE"></span><span class="target" id="steamaudio__fmod_8h_1ad256eef8d7bc819c34719d230d96eb58a8adf4a3976ab1b45b3fa4ac3e89746c1"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_MIXRETURN_OUTPUT_FORMAT</span></span></span><a class="headerlink" href="#_CPPv4N20IPLMixerReturnParams27IPL_MIXRETURN_OUTPUT_FORMATE" title="Link to this definition"></a><br /></dt>
+<dd><p><strong>Type</strong>: <code class="docutils literal notranslate"><span class="pre">FMOD_DSP_PARAMETER_TYPE_INT</span></code></p>
+<p><strong>Range</strong>: 0 to 2.</p>
+<p>Controls the output format.</p>
+<p><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">0</span></code>: Output will be the format in FMOD’s mixer.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">1</span></code>: Output will be the format from FMOD’s final output.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">2</span></code>: Output will be the format from the event’s input. </p></li>
+</ul>
+</p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N20IPLMixerReturnParams24IPL_MIXRETURN_NUM_PARAMSE">
+<span id="_CPPv3N20IPLMixerReturnParams24IPL_MIXRETURN_NUM_PARAMSE"></span><span id="_CPPv2N20IPLMixerReturnParams24IPL_MIXRETURN_NUM_PARAMSE"></span><span class="target" id="steamaudio__fmod_8h_1ad256eef8d7bc819c34719d230d96eb58a2fcee726157130acbcd14a28e8ee8c3a"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPL_MIXRETURN_NUM_PARAMS</span></span></span><a class="headerlink" href="#_CPPv4N20IPLMixerReturnParams24IPL_MIXRETURN_NUM_PARAMSE" title="Link to this definition"></a><br /></dt>
+<dd><p>The number of parameters in this effect. </p>
+</dd></dl>
+
+</dd></dl>
+
 </section>
 </section>
 

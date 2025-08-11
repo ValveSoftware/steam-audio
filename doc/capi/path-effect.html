@@ -83,6 +83,8 @@
 <li class="toctree-l4"><a class="reference internal" href="#_CPPv420iplPathEffectReleaseP13IPLPathEffect"><code class="docutils literal notranslate"><span class="pre">iplPathEffectRelease()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#_CPPv418iplPathEffectReset13IPLPathEffect"><code class="docutils literal notranslate"><span class="pre">iplPathEffectReset()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#_CPPv418iplPathEffectApply13IPLPathEffectP19IPLPathEffectParamsP14IPLAudioBufferP14IPLAudioBuffer"><code class="docutils literal notranslate"><span class="pre">iplPathEffectApply()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv420iplPathEffectGetTail13IPLPathEffectP14IPLAudioBuffer"><code class="docutils literal notranslate"><span class="pre">iplPathEffectGetTail()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv424iplPathEffectGetTailSize13IPLPathEffect"><code class="docutils literal notranslate"><span class="pre">iplPathEffectGetTailSize()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#structures">Structures</a><ul>
@@ -95,6 +97,9 @@
 <li class="toctree-l2"><a class="reference internal" href="probes.html">Probes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="baking.html">Baking</a></li>
 <li class="toctree-l2"><a class="reference internal" href="simulation.html">Simulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="energy-field.html">Energy Field</a></li>
+<li class="toctree-l2"><a class="reference internal" href="impulse-response.html">Impulse Response</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reconstructor.html">Reconstructor</a></li>
 </ul>
 </li>
 </ul>
@@ -212,6 +217,39 @@
 </dl>
 </dd></dl>
 
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv420iplPathEffectGetTail13IPLPathEffectP14IPLAudioBuffer">
+<span id="_CPPv320iplPathEffectGetTail13IPLPathEffectP14IPLAudioBuffer"></span><span id="_CPPv220iplPathEffectGetTail13IPLPathEffectP14IPLAudioBuffer"></span><span id="iplPathEffectGetTail__IPLPathEffect.IPLAudioBufferP"></span><span class="target" id="group__patheffect_1ga2f2ad13281fe7d64d83f2dd4ab5d5837"></span><a class="reference internal" href="audio-buffers.html#_CPPv419IPLAudioEffectState" title="IPLAudioEffectState"><span class="n"><span class="pre">IPLAudioEffectState</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplPathEffectGetTail</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv413IPLPathEffect" title="IPLPathEffect"><span class="n"><span class="pre">IPLPathEffect</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">effect</span></span>, <a class="reference internal" href="audio-buffers.html#_CPPv414IPLAudioBuffer" title="IPLAudioBuffer"><span class="n"><span class="pre">IPLAudioBuffer</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">out</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv420iplPathEffectGetTail13IPLPathEffectP14IPLAudioBuffer" title="Link to this definition"></a><br /></dt>
+<dd><p>Retrieves a single frame of tail samples from a path effect’s internal buffers. </p>
+<p>After the input to the path effect has stopped, this function must be called instead of <code class="docutils literal notranslate"><span class="pre">iplPathEffectApply</span></code> until the return value indicates that no more tail samples remain.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>effect</strong> – The path effect. </p></li>
+<li><p><strong>out</strong> – The output audio buffer. Must have as many channels as needed for the Ambisonics order specified when creating the effect.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">IPL_AUDIOEFFECTSTATE_TAILREMAINING</span></code> if any tail samples remain in the effect’s internal buffers, or <code class="docutils literal notranslate"><span class="pre">IPL_AUDIOEFFECTSTATE_TAILCOMPLETE</span></code> otherwise. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv424iplPathEffectGetTailSize13IPLPathEffect">
+<span id="_CPPv324iplPathEffectGetTailSize13IPLPathEffect"></span><span id="_CPPv224iplPathEffectGetTailSize13IPLPathEffect"></span><span id="iplPathEffectGetTailSize__IPLPathEffect"></span><span class="target" id="group__patheffect_1ga777af4f61328e01691de85b24c4d50c9"></span><a class="reference internal" href="types.html#_CPPv48IPLint32" title="IPLint32"><span class="n"><span class="pre">IPLint32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplPathEffectGetTailSize</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv413IPLPathEffect" title="IPLPathEffect"><span class="n"><span class="pre">IPLPathEffect</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">effect</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv424iplPathEffectGetTailSize13IPLPathEffect" title="Link to this definition"></a><br /></dt>
+<dd><p>Returns the number of tail samples remaining in a path effect’s internal buffers. </p>
+<p>Tail samples are audio samples that should be played even after the input to the effect has stopped playing and no further input samples are available.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>effect</strong> – The path effect.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The number of tail samples remaining. </p>
+</dd>
+</dl>
+</dd></dl>
+
 </section>
 <section id="structures">
 <h2>Structures<a class="headerlink" href="#structures" title="Link to this heading"></a></h2>
@@ -259,7 +297,7 @@
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N19IPLPathEffectParams8eqCoeffsE">
-<span id="_CPPv3N19IPLPathEffectParams8eqCoeffsE"></span><span id="_CPPv2N19IPLPathEffectParams8eqCoeffsE"></span><span id="IPLPathEffectParams::eqCoeffs__IPLfloat32A"></span><span class="target" id="struct_i_p_l_path_effect_params_1ad0ae6c46495d7ae73c35f3a2d8650d70"></span><a class="reference internal" href="types.html#_CPPv410IPLfloat32" title="IPLfloat32"><span class="n"><span class="pre">IPLfloat32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">eqCoeffs</span></span></span><span class="p"><span class="pre">[</span></span><span class="m"><span class="pre">3</span></span><span class="p"><span class="pre">]</span></span><a class="headerlink" href="#_CPPv4N19IPLPathEffectParams8eqCoeffsE" title="Link to this definition"></a><br /></dt>
+<span id="_CPPv3N19IPLPathEffectParams8eqCoeffsE"></span><span id="_CPPv2N19IPLPathEffectParams8eqCoeffsE"></span><span id="IPLPathEffectParams::eqCoeffs__IPLfloat32A"></span><span class="target" id="struct_i_p_l_path_effect_params_1a827a9f8762d766cdd92cbfa06f71fb64"></span><a class="reference internal" href="types.html#_CPPv410IPLfloat32" title="IPLfloat32"><span class="n"><span class="pre">IPLfloat32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">eqCoeffs</span></span></span><span class="p"><span class="pre">[</span></span><span class="n"><span class="pre">IPL_NUM_BANDS</span></span><span class="p"><span class="pre">]</span></span><a class="headerlink" href="#_CPPv4N19IPLPathEffectParams8eqCoeffsE" title="Link to this definition"></a><br /></dt>
 <dd><p>3-band EQ coefficients for modeling frequency-dependent attenuation caused by paths bending around obstacles. </p>
 </dd></dl>
 
@@ -296,6 +334,13 @@
 <span id="_CPPv3N19IPLPathEffectParams8listenerE"></span><span id="_CPPv2N19IPLPathEffectParams8listenerE"></span><span id="IPLPathEffectParams::listener__IPLCoordinateSpace3"></span><span class="target" id="struct_i_p_l_path_effect_params_1aa748549a6aa4a6f9e2f151371816021e"></span><a class="reference internal" href="geometry.html#_CPPv419IPLCoordinateSpace3" title="IPLCoordinateSpace3"><span class="n"><span class="pre">IPLCoordinateSpace3</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">listener</span></span></span><a class="headerlink" href="#_CPPv4N19IPLPathEffectParams8listenerE" title="Link to this definition"></a><br /></dt>
 <dd><p>The position and orientation of the listener. </p>
 <p>Only used if <code class="docutils literal notranslate"><span class="pre">spatialize</span></code> was set to <code class="docutils literal notranslate"><span class="pre">IPL_TRUE</span></code> in <code class="docutils literal notranslate"><a class="reference internal" href="#struct_i_p_l_path_effect_settings"><span class="std std-ref"><span class="pre">IPLPathEffectSettings</span></span></a></code> and <code class="docutils literal notranslate"><span class="pre">binaural</span></code> is set to <code class="docutils literal notranslate"><span class="pre">IPL_TRUE</span></code>. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N19IPLPathEffectParams11normalizeEQE">
+<span id="_CPPv3N19IPLPathEffectParams11normalizeEQE"></span><span id="_CPPv2N19IPLPathEffectParams11normalizeEQE"></span><span id="IPLPathEffectParams::normalizeEQ__IPLbool"></span><span class="target" id="struct_i_p_l_path_effect_params_1a6c024adad9ba33ff4d10b06da7ac88ee"></span><a class="reference internal" href="types.html#_CPPv47IPLbool" title="IPLbool"><span class="n"><span class="pre">IPLbool</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">normalizeEQ</span></span></span><a class="headerlink" href="#_CPPv4N19IPLPathEffectParams11normalizeEQE" title="Link to this definition"></a><br /></dt>
+<dd><p>If <code class="docutils literal notranslate"><span class="pre">IPL_TRUE</span></code>, the values in <code class="docutils literal notranslate"><span class="pre">eqCoeffs</span></code> will be normalized before being used, i.e., each value in <code class="docutils literal notranslate"><span class="pre">eqCoeffs</span></code> will be divided by the largest value in <code class="docutils literal notranslate"><span class="pre">eqCoeffs</span></code>. </p>
+<p>This can help counteract overly-aggressive filtering due to a physics-based deviation model. If <code class="docutils literal notranslate"><span class="pre">IPL_FALSE</span></code>, the values in <code class="docutils literal notranslate"><span class="pre">eqCoeffs</span></code> will be used as-is. </p>
 </dd></dl>
 
 </div>

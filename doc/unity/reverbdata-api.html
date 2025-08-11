@@ -1,0 +1,256 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Steam Audio Reverb Data &mdash; Steam Audio Unity Integration  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/steamaudio.css?v=833c5bfb" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=7f41d439"></script>
+      <script src="_static/doctools.js?v=9a2dae69"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Steam Audio Manager" href="manager-api.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html">
+            
+              <img src="_static/steam-audio-logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Unity Integration</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guide.html">User’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="build-instructions.html">Build Instructions</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="reference.html">Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="components.html">Components</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mixer-effects.html">Mixer Effects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="asset-types.html">Asset Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="menu-commands.html">Menu Commands</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="api-reference.html">C# API Reference</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="manager-api.html">Steam Audio Manager</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Steam Audio Reverb Data</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv4N19PhonyNameDueToError10InitializeEv"><code class="docutils literal notranslate"><span class="pre">PhonyNameDueToError::Initialize()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv4N19PhonyNameDueToError22GetImpulseResponseSizeEv"><code class="docutils literal notranslate"><span class="pre">PhonyNameDueToError::GetImpulseResponseSize()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv4N19PhonyNameDueToError18GetEnergyFieldDataEiii"><code class="docutils literal notranslate"><span class="pre">PhonyNameDueToError::GetEnergyFieldData()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv4N19PhonyNameDueToError18GetEnergyFieldSizeEv"><code class="docutils literal notranslate"><span class="pre">PhonyNameDueToError::GetEnergyFieldSize()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv4N19PhonyNameDueToError22GetImpulseResponseDataEii"><code class="docutils literal notranslate"><span class="pre">PhonyNameDueToError::GetImpulseResponseData()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv4N19PhonyNameDueToError28reverbEnergyFieldNumChannelsE"><code class="docutils literal notranslate"><span class="pre">PhonyNameDueToError::reverbEnergyFieldNumChannels</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv4N19PhonyNameDueToError25reverbEnergyFieldNumBandsE"><code class="docutils literal notranslate"><span class="pre">PhonyNameDueToError::reverbEnergyFieldNumBands</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv4N19PhonyNameDueToError24reverbEnergyFieldNumBinsE"><code class="docutils literal notranslate"><span class="pre">PhonyNameDueToError::reverbEnergyFieldNumBins</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv4N19PhonyNameDueToError19reverbIRNumChannelsE"><code class="docutils literal notranslate"><span class="pre">PhonyNameDueToError::reverbIRNumChannels</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv4N19PhonyNameDueToError18reverbIRNumSamplesE"><code class="docutils literal notranslate"><span class="pre">PhonyNameDueToError::reverbIRNumSamples</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Steam Audio Unity Integration</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="reference.html">Reference</a></li>
+          <li class="breadcrumb-item"><a href="api-reference.html">C# API Reference</a></li>
+      <li class="breadcrumb-item active">Steam Audio Reverb Data</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="steam-audio-reverb-data">
+<h1>Steam Audio Reverb Data<a class="headerlink" href="#steam-audio-reverb-data" title="Link to this heading"></a></h1>
+<dl class="cpp class">
+<dt class="sig sig-object cpp">
+<span class="target" id="class_steam_audio_1_1_steam_audio_reverb_data"></span><span class="sig-name descname"><span class="pre">SteamAudio.SteamAudioReverbData</span> <span class="pre">:</span> <span class="pre">ScriptableObject</span></span></dt>
+<dd><p>Baked reverb data stored for a <code class="docutils literal notranslate"><span class="pre">SteamAudioReverbDataPoint</span></code>. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N19PhonyNameDueToError10InitializeEv">
+<span id="_CPPv3N19PhonyNameDueToError10InitializeEv"></span><span id="_CPPv2N19PhonyNameDueToError10InitializeEv"></span><span id="PhonyNameDueToError::Initialize"></span><span class="target" id="class_steam_audio_1_1_steam_audio_reverb_data_1a98b1050f09da390896f964fb7a892391"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Initialize</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N19PhonyNameDueToError10InitializeEv" title="Link to this definition"></a><br /></dt>
+<dd><p>Initializes the reverb data to default (empty) values. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N19PhonyNameDueToError22GetImpulseResponseSizeEv">
+<span id="_CPPv3N19PhonyNameDueToError22GetImpulseResponseSizeEv"></span><span id="_CPPv2N19PhonyNameDueToError22GetImpulseResponseSizeEv"></span><span id="PhonyNameDueToError::GetImpulseResponseSize"></span><span class="target" id="class_steam_audio_1_1_steam_audio_reverb_data_1ac84408a391960be0812594346e774787"></span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GetImpulseResponseSize</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N19PhonyNameDueToError22GetImpulseResponseSizeEv" title="Link to this definition"></a><br /></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The total size of the impulse response (#channels x #samples). </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N19PhonyNameDueToError18GetEnergyFieldDataEiii">
+<span id="_CPPv3N19PhonyNameDueToError18GetEnergyFieldDataEiii"></span><span id="_CPPv2N19PhonyNameDueToError18GetEnergyFieldDataEiii"></span><span id="PhonyNameDueToError::GetEnergyFieldData__i.i.i"></span><span class="target" id="class_steam_audio_1_1_steam_audio_reverb_data_1aa88101b091e0b6a35df3f366dc61f798"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GetEnergyFieldData</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">channel</span></span>, <span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">band</span></span>, <span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">bin</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N19PhonyNameDueToError18GetEnergyFieldDataEiii" title="Link to this definition"></a><br /></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>channel</strong> – <strong>[in]</strong> The index of the channel. </p></li>
+<li><p><strong>band</strong> – <strong>[in]</strong> The index of the band. </p></li>
+<li><p><strong>bin</strong> – <strong>[in]</strong> The index of the bin. </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The energy value stored for a particular channel, band, and bin.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N19PhonyNameDueToError18GetEnergyFieldSizeEv">
+<span id="_CPPv3N19PhonyNameDueToError18GetEnergyFieldSizeEv"></span><span id="_CPPv2N19PhonyNameDueToError18GetEnergyFieldSizeEv"></span><span id="PhonyNameDueToError::GetEnergyFieldSize"></span><span class="target" id="class_steam_audio_1_1_steam_audio_reverb_data_1a5f3b41f586085051adb5a5b476ca53da"></span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GetEnergyFieldSize</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N19PhonyNameDueToError18GetEnergyFieldSizeEv" title="Link to this definition"></a><br /></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The total size of the energy field (#channels x #bands x #bins). </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N19PhonyNameDueToError22GetImpulseResponseDataEii">
+<span id="_CPPv3N19PhonyNameDueToError22GetImpulseResponseDataEii"></span><span id="_CPPv2N19PhonyNameDueToError22GetImpulseResponseDataEii"></span><span id="PhonyNameDueToError::GetImpulseResponseData__i.i"></span><span class="target" id="class_steam_audio_1_1_steam_audio_reverb_data_1ae07f48b16d4ceedcfda9b9fc8e5c57fd"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GetImpulseResponseData</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">channel</span></span>, <span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">sample</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N19PhonyNameDueToError22GetImpulseResponseDataEii" title="Link to this definition"></a><br /></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>channel</strong> – <strong>[in]</strong> The index of the channel. </p></li>
+<li><p><strong>sample</strong> – <strong>[in]</strong> The index of the sample. </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The sample value stored for a particular channel and sample index.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp">
+<span class="target" id="class_steam_audio_1_1_steam_audio_reverb_data_1a1612f5ace232b82eb8192dac5f402663"></span><span class="sig-name descname"><span class="pre">float[]</span> <span class="pre">reverbTimes</span></span></dt>
+<dd><p>Reverb times (in seconds), for use in a parametric reverb effect. </p>
+<p>One per frequency band. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp">
+<span class="target" id="class_steam_audio_1_1_steam_audio_reverb_data_1afa4e9fabc2003703116355185b34230a"></span><span class="sig-name descname"><span class="pre">float[]</span> <span class="pre">reverbEnergyField</span></span></dt>
+<dd><p>The energy field, stored in a row-major array of size (#channels x #bands x #bins). </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N19PhonyNameDueToError28reverbEnergyFieldNumChannelsE">
+<span id="_CPPv3N19PhonyNameDueToError28reverbEnergyFieldNumChannelsE"></span><span id="_CPPv2N19PhonyNameDueToError28reverbEnergyFieldNumChannelsE"></span><span id="PhonyNameDueToError::reverbEnergyFieldNumChannels__i"></span><span class="target" id="class_steam_audio_1_1_steam_audio_reverb_data_1a076e8b0fdb0d14c5e20a97c6768463c6"></span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">reverbEnergyFieldNumChannels</span></span></span><a class="headerlink" href="#_CPPv4N19PhonyNameDueToError28reverbEnergyFieldNumChannelsE" title="Link to this definition"></a><br /></dt>
+<dd><p>The number of channels in the energy field. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N19PhonyNameDueToError25reverbEnergyFieldNumBandsE">
+<span id="_CPPv3N19PhonyNameDueToError25reverbEnergyFieldNumBandsE"></span><span id="_CPPv2N19PhonyNameDueToError25reverbEnergyFieldNumBandsE"></span><span id="PhonyNameDueToError::reverbEnergyFieldNumBands__i"></span><span class="target" id="class_steam_audio_1_1_steam_audio_reverb_data_1a497d7e0052443776e3cfd6eb3d965fb7"></span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">reverbEnergyFieldNumBands</span></span></span><a class="headerlink" href="#_CPPv4N19PhonyNameDueToError25reverbEnergyFieldNumBandsE" title="Link to this definition"></a><br /></dt>
+<dd><p>The number of bands in the energy field. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N19PhonyNameDueToError24reverbEnergyFieldNumBinsE">
+<span id="_CPPv3N19PhonyNameDueToError24reverbEnergyFieldNumBinsE"></span><span id="_CPPv2N19PhonyNameDueToError24reverbEnergyFieldNumBinsE"></span><span id="PhonyNameDueToError::reverbEnergyFieldNumBins__i"></span><span class="target" id="class_steam_audio_1_1_steam_audio_reverb_data_1a315c61c4ff40744c1e4c249f31f97635"></span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">reverbEnergyFieldNumBins</span></span></span><a class="headerlink" href="#_CPPv4N19PhonyNameDueToError24reverbEnergyFieldNumBinsE" title="Link to this definition"></a><br /></dt>
+<dd><p>The number of bins in the energy field. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp">
+<span class="target" id="class_steam_audio_1_1_steam_audio_reverb_data_1ae3948f6399d316a1d481a022e7c97761"></span><span class="sig-name descname"><span class="pre">float[]</span> <span class="pre">reverbIR</span></span></dt>
+<dd><p>The impulse response, stored in a row-major array of size (#channels x #samples). </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N19PhonyNameDueToError19reverbIRNumChannelsE">
+<span id="_CPPv3N19PhonyNameDueToError19reverbIRNumChannelsE"></span><span id="_CPPv2N19PhonyNameDueToError19reverbIRNumChannelsE"></span><span id="PhonyNameDueToError::reverbIRNumChannels__i"></span><span class="target" id="class_steam_audio_1_1_steam_audio_reverb_data_1a975ea4a42ccdddd53b832d4b5f13de5e"></span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">reverbIRNumChannels</span></span></span><a class="headerlink" href="#_CPPv4N19PhonyNameDueToError19reverbIRNumChannelsE" title="Link to this definition"></a><br /></dt>
+<dd><p>The number of channels in the impulse response. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N19PhonyNameDueToError18reverbIRNumSamplesE">
+<span id="_CPPv3N19PhonyNameDueToError18reverbIRNumSamplesE"></span><span id="_CPPv2N19PhonyNameDueToError18reverbIRNumSamplesE"></span><span id="PhonyNameDueToError::reverbIRNumSamples__i"></span><span class="target" id="class_steam_audio_1_1_steam_audio_reverb_data_1a60a26f18f0edcb56d59dbe6898ed9c13"></span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">reverbIRNumSamples</span></span></span><a class="headerlink" href="#_CPPv4N19PhonyNameDueToError18reverbIRNumSamplesE" title="Link to this definition"></a><br /></dt>
+<dd><p>The number of samples in the impulse response. </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="manager-api.html" class="btn btn-neutral float-left" title="Steam Audio Manager" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2017-2023, Valve Corporation.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

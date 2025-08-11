@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Steam Audio Probe Batch &mdash; Steam Audio Unity Integration  documentation</title>
+  <title>Steam Audio Reverb Data Point &mdash; Steam Audio Unity Integration  documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="_static/steamaudio.css?v=833c5bfb" />
@@ -20,8 +20,8 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Steam Audio Source" href="source.html" />
-    <link rel="prev" title="Steam Audio Manager" href="manager.html" /> 
+    <link rel="next" title="Mixer Effects" href="mixer-effects.html" />
+    <link rel="prev" title="Steam Audio Static Mesh" href="static-mesh.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -58,10 +58,10 @@
 <li class="toctree-l3"><a class="reference internal" href="geometry.html">Steam Audio Geometry</a></li>
 <li class="toctree-l3"><a class="reference internal" href="listener.html">Steam Audio Listener</a></li>
 <li class="toctree-l3"><a class="reference internal" href="manager.html">Steam Audio Manager</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">Steam Audio Probe Batch</a></li>
+<li class="toctree-l3"><a class="reference internal" href="probe-batch.html">Steam Audio Probe Batch</a></li>
 <li class="toctree-l3"><a class="reference internal" href="source.html">Steam Audio Source</a></li>
 <li class="toctree-l3"><a class="reference internal" href="static-mesh.html">Steam Audio Static Mesh</a></li>
-<li class="toctree-l3"><a class="reference internal" href="reverbdatapoint.html">Steam Audio Reverb Data Point</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Steam Audio Reverb Data Point</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="mixer-effects.html">Mixer Effects</a></li>
@@ -88,7 +88,7 @@
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="reference.html">Reference</a></li>
           <li class="breadcrumb-item"><a href="components.html">Components</a></li>
-      <li class="breadcrumb-item active">Steam Audio Probe Batch</li>
+      <li class="breadcrumb-item active">Steam Audio Reverb Data Point</li>
       <li class="wy-breadcrumbs-aside">
       </li>
   </ul>
@@ -97,30 +97,31 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="steam-audio-probe-batch">
-<h1>Steam Audio Probe Batch<a class="headerlink" href="#steam-audio-probe-batch" title="Link to this heading"></a></h1>
-<p>A volume in which sound probes can be generated. When baking reflections, reverb, or pathing, baked data is stored in one or more probe batches.</p>
+  <section id="steam-audio-reverb-data-point">
+<h1>Steam Audio Reverb Data Point<a class="headerlink" href="#steam-audio-reverb-data-point" title="Link to this heading"></a></h1>
+<p>A single point in space for which reverb can be baked and stored.</p>
+<p>This component is designed to be used for baking and storing reverb data only. Unlike the <a class="reference internal" href="probe-batch.html"><span class="doc">Steam Audio Probe Batch</span></a> component, it is not designed to be used for run-time rendering of reverb together with <a class="reference internal" href="source.html"><span class="doc">Steam Audio Source</span></a>.</p>
 <p>Can be attached to any GameObject. Typically, this is attached to an empty GameObject created just for this purpose.</p>
-<p>Each probe batch contains one or more probes within its volume. This volume is shown in the <strong>Scene</strong> tab as a magenta wireframe outline. You can control the size and shape of this volume using Unity’s translate, rotate, and scale tools, just like any other GameObject.</p>
-<img alt="_images/probe_batch.png" src="_images/probe_batch.png" />
+<img alt="Steam Audio Reverb Data Point" src="_images/reverbdatapoint.png" />
+<p>Each of the settings below can be adjusted independently for every probe. For global options, check <a class="reference internal" href="settings.html"><span class="doc">Steam Audio Settings</span></a>, especially the Baked Reflections section.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Every Steam Audio Reverb Data Point automatically bakes both parametric and convolution reverb.</p>
+</div>
 <dl class="simple">
-<dt>Asset</dt><dd><p>Reference to the asset that contains the exported baked data for this probe batch. Automatically generated by Steam Audio.</p>
+<dt>Sampling Rate</dt><dd><p>The frequency (Hz) used to generate the impulse response (IR). Match this to the runtime audio engine’s sample rate; otherwise the IR must be resampled.</p>
 </dd>
-<dt>Placement Strategy</dt><dd><p>Specifies how probes should be generated and placed within this volume.</p>
-<ul class="simple">
-<li><p><em>Centroid</em>. Places a single probe at the center of the volume.</p></li>
-<li><p><em>Uniform Floor</em>. Places probes at a specified height above the floor with a specified horizontal spacing between probes. The “floor” is defined as any geometry that would intersect rays cast within the volume and parallel to the -y axis in the local coordinate system of the probe batch.</p></li>
-</ul>
+<dt>Ambisonic Order</dt><dd><p>The Ambisonic order of the IRs generated when baking reverb. Increasing this value results in more accurate directional variation of reflected sound, at the cost of increased disk space usage.</p>
 </dd>
-<dt>Horizontal Spacing</dt><dd><p>The horizontal distance (in meters) between adjacent probes. Only used if <strong>Placement Strategy</strong> is <strong>Uniform Floor</strong>.</p>
+<dt>Reverb Duration</dt><dd><p>The duration (in seconds) of the IRs generated when baking reverb. Increasing this value results in longer, more accurate reverb tails, at the cost of increased disk space usage.</p>
 </dd>
-<dt>Height Above Floor</dt><dd><p>The height (in meters) above the floor at which probes should be placed. Only used if <strong>Placement Strategy</strong> is <strong>Uniform Floor</strong>.</p>
+<dt>Store Energy Field</dt><dd><p>Saves Steam Audio’s intermediate multi-band Energy Field data.</p>
 </dd>
-<dt>Generate Probes</dt><dd><p>Generates probes within the volume of this probe batch.</p>
+<dt>Store Impulse Response</dt><dd><p>Stores the full multi-channel, time-domain IR at the chosen sampling rate.</p>
 </dd>
-<dt>Bake</dt><dd><p>Starts baking pathing data for this probe batch.</p>
+<dt>Bake / Bake Selected</dt><dd><p>Bake reverb for the selected probe(s).</p>
 </dd>
-<dt>Probe Statistics</dt><dd><p>Shows the size (in bytes) of various baked data stored in this probe batch.</p>
+<dt>Reverb Data</dt><dd><p>Reference to the generated <a class="reference internal" href="reverbdata.html"><span class="doc">Steam Audio Reverb Data</span></a> asset containing this probe’s baked reverb. These assets are automatically placed in the <code class="docutils literal notranslate"><span class="pre">Assets/Resources/ReverbData</span></code> folder.</p>
 </dd>
 </dl>
 </section>
@@ -129,8 +130,8 @@
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="manager.html" class="btn btn-neutral float-left" title="Steam Audio Manager" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="source.html" class="btn btn-neutral float-right" title="Steam Audio Source" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="static-mesh.html" class="btn btn-neutral float-left" title="Steam Audio Static Mesh" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="mixer-effects.html" class="btn btn-neutral float-right" title="Mixer Effects" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

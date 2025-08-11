@@ -1,0 +1,429 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Energy Field &mdash; Steam Audio C API  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/steamaudio.css?v=b5aaeb06" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=7f41d439"></script>
+      <script src="_static/doctools.js?v=9a2dae69"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Impulse Response" href="impulse-response.html" />
+    <link rel="prev" title="Simulation" href="simulation.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html">
+            
+              <img src="_static/steam-audio-logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Steam Audio SDK</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guide.html">Programmer’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="build-instructions.html">Build Instructions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="integration.html">Integrating Steam Audio</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="reference.html">API Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="types.html">Basic Data Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="context.html">Context</a></li>
+<li class="toctree-l2"><a class="reference internal" href="geometry.html">Geometry</a></li>
+<li class="toctree-l2"><a class="reference internal" href="serialization.html">Serialization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="embree.html">Embree</a></li>
+<li class="toctree-l2"><a class="reference internal" href="opencl.html">OpenCL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="radeon-rays.html">Radeon Rays</a></li>
+<li class="toctree-l2"><a class="reference internal" href="trueaudio-next.html">TrueAudio Next</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scene.html">Scene</a></li>
+<li class="toctree-l2"><a class="reference internal" href="audio-buffers.html">Audio Buffers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hrtf.html">HRTF</a></li>
+<li class="toctree-l2"><a class="reference internal" href="panning-effect.html">Panning Effect</a></li>
+<li class="toctree-l2"><a class="reference internal" href="binaural-effect.html">Binaural Effect</a></li>
+<li class="toctree-l2"><a class="reference internal" href="virtual-surround-effect.html">Virtual Surround Effect</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ambisonics-encode-effect.html">Ambisonics Encode Effect</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ambisonics-panning-effect.html">Ambisonics Panning Effect</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ambisonics-binaural-effect.html">Ambisonics Binaural Effect</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ambisonics-rotation-effect.html">Ambisonics Rotation Effect</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ambisonics-decode-effect.html">Ambisonics Decode Effect</a></li>
+<li class="toctree-l2"><a class="reference internal" href="direct-effect.html">Direct Effect</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reflections-effect.html">Reflection Effect</a></li>
+<li class="toctree-l2"><a class="reference internal" href="path-effect.html">Path Effect</a></li>
+<li class="toctree-l2"><a class="reference internal" href="probes.html">Probes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="baking.html">Baking</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simulation.html">Simulation</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Energy Field</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#typedefs">Typedefs</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv414IPLEnergyField"><code class="docutils literal notranslate"><span class="pre">IPLEnergyField</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#functions">Functions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv420iplEnergyFieldCreate10IPLContextP22IPLEnergyFieldSettingsP14IPLEnergyField"><code class="docutils literal notranslate"><span class="pre">iplEnergyFieldCreate()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv420iplEnergyFieldRetain14IPLEnergyField"><code class="docutils literal notranslate"><span class="pre">iplEnergyFieldRetain()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv421iplEnergyFieldReleaseP14IPLEnergyField"><code class="docutils literal notranslate"><span class="pre">iplEnergyFieldRelease()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv428iplEnergyFieldGetNumChannels14IPLEnergyField"><code class="docutils literal notranslate"><span class="pre">iplEnergyFieldGetNumChannels()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv424iplEnergyFieldGetNumBins14IPLEnergyField"><code class="docutils literal notranslate"><span class="pre">iplEnergyFieldGetNumBins()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv421iplEnergyFieldGetData14IPLEnergyField"><code class="docutils literal notranslate"><span class="pre">iplEnergyFieldGetData()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv424iplEnergyFieldGetChannel14IPLEnergyField8IPLint32"><code class="docutils literal notranslate"><span class="pre">iplEnergyFieldGetChannel()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv421iplEnergyFieldGetBand14IPLEnergyField8IPLint328IPLint32"><code class="docutils literal notranslate"><span class="pre">iplEnergyFieldGetBand()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv419iplEnergyFieldReset14IPLEnergyField"><code class="docutils literal notranslate"><span class="pre">iplEnergyFieldReset()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv418iplEnergyFieldCopy14IPLEnergyField14IPLEnergyField"><code class="docutils literal notranslate"><span class="pre">iplEnergyFieldCopy()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv418iplEnergyFieldSwap14IPLEnergyField14IPLEnergyField"><code class="docutils literal notranslate"><span class="pre">iplEnergyFieldSwap()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv417iplEnergyFieldAdd14IPLEnergyField14IPLEnergyField14IPLEnergyField"><code class="docutils literal notranslate"><span class="pre">iplEnergyFieldAdd()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv419iplEnergyFieldScale14IPLEnergyField10IPLfloat3214IPLEnergyField"><code class="docutils literal notranslate"><span class="pre">iplEnergyFieldScale()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv424iplEnergyFieldScaleAccum14IPLEnergyField10IPLfloat3214IPLEnergyField"><code class="docutils literal notranslate"><span class="pre">iplEnergyFieldScaleAccum()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#structures">Structures</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv422IPLEnergyFieldSettings"><code class="docutils literal notranslate"><span class="pre">IPLEnergyFieldSettings</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="impulse-response.html">Impulse Response</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reconstructor.html">Reconstructor</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Steam Audio C API</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="reference.html">API Reference</a></li>
+      <li class="breadcrumb-item active">Energy Field</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="energy-field">
+<h1>Energy Field<a class="headerlink" href="#energy-field" title="Link to this heading"></a></h1>
+<section id="typedefs">
+<h2>Typedefs<a class="headerlink" href="#typedefs" title="Link to this heading"></a></h2>
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv414IPLEnergyField">
+<span id="_CPPv314IPLEnergyField"></span><span id="_CPPv214IPLEnergyField"></span><span id="IPLEnergyField"></span><span class="target" id="group__energyfield_1ga2d49e68308ced1323d64b3ffbff82f59"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="n"><span class="pre">_IPLEnergyField_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">IPLEnergyField</span></span></span><a class="headerlink" href="#_CPPv414IPLEnergyField" title="Link to this definition"></a><br /></dt>
+<dd><p>An energy field. </p>
+<p>Energy fields represent a histogram of sound energy arriving at a point, as a function of incident direction, frequency band, and arrival time.</p>
+<p>Time is subdivided into “bins” of the histogram, with each bin corresponding to 10ms. For each bin, incident energy is stored separately for each frequency band. For a given frequency band and time bin, we store an Ambisonic representation of the variation of incident energy as a function of direction.</p>
+<p>Energy field data is stored as a 3D array of size #channels * #bands * #bins, in row-major order. </p>
+</dd></dl>
+
+</section>
+<section id="functions">
+<h2>Functions<a class="headerlink" href="#functions" title="Link to this heading"></a></h2>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv420iplEnergyFieldCreate10IPLContextP22IPLEnergyFieldSettingsP14IPLEnergyField">
+<span id="_CPPv320iplEnergyFieldCreate10IPLContextP22IPLEnergyFieldSettingsP14IPLEnergyField"></span><span id="_CPPv220iplEnergyFieldCreate10IPLContextP22IPLEnergyFieldSettingsP14IPLEnergyField"></span><span id="iplEnergyFieldCreate__IPLContext.IPLEnergyFieldSettingsP.IPLEnergyFieldP"></span><span class="target" id="group__energyfield_1ga6c8d3a0a889373715cf00906f093245e"></span><a class="reference internal" href="types.html#_CPPv48IPLerror" title="IPLerror"><span class="n"><span class="pre">IPLerror</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplEnergyFieldCreate</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="context.html#_CPPv410IPLContext" title="IPLContext"><span class="n"><span class="pre">IPLContext</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">context</span></span>, <a class="reference internal" href="#_CPPv422IPLEnergyFieldSettings" title="IPLEnergyFieldSettings"><span class="n"><span class="pre">IPLEnergyFieldSettings</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">settings</span></span>, <a class="reference internal" href="#_CPPv414IPLEnergyField" title="IPLEnergyField"><span class="n"><span class="pre">IPLEnergyField</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">energyField</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv420iplEnergyFieldCreate10IPLContextP22IPLEnergyFieldSettingsP14IPLEnergyField" title="Link to this definition"></a><br /></dt>
+<dd><p>Creates an energy field. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>context</strong> – The context used to initialize Steam Audio. </p></li>
+<li><p><strong>settings</strong> – The settings to use when creating the energy field. </p></li>
+<li><p><strong>energyField</strong> – [out] The created energy field.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Status code indicating whether or not the operation succeeded. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv420iplEnergyFieldRetain14IPLEnergyField">
+<span id="_CPPv320iplEnergyFieldRetain14IPLEnergyField"></span><span id="_CPPv220iplEnergyFieldRetain14IPLEnergyField"></span><span id="iplEnergyFieldRetain__IPLEnergyField"></span><span class="target" id="group__energyfield_1ga5d1559e3f7e4410875d8fae4f1f38746"></span><a class="reference internal" href="#_CPPv414IPLEnergyField" title="IPLEnergyField"><span class="n"><span class="pre">IPLEnergyField</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplEnergyFieldRetain</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv414IPLEnergyField" title="IPLEnergyField"><span class="n"><span class="pre">IPLEnergyField</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">energyField</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv420iplEnergyFieldRetain14IPLEnergyField" title="Link to this definition"></a><br /></dt>
+<dd><p>Retains an additional reference to an energy field. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>energyField</strong> – The energy field to retain a reference to.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The additional reference to the energy field. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv421iplEnergyFieldReleaseP14IPLEnergyField">
+<span id="_CPPv321iplEnergyFieldReleaseP14IPLEnergyField"></span><span id="_CPPv221iplEnergyFieldReleaseP14IPLEnergyField"></span><span id="iplEnergyFieldRelease__IPLEnergyFieldP"></span><span class="target" id="group__energyfield_1gaa6a5529d11df7033a068255c805bb9a2"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplEnergyFieldRelease</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv414IPLEnergyField" title="IPLEnergyField"><span class="n"><span class="pre">IPLEnergyField</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">energyField</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv421iplEnergyFieldReleaseP14IPLEnergyField" title="Link to this definition"></a><br /></dt>
+<dd><p>Releases a reference to an energy field. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>energyField</strong> – The energy field to release a reference to. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv428iplEnergyFieldGetNumChannels14IPLEnergyField">
+<span id="_CPPv328iplEnergyFieldGetNumChannels14IPLEnergyField"></span><span id="_CPPv228iplEnergyFieldGetNumChannels14IPLEnergyField"></span><span id="iplEnergyFieldGetNumChannels__IPLEnergyField"></span><span class="target" id="group__energyfield_1ga33d62f787d2e374bfd5df1b586835fe4"></span><a class="reference internal" href="types.html#_CPPv48IPLint32" title="IPLint32"><span class="n"><span class="pre">IPLint32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplEnergyFieldGetNumChannels</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv414IPLEnergyField" title="IPLEnergyField"><span class="n"><span class="pre">IPLEnergyField</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">energyField</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv428iplEnergyFieldGetNumChannels14IPLEnergyField" title="Link to this definition"></a><br /></dt>
+<dd><p>Returns the number of channels in the energy field. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>energyField</strong> – The energy field.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The number of channels in the energy field. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv424iplEnergyFieldGetNumBins14IPLEnergyField">
+<span id="_CPPv324iplEnergyFieldGetNumBins14IPLEnergyField"></span><span id="_CPPv224iplEnergyFieldGetNumBins14IPLEnergyField"></span><span id="iplEnergyFieldGetNumBins__IPLEnergyField"></span><span class="target" id="group__energyfield_1ga505c359407526a080331ac4865bc650b"></span><a class="reference internal" href="types.html#_CPPv48IPLint32" title="IPLint32"><span class="n"><span class="pre">IPLint32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplEnergyFieldGetNumBins</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv414IPLEnergyField" title="IPLEnergyField"><span class="n"><span class="pre">IPLEnergyField</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">energyField</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv424iplEnergyFieldGetNumBins14IPLEnergyField" title="Link to this definition"></a><br /></dt>
+<dd><p>Returns the number of bins in the energy field. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>energyField</strong> – The energy field.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The number of bins in the energy field. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv421iplEnergyFieldGetData14IPLEnergyField">
+<span id="_CPPv321iplEnergyFieldGetData14IPLEnergyField"></span><span id="_CPPv221iplEnergyFieldGetData14IPLEnergyField"></span><span id="iplEnergyFieldGetData__IPLEnergyField"></span><span class="target" id="group__energyfield_1gafd4b8a8c1259fe72e801ae3243c213c3"></span><a class="reference internal" href="types.html#_CPPv410IPLfloat32" title="IPLfloat32"><span class="n"><span class="pre">IPLfloat32</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">iplEnergyFieldGetData</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv414IPLEnergyField" title="IPLEnergyField"><span class="n"><span class="pre">IPLEnergyField</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">energyField</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv421iplEnergyFieldGetData14IPLEnergyField" title="Link to this definition"></a><br /></dt>
+<dd><p>Returns a pointer to the data stored in the energy field. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>energyField</strong> – The energy field.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Pointer to #channels * #bands * #bins IPLfloat32 values stored in the energy field, in row-major order. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv424iplEnergyFieldGetChannel14IPLEnergyField8IPLint32">
+<span id="_CPPv324iplEnergyFieldGetChannel14IPLEnergyField8IPLint32"></span><span id="_CPPv224iplEnergyFieldGetChannel14IPLEnergyField8IPLint32"></span><span id="iplEnergyFieldGetChannel__IPLEnergyField.IPLint32"></span><span class="target" id="group__energyfield_1ga46b4f9b4712e94460a77a2ea9b94795e"></span><a class="reference internal" href="types.html#_CPPv410IPLfloat32" title="IPLfloat32"><span class="n"><span class="pre">IPLfloat32</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">iplEnergyFieldGetChannel</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv414IPLEnergyField" title="IPLEnergyField"><span class="n"><span class="pre">IPLEnergyField</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">energyField</span></span>, <a class="reference internal" href="types.html#_CPPv48IPLint32" title="IPLint32"><span class="n"><span class="pre">IPLint32</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">channelIndex</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv424iplEnergyFieldGetChannel14IPLEnergyField8IPLint32" title="Link to this definition"></a><br /></dt>
+<dd><p>Returns a pointer to the data stored in the energy field for the given channel. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>energyField</strong> – The energy field. </p></li>
+<li><p><strong>channelIndex</strong> – Index of the channel.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Pointer to #bands * #bins IPLfloat32 values stored in the energy field for the given channel, in row-major order. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv421iplEnergyFieldGetBand14IPLEnergyField8IPLint328IPLint32">
+<span id="_CPPv321iplEnergyFieldGetBand14IPLEnergyField8IPLint328IPLint32"></span><span id="_CPPv221iplEnergyFieldGetBand14IPLEnergyField8IPLint328IPLint32"></span><span id="iplEnergyFieldGetBand__IPLEnergyField.IPLint32.IPLint32"></span><span class="target" id="group__energyfield_1gaea29c99ac62e24bdaf90c1fdb16d4260"></span><a class="reference internal" href="types.html#_CPPv410IPLfloat32" title="IPLfloat32"><span class="n"><span class="pre">IPLfloat32</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">iplEnergyFieldGetBand</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv414IPLEnergyField" title="IPLEnergyField"><span class="n"><span class="pre">IPLEnergyField</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">energyField</span></span>, <a class="reference internal" href="types.html#_CPPv48IPLint32" title="IPLint32"><span class="n"><span class="pre">IPLint32</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">channelIndex</span></span>, <a class="reference internal" href="types.html#_CPPv48IPLint32" title="IPLint32"><span class="n"><span class="pre">IPLint32</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">bandIndex</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv421iplEnergyFieldGetBand14IPLEnergyField8IPLint328IPLint32" title="Link to this definition"></a><br /></dt>
+<dd><p>Returns a pointer to the data stored in the energy field for the given channel and band. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>energyField</strong> – The energy field. </p></li>
+<li><p><strong>channelIndex</strong> – Index of the channel. </p></li>
+<li><p><strong>bandIndex</strong> – Index of the band.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Pointer to #bins IPLfloat32 values stored in the energy field for the given channel and band, in row-major order. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv419iplEnergyFieldReset14IPLEnergyField">
+<span id="_CPPv319iplEnergyFieldReset14IPLEnergyField"></span><span id="_CPPv219iplEnergyFieldReset14IPLEnergyField"></span><span id="iplEnergyFieldReset__IPLEnergyField"></span><span class="target" id="group__energyfield_1ga821bba9885bc85ddfbe6cd8df29d2655"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplEnergyFieldReset</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv414IPLEnergyField" title="IPLEnergyField"><span class="n"><span class="pre">IPLEnergyField</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">energyField</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv419iplEnergyFieldReset14IPLEnergyField" title="Link to this definition"></a><br /></dt>
+<dd><p>Resets all values stored in an energy field to zero. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>energyField</strong> – The energy field. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv418iplEnergyFieldCopy14IPLEnergyField14IPLEnergyField">
+<span id="_CPPv318iplEnergyFieldCopy14IPLEnergyField14IPLEnergyField"></span><span id="_CPPv218iplEnergyFieldCopy14IPLEnergyField14IPLEnergyField"></span><span id="iplEnergyFieldCopy__IPLEnergyField.IPLEnergyField"></span><span class="target" id="group__energyfield_1gada4829236ba04fe7a80c9daf9a534983"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplEnergyFieldCopy</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv414IPLEnergyField" title="IPLEnergyField"><span class="n"><span class="pre">IPLEnergyField</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">src</span></span>, <a class="reference internal" href="#_CPPv414IPLEnergyField" title="IPLEnergyField"><span class="n"><span class="pre">IPLEnergyField</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">dst</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv418iplEnergyFieldCopy14IPLEnergyField14IPLEnergyField" title="Link to this definition"></a><br /></dt>
+<dd><p>Copies data from one energy field into another. </p>
+<p>If the source and destination energy fields have different numbers of channels, only the smaller of the two numbers of channels will be copied.</p>
+<p>If the source and destination energy fields have different numbers of bins, only the smaller of the two numbers of bins will be copied.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>src</strong> – The source energy field. </p></li>
+<li><p><strong>dst</strong> – The destination energy field. </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv418iplEnergyFieldSwap14IPLEnergyField14IPLEnergyField">
+<span id="_CPPv318iplEnergyFieldSwap14IPLEnergyField14IPLEnergyField"></span><span id="_CPPv218iplEnergyFieldSwap14IPLEnergyField14IPLEnergyField"></span><span id="iplEnergyFieldSwap__IPLEnergyField.IPLEnergyField"></span><span class="target" id="group__energyfield_1ga658b62d8eaa74177795157c97030a993"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplEnergyFieldSwap</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv414IPLEnergyField" title="IPLEnergyField"><span class="n"><span class="pre">IPLEnergyField</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">a</span></span>, <a class="reference internal" href="#_CPPv414IPLEnergyField" title="IPLEnergyField"><span class="n"><span class="pre">IPLEnergyField</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">b</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv418iplEnergyFieldSwap14IPLEnergyField14IPLEnergyField" title="Link to this definition"></a><br /></dt>
+<dd><p>Swaps the data contained in one energy field with the data contained in another energy field. </p>
+<p>The two energy fields may contain different numbers of channels or bins.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>a</strong> – The first energy field. </p></li>
+<li><p><strong>b</strong> – The second energy field. </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv417iplEnergyFieldAdd14IPLEnergyField14IPLEnergyField14IPLEnergyField">
+<span id="_CPPv317iplEnergyFieldAdd14IPLEnergyField14IPLEnergyField14IPLEnergyField"></span><span id="_CPPv217iplEnergyFieldAdd14IPLEnergyField14IPLEnergyField14IPLEnergyField"></span><span id="iplEnergyFieldAdd__IPLEnergyField.IPLEnergyField.IPLEnergyField"></span><span class="target" id="group__energyfield_1gaec1e048d8a0d6065845d8a5b01f02f65"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplEnergyFieldAdd</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv414IPLEnergyField" title="IPLEnergyField"><span class="n"><span class="pre">IPLEnergyField</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">in1</span></span>, <a class="reference internal" href="#_CPPv414IPLEnergyField" title="IPLEnergyField"><span class="n"><span class="pre">IPLEnergyField</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">in2</span></span>, <a class="reference internal" href="#_CPPv414IPLEnergyField" title="IPLEnergyField"><span class="n"><span class="pre">IPLEnergyField</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">out</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv417iplEnergyFieldAdd14IPLEnergyField14IPLEnergyField14IPLEnergyField" title="Link to this definition"></a><br /></dt>
+<dd><p>Adds the values stored in two energy fields, and stores the result in a third energy field. </p>
+<p>If the energy fields have different numbers of channels, only the smallest of the three numbers of channels will be added.</p>
+<p>If the energy fields have different numbers of bins, only the smallest of the three numbers of bins will be added.</p>
+<p>This function can be used for in-place addition, i.e. <code class="docutils literal notranslate"><span class="pre">out</span></code> may be equal to <code class="docutils literal notranslate"><span class="pre">in1</span></code> or <code class="docutils literal notranslate"><span class="pre">in2</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>in1</strong> – The first input energy field. </p></li>
+<li><p><strong>in2</strong> – The second input energy field. </p></li>
+<li><p><strong>out</strong> – The output energy field. </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv419iplEnergyFieldScale14IPLEnergyField10IPLfloat3214IPLEnergyField">
+<span id="_CPPv319iplEnergyFieldScale14IPLEnergyField10IPLfloat3214IPLEnergyField"></span><span id="_CPPv219iplEnergyFieldScale14IPLEnergyField10IPLfloat3214IPLEnergyField"></span><span id="iplEnergyFieldScale__IPLEnergyField.IPLfloat32.IPLEnergyField"></span><span class="target" id="group__energyfield_1ga39318029f4bbf848b701b7e67b394173"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplEnergyFieldScale</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv414IPLEnergyField" title="IPLEnergyField"><span class="n"><span class="pre">IPLEnergyField</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">in</span></span>, <a class="reference internal" href="types.html#_CPPv410IPLfloat32" title="IPLfloat32"><span class="n"><span class="pre">IPLfloat32</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">scalar</span></span>, <a class="reference internal" href="#_CPPv414IPLEnergyField" title="IPLEnergyField"><span class="n"><span class="pre">IPLEnergyField</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">out</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv419iplEnergyFieldScale14IPLEnergyField10IPLfloat3214IPLEnergyField" title="Link to this definition"></a><br /></dt>
+<dd><p>Scales the values stored in an energy field by a scalar, and stores the result in a second energy field. </p>
+<p>If the energy fields have different numbers of channels, only the smallest of the two numbers of channels will be scaled.</p>
+<p>If the energy fields have different numbers of bins, only the smallest of the two numbers of bins will be scaled.</p>
+<p>This function can be used for in-place scaling, i.e. <code class="docutils literal notranslate"><span class="pre">out</span></code> may be equal to <code class="docutils literal notranslate"><span class="pre">in</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>in</strong> – The input energy field. </p></li>
+<li><p><strong>scalar</strong> – The scalar value. </p></li>
+<li><p><strong>out</strong> – The output energy field. </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv424iplEnergyFieldScaleAccum14IPLEnergyField10IPLfloat3214IPLEnergyField">
+<span id="_CPPv324iplEnergyFieldScaleAccum14IPLEnergyField10IPLfloat3214IPLEnergyField"></span><span id="_CPPv224iplEnergyFieldScaleAccum14IPLEnergyField10IPLfloat3214IPLEnergyField"></span><span id="iplEnergyFieldScaleAccum__IPLEnergyField.IPLfloat32.IPLEnergyField"></span><span class="target" id="group__energyfield_1gae0e0bbcd75e51d59e1349e7a9d62b5c4"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplEnergyFieldScaleAccum</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv414IPLEnergyField" title="IPLEnergyField"><span class="n"><span class="pre">IPLEnergyField</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">in</span></span>, <a class="reference internal" href="types.html#_CPPv410IPLfloat32" title="IPLfloat32"><span class="n"><span class="pre">IPLfloat32</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">scalar</span></span>, <a class="reference internal" href="#_CPPv414IPLEnergyField" title="IPLEnergyField"><span class="n"><span class="pre">IPLEnergyField</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">out</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv424iplEnergyFieldScaleAccum14IPLEnergyField10IPLfloat3214IPLEnergyField" title="Link to this definition"></a><br /></dt>
+<dd><p>Scales the values stored in an energy field by a scalar, and adds the result to a second energy field. </p>
+<p>If the energy fields have different numbers of channels, only the smallest of the two numbers of channels will be added.</p>
+<p>If the energy fields have different numbers of bins, only the smallest of the two numbers of bins will be added.</p>
+<p>This function can be used for in-place operation, i.e. <code class="docutils literal notranslate"><span class="pre">out</span></code> may be equal to <code class="docutils literal notranslate"><span class="pre">in</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>in</strong> – The input energy field. </p></li>
+<li><p><strong>scalar</strong> – The scalar value. </p></li>
+<li><p><strong>out</strong> – The output energy field. </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="structures">
+<h2>Structures<a class="headerlink" href="#structures" title="Link to this heading"></a></h2>
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv422IPLEnergyFieldSettings">
+<span id="_CPPv322IPLEnergyFieldSettings"></span><span id="_CPPv222IPLEnergyFieldSettings"></span><span id="IPLEnergyFieldSettings"></span><span class="target" id="struct_i_p_l_energy_field_settings"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IPLEnergyFieldSettings</span></span></span><a class="headerlink" href="#_CPPv422IPLEnergyFieldSettings" title="Link to this definition"></a><br /></dt>
+<dd><p>Settings used to create an energy field. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N22IPLEnergyFieldSettings8durationE">
+<span id="_CPPv3N22IPLEnergyFieldSettings8durationE"></span><span id="_CPPv2N22IPLEnergyFieldSettings8durationE"></span><span id="IPLEnergyFieldSettings::duration__IPLfloat32"></span><span class="target" id="struct_i_p_l_energy_field_settings_1aeda5a21fb3c88f8f9185a228686e29f8"></span><a class="reference internal" href="types.html#_CPPv410IPLfloat32" title="IPLfloat32"><span class="n"><span class="pre">IPLfloat32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">duration</span></span></span><a class="headerlink" href="#_CPPv4N22IPLEnergyFieldSettings8durationE" title="Link to this definition"></a><br /></dt>
+<dd><p>Total duration (in seconds) of the energy field. </p>
+<p>This determines the number of bins in each channel and band. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N22IPLEnergyFieldSettings5orderE">
+<span id="_CPPv3N22IPLEnergyFieldSettings5orderE"></span><span id="_CPPv2N22IPLEnergyFieldSettings5orderE"></span><span id="IPLEnergyFieldSettings::order__IPLint32"></span><span class="target" id="struct_i_p_l_energy_field_settings_1a8f0bc3d342c8bf145d3f4fc741f84df9"></span><a class="reference internal" href="types.html#_CPPv48IPLint32" title="IPLint32"><span class="n"><span class="pre">IPLint32</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">order</span></span></span><a class="headerlink" href="#_CPPv4N22IPLEnergyFieldSettings5orderE" title="Link to this definition"></a><br /></dt>
+<dd><p>The Ambisonic order. </p>
+<p>This determines the number of channels. </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="simulation.html" class="btn btn-neutral float-left" title="Simulation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="impulse-response.html" class="btn btn-neutral float-right" title="Impulse Response" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2017-2023, Valve Corporation.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

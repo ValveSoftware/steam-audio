@@ -187,12 +187,12 @@
 </ol>
 <p>Steam Audio will now use raycast occlusion to check if the source is occluded from the listener by any geometry. This assumes that the source is a single point. You can also model sources with larger spatial extent. For more information, refer to the Steam Audio Unreal Engine integration documentation.</p>
 </div><div aria-labelledby="tab-1-Qysr" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-1-Qysr" name="Qysr" role="tabpanel" tabindex="0"><ol class="arabic simple">
+<li><p>Make sure an <code class="docutils literal notranslate"><span class="pre">IPLSource</span></code> object is registered for use by the Steam Audio Spatializer DSP by calling <code class="docutils literal notranslate"><span class="pre">iplFMODAddSource</span></code>.</p></li>
 <li><p>Call <code class="docutils literal notranslate"><span class="pre">iplSimulatorRunDirect</span></code> to run occlusion simulations.</p></li>
-<li><p>Call <code class="docutils literal notranslate"><span class="pre">iplSourceGetOutputs</span></code> to retrieve the results of the simulation for a given source in an <code class="docutils literal notranslate"><span class="pre">IPLSimulationOutputs</span></code> structure.</p></li>
 <li><p>Call <code class="docutils literal notranslate"><span class="pre">FMOD::DSP::setParameterData</span></code> to set the following parameters of the Steam Audio Spatializer DSP attached to the event corresponding to the source:</p>
 <ol class="arabic simple">
-<li><p>Set <code class="docutils literal notranslate"><span class="pre">APPLY_OCCLUSION</span></code> to <code class="docutils literal notranslate"><span class="pre">1</span></code>.</p></li>
-<li><p>Set <code class="docutils literal notranslate"><span class="pre">SIMULATION_OUTPUTS</span></code> to the address of the <code class="docutils literal notranslate"><span class="pre">IPLSimulationOutputs</span></code> structure.</p></li>
+<li><p>Set <code class="docutils literal notranslate"><span class="pre">IPL_SPATIALIZE_APPLY_OCCLUSION</span></code> to <code class="docutils literal notranslate"><span class="pre">1</span></code>.</p></li>
+<li><p>Set <code class="docutils literal notranslate"><span class="pre">IPL_SPATIALIZE_SIMULATION_OUTPUTS_HANDLE</span></code> to the handle value returned by <code class="docutils literal notranslate"><span class="pre">iplFMODAddSource</span></code>.</p></li>
 </ol>
 </li>
 </ol>
@@ -222,13 +222,13 @@
 </ol>
 <p>Steam Audio will now model how sound travels through occluding geometry, based on the acoustic material properties of the geometry.</p>
 </div><div aria-labelledby="tab-2-Qysr" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-2-Qysr" name="Qysr" role="tabpanel" tabindex="0"><ol class="arabic simple">
+<li><p>Make sure an <code class="docutils literal notranslate"><span class="pre">IPLSource</span></code> object is registered for use by the Steam Audio Spatializer DSP by calling <code class="docutils literal notranslate"><span class="pre">iplFMODAddSource</span></code>.</p></li>
 <li><p>Call <code class="docutils literal notranslate"><span class="pre">iplSimulatorRunDirect</span></code> to run occlusion and transmission simulations.</p></li>
-<li><p>Call <code class="docutils literal notranslate"><span class="pre">iplSourceGetOutputs</span></code> to retrieve the results of the simulation for a given source in an <code class="docutils literal notranslate"><span class="pre">IPLSimulationOutputs</span></code> structure.</p></li>
 <li><p>Call <code class="docutils literal notranslate"><span class="pre">FMOD::DSP::setParameterData</span></code> to set the following parameters of the Steam Audio Spatializer DSP attached to the event corresponding to the source:</p>
 <ol class="arabic simple">
-<li><p>Set <code class="docutils literal notranslate"><span class="pre">APPLY_OCCLUSION</span></code> to <code class="docutils literal notranslate"><span class="pre">1</span></code>.</p></li>
-<li><p>Set <code class="docutils literal notranslate"><span class="pre">APPLY_TRANSMISSION</span></code> to <code class="docutils literal notranslate"><span class="pre">1</span></code>.</p></li>
-<li><p>Set <code class="docutils literal notranslate"><span class="pre">SIMULATION_OUTPUTS</span></code> to the address of the <code class="docutils literal notranslate"><span class="pre">IPLSimulationOutputs</span></code> structure.</p></li>
+<li><p>Set <code class="docutils literal notranslate"><span class="pre">IPL_SPATIALIZE_APPLY_OCCLUSION</span></code> to <code class="docutils literal notranslate"><span class="pre">1</span></code>.</p></li>
+<li><p>Set <code class="docutils literal notranslate"><span class="pre">IPL_SPATIALIZE_APPLY_TRANSMISSION</span></code> to <code class="docutils literal notranslate"><span class="pre">1</span></code>.</p></li>
+<li><p>Set <code class="docutils literal notranslate"><span class="pre">IPL_SPATIALIZE_SIMULATION_OUTPUTS_HANDLE</span></code> to the handle value returned by <code class="docutils literal notranslate"><span class="pre">iplFMODAddSource</span></code>.</p></li>
 </ol>
 </li>
 </ol>
@@ -257,16 +257,14 @@
 <li><p>In the Details tab, check <strong>Simulate Reflections</strong>.</p></li>
 </ol>
 <p>Steam Audio will now use real-time ray tracing to model how sound is reflected by geometry, based on the acoustic material properties of the geometry. You can control many aspects of this process, including how many rays are traced, how many successive reflections are modeled, how reflected sound is rendered, and much more. Since modeling reflections is CPU-intensive, you can pre-compute reflections for a static sound source, or even offload the work to the GPU. For more information, refer to the Steam Audio Unreal Engine integration documentation.</p>
-</div><div aria-labelledby="tab-3-Qysr" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-3-Qysr" name="Qysr" role="tabpanel" tabindex="0"><ol class="arabic">
+</div><div aria-labelledby="tab-3-Qysr" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-3-Qysr" name="Qysr" role="tabpanel" tabindex="0"><ol class="arabic simple">
+<li><p>Make sure an <code class="docutils literal notranslate"><span class="pre">IPLSource</span></code> object is registered for use by the Steam Audio Spatializer DSP by calling <code class="docutils literal notranslate"><span class="pre">iplFMODAddSource</span></code>.</p></li>
 <li><p>Call <code class="docutils literal notranslate"><span class="pre">iplSimulatorRunReflections</span></code> to run reflection simulations.</p></li>
-<li><p>Call <code class="docutils literal notranslate"><span class="pre">iplSourceGetOutputs</span></code> to retrieve the results of the simulation for a given source in an <code class="docutils literal notranslate"><span class="pre">IPLSimulationOutputs</span></code> structure.</p></li>
 <li><p>Call <code class="docutils literal notranslate"><span class="pre">FMOD::DSP::setParameterData</span></code> to set the following parameters of the Steam Audio Spatializer DSP attached to the event corresponding to the source:</p>
-<blockquote>
-<div><ol class="arabic simple">
-<li><p>Set <code class="docutils literal notranslate"><span class="pre">APPLY_REFLECTIONS</span></code> to <code class="docutils literal notranslate"><span class="pre">1</span></code>.</p></li>
-<li><p>Set <code class="docutils literal notranslate"><span class="pre">SIMULATION_OUTPUTS</span></code> to the address of the <code class="docutils literal notranslate"><span class="pre">IPLSimulationOutputs</span></code> structure.</p></li>
+<ol class="arabic simple">
+<li><p>Set <code class="docutils literal notranslate"><span class="pre">IPL_SPATIALIZE_APPLY_REFLECTIONS</span></code> to <code class="docutils literal notranslate"><span class="pre">1</span></code>.</p></li>
+<li><p>Set <code class="docutils literal notranslate"><span class="pre">IPL_SPATIALIZE_SIMULATION_OUTPUTS_HANDLE</span></code> to the handle value returned by <code class="docutils literal notranslate"><span class="pre">iplFMODAddSource</span></code>.</p></li>
 </ol>
-</div></blockquote>
 </li>
 </ol>
 </div></div>
@@ -326,16 +324,14 @@
 <li><p>Check <strong>Simulate Pathing</strong>.</p></li>
 </ol>
 <p>You can control many aspects of the baking process, as well as the run-time path finding algorithm. For more information, refer to the Steam Audio Unreal Engine integration documentation.</p>
-</div><div aria-labelledby="tab-5-Qysr" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-5-Qysr" name="Qysr" role="tabpanel" tabindex="0"><ol class="arabic">
+</div><div aria-labelledby="tab-5-Qysr" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-5-Qysr" name="Qysr" role="tabpanel" tabindex="0"><ol class="arabic simple">
+<li><p>Make sure an <code class="docutils literal notranslate"><span class="pre">IPLSource</span></code> object is registered for use by the Steam Audio Spatializer DSP by calling <code class="docutils literal notranslate"><span class="pre">iplFMODAddSource</span></code>.</p></li>
 <li><p>Call <code class="docutils literal notranslate"><span class="pre">iplSimulatorRunPathing</span></code> to run pathing simulations.</p></li>
-<li><p>Call <code class="docutils literal notranslate"><span class="pre">iplSourceGetOutputs</span></code> to retrieve the results of the simulation for a given source in an <code class="docutils literal notranslate"><span class="pre">IPLSimulationOutputs</span></code> structure.</p></li>
 <li><p>Call <code class="docutils literal notranslate"><span class="pre">FMOD::DSP::setParameterData</span></code> to set the following parameters of the Steam Audio Spatializer DSP attached to the event corresponding to the source:</p>
-<blockquote>
-<div><ol class="arabic simple">
-<li><p>Set <code class="docutils literal notranslate"><span class="pre">APPLY_PATHING</span></code> to <code class="docutils literal notranslate"><span class="pre">1</span></code>.</p></li>
-<li><p>Set <code class="docutils literal notranslate"><span class="pre">SIMULATION_OUTPUTS</span></code> to the address of the <code class="docutils literal notranslate"><span class="pre">IPLSimulationOutputs</span></code> structure.</p></li>
+<ol class="arabic simple">
+<li><p>Set <code class="docutils literal notranslate"><span class="pre">IPL_SPATIALIZE_APPLY_PATHING</span></code> to <code class="docutils literal notranslate"><span class="pre">1</span></code>.</p></li>
+<li><p>Set <code class="docutils literal notranslate"><span class="pre">IPL_SPATIALIZE_SIMULATION_OUTPUTS_HANDLE</span></code> to the handle value returned by <code class="docutils literal notranslate"><span class="pre">iplFMODAddSource</span></code>.</p></li>
 </ol>
-</div></blockquote>
 </li>
 </ol>
 </div></div>
