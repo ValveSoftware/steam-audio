@@ -16,6 +16,7 @@
 
 #pragma once
 
+#include "job_graph.h"
 #include "probe_batch.h"
 #include "scene.h"
 
@@ -68,7 +69,13 @@ private:
 class ProbeVisibilityGraph
 {
 public:
-    vector<list<int>> mAdjacent; // The graph, represented as an adjacency list.
+    struct AdjacencyListEntry
+    {
+        int index;
+        float cost;
+    };
+
+    vector<vector<AdjacencyListEntry>> mAdjacent; // The graph, represented as an adjacency list.
 
     // Computes a visibility graph given an array of probes (more precisely, pointers to probes).
     ProbeVisibilityGraph(const IScene& scene,
@@ -78,12 +85,15 @@ public:
                          float threshold,
                          float visRange,
                          int numThreads,
+                         JobGraph& jobGraph,
                          std::atomic<bool>& cancel,
                          ProgressCallback progressCallback = nullptr,
                          void* callbackUserData = nullptr);
 
     // Deserializes a visibility graph.
     ProbeVisibilityGraph(const Serialized::VisibilityGraph* serializedObject);
+
+    void updateCosts(const ProbeBatch& probeBatch);
 
     // Tests whether an edge exists between two probes, i.e., whether the graph indicates that the two probes are
     // mutually visible.
@@ -100,6 +110,9 @@ public:
 
     // Serializes this object.
     flatbuffers::Offset<Serialized::VisibilityGraph> serialize(SerializedObject& serializedObject) const;
+
+private:
+    std::atomic<int> mNumJobsRemaining;
 };
 
 }

@@ -25,7 +25,7 @@ using namespace ipl;
 
 ITEST(directsoundeffect)
 {
-    const int kNumBands = 3;
+    const int kNumBands = Bands::kNumBands;
 
     auto context = make_shared<Context>(nullptr, nullptr, nullptr, SIMDLevel::AVX2, STEAMAUDIO_VERSION);
 
@@ -43,9 +43,8 @@ ITEST(directsoundeffect)
 
     DirectEffectParams directParams{};
     directParams.directPath.distanceAttenuation = 1.0f;
-    directParams.directPath.airAbsorption[0] = 1.0f;
-    directParams.directPath.airAbsorption[1] = 1.0f;
-    directParams.directPath.airAbsorption[2] = 1.0f;
+    for (auto i = 0; i < Bands::kNumBands; ++i)
+        directParams.directPath.airAbsorption[i] = 1.0f;
     directParams.transmissionType = TransmissionType::FreqIndependent;
 
     bool applyEQ = false;
@@ -54,7 +53,14 @@ ITEST(directsoundeffect)
 	{
 		ImGui::SliderFloat("Attenuation", &directParams.directPath.distanceAttenuation, 0.0f, 1.0f);
 		ImGui::Checkbox("Apply EQ", &applyEQ);
-		ImGui::SliderFloat3("EQ", directParams.directPath.airAbsorption, 0.05f, 1.0f);
+		
+        for (auto i = 0; i < Bands::kNumBands; ++i)
+        {
+            char label[32] = {0};
+            sprintf(label, "EQ band %d", i);
+
+            ImGui::SliderFloat(label, &directParams.directPath.airAbsorption[i], 0.05f, 1.0f);
+        }
 	};
 
     auto processAudio = [&](const AudioBuffer& in, AudioBuffer& out)

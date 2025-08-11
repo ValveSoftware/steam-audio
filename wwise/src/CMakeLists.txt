@@ -235,7 +235,7 @@ elseif (IPL_OS_MACOS)
     )
 
     add_dependencies(phonon_wwise_copy_unity_${Wwise_ARCHITECTURE} phonon_wwise_copy_unity)
-elseif (IPL_OS_ANDROID)
+elseif (IPL_OS_ANDROID AND NOT IPL_CPU_X64)
     if (IPL_CPU_ARMV7)
         set(Wwise_ARCHITECTURE armeabi-v7a)
     elseif (IPL_CPU_ARMV8)

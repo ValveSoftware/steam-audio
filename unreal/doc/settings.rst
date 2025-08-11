@@ -26,6 +26,19 @@ Default Landscape Material
 Default BSP Material
     The material to use for BSP geometry.
 
+Physics Material To Steam Audio Material Mapping
+    Specifies an optional mapping from physics material to Steam Audio materials, so Static Mesh actors that already have a given physics material can automatically be tagged with the corresponding Steam Audio material during scene export.
+
+    .. image:: media/material-mapping.png
+
+    Use the **+** button to add a new mapping from a physics material to a Steam Audio material. Set **Key** to the physics material, and **Value** to the corresponding Steam Audio material.
+
+    Steam Audio uses the following procedure to determine which Steam Audio material to apply to a given Steam Audio Geometry component:
+
+    1.  If the Steam Audio Geometry component specifies a Steam Audio material explicitly, that material is used.
+    2.  Otherwise, if the Static Mesh uses a physics material that is mapped to a Steam Audio material, that material is used.
+    3.  Otherwise, the **Default Mesh Material** is used.
+
 Scene Type
     Specifies the ray tracing implementation to use for simulations.
 

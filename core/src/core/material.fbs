@@ -21,3 +21,9 @@ struct Material {
     scattering:float;
     transmission:[float:3];
 }
+
+table Material2 {
+    absorption:[float];
+    scattering:float;
+    transmission:[float];
+}

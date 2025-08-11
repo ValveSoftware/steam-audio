@@ -210,7 +210,11 @@ void DirectSimulator::transmission(const IScene& scene,
     auto maxDistance = (sourcePosition - listenerPosition).length();
 
     // Product of the transmission coefficients of all hit points.
-    float accumulatedTransmission[Bands::kNumBands] = {1.0f, 1.0f, 1.0f};
+    float accumulatedTransmission[Bands::kNumBands];
+    for (auto i = 0; i < Bands::kNumBands; ++i)
+    {
+        accumulatedTransmission[i] = 1.0f;
+    }
 
     for (auto i = 0; i < numTransmissionRays; ++i)
     {

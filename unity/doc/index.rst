@@ -10,7 +10,6 @@ Steam Audio Unity Integration
     guide
     build-instructions
     reference
-    api-reference
    
 Steam Audio is a cross-platform software toolkit for spatial audio. You can use it to add rich, immersive positional and environmental audio effects to games and VR/AR apps. Steam Audio offers a wide variety of features, including:
 

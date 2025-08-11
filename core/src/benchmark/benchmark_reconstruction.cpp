@@ -100,13 +100,11 @@ void BenchmarkReconstructionForScene(const std::string& fileName, const SceneTyp
     LoadObj(fileName, vertices, triangleIndices, materialIndices);
 
     Material material;
-    material.absorption[0] = 0.1f;
-    material.absorption[1] = 0.1f;
-    material.absorption[2] = 0.1f;
+    for (auto iBand = 0; iBand < Bands::kNumBands; ++iBand)
+        material.absorption[iBand] = 0.1f;
     material.scattering = 0.5f;
-    material.transmission[0] = 1.0f;
-    material.transmission[1] = 1.0f;
-    material.transmission[2] = 1.0f;
+    for (auto iBand = 0; iBand < Bands::kNumBands; ++iBand)
+        material.transmission[iBand] = 1.0f;
 
     auto embree = (type == SceneType::Embree) ? make_shared<EmbreeDevice>() : nullptr;
 #if defined(IPL_USES_OPENCL)

@@ -85,13 +85,13 @@ enum class EHRTFNormType : uint8
 
 class USOFAFile;
 
-USTRUCT(BlueprintType)
+USTRUCT(BlueprintType, meta = (DisplayName = "Physics Material To Steam Audio Material Mapping Value"))
 struct FPhysMatToSteamAudioMatTable_Value
 {
     GENERATED_USTRUCT_BODY()
 
 public:
-    UPROPERTY(EditAnywhere, meta = (AllowedClasses = "/Script/SteamAudio.SteamAudioMaterial"))
+    UPROPERTY(EditAnywhere, Category = SceneExportSettings, meta = (AllowedClasses = "/Script/SteamAudio.SteamAudioMaterial"))
     FSoftObjectPath SteamAudioMaterial;
 };
 
@@ -189,7 +189,7 @@ public:
     UPROPERTY(GlobalConfig, EditAnywhere, Category = SceneExportSettings, meta = (AllowedClasses = "/Script/SteamAudio.SteamAudioMaterial", DisplayName = "Default BSP Material"))
     FSoftObjectPath DefaultBSPMaterial;
 
-    UPROPERTY(GlobalConfig, EditAnywhere, Category = SteamAudioGeometrySettings, meta = (AllowedClasses = "/Script/PhysicsCore.PhysicalMaterial"))
+    UPROPERTY(GlobalConfig, EditAnywhere, Category = SteamAudioGeometrySettings, meta = (AllowedClasses = "/Script/PhysicsCore.PhysicalMaterial", DisplayName = "Physics Material To Steam Audio Material Mapping"))
     TMap<FSoftObjectPath, FPhysMatToSteamAudioMatTable_Value> PhysMatToSteamAudioMatTable;
 
     UPROPERTY(GlobalConfig, EditAnywhere, Category = RayTracerSettings)

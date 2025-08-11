@@ -14,6 +14,8 @@
 // limitations under the License.
 //
 
+#pragma once
+
 #include "panning_effect.h"
 using namespace ipl;
 

@@ -23,15 +23,32 @@ namespace ipl {
 // AirAbsorptionModel
 // --------------------------------------------------------------------------------------------------------------------
 
+#if defined(IPL_ENABLE_OCTAVE_BANDS)
+const float AirAbsorptionModel::kDefaultCoefficients[Bands::kNumBands] = {
+    0.0f,
+    0.0f,
+    0.0f,
+    0.0f,
+    0.00011513f,
+    0.00034539f,
+    0.00057565f,
+    0.0011513f,
+    0.0034539f,
+    0.012089f,
+    0.041907f,
+};
+#else
 const float AirAbsorptionModel::kDefaultCoefficients[Bands::kNumBands] = { 0.0002f, 0.0017f, 0.0182f };
+#endif
 
 AirAbsorptionModel::AirAbsorptionModel()
     : callback(nullptr)
     , userData(nullptr)
 {
-    coefficients[0] = kDefaultCoefficients[0];
-    coefficients[1] = kDefaultCoefficients[1];
-    coefficients[2] = kDefaultCoefficients[2];
+    for (auto i = 0; i < Bands::kNumBands; ++i)
+    {
+        coefficients[i] = kDefaultCoefficients[i];
+    }
 }
 
 AirAbsorptionModel::AirAbsorptionModel(const float* coefficients,

@@ -15,6 +15,7 @@
 //
 
 #include <profiler.h>
+#include <bands.h>
 using namespace ipl;
 
 #include <phonon.h>
@@ -58,13 +59,11 @@ void BenchmarkDirectSoundEffectWithOptions(bool applyTransmission, IPLTransmissi
     IPLDirectEffectParams directParams;
     directParams.flags = (IPLDirectEffectFlags) (IPL_DIRECTEFFECTFLAGS_APPLYDISTANCEATTENUATION | IPL_DIRECTEFFECTFLAGS_APPLYOCCLUSION);
     directParams.distanceAttenuation = 1.0f;
-    directParams.airAbsorption[0] = 0.1f;
-    directParams.airAbsorption[1] = 0.2f;
-    directParams.airAbsorption[2] = 0.3f;
+    for (auto iBand = 0; iBand < Bands::kNumBands; ++iBand)
+        directParams.airAbsorption[iBand] = 0.1f;
     directParams.occlusion = 0.5f;
-    directParams.transmission[0] = 0.1f;
-    directParams.transmission[1] = 0.2f;
-    directParams.transmission[2] = 0.3f;
+    for (auto iBand = 0; iBand < Bands::kNumBands; ++iBand)
+        directParams.transmission[iBand] = 0.1f;
     directParams.transmissionType = transmissionType;
 
     if (applyTransmission)

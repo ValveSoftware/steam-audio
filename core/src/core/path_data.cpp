@@ -212,16 +212,16 @@ BakedPathData::BakedPathData(const IScene& scene,
 {
     // First, generate the visibility graph.
     ProbeVisibilityTester visTester(numSamples, asymmetricVisRange, down);
+
+    JobGraph jobGraph{};
     mVisGraph = ipl::make_unique<ProbeVisibilityGraph>(scene, probes, visTester, radius, threshold, visRange,
-                                                       numThreads, cancel, progressCallback, callbackUserData);
+                                                       numThreads, jobGraph, cancel, progressCallback, callbackUserData);
+
+    threadPool.process(jobGraph, [progressCallback, callbackUserData](float percentComplete) { progressCallback(percentComplete, callbackUserData); });
 
     // Next, using multiple threads, calculate shortest paths between every pair of probes.
     PathFinder pathFinder(probes, numThreads);
     Array<ProbePath, 2> probePaths(probes.numProbes(), probes.numProbes());
-    Array<ProbePath, 2> threadPaths(numThreads, probes.numProbes());
-    auto totalIterations = probes.numProbes() * probes.numProbes();
-    std::atomic<int> iterationsDone(0);
-    JobGraph jobGraph;
 
     if (cancel)
     {
@@ -229,50 +229,24 @@ BakedPathData::BakedPathData(const IScene& scene,
         return;
     }
 
-    // Allow a certain number of maximum probes to be baked in parallel so that progress callback
-    // can be called from the main thread.
-    const int kMaxProbesToBakeInParallel = 50;
-    for (auto i = 0; i < probes.numProbes();)
+    jobGraph.reset();
+
+    for (auto i = 0; i < probes.numProbes(); i++)
     {
-        if (cancel)
+        jobGraph.addJob([this, i, &scene, &probes, &probePaths, &pathFinder, radius, threshold, pathRange](int threadIndex, std::atomic<bool>&)
         {
-            cancel = false;
-            return;
-        }
+            PROFILE_ZONE("BakedPathData::bakeJob");
 
-        for (auto k = 0; k < kMaxProbesToBakeInParallel && i < probes.numProbes(); ++i, ++k)
-        {
-            auto bakeJob = [this, i, &scene, &probes, radius, threshold, pathRange, progressCallback,
-                callbackUserData, &pathFinder, &probePaths, &threadPaths, &totalIterations, &iterationsDone]
-                (int threadIndex,
-                    std::atomic<bool>&)
+            for (auto j = 0; j < probes.numProbes(); ++j)
             {
-                PROFILE_ZONE("BakedPathData::bakeJob");
-                for (auto j = 0; j < probes.numProbes(); ++j)
-                {
-                    threadPaths[threadIndex][j].nodes.clear();
-                }
+                probePaths[i][j].nodes.clear();
+            }
 
-                pathFinder.findAllShortestPaths(scene, probes, *mVisGraph, i, radius, threshold, pathRange,
-                    threadIndex, threadPaths[threadIndex]);
-
-                for (auto j = 0; j < probes.numProbes(); ++j)
-                {
-                    probePaths[i][j] = threadPaths[threadIndex][j];
-                    ++iterationsDone;
-                }
-            };
-
-            jobGraph.addJob(bakeJob);
-        }
-
-        threadPool.process(jobGraph);
-
-        if (progressCallback)
-        {
-            progressCallback(static_cast<float>(i) / probes.numProbes(), callbackUserData);
-        }
+            pathFinder.findAllShortestPaths(scene, probes, *mVisGraph, i, radius, threshold, pathRange, threadIndex, probePaths[i]);
+        });
     }
+
+    threadPool.process(jobGraph, [progressCallback, callbackUserData](float percentComplete) { progressCallback(percentComplete, callbackUserData); });
 
     // Remove all data with j > i, since they can be reconstructed from the data with j < i due to symmetry.
     ProbePath invalidProbePath;
@@ -601,6 +575,11 @@ flatbuffers::Offset<Serialized::BakedPathingData> BakedPathData::serialize(Seria
     auto pathsOffset = fbb.CreateVector(paths.data(), paths.size());
 
     return Serialized::CreateBakedPathingData(fbb, visGraphOffset, soundPathsOffset, pathIndicesOffset, pathsOffset);
+}
+
+void BakedPathData::updateVisGraphCosts(const ProbeBatch& probeBatch)
+{
+    mVisGraph->updateCosts(probeBatch);
 }
 
 

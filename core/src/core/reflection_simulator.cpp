@@ -251,7 +251,12 @@ void ReflectionSimulator::simulate(const IScene& scene,
     {
         Ray ray{ listeners[0].origin, mListenerSamples[i] };
 
-        float accumEnergy[Bands::kNumBands] = { 1.0f, 1.0f, 1.0f };
+        float accumEnergy[Bands::kNumBands];
+        for (auto j = 0; j < Bands::kNumBands; ++j)
+        {
+            accumEnergy[j] = 1.0f;
+        }
+
         auto accumDistance = 0.0f;
 
         for (auto j = 0; j < numBounces; ++j)
@@ -303,7 +308,12 @@ void ReflectionSimulator::simulateJob(const IScene& scene,
 
         Ray ray{ camera.origin, direction };
 
-        float accumEnergy[Bands::kNumBands] = { 1.0f, 1.0f, 1.0f };
+        float accumEnergy[Bands::kNumBands];
+        for (auto j = 0; j < Bands::kNumBands; ++j)
+        {
+            accumEnergy[j] = 1.0f;
+        }
+
         float accumDistance = 0.0f;
 
         for (auto j = 0; j < mNumBounces; ++j)
@@ -315,7 +325,7 @@ void ReflectionSimulator::simulateJob(const IScene& scene,
 
             for (auto k = 0; k < mNumSources; ++k)
             {
-                float energy[Bands::kNumBands] = { 0.0f, 0.0f, 0.0f };
+                float energy[Bands::kNumBands] = { 0 };
                 auto delay = 0.0f;
 
                 if (!shade(scene, ray, j, k, hit, hitPoint, accumEnergy, accumDistance, scalar, energy, delay))
@@ -352,7 +362,12 @@ void ReflectionSimulator::simulateJob(const IScene& scene,
     {
         Ray ray{ listener.origin, mListenerSamples[i] };
 
-        float accumEnergy[Bands::kNumBands] = { 1.0f, 1.0f, 1.0f };
+        float accumEnergy[Bands::kNumBands];
+        for (auto j = 0; j < Bands::kNumBands; ++j)
+        {
+            accumEnergy[j] = 1.0f;
+        }
+
         float accumDistance = 0.0f;
 
         for (auto j = 0; j < mNumBounces; ++j)
@@ -367,7 +382,7 @@ void ReflectionSimulator::simulateJob(const IScene& scene,
 
             for (auto k = 0; k < mNumSources; ++k)
             {
-                float energy[Bands::kNumBands] = { 0.0f, 0.0f, 0.0f };
+                float energy[Bands::kNumBands] = { 0 };
                 auto delay = 0.0f;
 
                 if (!shade(scene, ray, j, k, hit, hitPoint, accumEnergy, accumDistance, scalar, energy, delay))

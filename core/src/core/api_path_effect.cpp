@@ -135,6 +135,9 @@ IPLAudioEffectState CPathEffect::apply(IPLPathEffectParams* params,
         _params.listener = reinterpret_cast<const CoordinateSpace3f*>(&params->listener);
     }
 
+    // todo: version check
+    _params.normalizeEQ = (params->normalizeEQ == IPL_TRUE);
+
     return static_cast<IPLAudioEffectState>(_effect->apply(_params, _in, _out));
 }
 

@@ -79,7 +79,12 @@ AudioEffectState HybridReverbEffect::apply(const HybridReverbEffectDirectParams&
         mConvolutionEffectState = AudioEffectState::TailComplete;
     }
 
-    float _eqCoeffs[Bands::kNumBands] = {params.eqCoeffs[0], params.eqCoeffs[1], params.eqCoeffs[2]};
+    float _eqCoeffs[Bands::kNumBands];
+    for (auto i = 0; i < Bands::kNumBands; ++i)
+    {
+        _eqCoeffs[i] = params.eqCoeffs[i];
+    }
+
     auto gain = 16.0f;
     EQEffect::normalizeGains(_eqCoeffs, gain);
 
@@ -146,7 +151,12 @@ AudioEffectState HybridReverbEffect::apply(const HybridReverbEffectParams& param
         mConvolutionEffectState = AudioEffectState::TailComplete;
     }
 
-    float _eqCoeffs[Bands::kNumBands] = { params.eqCoeffs[0], params.eqCoeffs[1], params.eqCoeffs[2] };
+    float _eqCoeffs[Bands::kNumBands];
+    for (auto i = 0; i < Bands::kNumBands; ++i)
+    {
+        _eqCoeffs[i] = params.eqCoeffs[i];
+    }
+
     auto gain = 16.0f;
     EQEffect::normalizeGains(_eqCoeffs, gain);
 

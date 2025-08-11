@@ -52,20 +52,22 @@ find_library(Embree_sse2_LIBRARY
 	PATHS ${CMAKE_HOME_DIRECTORY}/deps/embree/lib/${IPL_BIN_SUBDIR}/release
 )
 
-find_library(Embree_sse4_LIBRARY
-	NAMES embree_sse42
-	PATHS ${CMAKE_HOME_DIRECTORY}/deps/embree/lib/${IPL_BIN_SUBDIR}/release
-)
+if (NOT IPL_OS_MACOS)
+	find_library(Embree_sse4_LIBRARY
+		NAMES embree_sse42
+		PATHS ${CMAKE_HOME_DIRECTORY}/deps/embree/lib/${IPL_BIN_SUBDIR}/release
+	)
 
-find_library(Embree_avx_LIBRARY
-	NAMES embree_avx
-	PATHS ${CMAKE_HOME_DIRECTORY}/deps/embree/lib/${IPL_BIN_SUBDIR}/release
-)
+	find_library(Embree_avx_LIBRARY
+		NAMES embree_avx
+		PATHS ${CMAKE_HOME_DIRECTORY}/deps/embree/lib/${IPL_BIN_SUBDIR}/release
+	)
 
-find_library(Embree_avx2_LIBRARY
-	NAMES embree_avx2
-	PATHS ${CMAKE_HOME_DIRECTORY}/deps/embree/lib/${IPL_BIN_SUBDIR}/release
-)
+	find_library(Embree_avx2_LIBRARY
+		NAMES embree_avx2
+		PATHS ${CMAKE_HOME_DIRECTORY}/deps/embree/lib/${IPL_BIN_SUBDIR}/release
+	)
+endif()
 
 find_library(Embree_lexers_LIBRARY_DEBUG
 	NAMES lexers
@@ -97,39 +99,51 @@ find_library(Embree_sse2_LIBRARY_DEBUG
 	PATHS ${CMAKE_HOME_DIRECTORY}/deps/embree/lib/${IPL_BIN_SUBDIR}/debug
 )
 
-find_library(Embree_sse4_LIBRARY_DEBUG
-	NAMES embree_sse42
-	PATHS ${CMAKE_HOME_DIRECTORY}/deps/embree/lib/${IPL_BIN_SUBDIR}/debug
-)
+if (NOT IPL_OS_MACOS)
+	find_library(Embree_sse4_LIBRARY_DEBUG
+		NAMES embree_sse42
+		PATHS ${CMAKE_HOME_DIRECTORY}/deps/embree/lib/${IPL_BIN_SUBDIR}/debug
+	)
 
-find_library(Embree_avx_LIBRARY_DEBUG
-	NAMES embree_avx
-	PATHS ${CMAKE_HOME_DIRECTORY}/deps/embree/lib/${IPL_BIN_SUBDIR}/debug
-)
+	find_library(Embree_avx_LIBRARY_DEBUG
+		NAMES embree_avx
+		PATHS ${CMAKE_HOME_DIRECTORY}/deps/embree/lib/${IPL_BIN_SUBDIR}/debug
+	)
 
-find_library(Embree_avx2_LIBRARY_DEBUG
-	NAMES embree_avx2
-	PATHS ${CMAKE_HOME_DIRECTORY}/deps/embree/lib/${IPL_BIN_SUBDIR}/debug
-)
+	find_library(Embree_avx2_LIBRARY_DEBUG
+		NAMES embree_avx2
+		PATHS ${CMAKE_HOME_DIRECTORY}/deps/embree/lib/${IPL_BIN_SUBDIR}/debug
+	)
+endif()
 
 if (Embree_INCLUDE_DIR)
-	file(STRINGS ${Embree_INCLUDE_DIR}/rtcore_version.h _Embree_VERSION_MAJOR REGEX "^#define[\t ]+RTCORE_VERSION_MAJOR[\t ]+.*")
-	file(STRINGS ${Embree_INCLUDE_DIR}/rtcore_version.h _Embree_VERSION_MINOR REGEX "^#define[\t ]+RTCORE_VERSION_MINOR[\t ]+.*")
-	file(STRINGS ${Embree_INCLUDE_DIR}/rtcore_version.h _Embree_VERSION_PATCH REGEX "^#define[\t ]+RTCORE_VERSION_PATCH[\t ]+.*")
-	string(REGEX REPLACE "^#define[\t ]+RTCORE_VERSION_MAJOR[\t ]+([0-9]+).*" "\\1" Embree_VERSION_MAJOR ${_Embree_VERSION_MAJOR})
-	string(REGEX REPLACE "^#define[\t ]+RTCORE_VERSION_MINOR[\t ]+([0-9]+).*" "\\1" Embree_VERSION_MINOR ${_Embree_VERSION_MINOR})
-	string(REGEX REPLACE "^#define[\t ]+RTCORE_VERSION_PATCH[\t ]+([0-9]+).*" "\\1" Embree_VERSION_PATCH ${_Embree_VERSION_PATCH})
+	file(STRINGS ${Embree_INCLUDE_DIR}/rtcore_config.h _Embree_VERSION_MAJOR REGEX "^#define[\t ]+RTC_VERSION_MAJOR[\t ]+.*")
+	file(STRINGS ${Embree_INCLUDE_DIR}/rtcore_config.h _Embree_VERSION_MINOR REGEX "^#define[\t ]+RTC_VERSION_MINOR[\t ]+.*")
+	file(STRINGS ${Embree_INCLUDE_DIR}/rtcore_config.h _Embree_VERSION_PATCH REGEX "^#define[\t ]+RTC_VERSION_PATCH[\t ]+.*")
+	string(REGEX REPLACE "^#define[\t ]+RTC_VERSION_MAJOR[\t ]+([0-9]+).*" "\\1" Embree_VERSION_MAJOR ${_Embree_VERSION_MAJOR})
+	string(REGEX REPLACE "^#define[\t ]+RTC_VERSION_MINOR[\t ]+([0-9]+).*" "\\1" Embree_VERSION_MINOR ${_Embree_VERSION_MINOR})
+	string(REGEX REPLACE "^#define[\t ]+RTC_VERSION_PATCH[\t ]+([0-9]+).*" "\\1" Embree_VERSION_PATCH ${_Embree_VERSION_PATCH})
 	set(Embree_VERSION ${Embree_VERSION_MAJOR}.${Embree_VERSION_MINOR}.${Embree_VERSION_PATCH})
 	set(Embree_VERSION_STRING ${Embree_VERSION})
 endif()
 
-find_package_handle_standard_args(Embree
-	FOUND_VAR 		Embree_FOUND
-	REQUIRED_VARS 	Embree_sse2_LIBRARY Embree_sse4_LIBRARY Embree_avx_LIBRARY Embree_avx2_LIBRARY
-					Embree_lexers_LIBRARY Embree_math_LIBRARY Embree_simd_LIBRARY Embree_sys_LIBRARY Embree_tasking_LIBRARY
-					Embree_INCLUDE_DIR
-	VERSION_VAR 	Embree_VERSION
-)
+if (IPL_OS_MACOS)
+	find_package_handle_standard_args(Embree
+		FOUND_VAR 		Embree_FOUND
+		REQUIRED_VARS 	Embree_sse2_LIBRARY
+						Embree_lexers_LIBRARY Embree_math_LIBRARY Embree_simd_LIBRARY Embree_sys_LIBRARY Embree_tasking_LIBRARY
+						Embree_INCLUDE_DIR
+		VERSION_VAR 	Embree_VERSION
+	)
+else()
+	find_package_handle_standard_args(Embree
+		FOUND_VAR 		Embree_FOUND
+		REQUIRED_VARS 	Embree_sse2_LIBRARY Embree_sse4_LIBRARY Embree_avx_LIBRARY Embree_avx2_LIBRARY
+						Embree_lexers_LIBRARY Embree_math_LIBRARY Embree_simd_LIBRARY Embree_sys_LIBRARY Embree_tasking_LIBRARY
+						Embree_INCLUDE_DIR
+		VERSION_VAR 	Embree_VERSION
+	)
+endif()
 
 if (Embree_FOUND)
 	if (NOT TARGET Embree::Embree)
@@ -169,27 +183,33 @@ if (Embree_FOUND)
 			set_target_properties(Embree::sse2 PROPERTIES IMPORTED_LOCATION_DEBUG ${Embree_sse2_LIBRARY_DEBUG})
 		endif()
 
-		add_library(Embree::sse4 UNKNOWN IMPORTED)
-		set_target_properties(Embree::sse4 PROPERTIES IMPORTED_LOCATION ${Embree_sse4_LIBRARY})
-		if (Embree_sse4_LIBRARY_DEBUG)
-			set_target_properties(Embree::sse4 PROPERTIES IMPORTED_LOCATION_DEBUG ${Embree_sse4_LIBRARY_DEBUG})
-		endif()
+		if (NOT IPL_OS_MACOS)
+			add_library(Embree::sse4 UNKNOWN IMPORTED)
+			set_target_properties(Embree::sse4 PROPERTIES IMPORTED_LOCATION ${Embree_sse4_LIBRARY})
+			if (Embree_sse4_LIBRARY_DEBUG)
+				set_target_properties(Embree::sse4 PROPERTIES IMPORTED_LOCATION_DEBUG ${Embree_sse4_LIBRARY_DEBUG})
+			endif()
 
-		add_library(Embree::avx UNKNOWN IMPORTED)
-		set_target_properties(Embree::avx PROPERTIES IMPORTED_LOCATION ${Embree_avx_LIBRARY})
-		if (Embree_avx_LIBRARY_DEBUG)
-			set_target_properties(Embree::avx PROPERTIES IMPORTED_LOCATION_DEBUG ${Embree_avx_LIBRARY_DEBUG})
-		endif()
+			add_library(Embree::avx UNKNOWN IMPORTED)
+			set_target_properties(Embree::avx PROPERTIES IMPORTED_LOCATION ${Embree_avx_LIBRARY})
+			if (Embree_avx_LIBRARY_DEBUG)
+				set_target_properties(Embree::avx PROPERTIES IMPORTED_LOCATION_DEBUG ${Embree_avx_LIBRARY_DEBUG})
+			endif()
 
-		add_library(Embree::avx2 UNKNOWN IMPORTED)
-		set_target_properties(Embree::avx2 PROPERTIES IMPORTED_LOCATION ${Embree_avx2_LIBRARY})
-		if (Embree_avx2_LIBRARY_DEBUG)
-			set_target_properties(Embree::avx2 PROPERTIES IMPORTED_LOCATION_DEBUG ${Embree_avx2_LIBRARY_DEBUG})
+			add_library(Embree::avx2 UNKNOWN IMPORTED)
+			set_target_properties(Embree::avx2 PROPERTIES IMPORTED_LOCATION ${Embree_avx2_LIBRARY})
+			if (Embree_avx2_LIBRARY_DEBUG)
+				set_target_properties(Embree::avx2 PROPERTIES IMPORTED_LOCATION_DEBUG ${Embree_avx2_LIBRARY_DEBUG})
+			endif()
 		endif()
 
 		add_library(Embree INTERFACE)
 		target_include_directories(Embree INTERFACE ${Embree_INCLUDE_DIR})
-		target_link_libraries(Embree INTERFACE Embree::lexers Embree::math Embree::simd Embree::sys Embree::tasking Embree::sse2 Embree::sse4 Embree::avx Embree::avx2)
+		if (IPL_OS_MACOS)
+			target_link_libraries(Embree INTERFACE Embree::lexers Embree::math Embree::simd Embree::sys Embree::tasking Embree::sse2)
+		else()
+			target_link_libraries(Embree INTERFACE Embree::lexers Embree::math Embree::simd Embree::sys Embree::tasking Embree::sse2 Embree::sse4 Embree::avx Embree::avx2)
+		endif()
 
 		add_library(Embree::Embree ALIAS Embree)
 	endif()

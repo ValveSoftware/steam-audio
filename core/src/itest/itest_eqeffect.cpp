@@ -23,6 +23,8 @@ using namespace ipl;
 
 ITEST(eqeffect)
 {
+    IIRFilterer::sEnableSwitching = true;
+
     AudioSettings audioSettings{};
     audioSettings.samplingRate = 44100;
     audioSettings.frameSize = 1024;
@@ -32,11 +34,23 @@ ITEST(eqeffect)
     AudioBuffer mono(1, audioSettings.frameSize);
     AudioBuffer result(1, audioSettings.frameSize);
 
-    float eqGains[Bands::kNumBands] = { 1.0f, 1.0f, 1.0f };
+    float eqGains[Bands::kNumBands];
+    for (auto i = 0; i < Bands::kNumBands; ++i)
+    {
+        eqGains[i] = 1.0f;
+    }
 
 	auto gui = [&]()
 	{
-		ImGui::SliderFloat3("EQ", eqGains, 0.0f, 1.0f);
+        for (auto i = 0; i < Bands::kNumBands; ++i)
+        {
+            char label[32] = {0};
+            sprintf(label, "EQ band %d", i);
+
+            ImGui::SliderFloat(label, &eqGains[i], 0.0f, 1.0f);
+        }
+
+        ImGui::Checkbox("8th Order", &IIR::sUseOrder8);
 	};
 
     auto processAudio = [&](const AudioBuffer& in,

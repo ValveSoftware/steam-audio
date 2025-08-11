@@ -40,6 +40,9 @@
 #include "api_path_effect.h"
 #include "api_probes.h"
 #include "api_simulator.h"
+#include "api_energy_field.h"
+#include "api_impulse_response.h"
+#include "api_reconstructor.h"
 
 namespace api {
 
@@ -193,6 +196,10 @@ std::string to_string(T* value)
     VALIDATE(IPLAirAbsorptionModelType, value, (IPL_AIRABSORPTIONTYPE_DEFAULT <= value && value <= IPL_AIRABSORPTIONTYPE_CALLBACK)); \
 }
 
+#define VALIDATE_IPLDeviationModelType(value) { \
+    VALIDATE(IPLDeviationModelType, value, (IPL_DEVIATIONTYPE_DEFAULT <= value && value <= IPL_DEVIATIONTYPE_CALLBACK)); \
+}
+
 // -- api flag enums
 
 #define VALIDATE_IPLDirectEffectFlags(value) { \
@@ -316,7 +323,7 @@ std::string to_string(T* value)
 }
 
 #define VALIDATE_IPLMaterial(value) { \
-    for (int iBand = 0; iBand < 3; ++iBand) { \
+    for (int iBand = 0; iBand < Bands::kNumBands; ++iBand) { \
         VALIDATE(IPLfloat32, value.absorption[iBand], (0.0f <= value.absorption[iBand] && value.absorption[iBand] <= 1.0f)); \
         VALIDATE(IPLfloat32, value.transmission[iBand], (0.0f <= value.transmission[iBand] && value.transmission[iBand] <= 1.0f)); \
     } \
@@ -530,12 +537,12 @@ std::string to_string(T* value)
         VALIDATE_IPLDirectEffectFlags(value->flags); \
         VALIDATE_IPLTransmissionType(value->transmissionType); \
         VALIDATE(IPLfloat32, value->distanceAttenuation, (0.0f <= value->distanceAttenuation && value->distanceAttenuation <= 1.0f)); \
-        for (int iBand = 0; iBand < 3; ++iBand) { \
+        for (int iBand = 0; iBand < Bands::kNumBands; ++iBand) { \
             VALIDATE(IPLfloat32, value->airAbsorption[iBand], (0.0f <= value->airAbsorption[iBand] && value->airAbsorption[iBand] <= 1.0f)); \
         } \
         VALIDATE(IPLfloat32, value->directivity, (0.0f <= value->directivity && value->directivity <= 1.0f)); \
         VALIDATE(IPLfloat32, value->occlusion, (0.0f <= value->occlusion && value->occlusion <= 1.0f)); \
-        for (int iBand = 0; iBand < 3; ++iBand) { \
+        for (int iBand = 0; iBand < Bands::kNumBands; ++iBand) { \
             VALIDATE(IPLfloat32, value->transmission[iBand], (0.0f <= value->transmission[iBand] && value->transmission[iBand] <= 1.0f)); \
         } \
     } \
@@ -560,12 +567,12 @@ std::string to_string(T* value)
             VALIDATE(IPLint32, value->irSize, (value->irSize > 0)); \
         } \
         if (value->type == IPL_REFLECTIONEFFECTTYPE_PARAMETRIC || value->type == IPL_REFLECTIONEFFECTTYPE_HYBRID) { \
-            for (int iBand = 0; iBand < 3; ++iBand) { \
+            for (int iBand = 0; iBand < Bands::kNumBands; ++iBand) { \
                 VALIDATE(IPLfloat32, value->reverbTimes[iBand], (value->reverbTimes[iBand] > 0.0f)); \
             } \
         } \
         if (value->type == IPL_REFLECTIONEFFECTTYPE_HYBRID) { \
-            for (int iBand = 0; iBand < 3; ++iBand) { \
+            for (int iBand = 0; iBand < Bands::kNumBands; ++iBand) { \
                 VALIDATE(IPLfloat32, value->eq[iBand], (0.0f < value->eq[iBand] && value->eq[iBand] <= 1.0f)); \
             } \
             VALIDATE(IPLint32, value->delay, (value->delay > 0)); \
@@ -591,7 +598,7 @@ std::string to_string(T* value)
 #define VALIDATE_IPLPathEffectParams(value) { \
     VALIDATE_POINTER(value); \
     if (value) { \
-        for (int iBand = 0; iBand < 3; ++iBand) { \
+        for (int iBand = 0; iBand < Bands::kNumBands; ++iBand) { \
             VALIDATE(IPLfloat32, value->eqCoeffs[iBand], (0.0f < value->eqCoeffs[iBand] && value->eqCoeffs[iBand] <= 1.0f)); \
         } \
         VALIDATE(IPLint32, value->order, (value->order >= 0)); \
@@ -730,6 +737,7 @@ std::string to_string(T* value)
             VALIDATE_IPLDistanceAttenuationModel((&value->distanceAttenuationModel)); \
             VALIDATE_IPLAirAbsorptionModel((&value->airAbsorptionModel)); \
             VALIDATE_IPLDirectivity((&value->directivity)); \
+            VALIDATE_IPLDeviationModel((value->deviationModel)); \
             VALIDATE_IPLOcclusionType(value->occlusionType); \
             VALIDATE(IPLfloat32, value->occlusionRadius, (value->occlusionRadius > 0.0f)); \
             VALIDATE(IPLint32, value->numOcclusionSamples, (value->numOcclusionSamples > 0)); \
@@ -741,7 +749,7 @@ std::string to_string(T* value)
                 VALIDATE_IPLBakedDataIdentifier(value->bakedDataIdentifier); \
             } \
             if (value->flags & IPL_SIMULATIONFLAGS_REFLECTIONS) { \
-                for (int iBand = 0; iBand < 3; ++iBand) { \
+                for (int iBand = 0; iBand < Bands::kNumBands; ++iBand) { \
                     VALIDATE(IPLfloat32, value->reverbScale[iBand], (value->reverbScale[iBand] > 0.0f)); \
                 } \
                 VALIDATE(IPLfloat32, value->hybridReverbTransitionTime, (value->hybridReverbTransitionTime > 0.0f)); \
@@ -794,7 +802,7 @@ std::string to_string(T* value)
     if (value) { \
         VALIDATE_IPLAirAbsorptionModelType(value->type); \
         if (value->type == IPL_AIRABSORPTIONTYPE_EXPONENTIAL) { \
-            VALIDATE_ARRAY_IPLfloat32(value->coefficients, 3); \
+            VALIDATE_ARRAY_IPLfloat32(value->coefficients, Bands::kNumBands); \
         } \
         else if (value->type == IPL_AIRABSORPTIONTYPE_CALLBACK) { \
             VALIDATE_POINTER(value->callback); \
@@ -808,6 +816,64 @@ std::string to_string(T* value)
     if (value) { \
         VALIDATE(IPLfloat32, value->dipoleWeight, (0.0f <= value->dipoleWeight && value->dipoleWeight <= 1.0f)); \
         VALIDATE(IPLfloat32, value->dipolePower, (value->dipolePower >= 0.0f)); \
+    } \
+}
+
+#define VALIDATE_IPLDeviationModel(value) { \
+    VALIDATE_POINTER(value); \
+    if (value) { \
+        VALIDATE_IPLDeviationModelType(value->type); \
+        if (value->type == IPL_AIRABSORPTIONTYPE_CALLBACK) { \
+            VALIDATE_POINTER(value->callback); \
+        } \
+    } \
+}
+
+#define VALIDATE_IPLEnergyFieldSettings(value) { \
+    VALIDATE_POINTER(value); \
+    if (value) { \
+        VALIDATE(IPLfloat32, value->duration, (value->duration > 0.0f)); \
+        VALIDATE(IPLint32, value->order, (value->order >= 0)); \
+    } \
+}
+
+#define VALIDATE_IPLImpulseResponseSettings(value) { \
+    VALIDATE_POINTER(value); \
+    if (value) { \
+        VALIDATE(IPLfloat32, value->duration, (value->duration > 0.0f)); \
+        VALIDATE(IPLint32, value->order, (value->order >= 0)); \
+        VALIDATE(IPLint32, value->samplingRate, (value->samplingRate >= 0)); \
+    } \
+}
+
+#define VALIDATE_IPLReconstructorSettings(value) { \
+    VALIDATE_POINTER(value); \
+    if (value) { \
+        VALIDATE(IPLfloat32, value->maxDuration, (value->maxDuration > 0.0f)); \
+        VALIDATE(IPLint32, value->maxOrder, (value->maxOrder >= 0)); \
+        VALIDATE(IPLint32, value->samplingRate, (value->samplingRate >= 0)); \
+    } \
+}
+
+#define VALIDATE_IPLReconstructorInputs(value) { \
+    VALIDATE_POINTER(value); \
+    if (value) { \
+        VALIDATE_POINTER(value->energyField); \
+    } \
+}
+
+#define VALIDATE_IPLReconstructorSharedInputs(value) { \
+    VALIDATE_POINTER(value); \
+    if (value) { \
+        VALIDATE(IPLfloat32, value->duration, (value->duration > 0.0f)); \
+        VALIDATE(IPLint32, value->order, (value->order >= 0)); \
+    } \
+}
+
+#define VALIDATE_IPLReconstructorOutputs(value) { \
+    VALIDATE_POINTER(value); \
+    if (value) { \
+        VALIDATE_POINTER(value->impulseResponse); \
     } \
 }
 
@@ -842,6 +908,9 @@ class CValidatedProbeArray;
 class CValidatedProbeBatch;
 class CValidatedSimulator;
 class CValidatedSource;
+class CValidatedEnergyField;
+class CValidatedImpulseResponse;
+class CValidatedReconstructor;
 
 class CValidatedContext : public CContext
 {
@@ -1188,7 +1257,7 @@ public:
 
         CContext::calculateAirAbsorption(source, listener, model, airAbsorption);
 
-        VALIDATE_ARRAY_IPLfloat32(airAbsorption, 3);
+        VALIDATE_ARRAY_IPLfloat32(airAbsorption, Bands::kNumBands);
     }
 
     virtual IPLfloat32 calculateDirectivity(IPLCoordinateSpace3 source, IPLVector3 listener, IPLDirectivity* model) override
@@ -1202,6 +1271,30 @@ public:
         VALIDATE_IPLfloat32(result);
 
         return result;
+    }
+
+    virtual IPLerror createEnergyField(const IPLEnergyFieldSettings* settings, IEnergyField** energyField) override
+    {
+        VALIDATE_IPLEnergyFieldSettings(settings);
+        VALIDATE_POINTER(energyField);
+
+        return apiObjectAllocate<CValidatedEnergyField, CContext, IEnergyField>(energyField, this, settings);
+    }
+
+    virtual IPLerror createImpulseResponse(const IPLImpulseResponseSettings* settings, IImpulseResponse** impulseResponse) override
+    {
+        VALIDATE_IPLImpulseResponseSettings(settings);
+        VALIDATE_POINTER(impulseResponse);
+
+        return apiObjectAllocate<CValidatedImpulseResponse, CContext, IImpulseResponse>(impulseResponse, this, settings);
+    }
+
+    virtual IPLerror createReconstructor(const IPLReconstructorSettings* settings, IReconstructor** reconstructor) override
+    {
+        VALIDATE_IPLReconstructorSettings(settings);
+        VALIDATE_POINTER(reconstructor);
+
+        return apiObjectAllocate<CValidatedReconstructor, CContext, IReconstructor>(reconstructor, this, settings);
     }
 };
 
@@ -1962,6 +2055,34 @@ public:
 
         return result;
     }
+
+    virtual void getEnergyField(IPLBakedDataIdentifier* identifier, int probeIndex, IEnergyField* energyField) override
+    {
+        VALIDATE_POINTER(identifier);
+        if (identifier)
+        {
+            VALIDATE_IPLBakedDataIdentifier((*identifier));
+        }
+
+        VALIDATE(IPLint32, probeIndex, (0 <= probeIndex && probeIndex < getNumProbes()));
+        VALIDATE_POINTER(energyField);
+
+        CProbeBatch::getEnergyField(identifier, probeIndex, energyField);
+    }
+
+    virtual void getReverb(IPLBakedDataIdentifier* identifier, int probeIndex, float* reverbTimes) override
+    {
+        VALIDATE_POINTER(identifier);
+        if (identifier)
+        {
+            VALIDATE_IPLBakedDataIdentifier((*identifier));
+        }
+
+        VALIDATE(IPLint32, probeIndex, (0 <= probeIndex && probeIndex < getNumProbes()));
+        VALIDATE_POINTER(reverbTimes);
+
+        CProbeBatch::getReverb(identifier, probeIndex, reverbTimes);
+    }
 };
 
 
@@ -2056,6 +2177,157 @@ public:
         CSource::getOutputs(flags, outputs);
 
         VALIDATE_IPLSimulationOutputs(outputs, flags);
+    }
+};
+
+
+// --------------------------------------------------------------------------------------------------------------------
+// CValidatedEnergyField
+// --------------------------------------------------------------------------------------------------------------------
+
+class CValidatedEnergyField : public CEnergyField
+{
+public:
+    CValidatedEnergyField(CContext* context, const IPLEnergyFieldSettings* settings)
+        : CEnergyField(context, settings)
+    {}
+
+    virtual int getNumChannels() override
+    {
+        auto result = CEnergyField::getNumChannels();
+        VALIDATE(IPLint32, result, (result >= 0));
+        return result;
+    }
+
+    virtual int getNumBins() override
+    {
+        auto result = CEnergyField::getNumBins();
+        VALIDATE(IPLint32, result, (result >= 0));
+        return result;
+    }
+
+    virtual void copy(IEnergyField* src) override
+    {
+        VALIDATE_POINTER(src);
+        CEnergyField::copy(src);
+    }
+
+    virtual void swap(IEnergyField* other) override
+    {
+        VALIDATE_POINTER(other);
+        CEnergyField::swap(other);
+    }
+
+    virtual void add(IEnergyField* in1, IEnergyField* in2) override
+    {
+        VALIDATE_POINTER(in1);
+        VALIDATE_POINTER(in2);
+        CEnergyField::add(in1, in2);
+    }
+
+    virtual void scale(IEnergyField* in, float scalar) override
+    {
+        VALIDATE_POINTER(in);
+        CEnergyField::scale(in, scalar);
+    }
+
+    virtual void scaleAccum(IEnergyField* in, float scalar) override
+    {
+        VALIDATE_POINTER(in);
+        CEnergyField::scaleAccum(in, scalar);
+    }
+};
+
+
+// --------------------------------------------------------------------------------------------------------------------
+// CValidatedImpulseResponse
+// --------------------------------------------------------------------------------------------------------------------
+
+class CValidatedImpulseResponse : public CImpulseResponse
+{
+public:
+    CValidatedImpulseResponse(CContext* context, const IPLImpulseResponseSettings* settings)
+        : CImpulseResponse(context, settings)
+    {}
+
+    virtual int getNumChannels() override
+    {
+        auto result = CImpulseResponse::getNumChannels();
+        VALIDATE(IPLint32, result, (result >= 0));
+        return result;
+    }
+
+    virtual int getNumSamples() override
+    {
+        auto result = CImpulseResponse::getNumSamples();
+        VALIDATE(IPLint32, result, (result >= 0));
+        return result;
+    }
+
+    virtual void copy(IImpulseResponse* src) override
+    {
+        VALIDATE_POINTER(src);
+        CImpulseResponse::copy(src);
+    }
+
+    virtual void swap(IImpulseResponse* other) override
+    {
+        VALIDATE_POINTER(other);
+        CImpulseResponse::swap(other);
+    }
+
+    virtual void add(IImpulseResponse* in1, IImpulseResponse* in2) override
+    {
+        VALIDATE_POINTER(in1);
+        VALIDATE_POINTER(in2);
+        CImpulseResponse::add(in1, in2);
+    }
+
+    virtual void scale(IImpulseResponse* in, float scalar) override
+    {
+        VALIDATE_POINTER(in);
+        CImpulseResponse::scale(in, scalar);
+    }
+
+    virtual void scaleAccum(IImpulseResponse* in, float scalar) override
+    {
+        VALIDATE_POINTER(in);
+        CImpulseResponse::scaleAccum(in, scalar);
+    }
+};
+
+
+// --------------------------------------------------------------------------------------------------------------------
+// CValidatedReconstructor
+// --------------------------------------------------------------------------------------------------------------------
+
+class CValidatedReconstructor : public CReconstructor
+{
+public:
+    CValidatedReconstructor(CContext* context, const IPLReconstructorSettings* settings)
+        : CReconstructor(context, settings)
+    {}
+
+    virtual void reconstruct(IPLint32 numInputs, const IPLReconstructorInputs* inputs,
+                             const IPLReconstructorSharedInputs* sharedInputs, IPLReconstructorOutputs* outputs) override
+    {
+        VALIDATE(IPLint32, numInputs, (numInputs >= 0));
+
+        VALIDATE_POINTER(inputs);
+        for (auto i = 0; i < numInputs; ++i)
+        {
+            VALIDATE_IPLReconstructorInputs((&inputs[i]));
+        }
+
+        VALIDATE_IPLReconstructorSharedInputs(sharedInputs);
+
+        VALIDATE_POINTER(outputs);
+        for (auto i = 0; i < numInputs; ++i)
+        {
+            VALIDATE_IPLReconstructorOutputs((&outputs[i]));
+        }
+
+        CReconstructor::reconstruct(numInputs, inputs, sharedInputs, outputs);
     }
 };
 

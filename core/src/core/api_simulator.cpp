@@ -380,9 +380,8 @@ void CSource::setInputs(IPLSimulationFlags flags,
         }
 
         _source->reflectionInputs.directivity = *reinterpret_cast<Directivity*>(&inputs->directivity);
-        _source->reflectionInputs.reverbScale[0] = inputs->reverbScale[0];
-        _source->reflectionInputs.reverbScale[1] = inputs->reverbScale[1];
-        _source->reflectionInputs.reverbScale[2] = inputs->reverbScale[2];
+        for (auto iBand = 0; iBand < Bands::kNumBands; ++iBand)
+            _source->reflectionInputs.reverbScale[iBand] = inputs->reverbScale[iBand];
         _source->reflectionInputs.transitionTime = inputs->hybridReverbTransitionTime;
         _source->reflectionInputs.overlapFraction = inputs->hybridReverbOverlapPercent;
         _source->reflectionInputs.baked = (inputs->baked == IPL_TRUE);
@@ -402,6 +401,30 @@ void CSource::setInputs(IPLSimulationFlags flags,
         _source->pathingInputs.findAlternatePaths = (inputs->findAlternatePaths == IPL_TRUE);
         _source->pathingInputs.simplifyPaths = true;
         _source->pathingInputs.realTimeVis = true;
+
+        switch (inputs->distanceAttenuationModel.type)
+        {
+        case IPL_DISTANCEATTENUATIONTYPE_DEFAULT:
+            _source->pathingInputs.distanceAttenuationModel = DistanceAttenuationModel{};
+            break;
+        case IPL_DISTANCEATTENUATIONTYPE_INVERSEDISTANCE:
+            _source->pathingInputs.distanceAttenuationModel = DistanceAttenuationModel(inputs->distanceAttenuationModel.minDistance, nullptr, nullptr);
+            break;
+        case IPL_DISTANCEATTENUATIONTYPE_CALLBACK:
+            _source->pathingInputs.distanceAttenuationModel = DistanceAttenuationModel(1.0f, inputs->distanceAttenuationModel.callback, inputs->distanceAttenuationModel.userData);
+            break;
+        }
+
+        _source->pathingInputs.deviationModel = DeviationModel{};
+        if (inputs->deviationModel)
+        {
+            switch (inputs->deviationModel->type)
+            {
+            case IPL_DEVIATIONTYPE_CALLBACK:
+                _source->pathingInputs.deviationModel = DeviationModel(inputs->deviationModel->callback, inputs->deviationModel->userData);
+                break;
+            }
+        }
     }
 }
 
@@ -418,14 +441,12 @@ void CSource::getOutputs(IPLSimulationFlags flags,
     if (flags & IPL_SIMULATIONFLAGS_DIRECT)
     {
         outputs->direct.distanceAttenuation = _source->directOutputs.directPath.distanceAttenuation;
-        outputs->direct.airAbsorption[0] = _source->directOutputs.directPath.airAbsorption[0];
-        outputs->direct.airAbsorption[1] = _source->directOutputs.directPath.airAbsorption[1];
-        outputs->direct.airAbsorption[2] = _source->directOutputs.directPath.airAbsorption[2];
+        for (auto iBand = 0; iBand < Bands::kNumBands; ++iBand)
+            outputs->direct.airAbsorption[iBand] = _source->directOutputs.directPath.airAbsorption[iBand];
         outputs->direct.directivity = _source->directOutputs.directPath.directivity;
         outputs->direct.occlusion = _source->directOutputs.directPath.occlusion;
-        outputs->direct.transmission[0] = _source->directOutputs.directPath.transmission[0];
-        outputs->direct.transmission[1] = _source->directOutputs.directPath.transmission[1];
-        outputs->direct.transmission[2] = _source->directOutputs.directPath.transmission[2];
+        for (auto iBand = 0; iBand < Bands::kNumBands; ++iBand)
+            outputs->direct.transmission[iBand] = _source->directOutputs.directPath.transmission[iBand];
     }
 
     if (flags & IPL_SIMULATIONFLAGS_REFLECTIONS)
@@ -433,19 +454,18 @@ void CSource::getOutputs(IPLSimulationFlags flags,
         outputs->reflections.ir = reinterpret_cast<IPLReflectionEffectIR>(&_source->reflectionOutputs.overlapSaveFIR);
         outputs->reflections.numChannels = _source->reflectionOutputs.numChannels;
         outputs->reflections.irSize = _source->reflectionOutputs.numSamples;
-        outputs->reflections.reverbTimes[0] = _source->reflectionOutputs.reverb.reverbTimes[0];
-        outputs->reflections.reverbTimes[1] = _source->reflectionOutputs.reverb.reverbTimes[1];
-        outputs->reflections.reverbTimes[2] = _source->reflectionOutputs.reverb.reverbTimes[2];
-        outputs->reflections.eq[0] = _source->reflectionOutputs.hybridEQ[0];
-        outputs->reflections.eq[1] = _source->reflectionOutputs.hybridEQ[1];
-        outputs->reflections.eq[2] = _source->reflectionOutputs.hybridEQ[2];
+        for (auto iBand = 0; iBand < Bands::kNumBands; ++iBand)
+        {
+            outputs->reflections.reverbTimes[iBand] = _source->reflectionOutputs.reverb.reverbTimes[iBand];
+            outputs->reflections.eq[iBand] = _source->reflectionOutputs.hybridEQ[iBand];
+        }
         outputs->reflections.delay = _source->reflectionOutputs.hybridDelay;
         outputs->reflections.tanSlot = _source->reflectionOutputs.tanSlot;
     }
 
     if (flags & IPL_SIMULATIONFLAGS_PATHING)
     {
-        memcpy(outputs->pathing.eqCoeffs, _source->pathingOutputs.eq, 3 * sizeof(float));
+        memcpy(outputs->pathing.eqCoeffs, _source->pathingOutputs.eq, Bands::kNumBands * sizeof(float));
         outputs->pathing.shCoeffs = _source->pathingOutputs.sh.data();
     }
 }

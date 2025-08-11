@@ -38,6 +38,7 @@ To build the plugin on any platform, you need the following software:
 
 -   Python (https://www.python.org)
 -   CMake 3.17 or later (https://cmake.org)
+-   FMOD Studio SDK (https://www.fmod.com/download#fmodengine)
 
 To build the Windows plugin, you will need:
 
@@ -84,6 +85,10 @@ in the appropriate locations.
 
 Building using the build script
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Before building the plugin, you must set the `FMODROOT` environment variable to point to the directory into which you extracted or installed the FMOD Studio SDK::
+
+    $ set FMODROOT=/path/to/fmod
 
 To build the plugin, run the following from a command prompt in the ``fmod`` directory of the repository::
 

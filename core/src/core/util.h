@@ -24,6 +24,8 @@ using namespace ipl;
 
 #include "phonon.h"
 
+namespace api {
+
 template <typename T>
 class Handle
 {
@@ -88,7 +90,9 @@ struct HandleTraits
     typedef void opaque_type;
 };
 
-#define DEFINE_OPAQUE_HANDLE(x, y)  namespace ipl { class y; } template <> struct HandleTraits<ipl::y> { typedef x opaque_type; }
+}
+
+#define DEFINE_OPAQUE_HANDLE(x, y)  namespace ipl { class y; } namespace api { template <> struct HandleTraits<ipl::y> { typedef x opaque_type; }; }
 
 DEFINE_OPAQUE_HANDLE(IPLContext, Context);
 DEFINE_OPAQUE_HANDLE(IPLSerializedObject, SerializedObject);
@@ -117,6 +121,8 @@ DEFINE_OPAQUE_HANDLE(IPLProbeArray, ProbeArray);
 DEFINE_OPAQUE_HANDLE(IPLProbeBatch, ProbeBatch);
 DEFINE_OPAQUE_HANDLE(IPLSource, SimulationData);
 DEFINE_OPAQUE_HANDLE(IPLSimulator, SimulationManager);
+
+namespace api {
 
 template <> struct HandleTraits<ipl::TripleBuffer<ipl::OverlapSaveFIR>> { typedef IPLReflectionEffectIR opaque_type; };
 
@@ -170,4 +176,6 @@ shared_ptr<Context> contextFromHandle(typename HandleTraits<T>::opaque_type hand
         return nullptr;
 
     return reinterpret_cast<Handle<T>*&>(handle)->context();
+}
+
 }

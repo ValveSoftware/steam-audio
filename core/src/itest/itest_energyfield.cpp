@@ -92,6 +92,7 @@ ITEST(energyfield)
 	memset(plotData.data(), 0, plotData.size(0) * sizeof(float));
 
     int displayChannelIndex = 0;
+    int displayBandIndex = 0;
     bool saveEnergyFieldNextFrame = false;
 
     auto gui = [&]()
@@ -99,6 +100,7 @@ ITEST(energyfield)
         const auto& energyField = *energyFields[0];
 
         ImGui::SliderInt("Channel", &displayChannelIndex, 0, 3);
+        ImGui::SliderInt("Band", &displayBandIndex, 0, Bands::kNumBands - 1);
         ImGui::PlotLines("Energy Field", plotData.data(), energyField.numBins(), 0, nullptr, -0.001f, 0.001f, ImVec2(512, 512));
         saveEnergyFieldNextFrame = ImGui::Button("Save Energy Field");
     };
@@ -126,10 +128,10 @@ ITEST(energyfield)
 				static_cast<OpenCLEnergyField*>(energyFieldPtrs[0])->copyDeviceToHost();
 #endif
 
-			memcpy(plotData.data(), (*energyFields[0])[displayChannelIndex][0], energyFields[0]->numBins() * sizeof(float));
+			memcpy(plotData.data(), (*energyFields[0])[displayChannelIndex][displayBandIndex], energyFields[0]->numBins() * sizeof(float));
 
             auto channel = displayChannelIndex;
-            auto band = 0;
+            auto band = displayBandIndex;
 
             //float prevFactor = .0f;
             //float nextFactor = 1.0f;

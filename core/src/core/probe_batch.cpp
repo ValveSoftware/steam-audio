@@ -53,6 +53,7 @@ ProbeBatch::ProbeBatch(const Serialized::ProbeBatch* serializedObject)
         else if (identifier.type == BakedDataType::Pathing)
         {
             data = ipl::make_unique<BakedPathData>(serializedObject->data_layers()->Get(i)->pathing_data());
+            static_cast<BakedPathData*>(data.get())->updateVisGraphCosts(*this);
         }
 
         addData(identifier, std::move(data));

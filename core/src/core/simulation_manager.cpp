@@ -504,15 +504,24 @@ void SimulationManager::estimateReverb()
             ReverbEstimator::estimate(*source->reflectionState.accumEnergyField, source->reflectionInputs.airAbsorptionModel, source->reflectionOutputs.reverb);
         }
 
-        if (source->reflectionState.validSimulationData && (source->reflectionInputs.reverbScale[0] != 1.0f ||
-                                                            source->reflectionInputs.reverbScale[1] != 1.0f ||
-                                                            source->reflectionInputs.reverbScale[2] != 1.0f))
+        auto shouldApplyReverbScale = false;
+        for (auto i = 0; i < Bands::kNumBands; ++i)
+        {
+            if (source->reflectionInputs.reverbScale[i] != 1.0f)
+            {
+                shouldApplyReverbScale = true;
+                break;
+            }
+        }
+
+        if (source->reflectionState.validSimulationData && shouldApplyReverbScale)
         {
             ReverbEstimator::applyReverbScale(source->reflectionInputs.reverbScale, *source->reflectionState.accumEnergyField);
 
-            source->reflectionOutputs.reverb.reverbTimes[0] *= source->reflectionInputs.reverbScale[0];
-            source->reflectionOutputs.reverb.reverbTimes[1] *= source->reflectionInputs.reverbScale[1];
-            source->reflectionOutputs.reverb.reverbTimes[2] *= source->reflectionInputs.reverbScale[2];
+            for (auto i = 0; i < Bands::kNumBands; ++i)
+            {
+                source->reflectionOutputs.reverb.reverbTimes[i] *= source->reflectionInputs.reverbScale[i];
+            }
         }
     }
 }
@@ -627,7 +636,7 @@ void SimulationManager::simulatePathing()
                                 listenerProbes, source->pathingInputs.visRadius, source->pathingInputs.visThreshold, source->pathingInputs.visRange,
                                 source->pathingInputs.order, source->pathingInputs.enableValidation, source->pathingInputs.findAlternatePaths,
                                 source->pathingInputs.simplifyPaths, source->pathingInputs.realTimeVis,
-                                source->pathingState.eq, source->pathingState.sh.data(), &source->pathingState.direction, &source->pathingState.distanceRatio, 
+                                source->pathingState.eq, source->pathingState.sh.data(), source->pathingInputs.distanceAttenuationModel, source->pathingInputs.deviationModel, &source->pathingState.direction, &source->pathingState.distanceRatio, 
                                 &source->pathingState.totalDeviation, mSharedData->pathing.visCallback, mSharedData->pathing.userData);
 
             memcpy(source->pathingOutputs.eq, source->pathingState.eq, Bands::kNumBands * sizeof(float));
@@ -673,7 +682,7 @@ void SimulationManager::simulatePathing(SimulationData& source)
             listenerProbes, source.pathingInputs.visRadius, source.pathingInputs.visThreshold, source.pathingInputs.visRange,
             source.pathingInputs.order, source.pathingInputs.enableValidation, source.pathingInputs.findAlternatePaths,
             source.pathingInputs.simplifyPaths, source.pathingInputs.realTimeVis,
-            source.pathingState.eq, source.pathingState.sh.data(), &source.pathingState.direction, &source.pathingState.distanceRatio, 
+            source.pathingState.eq, source.pathingState.sh.data(), source.pathingInputs.distanceAttenuationModel, source.pathingInputs.deviationModel, &source.pathingState.direction, &source.pathingState.distanceRatio, 
             &source.pathingState.totalDeviation, mSharedData->pathing.visCallback, mSharedData->pathing.userData);
 
         memcpy(source.pathingOutputs.eq, source.pathingState.eq, Bands::kNumBands * sizeof(float));
@@ -708,7 +717,7 @@ void SimulationManager::simulatePathing(SimulationData& source, ProbeNeighborhoo
             listenerProbeNeighborhood, source.pathingInputs.visRadius, source.pathingInputs.visThreshold, source.pathingInputs.visRange,
             source.pathingInputs.order, source.pathingInputs.enableValidation, source.pathingInputs.findAlternatePaths,
             source.pathingInputs.simplifyPaths, source.pathingInputs.realTimeVis,
-            source.pathingState.eq, source.pathingState.sh.data(), &source.pathingState.direction, &source.pathingState.distanceRatio, 
+            source.pathingState.eq, source.pathingState.sh.data(), source.pathingInputs.distanceAttenuationModel, source.pathingInputs.deviationModel, &source.pathingState.direction, &source.pathingState.distanceRatio, 
             &source.pathingState.totalDeviation, mSharedData->pathing.visCallback, mSharedData->pathing.userData);
 
         memcpy(source.pathingOutputs.eq, source.pathingState.eq, Bands::kNumBands * sizeof(float));
@@ -732,7 +741,7 @@ void SimulationManager::simulatePathing(SimulationData& source, ProbeNeighborhoo
             listenerProbeNeighborhood, source.pathingInputs.visRadius, source.pathingInputs.visThreshold, source.pathingInputs.visRange,
             source.pathingInputs.order, source.pathingInputs.enableValidation, source.pathingInputs.findAlternatePaths,
             source.pathingInputs.simplifyPaths, source.pathingInputs.realTimeVis,
-            source.pathingState.eq, source.pathingState.sh.data(), &source.pathingState.direction, &source.pathingState.distanceRatio, 
+            source.pathingState.eq, source.pathingState.sh.data(), source.pathingInputs.distanceAttenuationModel, source.pathingInputs.deviationModel, &source.pathingState.direction, &source.pathingState.distanceRatio, 
             &source.pathingState.totalDeviation, mSharedData->pathing.visCallback, mSharedData->pathing.userData, true);
 
         memcpy(source.pathingOutputs.eq, source.pathingState.eq, Bands::kNumBands * sizeof(float));

@@ -39,6 +39,7 @@ struct FSteamAudioSpatializationSource
     bool bApplyPathing;
     bool bApplyHRTFToPathing;
     float PathingMixLevel;
+    bool bNormalizePathingEQ;
 
     /** Retained reference to the HRTF. */
     IPLHRTF HRTF;

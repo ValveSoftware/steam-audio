@@ -1,7 +1,7 @@
 {
   "FileVersion" : 3,
   "Version" : 1,
-  "VersionName" : "4.6.1",
+  "VersionName" : "4.7.0",
   "FriendlyName" : "Steam Audio",
   "Description" : "Physically-based sound rendering.",
   "Category" : "Audio",
