@@ -106,6 +106,9 @@ static bool ExportStaticMeshComponent(UStaticMeshComponent* StaticMeshComponent,
     check(StaticMeshComponent->GetStaticMesh());
     check(StaticMeshComponent->GetStaticMesh()->GetRenderData());
 
+#if WITH_EDITOR
+    StaticMeshComponent->GetStaticMesh()->bAllowCPUAccess = true; // Used to update iplStaticMesh in Runime in the build
+#endif
     FStaticMeshLODResources& LODModel = StaticMeshComponent->GetStaticMesh()->GetRenderData()->LODResources[0];
     check(LODModel.GetNumVertices() > 0 && LODModel.GetNumTriangles() > 0);
 
