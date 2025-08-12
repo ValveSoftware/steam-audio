@@ -26,6 +26,7 @@ USteamAudioSpatializationSettings::USteamAudioSpatializationSettings()
     , bApplyPathing(false)
     , bApplyHRTFToPathing(false)
     , PathingMixLevel(1.0f)
+    , bNormalizePathingEQ(false)
 {}
 
 #if WITH_EDITOR
@@ -38,6 +39,8 @@ bool USteamAudioSpatializationSettings::CanEditChange(const FProperty* InPropert
     if (InProperty->GetFName() == GET_MEMBER_NAME_CHECKED(USteamAudioSpatializationSettings, bApplyHRTFToPathing))
         return bParentVal && bApplyPathing;
     if (InProperty->GetFName() == GET_MEMBER_NAME_CHECKED(USteamAudioSpatializationSettings, PathingMixLevel))
+        return bParentVal && bApplyPathing;
+    if (InProperty->GetFName() == GET_MEMBER_NAME_CHECKED(USteamAudioSpatializationSettings, bNormalizePathingEQ))
         return bParentVal && bApplyPathing;
 
     return bParentVal;

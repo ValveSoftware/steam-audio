@@ -185,6 +185,8 @@ public:
     // Saves the baked data to a serialized object.
     flatbuffers::Offset<Serialized::BakedPathingData> serialize(SerializedObject& serializedObject) const;
 
+    void updateVisGraphCosts(const ProbeBatch& probeBatch);
+
 private:
     unique_ptr<ProbeVisibilityGraph> mVisGraph; // The visibility graph.
     Array<SoundPath> mUniqueBakedPaths; // The unique SoundPaths.

@@ -74,15 +74,8 @@ OpenCLReconstructor::OpenCLReconstructor(shared_ptr<RadeonRaysDevice> radeonRays
     if (status != CL_SUCCESS)
         throw Exception(Status::Initialization);
 
-    IIR filters[Bands::kNumBands];
-    filters[0] = IIR::lowPass(Bands::kHighCutoffFrequencies[0], samplingRate);
-
-    for (auto i = 1; i < Bands::kNumBands - 1; ++i)
-    {
-        filters[i] = IIR::bandPass(Bands::kLowCutoffFrequencies[i], Bands::kHighCutoffFrequencies[i], samplingRate);
-    }
-
-    filters[Bands::kNumBands - 1] = IIR::highPass(Bands::kLowCutoffFrequencies[Bands::kNumBands - 1], samplingRate);
+    IIR2 filters[Bands::kNumBands];
+    IIR2::bandFilters(filters, samplingRate);
 
     status = clEnqueueWriteBuffer(radeonRays->openCL().irUpdateQueue(), mBandFilters.buffer(), CL_TRUE, 0,
                                   mBandFilters.size(), filters, 0, nullptr, nullptr);

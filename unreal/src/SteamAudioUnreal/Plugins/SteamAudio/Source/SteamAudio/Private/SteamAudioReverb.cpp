@@ -15,6 +15,8 @@
 //
 
 #include "SteamAudioReverb.h"
+#include "AudioDevice.h"
+#include "AudioDeviceManager.h"
 #include "Components/AudioComponent.h"
 #include "GameFramework/Actor.h"
 #include "HAL/UnrealMemory.h"

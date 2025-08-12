@@ -32,16 +32,16 @@ EmbreeDevice::EmbreeDevice()
 {
     mDevice = rtcNewDevice(nullptr);
 
-    int64_t major = rtcDeviceGetParameter1i(mDevice, RTC_CONFIG_VERSION_MAJOR);
-    int64_t minor = rtcDeviceGetParameter1i(mDevice, RTC_CONFIG_VERSION_MINOR);
-    int64_t patch = rtcDeviceGetParameter1i(mDevice, RTC_CONFIG_VERSION_PATCH);
+    int64_t major = rtcGetDeviceProperty(mDevice, RTC_DEVICE_PROPERTY_VERSION_MAJOR);
+    int64_t minor = rtcGetDeviceProperty(mDevice, RTC_DEVICE_PROPERTY_VERSION_MINOR);
+    int64_t patch = rtcGetDeviceProperty(mDevice, RTC_DEVICE_PROPERTY_VERSION_PATCH);
 
     gLog().message(MessageSeverity::Info, "Initialized Embree v%lld.%02lld.%02lld.", major, minor, patch);
 }
 
 EmbreeDevice::~EmbreeDevice()
 {
-    rtcDeleteDevice(mDevice);
+    rtcReleaseDevice(mDevice);
 }
 
 }

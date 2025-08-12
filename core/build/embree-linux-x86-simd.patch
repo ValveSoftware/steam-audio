@@ -1,0 +1,13 @@
+diff --git a/common/simd/vint4_sse2.h b/common/simd/vint4_sse2.h
+index e9e4a5a2c..1fad033b9 100644
+--- a/common/simd/vint4_sse2.h
++++ b/common/simd/vint4_sse2.h
+@@ -491,7 +491,7 @@ namespace embree
+   }
+ #else
+ __forceinline size_t toSizeT(const vint4& v) { 
+-#if defined(__WIN32__) && !defined(__X86_64__) // win32 workaround
++#if (defined(__WIN32__) && !defined(__X86_64__)) || (!defined(__ARM_NEON) && !defined(__X86_64__) && !defined(__x86_64__)) // win32 workaround
+     return toScalar(v);
+ #elif defined(__ARM_NEON)
+     // FIXME(LTE): Do we need a swap(i.e. use lane 1)?

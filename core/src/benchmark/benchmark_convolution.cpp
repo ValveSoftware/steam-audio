@@ -22,6 +22,7 @@
 //#define SMPL_FRAME_TIME 0.6667f
 #include <profiler.h>
 #include <containers.h>
+#include <bands.h>
 using namespace ipl;
 
 #include <phonon.h>
@@ -68,9 +69,8 @@ void AudioThread(const int sources, IPLContext context, IPLSimulator simulator, 
     inputs.occlusionType = IPL_OCCLUSIONTYPE_RAYCAST;
     inputs.occlusionRadius = 0.0f;
     inputs.numOcclusionSamples = 0;
-    inputs.reverbScale[0] = 1.0f;
-    inputs.reverbScale[1] = 1.0f;
-    inputs.reverbScale[2] = 1.0f;
+    for (auto iBand = 0; iBand < ipl::Bands::kNumBands; ++iBand)
+        inputs.reverbScale[iBand] = 1.0f;
     inputs.hybridReverbTransitionTime = 1.0f;
     inputs.hybridReverbOverlapPercent = 0.25f;
     iplSourceSetInputs(source, IPL_SIMULATIONFLAGS_REFLECTIONS, &inputs);

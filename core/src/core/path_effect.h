@@ -46,6 +46,7 @@ struct PathEffectParams
     bool binaural = false;
     const HRTFDatabase* hrtf = nullptr;
     const CoordinateSpace3f* listener = nullptr;
+    bool normalizeEQ = false;
 };
 
 // Renders a sound field as returned by PathSimulator.

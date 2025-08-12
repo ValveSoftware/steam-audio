@@ -16,8 +16,7 @@ include(FindPackageHandleStandardArgs)
 
 find_path(FMOD_INCLUDE_DIR
 	NAMES 			fmod.h
-	PATHS 			${CMAKE_HOME_DIRECTORY}/include
-	PATH_SUFFIXES 	fmod
+	PATHS 			$ENV{FMODROOT}/api/core/inc ${CMAKE_HOME_DIRECTORY}/include/fmod/api/core/inc
 )
 
 find_package_handle_standard_args(FMOD

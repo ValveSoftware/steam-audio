@@ -28,6 +28,8 @@ Functions
 .. doxygenfunction:: iplProbeBatchCommit
 .. doxygenfunction:: iplProbeBatchRemoveData
 .. doxygenfunction:: iplProbeBatchGetDataSize
+.. doxygenfunction:: iplProbeBatchGetEnergyField
+.. doxygenfunction:: iplProbeBatchGetReverb
 
 Structures
 ^^^^^^^^^^

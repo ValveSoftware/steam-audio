@@ -14,7 +14,7 @@
 
 cmake_minimum_required(VERSION 3.17)
 
-project(Phonon VERSION 4.6.1)
+project(Phonon VERSION 4.7.0)
 
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_MODULE_PATH "${CMAKE_HOME_DIRECTORY}/build")
@@ -83,6 +83,9 @@ endif()
 # Whether to compile a static or dynamic library
 option(BUILD_SHARED_LIBS "Build shared libraries instead of static." ON)
 
+# Whether to enable octave band support (experimental).
+option(STEAMAUDIO_ENABLE_OCTAVE_BANDS "Enable octave band support (experimental)." OFF)
+
 option(STEAMAUDIO_BUILD_TESTS "Build unit tests." ON)
 option(STEAMAUDIO_BUILD_BENCHMARKS "Build benchmarks." ON)
 option(STEAMAUDIO_BUILD_SAMPLES "Build samples." ON)
@@ -118,39 +121,6 @@ endif()
 #
 # COMPILER FLAGS
 #
-
-# Flags determined by system introspection
-if (IPL_OS_WINDOWS)
-    add_definitions(-DIPL_OS_WINDOWS)
-endif()
-if (IPL_OS_LINUX)
-    add_definitions(-DIPL_OS_LINUX)
-endif()
-if (IPL_OS_MACOS)
-    add_definitions(-DIPL_OS_MACOSX)
-endif()
-if (IPL_OS_ANDROID)
-    add_definitions(-DIPL_OS_ANDROID)
-endif()
-if (IPL_OS_IOS)
-    add_definitions(-DIPL_OS_IOS)
-endif()
-if (IPL_OS_WASM)
-    add_definitions(-DIPL_OS_WASM)
-endif()
-
-if (IPL_CPU_X86)
-    add_definitions(-DIPL_CPU_X86)
-endif()
-if (IPL_CPU_X64)
-    add_definitions(-DIPL_CPU_X64)
-endif()
-if (IPL_CPU_ARMV7)
-    add_definitions(-DIPL_CPU_ARMV7)
-endif()
-if (IPL_CPU_ARMV8)
-    add_definitions(-DIPL_CPU_ARM64)
-endif()
 
 # Windows flags
 if (IPL_OS_WINDOWS)
@@ -235,6 +205,12 @@ endif()
 # DEPENDENCIES
 #
 
+# Octave bands are not currently supported when using Radeon Rays.
+if (STEAMAUDIO_ENABLE_OCTAVE_BANDS)
+    set(STEAMAUDIO_ENABLE_RADEONRAYS OFF)
+    set(STEAMAUDIO_ENABLE_TRUEAUDIONEXT OFF)
+endif()
+
 if (STEAMAUDIO_ENABLE_IPP)
     find_package(IPP)
     if (IPP_FOUND)
@@ -273,7 +249,7 @@ find_package(FlatBuffers REQUIRED)
 
 if (STEAMAUDIO_ENABLE_EMBREE)
     find_package(ISPC 1.12 EXACT)
-    find_package(Embree 2.17 EXACT)
+    find_package(Embree 4)
     if (NOT ISPC_FOUND OR NOT Embree_FOUND)
         message(STATUS "Disabling Embree")
         set(STEAMAUDIO_ENABLE_EMBREE OFF)
@@ -374,6 +350,10 @@ endif()
 
 if (STEAMAUDIO_ENABLE_TRUEAUDIONEXT)
     add_definitions(-DIPL_USES_TRUEAUDIONEXT)
+endif()
+
+if (STEAMAUDIO_ENABLE_OCTAVE_BANDS)
+    add_definitions(-DIPL_ENABLE_OCTAVE_BANDS)
 endif()
 
 

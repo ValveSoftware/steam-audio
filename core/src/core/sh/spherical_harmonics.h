@@ -115,10 +115,10 @@ namespace sh
     // @dirs and @values must have the same size. The directions in @dirs are
     // assumed to be unit.
     std::unique_ptr<std::vector<double>> ProjectSparseSamples(const int order,
-        const std::vector<Vector3d>& dirs, const std::vector<double>& values);
+        const std::vector<ipl::Vector3d>& dirs, const std::vector<double>& values);
 
     // Variant of ProjectSparseSamples with user-provided output coefficients vector.
-    void ProjectSparseSamples(const int order, const std::vector<Vector3d>& dirs, 
+    void ProjectSparseSamples(const int order, const std::vector<ipl::Vector3d>& dirs, 
         const std::vector<double>& values, std::vector<double>& coeffs);
 #endif
 

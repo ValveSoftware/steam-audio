@@ -1,7 +1,7 @@
 {
 	"FileVersion": 3,
 	"Version": 1,
-	"VersionName": "4.6.1",
+	"VersionName": "4.7.0",
 	"FriendlyName": "Steam Audio Wwise Support",
 	"Description": "Integrates the Steam Audio plugin for Unreal and the Steam Audio plugin for Wwise.",
 	"Category": "Audio",

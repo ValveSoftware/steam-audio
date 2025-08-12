@@ -69,16 +69,27 @@ AudioEffectState EQEffect::apply(const EQEffectParams& params,
         mFirstFrame = false;
     }
 
-    if (mPrevGains[0] != params.gains[0] || mPrevGains[1] != params.gains[1] || mPrevGains[2] != params.gains[2])
+    auto gainsChanged = false;
+    for (auto i = 0; i < Bands::kNumBands; ++i)
+    {
+        if (mPrevGains[i] != params.gains[i])
+        {
+            gainsChanged = true;
+            break;
+        }
+    }
+
+    if (gainsChanged)
     {
         auto previous = mCurrent;
         mCurrent = 1 - mCurrent;
 
         setFilterGains(mCurrent, params.gains);
 
-        mFilters[0][mCurrent].copyState(mFilters[0][previous]);
-        mFilters[1][mCurrent].copyState(mFilters[1][previous]);
-        mFilters[2][mCurrent].copyState(mFilters[2][previous]);
+        for (auto i = 0; i < Bands::kNumBands; ++i)
+        {
+            mFilters[i][mCurrent].copyState(mFilters[i][previous]);
+        }
 
         applyFilterCascade(previous, in[0], mTemp.data());
         applyFilterCascade(mCurrent, in[0], out[0]);
@@ -120,8 +131,13 @@ void EQEffect::setFilterGains(int index,
                               const float* gains)
 {
     mFilters[0][index].setFilter(IIR::lowShelf(Bands::kHighCutoffFrequencies[0], gains[0], mSamplingRate));
-    mFilters[1][index].setFilter(IIR::peaking(Bands::kLowCutoffFrequencies[1], Bands::kHighCutoffFrequencies[1], gains[1], mSamplingRate));
-    mFilters[2][index].setFilter(IIR::highShelf(Bands::kLowCutoffFrequencies[2], gains[2], mSamplingRate));
+ 
+    for (auto i = 1; i < Bands::kNumBands - 1; ++i)
+    {
+        mFilters[i][index].setFilter(IIR::peaking(Bands::kLowCutoffFrequencies[i], Bands::kHighCutoffFrequencies[i], gains[i], mSamplingRate));
+    }
+    
+    mFilters[Bands::kNumBands - 1][index].setFilter(IIR::highShelf(Bands::kLowCutoffFrequencies[Bands::kNumBands - 1], gains[Bands::kNumBands - 1], mSamplingRate));
 }
 
 void EQEffect::applyFilterCascade(int index,
@@ -129,8 +145,10 @@ void EQEffect::applyFilterCascade(int index,
                                   float* out)
 {
     mFilters[0][index].apply(mFrameSize, in, out);
-    mFilters[1][index].apply(mFrameSize, out, out);
-    mFilters[2][index].apply(mFrameSize, out, out);
+    for (auto i = 1; i < Bands::kNumBands; ++i)
+    {
+        mFilters[i][index].apply(mFrameSize, out, out);
+    }
 }
 
 void EQEffect::normalizeGains(float* eqGains,
@@ -138,7 +156,11 @@ void EQEffect::normalizeGains(float* eqGains,
 {
     const auto kMaxEQGain = 0.0625f;
 
-    auto maxGain = std::max({eqGains[0], eqGains[1], eqGains[2]});
+    auto maxGain = 0.0f;
+    for (auto i = 0; i < Bands::kNumBands; ++i)
+    {
+        maxGain = std::max(maxGain, eqGains[i]);
+    }
 
     if (maxGain < std::numeric_limits<float>::min())
     {

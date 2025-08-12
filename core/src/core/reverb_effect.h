@@ -37,6 +37,8 @@ struct ReverbEffectParams
 class ReverbEffect
 {
 public:
+    static float sMinAbsorptiveGain;
+
     ReverbEffect(const AudioSettings& audioSettings);
 
     void reset();

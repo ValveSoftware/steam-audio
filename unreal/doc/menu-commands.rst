@@ -3,6 +3,9 @@ Menu Commands
 
 All of these commands are available under the **Steam Audio** menu in Unreal's main toolbar.
 
+Select All Actors with Geometry Component
+    Selects all actors in the currently open map that contain a Steam Audio Geometry component.
+
 Add Geometry Component to all Actors
     Adds a Steam Audio Geometry component to all actors in the currently open map that contain a Static Mesh component and do not already contain a Steam Audio Geometry component.
 

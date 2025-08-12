@@ -490,27 +490,21 @@ def configure_cmake(name, cmake_layers, platform, cmake, vs_version, ndk_path, e
     if platform == 'windows-x86':
         cmake_args += ['-G', vs_generator_name(vs_version), '-A', 'Win32']
         if not shared_crt:
-            cmake_args += ['-DCMAKE_C_FLAGS_RELEASE=/MT', '-DCMAKE_CXX_FLAGS_RELEASE=/MT']
-            cmake_args += ['-DCMAKE_C_FLAGS_DEBUG=/MTd', '-DCMAKE_CXX_FLAGS_DEBUG=/MTd']
+            cmake_args += ['-DCMAKE_MSVC_RUNTIME_LIBRARY=MultiThreaded$<$<CONFIG:Debug>:Debug>']
         else:
-            cmake_args += ['-DCMAKE_C_FLAGS_RELEASE=/MD', '-DCMAKE_CXX_FLAGS_RELEASE=/MD']
-            cmake_args += ['-DCMAKE_C_FLAGS_DEBUG=/MDd', '-DCMAKE_CXX_FLAGS_DEBUG=/MDd']
+            cmake_args += ['-DCMAKE_MSVC_RUNTIME_LIBRARY=MultiThreaded$<$<CONFIG:Debug>:Debug>DLL']
     elif platform == 'windows-x64':
         cmake_args += ['-G', vs_generator_name(vs_version), '-A', 'x64']
         if not shared_crt:
-            cmake_args += ['-DCMAKE_C_FLAGS_RELEASE=/MT', '-DCMAKE_CXX_FLAGS_RELEASE=/MT']
-            cmake_args += ['-DCMAKE_C_FLAGS_DEBUG=/MTd', '-DCMAKE_CXX_FLAGS_DEBUG=/MTd']
+            cmake_args += ['-DCMAKE_MSVC_RUNTIME_LIBRARY=MultiThreaded$<$<CONFIG:Debug>:Debug>']
         else:
-            cmake_args += ['-DCMAKE_C_FLAGS_RELEASE=/MD', '-DCMAKE_CXX_FLAGS_RELEASE=/MD']
-            cmake_args += ['-DCMAKE_C_FLAGS_DEBUG=/MDd', '-DCMAKE_CXX_FLAGS_DEBUG=/MDd']
+            cmake_args += ['-DCMAKE_MSVC_RUNTIME_LIBRARY=MultiThreaded$<$<CONFIG:Debug>:Debug>DLL']
     elif platform == 'windows-arm64':
         cmake_args += ['-G', vs_generator_name(vs_version), '-A', 'ARM64']
         if not shared_crt:
-            cmake_args += ['-DCMAKE_C_FLAGS_RELEASE=/MT', '-DCMAKE_CXX_FLAGS_RELEASE=/MT']
-            cmake_args += ['-DCMAKE_C_FLAGS_DEBUG=/MTd', '-DCMAKE_CXX_FLAGS_DEBUG=/MTd']
+            cmake_args += ['-DCMAKE_MSVC_RUNTIME_LIBRARY=MultiThreaded$<$<CONFIG:Debug>:Debug>']
         else:
-            cmake_args += ['-DCMAKE_C_FLAGS_RELEASE=/MD', '-DCMAKE_CXX_FLAGS_RELEASE=/MD']
-            cmake_args += ['-DCMAKE_C_FLAGS_DEBUG=/MDd', '-DCMAKE_CXX_FLAGS_DEBUG=/MDd']
+            cmake_args += ['-DCMAKE_MSVC_RUNTIME_LIBRARY=MultiThreaded$<$<CONFIG:Debug>:Debug>DLL']
     elif platform == 'linux-x86':
         cmake_args += ['-G', 'Unix Makefiles']
         cmake_args += ['-DCMAKE_C_FLAGS=-m32', '-DCMAKE_CXX_FLAGS=-m32', '-DCMAKE_SHARED_LINKER_FLAGS=-m32', '-DCMAKE_EXE_LINKER_FLAGS=-m32']

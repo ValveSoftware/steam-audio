@@ -45,6 +45,8 @@ public:
     bool processNextJob(int threadId,
                         std::atomic<bool>& cancel);
 
+    int getNumJobs() { return static_cast<int>(mJobs.size()); }
+
 private:
     vector<Job> mJobs;
     std::atomic<int> mJobConsumerIndex;

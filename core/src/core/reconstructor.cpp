@@ -63,12 +63,12 @@ Reconstructor::Reconstructor(float maxDuration,
         }
     }
 
-    mFilters[0].setFilter(IIR::lowPass(Bands::kHighCutoffFrequencies[0], samplingRate));
-    for (auto i = 1; i < Bands::kNumBands - 1; ++i)
+    IIR filters[Bands::kNumBands];
+    IIR::bandFilters(filters, samplingRate);
+    for (auto i = 0; i < Bands::kNumBands; ++i)
     {
-        mFilters[i].setFilter(IIR::bandPass(Bands::kLowCutoffFrequencies[i], Bands::kHighCutoffFrequencies[i], samplingRate));
+        mFilters[i].setFilter(filters[i]);
     }
-    mFilters[Bands::kNumBands - 1].setFilter(IIR::highPass(Bands::kLowCutoffFrequencies[Bands::kNumBands - 1], samplingRate));
 }
 
 void Reconstructor::reconstruct(int numIRs,

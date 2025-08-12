@@ -27,6 +27,7 @@ ThreadPool::ThreadPool(int numThreads)
     , mCancel(false)
     , mReady(0)
     , mCompleted(0)
+    , mJobsCompleted(0)
     , mQuit(false)
     , mJobGraph(nullptr)
 {
@@ -55,8 +56,24 @@ void ThreadPool::process(JobGraph& jobGraph)
     std::unique_lock<std::mutex> lock(mMutex);
     mReady = static_cast<int>(mThreads.size(0));
     mCompleted = 0;
+    mJobsCompleted = 0;
     mCondVarReady.notify_all();
     mCondVarComplete.wait(lock, [this]() { return (mCompleted == mThreads.size(0)); });
+}
+
+void ThreadPool::process(JobGraph& jobGraph, std::function<void(float)> progressFn)
+{
+    mJobGraph = &jobGraph;
+    std::unique_lock<std::mutex> lock(mMutex);
+    mReady = static_cast<int>(mThreads.size(0));
+    mCompleted = 0;
+    mJobsCompleted = 0;
+    mCondVarReady.notify_all();
+    mCondVarComplete.wait(lock, [this, &jobGraph, progressFn]() 
+    {
+        progressFn((mJobsCompleted.load() * 1.0f) / jobGraph.getNumJobs());
+        return (mCompleted == mThreads.size(0)); 
+    });
 }
 
 void ThreadPool::cancel()
@@ -83,6 +100,10 @@ void ThreadPool::threadFunc(int threadId)
         {
             if (mCancel)
                 break;
+
+            mJobsCompleted++;
+
+            mCondVarComplete.notify_one();
         }
 
         lock.lock();

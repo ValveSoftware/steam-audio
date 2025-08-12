@@ -33,6 +33,11 @@ public:
 
     void process(JobGraph& jobGraph);
 
+    // As jobs complete, the thread that calls this version of process() will be woken up, and will call the provided
+    // callback with the percentage of jobs completed so far. This lets callers ensure that the progress callback is
+    // only ever called from (say) the main thread.
+    void process(JobGraph& jobGraph, std::function<void(float)> progressFn);
+
     void cancel();
 
 private:
@@ -40,6 +45,7 @@ private:
     std::atomic<bool> mCancel;
     std::atomic<int> mReady;
     std::atomic<int> mCompleted;
+    std::atomic<int> mJobsCompleted;
     std::atomic<bool> mQuit;
     std::mutex mMutex;
     std::condition_variable mCondVarReady;

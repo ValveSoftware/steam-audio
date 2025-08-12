@@ -26,10 +26,15 @@ namespace ipl {
 
 namespace Bands
 {
+#if defined(IPL_ENABLE_OCTAVE_BANDS)
+    const int kNumBands = 11;
+#else
     const int kNumBands = 3;
+#endif
 
     extern const float kLowCutoffFrequencies[kNumBands];
     extern const float kHighCutoffFrequencies[kNumBands];
+    extern const float kBandPassNorm[kNumBands];
 }
 
 }

@@ -97,12 +97,12 @@ ITEST(bakedindirect)
 
 	auto source = ipl::make_shared<SimulationData>(true, false, sceneType, indirectType, 128, 1.0f, 1, 48000, 1024, openCL, tan);
 
+    source->reflectionInputs.enabled = true;
     source->reflectionInputs.distanceAttenuationModel = DistanceAttenuationModel{};
     source->reflectionInputs.airAbsorptionModel = AirAbsorptionModel{};
     source->reflectionInputs.directivity = Directivity{};
-    source->reflectionInputs.reverbScale[0] = 1.0f;
-    source->reflectionInputs.reverbScale[1] = 1.0f;
-    source->reflectionInputs.reverbScale[2] = 1.0f;
+    for (auto i = 0; i < Bands::kNumBands; ++i)
+        source->reflectionInputs.reverbScale[i] = 1.0f;
     source->reflectionInputs.transitionTime = 1.0f;
     source->reflectionInputs.overlapFraction = 0.25f;
     source->reflectionInputs.baked = true;

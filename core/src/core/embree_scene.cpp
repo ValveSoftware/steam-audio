@@ -33,6 +33,7 @@ EmbreeScene::EmbreeScene(shared_ptr<EmbreeDevice> embree)
     : mEmbree(embree)
     , mHasChanged(false)
     , mVersion(0)
+    , mNextGeomID(0)
 {
     initialize();
 }
@@ -42,6 +43,7 @@ EmbreeScene::EmbreeScene(shared_ptr<EmbreeDevice> embree,
     : mEmbree(embree)
     , mHasChanged(false)
     , mVersion(0)
+    , mNextGeomID(0)
 {
     assert(serializedObject);
     assert(serializedObject->static_meshes() && serializedObject->static_meshes()->Length() > 0);
@@ -66,15 +68,14 @@ EmbreeScene::EmbreeScene(shared_ptr<EmbreeDevice> embree,
 
 void EmbreeScene::initialize()
 {
-    auto sceneFlags = RTC_SCENE_DYNAMIC | RTC_SCENE_HIGH_QUALITY | RTC_SCENE_INCOHERENT;
-    auto algorithmFlags = RTC_INTERSECT1 | RTC_INTERSECT4 | RTC_INTERSECT8 | RTC_INTERSECT16 | RTC_INTERSECT_STREAM;
-
-    mScene = rtcDeviceNewScene(mEmbree->device(), sceneFlags, algorithmFlags);
+    mScene = rtcNewScene(mEmbree->device());
+    rtcSetSceneBuildQuality(mScene, RTC_BUILD_QUALITY_HIGH);
+    rtcSetSceneFlags(mScene, RTC_SCENE_FLAG_DYNAMIC);
 }
 
 EmbreeScene::~EmbreeScene()
 {
-    rtcDeleteScene(mScene);
+    rtcReleaseScene(mScene);
 }
 
 shared_ptr<IStaticMesh> EmbreeScene::createStaticMesh(int numVertices,
@@ -167,7 +168,7 @@ void EmbreeScene::commit()
         instancedMesh->commit(*this);
     }
 
-    rtcCommit(mScene);
+    rtcCommitScene(mScene);
 
     uint32_t maxID = 0;
 
@@ -184,6 +185,7 @@ void EmbreeScene::commit()
     }
 
     mMaterialsForGeometry.resize(maxID + 1);
+    mISPCMaterialsForGeometry.resize(maxID + 1);
     mMaterialIndicesForGeometry.resize(maxID + 1);
 
     for (const auto& staticMesh : mStaticMeshes[0])
@@ -193,6 +195,7 @@ void EmbreeScene::commit()
         auto index = embreeStaticMesh->geometryIndex();
 
         mMaterialsForGeometry[index] = embreeStaticMesh->materials();
+        mISPCMaterialsForGeometry[index] = embreeStaticMesh->ispcMaterials();
         mMaterialIndicesForGeometry[index] = embreeStaticMesh->materialIndices();
     }
 
@@ -205,6 +208,7 @@ void EmbreeScene::commit()
         auto index = embreeInstancedMesh->instanceIndex();
 
         mMaterialsForGeometry[index] = embreeStaticMesh->materials();
+        mISPCMaterialsForGeometry[index] = embreeStaticMesh->ispcMaterials();
         mMaterialIndicesForGeometry[index] = embreeStaticMesh->materialIndices();
     }
 
@@ -217,36 +221,55 @@ uint32_t EmbreeScene::version() const
     return mVersion;
 }
 
+uint32_t EmbreeScene::acquireGeometryID()
+{
+    if (mFreeGeomIDs.empty())
+    {
+        return mNextGeomID++; // Assumes no more than UINT_MAX simultaneous geometries...
+    }
+    else
+    {
+        auto geomID = mFreeGeomIDs.top();
+        mFreeGeomIDs.pop();
+        return geomID;
+    }
+}
+
+void EmbreeScene::releaseGeometryID(uint32_t geomID)
+{
+    mFreeGeomIDs.push(geomID);
+}
+
 Hit EmbreeScene::closestHit(const Ray& ray,
                             float minDistance,
                             float maxDistance) const
 {
     PROFILE_FUNCTION();
 
-    RTCRay embreeRay = { 0 };
-    embreeRay.org[0] = ray.origin.x();
-    embreeRay.org[1] = ray.origin.y();
-    embreeRay.org[2] = ray.origin.z();
-    embreeRay.dir[0] = ray.direction.x();
-    embreeRay.dir[1] = ray.direction.y();
-    embreeRay.dir[2] = ray.direction.z();
-    embreeRay.tnear = minDistance;
-    embreeRay.tfar = maxDistance;
-    embreeRay.mask = 0xffffffff;
-    embreeRay.geomID = RTC_INVALID_GEOMETRY_ID;
-    embreeRay.primID = RTC_INVALID_GEOMETRY_ID;
-    embreeRay.instID = RTC_INVALID_GEOMETRY_ID;
+    RTCRayHit embreeRay{};
+    embreeRay.ray.org_x = ray.origin.x();
+    embreeRay.ray.org_y = ray.origin.y();
+    embreeRay.ray.org_z = ray.origin.z();
+    embreeRay.ray.dir_x = ray.direction.x();
+    embreeRay.ray.dir_y = ray.direction.y();
+    embreeRay.ray.dir_z = ray.direction.z();
+    embreeRay.ray.tnear = minDistance;
+    embreeRay.ray.tfar = maxDistance;
+    embreeRay.ray.mask = 0xffffffff;
+    embreeRay.hit.geomID = RTC_INVALID_GEOMETRY_ID;
+    embreeRay.hit.primID = RTC_INVALID_GEOMETRY_ID;
+    embreeRay.hit.instID[0] = RTC_INVALID_GEOMETRY_ID;
 
-    rtcIntersect(mScene, embreeRay);
+    rtcIntersect1(mScene, &embreeRay);
 
     Hit hit;
-    if (embreeRay.geomID != RTC_INVALID_GEOMETRY_ID)
+    if (embreeRay.hit.geomID != RTC_INVALID_GEOMETRY_ID)
     {
-        auto geomID = (embreeRay.instID == RTC_INVALID_GEOMETRY_ID) ? embreeRay.geomID : embreeRay.instID;
+        auto geomID = (embreeRay.hit.instID[0] == RTC_INVALID_GEOMETRY_ID) ? embreeRay.hit.geomID : embreeRay.hit.instID[0];
 
-        hit.distance = embreeRay.tfar;
-        hit.normal = Vector3f::unitVector(Vector3f(embreeRay.Ng[0], embreeRay.Ng[1], embreeRay.Ng[2]));
-        hit.material = &mMaterialsForGeometry[geomID][mMaterialIndicesForGeometry[geomID][embreeRay.primID]];
+        hit.distance = embreeRay.ray.tfar;
+        hit.normal = Vector3f::unitVector(Vector3f(embreeRay.hit.Ng_x, embreeRay.hit.Ng_y, embreeRay.hit.Ng_z));
+        hit.material = &mMaterialsForGeometry[geomID][mMaterialIndicesForGeometry[geomID][embreeRay.hit.primID]];
     }
 
     return hit;
@@ -258,23 +281,20 @@ bool EmbreeScene::anyHit(const Ray& ray,
 {
     PROFILE_FUNCTION();
 
-    RTCRay embreeRay = { 0 };
-    embreeRay.org[0] = ray.origin.x();
-    embreeRay.org[1] = ray.origin.y();
-    embreeRay.org[2] = ray.origin.z();
-    embreeRay.dir[0] = ray.direction.x();
-    embreeRay.dir[1] = ray.direction.y();
-    embreeRay.dir[2] = ray.direction.z();
+    RTCRay embreeRay{};
+    embreeRay.org_x = ray.origin.x();
+    embreeRay.org_y = ray.origin.y();
+    embreeRay.org_z = ray.origin.z();
+    embreeRay.dir_x = ray.direction.x();
+    embreeRay.dir_y = ray.direction.y();
+    embreeRay.dir_z = ray.direction.z();
     embreeRay.tnear = minDistance;
     embreeRay.tfar = maxDistance;
     embreeRay.mask = 0xffffffff;
-    embreeRay.geomID = RTC_INVALID_GEOMETRY_ID;
-    embreeRay.primID = RTC_INVALID_GEOMETRY_ID;
-    embreeRay.instID = RTC_INVALID_GEOMETRY_ID;
 
-    rtcOccluded(mScene, embreeRay);
+    rtcOccluded1(mScene, &embreeRay);
 
-    return (embreeRay.geomID != RTC_INVALID_GEOMETRY_ID);
+    return (embreeRay.tfar < 0.0f);
 }
 
 void EmbreeScene::closestHits(int numRays,
@@ -355,8 +375,9 @@ void EmbreeScene::dumpObj(const string& fileName) const
     auto materialOffset = 0;
     for (auto i = 0u; i < scenes.size(); ++i)
     {
-        auto vertices = (float*) rtcMapBuffer(scenes[i], staticMeshes[i]->geometryIndex(), RTC_VERTEX_BUFFER);
-        auto indices = (int32_t*) rtcMapBuffer(scenes[i], staticMeshes[i]->geometryIndex(), RTC_INDEX_BUFFER);
+        auto geometry = rtcGetGeometry(scenes[i], staticMeshes[i]->geometryIndex());
+        auto vertices = (float*) rtcGetGeometryBufferData(geometry, RTC_BUFFER_TYPE_VERTEX, 0);
+        auto indices = (int32_t*) rtcGetGeometryBufferData(geometry, RTC_BUFFER_TYPE_INDEX, 0);
 
         // The OBJ file format does not use absorption and scattering coefficients; instead it uses diffuse
         // reflectivity (Kd) and specular reflectivity (Ks). They are defined by:
@@ -417,9 +438,6 @@ void EmbreeScene::dumpObj(const string& fileName) const
 
         vertexOffset += staticMeshes[i]->numVertices();
         materialOffset += staticMeshes[i]->numMaterials();
-
-        rtcUnmapBuffer(scenes[i], 0, RTC_INDEX_BUFFER);
-        rtcUnmapBuffer(scenes[i], 0, RTC_VERTEX_BUFFER);
     }
 
     fclose(mtlFile);

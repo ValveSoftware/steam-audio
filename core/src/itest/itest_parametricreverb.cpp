@@ -63,10 +63,13 @@ ITEST(parametricreverb)
 
     Array<float> edc(energyFields[0]->numBins());
 
+    int band = 0;
+
     auto gui = [&]()
     {
+        ImGui::SliderInt("Band", &band, 0, Bands::kNumBands - 1);
         ImGui::PlotLines("EDC", edc.data(), static_cast<int>(edc.size(0)), 0, nullptr, -100.0f, 0.0f, ImVec2(512, 512));
-        ImGui::Text("Reverb Time: (%.2f, %.2f, %.2f)", reverbs[0].reverbTimes[0], reverbs[0].reverbTimes[1], reverbs[0].reverbTimes[2]);
+        ImGui::Text("Reverb Time: %.2f", reverbs[0].reverbTimes[band]);
     };
 
     auto display = [&]()
@@ -92,7 +95,7 @@ ITEST(parametricreverb)
             auto E = 0.0f;
             for (auto i = energyFields[0]->numBins() - 1; i >= 0; --i)
             {
-                E += (*energyFieldPtrs[0])[0][1][i];
+                E += (*energyFieldPtrs[0])[0][band][i];
                 edc[i] = E;
             }
 

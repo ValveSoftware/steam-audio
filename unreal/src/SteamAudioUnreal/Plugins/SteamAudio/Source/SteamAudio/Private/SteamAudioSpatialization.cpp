@@ -35,6 +35,7 @@ FSteamAudioSpatializationSource::FSteamAudioSpatializationSource()
     , bApplyPathing(false)
     , bApplyHRTFToPathing(false)
     , PathingMixLevel(1.0f)
+    , bNormalizePathingEQ(false)
     , HRTF(nullptr)
     , PanningEffect(nullptr)
     , BinauralEffect(nullptr)
@@ -160,6 +161,7 @@ void FSteamAudioSpatializationPlugin::OnInitSource(const uint32 SourceId, const 
     Source.bApplyPathing = (Settings) ? Settings->bApplyPathing : false;
     Source.bApplyHRTFToPathing = (Settings) ? Settings->bApplyHRTFToPathing : false;
     Source.PathingMixLevel = (Settings) ? Settings->PathingMixLevel : 1.0f;
+    Source.bNormalizePathingEQ = (Settings) ? Settings->bNormalizePathingEQ : false;
 
     IPLContext Context = FSteamAudioModule::GetManager().GetContext();
 
@@ -376,6 +378,7 @@ void FSteamAudioSpatializationPlugin::ProcessAudio(const FAudioPluginSourceInput
             PathingParams.binaural = Source.bApplyHRTFToPathing ? IPL_TRUE : IPL_FALSE;
             PathingParams.hrtf = Source.HRTF;
             PathingParams.listener = FSteamAudioModule::GetManager().GetListenerCoordinates();
+            PathingParams.normalizeEQ = Source.bNormalizePathingEQ ? IPL_TRUE : IPL_FALSE;
 
             PathingParams.shCoeffs = Source.PathingCoeffs.GetData();
             for (int i = 0; i < 3; i++)

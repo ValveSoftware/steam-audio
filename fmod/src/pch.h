@@ -37,6 +37,6 @@
 #include <dlfcn.h>
 #endif
 
-#include <fmod/fmod.hpp>
+#include <fmod.hpp>
 
 #include <phonon.h>

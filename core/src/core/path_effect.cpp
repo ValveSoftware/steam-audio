@@ -117,6 +117,17 @@ AudioEffectState PathEffect::apply(const PathEffectParams& params,
         EQEffectParams eqParams{};
         eqParams.gains = params.eqCoeffs;
 
+        float eqGains[Bands::kNumBands] = {0};
+        if (params.normalizeEQ)
+        {
+            memcpy(eqGains, params.eqCoeffs, Bands::kNumBands * sizeof(float));
+
+            auto overallGain = 1.0f;
+            EQEffect::normalizeGains(eqGains, overallGain);
+
+            eqParams.gains = eqGains;
+        }
+
         mEQEffect.apply(eqParams, in, mEQBuffer);
 
         for (auto i = 0; i < SphericalHarmonics::numCoeffsForOrder(params.order); ++i)

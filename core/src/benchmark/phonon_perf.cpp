@@ -22,8 +22,13 @@
 #include <Windows.h>
 #endif
 
+#if defined(TRACY_ENABLE)
+#include <TracyClient.cpp>
+#endif
+
 #include <context.h>
 #include <containers.h>
+#include <profiler.h>
 #include <vector.h>
 using namespace ipl;
 
@@ -175,6 +180,15 @@ int main(int argc, char** argv)
     {
         gOutFile = fopen(argv[2], "w");
     }
+
+#if defined(TRACY_ENABLE)
+    TracyExternalAPI_t tracyAPI;
+    tracyAPI._emitZoneBegin = reinterpret_cast<decltype(tracyAPI._emitZoneBegin)>(___tracy_emit_zone_begin);
+    tracyAPI._emitZoneEnd = reinterpret_cast<decltype(tracyAPI._emitZoneEnd)>(___tracy_emit_zone_end);
+    tracyAPI._setThreadName = ___tracy_set_thread_name;
+
+    Profiler::setProfilerContext(&tracyAPI);
+#endif
 
     RunBenchmarks(std::string(argv[1]));
 

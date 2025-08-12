@@ -7,3 +7,4 @@ Reference
     mixer-effects
     asset-types
     menu-commands
+    api-reference

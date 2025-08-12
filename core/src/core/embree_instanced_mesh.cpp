@@ -43,15 +43,24 @@ EmbreeInstancedMesh::EmbreeInstancedMesh(shared_ptr<EmbreeScene> scene,
 
     mSubScene->commit();
 
-    mInstanceIndex = rtcNewInstance2(scene->scene(), subScene->scene(), 1);
+    auto device = rtcGetSceneDevice(scene->scene());
+    mGeometry = rtcNewGeometry(device, RTC_GEOMETRY_TYPE_INSTANCE);
+    rtcSetGeometryInstancedScene(mGeometry, subScene->scene());
+    rtcReleaseDevice(device);
+
     updateTransform(*scene, transform);
+
+    mInstanceIndex = scene->acquireGeometryID();
+
+    rtcAttachGeometryByID(scene->scene(), mGeometry, mInstanceIndex);
 }
 
 EmbreeInstancedMesh::~EmbreeInstancedMesh()
 {
     if (auto scene = mScene.lock())
     {
-        rtcDeleteGeometry(scene->scene(), mInstanceIndex);
+        scene->releaseGeometryID(mInstanceIndex);
+        rtcReleaseGeometry(mGeometry);
     }
 }
 
@@ -68,14 +77,14 @@ void EmbreeInstancedMesh::updateTransform(const IScene& scene,
     }
 
     mTransform = transform;
-    rtcSetTransform2(_scene.scene(), mInstanceIndex, RTC_MATRIX_COLUMN_MAJOR, mTransform.elements, 0);
+    rtcSetGeometryTransform(mGeometry, 0, RTC_FORMAT_FLOAT4X4_COLUMN_MAJOR, mTransform.elements);
 }
 
 void EmbreeInstancedMesh::commit(const IScene& scene)
 {
     const auto& _scene = static_cast<const EmbreeScene&>(scene);
 
-    rtcUpdate(_scene.scene(), mInstanceIndex);
+    rtcCommitGeometry(mGeometry);
 
     // After calling commit(), this instanced mesh will be considered unchanged until a subsequent call to
     // updateTransform() changes the transform matrix.
@@ -89,12 +98,12 @@ bool EmbreeInstancedMesh::hasChanged() const
 
 void EmbreeInstancedMesh::enable(const EmbreeScene& scene)
 {
-    rtcEnable(scene.scene(), mInstanceIndex);
+    rtcEnableGeometry(mGeometry);
 }
 
 void EmbreeInstancedMesh::disable(const EmbreeScene& scene)
 {
-    rtcDisable(scene.scene(), mInstanceIndex);
+    rtcDisableGeometry(mGeometry);
 }
 
 }

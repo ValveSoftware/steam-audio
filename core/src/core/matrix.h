@@ -17,10 +17,10 @@
 #pragma once
 
 #if defined(IPL_USE_MKL)
-#include <mkl/mkl_blas.h>
-#include <mkl/mkl_cblas.h>
-#include <mkl/mkl_lapack.h>
-#include <mkl/mkl_lapacke.h>
+#include <mkl_blas.h>
+#include <mkl_cblas.h>
+#include <mkl_lapack.h>
+#include <mkl_lapacke.h>
 #endif
 
 #include "containers.h"
@@ -772,6 +772,15 @@ void leastSquares(const DynamicMatrix<T>& A,
     throw Exception(Status::Failure);
 }
 
+// Calculates the least squares solution of a linear system of equations, Ax = b, with L1 regularization.
+template <typename T>
+void leastSquaresL1(const DynamicMatrix<T>& A,
+                    const DynamicMatrix<T>& b,
+                    T* x)
+{
+    throw Exception(Status::Failure);
+}
+
 typedef DynamicMatrix<float> DynamicMatrixf;
 typedef DynamicMatrix<double> DynamicMatrixd;
 
@@ -779,9 +788,9 @@ typedef DynamicMatrix<double> DynamicMatrixd;
 
 // Optimized matrix-matrix multiplication for float values.
 template <>
-void multiplyMatrices(const DynamicMatrixf& a,
-                      const DynamicMatrixf& b,
-                      DynamicMatrixf& c)
+inline void multiplyMatrices(const DynamicMatrixf& a,
+                             const DynamicMatrixf& b,
+                             DynamicMatrixf& c)
 {
     assert(a.numRows == c.numRows);
     assert(b.numCols == c.numCols);
@@ -793,9 +802,9 @@ void multiplyMatrices(const DynamicMatrixf& a,
 
 // Optimized matrix-matrix multiplication for double values.
 template <>
-void multiplyMatrices(const DynamicMatrixd& a,
-                      const DynamicMatrixd& b,
-                      DynamicMatrixd& c)
+inline void multiplyMatrices(const DynamicMatrixd& a,
+                             const DynamicMatrixd& b,
+                             DynamicMatrixd& c)
 {
     assert(a.numRows == c.numRows);
     assert(b.numCols == c.numCols);
@@ -807,9 +816,9 @@ void multiplyMatrices(const DynamicMatrixd& a,
 
 // Calculates the least squares solution of a linear system of equations, for float values.
 template <>
-void leastSquares(const DynamicMatrixf& A,
-                  const DynamicMatrixf& b,
-                  DynamicMatrixf& x)
+inline void leastSquares(const DynamicMatrixf& A,
+                         const DynamicMatrixf& b,
+                         DynamicMatrixf& x)
 {
     DynamicMatrixf bx(std::max(b.numRows, x.numRows), 1);
     memcpy(bx.elements.data(), b.elements.data(), b.numRows * sizeof(float));
@@ -825,9 +834,9 @@ void leastSquares(const DynamicMatrixf& A,
 
 // Calculates the least squares solution of a linear system of equations, for double values.
 template <>
-void leastSquares(const DynamicMatrixd& A,
-                  const DynamicMatrixd& b,
-                  DynamicMatrixd& x)
+inline void leastSquares(const DynamicMatrixd& A,
+                         const DynamicMatrixd& b,
+                         DynamicMatrixd& x)
 {
     DynamicMatrixd bx(std::max(b.numRows, x.numRows), 1);
     memcpy(bx.elements.data(), b.elements.data(), b.numRows * sizeof(double));
@@ -839,6 +848,191 @@ void leastSquares(const DynamicMatrixd& A,
                    const_cast<double*>(bx.elements.data()), bx.numRows, s.elements.data(), -1.0, &rank);
 
     memcpy(x.elements.data(), bx.elements.data(), x.numRows * sizeof(double));
+}
+
+template<typename T>
+inline void softThreshold(int n, T* v, T threshold)
+{
+    for (int i = 0; i < n; ++i)
+    {
+        if (v[i] > threshold)
+            v[i] -= threshold;
+        else if (v[i] < -threshold)
+            v[i] += threshold;
+        else
+            v[i] = static_cast<T>(0.0);
+    }
+ }
+
+// Calculates the least squares solution of a linear system of equations, Ax = b, with L1 regularization.
+template<>
+inline void leastSquaresL1(const DynamicMatrixf& A,
+                           const DynamicMatrixf& b,
+                           float* x)
+{
+    // ADMM-based LASSO solver.
+    const float rho = 1.0f;
+    const float lambda = 0.1f;
+    const int kMaxIterations = 200;
+    const float tolerance = 1e-6f;
+    
+    DynamicMatrixf AtA(A.numCols, A.numCols);
+    DynamicMatrixf Atb(A.numCols, 1);
+    DynamicMatrixf z(A.numCols, 1);
+    DynamicMatrixf u(A.numCols, 1);
+    DynamicMatrixf q(A.numCols, 1);
+
+    AtA.zero();
+    Atb.zero();
+    z.zero();
+    u.zero();
+    q.zero();
+
+    // Compute AtA
+    cblas_sgemm(CblasColMajor, CblasTrans, CblasNoTrans, AtA.numRows, AtA.numCols, A.numRows, 1.0f, A.elements.data(),
+                A.numRows, A.elements.data(), A.numRows, 0.0f, AtA.elements.data(), AtA.numRows);
+
+    // Compute Atb
+    cblas_sgemv(CblasColMajor, CblasTrans, A.numRows, A.numCols, 1.0f, A.elements.data(), A.numRows, b.elements.data(),
+                1, .0f, Atb.elements.data(), 1);
+
+    // Form and factor (AtA + rho * I) via Colesky
+    for (int i = 0; i < AtA.numRows; ++i)
+    {
+        AtA(i, i) += rho;
+    }
+
+    int info = LAPACKE_spotrf(LAPACK_COL_MAJOR, 'U', AtA.numRows, AtA.elements.data(), AtA.numRows);
+    if (info)
+        return;
+
+    // ADMM-loop
+    for (int k = 0; k < kMaxIterations; ++k)
+    {
+        // x-updae: Solve (AtA + rhow * I) * x = Atb + row * (z - u)
+        for (int i = 0; i < q.numRows; ++i)
+        {
+            q(i, 0) = Atb(i, 0) + rho * (z(i, 0) - u(i, 0));
+        }
+
+        // Solve At A x = q
+        LAPACKE_spotrs(LAPACK_COL_MAJOR, 'U', AtA.numRows, 1, AtA.elements.data(), AtA.numRows, q.elements.data(), q.numRows);
+
+        // Copy solution
+        for (int i = 0; i < q.numRows; ++i)
+        {
+            x[i] = q(i, 0);
+        }
+
+        // z-update: softThreshold(x+u, lambda/rho)
+        for (int i = 0; i < q.numRows; ++i)
+        {
+            q(i, 0) = x[i] + u(i, 0);
+        }
+
+        softThreshold(q.numRows, q.elements.data(), lambda / rho);
+
+        for (int i = 0; i < z.numRows; ++i)
+        {
+            z(i, 0) = q(i, 0);
+        }
+
+        // Update and check convergence
+        float maxDiff = .0f;
+        for (int i = 0; i < u.numRows; ++i)
+        {
+            u(i, 0) += (x[i] - z(i, 0));
+            maxDiff = std::max<float>(maxDiff, fabsf(x[i] - z(i, 0)));
+        }
+
+        if (maxDiff < tolerance)
+            break;
+    }
+}
+
+template<>
+inline void leastSquaresL1(const DynamicMatrixd& A,
+                           const DynamicMatrixd& b,
+                           double* x)
+{
+    // ADMM-based LASSO solver.
+    const double rho = 1.0;
+    const double lambda = 0.1;
+    const int kMaxIterations = 200;
+    const double tolerance = 1e-6;
+
+    DynamicMatrixd AtA(A.numCols, A.numCols);
+    DynamicMatrixd Atb(A.numCols, 1);
+    DynamicMatrixd z(A.numCols, 1);
+    DynamicMatrixd u(A.numCols, 1);
+    DynamicMatrixd q(A.numCols, 1);
+
+    AtA.zero();
+    Atb.zero();
+    z.zero();
+    u.zero();
+    q.zero();
+
+    // Compute AtA
+    cblas_dgemm(CblasColMajor, CblasTrans, CblasNoTrans, AtA.numRows, AtA.numCols, A.numRows, 1.0f, A.elements.data(),
+                A.numRows, A.elements.data(), A.numRows, 0.0f, AtA.elements.data(), AtA.numRows);
+
+    // Compute Atb
+    cblas_dgemv(CblasColMajor, CblasTrans, A.numRows, A.numCols, 1.0f, A.elements.data(), A.numRows, b.elements.data(),
+                1, .0f, Atb.elements.data(), 1);
+
+    // Form and factor (AtA + rho * I) via Colesky
+    for (int i = 0; i < AtA.numRows; ++i)
+    {
+        AtA(i, i) += rho;
+    }
+
+    int info = LAPACKE_dpotrf(LAPACK_COL_MAJOR, 'U', AtA.numRows, AtA.elements.data(), AtA.numRows);
+    if (info)
+        return;
+
+    // ADMM-loop
+    for (int k = 0; k < kMaxIterations; ++k)
+    {
+        // x-updae: Solve (AtA + rhow * I) * x = Atb + row * (z - u)
+        for (int i = 0; i < q.numRows; ++i)
+        {
+            q(i, 0) = Atb(i, 0) + rho * (z(i, 0) - u(i, 0));
+        }
+
+        // Solve At A x = q
+        LAPACKE_dpotrs(LAPACK_COL_MAJOR, 'U', AtA.numRows, 1, AtA.elements.data(), AtA.numRows, q.elements.data(), q.numRows);
+
+        // Copy solution
+        for (int i = 0; i < q.numRows; ++i)
+        {
+            x[i] = q(i, 0);
+        }
+
+        // z-update: softThreshold(x+u, lambda/rho)
+        for (int i = 0; i < q.numRows; ++i)
+        {
+            q(i, 0) = x[i] + u(i, 0);
+        }
+
+        softThreshold(q.numRows, q.elements.data(), lambda / rho);
+
+        for (int i = 0; i < z.numRows; ++i)
+        {
+            z(i, 0) = q(i, 0);
+        }
+
+        // Update and check convergence
+        double maxDiff = .0;
+        for (int i = 0; i < u.numRows; ++i)
+        {
+            u(i, 0) += (x[i] - z(i, 0));
+            maxDiff = std::max<double>(maxDiff, fabs(x[i] - z(i, 0)));
+        }
+
+        if (maxDiff < tolerance)
+            break;
+    }
 }
 
 #endif

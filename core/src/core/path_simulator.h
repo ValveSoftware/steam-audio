@@ -18,6 +18,8 @@
 
 #include "path_data.h"
 #include "probe_manager.h"
+#include "distance_attenuation.h"
+#include "deviation.h"
 
 namespace ipl {
 
@@ -61,6 +63,8 @@ public:
                    bool realTimeVis,
                    float* eqGains,
                    float* coeffs,
+                   const DistanceAttenuationModel& distanceAttenuationModel,
+                   const DeviationModel& deviationModel,
                    Vector3f* avgDirection = nullptr,
                    float* distanceRatio = nullptr,
                    float* totalDeviation = nullptr,
@@ -143,6 +147,7 @@ private:
                                              const SoundPath* paths,
                                              const float* weights,
                                              int order,
+                                             const DistanceAttenuationModel& distanceAttenuationModel,
                                              float* coeffs);
 
     // Given a set of SoundPaths describing multiple paths that reach the listener, and corresponding weights,
@@ -153,6 +158,7 @@ private:
                                int numPaths,
                                const SoundPath* paths,
                                const float* weights,
+                               const DeviationModel& deviationModel,
                                float* eqGains,
                                float* totalDeviation);
 
@@ -181,6 +187,7 @@ private:
 
     // Calculates EQ coefficients corresponding to a given total deviation angle.
     static void calcDeviationTerm(float deviation,
+                                  const DeviationModel& deviationModel,
                                   float* deviationTerm);
 };
 

@@ -102,6 +102,8 @@ struct PathingSimulationInputs
     bool findAlternatePaths;
     bool simplifyPaths;
     bool realTimeVis;
+    DistanceAttenuationModel distanceAttenuationModel;
+    DeviationModel deviationModel;
 };
 
 struct PathingSimulationState

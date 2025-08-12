@@ -150,6 +150,7 @@ namespace SteamAudio
         public bool applyHRTFToPathing = false;
         [Range(0.0f, 10.0f)]
         public float pathingMixLevel = 1.0f;
+        public bool normalizePathingEQ = false;
 
 #if STEAMAUDIO_ENABLED
         Simulator mSimulator = null;
@@ -184,11 +185,12 @@ namespace SteamAudio
 
             mThis = GCHandle.Alloc(this);
 
-            if (mSettings.audioEngine == AudioEngineType.Unity &&
+            if ((mSettings.audioEngine == AudioEngineType.Unity &&
                 distanceAttenuation &&
                 distanceAttenuationInput == DistanceAttenuationInput.CurveDriven &&
                 reflections &&
-                useDistanceCurveForReflections)
+                useDistanceCurveForReflections) ||
+                (pathing && distanceAttenuationInput == DistanceAttenuationInput.CurveDriven))
             {
                 mAttenuationData.rolloffMode = mAudioSource.rolloffMode;
                 mAttenuationData.minDistance = mAudioSource.minDistance;
@@ -291,6 +293,10 @@ namespace SteamAudio
                 distanceAttenuationInput == DistanceAttenuationInput.CurveDriven &&
                 reflections &&
                 useDistanceCurveForReflections)
+            {
+                inputs.distanceAttenuationModel = mCurveAttenuationModel;
+            }
+            else if (pathing && distanceAttenuationInput == DistanceAttenuationInput.CurveDriven)
             {
                 inputs.distanceAttenuationModel = mCurveAttenuationModel;
             }

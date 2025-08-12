@@ -23,6 +23,8 @@
 #include <memory>
 #include <mutex>
 
+#include "platform.h"
+
 #if defined(IPL_OS_WINDOWS)
 #define IPL_CALLBACK __stdcall
 #else

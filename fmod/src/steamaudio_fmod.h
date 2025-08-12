@@ -31,7 +31,7 @@
 #elif defined(IPL_OS_MACOSX)
 #endif
 
-#include <fmod/fmod.hpp>
+#include <fmod.hpp>
 
 #include <phonon.h>
 
@@ -548,6 +548,8 @@ typedef enum IPLSpatializerParams
      *  - `2`: Output will be the format from the event's input.
      */
     IPL_SPATIALIZE_OUTPUT_FORMAT,
+
+    IPL_SPATIALIZE_NORMALIZE_PATHING_EQ,
 
     /** The number of parameters in this effect. */
     IPL_SPATIALIZE_NUM_PARAMS

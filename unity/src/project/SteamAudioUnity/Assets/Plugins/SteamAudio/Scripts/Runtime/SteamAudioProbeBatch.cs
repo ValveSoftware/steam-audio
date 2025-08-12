@@ -216,15 +216,16 @@ namespace SteamAudio
 
         public int GetSizeForLayer(BakedDataIdentifier identifier)
         {
-            var layerInfo = new BakedDataLayerInfo { };
-            if (FindLayer(identifier, ref layerInfo))
+            for (int i = 0; i < mBakedDataLayerInfo.Count; ++i)
             {
-                return layerInfo.dataSize;
+                if (mBakedDataLayerInfo[i].identifier.Equals(identifier))
+                {
+                    return mBakedDataLayerInfo[i].dataSize;
+                }
+
             }
-            else
-            {
-                return 0;
-            }
+
+            return 0;
         }
 
         public BakedDataLayerInfo GetInfoForLayer(int index)
@@ -247,50 +248,34 @@ namespace SteamAudio
             mBakedDataLayerInfo.Add(layerInfo);
         }
 
-        public void UpdateLayer(BakedDataIdentifier identifier, int dataSize)
-        {
-            var layerInfo = new BakedDataLayerInfo { };
-            if (FindLayer(identifier, ref layerInfo))
-            {
-                layerInfo.dataSize = dataSize;
-            }
-        }
-
         public void RemoveLayer(BakedDataIdentifier identifier)
         {
-            var layerInfo = new BakedDataLayerInfo { };
-            if (FindLayer(identifier, ref layerInfo))
+            for (int i = 0; i < mBakedDataLayerInfo.Count; ++i)
             {
-                mBakedDataLayerInfo.Remove(layerInfo);
-                UpdateGameObjectStatistics(layerInfo);
+                if (mBakedDataLayerInfo[i].identifier.Equals(identifier))
+                {
+                    var layerInfo = mBakedDataLayerInfo[i];
+                    mBakedDataLayerInfo.RemoveAt(i);
+                    UpdateGameObjectStatistics(layerInfo);
+                    return;
+                }
             }
         }
 
         public void AddOrUpdateLayer(GameObject gameObject, BakedDataIdentifier identifier, int dataSize)
         {
-            var layerInfo = new BakedDataLayerInfo { };
-            if (FindLayer(identifier, ref layerInfo))
+            for (int i = 0; i < mBakedDataLayerInfo.Count; ++i)
             {
-                UpdateLayer(identifier, dataSize);
-            }
-            else
-            {
-                AddLayer(gameObject, identifier, dataSize);
-            }
-        }
-
-        bool FindLayer(BakedDataIdentifier identifier, ref BakedDataLayerInfo result)
-        {
-            foreach (var layerInfo in mBakedDataLayerInfo)
-            {
-                if (layerInfo.identifier.Equals(identifier))
+                if (mBakedDataLayerInfo[i].identifier.Equals(identifier))
                 {
-                    result = layerInfo;
-                    return true;
+                    var layerInfo = mBakedDataLayerInfo[i];
+                    layerInfo.dataSize = dataSize;
+                    mBakedDataLayerInfo[i] = layerInfo;
+                    return;
                 }
             }
 
-            return false;
+            AddLayer(gameObject, identifier, dataSize);
         }
 
         void UpdateGameObjectStatistics(BakedDataLayerInfo layerInfo)

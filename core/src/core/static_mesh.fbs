@@ -23,6 +23,7 @@ table StaticMesh {
     mesh:Mesh;
     material_indices:[int32];
     materials:[Material];
+    materials2:[Material2];
 }
 
 root_type StaticMesh;
