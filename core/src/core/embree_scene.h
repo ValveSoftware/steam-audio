@@ -133,6 +133,8 @@ public:
 
     virtual void dumpObj(const string& fileName) const override;
 
+    virtual void SetStaticMeshMaterial(IStaticMesh* staticMesh, Material* NewMaterial, int index) override;
+
     // Allocates and returns a new geometry ID. Call this function to set the geometry ID for a new static mesh
     // or instanced mesh when creating it.
     uint32_t acquireGeometryID();
