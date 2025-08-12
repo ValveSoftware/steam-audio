@@ -41,6 +41,9 @@ namespace SteamAudio
         Playing
     }
 
+    /**
+     * Maintains global state for Steam Audio, manages simulations, and passes simulation results to the audio engine.
+     */
     public class SteamAudioManager : MonoBehaviour
     {
         [Header("HRTF Settings")]
@@ -469,16 +472,38 @@ namespace SteamAudio
             RemoveAllDynamicObjects();
         }
 
-        // Call this function when you create a new AudioListener component (or its equivalent, if you are using
-        // third-party audio middleware). Use this function if you want Steam Audio to automatically find the new
-        // AudioListener.
+        /** Notifies Steam Audio that the \c AudioListener has changed.
+         *
+         *  Call this function when you create a new \c AudioListener component (or its equivalent, if you are using
+         *  third-party audio middleware).
+         *
+         *  Steam Audio attempts to find the \c AudioListener whenever the scene changes, but if the \c AudioListener
+         *  changes dynamically after the scene has been loaded, this function must be called, otherwise simulation
+         *  results will be incorrect.
+         *
+         *  If the \c AudioListener starts out disabled, but is then enabled after scene load, this function
+         *  must be called, because Steam Audio does not consider disabled \c AudioListener components in its initial search.
+         *
+         *  Use this function if you want Steam Audio to automatically find the new AudioListener.
+         */
         public static void NotifyAudioListenerChanged()
         {
             NotifyAudioListenerChangedTo(AudioEngineStateHelpers.Create(SteamAudioSettings.Singleton.audioEngine).GetListenerTransform());
         }
 
-        // Call this function when you want to explicitly specify a new AudioListener component (or its equivalent, if
-        // you are using third-party audio middleware).
+        /** Notifies Steam Audio that the \c AudioListener has changed to a specific \c GameObject.
+         *  Call this function when you want to explicitly specify a new \c AudioListener component (or its equivalent, if
+         *  you are using third-party audio middleware).
+         *
+         *  Steam Audio attempts to find the \c AudioListener whenever the scene changes, but if the \c AudioListener
+         *  changes dynamically after the scene has been loaded, this function must be called, otherwise simulation
+         *  results will be incorrect.
+         *
+         *  If the \c AudioListener starts out disabled, but is then enabled after scene load, this function
+         *  must be called, because Steam Audio does not consider disabled \c AudioListener components in its initial search.
+         *
+         *  \param[in]  listenerTransform   The \c Transform component attached to the \c GameObject that contains the \c AudioListener.
+         */
         public static void NotifyAudioListenerChangedTo(Transform listenerTransform)
         {
             sSingleton.mListener = listenerTransform;

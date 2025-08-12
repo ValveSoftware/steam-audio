@@ -218,7 +218,7 @@ namespace SteamAudio
             var tasks = new BakedDataTask[1];
             tasks[0].gameObject = gameObject;
             tasks[0].component = this;
-            tasks[0].name = "Reverb";
+            tasks[0].name = gameObject.name;
             tasks[0].identifier = mIdentifier;
             tasks[0].probeBatches = (useAllProbeBatches) ? FindObjectsOfType<SteamAudioProbeBatch>() : probeBatches;
             tasks[0].probeBatchNames = new string[tasks[0].probeBatches.Length];

@@ -40,6 +40,8 @@ add_executable(phonon_perf
 	benchmark_pathingbake.cpp
 	benchmark_pathing.cpp
 	benchmark_probelookup.cpp
+	benchmark_hybridreverbsimulator.cpp
+	benchmark_astar.cpp
 )
 
 target_link_libraries(phonon_perf PRIVATE core hrtf)

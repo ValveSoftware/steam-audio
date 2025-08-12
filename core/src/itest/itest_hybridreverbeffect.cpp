@@ -91,10 +91,14 @@ ITEST(hybridreverbeffect)
         reflectionEffectParams.ir = nullptr;
         reflectionEffectParams.reverbTimes[0] = 2.0f;
         reflectionEffectParams.reverbTimes[1] = 1.5f;
-        reflectionEffectParams.reverbTimes[2] = 1.0f;
-        reflectionEffectParams.eq[0] = 1.0f / 16.0f;
-        reflectionEffectParams.eq[1] = 1.0f / 16.0f;
-        reflectionEffectParams.eq[2] = 1.0f / 16.0f;
+        for (auto i = 2; i < Bands::kNumBands; ++i)
+        {
+            reflectionEffectParams.reverbTimes[i] = 1.0f;
+        }
+        for (auto i = 0; i < Bands::kNumBands; ++i)
+        {
+            reflectionEffectParams.eq[i] = 1.0f / 16.0f;
+        }
         reflectionEffectParams.delay = 0;
 
         iplReflectionEffectApply(reflectionEffect, &reflectionEffectParams, &monoBuffer, &indirectBuffer, nullptr);

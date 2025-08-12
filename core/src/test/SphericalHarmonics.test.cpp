@@ -191,7 +191,7 @@ TEST_CASE("ProjectSparseSamples", "[SphericalHarmonics]")
         {
             double phi = p * 2.0 * ipl::Math::kPiD / 8.0;
             ipl::Vector3d dir = sh::ToVector(phi, theta);
-            double value = sh::EvalSHSum(2, coeffs, phi, theta);
+            double value = sh::EvalSHSum(2, coeffs.data(), phi, theta);
             sample_dirs.push_back(dir);
             sample_vals.push_back(value);
         }

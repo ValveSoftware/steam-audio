@@ -147,7 +147,6 @@ def cmake_generate(args):
 
     # On Android, explitly point to dependencies.
     if args.platform == 'android':
-        cmake_args += ['-DFMOD_INCLUDE_DIR=' + root_dir() + '/include/fmod']
         cmake_args += ['-DSteamAudio_INCLUDE_DIR=' + root_dir() + '/include/phonon']
 
     # On Windows x64, build documentation.

@@ -119,43 +119,75 @@ ProbeVisibilityGraph::ProbeVisibilityGraph(const IScene& scene,
                                            float threshold,
                                            float visRange,
                                            int numThreads,
+                                           JobGraph& jobGraph,
                                            std::atomic<bool>& cancel,
                                            ProgressCallback progressCallback,
                                            void* callbackUserData)
     : mAdjacent(probes.numProbes())
+    , mNumJobsRemaining(0)
 {
     PROFILE_FUNCTION();
 
-    auto totalPairs = probes.numProbes() * (probes.numProbes() - 1) / 2;
-    auto pairsProcessed = 0;
+    // For any 2 probe indices (i, j), we will only check visibility if i > j.
+    // We will divide the work of constructing the visibility graph into a set of jobs, where each job involves
+    // constructing one or more rows of the adjacency list (mAdjacent[i]). A given row will never be processed by
+    // multiple threads concurrently.
+    auto numProbes = probes.numProbes();
+    auto numProbesPerJob = 1;
 
-    for (auto i = 0; i < probes.numProbes(); ++i)
+    auto numProbesThisJob = 0;
+    auto firstProbeThisJob = 0;
+    for (auto i = 0; i < numProbes; i++)
     {
-        for (auto j = 0; j < i; ++j)
+        numProbesThisJob++;
+        if (numProbesThisJob == 1)
         {
-            ++pairsProcessed;
-
-            if (visTester.areProbesTooFar(probes, i, j, visRange))
-                continue;
-
-            if (!visTester.areProbesVisible(scene, probes, i, j, radius, threshold))
-                continue;
-
-            mAdjacent[i].push_back(j);
-            mAdjacent[j].push_back(i);
+            firstProbeThisJob = i;
         }
 
-        if (cancel)
-            return;
-
-        if (progressCallback)
+        if (numProbesThisJob == numProbesPerJob ||
+            i == numProbes - 1)
         {
-            progressCallback(static_cast<float>(pairsProcessed) / totalPairs, callbackUserData);
+            jobGraph.addJob([this, firstProbeThisJob, numProbesThisJob, radius, threshold, visRange, &scene, &probes, &visTester](int threadIndex, std::atomic<bool>& cancel)
+            {
+                for (auto i = firstProbeThisJob; i < firstProbeThisJob + numProbesThisJob; i++)
+                {
+                    for (auto j = 0; j < i; ++j)
+                    {
+                        if (visTester.areProbesTooFar(probes, i, j, visRange))
+                            continue;
+
+                        if (!visTester.areProbesVisible(scene, probes, i, j, radius, threshold))
+                            continue;
+
+                        auto cost = (probes[i].influence.center - probes[j].influence.center).length();
+
+                        mAdjacent[i].push_back(AdjacencyListEntry{j, cost});
+                    }
+                }
+
+                // The last job we process "completes" the adjacency list, by making sure that if we have an edge from
+                // i to j, we also have an edge from j to i.
+                if (std::atomic_fetch_sub_explicit(&mNumJobsRemaining, 1, std::memory_order_seq_cst) == 1)
+                {
+                    for (auto i = 0; i < probes.numProbes(); i++)
+                    {
+                        for (const auto& entry : mAdjacent[i])
+                        {
+                            mAdjacent[entry.index].push_back(AdjacencyListEntry{i, entry.cost});
+                        }
+                    }
+                }
+            });
+
+            mNumJobsRemaining++;
+            numProbesThisJob = 0;
         }
     }
 }
 
 ProbeVisibilityGraph::ProbeVisibilityGraph(const Serialized::VisibilityGraph* serializedObject)
+    : mNumJobsRemaining(0)
 {
     PROFILE_FUNCTION();
 
@@ -173,18 +205,31 @@ ProbeVisibilityGraph::ProbeVisibilityGraph(const Serialized::VisibilityGraph* se
         for (auto j = 0u; j < numEdges; ++j)
         {
             auto edge = serializedObject->nodes()->Get(i)->edges()->Get(j);
-            mAdjacent[i].push_back(edge);
+            mAdjacent[i].push_back(AdjacencyListEntry{edge, 0.0f});
         }
     }
 
     for (auto i = 0; i < static_cast<int>(numProbes); ++i)
     {
-        for (auto j : mAdjacent[i])
+        for (const auto& entry : mAdjacent[i])
         {
+            auto j = entry.index;
             if (j < i)
             {
-                mAdjacent[j].push_back(i);
+                mAdjacent[j].push_back(AdjacencyListEntry{i, 0.0f});
             }
+        }
+    }
+}
+
+void ProbeVisibilityGraph::updateCosts(const ProbeBatch& probeBatch)
+{
+    for (auto i = 0; i < mAdjacent.size(); i++)
+    {
+        for (auto& entry : mAdjacent[i])
+        {
+            auto j = entry.index;
+            entry.cost = (probeBatch[i].influence.center - probeBatch[j].influence.center).length();
         }
     }
 }
@@ -192,7 +237,7 @@ ProbeVisibilityGraph::ProbeVisibilityGraph(const Serialized::VisibilityGraph* se
 bool ProbeVisibilityGraph::hasEdge(int from,
                                    int to) const
 {
-    return (std::find(mAdjacent[from].begin(), mAdjacent[from].end(), to) != mAdjacent[from].end());
+    return (std::find_if(mAdjacent[from].begin(), mAdjacent[from].end(), [to](const AdjacencyListEntry& value) { return value.index == to; }) != mAdjacent[from].end());
 }
 
 void ProbeVisibilityGraph::prune(const ProbeBatch& probes,
@@ -201,9 +246,9 @@ void ProbeVisibilityGraph::prune(const ProbeBatch& probes,
 {
     for (auto i = 0u; i < mAdjacent.size(); ++i)
     {
-        auto isProbeTooFar = [&probes, &visTester, visRange, i](int j)
+        auto isProbeTooFar = [&probes, &visTester, visRange, i](const AdjacencyListEntry& j)
         {
-            return visTester.areProbesTooFar(probes, i, j, visRange);
+            return visTester.areProbesTooFar(probes, i, j.index, visRange);
         };
 
         mAdjacent[i].erase(std::remove_if(mAdjacent[i].begin(), mAdjacent[i].end(), isProbeTooFar), mAdjacent[i].end());
@@ -218,8 +263,9 @@ uint64_t ProbeVisibilityGraph::serializedSize() const
     for (auto i = 0; i < numProbes; ++i)
     {
         auto numEdges = 0;
-        for (auto j : mAdjacent[i])
+        for (const auto& entry : mAdjacent[i])
         {
+            auto j = entry.index;
             if (j < i)
             {
                 ++numEdges;
@@ -242,8 +288,9 @@ flatbuffers::Offset<Serialized::VisibilityGraph> ProbeVisibilityGraph::serialize
     for (auto i = 0; i < numProbes; ++i)
     {
         auto numEdges = 0;
-        for (auto j : mAdjacent[i])
+        for (const auto& entry : mAdjacent[i])
         {
+            auto j = entry.index;
             if (j < i)
             {
                 ++numEdges;
@@ -252,8 +299,9 @@ flatbuffers::Offset<Serialized::VisibilityGraph> ProbeVisibilityGraph::serialize
 
         vector<int32_t> edges;
         edges.reserve(numEdges);
-        for (auto j : mAdjacent[i])
+        for (const auto& entry : mAdjacent[i])
         {
+            auto j = entry.index;
             if (j < i)
             {
                 edges.push_back(j);

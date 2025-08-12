@@ -64,6 +64,7 @@ FMOD_DSP_PARAMETER_DESC gParams[] = {
     { FMOD_DSP_PARAMETER_TYPE_DATA, "DistRange", "", "Distance attenuation range." },
     { FMOD_DSP_PARAMETER_TYPE_INT, "SimOutHandle", "", "Simulation outputs handle." },
     { FMOD_DSP_PARAMETER_TYPE_INT, "OutputFormat", "", "Output Format" },
+    { FMOD_DSP_PARAMETER_TYPE_BOOL, "PathNormEQ", "", "Normalize pathing EQ." },
 };
 
 FMOD_DSP_PARAMETER_DESC* gParamsArray[IPL_SPATIALIZE_NUM_PARAMS];
@@ -117,6 +118,7 @@ void initParamDescs()
     gParams[IPL_SPATIALIZE_DISTANCE_ATTENUATION_RANGE].datadesc = {FMOD_DSP_PARAMETER_DATA_TYPE_ATTENUATION_RANGE};
     gParams[IPL_SPATIALIZE_SIMULATION_OUTPUTS_HANDLE].intdesc = {-1, 10000, -1};
     gParams[IPL_SPATIALIZE_OUTPUT_FORMAT].intdesc = {0, 2, 0, false, gOutputFormatValues};
+    gParams[IPL_SPATIALIZE_NORMALIZE_PATHING_EQ].booldesc = {false};
 }
 
 struct State
@@ -148,6 +150,7 @@ struct State
     float reflectionsMixLevel;
     bool pathingBinaural;
     float pathingMixLevel;
+    bool pathingNormalizeEQ;
     FMOD_DSP_PARAMETER_ATTENUATION_RANGE attenuationRange;
     std::atomic<bool> attenuationRangeSet;
     ParameterSpeakerFormatType outputFormat;
@@ -437,6 +440,7 @@ void reset(FMOD_DSP_STATE* state)
     effect->reflectionsMixLevel = 1.0f;
     effect->pathingBinaural = false;
     effect->pathingMixLevel = 1.0f;
+    effect->pathingNormalizeEQ = false;
     effect->attenuationRange.min = 1.0f;
     effect->attenuationRange.max = 20.0f;
     effect->attenuationRangeSet = false;
@@ -509,6 +513,9 @@ FMOD_RESULT F_CALL getBool(FMOD_DSP_STATE* state,
         break;
     case IPL_SPATIALIZE_PATHING_BINAURAL:
         *value = effect->pathingBinaural;
+        break;
+    case IPL_SPATIALIZE_NORMALIZE_PATHING_EQ:
+        *value = effect->pathingNormalizeEQ;
         break;
     default:
         return FMOD_ERR_INVALID_PARAM;
@@ -670,6 +677,9 @@ FMOD_RESULT F_CALL setBool(FMOD_DSP_STATE* state,
         break;
     case IPL_SPATIALIZE_PATHING_BINAURAL:
         effect->pathingBinaural = value;
+        break;
+    case IPL_SPATIALIZE_NORMALIZE_PATHING_EQ:
+        effect->pathingNormalizeEQ = value;
         break;
     default:
         return FMOD_ERR_INVALID_PARAM;
@@ -1151,6 +1161,7 @@ FMOD_RESULT F_CALL process(FMOD_DSP_STATE* state,
                 pathParams.binaural = numChannelsOut == 2 && !gHRTFDisabled && (effect->pathingBinaural) ? IPL_TRUE : IPL_FALSE;
                 pathParams.hrtf = gHRTF[0];
                 pathParams.listener = listenerCoordinates;
+                pathParams.normalizeEQ = (effect->pathingNormalizeEQ) ? IPL_TRUE : IPL_FALSE;
 
                 iplPathEffectApply(effect->pathEffect, &pathParams, &effect->monoBuffer, &effect->reflectionsSpatializedBuffer);
 

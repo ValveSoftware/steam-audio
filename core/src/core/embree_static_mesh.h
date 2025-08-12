@@ -83,6 +83,16 @@ public:
         return mMaterials.data();
     }
 
+    ispc::Material* ispcMaterials()
+    {
+        return mISPCMaterials.data();
+    }
+
+    const ispc::Material* ispcMaterials() const
+    {
+        return mISPCMaterials.data();
+    }
+
     void enable(const EmbreeScene& scene);
 
     void disable(const EmbreeScene& scene);
@@ -92,12 +102,16 @@ private:
                     const Vector3f* vertices,
                     const Triangle* triangles);
 
+    void convertMaterials();
+
     std::weak_ptr<EmbreeScene> mScene;
+    RTCGeometry mGeometry;
     uint32_t mGeometryIndex;
     int mNumVertices;
     int mNumTriangles;
     Array<int> mMaterialIndices;
     Array<Material> mMaterials;
+    vector<ispc::Material> mISPCMaterials;
 };
 
 }

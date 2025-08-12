@@ -27,22 +27,29 @@ ITEST(reverbeffect)
     audioSettings.samplingRate = 48000;
     audioSettings.frameSize = 1024;
 
-    ReverbEffect reverbEffect(audioSettings);
+    auto reverbEffect = ipl::make_unique<ReverbEffect>(audioSettings);
 
     AudioBuffer mono(1, audioSettings.frameSize);
     AudioBuffer result(1, audioSettings.frameSize);
 
     Reverb reverb{};
-    reverb.reverbTimes[0] = 2.0f;
-    reverb.reverbTimes[1] = 1.5f;
-    reverb.reverbTimes[2] = 1.0f;
+    for (auto i = 0; i < Bands::kNumBands; ++i)
+        reverb.reverbTimes[i] = 2.0f;
 
     auto dry = false;
     auto wet = true;
 
 	auto gui = [&]()
 	{
-		ImGui::SliderFloat3("Reverb Times", reverb.reverbTimes, 0.1f, 10.0f);
+        for (auto i = 0; i < Bands::kNumBands; ++i)
+        {
+            char label[32] = {0};
+            sprintf(label, "Reverb Time band %d", i);
+
+            ImGui::SliderFloat(label, &reverb.reverbTimes[i], 0.1f, 10.0f);
+        }
+
+        ImGui::Checkbox("8th Order", &IIR::sUseOrder8);
 		ImGui::Checkbox("Dry", &dry);
 		ImGui::Checkbox("Wet", &wet);
 	};
@@ -54,7 +61,7 @@ ITEST(reverbeffect)
         ReverbEffectParams reverbParams{};
         reverbParams.reverb = &reverb;
 
-        reverbEffect.apply(reverbParams, mono, result);
+        reverbEffect->apply(reverbParams, mono, result);
 
         outBuffer.makeSilent();
 
@@ -80,7 +87,7 @@ ITEST(reverbeffect)
     {
         outBuffer.makeSilent();
 
-        AudioEffectState effectState = reverbEffect.tail(result);
+        AudioEffectState effectState = reverbEffect->tail(result);
 
         if (wet)
         {

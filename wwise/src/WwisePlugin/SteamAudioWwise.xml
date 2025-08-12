@@ -426,8 +426,22 @@ for the documentation about the plugin xml format
           </PropertyDependency>
         </Dependencies>
       </Property>
+
+      <Property Name="PathingNormalizeEQ" Type="bool" DisplayGroup="Pathing" DisplayName="Normalize Pathing EQ">
+        <AudioEnginePropertyID>24</AudioEnginePropertyID>
+        <DefaultValue>false</DefaultValue>
+        <Dependencies>
+          <PropertyDependency Name="Pathing" Action="Enable">
+            <Condition>
+              <Enumeration Type="bool">
+                <Value>true</Value>
+              </Enumeration>
+            </Condition>
+          </PropertyDependency>
+        </Dependencies>
+      </Property>
     </Properties>
-	</EffectPlugin>
+  </EffectPlugin>
 
   <EffectPlugin Name="Steam Audio Mix Return" CompanyID="315" PluginID="30324">
     <PluginInfo>

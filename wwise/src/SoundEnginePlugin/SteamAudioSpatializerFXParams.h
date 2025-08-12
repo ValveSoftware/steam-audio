@@ -59,7 +59,8 @@ static const AkPluginParamID    SPATIALIZER_PARAM_REFLECTIONSMIXLEVEL = 20;
 static const AkPluginParamID    SPATIALIZER_PARAM_PATHING = 21;
 static const AkPluginParamID    SPATIALIZER_PARAM_PATHINGBINAURAL = 22;
 static const AkPluginParamID    SPATIALIZER_PARAM_PATHINGMIXLEVEL = 23;
-static const AkUInt32           SPATIALIZER_NUM_PARAMS = 24;
+static const AkPluginParamID    SPATIALIZER_PARAM_PATHINGNORMALIZEEQ = 24;
+static const AkUInt32           SPATIALIZER_NUM_PARAMS = 25;
 
 struct SteamAudioSpatializerRTPCParams
 {
@@ -87,6 +88,7 @@ struct SteamAudioSpatializerNonRTPCParams
     bool                reflectionsBinaural;
     bool                pathing;
     bool                pathingBinaural;
+    bool                pathingNormalizeEQ;
 };
 
 struct SteamAudioSpatializerFXParams : public AK::IAkPluginParam

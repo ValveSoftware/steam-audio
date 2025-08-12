@@ -34,7 +34,7 @@ ITEST(impulseresponse)
 	auto context = std::make_shared<Context>(nullptr, nullptr, nullptr, SIMDLevel::AVX2, STEAMAUDIO_VERSION);
 
     SceneType sceneType = SceneType::Default;
-	IndirectEffectType indirectType = IndirectEffectType::TrueAudioNext;
+	IndirectEffectType indirectType = IndirectEffectType::Convolution;
 	auto embree = (sceneType == SceneType::Embree) ? make_shared<EmbreeDevice>() : nullptr;
 #if defined(IPL_USES_OPENCL) && defined(IPL_USES_RADEONRAYS) && defined(IPL_USES_TRUEAUDIONEXT)
 	auto openCLDeviceList = (sceneType == SceneType::RadeonRays || indirectType == IndirectEffectType::TrueAudioNext) ? make_shared<OpenCLDeviceList>(OpenCLDeviceType::GPU, 0, 0.0f, false) : nullptr;

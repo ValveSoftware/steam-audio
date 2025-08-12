@@ -30,12 +30,15 @@ void benchmarkVisGraphForSettings(IScene const& scene,
                                   const ProbeBatch& probes,
                                   float spacing,
                                   int numSamples,
-                                  float range)
+                                  float range,
+                                  int numThreads)
 {
-    auto numRuns = 10;
+    auto numRuns = 1;
     auto radius = (numSamples == 1) ? 0.0f : spacing;
     auto threshold = 0.99f;
     std::atomic<bool> cancel(false);
+
+    ThreadPool threadPool(numThreads);
 
     Timer timer;
     timer.start();
@@ -43,12 +46,15 @@ void benchmarkVisGraphForSettings(IScene const& scene,
     for (auto i = 0; i < numRuns; ++i)
     {
         ProbeVisibilityTester visTester(numSamples, true, -Vector3f::kYAxis);
-        ProbeVisibilityGraph visGraph(scene, probes, visTester, radius, threshold, range, 1, cancel);
+
+        JobGraph jobGraph{};
+        ProbeVisibilityGraph visGraph(scene, probes, visTester, radius, threshold, range, numThreads, jobGraph, cancel);
+        threadPool.process(jobGraph);
     }
 
     auto msElapsed = timer.elapsedMilliseconds() / numRuns;
 
-    PrintOutput("%-10d %-10.2f %-10.2f\n", numSamples, range, msElapsed);
+    PrintOutput("%-10d %-10d %-10.2f %-10.2f\n", numSamples, numThreads, range, msElapsed);
 }
 
 void benchmarkVisGraph(shared_ptr<Context> context,
@@ -69,15 +75,19 @@ void benchmarkVisGraph(shared_ptr<Context> context,
     probeBatch->commit();
 
     PrintOutput("Running benchmark: Visibility Graph...\n");
-    PrintOutput("%-10s %-10s %-10s\n", "#samples", "range (m)", "time (ms)");
+    PrintOutput("%-10s %-10s %-10s %-10s\n", "#samples", "#threads", "range (m)", "time (ms)");
 
     int numSamplesValues[] = {1, 2, 4, 8};
     float rangeValues[] = {3.0f, 50.0f, INFINITY};
+    int numThreadsValues[] = {1, 2, 4, 8, 12, 16};
     for (auto numSamples : numSamplesValues)
     {
-        for (auto range : rangeValues)
+        for (auto numThreads : numThreadsValues)
         {
-            benchmarkVisGraphForSettings(*scene, *probeBatch, spacing, numSamples, range);
+            for (auto range : rangeValues)
+            {
+                benchmarkVisGraphForSettings(*scene, *probeBatch, spacing, numSamples, range, numThreads);
+            }
         }
     }
 
@@ -153,12 +163,18 @@ void benchmarkPathFinding(shared_ptr<Context> context,
     float rangeValues[] = {3.0f, 50.0f, INFINITY};
     std::atomic<bool> cancel(false);
 
+    ThreadPool threadPool(1);
+
     for (auto numSamples : numSamplesValues)
     {
         for (auto range : rangeValues)
         {
             ProbeVisibilityTester visTester(numSamples, true, -Vector3f::kYAxis);
-            ProbeVisibilityGraph visGraph(*scene, *probeBatch, visTester, spacing, 0.99f, range, 1, cancel);
+
+            JobGraph jobGraph{};
+            ProbeVisibilityGraph visGraph(*scene, *probeBatch, visTester, spacing, 0.99f, range, 1, jobGraph, cancel);
+            threadPool.process(jobGraph);
+
             benchmarkPathFindingForSettings(*scene, *probeBatch, visGraph, numSamples, spacing, 0.99f, range);
         }
     }
@@ -242,10 +258,10 @@ void benchmarkPathingForSettings(shared_ptr<Context> context, shared_ptr<IScene>
 
                 pathSimulator.findPaths(_source, _listener, *scene, *probeBatch, sourceProbes, listenerProbes, kProbeVisRadius,
                                         kProbeVisThreshold, kProbeVisRange, kOrder, true, true, true, true,
-                                        eqGains.data(), coeffs.data());
+                                        eqGains.data(), coeffs.data(), DistanceAttenuationModel{}, DeviationModel{});
             }
 
-            totalTime += timer.elapsedMicroseconds();
+            totalTime += static_cast<float>(timer.elapsedMicroseconds());
             ++totalProbesBenchmarked;
         }
     }
@@ -268,13 +284,11 @@ BENCHMARK(pathing)
     auto type = SceneType::Default;
 
     Material material;
-    material.absorption[0] = 0.1f;
-    material.absorption[1] = 0.1f;
-    material.absorption[2] = 0.1f;
+    for (auto iBand = 0; iBand < Bands::kNumBands; ++iBand)
+        material.absorption[iBand] = 0.1f;
     material.scattering = 0.5f;
-    material.transmission[0] = 1.0f;
-    material.transmission[1] = 1.0f;
-    material.transmission[2] = 1.0f;
+    for (auto iBand = 0; iBand < Bands::kNumBands; ++iBand)
+        material.transmission[iBand] = 1.0f;
 
     auto scene = shared_ptr<IScene>(SceneFactory::create(type, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr));
 

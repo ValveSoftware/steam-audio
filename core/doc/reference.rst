@@ -29,3 +29,6 @@ API Reference
     probes
     baking
     simulation
+    energy-field
+    impulse-response
+    reconstructor

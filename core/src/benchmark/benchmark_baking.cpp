@@ -59,8 +59,13 @@ void BenchmarkBakingForSettings(shared_ptr<Context> context, shared_ptr<IScene> 
     }
     auto elapsedSeconds = timer.elapsedSeconds();
 
-    PrintOutput("%-6d  %10d  %10d  %8.2f  %10d  %10d %8.2f\n", rays, diffuseSamples, bounces, spacing, probeBatch.numProbes(), threads,
-        elapsedSeconds);
+    probeBatch.commit();
+
+    SerializedObject bakedDataSize;
+    probeBatch.serializeAsRoot(bakedDataSize);
+
+    PrintOutput("%-6d  %10d  %10d  %8.2f  %10d  %10d %8.2f %16.4f\n", rays, diffuseSamples, bounces, spacing, probeBatch.numProbes(), threads,
+        elapsedSeconds, static_cast<float>(bakedDataSize.size()) / 1e6);
 }
 
 uint64_t GetProbeData(const std::string& fileName, const float spacing,
@@ -103,13 +108,11 @@ uint64_t GetProbeData(const std::string& fileName, const float spacing,
     localToWorldTransform(2, 2) = (zmax - zmin);
 
     Material material;
-    material.absorption[0] = 0.1f;
-    material.absorption[1] = 0.1f;
-    material.absorption[2] = 0.1f;
+    for (auto iBand = 0; iBand < Bands::kNumBands; ++iBand)
+        material.absorption[iBand] = 0.1f;
     material.scattering = 0.5f;
-    material.transmission[0] = 1.0f;
-    material.transmission[1] = 1.0f;
-    material.transmission[2] = 1.0f;
+    for (auto iBand = 0; iBand < Bands::kNumBands; ++iBand)
+        material.transmission[iBand] = 1.0f;
 
     auto scene = shared_ptr<IScene>(SceneFactory::create(SceneType::Default, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr));
 
@@ -164,13 +167,11 @@ void BenchmarkBakingForScene(const std::string& fileName, const SceneType type, 
 #endif
 
     Material material;
-    material.absorption[0] = 0.1f;
-    material.absorption[1] = 0.1f;
-    material.absorption[2] = 0.1f;
+    for (auto iBand = 0; iBand < Bands::kNumBands; ++iBand)
+        material.absorption[iBand] = 0.1f;
     material.scattering = 0.5f;
-    material.transmission[0] = 1.0f;
-    material.transmission[1] = 1.0f;
-    material.transmission[2] = 1.0f;
+    for (auto iBand = 0; iBand < Bands::kNumBands; ++iBand)
+        material.transmission[iBand] = 1.0f;
 
     auto scene = shared_ptr<IScene>(SceneFactory::create(type, nullptr, nullptr, nullptr, nullptr, nullptr, embree, radeonRays));
 
@@ -183,7 +184,7 @@ void BenchmarkBakingForScene(const std::string& fileName, const SceneType type, 
 
     // Single thread benchmarking.
     {
-        PrintOutput("%-6s  %10s  %10s  %10s  %10s  %10s  %10s\n", "Rays", "Diffuse", "Bounces", "Spacing", "#Probes", "Threads", "Time (sec)");
+        PrintOutput("%-6s  %10s  %10s  %10s  %10s  %10s  %10s %12s\n", "Rays", "Diffuse", "Bounces", "Spacing", "#Probes", "Threads", "Time (sec)", "Size (MB)");
 
         {
             auto probeDataSize = GetProbeData(fileName, 8.0f, 32768, 512, 4, 1, &probeData);
@@ -230,7 +231,7 @@ void BenchmarkBakingForScene(const std::string& fileName, const SceneType type, 
     // Multi-threaded benchmarking.
     if (type != SceneType::RadeonRays)
     {
-        PrintOutput("%-6s  %10s  %10s  %10s  %10s  %10s  %10s\n", "Rays", "Diffuse", "Bounces", "Spacing", "#Probes", "Threads", "Time (s)");
+        PrintOutput("%-6s  %10s  %10s  %10s  %10s  %10s  %10s %12s\n", "Rays", "Diffuse", "Bounces", "Spacing", "#Probes", "Threads", "Time (s)", "Size (MB)");
 
         auto threads = { 1, 2, 4, 6, 8, 12, 16, 20, 24, 28, 32, 40, 48, 56, 64, 72 };
         for (auto thread : threads)
@@ -248,9 +249,9 @@ BENCHMARK(baking)
 {
     SetCoreAffinityForBenchmarking();
 
-    PrintOutput("Running benchmark: Baking Simulation (Phonon)...\n");
-    BenchmarkBakingForScene("../../data/meshes/sponza.obj", SceneType::Default);
-    PrintOutput("\n");
+    //PrintOutput("Running benchmark: Baking Simulation (Phonon)...\n");
+    //BenchmarkBakingForScene("../../data/meshes/sponza.obj", SceneType::Default);
+    //PrintOutput("\n");
 #if defined(IPL_USES_EMBREE) && (defined(IPL_CPU_X86) || defined(IPL_CPU_X64))
     PrintOutput("Running benchmark: Baking Simulation (Embree)...\n");
     BenchmarkBakingForScene("../../data/meshes/sponza.obj", SceneType::Embree);

@@ -28,12 +28,12 @@ namespace ipl {
 // IIRFilterer
 // --------------------------------------------------------------------------------------------------------------------
 
-void IIRFilterer::resetFilter_float8()
+void IIR2Filterer::resetFilter_float8()
 {
     memset(mCoeffs8, 0, 8 * 12 * sizeof(float));
 }
 
-void IPL_FLOAT8_ATTR IIRFilterer::setFilter_float8(const IIR& filter)
+void IPL_FLOAT8_ATTR IIR2Filterer::setFilter_float8(const IIR2& filter)
 {
     mFilter = filter;
 
@@ -86,7 +86,7 @@ void IPL_FLOAT8_ATTR IIRFilterer::setFilter_float8(const IIR& filter)
     }
 }
 
-float8_t IPL_FLOAT8_ATTR IIRFilterer::apply(float8_t in)
+float8_t IPL_FLOAT8_ATTR IIR2Filterer::apply(float8_t in)
 {
     auto coeffxp7 = float8::load(&mCoeffs8[0][0]);
     auto coeffxp6 = float8::load(&mCoeffs8[1][0]);
@@ -150,7 +150,7 @@ float8_t IPL_FLOAT8_ATTR IIRFilterer::apply(float8_t in)
     return y;
 }
 
-void IPL_FLOAT8_ATTR IIRFilterer::apply_float8(int size,
+void IPL_FLOAT8_ATTR IIR2Filterer::apply_float8(int size,
                                const float* in,
                                float* out)
 {
@@ -238,6 +238,50 @@ void IPL_FLOAT8_ATTR IIRFilterer::apply_float8(int size,
     }
 
     float8::avoidTransitionPenalty();
+}
+
+
+// --------------------------------------------------------------------------------------------------------------------
+// IIR8Filterer
+// --------------------------------------------------------------------------------------------------------------------
+
+float8_t IPL_FLOAT8_ATTR IIR8Filterer::apply(float8_t in)
+{
+    auto out = in;
+    for (auto i = 0; i < 4; ++i)
+    {
+        out = m_filterers[i].apply(out);
+    }
+    return out;
+}
+
+
+// --------------------------------------------------------------------------------------------------------------------
+// IIRFilterer
+// --------------------------------------------------------------------------------------------------------------------
+
+float8_t IPL_FLOAT8_ATTR IIRFilterer::apply(float8_t in)
+{
+    return (this->*m_applyFloat8)(in);
+}
+
+float8_t IPL_FLOAT8_ATTR IIRFilterer::applyFloat8_iir2(float8_t in)
+{
+    return m_filterer2.apply(in);
+}
+
+float8_t IPL_FLOAT8_ATTR IIRFilterer::applyFloat8_switchable(float8_t in)
+{
+    if (IIR::sUseOrder8)
+    {
+        m_filterer2.reset();
+        return m_filterer8.apply(in);
+    }
+    else
+    {
+        m_filterer8.reset();
+        return m_filterer2.apply(in);
+    }
 }
 
 }

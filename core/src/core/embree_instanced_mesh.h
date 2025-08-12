@@ -78,6 +78,7 @@ private:
     shared_ptr<EmbreeScene> mSubScene;
     int mNumVertices;
     int mNumTriangles;
+    RTCGeometry mGeometry;
     unsigned int mInstanceIndex;
     Matrix4x4f mTransform;
 

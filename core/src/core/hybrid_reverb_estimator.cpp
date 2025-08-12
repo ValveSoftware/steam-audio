@@ -39,9 +39,12 @@ HybridReverbEstimator::HybridReverbEstimator(float maxDuration,
     , mTempFrame(2, frameSize)
     , mReverbIR(static_cast<int>(ceilf(maxDuration * samplingRate)))
 {
-    mBandpassFilters[0].setFilter(IIR::lowPass(Bands::kHighCutoffFrequencies[0], samplingRate));
-    mBandpassFilters[1].setFilter(IIR::bandPass(Bands::kLowCutoffFrequencies[1], Bands::kHighCutoffFrequencies[1], samplingRate));
-    mBandpassFilters[2].setFilter(IIR::highPass(Bands::kLowCutoffFrequencies[2], samplingRate));
+    IIR filters[Bands::kNumBands];
+    IIR::bandFilters(filters, samplingRate);
+    for (auto i = 0; i < Bands::kNumBands; ++i)
+    {
+        mBandpassFilters[i].setFilter(filters[i]);
+    }
 }
 
 float HybridReverbEstimator::calcRelativeEDC(const float* ir,
@@ -69,7 +72,16 @@ void HybridReverbEstimator::estimateHybridEQFromIR(const ImpulseResponse& ir,
                                                    float* bandIR,
                                                    float* eq)
 {
-    float whiteNoiseNorm[3] = {0.984652f, 0.996133f, 1.000000f};
+#if defined(IPL_ENABLE_OCTAVE_BANDS)
+    // todo: update white noise norms
+    float whiteNoiseNorm[Bands::kNumBands];
+    for (auto i = 0; i < Bands::kNumBands; ++i)
+    {
+        whiteNoiseNorm[i] = 1.0f;
+    }
+#else
+    float whiteNoiseNorm[Bands::kNumBands] = {0.984652f, 0.996133f, 1.000000f};
+#endif
 
     auto cutoffSample = static_cast<int>(floorf((1.0f - overlapFraction) * transitionTime * samplingRate));
 
@@ -80,12 +92,6 @@ void HybridReverbEstimator::estimateHybridEQFromIR(const ImpulseResponse& ir,
     {
         mBandpassFilters[i].reset();
         mBandpassFilters[i].apply(ir.numSamples(), ir[0], bandIR);
-
-        for (auto j = 0; j < ir.numSamples(); ++j)
-        {
-            auto distance = PropagationMedium::kSpeedOfSound * (((float) j) / samplingRate);
-            bandIR[j] *= sqrtf(1.0f / airAbsorption.evaluate(distance, i));
-        }
 
         eq[i] = calcRelativeEDC(bandIR, ir.numSamples(), cutoffSample);
     }
@@ -164,6 +170,8 @@ void HybridReverbEstimator::estimate(const EnergyField* energyField,
             impulseResponse[i][j] = 0.0f;
         }
     }
+
+    delay = estimateDelay(transitionTime, overlapFraction);
 }
 
 int HybridReverbEstimator::estimateDelay(float transitionTime, float overlapFraction)
@@ -188,14 +196,20 @@ void HybridReverbEstimator::calcReverbIR(int numSamples,
         ++numFrames;
     }
 
-    float _eqCoeffs[Bands::kNumBands] = { eqCoeffs[0], eqCoeffs[1], eqCoeffs[2] };
+    float _eqCoeffs[Bands::kNumBands];
+    for (auto i = 0; i < Bands::kNumBands; ++i)
+    {
+        _eqCoeffs[i] = eqCoeffs[i];
+    }
+
     auto overallGain = 16.0f * SphericalHarmonics::evaluate(0, 0, Vector3f{});
     EQEffect::normalizeGains(_eqCoeffs, overallGain);
 
     Reverb reverb;
-    reverb.reverbTimes[0] = reverbTimes[0];
-    reverb.reverbTimes[1] = reverbTimes[1];
-    reverb.reverbTimes[2] = reverbTimes[2];
+    for (auto i = 0; i < Bands::kNumBands; ++i)
+    {
+        reverb.reverbTimes[i] = reverbTimes[i];
+    }
 
     AudioBuffer temp(2, mFrameSize, mTempFrame.data());
     AudioBuffer temp0(temp, 0);

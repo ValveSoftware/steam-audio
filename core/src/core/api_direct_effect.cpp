@@ -104,14 +104,12 @@ IPLAudioEffectState CDirectEffect::apply(IPLDirectEffectParams* params,
     DirectEffectParams _params{};
 
     _params.directPath.distanceAttenuation = params->distanceAttenuation;
-    _params.directPath.airAbsorption[0] = params->airAbsorption[0];
-    _params.directPath.airAbsorption[1] = params->airAbsorption[1];
-    _params.directPath.airAbsorption[2] = params->airAbsorption[2];
+    for (auto iBand = 0; iBand < Bands::kNumBands; ++iBand)
+        _params.directPath.airAbsorption[iBand] = params->airAbsorption[iBand];
     _params.directPath.directivity = params->directivity;
     _params.directPath.occlusion = params->occlusion;
-    _params.directPath.transmission[0] = params->transmission[0];
-    _params.directPath.transmission[1] = params->transmission[1];
-    _params.directPath.transmission[2] = params->transmission[2];
+    for (auto iBand = 0; iBand < Bands::kNumBands; ++iBand)
+        _params.directPath.transmission[iBand] = params->transmission[iBand];
 
     _params.flags = static_cast<DirectEffectFlags>(params->flags);
     _params.transmissionType = static_cast<TransmissionType>(params->transmissionType);

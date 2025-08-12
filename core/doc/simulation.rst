@@ -40,6 +40,7 @@ Structures
 .. doxygenstruct:: IPLDistanceAttenuationModel
 .. doxygenstruct:: IPLAirAbsorptionModel
 .. doxygenstruct:: IPLDirectivity
+.. doxygenstruct:: IPLDeviationModel
 .. doxygenstruct:: IPLSimulationSettings
 .. doxygenstruct:: IPLSourceSettings
 .. doxygenstruct:: IPLSimulationInputs
@@ -54,6 +55,7 @@ Enumerations
 .. doxygenenum:: IPLDistanceAttenuationModelType
 .. doxygenenum:: IPLAirAbsorptionModelType
 .. doxygenenum:: IPLOcclusionType
+.. doxygenenum:: IPLDeviationModelType
 
 Callbacks
 ^^^^^^^^^
@@ -61,4 +63,5 @@ Callbacks
 .. doxygentypedef:: IPLDistanceAttenuationCallback
 .. doxygentypedef:: IPLAirAbsorptionCallback
 .. doxygentypedef:: IPLDirectivityCallback
+.. doxygentypedef:: IPLDeviationCallback
 .. doxygentypedef:: IPLPathingVisualizationCallback

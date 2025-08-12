@@ -59,6 +59,7 @@ enum Params
     DIRECT_BINAURAL,
     SIMULATION_OUTPUTS_HANDLE,
     PERSPECTIVE_CORRECTION,
+    PATHING_NORMALIZEEQ,
     NUM_PARAMS
 };
 
@@ -97,6 +98,7 @@ UnityAudioParameterDefinition gParamDefinitions[] =
     { "DirectBinaural", "", "Apply HRTF to direct path.", 0.0f, 1.0f, 1.0f, 1.0f, 1.0f },
     { "SimOutHandle", "", "Simulation outputs handle.", std::numeric_limits<float>::min(), std::numeric_limits<float>::max(), -1.0f, 1.0f, 1.0f },
     { "PerspectiveCorr", "", "Apply perspective correction to direct path.", 0.0f, 1.0f, 0.0f, 1.0f, 1.0f },
+    { "PathNormEQ", "", "Normalize pathing EQ.", 0.0f, 1.0f, 1.0f, 1.0f, 1.0f },
 };
 
 #if !defined(IPL_OS_UNSUPPORTED)
@@ -130,6 +132,7 @@ struct State
     float reflectionsMixLevel;
     bool pathingBinaural;
     float pathingMixLevel;
+    bool pathingNormalizeEQ;
 
     bool inputStarted;
 
@@ -381,6 +384,7 @@ void reset(UnityAudioEffectState* state)
     effect->reflectionsMixLevel = 1.0f;
     effect->pathingMixLevel = 1.0f;
     effect->pathingBinaural = false;
+    effect->pathingNormalizeEQ = false;
 
     iplSourceRelease(&effect->simulationSource[0]);
     iplSourceRelease(&effect->simulationSource[1]);
@@ -542,6 +546,9 @@ UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK getParam(UnityAudioEffectState* st
     case PATHING_MIXLEVEL:
         *value = effect->pathingMixLevel;
         break;
+    case PATHING_NORMALIZEEQ:
+        *value = (effect->pathingNormalizeEQ) ? 1.0f : 0.0f;
+        break;
     }
 
     return UNITY_AUDIODSP_OK;
@@ -686,6 +693,9 @@ UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK setParam(UnityAudioEffectState* st
         break;
     case PATHING_MIXLEVEL:
         effect->pathingMixLevel = value;
+        break;
+    case PATHING_NORMALIZEEQ:
+        effect->pathingNormalizeEQ = (value == 1.0f);
         break;
     case SIMULATION_OUTPUTS_HANDLE:
         if (gSourceManager)
@@ -946,6 +956,7 @@ UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK process(UnityAudioEffectState* sta
             pathParams.binaural = numChannelsOut == 2 && !gHRTFDisabled && (effect->pathingBinaural) ? IPL_TRUE : IPL_FALSE;
             pathParams.hrtf = gHRTF[0];
             pathParams.listener = listenerCoordinates;
+            pathParams.normalizeEQ = (effect->pathingNormalizeEQ) ? IPL_TRUE : IPL_FALSE;
 
             iplPathEffectApply(effect->pathEffect, &pathParams, &effect->monoBuffer, &effect->reflectionsSpatializedBuffer);
 

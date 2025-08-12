@@ -36,3 +36,9 @@ Install FMOD Studio Plugin Files
     FMOD Studio versions 2.0 through 2.1 expect plugin files to be under ``Assets/Plugins/FMOD/lib/(platform)``, whereas FMOD Studio 2.2 and later expect plugin files to be under ``Assets/Plugins/FMOD/platforms/(platform)/lib``. Use this menu command to move the files to the appropriate place.
 
     This is not necessary unless you are using FMOD Studio as your audio engine.
+
+Steam Audio Reverb Data Point > Bake All
+    Bakes reverb for every :doc:`Steam Audio Reverb Data Point <reverbdatapoint>` in the scene.
+
+Steam Audio Reverb Data Point > Clear Unreferenced Data
+    Deletes any Steam Audio Reverb Data assets no longer referenced in the project.

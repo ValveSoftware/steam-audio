@@ -95,6 +95,10 @@ public:
     virtual void removeData(IPLBakedDataIdentifier* identifier) override;
 
     virtual IPLsize getDataSize(IPLBakedDataIdentifier* identifier) override;
+
+    virtual void getEnergyField(IPLBakedDataIdentifier* identifier, int probeIndex, IEnergyField* energyField) override;
+
+    virtual void getReverb(IPLBakedDataIdentifier* identifier, int probeIndex, float* reverbTimes) override;
 };
 
 }

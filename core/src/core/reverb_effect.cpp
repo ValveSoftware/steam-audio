@@ -96,7 +96,13 @@ AudioEffectState ReverbEffect::apply(const ReverbEffectParams& params,
     }
 
     const auto* reverbTimes = params.reverb->reverbTimes;
-    auto maxReverbTime = std::max({reverbTimes[0], reverbTimes[1], reverbTimes[2]});
+
+    auto maxReverbTime = 0.0f;
+    for (auto i = 0; i < Bands::kNumBands; ++i)
+    {
+        maxReverbTime = std::max(maxReverbTime, reverbTimes[i]);
+    }
+
     mNumTailFramesRemaining = 2 * static_cast<int>(ceilf((maxReverbTime * mSamplingRate) / mFrameSize)); // fixme: why 2x?
 
     return (mNumTailFramesRemaining > 0) ? AudioEffectState::TailRemaining : AudioEffectState::TailComplete;
@@ -134,18 +140,21 @@ void ReverbEffect::apply_float4(const float* reverbTimes,
 
     memset(out, 0, mFrameSize * sizeof(float));
 
-    float const lowCutoff[Bands::kNumBands] = {20.0f, 500.0f, 5000.0f};
-    float const highCutoff[Bands::kNumBands] = {500.0f, 5000.0f, 22000.0f};
-
     for (auto i = 0; i < kNumDelays; ++i)
     {
         float absorptiveGains[Bands::kNumBands];
         calcAbsorptiveGains(clampedReverbTimes, mDelayValues[i], absorptiveGains);
 
         IIR iir[Bands::kNumBands];
-        iir[0] = IIR::lowShelf(highCutoff[0], absorptiveGains[0], mSamplingRate);
-        iir[1] = IIR::peaking(lowCutoff[1], highCutoff[1], absorptiveGains[1], mSamplingRate);
-        iir[2] = IIR::highShelf(lowCutoff[2], absorptiveGains[2], mSamplingRate);
+        for (auto j = 0; j < Bands::kNumBands; ++j)
+        {
+            if (j == 0)
+                iir[j] = IIR::lowShelf(Bands::kHighCutoffFrequencies[j], absorptiveGains[j], mSamplingRate);
+            else if (j == Bands::kNumBands - 1)
+                iir[j] = IIR::highShelf(Bands::kLowCutoffFrequencies[j], absorptiveGains[j], mSamplingRate);
+            else
+                iir[j] = IIR::peaking(Bands::kLowCutoffFrequencies[j], Bands::kHighCutoffFrequencies[j], absorptiveGains[j], mSamplingRate);
+        }
 
         for (auto j = 0; j < Bands::kNumBands; ++j)
         {
@@ -157,9 +166,15 @@ void ReverbEffect::apply_float4(const float* reverbTimes,
     calcToneCorrectionGains(clampedReverbTimes, toneCorrectionGains);
 
     IIR iir[Bands::kNumBands];
-    iir[0] = IIR::lowShelf(highCutoff[0], toneCorrectionGains[0], mSamplingRate);
-    iir[1] = IIR::peaking(lowCutoff[1], highCutoff[1], toneCorrectionGains[1], mSamplingRate);
-    iir[2] = IIR::highShelf(lowCutoff[2], toneCorrectionGains[2], mSamplingRate);
+    for (auto j = 0; j < Bands::kNumBands; ++j)
+    {
+        if (j == 0)
+            iir[j] = IIR::lowShelf(Bands::kHighCutoffFrequencies[j], toneCorrectionGains[j], mSamplingRate);
+        else if (j == Bands::kNumBands - 1)
+            iir[j] = IIR::highShelf(Bands::kLowCutoffFrequencies[j], toneCorrectionGains[j], mSamplingRate);
+        else
+            iir[j] = IIR::peaking(Bands::kLowCutoffFrequencies[j], Bands::kHighCutoffFrequencies[j], toneCorrectionGains[j], mSamplingRate);
+    }
 
     for (auto i = 0; i < Bands::kNumBands; ++i)
     {
@@ -298,6 +313,8 @@ void ReverbEffect::calcDelaysForReverbTime(float reverbTime)
     }
 }
 
+float ReverbEffect::sMinAbsorptiveGain = 1e-3f;
+
 void ReverbEffect::calcAbsorptiveGains(const float* reverbTimes,
                                        int delay,
                                        float* gains)
@@ -305,7 +322,7 @@ void ReverbEffect::calcAbsorptiveGains(const float* reverbTimes,
     for (auto i = 0; i < Bands::kNumBands; ++i)
     {
         // Note: Limit the gains to avoid instability in IIR filter.
-        gains[i] = std::max(expf(-(6.91f * delay) / (reverbTimes[i] * mSamplingRate)), 1e-8f);
+        gains[i] = std::max(expf(-(6.91f * delay) / (reverbTimes[i] * mSamplingRate)), sMinAbsorptiveGain);
     }
 }
 
@@ -317,7 +334,12 @@ void ReverbEffect::calcToneCorrectionGains(const float* reverbTimes,
         gains[i] = sqrtf(1.0f / reverbTimes[i]);
     }
 
-    auto maxGain = std::max({gains[0], gains[1], gains[2]});
+    auto maxGain = 0.0f;
+    for (auto i = 0; i < Bands::kNumBands; ++i)
+    {
+        maxGain = std::max(maxGain, gains[i]);
+    }
+    
     for (auto i = 0; i < Bands::kNumBands; ++i)
     {
         gains[i] /= maxGain;

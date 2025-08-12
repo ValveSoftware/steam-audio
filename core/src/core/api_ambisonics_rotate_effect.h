@@ -14,6 +14,8 @@
 // limitations under the License.
 //
 
+#pragma once
+
 #include "ambisonics_rotate_effect.h"
 using namespace ipl;
 

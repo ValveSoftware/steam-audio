@@ -151,7 +151,10 @@ static bool ExportStaticMeshComponent(UStaticMeshComponent* StaticMeshComponent,
     FSoftObjectPath MaterialAsset = GetMaterialAssetForActor(StaticMeshComponent->GetOwner());
     if (!MaterialAsset.IsValid())
     {
-        MaterialAsset = GetDefault<USteamAudioSettings>()->DefaultMeshMaterial;
+        auto SteamAudioSettings = GetDefault<USteamAudioSettings>();
+        auto BodyInstance = StaticMeshComponent->GetBodyInstance();
+        auto PhysicsMappedMaterial = BodyInstance ? SteamAudioSettings->PhysMatToSteamAudioMatTable.Find(BodyInstance->GetSimplePhysicalMaterial()) : nullptr;
+        MaterialAsset = PhysicsMappedMaterial ? PhysicsMappedMaterial->SteamAudioMaterial : SteamAudioSettings->DefaultMeshMaterial;
     }
 
     if (!ExportMaterial(MaterialAsset, Materials, MaterialIndexForAsset))
@@ -170,7 +173,6 @@ static bool ExportStaticMeshComponent(UStaticMeshComponent* StaticMeshComponent,
 /**
  * Exports a single Static Mesh actor.
  *
- * todo: what if there is a tree of static mesh components?
  * todo: what if static mesh components are attached to arbitrary actors (instead of static mesh actors)?
  */
 static bool ExportStaticMeshComponentsForActor(AStaticMeshActor* StaticMeshActor, TArray<IPLVector3>& Vertices,
@@ -179,16 +181,20 @@ static bool ExportStaticMeshComponentsForActor(AStaticMeshActor* StaticMeshActor
 {
     check(StaticMeshActor);
 
-    UStaticMeshComponent* StaticMeshComponent = StaticMeshActor->GetStaticMeshComponent();
-    if (!StaticMeshComponent)
-        return false;
+    TInlineComponentArray<UStaticMeshComponent*> StaticMeshComponents;
+    StaticMeshActor->GetComponents<UStaticMeshComponent>(StaticMeshComponents);
 
-    UStaticMesh* StaticMesh = StaticMeshComponent->GetStaticMesh();
-    if (!StaticMesh || !StaticMesh->HasValidRenderData())
-        return false;
+    for (UStaticMeshComponent* StaticMeshComponent : StaticMeshComponents)
+    {
+        UStaticMesh* StaticMesh = StaticMeshComponent->GetStaticMesh();
+        if (!StaticMesh || !StaticMesh->HasValidRenderData())
+            return false;
 
-    return ExportStaticMeshComponent(StaticMeshComponent, Vertices, Triangles, MaterialIndices, Materials,
-        MaterialIndexForAsset, bRelativePositions);
+        if (!ExportStaticMeshComponent(StaticMeshComponent, Vertices, Triangles, MaterialIndices, Materials, MaterialIndexForAsset, bRelativePositions))
+            return false;
+    }
+
+    return true;
 }
 
 #if WITH_EDITOR

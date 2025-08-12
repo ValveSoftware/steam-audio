@@ -41,18 +41,21 @@ void IPL_FLOAT8_ATTR ReverbEffect::apply_float8(const float* reverbTimes,
 
     memset(out, 0, mFrameSize * sizeof(float));
 
-    float const lowCutoff[Bands::kNumBands] = {20.0f, 500.0f, 5000.0f};
-    float const highCutoff[Bands::kNumBands] = {500.0f, 5000.0f, 22000.0f};
-
     for (auto i = 0; i < kNumDelays; ++i)
     {
         float absorptiveGains[Bands::kNumBands];
         calcAbsorptiveGains(clampedReverbTimes, mDelayValues[i], absorptiveGains);
 
         IIR iir[Bands::kNumBands];
-        iir[0] = IIR::lowShelf(highCutoff[0], absorptiveGains[0], mSamplingRate);
-        iir[1] = IIR::peaking(lowCutoff[1], highCutoff[1], absorptiveGains[1], mSamplingRate);
-        iir[2] = IIR::highShelf(lowCutoff[2], absorptiveGains[2], mSamplingRate);
+        for (auto j = 0; j < Bands::kNumBands; ++j)
+        {
+            if (j == 0)
+                iir[j] = IIR::lowShelf(Bands::kHighCutoffFrequencies[j], absorptiveGains[j], mSamplingRate);
+            else if (j == Bands::kNumBands - 1)
+                iir[j] = IIR::highShelf(Bands::kLowCutoffFrequencies[j], absorptiveGains[j], mSamplingRate);
+            else
+                iir[j] = IIR::peaking(Bands::kLowCutoffFrequencies[j], Bands::kHighCutoffFrequencies[j], absorptiveGains[j], mSamplingRate);
+        }
 
         for (auto j = 0; j < Bands::kNumBands; ++j)
         {
@@ -64,9 +67,15 @@ void IPL_FLOAT8_ATTR ReverbEffect::apply_float8(const float* reverbTimes,
     calcToneCorrectionGains(clampedReverbTimes, toneCorrectionGains);
 
     IIR iir[Bands::kNumBands];
-    iir[0] = IIR::lowShelf(highCutoff[0], toneCorrectionGains[0], mSamplingRate);
-    iir[1] = IIR::peaking(lowCutoff[1], highCutoff[1], toneCorrectionGains[1], mSamplingRate);
-    iir[2] = IIR::highShelf(lowCutoff[2], toneCorrectionGains[2], mSamplingRate);
+    for (auto j = 0; j < Bands::kNumBands; ++j)
+    {
+        if (j == 0)
+            iir[j] = IIR::lowShelf(Bands::kHighCutoffFrequencies[j], toneCorrectionGains[j], mSamplingRate);
+        else if (j == Bands::kNumBands - 1)
+            iir[j] = IIR::highShelf(Bands::kLowCutoffFrequencies[j], toneCorrectionGains[j], mSamplingRate);
+        else
+            iir[j] = IIR::peaking(Bands::kLowCutoffFrequencies[j], Bands::kHighCutoffFrequencies[j], toneCorrectionGains[j], mSamplingRate);
+    }
 
     for (auto i = 0; i < Bands::kNumBands; ++i)
     {

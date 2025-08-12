@@ -286,6 +286,22 @@ void UIWindow::drawLineSegment(const Vector3f& p, const Vector3f& q, const UICol
     glEnd();
 }
 
+void UIWindow::drawTriangle(const Vector3f& v0, const Vector3f& v1, const Vector3f& v2, 
+                            const UIColor& c0, const UIColor& c1, const UIColor& c2, float width /* = 1.0f */)
+{
+    glShadeModel(GL_SMOOTH);
+    glLineWidth(width);
+
+    glBegin(GL_TRIANGLES);
+    glColor3f(c0.r, c0.g, c0.b);
+    glVertex3f(v0.x(), v0.y(), v0.z());
+    glColor3f(c1.r, c1.g, c1.b);
+    glVertex3f(v1.x(), v1.y(), v1.z());
+    glColor3f(c2.r, c2.g, c2.b);
+    glVertex3f(v2.x(), v2.y(), v2.z());
+    glEnd();
+}
+
 void UIWindow::drawRay(const Ray& ray, const UIColor& color, float width /* = 1.0f */)
 {
     drawLineSegment(ray.origin, ray.origin + ray.direction, color, width);

@@ -39,7 +39,17 @@ OpenCLProgram::OpenCLProgram(const OpenCLDevice& openCL,
     auto device = openCL.device();
     status = clBuildProgram(mProgram, 1, &device, nullptr, nullptr, nullptr);
     if (status != CL_SUCCESS)
+    {
+        size_t buildLogSize = 0;
+        clGetProgramBuildInfo(mProgram, openCL.device(), CL_PROGRAM_BUILD_LOG, buildLogSize, nullptr, &buildLogSize);
+
+        vector<char> buildLog(buildLogSize);
+        clGetProgramBuildInfo(mProgram, openCL.device(), CL_PROGRAM_BUILD_LOG, buildLogSize, buildLog.data(), nullptr);
+
+        gLog().message(MessageSeverity::Error, "OpenCL compile failed:\n\n%s", buildLog.data());
+
         throw Exception(Status::Initialization);
+    }
 }
 
 OpenCLProgram::~OpenCLProgram()

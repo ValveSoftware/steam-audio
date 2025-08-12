@@ -61,6 +61,7 @@ AKRESULT SteamAudioSpatializerFXParams::Init(AK::IAkPluginMemAlloc* in_pAllocato
         NonRTPC.reflectionsBinaural = false;
         NonRTPC.pathing = false;
         NonRTPC.pathingBinaural = false;
+        NonRTPC.pathingNormalizeEQ = false;
 
         RTPC.pos[0] = 1.f;
         RTPC.pos[1] = 0.f;
@@ -121,6 +122,7 @@ AKRESULT SteamAudioSpatializerFXParams::SetParamsBlock(const void* in_pParamsBlo
     NonRTPC.pathing = READBANKDATA(bool, block, in_uBlockSize);
     NonRTPC.pathingBinaural = READBANKDATA(bool, block, in_uBlockSize);
     RTPC.pathingMixLevel = READBANKDATA(AkReal32, block, in_uBlockSize);
+    NonRTPC.pathingNormalizeEQ = READBANKDATA(bool, block, in_uBlockSize);
 
     CHECKBANKDATASIZE(in_uBlockSize, result);
 
@@ -206,6 +208,9 @@ AKRESULT SteamAudioSpatializerFXParams::SetParam(AkPluginParamID in_paramID, con
         break;
     case SPATIALIZER_PARAM_PATHINGMIXLEVEL:
         RTPC.directMixLevel = *((AkReal32*) in_pValue);
+        break;
+    case SPATIALIZER_PARAM_PATHINGNORMALIZEEQ:
+        NonRTPC.pathingNormalizeEQ = *((bool*) in_pValue);
         break;
     default:
         return AK_InvalidParameter;

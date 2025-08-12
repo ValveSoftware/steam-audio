@@ -123,12 +123,12 @@ You must now configure your game engine to enable occlusion simulation for this 
 
     .. group-tab:: C++
 
-        1.  Call ``iplSimulatorRunDirect`` to run occlusion simulations.
-        2.  Call ``iplSourceGetOutputs`` to retrieve the results of the simulation for a given source in an ``IPLSimulationOutputs`` structure.
+        1.  Make sure an ``IPLSource`` object is registered for use by the Steam Audio Spatializer DSP by calling ``iplFMODAddSource``.
+        2.  Call ``iplSimulatorRunDirect`` to run occlusion simulations.
         3.  Call ``FMOD::DSP::setParameterData`` to set the following parameters of the Steam Audio Spatializer DSP attached to the event corresponding to the source:
 
-            1.   Set ``APPLY_OCCLUSION`` to ``1``.
-            2.   Set ``SIMULATION_OUTPUTS`` to the address of the ``IPLSimulationOutputs`` structure.
+            1.   Set ``IPL_SPATIALIZE_APPLY_OCCLUSION`` to ``1``.
+            2.   Set ``IPL_SPATIALIZE_SIMULATION_OUTPUTS_HANDLE`` to the handle value returned by ``iplFMODAddSource``.
 
 You can also explicitly control occlusion manually or via scripting. For more information, see :doc:`Steam Audio Spatializer <spatializer>`.
 
@@ -164,13 +164,13 @@ You must now configure your game engine to enable transmission simulation for th
 
     .. group-tab:: C++
 
-       1.  Call ``iplSimulatorRunDirect`` to run occlusion and transmission simulations.
-       2.  Call ``iplSourceGetOutputs`` to retrieve the results of the simulation for a given source in an ``IPLSimulationOutputs`` structure.
+       1.  Make sure an ``IPLSource`` object is registered for use by the Steam Audio Spatializer DSP by calling ``iplFMODAddSource``.
+       2.  Call ``iplSimulatorRunDirect`` to run occlusion and transmission simulations.
        3.  Call ``FMOD::DSP::setParameterData`` to set the following parameters of the Steam Audio Spatializer DSP attached to the event corresponding to the source:
 
-           1.   Set ``APPLY_OCCLUSION`` to ``1``.
-           2.   Set ``APPLY_TRANSMISSION`` to ``1``.
-           3.   Set ``SIMULATION_OUTPUTS`` to the address of the ``IPLSimulationOutputs`` structure.
+           1.   Set ``IPL_SPATIALIZE_APPLY_OCCLUSION`` to ``1``.
+           2.   Set ``IPL_SPATIALIZE_APPLY_TRANSMISSION`` to ``1``.
+           3.   Set ``IPL_SPATIALIZE_SIMULATION_OUTPUTS_HANDLE`` to the handle value returned by ``iplFMODAddSource``.
 
 You can also control whether the transmission effect is frequency-dependent, or explicitly control transmission manually or via scripting. For more information, see :doc:`Steam Audio Spatializer <spatializer>`.
 
@@ -206,12 +206,12 @@ You must now configure your game engine to enable reflections simulation for thi
 
     .. group-tab:: C++
 
-       1.  Call ``iplSimulatorRunReflections`` to run reflection simulations.
-       2.  Call ``iplSourceGetOutputs`` to retrieve the results of the simulation for a given source in an ``IPLSimulationOutputs`` structure.
+       1.  Make sure an ``IPLSource`` object is registered for use by the Steam Audio Spatializer DSP by calling ``iplFMODAddSource``.
+       2.  Call ``iplSimulatorRunReflections`` to run reflection simulations.
        3.  Call ``FMOD::DSP::setParameterData`` to set the following parameters of the Steam Audio Spatializer DSP attached to the event corresponding to the source:
 
-            1.   Set ``APPLY_REFLECTIONS`` to ``1``.
-            2.   Set ``SIMULATION_OUTPUTS`` to the address of the ``IPLSimulationOutputs`` structure.
+           1.   Set ``IPL_SPATIALIZE_APPLY_REFLECTIONS`` to ``1``.
+           2.   Set ``IPL_SPATIALIZE_SIMULATION_OUTPUTS_HANDLE`` to the handle value returned by ``iplFMODAddSource``.
 
 For more information, see :doc:`Steam Audio Spatializer <spatializer>`.
 
@@ -288,11 +288,11 @@ You must now configure your game engine to enable reflections simulation for thi
 
     .. group-tab:: C++
 
-       1.  Call ``iplSimulatorRunPathing`` to run pathing simulations.
-       2.  Call ``iplSourceGetOutputs`` to retrieve the results of the simulation for a given source in an ``IPLSimulationOutputs`` structure.
+       1.  Make sure an ``IPLSource`` object is registered for use by the Steam Audio Spatializer DSP by calling ``iplFMODAddSource``.
+       2.  Call ``iplSimulatorRunPathing`` to run pathing simulations.
        3.  Call ``FMOD::DSP::setParameterData`` to set the following parameters of the Steam Audio Spatializer DSP attached to the event corresponding to the source:
 
-            1.   Set ``APPLY_PATHING`` to ``1``.
-            2.   Set ``SIMULATION_OUTPUTS`` to the address of the ``IPLSimulationOutputs`` structure.
+           1.   Set ``IPL_SPATIALIZE_APPLY_PATHING`` to ``1``.
+           2.   Set ``IPL_SPATIALIZE_SIMULATION_OUTPUTS_HANDLE`` to the handle value returned by ``iplFMODAddSource``.
 
 For more information, see :doc:`Steam Audio Spatializer <spatializer>`.

@@ -132,6 +132,11 @@ namespace SteamAudio
             API.iplProbeBatchAddProbeArray(mProbeBatch, probeArray.Get());
         }
 
+        public void AddProbe(Sphere probe)
+        {
+            API.iplProbeBatchAddProbe(mProbeBatch, probe);
+        }
+
         public void Commit()
         {
             API.iplProbeBatchCommit(mProbeBatch);

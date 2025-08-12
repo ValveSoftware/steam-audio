@@ -45,4 +45,10 @@ double Timer::elapsedMicroseconds() const
     return duration.count();
 }
 
+double Timer::elapsedNanoseconds() const
+{
+    std::chrono::duration<double, std::nano> duration = std::chrono::high_resolution_clock::now() - mStartTime;
+    return duration.count();
+}
+
 }

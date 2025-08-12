@@ -63,6 +63,7 @@ namespace SteamAudio
         SerializedProperty mFindAlternatePaths;
         SerializedProperty mApplyHRTFToPathing;
         SerializedProperty mPathingMixLevel;
+        SerializedProperty mNormalizePathingEQ;
 
         Texture2D mDirectivityPreview = null;
         float[] mDirectivitySamples = null;
@@ -111,6 +112,7 @@ namespace SteamAudio
             mFindAlternatePaths = serializedObject.FindProperty("findAlternatePaths");
             mApplyHRTFToPathing = serializedObject.FindProperty("applyHRTFToPathing");
             mPathingMixLevel = serializedObject.FindProperty("pathingMixLevel");
+            mNormalizePathingEQ = serializedObject.FindProperty("normalizePathingEQ");
         }
 
         public override void OnInspectorGUI()
@@ -267,6 +269,7 @@ namespace SteamAudio
                 {
                     EditorGUILayout.PropertyField(mApplyHRTFToPathing);
                     EditorGUILayout.PropertyField(mPathingMixLevel);
+                    EditorGUILayout.PropertyField(mNormalizePathingEQ);
                 }
             }
 

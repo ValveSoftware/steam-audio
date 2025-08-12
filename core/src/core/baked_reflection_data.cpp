@@ -286,6 +286,8 @@ void BakedReflectionsData::setHasConvolution(bool hasConvolution)
             mNeedsUpdate[i] = true;
         }
     }
+
+    mHasConvolution = hasConvolution;
 }
 
 void BakedReflectionsData::setHasParametric(bool hasParametric)
@@ -299,6 +301,8 @@ void BakedReflectionsData::setHasParametric(bool hasParametric)
             mNeedsUpdate[i] = true;
         }
     }
+
+    mHasParametric = hasParametric;
 }
 
 bool BakedReflectionsData::needsUpdate(int index) const

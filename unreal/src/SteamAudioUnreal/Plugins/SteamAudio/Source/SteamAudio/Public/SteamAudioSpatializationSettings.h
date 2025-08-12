@@ -65,6 +65,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = PathingSettings)
 	float PathingMixLevel;
 
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = PathingSettings, meta = (DisplayName = "Normalize Pathing EQ"))
+	bool bNormalizePathingEQ;
+
     USteamAudioSpatializationSettings();
 
 #if WITH_EDITOR

@@ -45,6 +45,7 @@ studio.plugins.registerPluginDescription("Steam Audio Spatializer", {
 		"PathBinaural": {displayName: "Apply HRTF To Pathing"},
 		"PathMixLevel": {displayName: "Pathing Mix Level"},
 		"OutputFormat": {displayName: "Output Format"},
+		"PathNormEQ": {displayName: "Normalize Pathing EQ"},
 	},
 	deckUi: {
 		deckWidgetType: studio.ui.deckWidgetType.Layout,
@@ -275,6 +276,11 @@ studio.plugins.registerPluginDescription("Steam Audio Spatializer", {
 					{
 						deckWidgetType: studio.ui.deckWidgetType.Button,
 						binding: "PathBinaural",
+						text: "On"
+					},
+					{
+						deckWidgetType: studio.ui.deckWidgetType.Button,
+						binding: "PathNormEQ",
 						text: "On"
 					},
 					{

@@ -192,6 +192,15 @@ public:
     virtual IPLfloat32 calculateDirectivity(IPLCoordinateSpace3 source,
                                             IPLVector3 listener,
                                             IPLDirectivity* model) override;
+
+    virtual IPLerror createEnergyField(const IPLEnergyFieldSettings* settings,
+                                       IEnergyField** energyField) override;
+
+    virtual IPLerror createImpulseResponse(const IPLImpulseResponseSettings* settings,
+                                           IImpulseResponse** impulseResponse) override;
+
+    virtual IPLerror createReconstructor(const IPLReconstructorSettings* settings,
+                                         IReconstructor** reconstructor) override;
 };
 
 }

@@ -62,6 +62,7 @@ bool SteamAudioSpatializerPlugin::GetBankParameters(const GUID& platform, AK::Ww
     dataWriter.WriteBool(m_propertySet.GetBool(platform, "Pathing"));
     dataWriter.WriteBool(m_propertySet.GetBool(platform, "PathingBinaural"));
     dataWriter.WriteReal32(m_propertySet.GetReal32(platform, "PathingMixLevel"));
+    dataWriter.WriteBool(m_propertySet.GetBool(platform, "PathingNormalizeEQ"));
 
     return true;
 }

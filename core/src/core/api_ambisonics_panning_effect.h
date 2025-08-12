@@ -14,6 +14,8 @@
 // limitations under the License.
 //
 
+#pragma once
+
 #include "ambisonics_panning_effect.h"
 using namespace ipl;
 

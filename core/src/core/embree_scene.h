@@ -21,6 +21,8 @@
 #include "embree_device.h"
 #include "scene.h"
 
+#include "embree_reflection_simulator.ispc.h"
+
 namespace ipl {
 
 // --------------------------------------------------------------------------------------------------------------------
@@ -69,6 +71,11 @@ public:
     const Material* const* materialsForGeometry() const
     {
         return mMaterialsForGeometry.data();
+    }
+
+    const ispc::Material* const* ispcMaterialsForGeometry() const
+    {
+        return mISPCMaterialsForGeometry.data();
     }
 
     const int* const* materialIndicesForGeometry() const
@@ -126,7 +133,12 @@ public:
 
     virtual void dumpObj(const string& fileName) const override;
 
-    virtual void SetStaticMeshMaterial(IStaticMesh* staticMesh, Material* NewMaterial, int index) override;
+    // Allocates and returns a new geometry ID. Call this function to set the geometry ID for a new static mesh
+    // or instanced mesh when creating it.
+    uint32_t acquireGeometryID();
+
+    // Marks a geometry ID as available for reuse. Call this function when destroying a static mesh or instanced mesh.
+    void releaseGeometryID(uint32_t geomID);
 
 private:
     shared_ptr<EmbreeDevice> mEmbree;
@@ -134,6 +146,7 @@ private:
     list<shared_ptr<IStaticMesh>> mStaticMeshes[2];
     list<shared_ptr<IInstancedMesh>> mInstancedMeshes[2];
     Array<const Material*> mMaterialsForGeometry;
+    vector<const ispc::Material*> mISPCMaterialsForGeometry;
     Array<const int*> mMaterialIndicesForGeometry;
 
     // Flag indicating whether the scene has changed in some way since the previous call to commit().
@@ -141,6 +154,12 @@ private:
 
     // The change version of the scene.
     uint32_t mVersion;
+
+    // The next available geometry ID we can assign.
+    uint32_t mNextGeomID;
+
+    // Previously-used geometry IDs that are now available to be assigned to new geometry.
+    priority_queue<uint32_t> mFreeGeomIDs;
 
     void initialize();
 };

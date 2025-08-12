@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+#include <bands.h>
 #include <profiler.h>
 #include <phonon.h>
 
@@ -72,7 +73,7 @@ void benchmarkPathEffectWithParams(int order, int frameSize)
     const int kNumRuns = 10000;
     const int kSamplingRate = 48000;
     const int numChannels = (order + 1) * (order + 1);
-    const int kNumBands = 3;
+    const int kNumBands = ipl::Bands::kNumBands;
 
     IPLContext context = nullptr;
     IPLContextSettings contextSettings{ STEAMAUDIO_VERSION, nullptr, nullptr, nullptr, IPL_SIMDLEVEL_AVX512 };
@@ -92,6 +93,10 @@ void benchmarkPathEffectWithParams(int order, int frameSize)
     IPLVector3 listenerUp = { 0.0f, 1.0f, 0.0f };
 
     float eqGains[kNumBands] = {1.0f, 0.5f, 0.25f};
+    for (auto i = 3; i < ipl::Bands::kNumBands; ++i)
+    {
+        eqGains[i] = 0.15f;
+    }
     std::vector<float> coeffs(numChannels);
     for (auto i = 0u; i < coeffs.size(); ++i)
     {
@@ -125,7 +130,7 @@ void benchmarkPathEffectWithParams(int order, int frameSize)
 
     IPLPathEffectParams params{};
     params.order = order;
-    memcpy(params.eqCoeffs, eqGains, 3 * sizeof(float));
+    memcpy(params.eqCoeffs, eqGains, kNumBands * sizeof(float));
     params.shCoeffs = coeffs.data();
     params.binaural = IPL_TRUE;
     params.hrtf = hrtf;

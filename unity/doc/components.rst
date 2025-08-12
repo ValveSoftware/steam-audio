@@ -15,3 +15,4 @@ All of these components can be attached by clicking Add Component in the Inspect
     probe-batch
     source
     static-mesh
+    reverbdatapoint

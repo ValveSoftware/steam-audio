@@ -36,6 +36,7 @@ public:
     double elapsedSeconds() const;
     double elapsedMilliseconds() const;
     double elapsedMicroseconds() const;
+    double elapsedNanoseconds() const;
 
 private:
     std::chrono::time_point<std::chrono::high_resolution_clock> mStartTime;
