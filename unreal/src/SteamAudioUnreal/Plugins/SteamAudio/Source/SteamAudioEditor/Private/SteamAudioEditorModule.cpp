@@ -373,7 +373,7 @@ void FSteamAudioEditorModule::OnExportDynamicObjects()
         if (!It->Asset.IsAsset())
             continue;
 
-        if (!It->GetOwner()->GetInstanceComponents().Contains(Cast<UActorComponent>(*It)))
+        if (!It->GetOwner()->IsChildActor() && !It->GetOwner()->GetInstanceComponents().Contains(Cast<UActorComponent>(*It)))
             continue;
 
         DynamicObjects.Add(*It);
@@ -435,7 +435,7 @@ void FSteamAudioEditorModule::OnExportDynamicObjectsCurrentLevel()
         if (!It->Asset.IsAsset())
             continue;
 
-        if (!It->GetOwner()->GetInstanceComponents().Contains(Cast<UActorComponent>(*It)))
+        if (!It->GetOwner()->IsChildActor() && !It->GetOwner()->GetInstanceComponents().Contains(Cast<UActorComponent>(*It)))
             continue;
 
         DynamicObjects.Add(*It);
