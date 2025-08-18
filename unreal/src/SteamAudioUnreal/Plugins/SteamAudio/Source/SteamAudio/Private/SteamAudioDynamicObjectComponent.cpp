@@ -35,18 +35,7 @@ USteamAudioDynamicObjectComponent::USteamAudioDynamicObjectComponent()
 
 FSoftObjectPath USteamAudioDynamicObjectComponent::GetAssetToLoad()
 {
-    FSoftObjectPath AssetToLoad = Asset;
-
-    if (!AssetToLoad.IsAsset())
-    {
-        const USteamAudioDynamicObjectComponent* DefaultObject = GetDefault<USteamAudioDynamicObjectComponent>();
-        if (DefaultObject)
-        {
-            AssetToLoad = DefaultObject->Asset;
-        }
-    }
-
-    return AssetToLoad;
+    return Asset;
 }
 
 void USteamAudioDynamicObjectComponent::BeginPlay()
