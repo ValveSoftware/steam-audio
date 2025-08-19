@@ -15,6 +15,7 @@
 //
 
 #include "SteamAudioDynamicObjectDetails.h"
+#include "Engine/StaticMeshActor.h"
 #include "ContentBrowserModule.h"
 #include "DetailCategoryBuilder.h"
 #include "DetailLayoutBuilder.h"
