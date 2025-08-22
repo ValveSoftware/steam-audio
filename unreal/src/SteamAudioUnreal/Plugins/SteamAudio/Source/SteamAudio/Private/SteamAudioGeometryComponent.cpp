@@ -19,6 +19,7 @@
 #include "Engine/StaticMesh.h"
 #include "Engine/StaticMeshActor.h"
 #include "StaticMeshResources.h"
+#include "SteamAudioSettings.h"
 
 // ---------------------------------------------------------------------------------------------------------------------
 // USteamAudioGeometryComponent
@@ -32,6 +33,28 @@ USteamAudioGeometryComponent::USteamAudioGeometryComponent()
 {
     // Disable ticking.
     PrimaryComponentTick.bCanEverTick = false;
+}
+
+void USteamAudioGeometryComponent::BeginPlay()
+{
+    Super::BeginPlay();
+
+    auto Settings = GetMutableDefault<USteamAudioSettings>();
+    if (int32* ExportIndexValue = Settings->ExportIndexesMap.Find(GetOwner()->GetName()))
+    {
+        ExportIndex = *ExportIndexValue;
+    }
+}
+
+void USteamAudioGeometryComponent::SetExportIndex(int32 NewExportIndex)
+{
+    auto Settings = GetMutableDefault<USteamAudioSettings>();
+    if (!Settings->ExportIndexesMap.Contains(GetOwner()->GetName()))
+    {
+        Settings->ExportIndexesMap.Add(GetOwner()->GetName(), NewExportIndex);
+    }
+
+    Settings->TryUpdateDefaultConfigFile();
 }
 
 void USteamAudioGeometryComponent::OnComponentCreated()

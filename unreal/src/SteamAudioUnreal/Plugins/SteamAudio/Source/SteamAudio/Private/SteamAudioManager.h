@@ -27,6 +27,7 @@
 class USteamAudioDynamicObjectComponent;
 class USteamAudioListenerComponent;
 class USteamAudioSourceComponent;
+class AStaticMeshActor;
 
 namespace SteamAudio {
 

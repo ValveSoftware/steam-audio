@@ -18,6 +18,7 @@
 #include "AudioDevice.h"
 #include "Async/Async.h"
 #include "HAL/UnrealMemory.h"
+#include "Engine/StaticMeshActor.h"
 #include "SteamAudioAudioEngineInterface.h"
 #include "SteamAudioCommon.h"
 #include "SteamAudioDynamicObjectComponent.h"

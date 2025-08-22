@@ -190,7 +190,12 @@ void EmbreeScene::commit()
 
     for (const auto& staticMesh : mStaticMeshes[0])
     {
-        const auto* embreeStaticMesh = reinterpret_cast<const EmbreeStaticMesh*>(staticMesh.get());
+        auto embreeStaticMesh = reinterpret_cast<EmbreeStaticMesh*>(staticMesh.get());
+        if (embreeStaticMesh->isMarkedToUpdateMaterials())
+        {
+            memcpy(embreeStaticMesh->materials(), embreeStaticMesh->materialsToUpdate().data(), embreeStaticMesh->numMaterials() * sizeof(Material));
+            embreeStaticMesh->unmarkToUpdateMaterials();
+        }
 
         auto index = embreeStaticMesh->geometryIndex();
 
@@ -451,11 +456,14 @@ void EmbreeScene::SetStaticMeshMaterial(IStaticMesh* staticMesh, Material* NewMa
     {
         if (curStaticMesh.get() == embreeStaticMesh)
         {
-            *const_cast<Material*>(embreeStaticMesh->materials() + index) = *NewMaterial;
+            embreeStaticMesh->materialsToUpdate().zero();
+            embreeStaticMesh->materialsToUpdate().resize(embreeStaticMesh->numMaterials());
+            memcpy(embreeStaticMesh->materialsToUpdate().data(), embreeStaticMesh->materials(), embreeStaticMesh->numMaterials() * sizeof(Material));
+            *const_cast<Material*>(embreeStaticMesh->materialsToUpdate().data() + index) = *NewMaterial;
+            embreeStaticMesh->markToUpdateMaterials();
             break;
         }
     }
-    commit();
 }
 
 }

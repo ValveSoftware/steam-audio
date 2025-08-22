@@ -40,6 +40,10 @@ public:
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = MaterialSettings, meta = (AllowedClasses = "/Script/SteamAudio.SteamAudioMaterial"))
     FSoftObjectPath Material;
 
+    /** Indicates whether we want the ability to change the geometry component's material at runtime. */
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = MaterialSettings)
+    bool bWantToChangeMaterialAtRuntime = true;
+
     /** Whether or not to export all actors attached to this actor. */
     UPROPERTY(EditAnywhere, Category = ExportSettings)
     bool bExportAllChildren;
@@ -54,6 +58,8 @@ public:
 
     USteamAudioGeometryComponent();
 
+    virtual void BeginPlay() override;
+
     /**
      * Inherited from UActorComponent
      */
@@ -66,7 +72,13 @@ public:
     virtual void PostEditChangeProperty(struct FPropertyChangedEvent& PropertyChangedEvent) override;
 #endif
 
+    void SetExportIndex(int32 NewExportIndex);
+
+    int32 GetExportIndex() const { return ExportIndex; }
+
 private:
+    int32 ExportIndex;
+
     /** Recalculates the number of vertices and triangles that are exported as part of this component. */
     void UpdateStatistics();
 

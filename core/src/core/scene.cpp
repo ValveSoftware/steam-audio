@@ -148,6 +148,17 @@ void Scene::commit()
     {
         instancedMesh->commit(*this);
     }
+    
+    // Update materials if needed
+    for (const auto& staticMesh : mStaticMeshes[0])
+    {
+        auto phononStaticMesh = static_cast<StaticMesh*>(staticMesh.get());
+        if (phononStaticMesh->isMarkedToUpdateMaterials())
+        {
+            memcpy(phononStaticMesh->materials(), phononStaticMesh->materialsToUpdate().data(), phononStaticMesh->numMaterials() * sizeof(Material));
+            phononStaticMesh->unmarkToUpdateMaterials();
+        }
+    }
 
     // The scene will be considered unchanged until something is changed subsequently.
     mHasChanged = false;
@@ -390,7 +401,11 @@ void Scene::SetStaticMeshMaterial(IStaticMesh* staticMesh, Material* NewMaterial
     {
         if (curStaticMesh.get() == buildInStaticMesh)
         {
-            *const_cast<Material*>(buildInStaticMesh->materials() + index) = *NewMaterial;
+            buildInStaticMesh->materialsToUpdate().zero();
+            buildInStaticMesh->materialsToUpdate().resize(buildInStaticMesh->numMaterials());
+            memcpy(buildInStaticMesh->materialsToUpdate().data(), buildInStaticMesh->materials(), buildInStaticMesh->numMaterials() * sizeof(Material));
+            *const_cast<Material*>(buildInStaticMesh->materialsToUpdate().data() + index) = *NewMaterial;
+            buildInStaticMesh->markToUpdateMaterials();
             break;
         }
     }

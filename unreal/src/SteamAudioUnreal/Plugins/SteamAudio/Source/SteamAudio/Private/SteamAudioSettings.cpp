@@ -74,6 +74,7 @@ FSteamAudioSettings USteamAudioSettings::GetSettings() const
 {
     FSteamAudioSettings Settings{};
     Settings.AudioEngine = AudioEngine;
+    Settings.ExportIndexesMap = const_cast<TMap<FString, int32>*>(&ExportIndexesMap);
     Settings.bExportLandscapeGeometry = bExportLandscapeGeometry;
     Settings.bExportBSPGeometry = bExportBSPGeometry;
     Settings.DefaultMeshMaterial = GetMaterialForAsset(DefaultMeshMaterial);
