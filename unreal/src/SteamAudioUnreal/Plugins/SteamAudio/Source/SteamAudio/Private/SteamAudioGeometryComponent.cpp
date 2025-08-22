@@ -54,6 +54,7 @@ void USteamAudioGeometryComponent::SetExportIndex(int32 NewExportIndex)
         Settings->ExportIndexesMap.Add(GetOwner()->GetName(), NewExportIndex);
     }
 
+    ExportIndex = NewExportIndex;
     Settings->TryUpdateDefaultConfigFile();
 }
 
