@@ -113,7 +113,10 @@ static bool ExportStaticMeshComponent(UStaticMeshComponent* StaticMeshComponent,
     check(StaticMeshComponent->GetStaticMesh());
     check(StaticMeshComponent->GetStaticMesh()->GetRenderData());
 
-    FStaticMeshLODResources& LODModel = StaticMeshComponent->GetStaticMesh()->GetRenderData()->LODResources[0];
+    int32 MinLODForExport = GetDefault<USteamAudioSettings>()->MinLODForExport;
+    auto StaticMeshRenderData = StaticMeshComponent->GetStaticMesh()->GetRenderData();
+    int32 ResultLODIndex = StaticMeshRenderData->LODResources.Num() - 1 >= MinLODForExport ? MinLODForExport : StaticMeshRenderData->LODResources.Num() - 1;
+    FStaticMeshLODResources& LODModel = StaticMeshRenderData->LODResources[ResultLODIndex];
     check(LODModel.GetNumVertices() > 0 && LODModel.GetNumTriangles() > 0);
 
     int StartVertexIndex = Vertices.Num();
