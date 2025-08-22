@@ -88,7 +88,9 @@ void USteamAudioDynamicObjectComponent::TickComponent(float DeltaTime, enum ELev
 
     if (Scene && InstancedMesh)
     {
-        IPLMatrix4x4 Transform = SteamAudio::ConvertTransform(GetOwner()->GetRootComponent()->GetComponentTransform());
+        FTransform RootComponentTransform = GetOwner()->GetRootComponent()->GetComponentTransform();
+        RootComponentTransform.SetTranslation(GetOwner()->GetComponentsBoundingBox().GetCenter());
+        IPLMatrix4x4 Transform = SteamAudio::ConvertTransform(RootComponentTransform);
         iplInstancedMeshUpdateTransform(InstancedMesh, Scene, Transform);
     }
 }
