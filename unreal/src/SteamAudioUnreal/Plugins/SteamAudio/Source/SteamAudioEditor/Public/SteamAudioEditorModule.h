@@ -79,6 +79,8 @@ private:
     bool PromptForAssetName(UWorld* World, ULevel* Level, FString& PackageName);
     bool PromptForSingleLevelName(UWorld* World, ULevel* Level, bool bExportOBJ, FString& Name);
     void PromptForAllLevelNames(UWorld* World, bool bExportOBJ, TMap<ULevel*, FString>& Names);
+
+    bool CurrentlyEditingInstancedLevel(UWorld* World);
 };
 
 }

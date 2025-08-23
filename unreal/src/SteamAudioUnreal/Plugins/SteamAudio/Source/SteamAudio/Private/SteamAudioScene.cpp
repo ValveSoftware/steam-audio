@@ -34,6 +34,11 @@
 #include "SteamAudioSettings.h"
 #include "SteamAudioStaticMeshActor.h"
 
+#if WITH_EDITOR
+#include "Editor.h"
+#include "Editor/UnrealEd/Public/Kismet2/BlueprintEditorUtils.h"
+#endif
+
 namespace SteamAudio {
 
 // ---------------------------------------------------------------------------------------------------------------------
@@ -108,7 +113,10 @@ static bool ExportStaticMeshComponent(UStaticMeshComponent* StaticMeshComponent,
     check(StaticMeshComponent->GetStaticMesh());
     check(StaticMeshComponent->GetStaticMesh()->GetRenderData());
 
-    FStaticMeshLODResources& LODModel = StaticMeshComponent->GetStaticMesh()->GetRenderData()->LODResources[0];
+    int32 MinLODForExport = GetDefault<USteamAudioSettings>()->MinLODForExport;
+    auto StaticMeshRenderData = StaticMeshComponent->GetStaticMesh()->GetRenderData();
+    int32 ResultLODIndex = StaticMeshRenderData->LODResources.Num() - 1 >= MinLODForExport ? MinLODForExport : StaticMeshRenderData->LODResources.Num() - 1;
+    FStaticMeshLODResources& LODModel = StaticMeshRenderData->LODResources[ResultLODIndex];
     check(LODModel.GetNumVertices() > 0 && LODModel.GetNumTriangles() > 0);
 
     int StartVertexIndex = Vertices.Num();
@@ -820,16 +828,16 @@ bool ExportDynamicObject(USteamAudioDynamicObjectComponent* DynamicObject, FStri
                 // Point the Steam Audio Dynamic Object component to the .uasset we just created.
                 if (DynamicObject->IsInBlueprint())
                 {
-                    USteamAudioDynamicObjectComponent* DefaultObject = GetMutableDefault<USteamAudioDynamicObjectComponent>();
-                    if (DefaultObject)
+                    UBlueprint* Blueprint = Cast<UBlueprint>(DynamicObject->GetOuter());
+                    if (Blueprint)
                     {
-                        DefaultObject->Asset = Asset;
-                        DefaultObject->MarkPackageDirty();
+                        Blueprint->Modify();
+                        FBlueprintEditorUtils::MarkBlueprintAsStructurallyModified(Blueprint);
                     }
                 }
 
                 DynamicObject->Asset = Asset;
-                DynamicObject->MarkPackageDirty();
+                DynamicObject->Modify();
             });
 
             iplSerializedObjectRelease(&SerializedObject);

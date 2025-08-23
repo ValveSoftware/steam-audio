@@ -106,6 +106,7 @@ struct FSteamAudioSettings
     EAudioEngineType AudioEngine;
     bool bExportLandscapeGeometry;
     bool bExportBSPGeometry;
+    int32 MinLODForExport;
     IPLMaterial DefaultMeshMaterial;
     IPLMaterial DefaultLandscapeMaterial;
     IPLMaterial DefaultBSPMaterial;
@@ -176,6 +177,10 @@ public:
     /** If true, BSP geometry will be exported as part of a level's static geometry. */
 	UPROPERTY(GlobalConfig, EditAnywhere, Category = SceneExportSettings, meta = (DisplayName = "Export BSP Geometry"))
 	bool bExportBSPGeometry;
+
+    /** Minimum LOD index when exporting a Geometry. */
+    UPROPERTY(GlobalConfig, EditAnywhere, Category = SceneExportSettings, meta = (ClampMin = "0", DisplayName = "Minimum LOD For Export Geometry"))
+    int32 MinLODForExport;
 
     /** Reference to the Steam Audio Material asset to use as the default material for Static Mesh actors. */
 	UPROPERTY(GlobalConfig, EditAnywhere, Category = SceneExportSettings, meta = (AllowedClasses = "/Script/SteamAudio.SteamAudioMaterial"))
