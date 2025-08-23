@@ -44,8 +44,8 @@ private:
 
     FString GetDefaultAssetOrFileName();
     bool PromptForFileName(FString& FileName);
-    bool PromptForAssetName(FString& AssetName);
-    bool PromptForName(bool bExportOBJ, FString& Name);
+    bool PromptForAssetName(USteamAudioDynamicObjectComponent* DynamicComponent, FString& AssetName, int32 AssetIndex);
+    bool PromptForName(USteamAudioDynamicObjectComponent* DynamicComponent, bool bExportOBJ, FString& Name, int32 AssetIndex);
     void Export(bool bExportOBJ);
 };
 
