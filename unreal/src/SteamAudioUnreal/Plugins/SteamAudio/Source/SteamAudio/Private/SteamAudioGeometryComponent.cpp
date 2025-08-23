@@ -40,6 +40,7 @@ void USteamAudioGeometryComponent::BeginPlay()
     Super::BeginPlay();
 
     auto Settings = GetMutableDefault<USteamAudioSettings>();
+    if (bWantToChangeMaterialAtRuntime)
     if (int32* ExportIndexValue = Settings->ExportIndexesMap.Find(GetOwner()->GetName()))
     {
         ExportIndex = *ExportIndexValue;
@@ -48,6 +49,9 @@ void USteamAudioGeometryComponent::BeginPlay()
 
 void USteamAudioGeometryComponent::SetExportIndex(int32 NewExportIndex)
 {
+    if (!bWantToChangeMaterialAtRuntime)
+        return;
+
     auto Settings = GetMutableDefault<USteamAudioSettings>();
     if (!Settings->ExportIndexesMap.Contains(GetOwner()->GetName()))
     {

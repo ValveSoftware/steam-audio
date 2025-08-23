@@ -45,11 +45,11 @@ public:
 	/** Updates the iplStaticMesh data.
 	Note: If you want to create a new Static Geometry during gameplay using this function, you will need to enable the "AllowCPUAccess" flag in the Static Mesh settings of actor. */
 	UFUNCTION(BlueprintCallable)
-	void UpdateStaticMesh();
+	static void UpdateStaticMesh();
 
 	/** Updates the iplStaticMesh material data on specified StaticMeshActor. */
 	UFUNCTION(BlueprintCallable)
-	void UpdateStaticMeshMaterial(AStaticMeshActor* StaticMeshActor);
+	static void UpdateStaticMeshMaterial(AStaticMeshActor* StaticMeshActor);
 
 	/** Shuts down the global Steam Audio state. */
 	UFUNCTION(BlueprintCallable)
