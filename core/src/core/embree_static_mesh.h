@@ -83,6 +83,17 @@ public:
         return mMaterials.data();
     }
 
+    Array<Material>& materialsToUpdate()
+    {
+        return mMaterialsToUpdate;
+    }
+
+    void markToUpdateMaterials() { mNeedToUpdateMaterials = true; }
+
+    void unmarkToUpdateMaterials() { mNeedToUpdateMaterials = false; }
+
+    bool isMarkedToUpdateMaterials() const { return mNeedToUpdateMaterials; }
+
     ispc::Material* ispcMaterials()
     {
         return mISPCMaterials.data();
@@ -111,6 +122,8 @@ private:
     int mNumTriangles;
     Array<int> mMaterialIndices;
     Array<Material> mMaterials;
+    Array<Material> mMaterialsToUpdate;
+    bool mNeedToUpdateMaterials = false;
     vector<ispc::Material> mISPCMaterials;
 };
 

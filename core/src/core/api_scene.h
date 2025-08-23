@@ -74,6 +74,8 @@ public:
 
     virtual IPLerror createInstancedMesh(IPLInstancedMeshSettings* settings,
                                          IInstancedMesh** instancedMesh) override;
+
+    virtual void SetStaticMeshMaterial(IPLStaticMesh staticMesh, IPLMaterial* NewMaterial, int index) override;
 };
 
 

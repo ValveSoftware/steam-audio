@@ -107,6 +107,17 @@ public:
         return mMaterials.data();
     }
 
+    Array<Material>& materialsToUpdate()
+    {
+        return mMaterialsToUpdate;
+    }
+
+    void markToUpdateMaterials() { mNeedToUpdateMaterials = true; }
+
+    void unmarkToUpdateMaterials() { mNeedToUpdateMaterials = false; }
+
+    bool isMarkedToUpdateMaterials() const { return mNeedToUpdateMaterials; }
+
     Hit closestHit(const Ray& ray,
                    float minDistance,
                    float maxDistance) const;
@@ -126,6 +137,8 @@ private:
     BVH mBVH;
     Array<int> mMaterialIndices;
     Array<Material> mMaterials;
+    Array<Material> mMaterialsToUpdate;
+    bool mNeedToUpdateMaterials = false;
 };
 
 }

@@ -27,6 +27,7 @@
 class USteamAudioDynamicObjectComponent;
 class USteamAudioListenerComponent;
 class USteamAudioSourceComponent;
+class AStaticMeshActor;
 
 namespace SteamAudio {
 
@@ -97,6 +98,12 @@ public:
     IPLCoordinateSpace3 GetListenerCoordinates();
     FSteamAudioSettings GetSteamAudioSettings() const { return SteamAudioSettings; }
     bool IsInitialized() const { return bInitializationSucceded; }
+
+    /** Updates the iplStaticMesh data. */
+    void UpdateStaticMesh();
+
+    /** Updates the iplStaticMesh material data on specified StaticMeshActor. */
+    void UpdateStaticMeshMaterial(AStaticMeshActor* StaticMeshActor);
 
     /** Initializes the HRTF. */
     bool InitHRTF(IPLAudioSettings& AudioSettings);

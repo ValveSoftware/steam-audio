@@ -15,6 +15,7 @@
 //
 
 #include "SteamAudioFunctionLibrary.h"
+#include "Engine/StaticMeshActor.h"
 #include "SteamAudioModule.h"
 #include "SteamAudioManager.h"
 
@@ -33,6 +34,16 @@ void USteamAudioFunctionLibrary::SetSteamAudioEnabled(bool bNewIsSteamAudioEnabl
 bool USteamAudioFunctionLibrary::IsSteamAudioEnabled()
 {
 	return FSteamAudioModule::GetManager().IsSteamAudioEnabled();
+}
+
+void USteamAudioFunctionLibrary::UpdateStaticMesh()
+{
+	FSteamAudioModule::GetManager().UpdateStaticMesh();
+}
+
+void USteamAudioFunctionLibrary::UpdateStaticMeshMaterial(AStaticMeshActor* StaticMeshActor)
+{
+	FSteamAudioModule::GetManager().UpdateStaticMeshMaterial(StaticMeshActor);
 }
 
 void USteamAudioFunctionLibrary::ShutDownSteamAudio(bool bResetFlags)

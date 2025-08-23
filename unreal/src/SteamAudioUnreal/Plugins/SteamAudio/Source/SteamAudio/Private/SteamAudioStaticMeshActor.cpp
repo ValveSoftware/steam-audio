@@ -70,6 +70,26 @@ void ASteamAudioStaticMeshActor::EndPlay(const EEndPlayReason::Type EndPlayReaso
     Super::EndPlay(EndPlayReason);
 }
 
+void ASteamAudioStaticMeshActor::UpdateStaticMesh()
+{
+    if (Scene && StaticMesh)
+    {
+        UWorld* World = GEngine->GetCurrentPlayWorld();
+        ULevel* Level = World->GetCurrentLevel();
+        SteamAudio::UpdateStaticGeometryForLevel(World, Level, StaticMesh);
+    }
+}
+
+void ASteamAudioStaticMeshActor::UpdateStaticMeshMaterial(AActor* RefreshableActor)
+{
+    if (Scene && StaticMesh)
+    {
+        UWorld* World = GEngine->GetCurrentPlayWorld();
+        ULevel* Level = World->GetCurrentLevel();
+        SteamAudio::UpdateStaticMeshMaterial(World, Level, StaticMesh, RefreshableActor);
+    }
+}
+
 ASteamAudioStaticMeshActor* ASteamAudioStaticMeshActor::FindInLevel(UWorld* World, ULevel* Level)
 {
     check(World);
