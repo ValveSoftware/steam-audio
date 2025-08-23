@@ -53,6 +53,9 @@
 #include "SteamAudioSpatializationSettingsFactory.h"
 #include "SteamAudioStaticMeshActor.h"
 #include "TickableNotification.h"
+#if ((ENGINE_MAJOR_VERSION == 5 && ENGINE_MINOR_VERSION >= 0) || (ENGINE_MAJOR_VERSION > 5))
+#include <LevelInstance/LevelInstanceSubsystem.h>
+#endif
 
 DEFINE_LOG_CATEGORY(LogSteamAudioEditor);
 
@@ -506,8 +509,37 @@ void FSteamAudioEditorModule::ExportSingleLevel(UWorld* World, ULevel* Level, bo
     }
 }
 
+bool FSteamAudioEditorModule::CurrentlyEditingInstancedLevel(UWorld* World)
+{
+#if ((ENGINE_MAJOR_VERSION == 5 && ENGINE_MINOR_VERSION >= 0) || (ENGINE_MAJOR_VERSION > 5))
+    if (!World)
+        return false;
+
+    ULevel* Level = World->GetCurrentLevel();
+    if (!Level)
+        return false;
+
+    ULevelInstanceSubsystem* LevelInstanceSubsystem = World->GetSubsystem<ULevelInstanceSubsystem>();
+    if (!LevelInstanceSubsystem)
+        return false;
+
+    return (LevelInstanceSubsystem->GetEditingLevelInstance() != nullptr);
+#else
+    return false;
+#endif
+}
+
 void FSteamAudioEditorModule::ExportAllLevels(UWorld* World, bool bExportOBJ)
 {
+#if ((ENGINE_MAJOR_VERSION == 5 && ENGINE_MINOR_VERSION >= 0) || (ENGINE_MAJOR_VERSION > 5))
+    // if we are currently editing an instanced level, just export that level
+    if (CurrentlyEditingInstancedLevel(World))
+    {
+        ExportSingleLevel(World, World->GetCurrentLevel(), bExportOBJ);
+        return;
+    }
+#endif
+
     TMap<ULevel*, FString> Names;
     PromptForAllLevelNames(World, bExportOBJ, Names);
 
@@ -521,6 +553,12 @@ void FSteamAudioEditorModule::ExportAllLevels(UWorld* World, bool bExportOBJ)
 
             for (ULevel* Level : World->GetLevels())
             {
+#if ((ENGINE_MAJOR_VERSION == 5 && ENGINE_MINOR_VERSION >= 0) || (ENGINE_MAJOR_VERSION > 5))
+                // skip instanced levels
+                if (Level->IsInstancedLevel())
+                    continue;
+#endif
+
                 FString LevelName;
                 Level->GetOutermostObject()->GetName(LevelName);
 
@@ -623,6 +661,12 @@ void FSteamAudioEditorModule::PromptForAllLevelNames(UWorld* World, bool bExport
 {
     for (ULevel* Level : World->GetLevels())
     {
+#if ((ENGINE_MAJOR_VERSION == 5 && ENGINE_MINOR_VERSION >= 0) || (ENGINE_MAJOR_VERSION > 5))
+        // skip instanced levels
+        if (Level->IsInstancedLevel())
+            continue;
+#endif
+
         if (DoesLevelHaveStaticGeometryForExport(World, Level))
         {
             FString Name;
