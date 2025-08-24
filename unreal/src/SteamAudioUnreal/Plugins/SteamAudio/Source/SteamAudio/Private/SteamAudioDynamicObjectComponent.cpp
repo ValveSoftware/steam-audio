@@ -28,9 +28,7 @@ USteamAudioDynamicObjectComponent::USteamAudioDynamicObjectComponent()
     , Scene(nullptr)
     , InstancedMesh(nullptr)
 {
-    // Enable ticking.
-    bAutoActivate = true;
-    PrimaryComponentTick.bCanEverTick = true;
+    PrimaryComponentTick.bCanEverTick = false;
 }
 
 FSoftObjectPath USteamAudioDynamicObjectComponent::GetAssetToLoad()
@@ -65,6 +63,7 @@ void USteamAudioDynamicObjectComponent::BeginPlay()
     }
 
     iplInstancedMeshAdd(InstancedMesh, Scene);
+    GetOwner()->GetRootComponent()->TransformUpdated.AddUObject(this, &USteamAudioDynamicObjectComponent::OnTransformUpdated);
 }
 
 void USteamAudioDynamicObjectComponent::EndPlay(const EEndPlayReason::Type EndPlayReason)
@@ -82,10 +81,8 @@ void USteamAudioDynamicObjectComponent::EndPlay(const EEndPlayReason::Type EndPl
     Super::EndPlay(EndPlayReason);
 }
 
-void USteamAudioDynamicObjectComponent::TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
+void USteamAudioDynamicObjectComponent::OnTransformUpdated(USceneComponent* UpdatedComponent, EUpdateTransformFlags UpdateTransformFlags, ETeleportType Teleport)
 {
-    Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-
     if (Scene && InstancedMesh)
     {
         FTransform RootComponentTransform = GetOwner()->GetRootComponent()->GetComponentTransform();
