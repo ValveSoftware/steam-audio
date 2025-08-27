@@ -961,43 +961,38 @@ void UpdateStaticMeshMaterial(UWorld* World, ULevel* Level, IPLStaticMesh Static
             TArray<AActor*> Actors;
             bool bExportSucceeded = RunInGameThread<bool>([&]()
                 {
-                    GetActorsForStaticGeometryExport(World, Level, Actors, true);
-                    for (int32 i = 0; i < Actors.Num(); ++i)
+                    if (RefreshableActor->IsA<AStaticMeshActor>() && !(!IsSteamAudioGeometry(RefreshableActor) || IsSteamAudioDynamicObject(RefreshableActor)))
                     {
-                        AActor* Actor = Actors[i];
-                        if (Actor->IsA<AStaticMeshActor>() && Actor == RefreshableActor)
+                        USteamAudioGeometryComponent* GeometryComponent = RefreshableActor->FindComponentByClass<USteamAudioGeometryComponent>();
+                        if (GeometryComponent)
                         {
-                            USteamAudioGeometryComponent* GeometryComponent = Actor->FindComponentByClass<USteamAudioGeometryComponent>();
-                            if (GeometryComponent)
-                            {
-                                if (!GeometryComponent->bWantToChangeMaterialAtRuntime)
-                                    return false;
-
-                                ExportIndex = GeometryComponent->GetExportIndex();
-                            }
-
-                            FSoftObjectPath MaterialAsset = GetMaterialAssetForActor(Actor);
-                            if (!MaterialAsset.IsValid())
-                            {
-                                MaterialAsset = GetDefault<USteamAudioSettings>()->DefaultMeshMaterial;
-                            }
-
-                            USteamAudioMaterial* Material = Cast<USteamAudioMaterial>(MaterialAsset.TryLoad());
-                            if (!Material)
-                            {
+                            if (!GeometryComponent->bWantToChangeMaterialAtRuntime)
                                 return false;
-                            }
 
-                            SteamAudioMaterial.absorption[0] = Material->AbsorptionLow;
-                            SteamAudioMaterial.absorption[1] = Material->AbsorptionMid;
-                            SteamAudioMaterial.absorption[2] = Material->AbsorptionHigh;
-                            SteamAudioMaterial.scattering = Material->Scattering;
-                            SteamAudioMaterial.transmission[0] = Material->TransmissionLow;
-                            SteamAudioMaterial.transmission[1] = Material->TransmissionMid;
-                            SteamAudioMaterial.transmission[2] = Material->TransmissionHigh;
-
-                            return true;
+                            ExportIndex = GeometryComponent->GetExportIndex();
                         }
+
+                        FSoftObjectPath MaterialAsset = GetMaterialAssetForActor(RefreshableActor);
+                        if (!MaterialAsset.IsValid())
+                        {
+                            MaterialAsset = GetDefault<USteamAudioSettings>()->DefaultMeshMaterial;
+                        }
+
+                        USteamAudioMaterial* Material = Cast<USteamAudioMaterial>(MaterialAsset.TryLoad());
+                        if (!Material)
+                        {
+                            return false;
+                        }
+
+                        SteamAudioMaterial.absorption[0] = Material->AbsorptionLow;
+                        SteamAudioMaterial.absorption[1] = Material->AbsorptionMid;
+                        SteamAudioMaterial.absorption[2] = Material->AbsorptionHigh;
+                        SteamAudioMaterial.scattering = Material->Scattering;
+                        SteamAudioMaterial.transmission[0] = Material->TransmissionLow;
+                        SteamAudioMaterial.transmission[1] = Material->TransmissionMid;
+                        SteamAudioMaterial.transmission[2] = Material->TransmissionHigh;
+
+                        return true;
                     }
 
                     return false;
