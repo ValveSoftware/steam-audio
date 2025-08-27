@@ -164,7 +164,7 @@ static bool ExportStaticMeshComponent(UStaticMeshComponent* StaticMeshComponent,
     }
 
     USteamAudioGeometryComponent* GeometryComponent = StaticMeshComponent->GetOwner()->FindComponentByClass<USteamAudioGeometryComponent>();
-    if (!ExportMaterial(MaterialAsset, Materials, MaterialIndexForAsset, GeometryComponent->bWantToChangeMaterialAtRuntime))
+    if (!ExportMaterial(MaterialAsset, Materials, MaterialIndexForAsset, GeometryComponent ? GeometryComponent->bWantToChangeMaterialAtRuntime : false))
         return false;
 
     check(MaterialIndexForAsset.Contains(MaterialAsset.ToString()));
@@ -294,7 +294,10 @@ static bool ExportActors(const TArray<AActor*>& Actors, TArray<IPLVector3>& Vert
             }
 
             USteamAudioGeometryComponent* GeometryComponent = Actor->FindComponentByClass<USteamAudioGeometryComponent>();
-            GeometryComponent->SetExportIndex(Materials.Num() - 1);
+            if (GeometryComponent)
+            {
+                GeometryComponent->SetExportIndex(Materials.Num() - 1);
+            }
         }
         else if (Actor->IsA<ALandscape>())
         {
