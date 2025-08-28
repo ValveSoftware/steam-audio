@@ -401,9 +401,6 @@ void Scene::SetStaticMeshMaterial(IStaticMesh* staticMesh, Material* NewMaterial
     {
         if (curStaticMesh.get() == buildInStaticMesh)
         {
-            buildInStaticMesh->materialsToUpdate().zero();
-            buildInStaticMesh->materialsToUpdate().resize(buildInStaticMesh->numMaterials());
-            memcpy(buildInStaticMesh->materialsToUpdate().data(), buildInStaticMesh->materials(), buildInStaticMesh->numMaterials() * sizeof(Material));
             *const_cast<Material*>(buildInStaticMesh->materialsToUpdate().data() + index) = *NewMaterial;
             buildInStaticMesh->markToUpdateMaterials();
             break;

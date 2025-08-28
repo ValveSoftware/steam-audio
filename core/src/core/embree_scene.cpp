@@ -456,9 +456,6 @@ void EmbreeScene::SetStaticMeshMaterial(IStaticMesh* staticMesh, Material* NewMa
     {
         if (curStaticMesh.get() == embreeStaticMesh)
         {
-            embreeStaticMesh->materialsToUpdate().zero();
-            embreeStaticMesh->materialsToUpdate().resize(embreeStaticMesh->numMaterials());
-            memcpy(embreeStaticMesh->materialsToUpdate().data(), embreeStaticMesh->materials(), embreeStaticMesh->numMaterials() * sizeof(Material));
             *const_cast<Material*>(embreeStaticMesh->materialsToUpdate().data() + index) = *NewMaterial;
             embreeStaticMesh->markToUpdateMaterials();
             break;
