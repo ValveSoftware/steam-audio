@@ -41,6 +41,11 @@ public:
 
     USteamAudioDynamicObjectComponent();
 
+#ifdef WITH_EDITOR
+    virtual void DestroyComponent(bool bPromoteChildren = false) override;
+    virtual void OnComponentDestroyed(bool bDestroyingHierarchy) override;
+#endif
+
     FSoftObjectPath GetAssetToLoad();
 
 protected:
@@ -60,6 +65,13 @@ private:
 
     /** The Instanced Mesh object. */
     IPLInstancedMesh InstancedMesh;
+
+#ifdef WITH_EDITOR
+    /** Equal true if the asset is not deleted */
+    bool bIsAssetActive = true;
+
+    void CleaupDynamicComponentAsset();
+#endif
 
     void OnTransformUpdated(USceneComponent* UpdatedComponent, EUpdateTransformFlags UpdateTransformFlags, ETeleportType Teleport);
 };
