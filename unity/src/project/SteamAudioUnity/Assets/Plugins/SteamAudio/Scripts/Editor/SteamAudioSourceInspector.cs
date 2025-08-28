@@ -20,6 +20,7 @@ using UnityEditor;
 namespace SteamAudio
 {
     [CustomEditor(typeof(SteamAudioSource))]
+    [CanEditMultipleObjects]
     public class SteamAudioSourceInspector : Editor
     {
         SerializedProperty mDirectBinaural;

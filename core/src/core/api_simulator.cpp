@@ -416,13 +416,16 @@ void CSource::setInputs(IPLSimulationFlags flags,
         }
 
         _source->pathingInputs.deviationModel = DeviationModel{};
-        if (inputs->deviationModel)
+        if (Context::isCallerAPIVersionAtLeast(4, 7))
         {
-            switch (inputs->deviationModel->type)
+            if (inputs->deviationModel)
             {
-            case IPL_DEVIATIONTYPE_CALLBACK:
-                _source->pathingInputs.deviationModel = DeviationModel(inputs->deviationModel->callback, inputs->deviationModel->userData);
-                break;
+                switch (inputs->deviationModel->type)
+                {
+                case IPL_DEVIATIONTYPE_CALLBACK:
+                    _source->pathingInputs.deviationModel = DeviationModel(inputs->deviationModel->callback, inputs->deviationModel->userData);
+                    break;
+                }
             }
         }
     }
