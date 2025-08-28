@@ -843,16 +843,16 @@ bool ExportDynamicObject(USteamAudioDynamicObjectComponent* DynamicObject, FStri
                 // Point the Steam Audio Dynamic Object component to the .uasset we just created.
                 if (DynamicObject->IsInBlueprint())
                 {
-                    USteamAudioDynamicObjectComponent* DefaultObject = GetMutableDefault<USteamAudioDynamicObjectComponent>();
-                    if (DefaultObject)
+                    UBlueprint* Blueprint = Cast<UBlueprint>(DynamicObject->GetOuter());
+                    if (Blueprint)
                     {
-                        DefaultObject->Asset = Asset;
-                        DefaultObject->MarkPackageDirty();
+                        Blueprint->Modify();
+                        FBlueprintEditorUtils::MarkBlueprintAsStructurallyModified(Blueprint);
                     }
                 }
 
                 DynamicObject->Asset = Asset;
-                DynamicObject->MarkPackageDirty();
+                DynamicObject->Modify();
             });
 
             iplSerializedObjectRelease(&SerializedObject);
