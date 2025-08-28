@@ -41,13 +41,6 @@ public:
 
     USteamAudioDynamicObjectComponent();
 
-    /**
-     * Inherited from UActorComponent
-     */
-
-    /** Called once every frame. */
-    virtual void TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
-
     FSoftObjectPath GetAssetToLoad();
 
 protected:
@@ -67,4 +60,6 @@ private:
 
     /** The Instanced Mesh object. */
     IPLInstancedMesh InstancedMesh;
+
+    void OnTransformUpdated(USceneComponent* UpdatedComponent, EUpdateTransformFlags UpdateTransformFlags, ETeleportType Teleport);
 };
