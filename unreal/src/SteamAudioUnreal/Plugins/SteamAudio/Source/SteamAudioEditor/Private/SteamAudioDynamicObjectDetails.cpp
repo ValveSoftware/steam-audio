@@ -132,24 +132,27 @@ void FSteamAudioDynamicObjectDetails::Export(bool bExportOBJ)
                 continue;
 
             auto ResultDynamicObjectComponent = (i == 0 ? DynamicObjectComponent.Get() : Children[i - 1]->FindComponentByClass<USteamAudioDynamicObjectComponent>());
-            if (!ResultDynamicObjectComponent)
+            if (!ResultDynamicObjectComponent && DynamicObjectComponent->bMakeAllChildActorsTheirOwnDynamicObjects)
             {
                 ResultDynamicObjectComponent = NewObject<USteamAudioDynamicObjectComponent>(Children[i - 1]);
                 ResultDynamicObjectComponent->RegisterComponent();
                 Children[i - 1]->AddInstanceComponent(ResultDynamicObjectComponent);
             }
 
-            FString Name;
-            bool bNameChosen = PromptForName(ResultDynamicObjectComponent, bExportOBJ, Name, AssetsCounter++);
-            if (bNameChosen)
+            if (ResultDynamicObjectComponent)
             {
-                Async(EAsyncExecution::Thread, [ResultDynamicObjectComponent, Name, bExportOBJ]()
-                    {
-                        if (!ExportDynamicObject(ResultDynamicObjectComponent, Name, bExportOBJ))
+                FString Name;
+                bool bNameChosen = PromptForName(ResultDynamicObjectComponent, bExportOBJ, Name, AssetsCounter++);
+                if (bNameChosen)
+                {
+                    Async(EAsyncExecution::Thread, [ResultDynamicObjectComponent, Name, bExportOBJ]()
                         {
-                            FSteamAudioEditorModule::NotifyFailed(NSLOCTEXT("SteamAudio", "ExportDynamicFail", "Failed to export dynamic object."));
-                        }
-                    });
+                            if (!ExportDynamicObject(ResultDynamicObjectComponent, Name, bExportOBJ))
+                            {
+                                FSteamAudioEditorModule::NotifyFailed(NSLOCTEXT("SteamAudio", "ExportDynamicFail", "Failed to export dynamic object."));
+                            }
+                        });
+                }
             }
         }
         FSteamAudioEditorModule::NotifySucceeded(NSLOCTEXT("SteamAudio", "ExportDynamicSuccess", "Dynamic object exported."));
