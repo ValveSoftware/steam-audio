@@ -19,6 +19,10 @@
 #include "SteamAudioCommon.h"
 #include "SteamAudioManager.h"
 
+#ifdef WITH_EDITOR
+#include "Subsystems/EditorAssetSubsystem.h"
+#endif
+
 // ---------------------------------------------------------------------------------------------------------------------
 // USteamAudioDynamicObjectComponent
 // ---------------------------------------------------------------------------------------------------------------------
@@ -103,3 +107,30 @@ void USteamAudioDynamicObjectComponent::TickComponent(float DeltaTime, enum ELev
         iplInstancedMeshUpdateTransform(InstancedMesh, Scene, Transform);
     }
 }
+
+#ifdef WITH_EDITOR
+void USteamAudioDynamicObjectComponent::CleaupDynamicComponentAsset()
+{
+    if (Asset.IsValid() && bIsAssetActive)
+    {
+        auto EditorAssetSubsystem = GEditor ? GEditor->GetEditorSubsystem<UEditorAssetSubsystem>() : nullptr;
+        if (EditorAssetSubsystem)
+        {
+            EditorAssetSubsystem->DeleteAsset(Asset.GetAssetPathString());
+            bIsAssetActive = false;
+        }
+    }
+}
+
+void USteamAudioDynamicObjectComponent::DestroyComponent(bool bPromoteChildren)
+{
+    CleaupDynamicComponentAsset();
+    Super::DestroyComponent(bPromoteChildren);
+}
+
+void USteamAudioDynamicObjectComponent::OnComponentDestroyed(bool bDestroyingHierarchy)
+{
+    CleaupDynamicComponentAsset();
+    Super::OnComponentDestroyed(bDestroyingHierarchy);
+}
+#endif
