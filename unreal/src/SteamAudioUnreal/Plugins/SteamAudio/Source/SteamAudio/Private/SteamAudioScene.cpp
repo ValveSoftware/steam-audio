@@ -34,6 +34,11 @@
 #include "SteamAudioSettings.h"
 #include "SteamAudioStaticMeshActor.h"
 
+#if WITH_EDITOR
+#include "Editor.h"
+#include "Editor/UnrealEd/Public/Kismet2/BlueprintEditorUtils.h"
+#endif
+
 namespace SteamAudio {
 
 // ---------------------------------------------------------------------------------------------------------------------
