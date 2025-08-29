@@ -104,7 +104,6 @@ using PhysMatToSteamAudioMatTableType = TMap<FSoftObjectPath, FPhysMatToSteamAud
 struct FSteamAudioSettings
 {
     EAudioEngineType AudioEngine;
-    TMap<FString, int32>* ExportIndexesMap;
     bool bExportLandscapeGeometry;
     bool bExportBSPGeometry;
     int32 MinLODForExport;
@@ -170,10 +169,6 @@ public:
         corresponding Steam Audio support plugin must also be enabled in your project settings. */
     UPROPERTY(GlobalConfig, EditAnywhere, Category = AudioEngineSettings)
     EAudioEngineType AudioEngine;
-
-    /** Shows the connection between Static Geometry and material indices. */
-    UPROPERTY(Config, VisibleAnywhere, Category = SceneExportSettings)
-    TMap<FString, int32> ExportIndexesMap;
 
     /** If true, Landscape actors (terrain) will be exported as part of a level's static geometry. */
 	UPROPERTY(GlobalConfig, EditAnywhere, Category = SceneExportSettings)

@@ -570,10 +570,6 @@ bool ExportStaticGeometryForLevel(UWorld* World, ULevel* Level, FString FileName
 
     Async(EAsyncExecution::Thread, [World, Level, FileName, bExportOBJ, &Promise]()
     {
-        auto Settings = GetMutableDefault<USteamAudioSettings>();
-        Settings->ExportIndexesMap.Empty();
-        Settings->TryUpdateDefaultConfigFile();
-
         bool bResult = false;
 
         // Start by collecting geometry and material information from the level.
@@ -888,10 +884,6 @@ void UpdateStaticGeometryForLevel(UWorld* World, ULevel* Level, IPLStaticMesh& O
 
     Async(EAsyncExecution::Thread, [World, Level, &OldStaticMesh]()
         {
-            auto Settings = GetMutableDefault<USteamAudioSettings>();
-            Settings->ExportIndexesMap.Empty();
-            Settings->TryUpdateDefaultConfigFile();
-
             // Start by collecting geometry and material information from the level.
             TArray<IPLVector3> Vertices;
             TArray<IPLTriangle> Triangles;
@@ -977,7 +969,7 @@ void UpdateStaticMeshMaterial(UWorld* World, ULevel* Level, IPLStaticMesh Static
                             if (!GeometryComponent->bWantToChangeMaterialAtRuntime)
                                 return false;
 
-                            ExportIndex = GeometryComponent->GetExportIndex();
+                            ExportIndex = GeometryComponent->ExportIndex;
                         }
 
                         FSoftObjectPath MaterialAsset = GetMaterialAssetForActor(RefreshableActor);

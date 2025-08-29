@@ -44,6 +44,10 @@ public:
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = MaterialSettings)
     bool bWantToChangeMaterialAtRuntime = true;
 
+    /** Shows the connection between Static Geometry and material indices. */
+    UPROPERTY(VisibleAnywhere, Category = MaterialSettings)
+    int32 ExportIndex = -1;
+
     /** Whether or not to export all actors attached to this actor. */
     UPROPERTY(EditAnywhere, Category = ExportSettings)
     bool bExportAllChildren;
@@ -74,11 +78,7 @@ public:
 
     void SetExportIndex(int32 NewExportIndex);
 
-    int32 GetExportIndex() const { return ExportIndex; }
-
 private:
-    int32 ExportIndex;
-
     /** Recalculates the number of vertices and triangles that are exported as part of this component. */
     void UpdateStatistics();
 
