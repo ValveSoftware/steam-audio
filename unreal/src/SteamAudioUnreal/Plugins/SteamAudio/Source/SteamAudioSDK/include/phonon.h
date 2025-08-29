@@ -1121,6 +1121,16 @@ IPLAPI void IPLCALL iplStaticMeshAdd(IPLStaticMesh staticMesh, IPLScene scene);
 */
 IPLAPI void IPLCALL iplStaticMeshRemove(IPLStaticMesh staticMesh, IPLScene scene);
 
+/** Loads the material data of specified object in the iplStaticMesh.
+
+    \param  staticMesh  The static mesh to update.
+    \param  scene       The scene from which to update the static mesh. This must be the scene which was passed when
+                        calling \c iplStaticMeshCreate.
+    \param  NewMaterial  The material data of specified object.
+    \param  index  The index of specified object. It means the object's index in the order it was exported.
+*/
+IPLAPI void IPLCALL iplStaticMeshMaterialSet(IPLStaticMesh staticMesh, IPLScene scene, IPLMaterial* NewMaterial, int index);
+
 /** Creates an instanced mesh.
 
     An instanced mesh takes one scene and positions it within another scene. This is useful if you have the

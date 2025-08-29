@@ -23,6 +23,7 @@
 class USteamAudioDynamicObjectComponent;
 class USteamAudioListenerComponent;
 class USteamAudioSourceComponent;
+class AStaticMeshActor;
 
 UCLASS()
 class STEAMAUDIO_API USteamAudioFunctionLibrary : public UBlueprintFunctionLibrary
@@ -40,6 +41,15 @@ public:
 	/** Returns the Steam Audio enabled mode. */
 	UFUNCTION(BlueprintPure)
 	static bool IsSteamAudioEnabled();
+
+	/** Updates the iplStaticMesh data.
+	Note: If you want to create a new Static Geometry during gameplay using this function, you will need to enable the "AllowCPUAccess" flag in the Static Mesh settings of actor. */
+	UFUNCTION(BlueprintCallable)
+	static void UpdateStaticMesh();
+
+	/** Updates the iplStaticMesh material data on specified StaticMeshActor. */
+	UFUNCTION(BlueprintCallable)
+	static void UpdateStaticMeshMaterial(AStaticMeshActor* StaticMeshActor);
 
 	/** Shuts down the global Steam Audio state. */
 	UFUNCTION(BlueprintCallable)

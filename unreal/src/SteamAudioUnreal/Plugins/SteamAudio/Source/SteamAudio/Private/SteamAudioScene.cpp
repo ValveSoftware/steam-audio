@@ -45,8 +45,6 @@ namespace SteamAudio {
 // Scene Export
 // ---------------------------------------------------------------------------------------------------------------------
 
-#if WITH_EDITOR
-
 /**
  * Returns a reference to the Steam Audio Material asset to use for a given actor.
  */
@@ -68,7 +66,7 @@ static FSoftObjectPath GetMaterialAssetForActor(AActor* Actor)
  * Adds a Steam Audio Material asset to the material data being prepared for export.
  */
 static bool ExportMaterial(FSoftObjectPath MaterialAsset, TArray<IPLMaterial>& Materials,
-    TMap<FString, int>& MaterialIndexForAsset)
+    TMap<FString, int>& MaterialIndexForAsset, bool bWantToChangeMaterialAtRuntime = false)
 {
     if (!MaterialAsset.IsValid())
     {
@@ -77,7 +75,7 @@ static bool ExportMaterial(FSoftObjectPath MaterialAsset, TArray<IPLMaterial>& M
     }
 
     // If the material has already been exported (because it was referenced by some other geometry), do nothing.
-    if (MaterialIndexForAsset.Contains(MaterialAsset.ToString()))
+    if (MaterialIndexForAsset.Contains(MaterialAsset.ToString()) && !bWantToChangeMaterialAtRuntime)
         return true;
 
     USteamAudioMaterial* Material = Cast<USteamAudioMaterial>(MaterialAsset.TryLoad());
@@ -113,6 +111,9 @@ static bool ExportStaticMeshComponent(UStaticMeshComponent* StaticMeshComponent,
     check(StaticMeshComponent->GetStaticMesh());
     check(StaticMeshComponent->GetStaticMesh()->GetRenderData());
 
+#if WITH_EDITOR
+    StaticMeshComponent->GetStaticMesh()->bAllowCPUAccess = true; // Used to update iplStaticMesh in Runime in the build
+#endif
     int32 MinLODForExport = GetDefault<USteamAudioSettings>()->MinLODForExport;
     auto StaticMeshRenderData = StaticMeshComponent->GetStaticMesh()->GetRenderData();
     int32 ResultLODIndex = StaticMeshRenderData->LODResources.Num() - 1 >= MinLODForExport ? MinLODForExport : StaticMeshRenderData->LODResources.Num() - 1;
@@ -167,7 +168,8 @@ static bool ExportStaticMeshComponent(UStaticMeshComponent* StaticMeshComponent,
         MaterialAsset = PhysicsMappedMaterial ? PhysicsMappedMaterial->SteamAudioMaterial : SteamAudioSettings->DefaultMeshMaterial;
     }
 
-    if (!ExportMaterial(MaterialAsset, Materials, MaterialIndexForAsset))
+    USteamAudioGeometryComponent* GeometryComponent = StaticMeshComponent->GetOwner()->FindComponentByClass<USteamAudioGeometryComponent>();
+    if (!ExportMaterial(MaterialAsset, Materials, MaterialIndexForAsset, GeometryComponent ? GeometryComponent->bWantToChangeMaterialAtRuntime : false))
         return false;
 
     check(MaterialIndexForAsset.Contains(MaterialAsset.ToString()));
@@ -206,6 +208,8 @@ static bool ExportStaticMeshComponentsForActor(AStaticMeshActor* StaticMeshActor
 
     return true;
 }
+
+#if WITH_EDITOR
 
 /**
  * Exports a single Landscape (terrain) actor.
@@ -272,6 +276,8 @@ static bool ExportLandscapeActor(ALandscape* LandscapeActor, TArray<IPLVector3>&
     return true;
 }
 
+#endif
+
 /**
  * Exports every actor in the given list of actors.
  *
@@ -291,14 +297,22 @@ static bool ExportActors(const TArray<AActor*>& Actors, TArray<IPLVector3>& Vert
             {
                 return false;
             }
+
+            USteamAudioGeometryComponent* GeometryComponent = Actor->FindComponentByClass<USteamAudioGeometryComponent>();
+            if (GeometryComponent)
+            {
+                GeometryComponent->SetExportIndex(Materials.Num() - 1);
+            }
         }
         else if (Actor->IsA<ALandscape>())
         {
+#if WITH_EDITOR
             if (!ExportLandscapeActor(Cast<ALandscape>(Actor), Vertices, Triangles, MaterialIndices, Materials,
                 MaterialIndexForAsset))
             {
                 return false;
             }
+#endif
         }
     }
 
@@ -421,14 +435,14 @@ static bool IsSteamAudioDynamicObject(AActor* Actor)
 /**
  * Finds all actors in the given (sub)level that are tagged for export as part of the level's static geometry.
  */
-static void GetActorsForStaticGeometryExport(UWorld* World, ULevel* Level, TArray<AActor*>& Actors)
+static void GetActorsForStaticGeometryExport(UWorld* World, ULevel* Level, TArray<AActor*>& Actors, bool bIsInRuntime = false)
 {
     check(World);
     check(Level);
 
     for (TActorIterator<AStaticMeshActor> It(World); It; ++It)
     {
-        if (It->GetLevel() != Level)
+        if (!bIsInRuntime && It->GetLevel() != Level)
             continue;
 
         if (!IsSteamAudioGeometry(*It) || IsSteamAudioDynamicObject(*It))
@@ -456,6 +470,8 @@ static void GetActorsForStaticGeometryExport(UWorld* World, ULevel* Level, TArra
         }
     }
 }
+
+#if WITH_EDITOR
 
 /**
  * Returns true if the given actor should be exported as part of the given Steam Audio Dynamic Object component. This
@@ -860,6 +876,136 @@ bool ExportDynamicObject(USteamAudioDynamicObjectComponent* DynamicObject, FStri
 // ---------------------------------------------------------------------------------------------------------------------
 // Scene Load/Unload
 // ---------------------------------------------------------------------------------------------------------------------
+
+void UpdateStaticGeometryForLevel(UWorld* World, ULevel* Level, IPLStaticMesh& OldStaticMesh)
+{
+    check(World);
+    check(Level);
+
+    Async(EAsyncExecution::Thread, [World, Level, &OldStaticMesh]()
+        {
+            // Start by collecting geometry and material information from the level.
+            TArray<IPLVector3> Vertices;
+            TArray<IPLTriangle> Triangles;
+            TArray<int> MaterialIndices;
+            TArray<IPLMaterial> Materials;
+            TMap<FString, int> MaterialIndexForAsset;
+            TArray<AActor*> Actors;
+            bool bExportSucceeded = RunInGameThread<bool>([&]()
+                {
+                    GetActorsForStaticGeometryExport(World, Level, Actors, true);
+                    if (!ExportActors(Actors, Vertices, Triangles, MaterialIndices, Materials, MaterialIndexForAsset))
+                        return false;
+
+                    if (GetDefault<USteamAudioSettings>()->bExportBSPGeometry)
+                    {
+                        if (!ExportBSPGeometry(World, Level, Vertices, Triangles, MaterialIndices, Materials, MaterialIndexForAsset))
+                            return false;
+                    }
+
+                    return true;
+                });
+
+            if (!bExportSucceeded)
+                return;
+
+            // If we didn't find anything, stop here.
+            if (Vertices.Num() <= 0 || Triangles.Num() <= 0 || MaterialIndices.Num() <= 0 || Materials.Num() <= 0)
+            {
+                UE_LOG(LogSteamAudio, Log, TEXT("No static geometry specified for level: %s"), *Level->GetOutermostObject()->GetName());
+                return;
+            }
+
+            FSteamAudioManager& Manager = FSteamAudioModule::GetManager();
+
+            IPLContext Context = Manager.GetContext();
+            IPLScene Scene = Manager.GetScene();
+
+            // Create a static mesh using all the data gathered from the level.
+            IPLStaticMeshSettings StaticMeshSettings{};
+            StaticMeshSettings.numVertices = Vertices.Num();
+            StaticMeshSettings.numTriangles = Triangles.Num();
+            StaticMeshSettings.numMaterials = Materials.Num();
+            StaticMeshSettings.vertices = Vertices.GetData();
+            StaticMeshSettings.triangles = Triangles.GetData();
+            StaticMeshSettings.materialIndices = MaterialIndices.GetData();
+            StaticMeshSettings.materials = Materials.GetData();
+
+            IPLStaticMesh StaticMesh = nullptr;
+            IPLerror Status = iplStaticMeshCreate(Scene, &StaticMeshSettings, &StaticMesh);
+            if (Status != IPL_STATUS_SUCCESS)
+            {
+                UE_LOG(LogSteamAudio, Error, TEXT("Unable to create Steam Audio static mesh for level: %s [%i]"), *Level->GetOutermostObject()->GetName(), Status);
+                Manager.ShutDownSteamAudio();
+                return;
+            }
+
+            iplStaticMeshAdd(StaticMesh, Scene);
+            iplSceneCommit(Scene);
+
+            iplStaticMeshRemove(OldStaticMesh, Scene);
+            iplSceneCommit(Scene);
+            OldStaticMesh = StaticMesh;
+        });
+}
+
+void UpdateStaticMeshMaterial(UWorld* World, ULevel* Level, IPLStaticMesh StaticMesh, AActor* RefreshableActor)
+{
+    check(World);
+    check(Level);
+
+    Async(EAsyncExecution::Thread, [World, Level, StaticMesh, RefreshableActor]()
+        {
+            IPLMaterial SteamAudioMaterial;
+            int32 ExportIndex;
+            TArray<AActor*> Actors;
+            bool bExportSucceeded = RunInGameThread<bool>([&]()
+                {
+                    if (RefreshableActor->IsA<AStaticMeshActor>() && !(!IsSteamAudioGeometry(RefreshableActor) || IsSteamAudioDynamicObject(RefreshableActor)))
+                    {
+                        USteamAudioGeometryComponent* GeometryComponent = RefreshableActor->FindComponentByClass<USteamAudioGeometryComponent>();
+                        if (GeometryComponent)
+                        {
+                            if (!GeometryComponent->bWantToChangeMaterialAtRuntime)
+                                return false;
+
+                            ExportIndex = GeometryComponent->ExportIndex;
+                        }
+
+                        FSoftObjectPath MaterialAsset = GetMaterialAssetForActor(RefreshableActor);
+                        if (!MaterialAsset.IsValid())
+                        {
+                            MaterialAsset = GetDefault<USteamAudioSettings>()->DefaultMeshMaterial;
+                        }
+
+                        USteamAudioMaterial* Material = Cast<USteamAudioMaterial>(MaterialAsset.TryLoad());
+                        if (!Material)
+                        {
+                            return false;
+                        }
+
+                        SteamAudioMaterial.absorption[0] = Material->AbsorptionLow;
+                        SteamAudioMaterial.absorption[1] = Material->AbsorptionMid;
+                        SteamAudioMaterial.absorption[2] = Material->AbsorptionHigh;
+                        SteamAudioMaterial.scattering = Material->Scattering;
+                        SteamAudioMaterial.transmission[0] = Material->TransmissionLow;
+                        SteamAudioMaterial.transmission[1] = Material->TransmissionMid;
+                        SteamAudioMaterial.transmission[2] = Material->TransmissionHigh;
+
+                        return true;
+                    }
+
+                    return false;
+                });
+
+            if (!bExportSucceeded)
+                return;
+
+            FSteamAudioManager& Manager = FSteamAudioModule::GetManager();
+            iplStaticMeshMaterialSet(StaticMesh, Manager.GetScene(), &SteamAudioMaterial, ExportIndex);
+            iplSceneCommit(Manager.GetScene());
+        });
+}
 
 IPLStaticMesh LoadStaticMeshFromAsset(FSoftObjectPath Asset, IPLContext Context, IPLScene Scene)
 {

@@ -41,6 +41,10 @@ public:
 
     static ASteamAudioStaticMeshActor* FindInLevel(UWorld* World, ULevel* Level);
 
+    void UpdateStaticMesh();
+
+    void UpdateStaticMeshMaterial(AActor* RefreshableActor);
+
 protected:
     /**
      * Inherited from UActorComponent
