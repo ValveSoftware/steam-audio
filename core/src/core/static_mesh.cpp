@@ -33,9 +33,11 @@ StaticMesh::StaticMesh(int numVertices,
     , mBVH(mMesh)
     , mMaterialIndices(numTriangles)
     , mMaterials(numMaterials)
+    , mMaterialsToUpdate(numMaterials)
 {
     memcpy(mMaterialIndices.data(), materialIndices, numTriangles * sizeof(int));
     memcpy(mMaterials.data(), materials, numMaterials * sizeof(Material));
+    memcpy(mMaterialsToUpdate.data(), materials, numMaterials * sizeof(Material));
 }
 
 StaticMesh::StaticMesh(const Serialized::StaticMesh* serializedObject)
@@ -71,7 +73,9 @@ StaticMesh::StaticMesh(const Serialized::StaticMesh* serializedObject)
     auto numMaterials = serializedObject->materials()->Length();
 
     mMaterials.resize(numMaterials);
+    mMaterialsToUpdate.resize(numMaterials);
     memcpy(mMaterials.data(), serializedObject->materials()->data(), numMaterials * sizeof(Material));
+    memcpy(mMaterialsToUpdate.data(), mMaterials.data(), numMaterials * sizeof(Material));
 #endif
 }
 

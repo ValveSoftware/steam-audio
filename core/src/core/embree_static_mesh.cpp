@@ -42,7 +42,9 @@ EmbreeStaticMesh::EmbreeStaticMesh(shared_ptr<EmbreeScene> scene,
     memcpy(mMaterialIndices.data(), materialIndices, numTriangles * sizeof(int));
 
     mMaterials.resize(numMaterials);
+    mMaterialsToUpdate.resize(numMaterials);
     memcpy(mMaterials.data(), materials, numMaterials * sizeof(Material));
+    memcpy(mMaterialsToUpdate.data(), materials, numMaterials * sizeof(Material));
 
     convertMaterials();
 }
@@ -91,7 +93,9 @@ EmbreeStaticMesh::EmbreeStaticMesh(shared_ptr<EmbreeScene> scene,
     auto numMaterials = serializedObject->materials()->Length();
 
     mMaterials.resize(numMaterials);
+    mMaterialsToUpdate.resize(numMaterials);
     memcpy(mMaterials.data(), serializedObject->materials()->data(), numMaterials * sizeof(Material));
+    memcpy(mMaterialsToUpdate.data(), mMaterials.data(), numMaterials * sizeof(Material));
 #endif
 
     convertMaterials();
