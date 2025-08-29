@@ -500,38 +500,6 @@ static bool DoesDynamicObjectContainActor(USteamAudioDynamicObjectComponent* Dyn
     return false;
 }
 
-/**
- * Finds all actors that should be exported as part of the given Steam Audio Dynamic Object.
- */
-static void GetActorsForDynamicObjectExport(USteamAudioDynamicObjectComponent* DynamicObjectComponent,
-    TArray<AActor*>& Actors)
-{
-    check(DynamicObjectComponent);
-
-    if (DynamicObjectComponent->IsInBlueprint())
-    {
-        const UBlueprintGeneratedClass* BlueprintClass = Cast<UBlueprintGeneratedClass>(DynamicObjectComponent->GetOutermostObject());
-        if (!BlueprintClass || !BlueprintClass->SimpleConstructionScript || !BlueprintClass->SimpleConstructionScript->GetComponentEditorActorInstance())
-            return;
-
-        Actors.Add(BlueprintClass->SimpleConstructionScript->GetComponentEditorActorInstance());
-    }
-    else
-    {
-        Actors.Add(DynamicObjectComponent->GetOwner());
-
-        TArray<AActor*> Children;
-        DynamicObjectComponent->GetOwner()->GetAllChildActors(Children);
-        for (AActor* Actor : Children)
-        {
-            if (DoesDynamicObjectContainActor(DynamicObjectComponent, Actor))
-            {
-                Actors.Add(Actor);
-            }
-        }
-    }
-}
-
 bool DoesLevelHaveStaticGeometryForExport(UWorld* World, ULevel* Level)
 {
     check(World);
@@ -741,11 +709,9 @@ bool ExportDynamicObject(USteamAudioDynamicObjectComponent* DynamicObject, FStri
         TArray<int> MaterialIndices;
         TArray<IPLMaterial> Materials;
         TMap<FString, int> MaterialIndexForAsset;
-        TArray<AActor*> Actors;
         bool bExportSucceeded = RunInGameThread<bool>([&]()
         {
-            GetActorsForDynamicObjectExport(DynamicObject, Actors);
-            return ExportActors(Actors, Vertices, Triangles, MaterialIndices, Materials, MaterialIndexForAsset, false);
+            return ExportActors({ DynamicObject->GetOwner() }, Vertices, Triangles, MaterialIndices, Materials, MaterialIndexForAsset, false);
         });
         if (!bExportSucceeded)
         {
