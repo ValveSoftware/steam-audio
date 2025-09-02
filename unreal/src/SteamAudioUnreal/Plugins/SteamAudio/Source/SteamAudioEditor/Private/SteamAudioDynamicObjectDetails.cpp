@@ -15,6 +15,7 @@
 //
 
 #include "SteamAudioDynamicObjectDetails.h"
+#include "Engine/StaticMeshActor.h"
 #include "ContentBrowserModule.h"
 #include "DetailCategoryBuilder.h"
 #include "DetailLayoutBuilder.h"
@@ -120,25 +121,41 @@ void FSteamAudioDynamicObjectDetails::Export(bool bExportOBJ)
 {
     if (DynamicObjectComponent != nullptr)
     {
-        FString Name;
-        bool bNameChosen = PromptForName(bExportOBJ, Name);
+        int32 AssetsCounter = 0;
+        TArray<AActor*> Children;
+        DynamicObjectComponent->GetOwner()->GetAllChildActors(Children);
 
-        if (bNameChosen)
+        FSteamAudioEditorModule::NotifyStarting(NSLOCTEXT("SteamAudio", "ExportDynamic", "Exporting dynamic object..."));
+        for (int32 i = 0; i < Children.Num() + 1; ++i)
         {
-            FSteamAudioEditorModule::NotifyStarting(NSLOCTEXT("SteamAudio", "ExportDynamic", "Exporting dynamic object..."));
+            if (i > 0 && !Children[i - 1]->IsA<AStaticMeshActor>())
+                continue;
 
-            Async(EAsyncExecution::Thread, [&]()
+            auto ResultDynamicObjectComponent = (i == 0 ? DynamicObjectComponent.Get() : Children[i - 1]->FindComponentByClass<USteamAudioDynamicObjectComponent>());
+            if (!ResultDynamicObjectComponent && DynamicObjectComponent->bMakeAllChildActorsTheirOwnDynamicObjects)
             {
-                if (!ExportDynamicObject(DynamicObjectComponent.Get(), Name, bExportOBJ))
+                ResultDynamicObjectComponent = NewObject<USteamAudioDynamicObjectComponent>(Children[i - 1]);
+                ResultDynamicObjectComponent->RegisterComponent();
+                Children[i - 1]->AddInstanceComponent(ResultDynamicObjectComponent);
+            }
+
+            if (ResultDynamicObjectComponent)
+            {
+                FString Name;
+                bool bNameChosen = PromptForName(ResultDynamicObjectComponent, bExportOBJ, Name, AssetsCounter++);
+                if (bNameChosen)
                 {
-                    FSteamAudioEditorModule::NotifyFailed(NSLOCTEXT("SteamAudio", "ExportDynamicFail", "Failed to export dynamic object."));
+                    Async(EAsyncExecution::Thread, [ResultDynamicObjectComponent, Name, bExportOBJ]()
+                        {
+                            if (!ExportDynamicObject(ResultDynamicObjectComponent, Name, bExportOBJ))
+                            {
+                                FSteamAudioEditorModule::NotifyFailed(NSLOCTEXT("SteamAudio", "ExportDynamicFail", "Failed to export dynamic object."));
+                            }
+                        });
                 }
-                else
-                {
-                    FSteamAudioEditorModule::NotifySucceeded(NSLOCTEXT("SteamAudio", "ExportDynamicSuccess", "Dynamic object exported."));
-                }
-            });
+            }
         }
+        FSteamAudioEditorModule::NotifySucceeded(NSLOCTEXT("SteamAudio", "ExportDynamicSuccess", "Dynamic object exported."));
     }
 }
 
@@ -181,36 +198,47 @@ bool FSteamAudioDynamicObjectDetails::PromptForFileName(FString& FileName)
     return false;
 }
 
-bool FSteamAudioDynamicObjectDetails::PromptForAssetName(FString& AssetName)
+bool FSteamAudioDynamicObjectDetails::PromptForAssetName(USteamAudioDynamicObjectComponent* DynamicComponent, FString& AssetName, int32 AssetIndex)
 {
     // If the Steam Audio Dynamic Object component points to some asset, use that asset's asset path.
-    if (DynamicObjectComponent != nullptr && DynamicObjectComponent->Asset.IsValid())
+    if (DynamicComponent != nullptr && DynamicComponent->Asset.IsValid())
     {
-        AssetName = DynamicObjectComponent->Asset.GetAssetPathString();
+        AssetName = DynamicComponent->Asset.GetAssetPathString();
         return true;
     }
 
-    // Otherwise, prompt the user to create a new .uasset.
-    IContentBrowserSingleton& ContentBrowser = FModuleManager::LoadModuleChecked<FContentBrowserModule>("ContentBrowser").Get();
-
-    FSaveAssetDialogConfig DialogConfig{};
-    DialogConfig.DialogTitleOverride = NSLOCTEXT("SteamAudio", "SaveStaticMesh", "Save static mesh as...");
-    DialogConfig.DefaultPath = TEXT("/Game");
-    DialogConfig.DefaultAssetName = GetDefaultAssetOrFileName();
-    DialogConfig.ExistingAssetPolicy = ESaveAssetDialogExistingAssetPolicy::AllowButWarn;
-    FString AssetPath = ContentBrowser.CreateModalSaveAssetDialog(DialogConfig);
-    if (!AssetPath.IsEmpty())
+    if (DynamicComponent == DynamicObjectComponent)
     {
-        AssetName = AssetPath;
+        // Otherwise, prompt the user to create a new .uasset.
+        IContentBrowserSingleton& ContentBrowser = FModuleManager::LoadModuleChecked<FContentBrowserModule>("ContentBrowser").Get();
+
+        FSaveAssetDialogConfig DialogConfig{};
+        DialogConfig.DialogTitleOverride = NSLOCTEXT("SteamAudio", "SaveStaticMesh", "Save static mesh as...");
+        DialogConfig.DefaultPath = TEXT("/Game");
+        DialogConfig.DefaultAssetName = GetDefaultAssetOrFileName();
+        DialogConfig.ExistingAssetPolicy = ESaveAssetDialogExistingAssetPolicy::AllowButWarn;
+        FString AssetPath = ContentBrowser.CreateModalSaveAssetDialog(DialogConfig);
+        if (!AssetPath.IsEmpty())
+        {
+            AssetName = AssetPath;
+            return true;
+        }
+    }
+    else
+    {
+        FString PackageName, ObjectName;
+        DynamicObjectComponent->Asset.GetAssetPathString().Split(".", &PackageName, &ObjectName);
+        FString AssetIndexExtension = "_" + FString::FromInt(AssetIndex);
+        AssetName = PackageName.Append(AssetIndexExtension) + "." + ObjectName.Append(AssetIndexExtension);
         return true;
     }
 
     return false;
 }
 
-bool FSteamAudioDynamicObjectDetails::PromptForName(bool bExportOBJ, FString& Name)
+bool FSteamAudioDynamicObjectDetails::PromptForName(USteamAudioDynamicObjectComponent* DynamicComponent, bool bExportOBJ, FString& Name, int32 AssetIndex)
 {
-    return (bExportOBJ) ? PromptForFileName(Name) : PromptForAssetName(Name);
+    return (bExportOBJ) ? PromptForFileName(Name) : PromptForAssetName(DynamicComponent, Name, AssetIndex);
 }
 
 }

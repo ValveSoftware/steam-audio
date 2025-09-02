@@ -41,7 +41,9 @@ void USteamAudioGeometryComponent::SetExportIndex(int32 NewExportIndex)
         return;
 
     ExportIndex = NewExportIndex;
+#if WITH_EDITOR
     Modify();
+#endif
 }
 
 void USteamAudioGeometryComponent::OnComponentCreated()

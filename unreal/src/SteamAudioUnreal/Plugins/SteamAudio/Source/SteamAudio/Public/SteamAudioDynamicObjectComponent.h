@@ -39,6 +39,10 @@ public:
     UPROPERTY(VisibleAnywhere, Category = ExportSettings, meta = (AllowedClasses = "/Script/SteamAudio.SteamAudioSerializedObject"))
     FSoftObjectPath Asset;
 
+    /** If this variable is set to true when exporting, a new dynamic components will be created for all child actors (if they do not already have one). */
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ExportSettings)
+    bool bMakeAllChildActorsTheirOwnDynamicObjects = true;
+
     USteamAudioDynamicObjectComponent();
 
 #ifdef WITH_EDITOR
