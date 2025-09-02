@@ -20,6 +20,11 @@
 #include "Engine/StaticMeshActor.h"
 #include "StaticMeshResources.h"
 #include "SteamAudioSettings.h"
+#include "SteamAudioStaticMeshActor.h"
+
+#if WITH_EDITOR
+#include "EditorScriptingHelpers.h"
+#endif
 
 // ---------------------------------------------------------------------------------------------------------------------
 // USteamAudioGeometryComponent
@@ -33,7 +38,57 @@ USteamAudioGeometryComponent::USteamAudioGeometryComponent()
 {
     // Disable ticking.
     PrimaryComponentTick.bCanEverTick = false;
+
+#if WITH_EDITOR
+    if (GetOwner() && EditorScriptingHelpers::CheckIfInEditorAndPIE())
+    {
+        GetOwner()->GetRootComponent()->TransformUpdated.AddUObject(this, &USteamAudioGeometryComponent::OnTransformUpdate);
+    }
+#endif
 }
+
+#if WITH_EDITOR
+void USteamAudioGeometryComponent::OnTransformUpdate(USceneComponent* UpdatedComponent, EUpdateTransformFlags UpdateTransformFlags, ETeleportType Teleport)
+{
+    if (!bIsFirstTransformUpdate)
+    {
+        if (auto SteamAudioSMA = ASteamAudioStaticMeshActor::FindInLevel(GetWorld(), GetWorld()->GetCurrentLevel()))
+        {
+            bool bIsNeedToExport = false;
+            for (TObjectIterator<USteamAudioGeometryComponent> It; It; ++It)
+            {
+                if (It && It->IsValidLowLevel() && ((It->IsRegistered() && !It->IsExportedTransformEqualsRoot()) || !It->IsRegistered()))
+                {
+                    bIsNeedToExport = true;
+                    break;
+                }
+            }
+            SetIsNeedToExport(bIsNeedToExport);
+        }
+    }
+    else
+    {
+        SetExportedTransform(ExportedTransform_Property);
+    }
+    bIsFirstTransformUpdate = false;
+}
+
+void USteamAudioGeometryComponent::SetIsNeedToExport(bool NewValue)
+{
+    if (auto SteamAudioSMA = ASteamAudioStaticMeshActor::FindInLevel(GetWorld(), GetWorld()->GetCurrentLevel()))
+    {
+        SteamAudioSMA->SetIsNeedToExport(NewValue);
+        Modify();
+    }
+}
+
+void USteamAudioGeometryComponent::SetExportedTransform(FTransform NewValue)
+{
+    ExportedTransform = NewValue;
+    ExportedTransform_Property = NewValue;
+    Modify();
+}
+#endif
 
 void USteamAudioGeometryComponent::SetExportIndex(int32 NewExportIndex)
 {
@@ -42,7 +97,10 @@ void USteamAudioGeometryComponent::SetExportIndex(int32 NewExportIndex)
 
     ExportIndex = NewExportIndex;
 #if WITH_EDITOR
-    Modify();
+    if (EditorScriptingHelpers::CheckIfInEditorAndPIE())
+    {
+        Modify();
+    }
 #endif
 }
 
@@ -54,6 +112,27 @@ void USteamAudioGeometryComponent::OnComponentCreated()
     UpdateStatistics();
 #endif
 }
+
+#if WITH_EDITOR
+void USteamAudioGeometryComponent::OnRegister()
+{
+    Super::OnRegister();
+
+    if (EditorScriptingHelpers::CheckIfInEditorAndPIE())
+    {
+        bIsFirstTransformUpdate = false; // For the case when we spawn a component ourselves in the editor (immediately apply a "Warning")
+        OnTransformUpdate(GetOwner()->GetRootComponent(), EUpdateTransformFlags::None, ETeleportType::None); // Checking if the component is exported
+    }
+}
+
+void USteamAudioGeometryComponent::OnUnregister()
+{
+    Super::OnUnregister();
+
+    if (EditorScriptingHelpers::CheckIfInEditorAndPIE())
+        SetIsNeedToExport(true);
+}
+#endif
 
 #if WITH_EDITOR
 void USteamAudioGeometryComponent::PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent)

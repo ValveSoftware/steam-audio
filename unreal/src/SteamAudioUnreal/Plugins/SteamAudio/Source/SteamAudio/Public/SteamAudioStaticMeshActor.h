@@ -39,11 +39,17 @@ public:
 
     ASteamAudioStaticMeshActor();
 
+    virtual void Tick(float DeltaTime) override;
+
     static ASteamAudioStaticMeshActor* FindInLevel(UWorld* World, ULevel* Level);
 
     void UpdateStaticMesh();
 
     void UpdateStaticMeshMaterial(AActor* RefreshableActor);
+
+    void SetIsNeedToExport(bool NewValue);
+
+    bool IsNeedToExport() const { return bIsNeedToExport; }
 
 protected:
     /**
@@ -55,6 +61,10 @@ protected:
 
     /** Called when the component is going to be destroyed. */
     virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
+
+#if WITH_EDITOR
+    virtual bool ShouldTickIfViewportsOnly() const override { return true; }
+#endif
 
 private:
     /** Retained reference to the main scene used by the Steam Audio Manager for simulation. */

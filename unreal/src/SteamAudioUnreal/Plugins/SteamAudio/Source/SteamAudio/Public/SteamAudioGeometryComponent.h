@@ -72,13 +72,37 @@ public:
     virtual void OnComponentCreated() override;
 
 #if WITH_EDITOR
+    virtual void OnRegister() override; // Also called during transform undo
+
+    virtual void OnUnregister() override; // Called when we delete an actor or the component itself
+#endif
+
+#if WITH_EDITOR
     /** Called when some property of the component is changed. */
     virtual void PostEditChangeProperty(struct FPropertyChangedEvent& PropertyChangedEvent) override;
 #endif
 
     void SetExportIndex(int32 NewExportIndex);
 
+#if WITH_EDITOR
+    void SetExportedTransform(FTransform NewValue);
+#endif
+
 private:
+    UPROPERTY()
+    FTransform ExportedTransform_Property = FTransform::Identity;
+
+#if WITH_EDITOR
+    FTransform ExportedTransform = FTransform::Identity; // Used if this component is not registered (the value in ExportedTransform_Property will not be saved)
+    bool bIsFirstTransformUpdate = true;
+
+    void SetIsNeedToExport(bool NewValue);
+
+    bool IsExportedTransformEqualsRoot() const { return GetOwner()->GetRootComponent()->GetComponentTransform().Equals(ExportedTransform, 0.01f) && !ExportedTransform.Equals(FTransform::Identity); }
+
+    void OnTransformUpdate(USceneComponent* UpdatedComponent, EUpdateTransformFlags UpdateTransformFlags, ETeleportType Teleport);
+#endif
+
     /** Recalculates the number of vertices and triangles that are exported as part of this component. */
     void UpdateStatistics();
 

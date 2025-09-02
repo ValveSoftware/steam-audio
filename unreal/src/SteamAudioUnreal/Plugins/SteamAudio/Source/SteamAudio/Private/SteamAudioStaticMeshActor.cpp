@@ -18,6 +18,11 @@
 #include "EngineUtils.h"
 #include "SteamAudioManager.h"
 #include "SteamAudioScene.h"
+#include "SteamAudioGeometryComponent.h"
+
+#if WITH_EDITOR
+#include "EditorScriptingHelpers.h"
+#endif
 
 // ---------------------------------------------------------------------------------------------------------------------
 // ASteamAudioStaticMeshActor
@@ -27,7 +32,11 @@ ASteamAudioStaticMeshActor::ASteamAudioStaticMeshActor()
     : Asset()
     , Scene(nullptr)
     , StaticMesh(nullptr)
-{}
+{
+#if WITH_EDITOR
+    PrimaryActorTick.bCanEverTick = true;
+#endif
+}
 
 void ASteamAudioStaticMeshActor::BeginPlay()
 {
@@ -68,6 +77,41 @@ void ASteamAudioStaticMeshActor::EndPlay(const EEndPlayReason::Type EndPlayReaso
     }
 
     Super::EndPlay(EndPlayReason);
+}
+
+void ASteamAudioStaticMeshActor::Tick(float DeltaTime)
+{
+#if WITH_EDITOR
+    if (GIsEditor && !(GEditor->PlayWorld || GIsPlayInEditorWorld)) // if in editor
+    {
+        FModuleManager::Get().GetModule("SteamAudioEditor")->StartupModule();
+    }
+#endif
+
+    Super::Tick(DeltaTime);
+}
+
+void ASteamAudioStaticMeshActor::SetIsNeedToExport(bool NewValue)
+{
+    bIsNeedToExport = NewValue;
+
+#if WITH_EDITOR
+    if (EditorScriptingHelpers::CheckIfInEditorAndPIE())
+    {
+        if (!NewValue) // If we exported the geometry
+        {
+            for (TObjectIterator<USteamAudioGeometryComponent> It; It; ++It)
+            {
+                if (It && It->IsValidLowLevel())
+                {
+                    It->SetExportedTransform(It->IsRegistered() ? It->GetOwner()->GetRootComponent()->GetComponentTransform() : FTransform::Identity);
+                }
+            }
+        }
+
+        Modify();
+    }
+#endif
 }
 
 void ASteamAudioStaticMeshActor::UpdateStaticMesh()
