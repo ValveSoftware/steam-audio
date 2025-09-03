@@ -283,11 +283,6 @@ void FSteamAudioEditorModule::ShutdownModule()
 
 void FSteamAudioEditorModule::UpdateMainToolBarIcon()
 {
-    FString SteamAudioContent = IPluginManager::Get().FindPlugin("SteamAudio")->GetBaseDir() + "/Content";
-    FVector2D Vec16 = FVector2D(16.0f, 16.0f);
-    FVector2D Vec40 = FVector2D(40.0f, 40.0f);
-    FVector2D Vec64 = FVector2D(64.0f, 64.0f);
-
     bool bIsWarning = IsWarning();
     if (bIsWarning)
     {
