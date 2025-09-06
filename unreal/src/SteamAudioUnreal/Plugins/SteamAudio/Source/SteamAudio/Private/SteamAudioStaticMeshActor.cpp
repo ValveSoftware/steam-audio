@@ -20,13 +20,11 @@
 #include "SteamAudioScene.h"
 #include "SteamAudioGeometryComponent.h"
 
-#if WITH_EDITOR
-#include "EditorScriptingHelpers.h"
-#endif
-
 // ---------------------------------------------------------------------------------------------------------------------
 // ASteamAudioStaticMeshActor
 // ---------------------------------------------------------------------------------------------------------------------
+
+#define CHECK_IfInEditorAndPIE() IsInGameThread() && GIsEditor && !(GEditor->PlayWorld || GIsPlayInEditorWorld)
 
 ASteamAudioStaticMeshActor::ASteamAudioStaticMeshActor()
     : Asset()
@@ -82,7 +80,7 @@ void ASteamAudioStaticMeshActor::EndPlay(const EEndPlayReason::Type EndPlayReaso
 void ASteamAudioStaticMeshActor::Tick(float DeltaTime)
 {
 #if WITH_EDITOR
-    if (GIsEditor && !(GEditor->PlayWorld || GIsPlayInEditorWorld)) // if in editor
+    if (CHECK_IfInEditorAndPIE())
     {
         FModuleManager::Get().GetModule("SteamAudioEditor")->StartupModule();
     }
@@ -96,7 +94,7 @@ void ASteamAudioStaticMeshActor::SetIsNeedToExport(bool NewValue)
     bIsNeedToExport = NewValue;
 
 #if WITH_EDITOR
-    if (EditorScriptingHelpers::CheckIfInEditorAndPIE())
+    if (CHECK_IfInEditorAndPIE())
     {
         if (!NewValue) // If we exported the geometry
         {

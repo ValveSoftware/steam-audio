@@ -22,13 +22,11 @@
 #include "SteamAudioSettings.h"
 #include "SteamAudioStaticMeshActor.h"
 
-#if WITH_EDITOR
-#include "EditorScriptingHelpers.h"
-#endif
-
 // ---------------------------------------------------------------------------------------------------------------------
 // USteamAudioGeometryComponent
 // ---------------------------------------------------------------------------------------------------------------------
+
+#define CHECK_IfInEditorAndPIE() IsInGameThread() && GIsEditor && !(GEditor->PlayWorld || GIsPlayInEditorWorld)
 
 USteamAudioGeometryComponent::USteamAudioGeometryComponent()
     : Material(nullptr)
@@ -40,7 +38,7 @@ USteamAudioGeometryComponent::USteamAudioGeometryComponent()
     PrimaryComponentTick.bCanEverTick = false;
 
 #if WITH_EDITOR
-    if (GetOwner() && EditorScriptingHelpers::CheckIfInEditorAndPIE())
+    if (GetOwner() && CHECK_IfInEditorAndPIE())
     {
         GetOwner()->GetRootComponent()->TransformUpdated.AddUObject(this, &USteamAudioGeometryComponent::OnTransformUpdate);
     }
@@ -97,7 +95,7 @@ void USteamAudioGeometryComponent::SetExportIndex(int32 NewExportIndex)
 
     ExportIndex = NewExportIndex;
 #if WITH_EDITOR
-    if (EditorScriptingHelpers::CheckIfInEditorAndPIE())
+    if (CHECK_IfInEditorAndPIE())
     {
         Modify();
     }
@@ -118,7 +116,7 @@ void USteamAudioGeometryComponent::OnRegister()
 {
     Super::OnRegister();
 
-    if (EditorScriptingHelpers::CheckIfInEditorAndPIE())
+    if (CHECK_IfInEditorAndPIE())
     {
         bIsFirstTransformUpdate = false; // For the case when we spawn a component ourselves in the editor (immediately apply a "Warning")
         OnTransformUpdate(GetOwner()->GetRootComponent(), EUpdateTransformFlags::None, ETeleportType::None); // Checking if the component is exported
@@ -129,7 +127,7 @@ void USteamAudioGeometryComponent::OnUnregister()
 {
     Super::OnUnregister();
 
-    if (EditorScriptingHelpers::CheckIfInEditorAndPIE())
+    if (CHECK_IfInEditorAndPIE())
         SetIsNeedToExport(true);
 }
 #endif
