@@ -92,7 +92,7 @@ public:
 
     virtual void dumpObj(const string& fileName) const = 0;
 
-    virtual void SetStaticMeshMaterial(IStaticMesh* staticMesh, Material* NewMaterial, int index) = 0;
+    virtual void setStaticMeshMaterial(IStaticMesh* staticMesh, Material* newMaterial, int index) = 0;
 
     bool isOccluded(const Vector3f& from,
                     const Vector3f& to) const;
@@ -182,7 +182,7 @@ public:
 
     virtual void dumpObj(const string& fileName) const override;
 
-    virtual void SetStaticMeshMaterial(IStaticMesh* staticMesh, Material* NewMaterial, int index) override;
+    virtual void setStaticMeshMaterial(IStaticMesh* staticMesh, Material* newMaterial, int index) override;
 
     bool intersectsBox(const Box& box) const;
 

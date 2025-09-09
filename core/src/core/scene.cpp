@@ -394,14 +394,14 @@ void Scene::dumpObj(const string& fileName) const
     fclose(objFile);
 }
 
-void Scene::SetStaticMeshMaterial(IStaticMesh* staticMesh, Material* NewMaterial, int index)
+void Scene::setStaticMeshMaterial(IStaticMesh* staticMesh, Material* newMaterial, int index)
 {
     auto buildInStaticMesh = reinterpret_cast<StaticMesh*>(staticMesh);
     for (const auto& curStaticMesh : mStaticMeshes[0])
     {
         if (curStaticMesh.get() == buildInStaticMesh)
         {
-            *const_cast<Material*>(buildInStaticMesh->materialsToUpdate().data() + index) = *NewMaterial;
+            *const_cast<Material*>(buildInStaticMesh->materialsToUpdate().data() + index) = *newMaterial;
             buildInStaticMesh->markToUpdateMaterials();
             break;
         }

@@ -136,7 +136,7 @@ public:
     virtual void dumpObj(const string& fileName) const override
     {}
 
-    virtual void SetStaticMeshMaterial(IStaticMesh* staticMesh, Material* NewMaterial, int index) override
+    virtual void setStaticMeshMaterial(IStaticMesh* staticMesh, Material* newMaterial, int index) override
     { }
 
 private:
