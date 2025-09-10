@@ -67,6 +67,9 @@ protected:
 #endif
 
 private:
+    UPROPERTY()
+    bool bIsNeedToExport = false;
+
     /** Retained reference to the main scene used by the Steam Audio Manager for simulation. */
     IPLScene Scene;
 
