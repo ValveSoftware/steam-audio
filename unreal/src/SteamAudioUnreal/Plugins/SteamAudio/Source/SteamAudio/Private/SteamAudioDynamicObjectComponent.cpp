@@ -19,7 +19,7 @@
 #include "SteamAudioCommon.h"
 #include "SteamAudioManager.h"
 
-#ifdef WITH_EDITOR
+#if WITH_EDITOR
 #include "Subsystems/EditorAssetSubsystem.h"
 #endif
 
@@ -70,8 +70,10 @@ void USteamAudioDynamicObjectComponent::BeginPlay()
     GetOwner()->GetRootComponent()->TransformUpdated.AddUObject(this, &USteamAudioDynamicObjectComponent::OnTransformUpdated);
 }
 
-void USteamAudioDynamicObjectComponent::EndPlay(const EEndPlayReason::Type EndPlayReason)
+void USteamAudioDynamicObjectComponent::BeginDestroy()
 {
+    Super::BeginDestroy();
+
     SteamAudio::FSteamAudioManager& Manager = SteamAudio::FSteamAudioModule::GetManager();
 
     if (Scene && InstancedMesh)
@@ -81,8 +83,6 @@ void USteamAudioDynamicObjectComponent::EndPlay(const EEndPlayReason::Type EndPl
         iplInstancedMeshRelease(&InstancedMesh);
         iplSceneRelease(&Scene);
     }
-
-    Super::EndPlay(EndPlayReason);
 }
 
 void USteamAudioDynamicObjectComponent::OnTransformUpdated(USceneComponent* UpdatedComponent, EUpdateTransformFlags UpdateTransformFlags, ETeleportType Teleport)
@@ -96,10 +96,10 @@ void USteamAudioDynamicObjectComponent::OnTransformUpdated(USceneComponent* Upda
     }
 }
 
-#ifdef WITH_EDITOR
+#if WITH_EDITOR
 void USteamAudioDynamicObjectComponent::CleaupDynamicComponentAsset()
 {
-    if (Asset.IsValid() && bIsAssetActive)
+    if (!Scene && Asset.IsValid() && bIsAssetActive)
     {
         auto EditorAssetSubsystem = GEditor ? GEditor->GetEditorSubsystem<UEditorAssetSubsystem>() : nullptr;
         if (EditorAssetSubsystem)
