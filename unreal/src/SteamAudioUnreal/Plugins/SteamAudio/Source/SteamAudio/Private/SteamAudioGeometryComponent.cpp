@@ -75,7 +75,7 @@ void USteamAudioGeometryComponent::SetIsNeedToExport(bool NewValue)
 {
     if (auto SteamAudioSMA = ASteamAudioStaticMeshActor::FindInLevel(GetWorld(), GetWorld()->GetCurrentLevel()))
     {
-        SteamAudioSMA->SetIsNeedToExport(NewValue);
+        SteamAudioSMA->SetIsNeedToExport(GetOwner()->FindComponentByClass<USteamAudioDynamicObjectComponent>() ? false : NewValue);
         Modify();
     }
 }
