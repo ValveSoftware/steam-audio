@@ -13,6 +13,7 @@
 # limitations under the License.
 
 include(FindPackageHandleStandardArgs)
+include(SteamAudioHelpers)
 
 get_host_bin_subdir(IPL_BIN_SUBDIR)
 
