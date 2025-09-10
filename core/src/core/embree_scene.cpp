@@ -449,14 +449,14 @@ void EmbreeScene::dumpObj(const string& fileName) const
     fclose(objFile);
 }
 
-void EmbreeScene::SetStaticMeshMaterial(IStaticMesh* staticMesh, Material* NewMaterial, int index)
+void EmbreeScene::setStaticMeshMaterial(IStaticMesh* staticMesh, Material* newMaterial, int index)
 {
     auto embreeStaticMesh = reinterpret_cast<EmbreeStaticMesh*>(staticMesh);
     for (const auto& curStaticMesh : mStaticMeshes[0])
     {
         if (curStaticMesh.get() == embreeStaticMesh)
         {
-            *const_cast<Material*>(embreeStaticMesh->materialsToUpdate().data() + index) = *NewMaterial;
+            *const_cast<Material*>(embreeStaticMesh->materialsToUpdate().data() + index) = *newMaterial;
             embreeStaticMesh->markToUpdateMaterials();
             break;
         }

@@ -968,7 +968,7 @@ void UpdateStaticMeshMaterial(UWorld* World, ULevel* Level, IPLStaticMesh Static
                 return;
 
             FSteamAudioManager& Manager = FSteamAudioModule::GetManager();
-            iplStaticMeshMaterialSet(StaticMesh, Manager.GetScene(), &SteamAudioMaterial, ExportIndex);
+            iplStaticMeshSetMaterial(StaticMesh, Manager.GetScene(), &SteamAudioMaterial, ExportIndex);
             iplSceneCommit(Manager.GetScene());
         });
 }

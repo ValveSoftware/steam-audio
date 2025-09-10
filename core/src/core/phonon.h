@@ -1126,10 +1126,10 @@ IPLAPI void IPLCALL iplStaticMeshRemove(IPLStaticMesh staticMesh, IPLScene scene
     \param  staticMesh  The static mesh to update.
     \param  scene       The scene from which to update the static mesh. This must be the scene which was passed when
                         calling \c iplStaticMeshCreate.
-    \param  NewMaterial  The material data of specified object.
+    \param  newMaterial  The material data of specified object.
     \param  index  The index of specified object. It means the object's index in the order it was exported.
 */
-IPLAPI void IPLCALL iplStaticMeshMaterialSet(IPLStaticMesh staticMesh, IPLScene scene, IPLMaterial* NewMaterial, int index);
+IPLAPI void IPLCALL iplStaticMeshSetMaterial(IPLStaticMesh staticMesh, IPLScene scene, IPLMaterial* newMaterial, IPLint32 index);
 
 /** Creates an instanced mesh.
 
