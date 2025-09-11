@@ -679,6 +679,7 @@ bool ExportStaticGeometryForLevel(UWorld* World, ULevel* Level, FString FileName
                 check(SteamAudioStaticMeshActor);
                 SteamAudioStaticMeshActor->Asset = Asset;
                 SteamAudioStaticMeshActor->MarkPackageDirty();
+                SteamAudioStaticMeshActor->SetIsNeedToExport(false);
             });
 
             iplSerializedObjectRelease(&SerializedObject);

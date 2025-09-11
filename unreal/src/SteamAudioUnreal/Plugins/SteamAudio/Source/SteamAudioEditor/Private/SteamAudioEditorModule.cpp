@@ -82,8 +82,30 @@ void AddAssetType(IAssetTools& AssetTools, TArray<TSharedPtr<FAssetTypeActions_B
 // FSteamAudioEditorModule
 // ---------------------------------------------------------------------------------------------------------------------
 
+// Check if we need to setup warning icons
+bool IsWarning()
+{
+    if (GEditor->GetLevelViewportClients().Num() <= 0)
+        return false;
+
+    UWorld* World = GEditor->GetLevelViewportClients()[0]->GetWorld();
+    ULevel* Level = World->GetCurrentLevel();
+    ASteamAudioStaticMeshActor* StaticMeshActor = ASteamAudioStaticMeshActor::FindInLevel(World, Level);
+    if (StaticMeshActor && StaticMeshActor->IsNeedToExport())
+    {
+        return true;
+    }
+    return false;
+}
+
 void FSteamAudioEditorModule::StartupModule()
 {
+    if (SteamAudioStyleSet.Get())
+    {
+        UpdateMainToolBarIcon();
+        return;
+    }
+
     // Initialize settings data.
     ISettingsModule& SettingsModule = FModuleManager::LoadModuleChecked<ISettingsModule>(TEXT("Settings"));
     SettingsModule.RegisterSettings("Project", "Plugins", "Steam Audio",
@@ -111,8 +133,10 @@ void FSteamAudioEditorModule::StartupModule()
     SteamAudioStyleSet->Set("ClassThumbnail.SteamAudioOcclusionSettings", new FSlateImageBrush(SteamAudioContent + "/S_SteamAudioOcclusionSettings_64.png", Vec64));
     SteamAudioStyleSet->Set("ClassIcon.SteamAudioReverbSettings", new FSlateImageBrush(SteamAudioContent + "/S_SteamAudioReverbSettings_16.png", Vec16));
     SteamAudioStyleSet->Set("ClassThumbnail.SteamAudioReverbSettings", new FSlateImageBrush(SteamAudioContent + "/S_SteamAudioReverbSettings_64.png", Vec64));
-    SteamAudioStyleSet->Set("LevelEditor.SteamAudioMode", new FSlateImageBrush(SteamAudioContent + "/SteamAudio_EdMode_40.png", Vec40));
+    SteamAudioStyleSet->Set("LevelEditor.SteamAudioMode", MainToolBarEdModeIcon = new FSlateImageBrush(SteamAudioContent + "/SteamAudio_EdMode_40.png", Vec40));
     SteamAudioStyleSet->Set("LevelEditor.SteamAudioMode.Small", new FSlateImageBrush(SteamAudioContent + "/SteamAudio_EdMode_16.png", Vec16));
+    SteamAudioStyleSet->Set("LevelEditor.SteamAudioMode.Warning", new FSlateImageBrush(SteamAudioContent + "/SteamAudio_EdModeWarning_40.png", Vec40));
+    SteamAudioStyleSet->Set("ToolBar.Warning", new FSlateImageBrush(SteamAudioContent + "/S_SteamAudioWarning_40.png", Vec40));
     FSlateStyleRegistry::RegisterSlateStyle(*SteamAudioStyleSet.Get());
 
     // Initialize asset types.
@@ -180,17 +204,19 @@ void FSteamAudioEditorModule::StartupModule()
                     );
                     MenuBuilder.EndSection();
 
+                    bool bIsWarning = IsWarning();
+
                     MenuBuilder.BeginSection("StaticGeometry", NSLOCTEXT("SteamAudio", "MenuStaticGeometry", "Static Geometry"));
                     MenuBuilder.AddMenuEntry(
                         NSLOCTEXT("SteamAudio", "MenuExportStatic", "Export Static Geometry"),
                         NSLOCTEXT("SteamAudio", "MenuExportStaticTooltip", "Export the static geometry for all sublevels."),
-                        FSlateIcon(),
+                        bIsWarning ? FSlateIcon(SteamAudioStyleSet->GetStyleSetName(), "ToolBar.Warning") : FSlateIcon(),
                         FUIAction(FExecuteAction::CreateRaw(this, &FSteamAudioEditorModule::OnExportStaticGeometry))
                     );
                     MenuBuilder.AddMenuEntry(
                         NSLOCTEXT("SteamAudio", "MenuExportStaticSingle", "Export Static Geometry (Current Level)"),
                         NSLOCTEXT("SteamAudio", "MenuExportStaticSingleTooltip", "Export the static geometry for the current sublevel."),
-                        FSlateIcon(),
+                        bIsWarning ? FSlateIcon(SteamAudioStyleSet->GetStyleSetName(), "ToolBar.Warning") : FSlateIcon(),
                         FUIAction(FExecuteAction::CreateRaw(this, &FSteamAudioEditorModule::OnExportStaticGeometryCurrentLevel))
                     );
                     MenuBuilder.AddMenuEntry(
@@ -252,6 +278,19 @@ void FSteamAudioEditorModule::ShutdownModule()
         {
             GUnrealEd->UnregisterComponentVisualizer(ClassName);
         }
+    }
+}
+
+void FSteamAudioEditorModule::UpdateMainToolBarIcon()
+{
+    bool bIsWarning = IsWarning();
+    if (bIsWarning)
+    {
+        SteamAudioStyleSet->Set("LevelEditor.SteamAudioMode", (FSlateImageBrush*)SteamAudioStyleSet->GetBrush("LevelEditor.SteamAudioMode.Warning"));
+    }
+    else
+    {
+        SteamAudioStyleSet->Set("LevelEditor.SteamAudioMode", MainToolBarEdModeIcon);
     }
 }
 
