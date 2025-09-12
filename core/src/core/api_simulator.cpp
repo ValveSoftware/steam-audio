@@ -366,6 +366,8 @@ void CSource::setInputs(IPLSimulationFlags flags,
             break;
         }
 
+        _source->reflectionInputs.distanceAttenuationModel.dirty = (inputs->distanceAttenuationModel.dirty == IPL_TRUE);
+
         switch (inputs->airAbsorptionModel.type)
         {
         case IPL_AIRABSORPTIONTYPE_DEFAULT:

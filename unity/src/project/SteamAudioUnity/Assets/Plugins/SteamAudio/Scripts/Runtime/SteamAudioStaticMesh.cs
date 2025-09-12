@@ -29,6 +29,7 @@ namespace SteamAudio
 #if STEAMAUDIO_ENABLED
         StaticMesh mStaticMesh = null;
         Task<StaticMesh> mTask = null;
+        bool mShouldLoadAsync = false;
 
         void Start()
         {
@@ -36,6 +37,14 @@ namespace SteamAudio
             {
                 Debug.LogWarningFormat("No asset set for Steam Audio Static Mesh in scene {0}. Export the scene before clicking Play.",
                     gameObject.scene.name);
+            }
+
+            // Only load the static mesh asynchronously if we're using the default scene type. In particular, with
+            // Embree, explicit synchronization would be required, such that if a Task is loading a static mesh
+            // asynchronously, then we don't run any simulations on the simulation thread at the same time.
+            if (SteamAudioManager.GetSceneType() == SceneType.Default)
+            {
+                mShouldLoadAsync = true;
             }
         }
 
@@ -73,14 +82,26 @@ namespace SteamAudio
         {
             if (mStaticMesh == null && asset != null)
             {
-                if (mTask == null)
+                if (mShouldLoadAsync)
                 {
-                    mTask = Task.Run(() => new StaticMesh(SteamAudioManager.Context, SteamAudioManager.CurrentScene, asset));
+                    if (mTask == null)
+                    {
+                        mTask = Task.Run(() => new StaticMesh(SteamAudioManager.Context, SteamAudioManager.CurrentScene, asset));
+                    }
+                    else if (mTask.IsCompleted)
+                    {
+                        mStaticMesh = mTask.Result;
+                        mTask = null;
+                        if (enabled)
+                        {
+                            mStaticMesh.AddToScene(SteamAudioManager.CurrentScene);
+                            SteamAudioManager.ScheduleCommitScene();
+                        }
+                    }
                 }
-                else if (mTask.IsCompleted)
+                else
                 {
-                    mStaticMesh = mTask.Result;
-                    mTask = null;
+                    mStaticMesh = new StaticMesh(SteamAudioManager.Context, SteamAudioManager.CurrentScene, asset);
                     if (enabled)
                     {
                         mStaticMesh.AddToScene(SteamAudioManager.CurrentScene);
