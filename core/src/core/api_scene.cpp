@@ -368,6 +368,15 @@ void CInstancedMesh::remove(IScene* scene)
     _scene->removeInstancedMesh(_instancedMesh);
 }
 
+int CInstancedMesh::getObjectIndex()
+{
+    auto _instancedMesh = mHandle.get();
+    if (!_instancedMesh)
+        return -1;
+
+    return _instancedMesh->getObjectIndex();
+}
+
 void CInstancedMesh::updateTransform(IScene* scene,
                                      IPLMatrix4x4 transform)
 {

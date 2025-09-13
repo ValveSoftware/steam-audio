@@ -126,6 +126,8 @@ public:
 
     virtual void remove(IScene* scene) override;
 
+    virtual int getObjectIndex() override;
+
     virtual void updateTransform(IScene* scene,
                                  IPLMatrix4x4 transform) override;
 };

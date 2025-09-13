@@ -1126,10 +1126,10 @@ IPLAPI void IPLCALL iplStaticMeshRemove(IPLStaticMesh staticMesh, IPLScene scene
     \param  staticMesh  The static mesh to update.
     \param  scene       The scene from which to update the static mesh. This must be the scene which was passed when
                         calling \c iplStaticMeshCreate.
-    \param  NewMaterial  The material data of specified object.
+    \param  newMaterial  The material data of specified object.
     \param  index  The index of specified object. It means the object's index in the order it was exported.
 */
-IPLAPI void IPLCALL iplStaticMeshMaterialSet(IPLStaticMesh staticMesh, IPLScene scene, IPLMaterial* NewMaterial, int index);
+IPLAPI void IPLCALL iplStaticMeshSetMaterial(IPLStaticMesh staticMesh, IPLScene scene, IPLMaterial* newMaterial, IPLint32 index);
 
 /** Creates an instanced mesh.
 
@@ -1187,6 +1187,15 @@ IPLAPI void IPLCALL iplInstancedMeshAdd(IPLInstancedMesh instancedMesh, IPLScene
                             calling \c iplInstancedMeshCreate.
 */
 IPLAPI void IPLCALL iplInstancedMeshRemove(IPLInstancedMesh instancedMesh, IPLScene scene);
+
+/** Getting the index of an instanced mesh from a scene.
+
+    This function should only be called after the Instanced mesh has been added to the scene 
+    (the iplInstancedMeshAdd function has been called).
+
+    \param  instancedMesh   The instanced mesh whose index we want to get.
+*/
+IPLAPI int IPLCALL iplInstancedMeshGetIndex(IPLInstancedMesh instancedMesh);
 
 /** Updates the local-to-world transform of an instanced mesh within its parent scene.
 
@@ -2364,6 +2373,9 @@ typedef struct {
 
     /** 3-band EQ coefficients for transmission, each between 0 and 1. */
     IPLfloat32 transmission[IPL_NUM_BANDS];
+
+    /** Hit information about closest occluder instanced mesh. */
+    IPLHit occlusionClosestHit;
 } IPLDirectEffectParams;
 
 /** Creates a direct effect.
