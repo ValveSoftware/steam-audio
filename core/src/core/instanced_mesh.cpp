@@ -30,6 +30,7 @@ InstancedMesh::InstancedMesh(shared_ptr<Scene> subScene,
     , mNumVertices(0)
     , mNumTriangles(0)
     , mHasChanged(false)
+    , mObjectIndex (-1)
 {
     for (const auto& mesh : mSubScene->staticMeshes())
     {
@@ -75,6 +76,7 @@ Hit InstancedMesh::closestHit(const Ray& ray,
 {
     auto transformedRay = inverseTransformRay(ray, minDistance, maxDistance);
     auto hit = mSubScene->closestHit(transformedRay, minDistance, maxDistance);
+    hit.objectIndex = mObjectIndex;
     return transformHit(hit, transformedRay);
 }
 

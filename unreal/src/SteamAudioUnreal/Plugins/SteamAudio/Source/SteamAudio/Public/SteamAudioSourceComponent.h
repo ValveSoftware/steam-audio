@@ -154,6 +154,8 @@ public:
     /** Returns the baked data identifier for this source. */
     IPLBakedDataIdentifier GetBakedDataIdentifier() const;
 
+    IPLHit GetClosestOccluderMesh();
+
     /**
      * Inherited from UActorComponent
      */
