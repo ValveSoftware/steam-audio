@@ -275,8 +275,6 @@ public:
     virtual void release() = 0;
 };
 
-class IStaticMesh;
-
 class IScene
 {
 public:
@@ -301,7 +299,7 @@ public:
     virtual IPLerror createInstancedMesh(IPLInstancedMeshSettings* settings,
                                          IInstancedMesh** instancedMesh) = 0;
 
-    virtual void setStaticMeshMaterial(IStaticMesh* staticMesh, IPLMaterial* newMaterial, IPLint32 index) = 0;
+    virtual void SetStaticMeshMaterial(IPLStaticMesh staticMesh, IPLMaterial* NewMaterial, int index) { }
 };
 
 class IStaticMesh
@@ -328,8 +326,6 @@ public:
     virtual void add(IScene* scene) = 0;
 
     virtual void remove(IScene* scene) = 0;
-
-    virtual int getObjectIndex() = 0;
 
     virtual void updateTransform(IScene* scene,
                                  IPLMatrix4x4 transform) = 0;
@@ -1098,12 +1094,12 @@ void IPLCALL iplStaticMeshAdd(IPLStaticMesh staticMesh, IPLScene scene)
     reinterpret_cast<api::IStaticMesh*>(staticMesh)->add(reinterpret_cast<api::IScene*>(scene));
 }
 
-void IPLCALL iplStaticMeshSetMaterial(IPLStaticMesh staticMesh, IPLScene scene, IPLMaterial* newMaterial, IPLint32 index)
+void IPLCALL iplStaticMeshMaterialSet(IPLStaticMesh staticMesh, IPLScene scene, IPLMaterial* NewMaterial, int index)
 {
-    if (!staticMesh || !scene)
+    if (!staticMesh)
         return;
     
-    reinterpret_cast<api::IScene*>(scene)->setStaticMeshMaterial(reinterpret_cast<api::IStaticMesh*>(staticMesh), newMaterial, index);
+    reinterpret_cast<api::IScene*>(scene)->SetStaticMeshMaterial(staticMesh, NewMaterial, index);
 }
 
 void IPLCALL iplStaticMeshRemove(IPLStaticMesh staticMesh, IPLScene scene)
@@ -1156,14 +1152,6 @@ void IPLCALL iplInstancedMeshRemove(IPLInstancedMesh instancedMesh, IPLScene sce
         return;
 
     reinterpret_cast<api::IInstancedMesh*>(instancedMesh)->remove(reinterpret_cast<api::IScene*>(scene));
-}
-
-int IPLCALL iplInstancedMeshGetIndex(IPLInstancedMesh instancedMesh)
-{
-    if (!instancedMesh)
-        return -1;
-
-    return reinterpret_cast<api::IInstancedMesh*>(instancedMesh)->getObjectIndex();
 }
 
 void IPLCALL iplInstancedMeshUpdateTransform(IPLInstancedMesh instancedMesh, IPLScene scene, IPLMatrix4x4 transform)
