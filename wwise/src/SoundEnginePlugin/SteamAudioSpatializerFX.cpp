@@ -1,4 +1,4 @@
-/*******************************************************************************
+﻿/*******************************************************************************
 The content of this file includes portions of the AUDIOKINETIC Wwise Technology
 released in source code form as part of the SDK installer package.
 
@@ -570,7 +570,6 @@ void SteamAudioSpatializerFX::Execute(AkAudioBuffer* in_pBuffer, AkUInt32 in_uIn
         pathingParams.binaural = m_params->NonRTPC.pathingBinaural ? IPL_TRUE : IPL_FALSE;
         pathingParams.hrtf = hrtf;
         pathingParams.listener = listenerCoords;
-        pathingParams.normalizeEQ = m_params->NonRTPC.pathingNormalizeEQ ? IPL_TRUE : IPL_FALSE;
 
         iplPathEffectApply(m_pathingEffect, &pathingParams, &m_monoBuffer, &m_ambisonicsOutBuffer);
 
