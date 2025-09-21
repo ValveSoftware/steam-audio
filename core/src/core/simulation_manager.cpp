@@ -260,14 +260,15 @@ void SimulationManager::simulateIndirect()
 void SimulationManager::simulateRealTimeReflections()
 {
     PROFILE_FUNCTION();
-
+    
     mRealTimeSources.clear();
     mRealTimeDirectivities.clear();
     mRealTimeEnergyFields.clear();
+    mSharedData->reflectionOutputs.reflectionRays.clear();
 
     auto listenerChanged = hasListenerChanged();
     auto sceneChanged = hasSceneChanged();
-
+    
     for (auto& source : mSourceData[0])
     {
         if (!source->reflectionInputs.enabled)
@@ -275,7 +276,7 @@ void SimulationManager::simulateRealTimeReflections()
 
         if (source->reflectionInputs.baked)
             continue;
-
+        
         mRealTimeSources.push_back(source->reflectionInputs.source);
         mRealTimeDirectivities.push_back(source->reflectionInputs.directivity);
 
@@ -291,19 +292,19 @@ void SimulationManager::simulateRealTimeReflections()
             mRealTimeEnergyFields.push_back(source->reflectionState.energyField.get());
         }
     }
-
+    
     if (mRealTimeSources.empty())
         return;
 
     mJobGraph.reset();
-
+    
     mReflectionSimulator->simulate(*mScene, static_cast<int>(mRealTimeSources.size()), mRealTimeSources.data(), 1, &mSharedData->reflection.listener,
                                    mRealTimeDirectivities.data(), mSharedData->reflection.numRays, mSharedData->reflection.numBounces,
                                    mSharedData->reflection.duration, mSharedData->reflection.order, mSharedData->reflection.irradianceMinDistance,
-                                   mRealTimeEnergyFields.data(), mJobGraph);
+                                   &mSharedData->reflectionOutputs.reflectionRays, mRealTimeEnergyFields.data(), mJobGraph);
 
     mThreadPool->process(mJobGraph);
-
+    
     accumulateEnergyFields();
 }
 

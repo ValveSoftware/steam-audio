@@ -162,6 +162,26 @@ void CSimulator::setSharedInputs(IPLSimulationFlags flags,
     }
 }
 
+void CSimulator::getSharedOutputs(IPLSimulationFlags flags,
+                                  IPLSimulationSharedOutputs& sharedOutputs)
+{
+    auto _simulator = mHandle.get();
+    if (!_simulator)
+        return;
+
+    if (flags & IPL_SIMULATIONFLAGS_REFLECTIONS)
+    {
+        SharedReflectionSimulationOutputs reflectionOutputs;
+        _simulator->getSharedReflectionOutputs(reflectionOutputs);
+        
+        int numReflectionRays = reflectionOutputs.reflectionRays.size() < 128 ? reflectionOutputs.reflectionRays.size() : 128;
+        for (int i = 0; i < numReflectionRays; ++i)
+        {
+            sharedOutputs.reflectionRays[i] = reflectionOutputs.reflectionRays[numReflectionRays < 128 ? i : (reflectionOutputs.reflectionRays.size() - 1) / (i + 1)].data();
+        }
+    }
+}
+
 void CSimulator::commit()
 {
     auto _simulator = mHandle.get();

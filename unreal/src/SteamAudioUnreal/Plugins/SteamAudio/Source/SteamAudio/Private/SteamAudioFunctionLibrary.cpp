@@ -46,6 +46,11 @@ void USteamAudioFunctionLibrary::UpdateStaticMeshMaterial(AStaticMeshActor* Stat
 	FSteamAudioModule::GetManager().UpdateStaticMeshMaterial(StaticMeshActor);
 }
 
+void USteamAudioFunctionLibrary::UpdateReflectionVisualization()
+{
+	FSteamAudioModule::GetManager().UpdateReflectionVisualization();
+}
+
 void USteamAudioFunctionLibrary::ShutDownSteamAudio(bool bResetFlags)
 {
 	FSteamAudioModule::GetManager().ShutDownSteamAudio(bResetFlags);

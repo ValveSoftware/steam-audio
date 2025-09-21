@@ -61,11 +61,17 @@ struct SharedPathingSimulationInputs
     void* userData = nullptr;
 };
 
+struct SharedReflectionSimulationOutputs
+{
+    vector<vector<IPLRay>> reflectionRays;
+};
+
 struct SharedSimulationData
 {
     SharedDirectSimulationInputs direct;
     SharedReflectionSimulationInputs reflection;
     SharedPathingSimulationInputs pathing;
+    SharedReflectionSimulationOutputs reflectionOutputs;
 };
 
 class SimulationManager
@@ -164,6 +170,19 @@ public:
     void setSharedPathingInputs(const SharedPathingSimulationInputs& sharedPathingInputs)
     {
         mSharedData->pathing = sharedPathingInputs;
+    }
+
+    void getSharedReflectionOutputs(SharedReflectionSimulationOutputs& sharedReflectionOutputs)
+    {
+        sharedReflectionOutputs.reflectionRays.resize(mSharedData->reflectionOutputs.reflectionRays.size());
+        for (int i = 0; i < sharedReflectionOutputs.reflectionRays.size(); ++i)
+        {
+            sharedReflectionOutputs.reflectionRays[i].resize(mSharedData->reflectionOutputs.reflectionRays[i].size());
+            for (int j = 0; j < sharedReflectionOutputs.reflectionRays[i].size(); ++j)
+            {
+                sharedReflectionOutputs.reflectionRays[i][j] = mSharedData->reflectionOutputs.reflectionRays[i][j];
+            }
+        }
     }
 
     void addProbeBatch(shared_ptr<ProbeBatch> probeBatch);

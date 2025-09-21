@@ -4101,6 +4101,14 @@ typedef struct {
     void* pathingUserData;
 } IPLSimulationSharedInputs;
 
+/** Simulation results that are not specific to any source. */
+typedef struct {
+
+    /** Several reflection rays that are used for reflection visualization.*/
+    IPLRay* reflectionRays[128];
+
+} IPLSimulationSharedOutputs;
+
 /** Simulation results for a source. */
 typedef struct {
     /** Direct path simulation results. */
@@ -4183,6 +4191,14 @@ IPLAPI void IPLCALL iplSimulatorRemoveProbeBatch(IPLSimulator simulator, IPLProb
     \param  sharedInputs    The shared input parameters to set.
 */
 IPLAPI void IPLCALL iplSimulatorSetSharedInputs(IPLSimulator simulator, IPLSimulationFlags flags, IPLSimulationSharedInputs* sharedInputs);
+
+/** Returns simulation parameters that are not associated with any particular source.
+
+    \param  simulator       The simulator being used.
+    \param  flags           The types of simulation for which to specify shared outputs.
+    \param  sharedOutputs    The shared outputs parameters to get.
+*/
+IPLAPI void IPLCALL iplSimulatorGetSharedOutputs(IPLSimulator simulator, IPLSimulationFlags flags, IPLSimulationSharedOutputs& sharedOutputs);
 
 /** Commits changes to the scene or probe batches used for simulation.
 

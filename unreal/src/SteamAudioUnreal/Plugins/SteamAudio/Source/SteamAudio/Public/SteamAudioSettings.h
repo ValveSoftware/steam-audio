@@ -113,6 +113,11 @@ struct FSteamAudioSettings
     PhysMatToSteamAudioMatTableType* PhysMatToSteamAudioMatTable;
     IPLSceneType SceneType;
     int MaxOcclusionSamples;
+    int VisualizedRealTimeRays;
+    float ReflectionVisualizationTime;
+    float ReflectionVisualisationRayLifeTime;
+    float ReflectionVisualisationThickness;
+    float ReflectionVisualisationImpactPointSize;
     int RealTimeRays;
     int RealTimeBounces;
     float RealTimeDuration;
@@ -203,6 +208,21 @@ public:
     /** The maximum possible value of Occlusion Samples that can be specified on any Steam Audio Source component. */
     UPROPERTY(GlobalConfig, EditAnywhere, Category = OcclusionSettings, meta = (UIMin = 1, UIMax = 128))
     int MaxOcclusionSamples;
+
+    UPROPERTY(GlobalConfig, EditAnywhere, Category = ReflectionsVisualisationSettings, meta = (UIMin = 1, UIMax = 128))
+    int VisualizedRealTimeRays = 32;
+
+    UPROPERTY(GlobalConfig, EditAnywhere, Category = ReflectionsVisualisationSettings, meta = (UIMin = 0))
+    float ReflectionVisualizationTime = 0.1f;
+
+    UPROPERTY(GlobalConfig, EditAnywhere, Category = ReflectionsVisualisationSettings, meta = (UIMin = 0))
+    float ReflectionVisualisationRayLifeTime = 1.0f;
+
+    UPROPERTY(GlobalConfig, EditAnywhere, Category = ReflectionsVisualisationSettings, meta = (UIMin = 0))
+    float ReflectionVisualisationThickness = 1.0f;
+
+    UPROPERTY(GlobalConfig, EditAnywhere, Category = ReflectionsVisualisationSettings, meta = (UIMin = 0))
+    float ReflectionVisualisationImpactPointSize = 10.0f;
 
     UPROPERTY(GlobalConfig, EditAnywhere, Category = ReflectionsSettings, meta = (UIMin = 1024, UIMax = 65536))
     int RealTimeRays;

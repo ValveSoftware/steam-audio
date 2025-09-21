@@ -111,6 +111,9 @@ public:
     /** Initializes the global Steam Audio state. */
     bool InitializeSteamAudio(EManagerInitReason Reason);
 
+    /** Stops the reflection visualization and produce it again. */
+    void UpdateReflectionVisualization();
+
     /** Sets the Steam Audio enabled mode. */
     void SetSteamAudioEnabled(bool bNewIsSteamAudioEnabled);
 
@@ -222,6 +225,25 @@ private:
 
     /** If true, the simulation thread is idle. */
     std::atomic<bool> ThreadPoolIdle;
+
+#if WITH_EDITOR
+    /** Contains an array with all calculated reflection rays. */
+    IPLSimulationSharedOutputs* ReflectionOutputs = nullptr;
+
+    /** Timers for drawing reflection rays, which are used to draw reflection rays sequentially. */
+    TArray<FTimerHandle> ReflectionVisualizationTimers;
+
+    /** The total time it will take to draw all the reflection rays. */
+    float ReflectionVisualizationTotalTime = 0;
+
+    void GetReflectionOutputs();
+
+    /** Starts all timers for drawing reflection rays. */
+    void StartReflectionVisualization();
+
+    /** Draws the reflection ray and its impact point. */
+    void DrawReflectionRay(FLinearColor Color, IPLRay IplRay);
+#endif
 
     /** Called by Steam Audio, writes Steam Audio log messages to the Unreal log. */
     static void IPLCALL LogCallback(IPLLogLevel Level, IPLstring Message);
