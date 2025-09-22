@@ -452,10 +452,7 @@ bool FSteamAudioManager::InitializeSteamAudio(EManagerInitReason Reason)
 
 #if WITH_EDITOR
         ReflectionVisualizationTimers.Empty();
-        if (ReflectionOutputs)
-        {
-            FMemory::Free(ReflectionOutputs);
-        }
+        ReflectionOutputs.Reset(nullptr);
         ReflectionOutputs = nullptr;
 #endif
     }
@@ -781,11 +778,8 @@ void FSteamAudioManager::GetReflectionOutputs()
 {
     if (ReflectionVisualizationTimers.IsEmpty() && USteamAudioListenerComponent::GetCurrentListener())
     {
-        if (ReflectionOutputs)
-        {
-            FMemory::Free(ReflectionOutputs);
-        }
-        ReflectionOutputs = reinterpret_cast<IPLSimulationSharedOutputs*>(FMemory::Malloc(sizeof(IPLSimulationSharedOutputs)));
+        IPLSimulationSharedOutputs* Outputs = reinterpret_cast<IPLSimulationSharedOutputs*>(FMemory::Malloc(sizeof(IPLSimulationSharedOutputs)));
+        ReflectionOutputs.Reset(Outputs);
         iplSimulatorGetSharedOutputs(Simulator, IPL_SIMULATIONFLAGS_REFLECTIONS, *ReflectionOutputs);
         ReflectionVisualizationTotalTime = 0;
     }

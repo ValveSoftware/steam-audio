@@ -228,7 +228,7 @@ private:
 
 #if WITH_EDITOR
     /** Contains an array with all calculated reflection rays. */
-    IPLSimulationSharedOutputs* ReflectionOutputs = nullptr;
+    TUniquePtr<IPLSimulationSharedOutputs> ReflectionOutputs = nullptr;
 
     /** Timers for drawing reflection rays, which are used to draw reflection rays sequentially. */
     TArray<FTimerHandle> ReflectionVisualizationTimers;
