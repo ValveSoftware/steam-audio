@@ -18,6 +18,7 @@
 #include "GameFramework/Actor.h"
 #include "SteamAudioCommon.h"
 #include "SteamAudioManager.h"
+#include "SteamAudioScene.h"
 
 #ifdef WITH_EDITOR
 #include "Subsystems/EditorAssetSubsystem.h"
@@ -44,6 +45,8 @@ void USteamAudioDynamicObjectComponent::BeginPlay()
 {
     Super::BeginPlay();
 
+    GetOwner()->GetRootComponent()->TransformUpdated.AddUObject(this, &USteamAudioDynamicObjectComponent::OnTransformUpdated);
+
     SteamAudio::FSteamAudioManager& Manager = SteamAudio::FSteamAudioModule::GetManager();
 
     FSoftObjectPath AssetToLoad = GetAssetToLoad();
@@ -67,7 +70,6 @@ void USteamAudioDynamicObjectComponent::BeginPlay()
     }
 
     iplInstancedMeshAdd(InstancedMesh, Scene);
-    GetOwner()->GetRootComponent()->TransformUpdated.AddUObject(this, &USteamAudioDynamicObjectComponent::OnTransformUpdated);
 }
 
 void USteamAudioDynamicObjectComponent::EndPlay(const EEndPlayReason::Type EndPlayReason)
@@ -122,3 +124,8 @@ void USteamAudioDynamicObjectComponent::OnComponentDestroyed(bool bDestroyingHie
     Super::OnComponentDestroyed(bDestroyingHierarchy);
 }
 #endif
+
+void USteamAudioDynamicObjectComponent::ExportDynamicObjectRuntime()
+{
+    SteamAudio::ExportDynamicObjectRuntime(this, Scene, InstancedMesh);
+}

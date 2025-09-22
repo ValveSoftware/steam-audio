@@ -99,6 +99,9 @@ public:
     FSteamAudioSettings GetSteamAudioSettings() const { return SteamAudioSettings; }
     bool IsInitialized() const { return bInitializationSucceded; }
 
+    /** Creates empty IPLScene based on active scene settings. */
+    bool CreateEmptyScene(IPLScene& SubScene);
+
     /** Updates the iplStaticMesh data. */
     void UpdateStaticMesh();
 
