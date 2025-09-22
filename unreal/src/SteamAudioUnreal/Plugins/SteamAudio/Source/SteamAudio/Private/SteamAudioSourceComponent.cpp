@@ -195,6 +195,11 @@ IPLBakedDataIdentifier USteamAudioSourceComponent::GetBakedDataIdentifier() cons
     return Identifier;
 }
 
+IPLHit USteamAudioSourceComponent::GetClosestOccluderMesh()
+{
+    return GetOutputs(IPLSimulationFlags::IPL_SIMULATIONFLAGS_DIRECT).direct.occlusionClosestHit;
+}
+
 #if WITH_EDITOR
 bool USteamAudioSourceComponent::CanEditChange(const FProperty* InProperty) const
 {

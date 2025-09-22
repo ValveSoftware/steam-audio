@@ -1188,6 +1188,15 @@ IPLAPI void IPLCALL iplInstancedMeshAdd(IPLInstancedMesh instancedMesh, IPLScene
 */
 IPLAPI void IPLCALL iplInstancedMeshRemove(IPLInstancedMesh instancedMesh, IPLScene scene);
 
+/** Getting the index of an instanced mesh from a scene.
+
+    This function should only be called after the Instanced mesh has been added to the scene 
+    (the iplInstancedMeshAdd function has been called).
+
+    \param  instancedMesh   The instanced mesh whose index we want to get.
+*/
+IPLAPI int IPLCALL iplInstancedMeshGetIndex(IPLInstancedMesh instancedMesh);
+
 /** Updates the local-to-world transform of an instanced mesh within its parent scene.
 
     This function allows the instanced mesh to be moved, rotated, and scaled dynamically.
@@ -2364,6 +2373,9 @@ typedef struct {
 
     /** 3-band EQ coefficients for transmission, each between 0 and 1. */
     IPLfloat32 transmission[IPL_NUM_BANDS];
+
+    /** Hit information about closest occluder instanced mesh. */
+    IPLHit occlusionClosestHit;
 } IPLDirectEffectParams;
 
 /** Creates a direct effect.

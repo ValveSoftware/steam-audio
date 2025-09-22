@@ -108,6 +108,7 @@ void Scene::removeStaticMesh(shared_ptr<IStaticMesh> staticMesh)
 void Scene::addInstancedMesh(shared_ptr<IInstancedMesh> instancedMesh)
 {
     mInstancedMeshes[1].push_back(instancedMesh);
+    instancedMesh->setObjectIndex(mInstancedMeshes[1].size() - 1);
 
     mHasChanged = true;
 }
