@@ -69,7 +69,7 @@ namespace SteamAudio
             if (mEventEmitter != null)
             {
                 var eventInstance = mEventEmitter.EventInstance;
-                if (!eventInstance.Equals(mEventInstance))
+                if (eventInstance.handle != mEventInstance.handle)
                 {
                     // The event instance is different from the one we last used, which most likely means the
                     // event-related objects were destroyed and re-created. Make sure we look for the DSP instance
