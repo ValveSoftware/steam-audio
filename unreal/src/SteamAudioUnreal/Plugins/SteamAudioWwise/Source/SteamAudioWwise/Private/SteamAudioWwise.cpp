@@ -33,6 +33,7 @@ void AKSOUNDENGINE_CALL iplWwiseSetSimulationSettings(IPLSimulationSettings Simu
 void AKSOUNDENGINE_CALL iplWwiseSetReverbSource(IPLSource ReverbSource);
 IPLint32 AKSOUNDENGINE_CALL iplWwiseAddSource(AkGameObjectID GameObjectID, IPLSource Source);
 void AKSOUNDENGINE_CALL iplWwiseRemoveSource(AkGameObjectID GameObjectID);
+void AKSOUNDENGINE_CALL iplWwiseSetHRTFDisabled(IPLbool bDisabled);
 }
 #endif
 
@@ -89,6 +90,7 @@ void FSteamAudioWwiseModule::StartupModule()
 	this->iplWwiseSetReverbSource = (iplWwiseSetReverbSource_t) ::iplWwiseSetReverbSource;
 	this->iplWwiseAddSource = (iplWwiseAddSource_t) ::iplWwiseAddSource;
 	this->iplWwiseRemoveSource = (iplWwiseRemoveSource_t) ::iplWwiseRemoveSource;
+	this->iplWwiseSetHRTFDisabled = (iplWwiseSetHRTFDisabled_t) ::iplWwiseSetHRTFDisabled;
 #else
 	Library = FPlatformProcess::GetDllHandle(*LibraryPath);
 	check(Library);
@@ -101,6 +103,7 @@ void FSteamAudioWwiseModule::StartupModule()
 	iplWwiseSetReverbSource = (iplWwiseSetReverbSource_t) FPlatformProcess::GetDllExport(Library, TEXT("iplWwiseSetReverbSource"));
 	iplWwiseAddSource = (iplWwiseAddSource_t) FPlatformProcess::GetDllExport(Library, TEXT("iplWwiseAddSource"));
 	iplWwiseRemoveSource = (iplWwiseRemoveSource_t) FPlatformProcess::GetDllExport(Library, TEXT("iplWwiseRemoveSource"));
+	iplWwiseSetHRTFDisabled = (iplWwiseSetHRTFDisabled_t) FPlatformProcess::GetDllExport(Library, TEXT("iplWwiseSetHRTFDisabled"));
 #endif
 }
 
@@ -194,6 +197,11 @@ IPLAudioSettings FWwiseAudioEngineState::GetAudioSettings()
 TSharedPtr<IAudioEngineSource> FWwiseAudioEngineState::CreateAudioEngineSource()
 {
 	return MakeShared<FWwiseAudioEngineSource>();
+}
+
+void FWwiseAudioEngineState::SetHRTFDisabled(bool bDisabled)
+{
+	FSteamAudioWwiseModule::Get().iplWwiseSetHRTFDisabled(bDisabled ? IPL_TRUE : IPL_FALSE);
 }
 
 

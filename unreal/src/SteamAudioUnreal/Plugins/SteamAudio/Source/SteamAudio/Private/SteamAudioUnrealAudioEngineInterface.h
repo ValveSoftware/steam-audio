@@ -54,6 +54,15 @@ public:
 
     /** Creates an interface object for communicating with a spatializer effect instance in the audio engine plugin. */
     virtual TSharedPtr<IAudioEngineSource> CreateAudioEngineSource() override;
+
+    /** Toggles the HRTF globally. */
+    virtual void SetHRTFDisabled(bool bDisabled) override;
+
+    /** Returns whether the HRTF has been globally disabled. */
+    static bool IsHRTFDisabled();
+
+private:
+    static std::atomic<bool> bHRTFDisabled;
 };
 
 
