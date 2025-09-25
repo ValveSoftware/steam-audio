@@ -298,10 +298,11 @@ void SimulationManager::simulateRealTimeReflections()
 
     mJobGraph.reset();
     
+    auto reflectionRaysPtr = mSharedData->reflection.reflectionVisualization ? &mSharedData->reflectionOutputs.reflectionRays : nullptr;
     mReflectionSimulator->simulate(*mScene, static_cast<int>(mRealTimeSources.size()), mRealTimeSources.data(), 1, &mSharedData->reflection.listener,
                                    mRealTimeDirectivities.data(), mSharedData->reflection.numRays, mSharedData->reflection.numBounces,
                                    mSharedData->reflection.duration, mSharedData->reflection.order, mSharedData->reflection.irradianceMinDistance,
-                                   &mSharedData->reflectionOutputs.reflectionRays, mRealTimeEnergyFields.data(), mJobGraph);
+                                   reflectionRaysPtr, mRealTimeEnergyFields.data(), mJobGraph);
 
     mThreadPool->process(mJobGraph);
     

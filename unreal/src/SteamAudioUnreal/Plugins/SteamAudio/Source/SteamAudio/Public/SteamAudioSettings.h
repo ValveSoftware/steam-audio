@@ -113,6 +113,7 @@ struct FSteamAudioSettings
     PhysMatToSteamAudioMatTableType* PhysMatToSteamAudioMatTable;
     IPLSceneType SceneType;
     int MaxOcclusionSamples;
+    bool bReflectionsVisualizationEnable;
     int VisualizedRealTimeRays;
     float ReflectionVisualizationTime;
     float ReflectionVisualisationRayLifeTime;
@@ -209,19 +210,22 @@ public:
     UPROPERTY(GlobalConfig, EditAnywhere, Category = OcclusionSettings, meta = (UIMin = 1, UIMax = 128))
     int MaxOcclusionSamples;
 
-    UPROPERTY(GlobalConfig, EditAnywhere, Category = ReflectionsVisualisationSettings, meta = (UIMin = 1, UIMax = 128))
+    UPROPERTY(GlobalConfig, EditAnywhere, Category = ReflectionsVisualisationSettings)
+    bool bReflectionsVisualizationEnable = true;
+
+    UPROPERTY(GlobalConfig, EditAnywhere, Category = ReflectionsVisualisationSettings, meta = (UIMin = 1, UIMax = 128), meta = (EditCondition = "bReflectionsVisualizationEnable"))
     int VisualizedRealTimeRays = 32;
 
-    UPROPERTY(GlobalConfig, EditAnywhere, Category = ReflectionsVisualisationSettings, meta = (UIMin = 0))
+    UPROPERTY(GlobalConfig, EditAnywhere, Category = ReflectionsVisualisationSettings, meta = (UIMin = 0), meta = (EditCondition = "bReflectionsVisualizationEnable"))
     float ReflectionVisualizationTime = 0.1f;
 
-    UPROPERTY(GlobalConfig, EditAnywhere, Category = ReflectionsVisualisationSettings, meta = (UIMin = 0))
+    UPROPERTY(GlobalConfig, EditAnywhere, Category = ReflectionsVisualisationSettings, meta = (UIMin = 0), meta = (EditCondition = "bReflectionsVisualizationEnable"))
     float ReflectionVisualisationRayLifeTime = 1.0f;
 
-    UPROPERTY(GlobalConfig, EditAnywhere, Category = ReflectionsVisualisationSettings, meta = (UIMin = 0))
+    UPROPERTY(GlobalConfig, EditAnywhere, Category = ReflectionsVisualisationSettings, meta = (UIMin = 0), meta = (EditCondition = "bReflectionsVisualizationEnable"))
     float ReflectionVisualisationThickness = 1.0f;
 
-    UPROPERTY(GlobalConfig, EditAnywhere, Category = ReflectionsVisualisationSettings, meta = (UIMin = 0))
+    UPROPERTY(GlobalConfig, EditAnywhere, Category = ReflectionsVisualisationSettings, meta = (UIMin = 0), meta = (EditCondition = "bReflectionsVisualizationEnable"))
     float ReflectionVisualisationImpactPointSize = 10.0f;
 
     UPROPERTY(GlobalConfig, EditAnywhere, Category = ReflectionsSettings, meta = (UIMin = 1024, UIMax = 65536))

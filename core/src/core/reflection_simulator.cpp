@@ -181,7 +181,10 @@ void ReflectionSimulator::simulate(const IScene& scene,
     mDuration = duration;
     mOrder = order;
     mIrradianceMinDistance = irradianceMinDistance;
-    mReflectionRays = reflectionRays; mReflectionRays->resize(mNumRays);
+    if (reflectionRays)
+    {
+        mReflectionRays = reflectionRays; mReflectionRays->resize(mNumRays);
+    }
 
     for (auto i = 0; i < numSources; ++i)
     {
@@ -381,17 +384,22 @@ void ReflectionSimulator::simulateJob(const IScene& scene,
                 break;
             }
 
-            (*mReflectionRays)[i].size() <= 0 ? (*mReflectionRays)[i].resize(mNumBounces + 1) : 0;
-            if (j == 0)
+            // Reflection visualization code start
+            if (mReflectionRays)
             {
-                (*mReflectionRays)[i][j] = Ray{ ray.origin, ray.direction * hit.distance };
+                (*mReflectionRays)[i].size() <= 0 ? (*mReflectionRays)[i].resize(mNumBounces + 1) : 0;
+                if (j == 0)
+                {
+                    (*mReflectionRays)[i][j] = Ray{ ray.origin, ray.direction * hit.distance };
+                }
+                else
+                {
+                    IPLVector3 iplDirection = (*mReflectionRays)[i][j].direction;
+                    Vector3f direction = Vector3f(iplDirection.x, iplDirection.y, iplDirection.z) * hit.distance;
+                    (*mReflectionRays)[i][j].direction = { direction.x(), direction.y(), direction.z() };
+                }
             }
-            else
-            {
-                IPLVector3 iplDirection = (*mReflectionRays)[i][j].direction;
-                Vector3f direction = Vector3f(iplDirection.x, iplDirection.y, iplDirection.z) * hit.distance;
-                (*mReflectionRays)[i][j].direction = { direction.x(), direction.y(), direction.z() };
-            }
+            // Reflection visualization code end
 
             if (cancel)
                 return;
@@ -425,6 +433,9 @@ void ReflectionSimulator::simulateJob(const IScene& scene,
             if (j < mNumBounces - 1)
             {
                 bounce(scene, j, hit, hitPoint, threadId, ray, accumEnergy, accumDistance);
+
+                // Reflection visualization code start
+                if (mReflectionRays)
                 if (j == (*mReflectionRays)[i].size() - 1)
                 {
                     (*mReflectionRays)[i][j + 1] = Ray{ ray.origin, ray.direction * scene.closestHit(ray, 0.0f, std::numeric_limits<float>::infinity()).distance };
@@ -433,6 +444,7 @@ void ReflectionSimulator::simulateJob(const IScene& scene,
                 {
                     (*mReflectionRays)[i][j + 1] = ray;
                 }
+                // Reflection visualization code end
 
                 if (cancel)
                     return;

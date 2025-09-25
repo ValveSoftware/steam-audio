@@ -180,7 +180,7 @@ private:
     Array<float, 2> mListenerCoeffs;
     std::atomic<int> mNumJobsRemaining;
     Array<ThreadState> mThreadState;
-    vector<vector<IPLRay>>* mReflectionRays;
+    vector<vector<IPLRay>>* mReflectionRays = nullptr;
 
     void simulateJob(const IScene& scene,
                      Array<float, 2>& image,

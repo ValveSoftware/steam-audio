@@ -52,6 +52,7 @@ struct SharedReflectionSimulationInputs
     int order;
     float irradianceMinDistance;
     ReconstructionType reconstructionType;
+    bool reflectionVisualization;
 };
 
 struct SharedPathingSimulationInputs

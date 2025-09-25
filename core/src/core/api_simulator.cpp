@@ -144,6 +144,7 @@ void CSimulator::setSharedInputs(IPLSimulationFlags flags,
         sharedReflectionInputs.order = sharedData->order;
         sharedReflectionInputs.irradianceMinDistance = sharedData->irradianceMinDistance;
         sharedReflectionInputs.reconstructionType = ReconstructionType::Linear;
+        sharedReflectionInputs.reflectionVisualization = sharedData->reflectionVisualization;
 
         _simulator->setSharedReflectionInputs(sharedReflectionInputs);
     }

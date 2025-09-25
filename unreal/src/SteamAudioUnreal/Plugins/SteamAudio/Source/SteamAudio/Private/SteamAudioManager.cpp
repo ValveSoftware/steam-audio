@@ -699,6 +699,7 @@ void FSteamAudioManager::Tick(float DeltaTime)
         iplSimulatorCommit(Simulator);
 
 #if WITH_EDITOR
+        if (SteamAudioSettings.bReflectionsVisualizationEnable)
         if (ReflectionOutputs && ReflectionVisualizationTimers.IsEmpty())
         {
             StartReflectionVisualization();
@@ -715,6 +716,7 @@ void FSteamAudioManager::Tick(float DeltaTime)
 	SharedInputs.duration = SimulationSettings.maxDuration;
 	SharedInputs.order = SimulationSettings.maxOrder;
 	SharedInputs.irradianceMinDistance = SteamAudioSettings.RealTimeIrradianceMinDistance;
+    SharedInputs.reflectionVisualization = SteamAudioSettings.bReflectionsVisualizationEnable;
 
     iplSimulatorSetSharedInputs(Simulator, IPL_SIMULATIONFLAGS_DIRECT, &SharedInputs);
 
@@ -765,7 +767,8 @@ void FSteamAudioManager::Tick(float DeltaTime)
         {
             iplSimulatorRunReflections(Simulator);
 #if WITH_EDITOR
-            GetReflectionOutputs();
+            if (SteamAudioSettings.bReflectionsVisualizationEnable)
+                GetReflectionOutputs();
 #endif
             iplSimulatorRunPathing(Simulator);
             ThreadPoolIdle = true;

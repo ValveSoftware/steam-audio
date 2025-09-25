@@ -4099,6 +4099,9 @@ typedef struct {
     /** Pointer to arbitrary user-specified data provided when calling the function that will
         call this callback.*/
     void* pathingUserData;
+
+    /** Is need to visualize reflection */
+    IPLbool reflectionVisualization;
 } IPLSimulationSharedInputs;
 
 /** Simulation results that are not specific to any source. */
