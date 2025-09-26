@@ -716,7 +716,11 @@ void FSteamAudioManager::Tick(float DeltaTime)
 	SharedInputs.duration = SimulationSettings.maxDuration;
 	SharedInputs.order = SimulationSettings.maxOrder;
 	SharedInputs.irradianceMinDistance = SteamAudioSettings.RealTimeIrradianceMinDistance;
-    SharedInputs.reflectionVisualization = SteamAudioSettings.bReflectionsVisualizationEnable;
+#if WITH_EDITOR
+    SharedInputs.reflectionVisualization = (IPLbool)SteamAudioSettings.bReflectionsVisualizationEnable;
+#else
+    SharedInputs.reflectionVisualization = IPLbool::IPL_FALSE;
+#endif
 
     iplSimulatorSetSharedInputs(Simulator, IPL_SIMULATIONFLAGS_DIRECT, &SharedInputs);
 
