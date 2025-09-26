@@ -67,6 +67,7 @@ public:
                           float duration,
                           int order,
                           float irradianceMinDistance,
+                          vector<vector<IPLRay>>* reflectionRays,
                           EnergyField* const* energyFields,
                           JobGraph& jobGraph) override;
 

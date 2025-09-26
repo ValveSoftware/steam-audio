@@ -51,6 +51,10 @@ public:
 	UFUNCTION(BlueprintCallable)
 	static void UpdateStaticMeshMaterial(AStaticMeshActor* StaticMeshActor);
 
+	/** Stops the reflection visualization and produce it again. */
+	UFUNCTION(BlueprintCallable)
+	static void UpdateReflectionVisualization();
+
 	/** Shuts down the global Steam Audio state. */
 	UFUNCTION(BlueprintCallable)
 	static void ShutDownSteamAudio(bool bResetFlags = true);
