@@ -76,5 +76,12 @@ namespace SteamAudio
         [DllImport("SteamAudioWwise")]
 #endif
         public static extern void iplWwiseRemoveSource(ulong gameObjectID);
+
+#if (UNITY_IOS || UNITY_WEBGL) && !UNITY_EDITOR
+        [DllImport("__Internal")]
+#else
+        [DllImport("SteamAudioWwise")]
+#endif
+        public static extern void iplWwiseSetHRTFDisabled(Bool disabled);
     }
 }

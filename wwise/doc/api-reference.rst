@@ -12,6 +12,7 @@ Functions
 .. doxygenfunction:: iplWwiseSetReverbSource
 .. doxygenfunction:: iplWwiseAddSource
 .. doxygenfunction:: iplWwiseRemoveSource
+.. doxygenfunction:: iplWwiseSetHRTFDisabled
 
 Structures
 ^^^^^^^^^^

@@ -33,6 +33,7 @@ void F_CALL iplFMODSetSimulationSettings(IPLSimulationSettings SimulationSetting
 void F_CALL iplFMODSetReverbSource(IPLSource ReverbSource);
 IPLint32 F_CALL iplFMODAddSource(IPLSource Source);
 void F_CALL iplFMODRemoveSource(IPLint32 Handle);
+void F_CALL iplFMODSetHRTFDisabled(IPLbool bDisabled);
 }
 #endif
 
@@ -76,6 +77,7 @@ void FSteamAudioFMODStudioModule::StartupModule()
 	this->iplFMODSetReverbSource = (iplFMODSetReverbSource_t) ::iplFMODSetReverbSource;
 	this->iplFMODAddSource = (iplFMODAddSource_t) ::iplFMODAddSource;
 	this->iplFMODRemoveSource = (iplFMODRemoveSource_t) ::iplFMODRemoveSource;
+	this->iplFMODSetHRTFDisabled = (iplFMODSetHRTFDisabled_t) ::iplFMODSetHRTFDisabled;
 #else
 	Library = FPlatformProcess::GetDllHandle(*LibraryPath);
 	check(Library);
@@ -88,6 +90,7 @@ void FSteamAudioFMODStudioModule::StartupModule()
 	iplFMODSetReverbSource = (iplFMODSetReverbSource_t) FPlatformProcess::GetDllExport(Library, TEXT("iplFMODSetReverbSource"));
 	iplFMODAddSource = (iplFMODAddSource_t) FPlatformProcess::GetDllExport(Library, TEXT("iplFMODAddSource"));
 	iplFMODRemoveSource = (iplFMODRemoveSource_t) FPlatformProcess::GetDllExport(Library, TEXT("iplFMODRemoveSource"));
+	iplFMODSetHRTFDisabled = (iplFMODSetHRTFDisabled_t) FPlatformProcess::GetDllExport(Library, TEXT("iplFMODSetHRTFDisabled"));
 #endif
 }
 
@@ -197,6 +200,11 @@ IPLAudioSettings FFMODStudioAudioEngineState::GetAudioSettings()
 TSharedPtr<IAudioEngineSource> FFMODStudioAudioEngineState::CreateAudioEngineSource()
 {
 	return MakeShared<FFMODStudioAudioEngineSource>();
+}
+
+void FFMODStudioAudioEngineState::SetHRTFDisabled(bool bDisabled)
+{
+	FSteamAudioFMODStudioModule::Get().iplFMODSetHRTFDisabled(bDisabled ? IPL_TRUE : IPL_FALSE);
 }
 
 FMOD::System* FFMODStudioAudioEngineState::GetSystem()

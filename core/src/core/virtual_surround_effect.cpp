@@ -75,6 +75,10 @@ AudioEffectState VirtualSurroundEffect::apply(const VirtualSurroundEffectParams&
         {
             AudioBuffer channel(in, i);
 
+            // Skip LFE channels, which are indicated by a position of (0, 0, 0).
+            if (mSpeakerLayout.speakers[i].lengthSquared() < 1e-3f)
+                continue;
+
             auto direction = Vector3f::unitVector(mSpeakerLayout.speakers[i]);
 
             BinauralEffectParams binauralParams{};

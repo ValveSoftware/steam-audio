@@ -47,6 +47,10 @@ bool STEAMAUDIO_API ExportDynamicObject(USteamAudioDynamicObjectComponent* Dynam
 
 #endif
 
+/**
+  * Exports geometry for a single dynamic object in Runtime.
+  */
+void STEAMAUDIO_API ExportDynamicObjectRuntime(USteamAudioDynamicObjectComponent* DynamicObject, IPLScene& Scene, IPLInstancedMesh& InstancedMesh);
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Scene Load/Unload

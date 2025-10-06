@@ -127,6 +127,11 @@ float PanningEffect::firstOrderPanningWeight(const Vector3f& direction,
 {
     auto sourceDirection = Vector3f::unitVector(direction);
     auto speakerDirection = Vector3f::unitVector(speakerLayout.speakers[index]);
+
+    // To handle LFE channels, set the speaker position to (0, 0, 0).
+    if (speakerDirection.lengthSquared() < 1e-3f)
+        return 0.0f;
+
     auto numSpeakers = speakerLayout.numSpeakers;
     auto cosTheta = Vector3f::dot(sourceDirection, speakerDirection);
 
@@ -139,6 +144,11 @@ float PanningEffect::secondOrderPanningWeight(const Vector3f& direction,
 {
     auto sourceDirection = Vector3f::unitVector(direction);
     auto speakerDirection = Vector3f::unitVector(speakerLayout.speakers[index]);
+
+    // To handle LFE channels, set the speaker position to (0, 0, 0).
+    if (speakerDirection.lengthSquared() < 1e-3f)
+        return 0.0f;
+
     auto numSpeakers = speakerLayout.numSpeakers;
     auto cosTheta = Vector3f::dot(sourceDirection, speakerDirection);
 
