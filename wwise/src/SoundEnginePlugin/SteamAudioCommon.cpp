@@ -82,6 +82,7 @@ GlobalState::GlobalState()
     , simulationSettingsValid{false}
     , reflectionMixer{}
     , reverbSource{}
+    , hrtfDisabled{false}
 {}
 
 
@@ -585,4 +586,11 @@ void AKSOUNDENGINE_CALL iplWwiseRemoveSource(AkGameObjectID gameObjectID)
     auto& globalState = SteamAudioWwise::GlobalState::Get();
 
     globalState.sourceMap.Remove(gameObjectID);
+}
+
+void AKSOUNDENGINE_CALL iplWwiseSetHRTFDisabled(IPLbool disabled)
+{
+    auto& globalState = SteamAudioWwise::GlobalState::Get();
+
+    globalState.hrtfDisabled = (disabled == IPL_TRUE);
 }

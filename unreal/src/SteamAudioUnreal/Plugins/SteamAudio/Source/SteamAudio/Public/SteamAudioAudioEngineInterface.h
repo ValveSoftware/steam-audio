@@ -54,6 +54,9 @@ public:
 
     /** Creates an interface object for communicating with a spatializer effect instance in the audio engine plugin. */
     virtual TSharedPtr<IAudioEngineSource> CreateAudioEngineSource() = 0;
+
+    /** Disables HRTF processing globally. */
+    virtual void SetHRTFDisabled(bool bDisabled) = 0;
 };
 
 

@@ -26,6 +26,7 @@
 #include "SteamAudioReverbSettings.h"
 #include "SteamAudioSettings.h"
 #include "SteamAudioSourceComponent.h"
+#include "SteamAudioUnrealAudioEngineInterface.h"
 
 #include "Misc/AssertionMacros.h"
 
@@ -453,7 +454,7 @@ void FSteamAudioReverbPlugin::ProcessSourceAudio(const FAudioPluginSourceInputDa
                 AmbisonicsDecodeParams.order = SimulationSettings.maxOrder;
                 AmbisonicsDecodeParams.hrtf = Source.HRTF;
                 AmbisonicsDecodeParams.orientation = FSteamAudioModule::GetManager().GetListenerCoordinates();
-                AmbisonicsDecodeParams.binaural = bBinaural ? IPL_TRUE : IPL_FALSE;
+                AmbisonicsDecodeParams.binaural = (bBinaural && !FUnrealAudioEngineState::IsHRTFDisabled()) ? IPL_TRUE : IPL_FALSE;
 
                 iplAmbisonicsDecodeEffectApply(Source.AmbisonicsDecodeEffect, &AmbisonicsDecodeParams, &Source.IndirectBuffer, &Source.OutBuffer);
 
@@ -833,7 +834,7 @@ void FSteamAudioReverbSubmixPlugin::OnProcessAudio(const FSoundEffectSubmixInput
             AmbisonicsDecodeParams.order = SimulationSettings.maxOrder;
             AmbisonicsDecodeParams.hrtf = HRTF;
             AmbisonicsDecodeParams.orientation = SteamAudio::FSteamAudioModule::GetManager().GetListenerCoordinates();
-            AmbisonicsDecodeParams.binaural = (CurrentPreset && CurrentPreset->Settings.bApplyHRTF) ? IPL_TRUE : IPL_FALSE;
+            AmbisonicsDecodeParams.binaural = (CurrentPreset && CurrentPreset->Settings.bApplyHRTF && !SteamAudio::FUnrealAudioEngineState::IsHRTFDisabled()) ? IPL_TRUE : IPL_FALSE;
 
             iplAmbisonicsDecodeEffectApply(AmbisonicsDecodeEffect, &AmbisonicsDecodeParams, &IndirectBuffer, &OutBuffer);
 

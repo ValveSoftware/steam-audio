@@ -79,4 +79,8 @@ public:
 	/** Unregisters a Steam Audio Listener component from simulation. */
 	UFUNCTION(BlueprintCallable)
 	static void RemoveListener(USteamAudioListenerComponent* Listener);
+
+	/** Disables HRTF globally. */
+	UFUNCTION(BlueprintCallable, Category="SteamAudio")
+	static void SetHRTFDisabled(bool bDisabled);
 };

@@ -15,7 +15,6 @@
 //
 
 #include "SteamAudioManager.h"
-#include "Kismet/KismetSystemLibrary.h"
 #include "AudioDevice.h"
 #include "Async/Async.h"
 #include "HAL/UnrealMemory.h"
@@ -96,16 +95,21 @@ FSteamAudioManager::~FSteamAudioManager()
     ShutDownSteamAudio();
 }
 
-void FSteamAudioManager::UpdateReflectionVisualization()
+bool FSteamAudioManager::CreateEmptyScene(IPLScene& SubScene)
 {
-#if WITH_EDITOR
-    if (USteamAudioListenerComponent::GetCurrentListener())
-        for (int32 i = 0; i < ReflectionVisualizationTimers.Num(); ++i)
-        {
-            USteamAudioListenerComponent::GetCurrentListener()->GetWorld()->GetTimerManager().ClearTimer(ReflectionVisualizationTimers[i]);
-        }
-    ReflectionVisualizationTimers.Empty();
-#endif
+    IPLSceneSettings SceneSettings{};
+    SceneSettings.type = static_cast<IPLSceneType>(ActualSceneType);
+    SceneSettings.embreeDevice = EmbreeDevice;
+    SceneSettings.radeonRaysDevice = RadeonRaysDevice;
+
+    IPLerror Status = iplSceneCreate(Context, &SceneSettings, &SubScene);
+    if (Status != IPL_STATUS_SUCCESS)
+    {
+        UE_LOG(LogSteamAudio, Error, TEXT("Unable to create scene. [%d]"), Status);
+        return false;
+    }
+
+    return true;
 }
 
 void FSteamAudioManager::UpdateStaticMesh()
@@ -338,17 +342,10 @@ bool FSteamAudioManager::InitializeSteamAudio(EManagerInitReason Reason)
 
     check(!Scene);
 
-    IPLSceneSettings SceneSettings{};
-    SceneSettings.type = static_cast<IPLSceneType>(ActualSceneType);
-    SceneSettings.embreeDevice = EmbreeDevice;
-    SceneSettings.radeonRaysDevice = RadeonRaysDevice;
-
-    IPLerror Status = iplSceneCreate(Context, &SceneSettings, &Scene);
-    if (Status != IPL_STATUS_SUCCESS)
+    if (!CreateEmptyScene(Scene))
     {
         ShutDownSteamAudio(false);
         bInitializationSucceded = false;
-        UE_LOG(LogSteamAudio, Error, TEXT("Unable to create scene. [%d]"), Status);
         return false;
     }
 
@@ -392,7 +389,7 @@ bool FSteamAudioManager::InitializeSteamAudio(EManagerInitReason Reason)
         SimulationSettings.radeonRaysDevice = RadeonRaysDevice;
         SimulationSettings.tanDevice = TrueAudioNextDevice;
 
-        Status = iplSimulatorCreate(Context, &SimulationSettings, &Simulator);
+        IPLerror Status = iplSimulatorCreate(Context, &SimulationSettings, &Simulator);
         if (Status != IPL_STATUS_SUCCESS)
         {
             ShutDownSteamAudio(false);
@@ -449,12 +446,6 @@ bool FSteamAudioManager::InitializeSteamAudio(EManagerInitReason Reason)
         {
             AudioEngineState->Initialize(Context, HRTF, SimulationSettings);
         }
-
-#if WITH_EDITOR
-        ReflectionVisualizationTimers.Empty();
-        ReflectionOutputs.Reset(nullptr);
-        ReflectionOutputs = nullptr;
-#endif
     }
 
     bInitializationSucceded = true;
@@ -584,7 +575,6 @@ IPLInstancedMesh FSteamAudioManager::LoadDynamicObject(USteamAudioDynamicObjectC
     FString AssetName = DynamicObjectComponent->GetAssetToLoad().GetAssetPathString();
 
     IPLScene SubScene = nullptr;
-    IPLerror Status = IPL_STATUS_SUCCESS;
     if (DynamicObjects.Contains(AssetName))
     {
         SubScene = DynamicObjects[AssetName];
@@ -592,15 +582,8 @@ IPLInstancedMesh FSteamAudioManager::LoadDynamicObject(USteamAudioDynamicObjectC
     }
     else
     {
-        IPLSceneSettings SceneSettings{};
-        SceneSettings.type = static_cast<IPLSceneType>(ActualSceneType);
-        SceneSettings.embreeDevice = EmbreeDevice;
-        SceneSettings.radeonRaysDevice = RadeonRaysDevice;
-
-        Status = iplSceneCreate(Context, &SceneSettings, &SubScene);
-        if (Status != IPL_STATUS_SUCCESS)
+        if (!CreateEmptyScene(SubScene))
         {
-            UE_LOG(LogSteamAudio, Error, TEXT("Unable to create scene. [%d]"), Status);
             return nullptr;
         }
 
@@ -625,7 +608,7 @@ IPLInstancedMesh FSteamAudioManager::LoadDynamicObject(USteamAudioDynamicObjectC
     InstancedMeshSettings.transform = ConvertTransform(DynamicObjectComponent->GetOwner()->GetRootComponent()->GetComponentTransform());
 
     IPLInstancedMesh InstancedMesh = nullptr;
-    Status = iplInstancedMeshCreate(Scene, &InstancedMeshSettings, &InstancedMesh);
+    IPLerror Status = iplInstancedMeshCreate(Scene, &InstancedMeshSettings, &InstancedMesh);
     if (Status != IPL_STATUS_SUCCESS)
     {
         UE_LOG(LogSteamAudio, Error, TEXT("Unable to create instanced mesh. [%d]"), Status);
@@ -697,14 +680,6 @@ void FSteamAudioManager::Tick(float DeltaTime)
 
         iplSimulatorSetScene(Simulator, Scene);
         iplSimulatorCommit(Simulator);
-
-#if WITH_EDITOR
-        if (SteamAudioSettings.bReflectionsVisualizationEnable)
-        if (ReflectionOutputs && ReflectionVisualizationTimers.IsEmpty())
-        {
-            StartReflectionVisualization();
-        }
-#endif
     }
 
     IPLSimulationSettings SimulationSettings = GetRealTimeSettings(static_cast<IPLSimulationFlags>(IPL_SIMULATIONFLAGS_DIRECT | IPL_SIMULATIONFLAGS_REFLECTIONS | IPL_SIMULATIONFLAGS_PATHING));
@@ -716,11 +691,6 @@ void FSteamAudioManager::Tick(float DeltaTime)
 	SharedInputs.duration = SimulationSettings.maxDuration;
 	SharedInputs.order = SimulationSettings.maxOrder;
 	SharedInputs.irradianceMinDistance = SteamAudioSettings.RealTimeIrradianceMinDistance;
-#if WITH_EDITOR
-    SharedInputs.reflectionVisualization = (IPLbool)SteamAudioSettings.bReflectionsVisualizationEnable;
-#else
-    SharedInputs.reflectionVisualization = IPLbool::IPL_FALSE;
-#endif
 
     iplSimulatorSetSharedInputs(Simulator, IPL_SIMULATIONFLAGS_DIRECT, &SharedInputs);
 
@@ -770,64 +740,11 @@ void FSteamAudioManager::Tick(float DeltaTime)
         AsyncPool(*ThreadPool, [this] // May cause a crash when OpenCL device is not initialized
         {
             iplSimulatorRunReflections(Simulator);
-#if WITH_EDITOR
-            if (SteamAudioSettings.bReflectionsVisualizationEnable)
-                GetReflectionOutputs();
-#endif
             iplSimulatorRunPathing(Simulator);
             ThreadPoolIdle = true;
         });
     }
 }
-
-#if WITH_EDITOR
-void FSteamAudioManager::GetReflectionOutputs()
-{
-    if (ReflectionVisualizationTimers.IsEmpty() && USteamAudioListenerComponent::GetCurrentListener())
-    {
-        IPLSimulationSharedOutputs* Outputs = reinterpret_cast<IPLSimulationSharedOutputs*>(FMemory::Malloc(sizeof(IPLSimulationSharedOutputs)));
-        ReflectionOutputs.Reset(Outputs);
-        iplSimulatorGetSharedOutputs(Simulator, IPL_SIMULATIONFLAGS_REFLECTIONS, *ReflectionOutputs);
-        ReflectionVisualizationTotalTime = 0;
-    }
-}
-
-void FSteamAudioManager::StartReflectionVisualization()
-{
-    for (int32 i = 0; i < FMath::Min(SteamAudioSettings.VisualizedRealTimeRays, SteamAudioSettings.RealTimeRays); ++i)
-    {
-        FLinearColor color;
-        color.R = FMath::FRand();
-        color.G = FMath::FRand();
-        color.B = FMath::FRand();
-        for (int32 j = 0; j < SteamAudioSettings.RealTimeBounces + 1; ++j)
-        {
-            if (!ReflectionOutputs->reflectionRays[i])
-                break;
-
-            IPLRay IplRay = ReflectionOutputs->reflectionRays[i][j];
-            if (IplRay.origin.x == 0 && IplRay.origin.y == 0 && IplRay.origin.z == 0)
-                continue;
-
-            ReflectionVisualizationTotalTime += SteamAudioSettings.ReflectionVisualizationTime;
-            ReflectionVisualizationTimers.Add(FTimerHandle());
-            FTimerDelegate TimerDelegate;
-            TimerDelegate.BindRaw(this, &FSteamAudioManager::DrawReflectionRay, color, IplRay);
-            USteamAudioListenerComponent::GetCurrentListener()->GetWorld()->GetTimerManager().SetTimer(ReflectionVisualizationTimers.Last(), TimerDelegate, ReflectionVisualizationTotalTime, false);
-        }
-    }
-}
-
-void FSteamAudioManager::DrawReflectionRay(FLinearColor Color, IPLRay IplRay)
-{
-    FVector Origin = SteamAudio::ConvertVectorInverse(IplRay.origin);
-    FVector Direction = SteamAudio::ConvertVectorInverse(IplRay.direction);
-    UKismetSystemLibrary::DrawDebugLine(USteamAudioListenerComponent::GetCurrentListener(), Origin, Origin + Direction, Color, SteamAudioSettings.ReflectionVisualisationRayLifeTime, SteamAudioSettings.ReflectionVisualisationThickness);
-    UKismetSystemLibrary::DrawDebugPoint(USteamAudioListenerComponent::GetCurrentListener(), Origin + Direction, SteamAudioSettings.ReflectionVisualisationImpactPointSize, FLinearColor::Black, SteamAudioSettings.ReflectionVisualisationRayLifeTime);
-
-    ReflectionVisualizationTimers.RemoveAt(0);
-}
-#endif
 
 void FSteamAudioManager::LogCallback(IPLLogLevel Level, IPLstring Message)
 {

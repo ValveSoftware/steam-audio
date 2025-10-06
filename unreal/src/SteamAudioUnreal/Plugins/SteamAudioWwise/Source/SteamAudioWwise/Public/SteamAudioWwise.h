@@ -41,6 +41,7 @@ typedef void (AKSOUNDENGINE_CALL* iplWwiseSetSimulationSettings_t)(IPLSimulation
 typedef void (AKSOUNDENGINE_CALL* iplWwiseSetReverbSource_t)(IPLSource ReverbSource);
 typedef void (AKSOUNDENGINE_CALL* iplWwiseAddSource_t)(AkGameObjectID GameObjectID, IPLSource Source);
 typedef void (AKSOUNDENGINE_CALL* iplWwiseRemoveSource_t)(AkGameObjectID GameObjectID);
+typedef void (AKSOUNDENGINE_CALL* iplWwiseSetHRTFDisabled_t)(IPLbool bDisabled);
 
 class FSteamAudioWwiseModule : public IAudioEngineStateFactory
 {
@@ -57,6 +58,7 @@ public:
     iplWwiseSetReverbSource_t iplWwiseSetReverbSource;
     iplWwiseAddSource_t iplWwiseAddSource;
     iplWwiseRemoveSource_t iplWwiseRemoveSource;
+    iplWwiseSetHRTFDisabled_t iplWwiseSetHRTFDisabled;
 
     /**
      * Inherited from IModuleInterface
@@ -115,6 +117,9 @@ public:
 
     /** Creates an interface object for communicating with a spatializer effect instance in the audio engine plugin. */
     virtual TSharedPtr<IAudioEngineSource> CreateAudioEngineSource() override;
+
+    /** Disables HRTF processing globally. */
+    virtual void SetHRTFDisabled(bool bDisabled) override;
 
 private:
     /** Converts a vector from Wwise's coordinate system to Unreal's coordinate system. */

@@ -16,6 +16,7 @@
 
 #include "SteamAudioFunctionLibrary.h"
 #include "Engine/StaticMeshActor.h"
+#include "SteamAudioAudioEngineInterface.h"
 #include "SteamAudioModule.h"
 #include "SteamAudioManager.h"
 
@@ -79,4 +80,12 @@ void USteamAudioFunctionLibrary::AddListener(USteamAudioListenerComponent* Liste
 void USteamAudioFunctionLibrary::RemoveListener(USteamAudioListenerComponent* Listener)
 {
 	FSteamAudioModule::GetManager().RemoveListener(Listener);
+}
+
+void USteamAudioFunctionLibrary::SetHRTFDisabled(bool bDisabled)
+{
+	if (FSteamAudioModule::Get().GetAudioEngineState())
+    {
+        FSteamAudioModule::Get().GetAudioEngineState()->SetHRTFDisabled(bDisabled);
+    }
 }
