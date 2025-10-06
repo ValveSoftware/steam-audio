@@ -127,5 +127,8 @@ void USteamAudioDynamicObjectComponent::OnComponentDestroyed(bool bDestroyingHie
 
 void USteamAudioDynamicObjectComponent::ExportDynamicObjectRuntime()
 {
-    SteamAudio::ExportDynamicObjectRuntime(this, Scene, InstancedMesh);
+    if (!Scene || !InstancedMesh)
+    {
+        SteamAudio::ExportDynamicObjectRuntime(this, Scene, InstancedMesh);
+    }
 }
