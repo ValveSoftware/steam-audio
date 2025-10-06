@@ -50,6 +50,8 @@ public:
     virtual void OnComponentDestroyed(bool bDestroyingHierarchy) override;
 #endif
 
+    void ExportDynamicObjectRuntime();
+
     FSoftObjectPath GetAssetToLoad();
 
 protected:
