@@ -317,6 +317,9 @@ struct GlobalState
     /** The IPLSource used by the game engine for simulating reverb. */
     DoubleBufferedSource reverbSource;
 
+    /** If true, HRTF processing will be disabled globally. */
+    std::atomic<bool> hrtfDisabled;
+
     /**
      * Default constructor.
      */
@@ -495,5 +498,13 @@ AK_DLLEXPORT void AKSOUNDENGINE_CALL iplWwiseAddSource(AkGameObjectID gameObject
  * \param gameObjectID  The Wwise game object ID.
  */
 AK_DLLEXPORT void AKSOUNDENGINE_CALL iplWwiseRemoveSource(AkGameObjectID gameObjectID);
+
+/**
+ *  Specifies whether HRTF-based binaural rendering should be globally disabled in all Steam Audio effects.
+ *  If disabled, Steam Audio will use a simpler panning algorithm.
+ *
+ *  \param[in]  disabled    Whether or not HRTF-based binaural rendering should be disabled.
+ */
+AK_DLLEXPORT void AKSOUNDENGINE_CALL iplWwiseSetHRTFDisabled(IPLbool disabled);
 
 }

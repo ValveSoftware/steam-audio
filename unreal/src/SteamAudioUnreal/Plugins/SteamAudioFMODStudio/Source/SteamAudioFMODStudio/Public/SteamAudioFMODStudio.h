@@ -39,6 +39,7 @@ typedef void (F_CALL* iplFMODSetSimulationSettings_t)(IPLSimulationSettings Simu
 typedef void (F_CALL* iplFMODSetReverbSource_t)(IPLSource ReverbSource);
 typedef IPLint32 (F_CALL* iplFMODAddSource_t)(IPLSource Source);
 typedef void (F_CALL* iplFMODRemoveSource_t)(IPLint32 Handle);
+typedef void (F_CALL* iplFMODSetHRTFDisabled_t)(IPLbool bDisabled);
 
 class FSteamAudioFMODStudioModule : public IAudioEngineStateFactory
 {
@@ -55,6 +56,7 @@ public:
     iplFMODSetReverbSource_t iplFMODSetReverbSource;
     iplFMODAddSource_t iplFMODAddSource;
     iplFMODRemoveSource_t iplFMODRemoveSource;
+    iplFMODSetHRTFDisabled_t iplFMODSetHRTFDisabled;
 
     /**
      * Inherited from IModuleInterface
@@ -110,6 +112,9 @@ public:
 
     /** Creates an interface object for communicating with a spatializer effect instance in the audio engine plugin. */
     virtual TSharedPtr<IAudioEngineSource> CreateAudioEngineSource() override;
+
+    /** Disables HRTF processing globally. */
+    virtual void SetHRTFDisabled(bool bDisabled) override;
 
     /** Returns the FMOD core system instance. */
     FMOD::System* GetSystem();

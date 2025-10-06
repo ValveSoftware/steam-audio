@@ -95,6 +95,23 @@ FSteamAudioManager::~FSteamAudioManager()
     ShutDownSteamAudio();
 }
 
+bool FSteamAudioManager::CreateEmptyScene(IPLScene& SubScene)
+{
+    IPLSceneSettings SceneSettings{};
+    SceneSettings.type = static_cast<IPLSceneType>(ActualSceneType);
+    SceneSettings.embreeDevice = EmbreeDevice;
+    SceneSettings.radeonRaysDevice = RadeonRaysDevice;
+
+    IPLerror Status = iplSceneCreate(Context, &SceneSettings, &SubScene);
+    if (Status != IPL_STATUS_SUCCESS)
+    {
+        UE_LOG(LogSteamAudio, Error, TEXT("Unable to create scene. [%d]"), Status);
+        return false;
+    }
+
+    return true;
+}
+
 void FSteamAudioManager::UpdateStaticMesh()
 {
     UWorld* World = GEngine->GetCurrentPlayWorld();
@@ -325,17 +342,10 @@ bool FSteamAudioManager::InitializeSteamAudio(EManagerInitReason Reason)
 
     check(!Scene);
 
-    IPLSceneSettings SceneSettings{};
-    SceneSettings.type = static_cast<IPLSceneType>(ActualSceneType);
-    SceneSettings.embreeDevice = EmbreeDevice;
-    SceneSettings.radeonRaysDevice = RadeonRaysDevice;
-
-    IPLerror Status = iplSceneCreate(Context, &SceneSettings, &Scene);
-    if (Status != IPL_STATUS_SUCCESS)
+    if (!CreateEmptyScene(Scene))
     {
         ShutDownSteamAudio(false);
         bInitializationSucceded = false;
-        UE_LOG(LogSteamAudio, Error, TEXT("Unable to create scene. [%d]"), Status);
         return false;
     }
 
@@ -379,7 +389,7 @@ bool FSteamAudioManager::InitializeSteamAudio(EManagerInitReason Reason)
         SimulationSettings.radeonRaysDevice = RadeonRaysDevice;
         SimulationSettings.tanDevice = TrueAudioNextDevice;
 
-        Status = iplSimulatorCreate(Context, &SimulationSettings, &Simulator);
+        IPLerror Status = iplSimulatorCreate(Context, &SimulationSettings, &Simulator);
         if (Status != IPL_STATUS_SUCCESS)
         {
             ShutDownSteamAudio(false);
@@ -565,7 +575,6 @@ IPLInstancedMesh FSteamAudioManager::LoadDynamicObject(USteamAudioDynamicObjectC
     FString AssetName = DynamicObjectComponent->GetAssetToLoad().GetAssetPathString();
 
     IPLScene SubScene = nullptr;
-    IPLerror Status = IPL_STATUS_SUCCESS;
     if (DynamicObjects.Contains(AssetName))
     {
         SubScene = DynamicObjects[AssetName];
@@ -573,15 +582,8 @@ IPLInstancedMesh FSteamAudioManager::LoadDynamicObject(USteamAudioDynamicObjectC
     }
     else
     {
-        IPLSceneSettings SceneSettings{};
-        SceneSettings.type = static_cast<IPLSceneType>(ActualSceneType);
-        SceneSettings.embreeDevice = EmbreeDevice;
-        SceneSettings.radeonRaysDevice = RadeonRaysDevice;
-
-        Status = iplSceneCreate(Context, &SceneSettings, &SubScene);
-        if (Status != IPL_STATUS_SUCCESS)
+        if (!CreateEmptyScene(SubScene))
         {
-            UE_LOG(LogSteamAudio, Error, TEXT("Unable to create scene. [%d]"), Status);
             return nullptr;
         }
 
@@ -606,7 +608,7 @@ IPLInstancedMesh FSteamAudioManager::LoadDynamicObject(USteamAudioDynamicObjectC
     InstancedMeshSettings.transform = ConvertTransform(DynamicObjectComponent->GetOwner()->GetRootComponent()->GetComponentTransform());
 
     IPLInstancedMesh InstancedMesh = nullptr;
-    Status = iplInstancedMeshCreate(Scene, &InstancedMeshSettings, &InstancedMesh);
+    IPLerror Status = iplInstancedMeshCreate(Scene, &InstancedMeshSettings, &InstancedMesh);
     if (Status != IPL_STATUS_SUCCESS)
     {
         UE_LOG(LogSteamAudio, Error, TEXT("Unable to create instanced mesh. [%d]"), Status);

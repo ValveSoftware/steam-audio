@@ -45,6 +45,11 @@ namespace SteamAudio
         {
             WwiseAPI.iplWwiseSetReverbSource(reverbSource.Get());
         }
+
+        public override void SetHRTFDisabled(bool disabled)
+        {
+            WwiseAPI.iplWwiseSetHRTFDisabled(disabled ? Bool.True : Bool.False);
+        }
     }
 
     public sealed class WwiseAudioEngineStateHelpers : AudioEngineStateHelpers

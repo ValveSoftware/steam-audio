@@ -838,6 +838,82 @@ bool ExportDynamicObject(USteamAudioDynamicObjectComponent* DynamicObject, FStri
 
 #endif
 
+void ExportDynamicObjectRuntime(USteamAudioDynamicObjectComponent* DynamicObject, IPLScene& Scene, IPLInstancedMesh& InstancedMesh)
+{
+    if (!DynamicObject || DynamicObject->Asset.IsAsset())
+        return;
+
+    Async(EAsyncExecution::Thread, [DynamicObject, &Scene, &InstancedMesh]()
+        {
+            // Start by collecting geometry and material information from the level.
+            TArray<IPLVector3> Vertices;
+            TArray<IPLTriangle> Triangles;
+            TArray<int> MaterialIndices;
+            TArray<IPLMaterial> Materials;
+            TMap<FString, int> MaterialIndexForAsset;
+            bool bExportSucceeded = RunInGameThread<bool>([&]()
+                {
+                    return ExportActors({ DynamicObject->GetOwner() }, Vertices, Triangles, MaterialIndices, Materials, MaterialIndexForAsset, false);
+                });
+            if (!bExportSucceeded)
+            {
+                return;
+            }
+
+            // If we didn't find anything, stop here.
+            if (Vertices.Num() <= 0 || Triangles.Num() <= 0 || MaterialIndices.Num() <= 0 || Materials.Num() <= 0)
+            {
+                UE_LOG(LogSteamAudio, Log, TEXT("No geometry specified for dynamic object: %s"), *DynamicObject->GetOuter()->GetName());
+                return;
+            }
+
+            FSteamAudioManager& Manager = FSteamAudioModule::GetManager();
+            IPLContext Context = Manager.GetContext();
+            Scene = iplSceneRetain(Manager.GetScene());
+
+            IPLScene SubScene = nullptr;
+            if (!Manager.CreateEmptyScene(SubScene))
+            {
+                return;
+            }
+
+            // Create a static mesh using all the data gathered from the level.
+            IPLStaticMeshSettings StaticMeshSettings{};
+            StaticMeshSettings.numVertices = Vertices.Num();
+            StaticMeshSettings.numTriangles = Triangles.Num();
+            StaticMeshSettings.numMaterials = Materials.Num();
+            StaticMeshSettings.vertices = Vertices.GetData();
+            StaticMeshSettings.triangles = Triangles.GetData();
+            StaticMeshSettings.materialIndices = MaterialIndices.GetData();
+            StaticMeshSettings.materials = Materials.GetData();
+
+            IPLStaticMesh StaticMesh = nullptr;
+            IPLerror Status = iplStaticMeshCreate(Scene, &StaticMeshSettings, &StaticMesh);
+            if (Status != IPL_STATUS_SUCCESS)
+            {
+                UE_LOG(LogSteamAudio, Error, TEXT("Unable to create Steam Audio static mesh for dynamic object: %s [%i]"), *DynamicObject->GetOuter()->GetName(), Status);
+                return;
+            }
+
+            iplStaticMeshAdd(StaticMesh, SubScene);
+            iplSceneCommit(SubScene);
+            iplStaticMeshRelease(&StaticMesh);
+
+            IPLInstancedMeshSettings InstancedMeshSettings{};
+            InstancedMeshSettings.subScene = SubScene;
+            InstancedMeshSettings.transform = ConvertTransform(DynamicObject->GetOwner()->GetRootComponent()->GetComponentTransform());
+
+            Status = iplInstancedMeshCreate(Scene, &InstancedMeshSettings, &InstancedMesh);
+            if (Status != IPL_STATUS_SUCCESS)
+            {
+                UE_LOG(LogSteamAudio, Error, TEXT("Unable to create instanced mesh. [%d]"), Status);
+                return;
+            }
+
+            iplInstancedMeshAdd(InstancedMesh, Scene);
+        });
+}
+
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Scene Load/Unload

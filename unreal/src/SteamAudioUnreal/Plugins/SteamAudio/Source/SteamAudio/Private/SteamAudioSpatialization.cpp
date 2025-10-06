@@ -22,6 +22,7 @@
 #include "SteamAudioManager.h"
 #include "SteamAudioSourceComponent.h"
 #include "SteamAudioSpatializationSettings.h"
+#include "SteamAudioUnrealAudioEngineInterface.h"
 
 namespace SteamAudio {
 
@@ -329,7 +330,7 @@ void FSteamAudioSpatializationPlugin::ProcessAudio(const FAudioPluginSourceInput
         RelativeDirection.z = InputData.SpatializationParams->EmitterPosition.Z;
 
         // Apply panning or binaural effect to the input, storing the result in OutBuffer.
-        if (Source.bBinaural)
+        if (Source.bBinaural && !FUnrealAudioEngineState::IsHRTFDisabled())
         {
             IPLBinauralEffectParams Params{};
             Params.direction = RelativeDirection;
@@ -375,7 +376,7 @@ void FSteamAudioSpatializationPlugin::ProcessAudio(const FAudioPluginSourceInput
 
             IPLPathEffectParams PathingParams = Outputs.pathing;
             PathingParams.order = SimulationSettings.maxOrder;
-            PathingParams.binaural = Source.bApplyHRTFToPathing ? IPL_TRUE : IPL_FALSE;
+            PathingParams.binaural = (Source.bApplyHRTFToPathing && !FUnrealAudioEngineState::IsHRTFDisabled()) ? IPL_TRUE : IPL_FALSE;
             PathingParams.hrtf = Source.HRTF;
             PathingParams.listener = FSteamAudioModule::GetManager().GetListenerCoordinates();
             PathingParams.normalizeEQ = Source.bNormalizePathingEQ ? IPL_TRUE : IPL_FALSE;

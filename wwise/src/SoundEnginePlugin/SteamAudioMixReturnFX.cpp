@@ -317,7 +317,7 @@ void SteamAudioMixReturnFX::Execute(AkAudioBuffer* in_pBuffer, AkUInt32 in_uInOf
 
         IPLAmbisonicsDecodeEffectParams ambisonicsDecodeParams{};
         ambisonicsDecodeParams.order = globalState.simulationSettings.maxOrder;
-        ambisonicsDecodeParams.binaural = m_params->NonRTPC.binaural ? IPL_TRUE : IPL_FALSE;
+        ambisonicsDecodeParams.binaural = (m_params->NonRTPC.binaural && !globalState.hrtfDisabled) ? IPL_TRUE : IPL_FALSE;
         ambisonicsDecodeParams.hrtf = hrtf;
         ambisonicsDecodeParams.orientation = listenerCoords;
 

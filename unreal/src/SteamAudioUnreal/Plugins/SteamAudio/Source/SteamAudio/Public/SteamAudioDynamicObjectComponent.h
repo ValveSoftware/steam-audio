@@ -45,14 +45,14 @@ public:
 
     USteamAudioDynamicObjectComponent();
 
-#ifdef WITH_EDITOR
+#if WITH_EDITOR
     virtual void DestroyComponent(bool bPromoteChildren = false) override;
     virtual void OnComponentDestroyed(bool bDestroyingHierarchy) override;
 #endif
 
-    FSoftObjectPath GetAssetToLoad();
+    void ExportDynamicObjectRuntime();
 
-    int32 GetInstancedMeshIndex() const { return InstancedMeshIndex; }
+    FSoftObjectPath GetAssetToLoad();
 
 protected:
     /**
@@ -63,7 +63,7 @@ protected:
     virtual void BeginPlay() override;
 
     /** Called when the component is going to be destroyed. */
-    virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
+    virtual void BeginDestroy() override;
 
 private:
     /** Retained reference to the main scene used by the Steam Audio Manager for simulation. */
@@ -72,9 +72,7 @@ private:
     /** The Instanced Mesh object. */
     IPLInstancedMesh InstancedMesh;
 
-    int32 InstancedMeshIndex = -1;
-
-#ifdef WITH_EDITOR
+#if WITH_EDITOR
     /** Equal true if the asset is not deleted */
     bool bIsAssetActive = true;
 
