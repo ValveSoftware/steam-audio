@@ -570,6 +570,10 @@ void SteamAudioSpatializerFX::Execute(AkAudioBuffer* in_pBuffer, AkUInt32 in_uIn
         pathingParams.binaural = m_params->NonRTPC.pathingBinaural ? IPL_TRUE : IPL_FALSE;
         pathingParams.hrtf = hrtf;
         pathingParams.listener = listenerCoords;
+        #if (AK_WWISESDK_VERSION_MAJOR > 2024) || (AK_WWISESDK_VERSION_MAJOR == 2024 && AK_WWISESDK_VERSION_MINOR >= 1)
+        #else
+            pathingParams.normalizeEQ = m_params->NonRTPC.pathingNormalizeEQ ? IPL_TRUE : IPL_FALSE;
+        #endif
 
         iplPathEffectApply(m_pathingEffect, &pathingParams, &m_monoBuffer, &m_ambisonicsOutBuffer);
 
