@@ -226,6 +226,15 @@ void SOFAHRTFMap::interpolatedHRIRWeights(const Vector3f& direction,
     {
         rIndex = (neighborDistances[4] <= neighborDistances[5]) ? 4 : 5;
     }
+    // r is not continuous, so we may only have one neighbor
+    else if (neighbors[4] >= 0)
+    {
+        rIndex = 4;
+    }
+    else if (neighbors[5] >= 0)
+    {
+        rIndex = 5;
+    }
 
     // Index 0 is the nearest neighbor.
     // Index 1 is the phi-neighbor of the nearest neighbor.
