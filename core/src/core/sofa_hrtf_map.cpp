@@ -190,7 +190,7 @@ void SOFAHRTFMap::interpolatedHRIRWeights(const Vector3f& direction,
     }
     else
     {
-        while (neighborCoordinates[0] - nearestPosition[0] <= -180.0f)
+        while (neighborCoordinates[1] - nearestPosition[0] <= -180.0f)
         {
             neighborCoordinates[1] += 360.0f;
         }
