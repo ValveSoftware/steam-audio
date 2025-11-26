@@ -158,6 +158,9 @@ AKRESULT SteamAudioSpatializerFX::LazyInit()
     auto context = globalState.context.Read();
     auto hrtf = globalState.hrtf.Read();
 
+    if (!context || !hrtf)
+        return AK_NotInitialized;
+
     if (!m_directEffect)
     {
         IPLDirectEffectSettings directEffectSettings{};

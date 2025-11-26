@@ -14,7 +14,7 @@
 
 cmake_minimum_required(VERSION 3.17)
 
-project(SteamAudioWwise VERSION 4.7.0)
+project(SteamAudioWwise VERSION 4.8.0)
 set(CMAKE_MODULE_PATH ${CMAKE_HOME_DIRECTORY}/build)
 
 

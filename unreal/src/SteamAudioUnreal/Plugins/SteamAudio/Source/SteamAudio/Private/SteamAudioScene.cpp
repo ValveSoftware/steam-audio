@@ -33,6 +33,7 @@
 #include "SteamAudioSerializedObject.h"
 #include "SteamAudioSettings.h"
 #include "SteamAudioStaticMeshActor.h"
+#include "PhysicalMaterials/PhysicalMaterial.h"
 
 #if WITH_EDITOR
 #include "Editor.h"

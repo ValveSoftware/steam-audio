@@ -31,49 +31,49 @@ class STEAMAUDIO_API USteamAudioFunctionLibrary : public UBlueprintFunctionLibra
 	GENERATED_BODY()
 	
 public:
-	UFUNCTION(BlueprintPure)
+	UFUNCTION(BlueprintPure, Category="SteamAudio")
 	static bool IsInitialized();
 
 	/** Sets the Steam Audio enabled mode. */
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category="SteamAudio")
 	static void SetSteamAudioEnabled(bool bNewIsSteamAudioEnabled);
 
 	/** Returns the Steam Audio enabled mode. */
-	UFUNCTION(BlueprintPure)
+	UFUNCTION(BlueprintPure, Category="SteamAudio")
 	static bool IsSteamAudioEnabled();
 
 	/** Updates the iplStaticMesh data.
 	Note: If you want to create a new Static Geometry during gameplay using this function, you will need to enable the "AllowCPUAccess" flag in the Static Mesh settings of actor. */
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category="SteamAudio")
 	static void UpdateStaticMesh();
 
 	/** Updates the iplStaticMesh material data on specified StaticMeshActor. */
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category="SteamAudio")
 	static void UpdateStaticMeshMaterial(AStaticMeshActor* StaticMeshActor);
 
 	/** Shuts down the global Steam Audio state. */
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category="SteamAudio")
 	static void ShutDownSteamAudio(bool bResetFlags = true);
 
 	/** Releases the reference to the geometry and material data for the given Steam Audio Dynamic Mesh component.
 		If the reference count reaches zero, the data is destroyed. */
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category="SteamAudio")
 	static void UnloadDynamicObject(USteamAudioDynamicObjectComponent* DynamicObjectComponent);
 
 	/** Registers a Steam Audio Source component for simulation. */
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category="SteamAudio")
 	static void AddSource(USteamAudioSourceComponent* Source);
 
 	/** Unregisters a Steam Audio Source component from simulation. */
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category="SteamAudio")
 	static void RemoveSource(USteamAudioSourceComponent* Source);
 
 	/** Registers a Steam Audio Listener component for simulation. */
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category="SteamAudio")
 	static void AddListener(USteamAudioListenerComponent* Listener);
 
 	/** Unregisters a Steam Audio Listener component from simulation. */
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category="SteamAudio")
 	static void RemoveListener(USteamAudioListenerComponent* Listener);
 
 	/** Disables HRTF globally. */

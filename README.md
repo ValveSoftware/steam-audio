@@ -1,4 +1,4 @@
-# Steam Audio 4.7.0
+# Steam Audio 4.8.0
 
 Valve Corporation
 

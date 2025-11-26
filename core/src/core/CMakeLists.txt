@@ -972,6 +972,7 @@ if (NOT UNREAL_PLUGIN_DIR STREQUAL "")
             COMMAND     ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_BINARY_DIR}/phonon_version.h ${UNREAL_INCLUDE_DIR}
             COMMAND     ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/phonon_interfaces.h ${UNREAL_INCLUDE_DIR}
             COMMAND     ${CMAKE_COMMAND} -E copy $<TARGET_FILE:phonon> ${UNREAL_PLUGIN_DIR}
+            COMMAND     ${CMAKE_COMMAND} -E copy $<TARGET_LINKER_FILE:phonon> ${UNREAL_PLUGIN_DIR}
         )
     endif()
 endif()

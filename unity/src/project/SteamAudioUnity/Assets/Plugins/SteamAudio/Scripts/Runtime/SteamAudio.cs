@@ -25,7 +25,7 @@ namespace SteamAudio
     public static class Constants
     {
         public const uint kVersionMajor = 4;
-        public const uint kVersionMinor = 7;
+        public const uint kVersionMinor = 8;
         public const uint kVersionPatch = 0;
         public const uint kVersion = (kVersionMajor << 16) | (kVersionMinor << 8) | kVersionPatch;
     }

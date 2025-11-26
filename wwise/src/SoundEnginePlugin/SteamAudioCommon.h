@@ -171,6 +171,7 @@ public:
     {
         Release(&m_buffer[1]);
         Release(&m_buffer[0]);
+        m_newValueWritten = false;
     }
 
     /**
