@@ -54,6 +54,8 @@ public:
 
     FSoftObjectPath GetAssetToLoad();
 
+    int32 GetInstancedMeshIndex() const { return InstancedMeshIndex; }
+
 protected:
     /**
      * Inherited from UActorComponent
@@ -71,6 +73,8 @@ private:
 
     /** The Instanced Mesh object. */
     IPLInstancedMesh InstancedMesh;
+
+    int32 InstancedMeshIndex = -1;
 
 #if WITH_EDITOR
     /** Equal true if the asset is not deleted */

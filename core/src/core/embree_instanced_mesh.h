@@ -66,6 +66,10 @@ public:
 
     virtual void commit(const IScene& scene) override;
 
+    virtual void setObjectIndex(int newObjectIndex) override { mObjectIndex = newObjectIndex; }
+
+    virtual int getObjectIndex() const override { return mObjectIndex; }
+
     // Returns true if the transform has changed since the previous call to commit().
     virtual bool hasChanged() const override;
 
@@ -81,6 +85,7 @@ private:
     RTCGeometry mGeometry;
     unsigned int mInstanceIndex;
     Matrix4x4f mTransform;
+    int mObjectIndex;
 
     // Flag indicating whether this instanced mesh has changed since the last call to commit().
     bool mHasChanged;

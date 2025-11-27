@@ -33,6 +33,7 @@ EmbreeInstancedMesh::EmbreeInstancedMesh(shared_ptr<EmbreeScene> scene,
     , mNumVertices(0)
     , mNumTriangles(0)
     , mHasChanged(false)
+    , mObjectIndex(-1)
 {
     for (const auto& mesh : mSubScene->staticMeshes())
     {

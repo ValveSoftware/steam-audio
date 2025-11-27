@@ -18,6 +18,7 @@
 
 #include "material.h"
 #include "vector.h"
+#include "phonon.h"
 
 namespace ipl {
 
@@ -47,6 +48,16 @@ public:
     bool isValid() const
     {
         return (distance < std::numeric_limits<float>::infinity());
+    }
+
+    operator IPLHit()
+    {
+        IPLHit iplHit{ distance, triangleIndex, objectIndex, materialIndex };
+        iplHit.normal.x = normal.x();
+        iplHit.normal.y = normal.y();
+        iplHit.normal.z = normal.z();
+        iplHit.material = material ? reinterpret_cast<IPLMaterial*>(const_cast<Material*>(material)) : nullptr;
+        return iplHit;
     }
 };
 
