@@ -717,7 +717,7 @@ def copy_dependency(name, dep, platform):
                 copy_file(src, dest)
         elif copy_item[0].startswith('install/') and copy_item[0].endswith('/lib'):
             # try lib64 instead of lib
-            src = src.replace('/lib', '/lib64')
+            src = '/lib64'.join(src.rsplit('/lib', 1))
             if os.path.exists(src):
                 if '.' not in src or os.path.isdir(src):
                     copy_directory(src, dest)
