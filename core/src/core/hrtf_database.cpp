@@ -154,7 +154,13 @@ void HRTFDatabase::interpolatedHRTF(const Vector3f& direction,
 
 void HRTFDatabase::ambisonicsHRTF(int index,
                                   const complex_t** hrtf) const
-{
+{   
+    if (!this)
+		return;
+
+    if (!hrtf)
+        return;
+
     for (auto i = 0; i < IHRTFMap::kNumEars; ++i)
     {
         hrtf[i] = mAmbisonicsHRTF[i][index];
