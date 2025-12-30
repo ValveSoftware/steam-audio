@@ -1,4 +1,4 @@
-/*******************************************************************************
+﻿/*******************************************************************************
 The content of this file includes portions of the AUDIOKINETIC Wwise Technology
 released in source code form as part of the SDK installer package.
 
@@ -28,19 +28,27 @@ the specific language governing permissions and limitations under the License.
 
 #include "../SteamAudioWwisePlugin.h"
 
-class SteamAudioSpatializerPluginGUI final : public AK::Wwise::Plugin::PluginMFCWindows<>, public AK::Wwise::Plugin::GUIWindows
+#if (AK_WWISESDK_VERSION_MAJOR > 2024) || (AK_WWISESDK_VERSION_MAJOR == 2024 && AK_WWISESDK_VERSION_MINOR >= 1)
+    #include <AK/Wwise/Plugin/GUIWindows.h>
+    using SteamAudioPluginGUI = AK::Wwise::Plugin::GUIWindows;
+#else
+    #include <AK/Wwise/Plugin/PluginMFCWindows.h>
+    using SteamAudioPluginGUI = AK::Wwise::Plugin::PluginMFCWindows<>;
+#endif
+
+class SteamAudioSpatializerPluginGUI final : public SteamAudioPluginGUI
 {
 public:
     SteamAudioSpatializerPluginGUI();
 };
 
-class SteamAudioMixReturnPluginGUI final : public AK::Wwise::Plugin::PluginMFCWindows<>, public AK::Wwise::Plugin::GUIWindows
+class SteamAudioMixReturnPluginGUI final : public SteamAudioPluginGUI
 {
 public:
     SteamAudioMixReturnPluginGUI();
 };
 
-class SteamAudioReverbPluginGUI final : public AK::Wwise::Plugin::PluginMFCWindows<>, public AK::Wwise::Plugin::GUIWindows
+class SteamAudioReverbPluginGUI final : public SteamAudioPluginGUI
 {
 public:
     SteamAudioReverbPluginGUI();
