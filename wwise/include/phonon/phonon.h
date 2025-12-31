@@ -3400,6 +3400,25 @@ IPLAPI IPLerror IPLCALL iplProbeBatchLoad(IPLContext context, IPLSerializedObjec
 */
 IPLAPI void IPLCALL iplProbeBatchSave(IPLProbeBatch probeBatch, IPLSerializedObject serializedObject);
 
+/** Retrieves the shortest path between two points using the baked pathing data.
+    This is primarily for debug visualization to diagnose pathing issues.
+
+    \param  probeBatch  The probe batch containing the baked pathing data.
+    \param  source
+    \param  listener
+    \param  pathBuffer  A caller-allocated array of IPLVector3 to hold the path points.
+    \param  maxPoints The capacity of pathBuffer.
+    \param numPoints    [out] The actual number of points returned.
+    \param outVirtualSource [out] The virtual source position compouted along the path.
+*/
+IPLAPI IPLerror IPLCALL iplProbeBatchGetDebugPath(IPLProbeBatch probeBatch,
+    IPLVector3 source,
+	IPLVector3 listener, 
+    IPLVector3* pathBuffer,
+    IPLint32 maxPoints,
+    IPLint32* numPoints,
+	IPLVector3* outVirtualSource);
+
 /** \return The number of probes in a probe batch.
 
     \param  probeBatch  The probe batch.
