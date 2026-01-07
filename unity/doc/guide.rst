@@ -14,6 +14,12 @@ To spatialize an Audio Source:
 Steam Audio will apply HRTF-based binaural rendering to the Audio Source, using default settings. You can control many properties of the spatialization using the :doc:`Steam Audio Source <source>` component, including occlusion, reflections, and more.
 
 
+Change the audio listener at run-time
+-------------------------------------
+
+If your ``AudioListener`` (or its third-party middleware equivalent) is instantiated by a script after a scene is loaded, or can be dynamically changed, you will need to call either the ``NotifyAudioListenerChanged`` or ``NotifyAudioListenerChangedTo`` methods of :doc:`SteamAudioManager <manager-api>`.
+
+
 Spatialize an Ambisonic source
 ------------------------------
 

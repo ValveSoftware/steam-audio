@@ -43,3 +43,6 @@ Once Steam Audio is added to your project, you can spatialize any Audio Source:
 .. image:: media/audiosource_spatialize.png
 
 2. In the Inspector tab, under Audio Source, check **Spatialize**.
+
+.. note::
+    If your ``AudioListener`` (or its third-party middleware equivalent) is instantiated by a script after a scene is loaded, or can be dynamically changed, you will need to call either the ``NotifyAudioListenerChanged`` or ``NotifyAudioListenerChangedTo`` methods of :doc:`SteamAudioManager <manager-api>`.
