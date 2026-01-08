@@ -23,6 +23,8 @@
 #include "SteamAudioScene.h"
 #include "SteamAudioSerializedObject.h"
 #include "SteamAudioStaticMeshActor.h"
+#include "DrawDebugHelpers.h"
+#include "Kismet/GameplayStatics.h"
 
 
 // ---------------------------------------------------------------------------------------------------------------------
@@ -47,6 +49,9 @@ ASteamAudioProbeVolume::ASteamAudioProbeVolume()
     }
 
 	ProbeComponent = CreateDefaultSubobject<USteamAudioProbeComponent>(TEXT("ProbeComponent0"));
+
+	PrimaryActorTick.bCanEverTick = true;
+    PrimaryActorTick.bStartWithTickEnabled = true;
 }
 
 #if WITH_EDITOR
@@ -312,4 +317,71 @@ void ASteamAudioProbeVolume::UpdateLayer(const FString& Name, int Size)
 int ASteamAudioProbeVolume::FindLayer(const FString& Name)
 {
 	return DetailedStats.IndexOfByPredicate([&Name](const FSteamAudioBakedDataInfo& Info) { return Info.Name == Name; });
+}
+
+void ASteamAudioProbeVolume::Tick(float DeltaTime)
+{
+    Super::Tick(DeltaTime);
+
+    if (!bShowDebugPath || !ProbeBatch || !DebugSourceActor)
+		return;
+
+	FVector SourcePos = DebugSourceActor->GetActorLocation();
+	FVector ListenerPos = FVector::ZeroVector;
+
+	APlayerCameraManager* CamManager = UGameplayStatics::GetPlayerCameraManager(this, 0);
+    if (CamManager)
+    {
+        APawn* PlayerPawn = UGameplayStatics::GetPlayerCameraManager(this, 0);
+        if (PlayerPawn)
+        {
+            // Avoid debug lines blocking the camera view
+            ListenerPos = PlayerPawn->GetActorLocation();
+        }
+        else
+        {
+            ListenerPos = CamManger->GetCameraLocation() - FVector(0, 0, 50.0f);
+        }
+    }
+    else
+        return;
+
+    IPLVector3 iplSource = SteamAudio::ConvertVector(SourcePos);
+	IPLVector3 iplListener = SteamAudio::ConvertVector(ListenerPos);
+
+    const int MaxPoints = 128;
+	IPLVector3 PathPoints[MaxPoints];
+    IPLint32 NumPoints = 0;
+    IPLVector3 OutVirtSource;
+
+	IPLerror Result = iplProbeBatchGetDebugPath(ProbeBatch, iplSource, iplListener, PathPoints, MaxPoints, &NumPoints, &OutVirtSource);
+
+    if (Result != IPL_STATUS_SUCCESS || NumPoints == 0)
+    {
+        // Path not found or direct, draw red
+		DrawDebugLine(GetWorld(), SourcePos, ListenerPos, FColor::Red, false, -1.0f, 0, 1.0f);
+		return;
+    }
+
+    FVector PreviousPos = SourcePos;
+
+	FVector VirtualSourcePos = SteamAudio::ConvertVectorInverse(OutVirtSource);
+
+    // Virtual source, highest render priority
+	DrawDebugSphere(GetWorld(), VirtualSourcePos, 15.0f, 16, FCVolor::Magenta, false, -1.0f, 100, 2.0f);
+
+	DrawDebugLine(GetWorld(), ListenerPos, VirtualSourcePos, FColor::Magenta, false, -1.0f, 0, 2.0f);
+
+    for (int i = 0; i < NumPoints; ++i)
+    {
+		FVector CurrentPos = SteamAudio::ConvertVectorInverse(PathPoints[i]);
+
+        DrawDebugLine(GetWorld(), PreviousPos, CurrentPos, FColor::Cyan, false, -1.0f, 0, 3.0f);
+
+		DrawDebugPoint(GetWorld(), CurrentPos, 10.0f, FColor::Yellow, false, -1.0f);
+
+        PreviousPos = CurrentPos;
+    }
+
+	DrawDebugLine(GetWorld(), PreviousPos, ListenerPos, FColor::Cyan, false, -1.0f, 0, 3.0f);
 }
