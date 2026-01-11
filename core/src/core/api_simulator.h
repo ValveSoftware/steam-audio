@@ -58,6 +58,9 @@ public:
     virtual void setSharedInputs(IPLSimulationFlags flags,
                                  IPLSimulationSharedInputs* sharedInputs) override;
 
+    virtual void getSharedOutputs(IPLSimulationFlags flags,
+                                IPLSimulationSharedOutputs& sharedOutputs) override;
+
     virtual void commit() override;
 
     virtual void runDirect() override;
