@@ -30,7 +30,7 @@ namespace SteamAudio
         SerializedProperty mHeightAboveFloor;
         SerializedProperty mAsset;
 
-        bool mShouldShowProgressBar = false;
+        static bool mShouldShowProgressBar = false;
 
         private void OnEnable()
         {
@@ -132,6 +132,23 @@ namespace SteamAudio
             }
 
             serializedObject.ApplyModifiedProperties();
+        }
+
+        [MenuItem("Steam Audio/Steam Audio Probe Batch/Bake All Pathing In Current Scene", false, 63)]
+        public static void BakeAllPathingInScene()
+        {
+            var probeBatches = FindObjectsByType<SteamAudioProbeBatch>(FindObjectsSortMode.None);
+            if (probeBatches.Length == 0)
+            {
+                EditorUtility.DisplayDialog(
+                    "No Steam Audio Probe Batches Found",
+                    "No Steam Audio Probe Batch components were found in the currently-open scene.",
+                    "OK");
+                return;
+            }
+
+            SteamAudioProbeBatch.BeginBake(probeBatches);
+            mShouldShowProgressBar = true;
         }
 #else
         public override void OnInspectorGUI()

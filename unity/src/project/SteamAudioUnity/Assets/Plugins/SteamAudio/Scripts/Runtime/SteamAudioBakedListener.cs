@@ -16,6 +16,9 @@
 
 using System;
 using UnityEngine;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 namespace SteamAudio
 {
@@ -136,6 +139,41 @@ namespace SteamAudio
                 tasks[0].probeBatchNames[i] = tasks[0].probeBatches[i].gameObject.name;
                 tasks[0].probeBatchAssets[i] = tasks[0].probeBatches[i].GetAsset();
             }
+
+            Baker.BeginBake(tasks);
+        }
+
+        public static void BeginBake(SteamAudioBakedListener[] bakedListeners)
+        {
+#if UNITY_EDITOR
+            AssetDatabase.StartAssetEditing();
+#endif
+
+            var tasks = new BakedDataTask[bakedListeners.Length];
+
+            for (var i = 0; i < bakedListeners.Length; i++)
+            {
+                tasks[i].gameObject = bakedListeners[i].gameObject;
+                tasks[i].component = bakedListeners[i];
+                tasks[i].name = bakedListeners[i].gameObject.name;
+                tasks[i].identifier = bakedListeners[i].GetBakedDataIdentifier();
+#if UNITY_2020_3_OR_NEWER
+                tasks[i].probeBatches = (bakedListeners[i].useAllProbeBatches) ? FindObjectsByType<SteamAudioProbeBatch>(FindObjectsSortMode.None) : bakedListeners[i].probeBatches;
+#else
+                tasks[i].probeBatches = (bakedListeners[i].useAllProbeBatches) ?  FindObjectsOfType<SteamAudioProbeBatch>() : bakedListeners[i].probeBatches;
+#endif
+                tasks[i].probeBatchNames = new string[tasks[i].probeBatches.Length];
+                tasks[i].probeBatchAssets = new SerializedData[tasks[i].probeBatches.Length];
+                for (var j = 0; j < tasks[i].probeBatchNames.Length; ++j)
+                {
+                    tasks[i].probeBatchNames[j] = tasks[i].probeBatches[j].gameObject.name;
+                    tasks[i].probeBatchAssets[j] = tasks[i].probeBatches[j].GetAsset();
+                }
+            }
+
+#if UNITY_EDITOR
+            AssetDatabase.StopAssetEditing();
+#endif
 
             Baker.BeginBake(tasks);
         }

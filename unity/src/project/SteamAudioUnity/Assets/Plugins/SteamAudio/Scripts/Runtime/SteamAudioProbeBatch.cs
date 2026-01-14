@@ -16,6 +16,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 #if UNITY_EDITOR
@@ -321,6 +322,36 @@ namespace SteamAudio
             tasks[0].probeBatches[0] = this;
             tasks[0].probeBatchNames[0] = gameObject.name;
             tasks[0].probeBatchAssets[0] = GetAsset();
+
+            Baker.BeginBake(tasks);
+        }
+
+        public static void BeginBake(SteamAudioProbeBatch[] probeBatches)
+        {
+#if UNITY_EDITOR
+            AssetDatabase.StartAssetEditing();
+#endif
+
+            var tasks = new BakedDataTask[probeBatches.Length];
+
+            for (var i = 0; i < probeBatches.Length; i++)
+            {
+                tasks[i].gameObject = probeBatches[i].gameObject;
+                tasks[i].component = probeBatches[i];
+                tasks[i].name = probeBatches[i].gameObject.name;
+                tasks[i].identifier = probeBatches[i].GetBakedDataIdentifier();
+                tasks[i].probeBatches = new SteamAudioProbeBatch[1];
+                tasks[i].probeBatchNames = new string[1];
+                tasks[i].probeBatchAssets = new SerializedData[1];
+
+                tasks[i].probeBatches[0] = probeBatches[i];
+                tasks[i].probeBatchNames[0] = probeBatches[i].gameObject.name;
+                tasks[i].probeBatchAssets[0] = probeBatches[i].GetAsset();
+            }
+
+#if UNITY_EDITOR
+            AssetDatabase.StopAssetEditing();
+#endif
 
             Baker.BeginBake(tasks);
         }

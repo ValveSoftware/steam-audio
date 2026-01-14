@@ -30,7 +30,7 @@ namespace SteamAudio
         SerializedProperty mProbeBatches;
 
         bool mStatsFoldout = false;
-        bool mShouldShowProgressBar = false;
+        static bool mShouldShowProgressBar = false;
 
         private void OnEnable()
         {
@@ -97,6 +97,23 @@ namespace SteamAudio
             }
 
             serializedObject.ApplyModifiedProperties();
+        }
+
+        [MenuItem("Steam Audio/Steam Audio Listener/Bake All Reverb In Current Scene", false, 64)]
+        public static void BakeAllReverbInScene()
+        {
+            var listeners = FindObjectsByType<SteamAudioListener>(FindObjectsSortMode.None);
+            if (listeners.Length == 0)
+            {
+                EditorUtility.DisplayDialog(
+                    "No Steam Audio Listeners Found",
+                    "No Steam Audio Listener components were found in the currently-open scene.",
+                    "OK");
+                return;
+            }
+
+            SteamAudioListener.BeginBake(listeners);
+            mShouldShowProgressBar = true;
         }
 #else
         public override void OnInspectorGUI()

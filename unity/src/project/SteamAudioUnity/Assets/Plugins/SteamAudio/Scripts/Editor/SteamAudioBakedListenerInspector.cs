@@ -28,7 +28,7 @@ namespace SteamAudio
         SerializedProperty mProbeBatches;
 
         bool mStatsFoldout = false;
-        bool mShouldShowProgressBar = false;
+        static bool mShouldShowProgressBar = false;
 
         private void OnEnable()
         {
@@ -86,6 +86,23 @@ namespace SteamAudio
             }
 
             serializedObject.ApplyModifiedProperties();
+        }
+
+        [MenuItem("Steam Audio/Steam Audio Baked Listener/Bake All Static Listener Reflections In Current Scene", false, 65)]
+        public static void BakeAllReflectionsInScene()
+        {
+            var bakedListeners = FindObjectsByType<SteamAudioBakedListener>(FindObjectsSortMode.None);
+            if (bakedListeners.Length == 0)
+            {
+                EditorUtility.DisplayDialog(
+                    "No Steam Audio Baked Listeners Found",
+                    "No Steam Audio Baked Listener components were found in the currently-open scene.",
+                    "OK");
+                return;
+            }
+
+            SteamAudioBakedListener.BeginBake(bakedListeners);
+            mShouldShowProgressBar = true;
         }
 #else
         public override void OnInspectorGUI()
