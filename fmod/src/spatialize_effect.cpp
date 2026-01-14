@@ -180,6 +180,15 @@ struct State
     IPLPathEffectSettings pathEffectSettingsBackup;
     IPLAmbisonicsDecodeEffect ambisonicsEffect;
     IPLAmbisonicsDecodeEffectSettings ambisonicsEffectSettingsBackup;
+
+    IPLAudioEffectState panningState;
+    IPLAudioEffectState binauralState;
+    IPLAudioEffectState directState;
+    IPLAudioEffectState reflectionState;
+    IPLAudioEffectState pathState;
+    IPLAudioEffectState ambisonicsState;
+    bool hasTail;
+    bool shouldProcessTail;
 };
 
 enum InitFlags
@@ -453,6 +462,15 @@ void reset(FMOD_DSP_STATE* state)
     effect->prevDirectMixLevel = 1.0f;
     effect->prevReflectionsMixLevel = 0.0f;
     effect->prevPathingMixLevel = 0.0f;
+
+    effect->panningState = IPL_AUDIOEFFECTSTATE_TAILCOMPLETE;
+    effect->binauralState = IPL_AUDIOEFFECTSTATE_TAILCOMPLETE;
+    effect->directState = IPL_AUDIOEFFECTSTATE_TAILCOMPLETE;
+    effect->reflectionState = IPL_AUDIOEFFECTSTATE_TAILCOMPLETE;
+    effect->pathState = IPL_AUDIOEFFECTSTATE_TAILCOMPLETE;
+    effect->ambisonicsState = IPL_AUDIOEFFECTSTATE_TAILCOMPLETE;
+    effect->hasTail = false;
+    effect->shouldProcessTail = false;
 }
 
 FMOD_RESULT F_CALL create(FMOD_DSP_STATE* state)
@@ -1022,12 +1040,19 @@ FMOD_RESULT F_CALL process(FMOD_DSP_STATE* state,
 
         if (inputsIdle)
         {
-            // if the sound is idle, we still need to check the expected overall gain to help manage
-            // channel counts. updateOverallGain won't do any processing - just determine how loud
-            // the sound would be (according to attenuation, etc) if it were playing.
-            // Note: the SteamAudio Unity plugin now calculates iplGetDirectSoundPath so this is even lighter
-            updateOverallGain(state, sourceCoordinates, listenerCoordinates);
-            return FMOD_ERR_DSP_DONTPROCESS;
+            if (effect->hasTail)
+            {
+                effect->shouldProcessTail = true;
+            }
+            else
+            {
+                // if the sound is idle, we still need to check the expected overall gain to help manage
+                // channel counts. updateOverallGain won't do any processing - just determine how loud
+                // the sound would be (according to attenuation, etc) if it were playing.
+                // Note: the SteamAudio Unity plugin now calculates iplGetDirectSoundPath so this is even lighter
+                updateOverallGain(state, sourceCoordinates, listenerCoordinates);
+                return FMOD_ERR_DSP_DONTPROCESS;
+            }
         }
     }
     else if (operation == FMOD_DSP_PROCESS_PERFORM)
@@ -1069,34 +1094,87 @@ FMOD_RESULT F_CALL process(FMOD_DSP_STATE* state,
             effect->newSimulationSourceWritten = false;
         }
 
+        effect->hasTail = false;
+        auto tailStartedDirect = false;
+        auto tailStartedReflections = false;
+        auto tailStartedPathing = false;
+
         auto sourcePosition = sourceCoordinates.origin;
         auto direction = iplCalculateRelativeDirection(gContext, sourcePosition, listenerCoordinates.origin, listenerCoordinates.ahead, listenerCoordinates.up);
 
         iplAudioBufferDeinterleave(gContext, in, &effect->inBuffer);
 
-        IPLDirectEffectParams directParams = getDirectParams(state, sourceCoordinates, listenerCoordinates, false);
+        // clear this because if we're extracting the tail, we may never write to outBuffer on the direct path
+        for (auto i = 0; i < effect->outBuffer.numChannels; i++)
+        {
+            memset(effect->outBuffer.data[i], 0, effect->outBuffer.numSamples * sizeof(float));
+        }
 
-        iplDirectEffectApply(effect->directEffect, &directParams, &effect->inBuffer, &effect->directBuffer);
+        if (effect->shouldProcessTail && !tailStartedDirect)
+        {
+            if (effect->directState == IPL_AUDIOEFFECTSTATE_TAILREMAINING)
+            {
+                effect->directState = iplDirectEffectGetTail(effect->directEffect, &effect->directBuffer);
+                tailStartedDirect = true;
+            }
+        }
+        else
+        {
+            IPLDirectEffectParams directParams = getDirectParams(state, sourceCoordinates, listenerCoordinates, false);
+
+            effect->directState = iplDirectEffectApply(effect->directEffect, &directParams, &effect->inBuffer, &effect->directBuffer);
+        }
+
+        if (effect->directState == IPL_AUDIOEFFECTSTATE_TAILREMAINING)
+            effect->hasTail = true;
 
         bool directBinaural = numChannelsOut == 2 && effect->directBinaural && !gHRTFDisabled;
         if (directBinaural)
         {
-            IPLBinauralEffectParams binauralParams{};
-            binauralParams.direction = direction;
-            binauralParams.interpolation = effect->hrtfInterpolation;
-            binauralParams.spatialBlend = 1.0f;
-            binauralParams.hrtf = gHRTF[0];
+            if (effect->shouldProcessTail && !tailStartedDirect)
+            {
+                if (effect->binauralState == IPL_AUDIOEFFECTSTATE_TAILREMAINING)
+                {
+                    effect->binauralState = iplBinauralEffectGetTail(effect->binauralEffect, &effect->outBuffer);
+                    tailStartedDirect = true;
+                }
+            }
+            else
+            {
+                IPLBinauralEffectParams binauralParams{};
+                binauralParams.direction = direction;
+                binauralParams.interpolation = effect->hrtfInterpolation;
+                binauralParams.spatialBlend = 1.0f;
+                binauralParams.hrtf = gHRTF[0];
 
-            iplBinauralEffectApply(effect->binauralEffect, &binauralParams, &effect->directBuffer, &effect->outBuffer);
+                effect->binauralState = iplBinauralEffectApply(effect->binauralEffect, &binauralParams, &effect->directBuffer, &effect->outBuffer);
+            }
+
+            if (effect->binauralState == IPL_AUDIOEFFECTSTATE_TAILREMAINING)
+                effect->hasTail = true;
         }
         else
         {
             iplAudioBufferDownmix(gContext, &effect->directBuffer, &effect->monoBuffer);
 
-            IPLPanningEffectParams panningParams{};
-            panningParams.direction = direction;
+            if (effect->shouldProcessTail && !tailStartedDirect)
+            {
+                if (effect->panningState == IPL_AUDIOEFFECTSTATE_TAILREMAINING)
+                {
+                    effect->panningState = iplPanningEffectGetTail(effect->panningEffect, &effect->outBuffer);
+                    tailStartedDirect = true;
+                }
+            }
+            else
+            {
+                IPLPanningEffectParams panningParams{};
+                panningParams.direction = direction;
 
-            iplPanningEffectApply(effect->panningEffect, &panningParams, &effect->monoBuffer, &effect->outBuffer);
+                effect->panningState = iplPanningEffectApply(effect->panningEffect, &panningParams, &effect->monoBuffer, &effect->outBuffer);
+            }
+
+            if (effect->panningState == IPL_AUDIOEFFECTSTATE_TAILREMAINING)
+                effect->hasTail = true;
         }
 
         for (auto i = 0; i < numChannelsOut; ++i)
@@ -1118,12 +1196,6 @@ FMOD_RESULT F_CALL process(FMOD_DSP_STATE* state,
                 applyVolumeRamp(effect->prevReflectionsMixLevel, effect->reflectionsMixLevel, frameSize, effect->monoBuffer.data[0]);
                 effect->prevReflectionsMixLevel = effect->reflectionsMixLevel;
 
-                IPLReflectionEffectParams reflectionParams = simulationOutputs.reflections;
-                reflectionParams.type = gSimulationSettings.reflectionType;
-                reflectionParams.numChannels = numChannelsForOrder(gSimulationSettings.maxOrder);
-                reflectionParams.irSize = numSamplesForDuration(gSimulationSettings.maxDuration, static_cast<int>(samplingRate));
-                reflectionParams.tanDevice = gSimulationSettings.tanDevice;
-
                 if (gNewReflectionMixerWritten)
                 {
                     iplReflectionMixerRelease(&gReflectionMixer[0]);
@@ -1132,17 +1204,51 @@ FMOD_RESULT F_CALL process(FMOD_DSP_STATE* state,
                     gNewReflectionMixerWritten = false;
                 }
 
-                iplReflectionEffectApply(effect->reflectionEffect, &reflectionParams, &effect->monoBuffer, &effect->reflectionsBuffer, gReflectionMixer[0]);
+                if (effect->shouldProcessTail && !tailStartedReflections)
+                {
+                    if (effect->reflectionState == IPL_AUDIOEFFECTSTATE_TAILREMAINING)
+                    {
+                        effect->reflectionState = iplReflectionEffectGetTail(effect->reflectionEffect, &effect->reflectionsBuffer, gReflectionMixer[0]);
+                        tailStartedReflections = true;
+                    }
+                }
+                else
+                {
+                    IPLReflectionEffectParams reflectionParams = simulationOutputs.reflections;
+                    reflectionParams.type = gSimulationSettings.reflectionType;
+                    reflectionParams.numChannels = numChannelsForOrder(gSimulationSettings.maxOrder);
+                    reflectionParams.irSize = numSamplesForDuration(gSimulationSettings.maxDuration, static_cast<int>(samplingRate));
+                    reflectionParams.tanDevice = gSimulationSettings.tanDevice;
+
+                    effect->reflectionState = iplReflectionEffectApply(effect->reflectionEffect, &reflectionParams, &effect->monoBuffer, &effect->reflectionsBuffer, gReflectionMixer[0]);
+                }
+
+                if (effect->reflectionState == IPL_AUDIOEFFECTSTATE_TAILREMAINING)
+                    effect->hasTail = true;
 
                 if (gSimulationSettings.reflectionType != IPL_REFLECTIONEFFECTTYPE_TAN && !gReflectionMixer[0])
                 {
-                    IPLAmbisonicsDecodeEffectParams ambisonicsParams;
-                    ambisonicsParams.order = gSimulationSettings.maxOrder;
-                    ambisonicsParams.hrtf = gHRTF[0];
-                    ambisonicsParams.orientation = listenerCoordinates;
-                    ambisonicsParams.binaural = numChannelsOut == 2 && !gHRTFDisabled && (effect->reflectionsBinaural) ? IPL_TRUE : IPL_FALSE;
+                    if (effect->shouldProcessTail && !tailStartedReflections)
+                    {
+                        if (effect->ambisonicsState == IPL_AUDIOEFFECTSTATE_TAILREMAINING)
+                        {
+                            effect->ambisonicsState = iplAmbisonicsDecodeEffectGetTail(effect->ambisonicsEffect, &effect->reflectionsSpatializedBuffer);
+                            tailStartedReflections = true;
+                        }
+                    }
+                    else
+                    {
+                        IPLAmbisonicsDecodeEffectParams ambisonicsParams;
+                        ambisonicsParams.order = gSimulationSettings.maxOrder;
+                        ambisonicsParams.hrtf = gHRTF[0];
+                        ambisonicsParams.orientation = listenerCoordinates;
+                        ambisonicsParams.binaural = numChannelsOut == 2 && !gHRTFDisabled && (effect->reflectionsBinaural) ? IPL_TRUE : IPL_FALSE;
 
-                    iplAmbisonicsDecodeEffectApply(effect->ambisonicsEffect, &ambisonicsParams, &effect->reflectionsBuffer, &effect->reflectionsSpatializedBuffer);
+                        effect->ambisonicsState = iplAmbisonicsDecodeEffectApply(effect->ambisonicsEffect, &ambisonicsParams, &effect->reflectionsBuffer, &effect->reflectionsSpatializedBuffer);
+                    }
+
+                    if (effect->ambisonicsState == IPL_AUDIOEFFECTSTATE_TAILREMAINING)
+                        effect->hasTail = true;
 
                     iplAudioBufferMix(gContext, &effect->reflectionsSpatializedBuffer, &effect->outBuffer);
                 }
@@ -1156,20 +1262,36 @@ FMOD_RESULT F_CALL process(FMOD_DSP_STATE* state,
                 applyVolumeRamp(effect->prevPathingMixLevel, effect->pathingMixLevel, frameSize, effect->monoBuffer.data[0]);
                 effect->prevPathingMixLevel = effect->pathingMixLevel;
 
-                IPLPathEffectParams pathParams = simulationOutputs.pathing;
-                pathParams.order = gSimulationSettings.maxOrder;
-                pathParams.binaural = numChannelsOut == 2 && !gHRTFDisabled && (effect->pathingBinaural) ? IPL_TRUE : IPL_FALSE;
-                pathParams.hrtf = gHRTF[0];
-                pathParams.listener = listenerCoordinates;
-                pathParams.normalizeEQ = (effect->pathingNormalizeEQ) ? IPL_TRUE : IPL_FALSE;
+                if (effect->shouldProcessTail && !tailStartedPathing)
+                {
+                    if (effect->pathState == IPL_AUDIOEFFECTSTATE_TAILREMAINING)
+                    {
+                        effect->pathState = iplPathEffectGetTail(effect->pathEffect, &effect->reflectionsSpatializedBuffer);
+                        tailStartedPathing = true;
+                    }
+                }
+                else
+                {
+                    IPLPathEffectParams pathParams = simulationOutputs.pathing;
+                    pathParams.order = gSimulationSettings.maxOrder;
+                    pathParams.binaural = numChannelsOut == 2 && !gHRTFDisabled && (effect->pathingBinaural) ? IPL_TRUE : IPL_FALSE;
+                    pathParams.hrtf = gHRTF[0];
+                    pathParams.listener = listenerCoordinates;
+                    pathParams.normalizeEQ = (effect->pathingNormalizeEQ) ? IPL_TRUE : IPL_FALSE;
 
-                iplPathEffectApply(effect->pathEffect, &pathParams, &effect->monoBuffer, &effect->reflectionsSpatializedBuffer);
+                    effect->pathState = iplPathEffectApply(effect->pathEffect, &pathParams, &effect->monoBuffer, &effect->reflectionsSpatializedBuffer);
+                }
+
+                if (effect->pathState == IPL_AUDIOEFFECTSTATE_TAILREMAINING)
+                    effect->hasTail = true;
 
                 iplAudioBufferMix(gContext, &effect->reflectionsSpatializedBuffer, &effect->outBuffer);
             }
         }
 
         iplAudioBufferInterleave(gContext, &effect->outBuffer, out);
+
+        effect->shouldProcessTail = false;
     }
 
     return FMOD_OK;

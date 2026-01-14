@@ -54,6 +54,11 @@ struct State
     IPLReflectionEffectSettings reflectionEffectSettingsBackup;
     IPLAmbisonicsDecodeEffect ambisonicsEffect;
     IPLAmbisonicsDecodeEffectSettings ambisonicsEffectSettingsBackup;
+
+    IPLAudioEffectState reflectionState;
+    IPLAudioEffectState ambisonicsState;
+    bool hasTail;
+    bool shouldProcessTail;
 };
 
 enum InitFlags
@@ -182,6 +187,11 @@ void reset(FMOD_DSP_STATE* state)
 
     effect->binaural = false;
     effect->outputFormat = ParameterSpeakerFormatType::PARAMETER_FROM_MIXER;
+
+    effect->reflectionState = IPL_AUDIOEFFECTSTATE_TAILCOMPLETE;
+    effect->ambisonicsState = IPL_AUDIOEFFECTSTATE_TAILCOMPLETE;
+    effect->hasTail = false;
+    effect->shouldProcessTail = false;
 }
 
 FMOD_RESULT F_CALL create(FMOD_DSP_STATE* state)
@@ -301,7 +311,16 @@ FMOD_RESULT F_CALL process(FMOD_DSP_STATE* state,
             return FMOD_ERR_DSP_DONTPROCESS;
 
         if (inputsIdle)
-            return FMOD_ERR_DSP_DONTPROCESS;
+        {
+            if (effect->hasTail)
+            {
+                effect->shouldProcessTail = true;
+            }
+            else
+            {
+                return FMOD_ERR_DSP_DONTPROCESS;
+            }
+        }
     }
     else if (operation == FMOD_DSP_PROCESS_PERFORM)
     {
@@ -344,19 +363,13 @@ FMOD_RESULT F_CALL process(FMOD_DSP_STATE* state,
         if (!gReverbSource[0])
             return FMOD_OK;
 
+        effect->hasTail = false;
+        auto tailStarted = false;
+
         auto listenerCoordinates = calcListenerCoordinates(state);
 
         iplAudioBufferDeinterleave(gContext, in, &effect->inBuffer);
         iplAudioBufferDownmix(gContext, &effect->inBuffer, &effect->monoBuffer);
-
-        IPLSimulationOutputs reverbOutputs{};
-        iplSourceGetOutputs(gReverbSource[0], IPL_SIMULATIONFLAGS_REFLECTIONS, &reverbOutputs);
-
-        IPLReflectionEffectParams reflectionParams = reverbOutputs.reflections;
-        reflectionParams.type = gSimulationSettings.reflectionType;
-        reflectionParams.numChannels = numChannelsForOrder(gSimulationSettings.maxOrder);
-        reflectionParams.irSize = numSamplesForDuration(gSimulationSettings.maxDuration, samplingRate);
-        reflectionParams.tanDevice = gSimulationSettings.tanDevice;
 
         if (gNewReflectionMixerWritten)
         {
@@ -366,20 +379,59 @@ FMOD_RESULT F_CALL process(FMOD_DSP_STATE* state,
             gNewReflectionMixerWritten = false;
         }
 
-        iplReflectionEffectApply(effect->reflectionEffect, &reflectionParams, &effect->monoBuffer, &effect->reflectionsBuffer, gReflectionMixer[0]);
+        if (effect->shouldProcessTail && !tailStarted)
+        {
+            if (effect->reflectionState == IPL_AUDIOEFFECTSTATE_TAILREMAINING)
+            {
+                effect->reflectionState = iplReflectionEffectGetTail(effect->reflectionEffect, &effect->reflectionsBuffer, gReflectionMixer[0]);
+                tailStarted = true;
+            }
+        }
+        else
+        {
+            IPLSimulationOutputs reverbOutputs{};
+            iplSourceGetOutputs(gReverbSource[0], IPL_SIMULATIONFLAGS_REFLECTIONS, &reverbOutputs);
+
+            IPLReflectionEffectParams reflectionParams = reverbOutputs.reflections;
+            reflectionParams.type = gSimulationSettings.reflectionType;
+            reflectionParams.numChannels = numChannelsForOrder(gSimulationSettings.maxOrder);
+            reflectionParams.irSize = numSamplesForDuration(gSimulationSettings.maxDuration, samplingRate);
+            reflectionParams.tanDevice = gSimulationSettings.tanDevice;
+
+            effect->reflectionState = iplReflectionEffectApply(effect->reflectionEffect, &reflectionParams, &effect->monoBuffer, &effect->reflectionsBuffer, gReflectionMixer[0]);
+        }
+
+        if (effect->reflectionState == IPL_AUDIOEFFECTSTATE_TAILREMAINING)
+            effect->hasTail = true;
 
         if (gSimulationSettings.reflectionType != IPL_REFLECTIONEFFECTTYPE_TAN && !gReflectionMixer[0])
         {
-            IPLAmbisonicsDecodeEffectParams ambisonicsParams;
-            ambisonicsParams.order = gSimulationSettings.maxOrder;
-            ambisonicsParams.hrtf = gHRTF[0];
-            ambisonicsParams.orientation = listenerCoordinates;
-            ambisonicsParams.binaural = numChannelsOut == 2 && !gHRTFDisabled && (effect->binaural) ? IPL_TRUE : IPL_FALSE;
+            if (effect->shouldProcessTail && !tailStarted)
+            {
+                if (effect->ambisonicsState == IPL_AUDIOEFFECTSTATE_TAILREMAINING)
+                {
+                    effect->reflectionState = iplAmbisonicsDecodeEffectGetTail(effect->ambisonicsEffect, &effect->outBuffer);
+                    tailStarted = true;
+                }
+            }
+            else
+            {
+                IPLAmbisonicsDecodeEffectParams ambisonicsParams;
+                ambisonicsParams.order = gSimulationSettings.maxOrder;
+                ambisonicsParams.hrtf = gHRTF[0];
+                ambisonicsParams.orientation = listenerCoordinates;
+                ambisonicsParams.binaural = numChannelsOut == 2 && !gHRTFDisabled && (effect->binaural) ? IPL_TRUE : IPL_FALSE;
 
-            iplAmbisonicsDecodeEffectApply(effect->ambisonicsEffect, &ambisonicsParams, &effect->reflectionsBuffer, &effect->outBuffer);
+                iplAmbisonicsDecodeEffectApply(effect->ambisonicsEffect, &ambisonicsParams, &effect->reflectionsBuffer, &effect->outBuffer);
+            }
+
+            if (effect->ambisonicsState == IPL_AUDIOEFFECTSTATE_TAILREMAINING)
+                effect->hasTail = true;
 
             iplAudioBufferInterleave(gContext, &effect->outBuffer, out);
         }
+
+        effect->shouldProcessTail = false;
 
         return FMOD_OK;
     }

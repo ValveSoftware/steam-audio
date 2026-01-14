@@ -55,6 +55,11 @@ struct State
     IPLReflectionEffectSettings reflectionMixerSettingsBackup;
     IPLAmbisonicsDecodeEffect ambisonicsEffect;
     IPLAmbisonicsDecodeEffectSettings ambisonicsEffectSettingsBackup;
+
+    IPLAudioEffectState mixerState;
+    IPLAudioEffectState ambisonicsState;
+    bool hasTail;
+    bool shouldProcessTail;
 };
 
 enum InitFlags
@@ -187,6 +192,11 @@ void reset(FMOD_DSP_STATE* state)
 
     effect->binaural = false;
     effect->outputFormat = ParameterSpeakerFormatType::PARAMETER_FROM_MIXER;
+
+    effect->mixerState = IPL_AUDIOEFFECTSTATE_TAILCOMPLETE;
+    effect->ambisonicsState = IPL_AUDIOEFFECTSTATE_TAILCOMPLETE;
+    effect->hasTail = false;
+    effect->shouldProcessTail = false;
 }
 
 FMOD_RESULT F_CALL create(FMOD_DSP_STATE* state)
@@ -301,7 +311,16 @@ FMOD_RESULT F_CALL process(FMOD_DSP_STATE* state,
             return FMOD_ERR_DSP_DONTPROCESS;
 
         if (inputsIdle)
-            return FMOD_ERR_DSP_DONTPROCESS;
+        {
+            if (effect->hasTail)
+            {
+                effect->shouldProcessTail = true;
+            }
+            else
+            {
+                return FMOD_ERR_DSP_DONTPROCESS;
+            }
+        }
     }
     else if (operation == FMOD_DSP_PROCESS_PERFORM)
     {
@@ -333,26 +352,65 @@ FMOD_RESULT F_CALL process(FMOD_DSP_STATE* state,
             gNewHRTFWritten = false;
         }
 
+        effect->hasTail = false;
+        auto tailStarted = false;
+
         auto listenerCoordinates = calcListenerCoordinates(state);
 
-        IPLReflectionEffectParams reflectionParams;
-        reflectionParams.numChannels = numChannelsForOrder(gSimulationSettings.maxOrder);
-        reflectionParams.tanDevice = gSimulationSettings.tanDevice;
+        if (effect->shouldProcessTail && !tailStarted)
+        {
+            if (effect->mixerState == IPL_AUDIOEFFECTSTATE_TAILREMAINING)
+            {
+                // reflection mixer does not actually generate any tail
+                for (auto i = 0; i < effect->reflectionsBuffer.numChannels; i++)
+                {
+                    memset(effect->reflectionsBuffer.data[i], 0, effect->reflectionsBuffer.numSamples * sizeof(float));
+                }
 
-        iplReflectionMixerApply(effect->reflectionMixer, &reflectionParams, &effect->reflectionsBuffer);
+                effect->mixerState = IPL_AUDIOEFFECTSTATE_TAILCOMPLETE;
+                tailStarted = true;
+            }
+        }
+        else
+        {
+            IPLReflectionEffectParams reflectionParams;
+            reflectionParams.numChannels = numChannelsForOrder(gSimulationSettings.maxOrder);
+            reflectionParams.tanDevice = gSimulationSettings.tanDevice;
 
-        IPLAmbisonicsDecodeEffectParams ambisonicsParams;
-        ambisonicsParams.order = gSimulationSettings.maxOrder;
-        ambisonicsParams.hrtf = gHRTF[0];
-        ambisonicsParams.orientation = listenerCoordinates;
-        ambisonicsParams.binaural = numChannelsOut == 2 && !gHRTFDisabled && (effect->binaural) ? IPL_TRUE : IPL_FALSE;
+            effect->mixerState = iplReflectionMixerApply(effect->reflectionMixer, &reflectionParams, &effect->reflectionsBuffer);
+        }
 
-        iplAmbisonicsDecodeEffectApply(effect->ambisonicsEffect, &ambisonicsParams, &effect->reflectionsBuffer, &effect->outBuffer);
+        if (effect->mixerState == IPL_AUDIOEFFECTSTATE_TAILREMAINING)
+            effect->hasTail = true;
+
+        if (effect->shouldProcessTail && !tailStarted)
+        {
+            if (effect->ambisonicsState == IPL_AUDIOEFFECTSTATE_TAILREMAINING)
+            {
+                effect->ambisonicsState = iplAmbisonicsDecodeEffectGetTail(effect->ambisonicsEffect, &effect->outBuffer);
+                tailStarted = true;
+            }
+        }
+        else
+        {
+            IPLAmbisonicsDecodeEffectParams ambisonicsParams;
+            ambisonicsParams.order = gSimulationSettings.maxOrder;
+            ambisonicsParams.hrtf = gHRTF[0];
+            ambisonicsParams.orientation = listenerCoordinates;
+            ambisonicsParams.binaural = numChannelsOut == 2 && !gHRTFDisabled && (effect->binaural) ? IPL_TRUE : IPL_FALSE;
+
+            effect->ambisonicsState = iplAmbisonicsDecodeEffectApply(effect->ambisonicsEffect, &ambisonicsParams, &effect->reflectionsBuffer, &effect->outBuffer);
+        }
+
+        if (effect->ambisonicsState == IPL_AUDIOEFFECTSTATE_TAILREMAINING)
+            effect->hasTail = true;
 
         iplAudioBufferDeinterleave(gContext, in, &effect->inBuffer);
         iplAudioBufferMix(gContext, &effect->inBuffer, &effect->outBuffer);
 
         iplAudioBufferInterleave(gContext, &effect->outBuffer, out);
+
+        effect->shouldProcessTail = false;
 
         return FMOD_OK;
     }
