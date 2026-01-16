@@ -452,6 +452,7 @@ void CSource::getOutputs(IPLSimulationFlags flags,
         outputs->direct.occlusion = _source->directOutputs.directPath.occlusion;
         for (auto iBand = 0; iBand < Bands::kNumBands; ++iBand)
             outputs->direct.transmission[iBand] = _source->directOutputs.directPath.transmission[iBand];
+        outputs->direct.occlusionClosestHit = _source->directOutputs.occlusionClosestHit;
     }
 
     if (flags & IPL_SIMULATIONFLAGS_REFLECTIONS)

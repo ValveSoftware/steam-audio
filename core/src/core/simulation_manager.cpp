@@ -185,11 +185,12 @@ void SimulationManager::simulateDirect()
 void SimulationManager::simulateDirect(SimulationData& source)
 {
     PROFILE_FUNCTION();
-
+    
     mDirectSimulator->simulate(mScene.get(), source.directInputs.flags, source.directInputs.source, mSharedData->direct.listener,
                                source.directInputs.distanceAttenuationModel, source.directInputs.airAbsorptionModel,
                                source.directInputs.directivity, source.directInputs.occlusionType, source.directInputs.occlusionRadius,
-                               source.directInputs.numOcclusionSamples, source.directInputs.numTransmissionRays, source.directOutputs.directPath);
+                               source.directInputs.numOcclusionSamples, source.directInputs.numTransmissionRays, source.directOutputs.directPath,
+                               source.directOutputs.occlusionClosestHit);
 }
 
 void SimulationManager::simulateIndirect()
