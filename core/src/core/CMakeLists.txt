@@ -592,7 +592,7 @@ endif()
 # This is needed so we can include generated headers
 target_include_directories(core PUBLIC ${CMAKE_CURRENT_BINARY_DIR})
 
-if (IPL_OS_WINDOWS)
+if (IPL_OS_WINDOWS AND NOT (CMAKE_SYSTEM_NAME MATCHES "WindowsStore"))
     target_link_libraries(core PUBLIC delayimp)
 elseif (IPL_OS_LINUX)
     target_link_libraries(core PUBLIC m dl pthread)
