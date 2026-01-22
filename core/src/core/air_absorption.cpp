@@ -57,9 +57,12 @@ AirAbsorptionModel::AirAbsorptionModel(const float* coefficients,
     : callback(callback)
     , userData(userData)
 {
-    for (auto i = 0; i < Bands::kNumBands; ++i)
+    if (coefficients)
     {
-        this->coefficients[i] = coefficients[i];
+        for (auto i = 0; i < Bands::kNumBands; ++i)
+        {
+            this->coefficients[i] = coefficients[i];
+        }
     }
 }
 
