@@ -198,7 +198,7 @@ AKRESULT SteamAudioSpatializerFXParams::SetParam(AkPluginParamID in_paramID, con
         NonRTPC.reflectionsBinaural = *((bool*) in_pValue);
         break;
     case SPATIALIZER_PARAM_REFLECTIONSMIXLEVEL:
-        RTPC.directMixLevel = *((AkReal32*) in_pValue);
+        RTPC.reflectionsMixLevel = *((AkReal32*) in_pValue);
         break;
     case SPATIALIZER_PARAM_PATHING:
         NonRTPC.pathing = *((bool*) in_pValue);
@@ -207,7 +207,7 @@ AKRESULT SteamAudioSpatializerFXParams::SetParam(AkPluginParamID in_paramID, con
         NonRTPC.pathingBinaural = *((bool*) in_pValue);
         break;
     case SPATIALIZER_PARAM_PATHINGMIXLEVEL:
-        RTPC.directMixLevel = *((AkReal32*) in_pValue);
+        RTPC.pathingMixLevel = *((AkReal32*) in_pValue);
         break;
     case SPATIALIZER_PARAM_PATHINGNORMALIZEEQ:
         NonRTPC.pathingNormalizeEQ = *((bool*) in_pValue);
