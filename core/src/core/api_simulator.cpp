@@ -144,6 +144,7 @@ void CSimulator::setSharedInputs(IPLSimulationFlags flags,
         sharedReflectionInputs.order = sharedData->order;
         sharedReflectionInputs.irradianceMinDistance = sharedData->irradianceMinDistance;
         sharedReflectionInputs.reconstructionType = ReconstructionType::Linear;
+        sharedReflectionInputs.reflectionVisualization = sharedData->reflectionVisualization;
 
         _simulator->setSharedReflectionInputs(sharedReflectionInputs);
     }
@@ -159,6 +160,26 @@ void CSimulator::setSharedInputs(IPLSimulationFlags flags,
         }
 
         _simulator->setSharedPathingInputs(sharedPathingInputs);
+    }
+}
+
+void CSimulator::getSharedOutputs(IPLSimulationFlags flags,
+                                  IPLSimulationSharedOutputs& sharedOutputs)
+{
+    auto _simulator = mHandle.get();
+    if (!_simulator)
+        return;
+
+    if (flags & IPL_SIMULATIONFLAGS_REFLECTIONS)
+    {
+        SharedReflectionSimulationOutputs reflectionOutputs;
+        _simulator->getSharedReflectionOutputs(reflectionOutputs);
+        
+        int numReflectionRays = reflectionOutputs.reflectionRays.size() < 128 ? reflectionOutputs.reflectionRays.size() : 128;
+        for (int i = 0; i < numReflectionRays; ++i)
+        {
+            sharedOutputs.reflectionRays[i] = reflectionOutputs.reflectionRays[numReflectionRays < 128 ? i : (reflectionOutputs.reflectionRays.size() - 1) / (i + 1)].data();
+        }
     }
 }
 

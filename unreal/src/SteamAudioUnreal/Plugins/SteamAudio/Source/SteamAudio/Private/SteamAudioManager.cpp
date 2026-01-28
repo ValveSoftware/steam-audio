@@ -15,6 +15,7 @@
 //
 
 #include "SteamAudioManager.h"
+#include "Kismet/KismetSystemLibrary.h"
 #include "AudioDevice.h"
 #include "Async/Async.h"
 #include "HAL/UnrealMemory.h"
@@ -93,6 +94,18 @@ FSteamAudioManager::FSteamAudioManager()
 FSteamAudioManager::~FSteamAudioManager()
 {
     ShutDownSteamAudio();
+}
+
+void FSteamAudioManager::UpdateReflectionVisualization()
+{
+#if WITH_EDITOR
+    if (USteamAudioListenerComponent::GetCurrentListener())
+        for (int32 i = 0; i < ReflectionVisualizationTimers.Num(); ++i)
+        {
+            USteamAudioListenerComponent::GetCurrentListener()->GetWorld()->GetTimerManager().ClearTimer(ReflectionVisualizationTimers[i]);
+        }
+    ReflectionVisualizationTimers.Empty();
+#endif
 }
 
 bool FSteamAudioManager::CreateEmptyScene(IPLScene& SubScene)
@@ -446,6 +459,12 @@ bool FSteamAudioManager::InitializeSteamAudio(EManagerInitReason Reason)
         {
             AudioEngineState->Initialize(Context, HRTF, SimulationSettings);
         }
+
+#if WITH_EDITOR
+        ReflectionVisualizationTimers.Empty();
+        ReflectionOutputs.Reset(nullptr);
+        ReflectionOutputs = nullptr;
+#endif
     }
 
     bInitializationSucceded = true;
@@ -680,17 +699,30 @@ void FSteamAudioManager::Tick(float DeltaTime)
 
         iplSimulatorSetScene(Simulator, Scene);
         iplSimulatorCommit(Simulator);
+
+#if WITH_EDITOR
+        if (SteamAudioSettings.bReflectionsVisualizationEnable)
+            if (ReflectionOutputs && ReflectionVisualizationTimers.IsEmpty())
+            {
+                StartReflectionVisualization();
+            }
+#endif
     }
 
     IPLSimulationSettings SimulationSettings = GetRealTimeSettings(static_cast<IPLSimulationFlags>(IPL_SIMULATIONFLAGS_DIRECT | IPL_SIMULATIONFLAGS_REFLECTIONS | IPL_SIMULATIONFLAGS_PATHING));
 
     IPLSimulationSharedInputs SharedInputs{};
     SharedInputs.listener = GetListenerCoordinates();
-	SharedInputs.numRays = SimulationSettings.maxNumRays;
-	SharedInputs.numBounces = SteamAudioSettings.RealTimeBounces;
-	SharedInputs.duration = SimulationSettings.maxDuration;
-	SharedInputs.order = SimulationSettings.maxOrder;
-	SharedInputs.irradianceMinDistance = SteamAudioSettings.RealTimeIrradianceMinDistance;
+    SharedInputs.numRays = SimulationSettings.maxNumRays;
+    SharedInputs.numBounces = SteamAudioSettings.RealTimeBounces;
+    SharedInputs.duration = SimulationSettings.maxDuration;
+    SharedInputs.order = SimulationSettings.maxOrder;
+    SharedInputs.irradianceMinDistance = SteamAudioSettings.RealTimeIrradianceMinDistance;
+#if WITH_EDITOR
+    SharedInputs.reflectionVisualization = (IPLbool)SteamAudioSettings.bReflectionsVisualizationEnable;
+#else
+    SharedInputs.reflectionVisualization = IPLbool::IPL_FALSE;
+#endif
 
     iplSimulatorSetSharedInputs(Simulator, IPL_SIMULATIONFLAGS_DIRECT, &SharedInputs);
 
@@ -737,14 +769,67 @@ void FSteamAudioManager::Tick(float DeltaTime)
         ThreadPoolIdle = false;
 
         if (!bShouldInitOpenCL || (bShouldInitOpenCL && OpenCLDevice))
-        AsyncPool(*ThreadPool, [this] // May cause a crash when OpenCL device is not initialized
-        {
-            iplSimulatorRunReflections(Simulator);
-            iplSimulatorRunPathing(Simulator);
-            ThreadPoolIdle = true;
-        });
+            AsyncPool(*ThreadPool, [this] // May cause a crash when OpenCL device is not initialized
+                {
+                    iplSimulatorRunReflections(Simulator);
+#if WITH_EDITOR
+                    if (SteamAudioSettings.bReflectionsVisualizationEnable)
+                        GetReflectionOutputs();
+#endif
+                    iplSimulatorRunPathing(Simulator);
+                    ThreadPoolIdle = true;
+                });
     }
 }
+
+#if WITH_EDITOR
+void FSteamAudioManager::GetReflectionOutputs()
+{
+    if (ReflectionVisualizationTimers.IsEmpty() && USteamAudioListenerComponent::GetCurrentListener())
+    {
+        IPLSimulationSharedOutputs* Outputs = reinterpret_cast<IPLSimulationSharedOutputs*>(FMemory::Malloc(sizeof(IPLSimulationSharedOutputs)));
+        ReflectionOutputs.Reset(Outputs);
+        iplSimulatorGetSharedOutputs(Simulator, IPL_SIMULATIONFLAGS_REFLECTIONS, *ReflectionOutputs);
+        ReflectionVisualizationTotalTime = 0;
+    }
+}
+
+void FSteamAudioManager::StartReflectionVisualization()
+{
+    for (int32 i = 0; i < FMath::Min(SteamAudioSettings.VisualizedRealTimeRays, SteamAudioSettings.RealTimeRays); ++i)
+    {
+        FLinearColor color;
+        color.R = FMath::FRand();
+        color.G = FMath::FRand();
+        color.B = FMath::FRand();
+        for (int32 j = 0; j < SteamAudioSettings.RealTimeBounces + 1; ++j)
+        {
+            if (!ReflectionOutputs->reflectionRays[i])
+                break;
+
+            IPLRay IplRay = ReflectionOutputs->reflectionRays[i][j];
+            if (IplRay.origin.x == 0 && IplRay.origin.y == 0 && IplRay.origin.z == 0)
+                continue;
+
+            ReflectionVisualizationTotalTime += SteamAudioSettings.ReflectionVisualizationTime;
+            ReflectionVisualizationTimers.Add(FTimerHandle());
+            FTimerDelegate TimerDelegate;
+            TimerDelegate.BindRaw(this, &FSteamAudioManager::DrawReflectionRay, color, IplRay);
+            USteamAudioListenerComponent::GetCurrentListener()->GetWorld()->GetTimerManager().SetTimer(ReflectionVisualizationTimers.Last(), TimerDelegate, ReflectionVisualizationTotalTime, false);
+        }
+    }
+}
+
+void FSteamAudioManager::DrawReflectionRay(FLinearColor Color, IPLRay IplRay)
+{
+    FVector Origin = SteamAudio::ConvertVectorInverse(IplRay.origin);
+    FVector Direction = SteamAudio::ConvertVectorInverse(IplRay.direction);
+    UKismetSystemLibrary::DrawDebugLine(USteamAudioListenerComponent::GetCurrentListener(), Origin, Origin + Direction, Color, SteamAudioSettings.ReflectionVisualisationRayLifeTime, SteamAudioSettings.ReflectionVisualisationThickness);
+    UKismetSystemLibrary::DrawDebugPoint(USteamAudioListenerComponent::GetCurrentListener(), Origin + Direction, SteamAudioSettings.ReflectionVisualisationImpactPointSize, FLinearColor::Black, SteamAudioSettings.ReflectionVisualisationRayLifeTime);
+
+    ReflectionVisualizationTimers.RemoveAt(0);
+}
+#endif
 
 void FSteamAudioManager::LogCallback(IPLLogLevel Level, IPLstring Message)
 {
