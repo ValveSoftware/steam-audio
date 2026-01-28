@@ -42,7 +42,8 @@ void DirectSimulator::simulate(const IScene* scene,
                                float occlusionRadius,
                                int numOcclusionSamples,
                                int numTransmissionRays,
-                               DirectSoundPath& directSoundPath)
+                               DirectSoundPath& directSoundPath,
+                               Hit& occlusionClosestHit)
 {
     auto distance = (source.origin - listener.origin).length();
 
@@ -115,7 +116,7 @@ void DirectSimulator::simulate(const IScene* scene,
 
     if (scene && (flags & CalcTransmission))
     {
-        transmission(*scene, listener.origin, source.origin, directSoundPath.transmission, numTransmissionRays);
+        transmission(*scene, listener.origin, source.origin, directSoundPath.transmission, numTransmissionRays, occlusionClosestHit);
     }
     else
     {
@@ -186,7 +187,8 @@ void DirectSimulator::transmission(const IScene& scene,
                                    const Vector3f& listenerPosition,
                                    const Vector3f& sourcePosition,
                                    float* transmissionFactors,
-                                   int numTransmissionRays)
+                                   int numTransmissionRays,
+                                   Hit& occlusionClosestHit)
 {
     assert(numTransmissionRays > 0);
 
@@ -223,6 +225,10 @@ void DirectSimulator::transmission(const IScene& scene,
         auto& minDistance = minDistances[currentRayIndex];
 
         auto hit = scene.closestHit(ray, minDistance, maxDistance);
+        if (!hit.isValid() || currentRayIndex == 1) // check only ray from source
+        {
+            occlusionClosestHit = hit;
+        }
 
         // If there's nothing more between the ray origin and the source, stop.
         if (!hit.isValid())

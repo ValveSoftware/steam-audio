@@ -329,6 +329,8 @@ public:
 
     virtual void remove(IScene* scene) = 0;
 
+    virtual int getObjectIndex() = 0;
+
     virtual void updateTransform(IScene* scene,
                                  IPLMatrix4x4 transform) = 0;
 };
@@ -1154,6 +1156,14 @@ void IPLCALL iplInstancedMeshRemove(IPLInstancedMesh instancedMesh, IPLScene sce
         return;
 
     reinterpret_cast<api::IInstancedMesh*>(instancedMesh)->remove(reinterpret_cast<api::IScene*>(scene));
+}
+
+int IPLCALL iplInstancedMeshGetIndex(IPLInstancedMesh instancedMesh)
+{
+    if (!instancedMesh)
+        return -1;
+
+    return reinterpret_cast<api::IInstancedMesh*>(instancedMesh)->getObjectIndex();
 }
 
 void IPLCALL iplInstancedMeshUpdateTransform(IPLInstancedMesh instancedMesh, IPLScene scene, IPLMatrix4x4 transform)
