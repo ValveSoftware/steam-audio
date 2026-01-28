@@ -18,6 +18,8 @@
 
 #if defined(IPL_OS_MACOSX)
 #include <mach-o/dyld.h>
+#elif defined(IPL_OS_LINUX)
+#include <unistd.h>
 #endif
 
 #if defined(IPL_OS_IOS) || defined(IPL_OS_WASM)
@@ -172,6 +174,19 @@ bool isRunningInEditor()
     uint32_t bufferSize = 1024;
     _NSGetExecutablePath(moduleFileName, &bufferSize);
     return (strstr(moduleFileName, "FMOD Studio.app") != nullptr);
+#elif defined(IPL_OS_LINUX)
+    char moduleFileName[1024] = {0};
+    readlink("/proc/self/exe", moduleFileName, 1024);
+
+    auto baseName = strrchr(moduleFileName, '/');
+    if (!baseName)
+        return false;
+
+    baseName++;
+
+    return (strstr(baseName, "fmodstudio") != nullptr);
+#else
+    return false;
 #endif
 }
 

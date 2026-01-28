@@ -34,7 +34,6 @@ const wchar_t* gLoadingBinaryNames[] = {
 #elif defined (IPL_OS_MACOSX)
 const char* gLoadingBinaryNames[] = {
     "libphonon_fmod.dylib",
-    "phonon_fmod.bundle/Contents/MacOS/phonon_fmod",
 };
 #else
 const char* gLoadingBinaryNames[] = {
@@ -49,7 +48,6 @@ const char* gLoadedBinaryNames[] = {
 #elif defined (IPL_OS_MACOSX)
 const char* gLoadedBinaryNames[] = {
     "libphonon.dylib",
-    "phonon.bundle/Contents/MacOS/phonon",
 };
 #else
 const char* gLoadedBinaryNames[] = {
@@ -127,7 +125,7 @@ void Library::getLoadingBinaryPath(char* loadingBinaryPath,
 
         auto path = strchr(line, '/');
         if (!path)
-            break;
+            continue;
 
         for (auto i = 0; i < numLoadingBinaryNames; ++i)
         {
