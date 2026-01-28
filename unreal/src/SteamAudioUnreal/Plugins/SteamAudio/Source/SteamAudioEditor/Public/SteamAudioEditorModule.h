@@ -58,7 +58,9 @@ private:
     TArray<TSharedPtr<FAssetTypeActions_Base>> AssetTypeActions; // Metadata objects for each type of Steam Audio asset that can be created.
 	TArray<FName> RegisteredComponentClassNames;
     TSharedPtr<FBakeWindow> BakeWindow;
+    FSlateImageBrush* MainToolBarEdModeIcon;
 
+    void UpdateMainToolBarIcon();
     void RegisterComponentVisualizer(FName ComponentClassName, TSharedPtr<FComponentVisualizer> Visualizer);
 
     void OnSelectActorsWithGeometryComponent();
