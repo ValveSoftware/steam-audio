@@ -211,10 +211,15 @@ void ArrayMath::multiplyAccumulate(int size,
 }
 
 void ArrayMath::multiplyAccumulate(int size,
-                                   const complex_t* in1,
-                                   const complex_t* in2,
-                                   complex_t* accum)
+    const complex_t* in1,
+    const complex_t* in2,
+    complex_t* accum)
 {
+    if (!in1 || !in2 || !accum || size <= 0 || reinterpret_cast<uintptr_t>(accum) == 0xFFFFFFFFFFFFFFFF)
+    {
+        return;
+    }
+
     auto arraySizeAsReal = 2 * size;
     auto simdArraySizeAsReal = arraySizeAsReal & ~3;
 
@@ -257,8 +262,7 @@ void ArrayMath::multiplyAccumulate(int size,
 
             auto y = float4::add(float4::mul(b1, x2), float4::mul(b0, float4::mul(b3, b4)));
 
-            y = float4::add(y, float4::load(&outData[i]));
-
+            y = float4::add(y, float4::loadu(&outData[i]));
             float4::storeu(&outData[i], y);
         }
     }
