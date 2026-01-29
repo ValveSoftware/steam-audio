@@ -190,7 +190,7 @@ void SOFAHRTFMap::interpolatedHRIRWeights(const Vector3f& direction,
     }
     else
     {
-        while (neighborCoordinates[0] - nearestPosition[0] <= -180.0f)
+        while (neighborCoordinates[1] - nearestPosition[0] <= -180.0f)
         {
             neighborCoordinates[1] += 360.0f;
         }
@@ -225,6 +225,15 @@ void SOFAHRTFMap::interpolatedHRIRWeights(const Vector3f& direction,
     if (neighbors[4] >= 0 && neighbors[5] >= 0)
     {
         rIndex = (neighborDistances[4] <= neighborDistances[5]) ? 4 : 5;
+    }
+    // r is not continuous, so we may only have one neighbor
+    else if (neighbors[4] >= 0)
+    {
+        rIndex = 4;
+    }
+    else if (neighbors[5] >= 0)
+    {
+        rIndex = 5;
     }
 
     // Index 0 is the nearest neighbor.
