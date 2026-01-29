@@ -1,0 +1,7 @@
+@PACKAGE_INIT@
+
+include(CMakeFindDependencyMacro)
+
+include(${CMAKE_CURRENT_LIST_DIR}/steam-audioTargets.cmake)
+
+check_required_components(steam-audio)
