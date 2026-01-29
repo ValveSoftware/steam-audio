@@ -217,7 +217,11 @@ BakedPathData::BakedPathData(const IScene& scene,
     mVisGraph = ipl::make_unique<ProbeVisibilityGraph>(scene, probes, visTester, radius, threshold, visRange,
                                                        numThreads, jobGraph, cancel, progressCallback, callbackUserData);
 
-    threadPool.process(jobGraph, [progressCallback, callbackUserData](float percentComplete) { progressCallback(percentComplete, callbackUserData); });
+    threadPool.process(jobGraph, [progressCallback, callbackUserData](float percentComplete) {
+        if (progressCallback) {
+            progressCallback(percentComplete, callbackUserData);
+        }
+    });
 
     // Next, using multiple threads, calculate shortest paths between every pair of probes.
     PathFinder pathFinder(probes, numThreads);
@@ -246,7 +250,11 @@ BakedPathData::BakedPathData(const IScene& scene,
         });
     }
 
-    threadPool.process(jobGraph, [progressCallback, callbackUserData](float percentComplete) { progressCallback(percentComplete, callbackUserData); });
+    threadPool.process(jobGraph, [progressCallback, callbackUserData](float percentComplete) {
+        if (progressCallback) {
+            progressCallback(percentComplete, callbackUserData);
+        }
+    });
 
     // Remove all data with j > i, since they can be reconstructed from the data with j < i due to symmetry.
     ProbePath invalidProbePath;
