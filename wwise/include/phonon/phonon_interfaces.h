@@ -595,6 +595,8 @@ public:
     virtual void getEnergyField(IPLBakedDataIdentifier* identifier, int probeIndex, IEnergyField* energyField) = 0;
 
     virtual void getReverb(IPLBakedDataIdentifier* identifier, int probeIndex, float* reverbTimes) = 0;
+
+	virtual IPLerror getDebugPath(IPLVector3 source, IPLVector3 listener, IPLVector3* pathBuffer, IPLint32 maxPoints, IPLint32* numPoints, IPLVector3* outVirtualSource) = 0;
 };
 
 class ISimulator
@@ -2158,6 +2160,14 @@ void IPLCALL iplProbeBatchSave(IPLProbeBatch probeBatch,
         return;
 
     reinterpret_cast<api::IProbeBatch*>(probeBatch)->save(reinterpret_cast<api::ISerializedObject*>(serializedObject));
+}
+
+IPLerror IPLCALL iplProbeBatchGetDebugPath(IPLProbeBatch probeBatch, IPLVector3 source, IPLVector3 listener, IPLVector3* pathBuffer, IPLint32 maxPoints, IPLint32* numPoints, IPLVector3* outVirtualSource)
+{
+    if (!probeBatch)
+		return IPL_STATUS_FAILURE;
+
+	return reinterpret_cast<api::IProbeBatch*>(probeBatch)->getDebugPath(source, listener, pathBuffer, maxPoints, numPoints, outVirtualSource);
 }
 
 IPLint32 IPLCALL iplProbeBatchGetNumProbes(IPLProbeBatch probeBatch)

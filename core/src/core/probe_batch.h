@@ -187,6 +187,13 @@ public:
 
     void serializeAsRoot(SerializedObject& serializedObject) const;
 
+    void getDebugPath(const Vector3f& source,
+                      const Vector3f& listener,
+                      Vector3f* pathBuffer,
+                      int maxPoints,
+                      int* numPoints,
+        Vector3f* outVirtualSource) const;
+
 protected:
     vector<Probe> mProbes;
     unique_ptr<ProbeTree> mProbeTree;
