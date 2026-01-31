@@ -41,7 +41,8 @@ namespace float4
 
 }
 
-#if defined(IPL_OS_WINDOWS)
+// Clang already defines operators for __m128
+#if defined(IPL_OS_WINDOWS) && !defined(__clang__)
 
 namespace ipl {
 
