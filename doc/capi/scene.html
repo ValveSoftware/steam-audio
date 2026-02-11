@@ -81,6 +81,7 @@
 <li class="toctree-l4"><a class="reference internal" href="#_CPPv417iplStaticMeshSave13IPLStaticMesh19IPLSerializedObject"><code class="docutils literal notranslate"><span class="pre">iplStaticMeshSave()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#_CPPv416iplStaticMeshAdd13IPLStaticMesh8IPLScene"><code class="docutils literal notranslate"><span class="pre">iplStaticMeshAdd()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#_CPPv419iplStaticMeshRemove13IPLStaticMesh8IPLScene"><code class="docutils literal notranslate"><span class="pre">iplStaticMeshRemove()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv424iplStaticMeshSetMaterial13IPLStaticMesh8IPLSceneP11IPLMaterial8IPLint32"><code class="docutils literal notranslate"><span class="pre">iplStaticMeshSetMaterial()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#_CPPv422iplInstancedMeshCreate8IPLSceneP24IPLInstancedMeshSettingsP16IPLInstancedMesh"><code class="docutils literal notranslate"><span class="pre">iplInstancedMeshCreate()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#_CPPv422iplInstancedMeshRetain16IPLInstancedMesh"><code class="docutils literal notranslate"><span class="pre">iplInstancedMeshRetain()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#_CPPv423iplInstancedMeshReleaseP16IPLInstancedMesh"><code class="docutils literal notranslate"><span class="pre">iplInstancedMeshRelease()</span></code></a></li>
@@ -416,6 +417,22 @@
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>staticMesh</strong> – The static mesh to remove. </p></li>
 <li><p><strong>scene</strong> – The scene from which to remove the static mesh. This must be the scene which was passed when calling <code class="docutils literal notranslate"><span class="pre">iplStaticMeshCreate</span></code>. </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv424iplStaticMeshSetMaterial13IPLStaticMesh8IPLSceneP11IPLMaterial8IPLint32">
+<span id="_CPPv324iplStaticMeshSetMaterial13IPLStaticMesh8IPLSceneP11IPLMaterial8IPLint32"></span><span id="_CPPv224iplStaticMeshSetMaterial13IPLStaticMesh8IPLSceneP11IPLMaterial8IPLint32"></span><span id="iplStaticMeshSetMaterial__IPLStaticMesh.IPLScene.IPLMaterialP.IPLint32"></span><span class="target" id="group__scene_1ga88ed0a26459da443a9b46e77483155c8"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iplStaticMeshSetMaterial</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv413IPLStaticMesh" title="IPLStaticMesh"><span class="n"><span class="pre">IPLStaticMesh</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">staticMesh</span></span>, <a class="reference internal" href="#_CPPv48IPLScene" title="IPLScene"><span class="n"><span class="pre">IPLScene</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">scene</span></span>, <a class="reference internal" href="#_CPPv411IPLMaterial" title="IPLMaterial"><span class="n"><span class="pre">IPLMaterial</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">newMaterial</span></span>, <a class="reference internal" href="types.html#_CPPv48IPLint32" title="IPLint32"><span class="n"><span class="pre">IPLint32</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">index</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv424iplStaticMeshSetMaterial13IPLStaticMesh8IPLSceneP11IPLMaterial8IPLint32" title="Link to this definition"></a><br /></dt>
+<dd><p>Loads the material data of specified object in the iplStaticMesh. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>staticMesh</strong> – The static mesh to update. </p></li>
+<li><p><strong>scene</strong> – The scene from which to update the static mesh. This must be the scene which was passed when calling <code class="docutils literal notranslate"><span class="pre">iplStaticMeshCreate</span></code>. </p></li>
+<li><p><strong>newMaterial</strong> – The material data of specified object. </p></li>
+<li><p><strong>index</strong> – The index of specified object. It means the object’s index in the order it was exported. </p></li>
 </ul>
 </dd>
 </dl>

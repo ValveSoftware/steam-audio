@@ -123,6 +123,10 @@
 <ol class="arabic simple" start="2">
 <li><p>In the Inspector tab, under Audio Source, check <strong>Spatialize</strong>.</p></li>
 </ol>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If your <code class="docutils literal notranslate"><span class="pre">AudioListener</span></code> (or its third-party middleware equivalent) is instantiated by a script after a scene is loaded, or can be dynamically changed, you will need to call either the <code class="docutils literal notranslate"><span class="pre">NotifyAudioListenerChanged</span></code> or <code class="docutils literal notranslate"><span class="pre">NotifyAudioListenerChangedTo</span></code> methods of <a class="reference internal" href="manager-api.html"><span class="doc">SteamAudioManager</span></a>.</p>
+</div>
 </section>
 </section>
 

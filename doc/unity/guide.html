@@ -49,6 +49,7 @@
 <li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting Started</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">User’s Guide</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#spatialize-an-audio-source">Spatialize an audio source</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#change-the-audio-listener-at-run-time">Change the audio listener at run-time</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#spatialize-an-ambisonic-source">Spatialize an Ambisonic source</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#apply-distance-falloff">Apply distance falloff</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#blend-between-spatialized-and-unspatialized-audio">Blend between spatialized and unspatialized audio</a></li>
@@ -108,6 +109,10 @@
 </ol>
 <img alt="_images/audiosource_spatialize.png" src="_images/audiosource_spatialize.png" />
 <p>Steam Audio will apply HRTF-based binaural rendering to the Audio Source, using default settings. You can control many properties of the spatialization using the <a class="reference internal" href="source.html"><span class="doc">Steam Audio Source</span></a> component, including occlusion, reflections, and more.</p>
+</section>
+<section id="change-the-audio-listener-at-run-time">
+<h2>Change the audio listener at run-time<a class="headerlink" href="#change-the-audio-listener-at-run-time" title="Link to this heading"></a></h2>
+<p>If your <code class="docutils literal notranslate"><span class="pre">AudioListener</span></code> (or its third-party middleware equivalent) is instantiated by a script after a scene is loaded, or can be dynamically changed, you will need to call either the <code class="docutils literal notranslate"><span class="pre">NotifyAudioListenerChanged</span></code> or <code class="docutils literal notranslate"><span class="pre">NotifyAudioListenerChangedTo</span></code> methods of <a class="reference internal" href="manager-api.html"><span class="doc">SteamAudioManager</span></a>.</p>
 </section>
 <section id="spatialize-an-ambisonic-source">
 <h2>Spatialize an Ambisonic source<a class="headerlink" href="#spatialize-an-ambisonic-source" title="Link to this heading"></a></h2>
