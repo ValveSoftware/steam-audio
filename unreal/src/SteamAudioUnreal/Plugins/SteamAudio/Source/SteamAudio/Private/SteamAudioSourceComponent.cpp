@@ -216,16 +216,16 @@ bool USteamAudioSourceComponent::CanEditChange(const FProperty* InProperty) cons
         return bParentVal && !bSimulateTransmission;
     if ((InProperty->GetFName() == GET_MEMBER_NAME_CHECKED(USteamAudioSourceComponent, TransmissionHighValue)))
         return bParentVal && !bSimulateTransmission;
-	if ((InProperty->GetFName() == GET_MEMBER_NAME_CHECKED(USteamAudioSourceComponent, ReflectionsType)))
-		return bParentVal && bSimulateReflections;
-	if ((InProperty->GetFName() == GET_MEMBER_NAME_CHECKED(USteamAudioSourceComponent, CurrentBakedSource)))
-		return bParentVal && bSimulateReflections && (ReflectionsType == EReflectionSimulationType::BAKED_STATIC_SOURCE);
-	if ((InProperty->GetFName() == GET_MEMBER_NAME_CHECKED(USteamAudioSourceComponent, PathingProbeBatch)))
-		return bParentVal && bSimulatePathing;
-	if ((InProperty->GetFName() == GET_MEMBER_NAME_CHECKED(USteamAudioSourceComponent, bPathValidation)))
-		return bParentVal && bSimulatePathing;
-	if ((InProperty->GetFName() == GET_MEMBER_NAME_CHECKED(USteamAudioSourceComponent, bFindAlternatePaths)))
-		return bParentVal && bSimulatePathing;
+    if ((InProperty->GetFName() == GET_MEMBER_NAME_CHECKED(USteamAudioSourceComponent, ReflectionsType)))
+        return bParentVal && bSimulateReflections;
+    if ((InProperty->GetFName() == GET_MEMBER_NAME_CHECKED(USteamAudioSourceComponent, CurrentBakedSource)))
+        return bParentVal && bSimulateReflections && (ReflectionsType == EReflectionSimulationType::BAKED_STATIC_SOURCE);
+    if ((InProperty->GetFName() == GET_MEMBER_NAME_CHECKED(USteamAudioSourceComponent, PathingProbeBatch)))
+        return bParentVal && bSimulatePathing;
+    if ((InProperty->GetFName() == GET_MEMBER_NAME_CHECKED(USteamAudioSourceComponent, bPathValidation)))
+        return bParentVal && bSimulatePathing;
+    if ((InProperty->GetFName() == GET_MEMBER_NAME_CHECKED(USteamAudioSourceComponent, bFindAlternatePaths)))
+        return bParentVal && bSimulatePathing;
 
     return bParentVal;
 }
