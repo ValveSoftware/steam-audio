@@ -288,10 +288,13 @@ void FSteamAudioEditorModule::OnAddGeometryComponentToStaticMeshes()
 {
     UWorld* World = GEditor->GetLevelViewportClients()[0]->GetWorld();
 
+    TArray<AActor*> TargetActors;
+    
     for (TActorIterator<AActor> It(World); It; ++It)
     {
+        AActor* Actor = *It;
         TArray<UStaticMeshComponent*> StaticMeshComponents;
-        It->GetComponents<UStaticMeshComponent>(StaticMeshComponents);
+        Actor->GetComponents<UStaticMeshComponent>(StaticMeshComponents);
 
         bool bCanAffectAudio = false;
         for (UStaticMeshComponent* StaticMeshComponent : StaticMeshComponents)
@@ -303,16 +306,29 @@ void FSteamAudioEditorModule::OnAddGeometryComponentToStaticMeshes()
                 break;
             }
         }
-
-        if (bCanAffectAudio)
+        
+        // Also check if we already have a component geometry component
+        if (bCanAffectAudio && !Actor->FindComponentByClass<USteamAudioGeometryComponent>())
         {
-            USteamAudioGeometryComponent* GeometryComponent = It->FindComponentByClass<USteamAudioGeometryComponent>();
-            if (!GeometryComponent)
-            {
-                GeometryComponent = NewObject<USteamAudioGeometryComponent>(*It);
-                GeometryComponent->RegisterComponent();
-                It->AddInstanceComponent(GeometryComponent);
-            }
+            TargetActors.Add(Actor);
+        }
+    }
+    
+    if (TargetActors.Num() > 0)
+    {
+        const FScopedTransaction Transaction(FText::Format(
+            NSLOCTEXT("SteamAudio", "AddGeometry", "Add Steam Audio Geometry to {0} Actors"), 
+            FText::AsNumber(TargetActors.Num())
+        ));
+        
+        for (AActor* TargetActor : TargetActors)
+        {
+            TargetActor->Modify();
+            USteamAudioGeometryComponent* GeometryComponent = NewObject<USteamAudioGeometryComponent>(TargetActor, USteamAudioGeometryComponent::StaticClass(), NAME_None, RF_Transactional);
+            GeometryComponent->RegisterComponent();
+            TargetActor->AddInstanceComponent(GeometryComponent);
+            TargetActor->MarkPackageDirty();
+            TargetActor->PostEditChange();
         }
     }
 }
@@ -321,11 +337,43 @@ void FSteamAudioEditorModule::OnRemoveGeometryComponentFromStaticMeshes()
 {
     UWorld* World = GEditor->GetLevelViewportClients()[0]->GetWorld();
 
-    for (TObjectIterator<USteamAudioGeometryComponent> It; It; ++It)
+    TArray<AActor*> TargetActors;
+    
+    for (TActorIterator<AActor> It(World); It; ++It)
     {
-        if (It && It->IsValidLowLevel() && It->GetWorld() == World)
+        // If the actor has a geometry component, we're going to modify it
+        if (It->FindComponentByClass<USteamAudioGeometryComponent>())
         {
-            It->DestroyComponent();
+            TargetActors.Add(*It);
+        }
+    }
+    
+    if (TargetActors.Num() > 0)
+    {
+        const FScopedTransaction Transaction(FText::Format(
+            NSLOCTEXT("SteamAudio", "RemoveGeometry", "Remove Steam Audio Geometry from {0} Actors"), 
+            FText::AsNumber(TargetActors.Num())
+        ));
+        
+        for (AActor* TargetActor : TargetActors)
+        {
+            TargetActor->Modify();
+            
+            TArray<USteamAudioGeometryComponent*> GeometryComponents;
+            TargetActor->GetComponents<USteamAudioGeometryComponent>(GeometryComponents);
+
+            for (USteamAudioGeometryComponent* GeometryComponent : GeometryComponents)
+            {
+                if (GeometryComponent && GeometryComponent->IsValidLowLevel() && GeometryComponent->GetWorld() == World)
+                {
+                    GeometryComponent->Modify();
+                    GeometryComponent->DestroyComponent();
+                    TargetActor->RemoveInstanceComponent(GeometryComponent);
+                }
+            }
+            
+            TargetActor->MarkPackageDirty();
+            TargetActor->PostEditChange();
         }
     }
 }
