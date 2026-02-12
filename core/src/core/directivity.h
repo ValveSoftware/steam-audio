@@ -24,7 +24,7 @@ namespace ipl {
 // Directivity
 // --------------------------------------------------------------------------------------------------------------------
 
-typedef float (IPL_CALLBACK *DirectivityCallback)(const Vector3f& direction,
+typedef float (IPL_CALLBACK *DirectivityCallback)(Vector3f direction,
                                                   void* userData);
 
 class Directivity
