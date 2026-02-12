@@ -201,7 +201,10 @@ static bool ExportStaticMeshComponentsForActor(AStaticMeshActor* StaticMeshActor
     {
         UStaticMesh* StaticMesh = StaticMeshComponent->GetStaticMesh();
         if (!StaticMesh || !StaticMesh->HasValidRenderData())
+        {
+            UE_LOG(LogSteamAudio, Error, TEXT("Static Mesh Component %s on actor %s doesn't have a valid static mesh, or it doesn't have valid render data"), *StaticMeshComponent->GetName(), *StaticMeshComponent->GetOwner()->GetName());
             return false;
+        }
 
         if (!ExportStaticMeshComponent(StaticMeshComponent, Vertices, Triangles, MaterialIndices, Materials, MaterialIndexForAsset, bRelativePositions))
             return false;
