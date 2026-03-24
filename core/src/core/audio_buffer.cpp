@@ -143,12 +143,12 @@ void AudioBuffer::convertAmbisonics(AmbisonicsType inType,
         2.0f / sqrtf(3.0f),
         2.0f / sqrtf(3.0f),
         1.0f,
-        sqrtf(45.0f) / 32.0f,
-        sqrtf(45.0f) / 32.0f,
+        sqrtf(45.0f / 32.0f),
+        sqrtf(45.0f / 32.0f),
         3.0f / sqrtf(5.0f),
         3.0f / sqrtf(5.0f),
-        sqrtf(8.0f) / 5.0f,
-        sqrtf(8.0f) / 5.0f
+        sqrtf(8.0f / 5.0f),
+        sqrtf(8.0f / 5.0f)
     };
 
     for (auto inIndex = 0; inIndex < numChannels; ++inIndex)
