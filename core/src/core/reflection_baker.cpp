@@ -154,7 +154,7 @@ void ReflectionBaker::bake(const IScene& scene,
             jobGraph.reset();
             simulator.simulate(scene, numSources, sources.data(), numListeners, listeners.data(),
                                directivities.data(), numRays, numBounces, simDuration, order,
-                               irradianceMinDistance, energyFieldPtrs.data(), jobGraph);
+                               irradianceMinDistance, nullptr, energyFieldPtrs.data(), jobGraph);
 
             threadPool.process(jobGraph);
 

@@ -21,6 +21,7 @@
 #include "mesh.h"
 #include "sphere.h"
 #include "triangle.h"
+#include "phonon.h"
 
 namespace ipl {
 
@@ -56,6 +57,14 @@ public:
 
     // Calculates the intersection of a ray with a sphere.
     float intersect(const Sphere& sphere) const;
+
+    operator IPLRay()
+    {
+        IPLRay iplRay;
+        iplRay.direction = { direction.x(), direction.y(), direction.z() };
+        iplRay.origin = { origin.x(), origin.y(), origin.z() };
+        return iplRay;
+    }
 };
 
 }

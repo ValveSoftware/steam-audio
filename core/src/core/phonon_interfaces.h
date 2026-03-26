@@ -613,6 +613,9 @@ public:
     virtual void setSharedInputs(IPLSimulationFlags flags,
                                  IPLSimulationSharedInputs* sharedInputs) = 0;
 
+    virtual void getSharedOutputs(IPLSimulationFlags flags,
+                                IPLSimulationSharedOutputs& sharedInputs) = 0;
+
     virtual void commit() = 0;
 
     virtual void runDirect() = 0;
@@ -2336,6 +2339,16 @@ void IPLCALL iplSimulatorSetSharedInputs(IPLSimulator simulator,
         return;
 
     reinterpret_cast<api::ISimulator*>(simulator)->setSharedInputs(flags, sharedInputs);
+}
+
+void IPLCALL iplSimulatorGetSharedOutputs(IPLSimulator simulator, 
+                                    IPLSimulationFlags flags, 
+                                    IPLSimulationSharedOutputs& sharedOutputs)
+{
+    if (!simulator)
+        return;
+
+    reinterpret_cast<api::ISimulator*>(simulator)->getSharedOutputs(flags, sharedOutputs);
 }
 
 void IPLCALL iplSimulatorCommit(IPLSimulator simulator)

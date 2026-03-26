@@ -32,6 +32,12 @@ USteamAudioSettings::USteamAudioSettings()
     , DefaultBSPMaterial("/SteamAudio/Materials/Default.Default")
     , SceneType(ESceneType::DEFAULT)
     , MaxOcclusionSamples(16)
+    , bReflectionsVisualizationEnable(true)
+    , VisualizedRealTimeRays(32)
+    , ReflectionVisualizationTime(0.1f)
+    , ReflectionVisualisationRayLifeTime(1.0f)
+    , ReflectionVisualisationThickness(1.0f)
+    , ReflectionVisualisationImpactPointSize(10.0f)
     , RealTimeRays(4096)
     , RealTimeBounces(4)
     , RealTimeDuration(1.0f)
@@ -84,6 +90,12 @@ FSteamAudioSettings USteamAudioSettings::GetSettings() const
     Settings.PhysMatToSteamAudioMatTable = const_cast<PhysMatToSteamAudioMatTableType*>(&PhysMatToSteamAudioMatTable);
     Settings.SceneType = static_cast<IPLSceneType>(SceneType);
     Settings.MaxOcclusionSamples = MaxOcclusionSamples;
+    Settings.bReflectionsVisualizationEnable = bReflectionsVisualizationEnable;
+    Settings.VisualizedRealTimeRays = VisualizedRealTimeRays;
+    Settings.ReflectionVisualizationTime = ReflectionVisualizationTime;
+    Settings.ReflectionVisualisationRayLifeTime = ReflectionVisualisationRayLifeTime;
+    Settings.ReflectionVisualisationThickness = ReflectionVisualisationThickness;
+    Settings.ReflectionVisualisationImpactPointSize = ReflectionVisualisationImpactPointSize;
     Settings.RealTimeRays = RealTimeRays;
     Settings.RealTimeBounces = RealTimeBounces;
     Settings.RealTimeDuration = RealTimeDuration;

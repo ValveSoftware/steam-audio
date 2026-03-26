@@ -21,6 +21,7 @@
 #include "job_graph.h"
 #include "sampling.h"
 #include "scene.h"
+#include "phonon.h"
 
 namespace ipl {
 
@@ -66,6 +67,7 @@ public:
                           float duration,
                           int order,
                           float irradianceMinDistance,
+                          vector<vector<IPLRay>>* reflectionRays,
                           EnergyField* const* energyFields,
                           JobGraph& jobGraph) = 0;
 
@@ -130,6 +132,7 @@ public:
                           float duration,
                           int order,
                           float irradianceMinDistance,
+                          vector<vector<IPLRay>>* reflectionRays,
                           EnergyField* const* energyFields,
                           JobGraph& jobGraph) override;
 
@@ -177,6 +180,7 @@ private:
     Array<float, 2> mListenerCoeffs;
     std::atomic<int> mNumJobsRemaining;
     Array<ThreadState> mThreadState;
+    vector<vector<IPLRay>>* mReflectionRays = nullptr;
 
     void simulateJob(const IScene& scene,
                      Array<float, 2>& image,
@@ -263,6 +267,7 @@ public:
                           float duration,
                           int order,
                           float irradianceMinDistance,
+                          vector<vector<IPLRay>>* reflectionRays,
                           EnergyField* const* energyFields,
                           JobGraph& jobGraph) override;
 
