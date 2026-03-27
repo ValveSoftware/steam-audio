@@ -154,14 +154,20 @@ AudioEffectState PathEffect::apply(const PathEffectParams& params,
                 for (auto m = -l; m <= l; ++m, ++i)
                 {
                     const complex_t* hrtfForChannel[2] = {nullptr, nullptr};
-                    params.hrtf->ambisonicsHRTF(i, hrtfForChannel);
+
+                    if (params.hrtf)
+                    {
+                        params.hrtf->ambisonicsHRTF(i, hrtfForChannel);
+                    }
 
                     for (auto k = 0; k < IHRTFMap::kNumEars; ++k)
                     {
-                        ArrayMath::scaleAccumulate(params.hrtf->numSpectrumSamples(),
-                            reinterpret_cast<const float*>(hrtfForChannel[k]),
-                            scalar * (*mAmbisonicsBuffer)[i][0],
-                            reinterpret_cast<float*>(mHRTF[k]));
+                        if (hrtfForChannel[k]) {
+                            ArrayMath::scaleAccumulate(params.hrtf->numSpectrumSamples(),
+                                reinterpret_cast<const float*>(hrtfForChannel[k]),
+                                scalar * (*mAmbisonicsBuffer)[i][0],
+                                reinterpret_cast<float*>(mHRTF[k]));
+                        }
                     }
                 }
             }
