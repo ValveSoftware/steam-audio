@@ -320,6 +320,26 @@ void CProbeBatch::getReverb(IPLBakedDataIdentifier* identifier, int probeIndex, 
     memcpy(reverbTimes, _sourceReverbTimes->reverbTimes, Bands::kNumBands * sizeof(float));
 }
 
+IPLerror CProbeBatch::getDebugPath(IPLVector3 source, IPLVector3 listener, IPLVector3* pathBuffer, IPLint32 maxPoints, IPLint32* numPoints, IPLVector3* outVirtualSource)
+{
+	auto _probeBatch = mHandle.get();
+	if (!_probeBatch)
+		return IPL_STATUS_SUCCESS;
+    ipl::Vector3f iplSource(source.x, source.y, source.z);
+    ipl::Vector3f iplListener(listener.x, listener.y, listener.z);
+    ipl::Vector3f iplVirtSource;
+
+    _probeBatch->getDebugPath(iplSource, iplListener, reinterpret_cast<ipl::Vector3f*>(pathBuffer), maxPoints, (int*)numPoints, &iplVirtSource);
+
+    if (outVirtualSource)
+    {
+        outVirtualSource->x = iplVirtSource.x();
+        outVirtualSource->y = iplVirtSource.y();
+        outVirtualSource->z = iplVirtSource.z();
+	}
+
+	return IPL_STATUS_SUCCESS;
+}
 
 // --------------------------------------------------------------------------------------------------------------------
 // CContext

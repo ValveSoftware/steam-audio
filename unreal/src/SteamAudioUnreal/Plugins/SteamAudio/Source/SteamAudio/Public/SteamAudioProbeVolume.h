@@ -121,6 +121,14 @@ public:
     UPROPERTY()
     USteamAudioProbeComponent* ProbeComponent;
 
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Steam Audio Debug")
+    bool bShowDebugPath = false;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Steam Audio Debug", meta = (EditCondition = "bShowDebugPath"))
+    AActor* DebugSourceActor;
+
+	virtual void Tick(float DeltaTime) override;
+
     ASteamAudioProbeVolume();
 
     /**

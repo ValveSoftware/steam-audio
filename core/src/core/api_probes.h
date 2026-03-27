@@ -99,6 +99,8 @@ public:
     virtual void getEnergyField(IPLBakedDataIdentifier* identifier, int probeIndex, IEnergyField* energyField) override;
 
     virtual void getReverb(IPLBakedDataIdentifier* identifier, int probeIndex, float* reverbTimes) override;
+    
+    virtual IPLerror getDebugPath(IPLVector3 source, IPLVector3 listener, IPLVector3* pathBuffer, IPLint32 maxPoints, IPLint32* numPoints, IPLVector3* outVirtualSource) override;
 };
 
 }

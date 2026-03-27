@@ -205,4 +205,62 @@ void ProbeBatch::serializeAsRoot(SerializedObject& serializedObject) const
     serializedObject.commit();
 }
 
+void ProbeBatch::getDebugPath(const Vector3f& source, const Vector3f& listener, Vector3f* pathBuffer, int maxPoints, int* numPoints, Vector3f* outVirtualSource) const
+{
+    *numPoints = 0;
+
+    BakedDataIdentifier identifier;
+	identifier.type = BakedDataType::Pathing;
+	identifier.variation = BakedDataVariation::Dynamic;
+
+    if (!hasData(identifier))
+		return;
+
+    const auto& bakedData = static_cast<const BakedPathData&>(*mData.at(identifier));
+
+    int startProbe = -1;
+    int endProbe = -1;
+	float minStartDist = FLT_MAX;
+	float minEndDist = FLT_MAX;
+
+    for (int i = 0; i < numProbes(); ++i)
+    {
+		float dS = (mProbes[i].influence.center - source).lengthSquared();
+        if (dS < minStartDist) { minStartDist = dS; startProbe = i; }
+
+		float dL = (mProbes[i].influence.center - listener).lengthSquared();
+		if (dL < minEndDist) { minEndDist = dL; endProbe = i; }
+    }
+
+    if (startProbe == -1 || endProbe == -1)
+		return;
+
+	ProbePath probePath;
+	auto soundPath = bakedData.lookupShortestPath(startProbe, endProbe, &probePath);
+
+    if (!probePath.valid)
+		return;
+
+    int count = 0;
+
+    for (auto nodeIndex : probePath.nodes)
+    {
+        if (count >= maxPoints) break;
+		pathBuffer[count++] = mProbes[nodeIndex].influence.center;
+    }
+
+    *numPoints = count;
+    
+    if (outVirtualSource)
+    {
+        if (soundPath.direct)
+        {
+            *outVirtualSource = source;
+        }
+        else
+        {
+            *outVirtualSource = soundPath.toVirtualSource(*this, source, endProbe);
+        }
+    }
+}
 }
