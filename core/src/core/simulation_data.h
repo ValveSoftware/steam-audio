@@ -45,6 +45,7 @@ struct DirectSimulationInputs
 struct DirectSimulationOutputs
 {
     DirectSoundPath directPath;
+    Hit occlusionClosestHit;
 };
 
 struct ReflectionSimulationInputs

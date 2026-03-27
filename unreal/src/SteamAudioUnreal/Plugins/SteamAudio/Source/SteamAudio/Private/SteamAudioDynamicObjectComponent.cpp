@@ -70,6 +70,7 @@ void USteamAudioDynamicObjectComponent::BeginPlay()
     }
 
     iplInstancedMeshAdd(InstancedMesh, Scene);
+    InstancedMeshIndex = iplInstancedMeshGetIndex(InstancedMesh);
 }
 
 void USteamAudioDynamicObjectComponent::BeginDestroy()

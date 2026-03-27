@@ -125,6 +125,7 @@ void EmbreeScene::removeStaticMesh(shared_ptr<IStaticMesh> staticMesh)
 void EmbreeScene::addInstancedMesh(shared_ptr<IInstancedMesh> instancedMesh)
 {
     mInstancedMeshes[1].push_back(instancedMesh);
+    instancedMesh->setObjectIndex(mInstancedMeshes[1].size() - 1);
     reinterpret_cast<EmbreeInstancedMesh*>(instancedMesh.get())->enable(*this);
 
     mHasChanged = true;
@@ -275,6 +276,17 @@ Hit EmbreeScene::closestHit(const Ray& ray,
         hit.distance = embreeRay.ray.tfar;
         hit.normal = Vector3f::unitVector(Vector3f(embreeRay.hit.Ng_x, embreeRay.hit.Ng_y, embreeRay.hit.Ng_z));
         hit.material = &mMaterialsForGeometry[geomID][mMaterialIndicesForGeometry[geomID][embreeRay.hit.primID]];
+        for (const auto& instancedMesh : mInstancedMeshes[0])
+        {
+            const auto* embreeInstancedMesh = reinterpret_cast<const EmbreeInstancedMesh*>(instancedMesh.get());
+            auto index = embreeInstancedMesh->instanceIndex();
+
+            if (index == geomID)
+            {
+                hit.objectIndex = embreeInstancedMesh->getObjectIndex();
+                break;
+            }
+        }
     }
 
     return hit;

@@ -75,7 +75,8 @@ public:
                   float occlusionRadius,
                   int numOcclusionSamples,
                   int numTransmissionRays,
-                  DirectSoundPath& directSoundPath);
+                  DirectSoundPath& directSoundPath,
+                  Hit& occlusionClosestHit);
 
     static float directPathDelay(const Vector3f& listener,
                                  const Vector3f& source);
@@ -97,7 +98,8 @@ private:
                       const Vector3f& listenerPosition,
                       const Vector3f& sourcePosition,
                       float* transmissionFactors,
-                      int numTransmissionRays);
+                      int numTransmissionRays,
+                      Hit& occlusionClosestHit);
 };
 
 }
