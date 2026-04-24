@@ -98,29 +98,32 @@ namespace SteamAudio
             if (!mEventInstance.isValid())
                 return;
 
-            FMOD.ChannelGroup channelGroup;
-            mEventInstance.getChannelGroup(out channelGroup);
+            mEventInstance.getChannelGroup(out var channelGroup);
+            mFoundDSP = FindDSPInChannelGroup(channelGroup);
+        }
 
-            int numDSPs;
-            channelGroup.getNumDSPs(out numDSPs);
-
+        bool FindDSPInChannelGroup(FMOD.ChannelGroup channelGroup)
+        {
+            channelGroup.getNumDSPs(out var numDSPs);
             for (var i = 0; i < numDSPs; ++i)
             {
                 channelGroup.getDSP(i, out mDSP);
-
-                var dspName = "";
-                var dspVersion = 0u;
-                var dspNumChannels = 0;
-                var dspConfigWidth = 0;
-                var dspConfigHeight = 0;
-                mDSP.getInfo(out dspName, out dspVersion, out dspNumChannels, out dspConfigWidth, out dspConfigHeight);
+                mDSP.getInfo(out var dspName, out _, out _, out _, out _);
 
                 if (dspName == "Steam Audio Spatializer")
-                {
-                    mFoundDSP = true;
-                    return;
-                }
+                    return true;
             }
+
+            channelGroup.getNumGroups(out var numGroups);
+            for (var i = 0; i < numGroups; ++i)
+            {
+                channelGroup.getGroup(i, out var childGroup);
+                
+                if (FindDSPInChannelGroup(childGroup))
+                    return true;
+            }
+
+            return false;
         }
     }
 }
