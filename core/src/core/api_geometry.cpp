@@ -41,7 +41,7 @@ IPLVector3 CContext::calculateRelativeDirection(IPLVector3 sourcePosition,
     auto _listenerRight = Vector3f::unitVector(Vector3f::cross(_listenerAhead, _listenerUp));
 
     auto listenerToSource = _sourcePosition - _listenerPosition;
-    auto _relativeDirection = Vector3f::kYAxis;
+    auto _relativeDirection = Vector3f(0.f, 0.f, -1.f);
 
     if (listenerToSource.length() > 1e-5f)
     {
@@ -52,8 +52,7 @@ IPLVector3 CContext::calculateRelativeDirection(IPLVector3 sourcePosition,
         _relativeDirection.z() = (-Vector3f::dot(listenerToSource, _listenerAhead));
     }
 
-    IPLVector3 relativeDirection = {_relativeDirection.x(), _relativeDirection.y(), _relativeDirection.z()};
-    return relativeDirection;
+    return {_relativeDirection.x(), _relativeDirection.y(), _relativeDirection.z()};
 }
 
 }

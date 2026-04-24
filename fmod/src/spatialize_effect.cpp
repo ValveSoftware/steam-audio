@@ -1032,6 +1032,12 @@ FMOD_RESULT F_CALL process(FMOD_DSP_STATE* state,
 
     auto sourceCoordinates = calcCoordinates(effect->source.absolute);
     auto listenerCoordinates = calcListenerCoordinates(state);
+    if (sourceCoordinates.origin.x == listenerCoordinates.origin.x &&
+        sourceCoordinates.origin.y == listenerCoordinates.origin.y &&
+        sourceCoordinates.origin.z == listenerCoordinates.origin.z)
+    {
+        sourceCoordinates.origin.z -= 1e-4f;
+    }
 
     if (operation == FMOD_DSP_PROCESS_QUERY)
     {
