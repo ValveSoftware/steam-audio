@@ -38,6 +38,7 @@ PanningEffect::PanningEffect(const PanningEffectSettings& settings)
 void PanningEffect::reset()
 {
     mPrevDirection = Vector3f::kZero;
+    mCrossfadeCoefficients = true;
 }
 
 AudioEffectState PanningEffect::apply(const PanningEffectParams& params,
@@ -47,6 +48,11 @@ AudioEffectState PanningEffect::apply(const PanningEffectParams& params,
     assert(in.numSamples() == out.numSamples());
     assert(in.numChannels() == 1);
     assert(out.numChannels() == mSpeakerLayout.numSpeakers);
+    assert(params.direction != nullptr);
+
+    const Vector3f& direction = *params.direction;
+    if (!mCrossfadeCoefficients)
+        mPrevDirection = direction;
 
     PanningData panningData{};
     PanningData prevPanningData{};
@@ -57,27 +63,40 @@ AudioEffectState PanningEffect::apply(const PanningEffectParams& params,
         // We will be using pairwise constant-power panning for this speaker layout,
         // so precalculate some intermediate data instead of recalculating this
         // information once for each output channel.
-        calcPairwisePanningData(*params.direction, mSpeakerLayout, panningData);
-        calcPairwisePanningData(mPrevDirection, mSpeakerLayout, prevPanningData);
+        calcPairwisePanningData(direction, mSpeakerLayout, panningData);
+        if (direction != mPrevDirection)
+            calcPairwisePanningData(mPrevDirection, mSpeakerLayout, prevPanningData);
+        else
+            prevPanningData = panningData;
     }
 
     for (auto i = 0; i < out.numChannels(); ++i)
     {
-        auto weight = panningWeight(*params.direction, mSpeakerLayout, i, &panningData);
+        auto weight = panningWeight(direction, mSpeakerLayout, i, &panningData);
         auto weightPrev = panningWeight(mPrevDirection, mSpeakerLayout, i, &prevPanningData);
 
-        for (auto j = 0; j < in.numSamples(); ++j)
+		if (weight == weightPrev) 
         {
-            // Crossfade between the panning coefficients for the previous frame and the
-            // current frame.
-            auto alpha = static_cast<float>(i) / static_cast<float>(in.numSamples());
-            auto blendedWeight = alpha * weight + (1.0f - alpha) * weightPrev;
+			for (auto j = 0; j < in.numSamples(); ++j) 
+            {
+				out[i][j] = weight * in[0][j];
+			}
+		}
+		else 
+        {
+            for (auto j = 0; j < in.numSamples(); ++j)
+            {
+                // Crossfade between the panning coefficients for the previous frame and the
+                // current frame.
+                auto alpha = static_cast<float>(i) / static_cast<float>(in.numSamples());
+                auto blendedWeight = alpha * weight + (1.0f - alpha) * weightPrev;
 
-            out[i][j] = blendedWeight * in[0][j];
+                out[i][j] = blendedWeight * in[0][j];
+            }
         }
     }
 
-    mPrevDirection = *params.direction;
+    mPrevDirection = direction;
 
     return AudioEffectState::TailComplete;
 }

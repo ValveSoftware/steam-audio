@@ -1525,6 +1525,16 @@ IPLAPI void IPLCALL iplPanningEffectReset(IPLPanningEffect effect);
 */
 IPLAPI IPLAudioEffectState IPLCALL iplPanningEffectApply(IPLPanningEffect effect, IPLPanningEffectParams* params, IPLAudioBuffer* in, IPLAudioBuffer* out);
 
+/** Enables or disables smooth crossfading of panning coefficients when the source direction changes.
+
+    When enabled (default), the panning effect will smoothly crossfade between the previous and current
+    direction over a single audio frame. When disabled, the new direction will be applied immediately.
+
+    \param  effect      The panning effect.
+    \param  smoothed    Set to true to enable smoothing. Set to false to apply new directions immediately.
+*/
+IPLAPI void IPLCALL iplPanningEffectSetSmoothed(IPLPanningEffect effect, bool smoothed);
+
 /** Returns the number of tail samples remaining in a panning effect's internal buffers.
 
     Tail samples are audio samples that should be played even after the input to the effect has stopped

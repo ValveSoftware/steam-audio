@@ -90,6 +90,15 @@ IPLAudioEffectState CPanningEffect::apply(IPLPanningEffectParams* params,
     return static_cast<IPLAudioEffectState>(_effect->apply(_params, _in, _out));
 }
 
+void CPanningEffect::setSmoothedPanning(bool smoothed)
+{
+	const auto _effect = mHandle.get();
+	if (!_effect)
+		return;
+
+	_effect->setSmoothedPanning(smoothed);
+}
+
 IPLint32 CPanningEffect::getTailSize()
 {
     auto _effect = mHandle.get();

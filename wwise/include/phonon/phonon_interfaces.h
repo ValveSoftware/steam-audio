@@ -354,6 +354,8 @@ public:
                                       IPLAudioBuffer* in,
                                       IPLAudioBuffer* out) = 0;
 
+    virtual void setSmoothedPanning(bool smoothed) = 0;
+
     virtual IPLint32 getTailSize() = 0;
 
     virtual IPLAudioEffectState getTail(IPLAudioBuffer* out) = 0;
@@ -1311,6 +1313,14 @@ IPLAudioEffectState IPLCALL iplPanningEffectApply(IPLPanningEffect effect,
         return IPL_AUDIOEFFECTSTATE_TAILCOMPLETE;
 
     return reinterpret_cast<api::IPanningEffect*>(effect)->apply(params, in, out);
+}
+
+void IPLCALL iplPanningEffectSetSmoothed(IPLPanningEffect effect, bool smoothed)
+{
+    if (!effect)
+        return;
+
+    reinterpret_cast<api::IPanningEffect*>(effect)->setSmoothedPanning(smoothed);
 }
 
 IPLint32 IPLCALL iplPanningEffectGetTailSize(IPLPanningEffect effect)

@@ -1631,6 +1631,11 @@ public:
 
         return result;
     }
+
+	virtual void setSmoothedPanning(bool smoothed) override
+	{
+		CPanningEffect::setSmoothedPanning(smoothed);
+	}
 };
 
 

@@ -51,6 +51,8 @@ public:
                                       IPLAudioBuffer* in,
                                       IPLAudioBuffer* out) override;
 
+    virtual void setSmoothedPanning(bool smoothed) override;
+
     virtual IPLint32 getTailSize() override;
 
     virtual IPLAudioEffectState getTail(IPLAudioBuffer* out) override;
