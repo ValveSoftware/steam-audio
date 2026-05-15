@@ -34,6 +34,9 @@ namespace SteamAudio
 
         public override void Initialize(GameObject gameObject)
         {
+            mFoundDSP = false;
+            mDSP = default;
+            
             FindDSP(gameObject);
 
             mSteamAudioSource = gameObject.GetComponent<SteamAudioSource>();
@@ -46,6 +49,7 @@ namespace SteamAudio
         public override void Destroy()
         {
             mFoundDSP = false;
+            mDSP = default;
 
             if (mSteamAudioSource)
             {
@@ -57,11 +61,23 @@ namespace SteamAudio
         {
             CheckForChangedEventInstance();
 
-            FindDSP(source.gameObject);
-            if (!mFoundDSP)
+            if (!mFoundDSP || !mDSP.hasHandle())
+            {
+                mFoundDSP = false;
+                mDSP = default;
+                FindDSP(source.gameObject);
+            }
+
+            if (!mFoundDSP || !mDSP.hasHandle())
                 return;
 
-            mDSP.setParameterInt(kSimulationOutputsParamIndex, mHandle);
+            var result = mDSP.setParameterInt(kSimulationOutputsParamIndex, mHandle);
+
+            if (result != FMOD.RESULT.OK)
+            {
+                mFoundDSP = false;
+                mDSP = default;
+            }
         }
 
         void CheckForChangedEventInstance()
@@ -69,12 +85,14 @@ namespace SteamAudio
             if (mEventEmitter != null)
             {
                 var eventInstance = mEventEmitter.EventInstance;
-                if (eventInstance.handle != mEventInstance.handle)
+                if (!eventInstance.isValid() || eventInstance.handle != mEventInstance.handle)
                 {
                     // The event instance is different from the one we last used, which most likely means the
                     // event-related objects were destroyed and re-created. Make sure we look for the DSP instance
                     // when FindDSP is called next.
                     mFoundDSP = false;
+                    mDSP = default;
+                    mEventInstance = default;
                 }
             }
             else
@@ -82,6 +100,8 @@ namespace SteamAudio
                 // We haven't yet seen a valid event emitter component, so make sure we look for one when
                 // FindDSP is called.
                 mFoundDSP = false;
+                mDSP = default;
+                mEventInstance = default;
             }
         }
 
@@ -99,24 +119,36 @@ namespace SteamAudio
                 return;
 
             FMOD.ChannelGroup channelGroup;
-            mEventInstance.getChannelGroup(out channelGroup);
+            if (mEventInstance.getChannelGroup(out channelGroup) != FMOD.RESULT.OK)
+                return;
+
+            if (!channelGroup.hasHandle())
+                return;
 
             int numDSPs;
-            channelGroup.getNumDSPs(out numDSPs);
+            if (channelGroup.getNumDSPs(out numDSPs) != FMOD.RESULT.OK)
+                return;
 
             for (var i = 0; i < numDSPs; ++i)
             {
-                channelGroup.getDSP(i, out mDSP);
+                FMOD.DSP dsp;
+                if (channelGroup.getDSP(i, out dsp) != FMOD.RESULT.OK)
+                    continue;
+
+                if (!dsp.hasHandle())
+                    continue;
 
                 var dspName = "";
                 var dspVersion = 0u;
                 var dspNumChannels = 0;
                 var dspConfigWidth = 0;
                 var dspConfigHeight = 0;
-                mDSP.getInfo(out dspName, out dspVersion, out dspNumChannels, out dspConfigWidth, out dspConfigHeight);
+                if (dsp.getInfo(out dspName, out dspVersion, out dspNumChannels, out dspConfigWidth, out dspConfigHeight) != FMOD.RESULT.OK)
+                    continue;
 
                 if (dspName == "Steam Audio Spatializer")
                 {
+                    mDSP = dsp;
                     mFoundDSP = true;
                     return;
                 }
