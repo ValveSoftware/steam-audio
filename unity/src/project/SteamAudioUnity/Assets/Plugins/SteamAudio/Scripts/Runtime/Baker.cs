@@ -96,7 +96,7 @@ namespace SteamAudio
 
             if (staticMeshComponent == null || staticMeshComponent.asset == null)
             {
-                Debug.LogError(string.Format("Scene {0} has not been exported. Click Steam Audio > Export Active Scene to do so.", SceneManager.GetActiveScene().name));
+                Debug.LogError($"Scene {SceneManager.GetActiveScene().name} has not been exported. Click Steam Audio > Export Active Scene to do so.");
                 return;
             }
 
@@ -213,14 +213,14 @@ namespace SteamAudio
 #if UNITY_EDITOR
             var progress = ((sNumSubTasksCompleted + sProgress) / Mathf.Max(sNumSubTasks, 1)) + .01f; // Adding an offset because progress bar when it is exact 0 has some non-zero progress.
 
-            var progressString = string.Format("Task {0} / {1} [{2}]", taskIndex + 1, numTasks, taskName);
+            var progressString = $"Task {taskIndex + 1} / {numTasks} [{taskName}]";
             if (subTaskName != null)
             {
-                progressString += string.Format(", Probe Batch {0} / {1} [{2}]", subTaskIndex + 1, numSubTasks, subTaskName);
+                progressString += $", Probe Batch {subTaskIndex + 1} / {numSubTasks} [{subTaskName}]";
             }
 
             var progressPercent = Mathf.FloorToInt(Mathf.Min(progress * 100.0f, 100.0f));
-            progressString += string.Format(" ({0}% complete)", progressPercent);
+            progressString += $" ({progressPercent}% complete)";
 
             Progress.Report(sProgressId, progress, progressString);
 #endif
@@ -292,15 +292,15 @@ namespace SteamAudio
                 var taskName = "";
                 if (sTasks[i].identifier.type == BakedDataType.Pathing)
                 {
-                    taskName = string.Format("{0} (Pathing)", sTasks[i].name);
+                    taskName = $"{sTasks[i].name} (Pathing)";
                 }
                 else if (sTasks[i].identifier.variation == BakedDataVariation.Reverb)
                 {
-                    taskName = string.Format("{0} (Reverb)", sTasks[i].name);
+                    taskName = $"{sTasks[i].name} (Reverb)";
                 }
                 else
                 {
-                    taskName = string.Format("{0} (Reflections)", sTasks[i].name);
+                    taskName = $"{sTasks[i].name} (Reflections)";
                 }
 
                 sCurrentTask = i;
@@ -309,26 +309,27 @@ namespace SteamAudio
                 sNumSubTasksInCurrentTask = 0;
                 sCurrentSubTaskName = null;
 
-                Debug.Log(string.Format("START: Baking effect for {0}.", taskName));
+                Debug.Log($"START: Baking effect for {taskName}.");
 
                 if (sTasks[i].probeBatches != null)
                 {
                     var probeBatches = sTasks[i].probeBatches;
 
-                    for (var j = 0; j < probeBatches.Length; ++j)
+                    int probeCount = probeBatches.Length;
+                    for (var j = 0; j < probeCount; ++j)
                     {
                         if (sCancel)
                             return;
 
                         if (probeBatches[j] == null)
                         {
-                            Debug.LogWarning(string.Format("{0}: Probe Batch at index {1} is null, skipping.", taskName, j));
+                            Debug.LogWarning($"{taskName}: Probe Batch at index {j} is null, skipping.");
                             continue;
                         }
 
                         if (probeBatches[j].GetNumProbes() == 0)
                         {
-                            Debug.LogWarning(string.Format("{0}: Probe Batch {1} has no probes, skipping.", taskName, sTasks[i].probeBatchNames[j]));
+                            Debug.LogWarning($"{taskName}: Probe Batch {sTasks[i].probeBatchNames[j]} has no probes, skipping.");
                             continue;
                         }
 
@@ -546,7 +547,7 @@ namespace SteamAudio
                     UpdateBakeProgress(i, sTasks.Length, taskName);
                 }
 
-                Debug.Log(string.Format("COMPLETED: Baking effect for {0}.", taskName));
+                Debug.Log($"COMPLETED: Baking effect for {taskName}.");
             }
 
             sStatus = BakeStatus.Complete;

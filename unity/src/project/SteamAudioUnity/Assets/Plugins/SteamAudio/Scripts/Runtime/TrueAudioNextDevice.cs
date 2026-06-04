@@ -32,7 +32,7 @@ namespace SteamAudio
 
             var status = API.iplTrueAudioNextDeviceCreate(openCLDevice.Get(), ref deviceSettings, out mTrueAudioNextDevice);
             if (status != Error.Success)
-                throw new Exception(string.Format("Unable to create TrueAudio Next device. [{0}]", status));
+                throw new Exception($"Unable to create TrueAudio Next device. [{status}]");
         }
 
         public TrueAudioNextDevice(TrueAudioNextDevice device)

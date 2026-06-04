@@ -38,7 +38,7 @@ namespace SteamAudio
 
             var status = API.iplContextCreate(ref contextSettings, out mContext);
             if (status != Error.Success)
-                throw new Exception(string.Format("Unable to create context. [{0}]", status));
+                throw new Exception($"Unable to create context. [{status}]");
         }
 
         public Context(Context context)
@@ -62,7 +62,7 @@ namespace SteamAudio
         }
 
         [MonoPInvokeCallback(typeof(LogCallback))]
-        public static void LogMessage(LogLevel level, string message)
+        public void LogMessage(LogLevel level, string message)
         {
             switch (level)
             {

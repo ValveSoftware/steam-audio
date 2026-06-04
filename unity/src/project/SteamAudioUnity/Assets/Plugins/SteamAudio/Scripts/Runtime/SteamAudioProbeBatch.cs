@@ -149,7 +149,7 @@ namespace SteamAudio
 
             if (staticMeshComponent == null || staticMeshComponent.asset == null)
             {
-                Debug.LogError(string.Format("Scene {0} has not been exported. Click Steam Audio > Export Active Scene to do so.", SceneManager.GetActiveScene().name));
+                Debug.LogError($"Scene {SceneManager.GetActiveScene().name} has not been exported. Click Steam Audio > Export Active Scene to do so.");
                 return;
             }
 
@@ -279,7 +279,7 @@ namespace SteamAudio
             AddLayer(gameObject, identifier, dataSize);
         }
 
-        void UpdateGameObjectStatistics(BakedDataLayerInfo layerInfo)
+        static void UpdateGameObjectStatistics(BakedDataLayerInfo layerInfo)
         {
             if (layerInfo.identifier.type == BakedDataType.Reflections)
             {
@@ -300,7 +300,7 @@ namespace SteamAudio
             }
         }
 
-        BakedDataIdentifier GetBakedDataIdentifier()
+        public BakedDataIdentifier GetBakedDataIdentifier()
         {
             var identifier = new BakedDataIdentifier { };
             identifier.type = BakedDataType.Pathing;

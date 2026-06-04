@@ -35,7 +35,7 @@ namespace SteamAudio
             var deviceList = IntPtr.Zero;
             var status = API.iplOpenCLDeviceListCreate(context.Get(), ref deviceSettings, out deviceList);
             if (status != Error.Success)
-                throw new Exception(string.Format("Unable to enumerate OpenCL devices. [{0}]", status));
+                throw new Exception($"Unable to enumerate OpenCL devices. [{status}]");
 
             var numDevices = API.iplOpenCLDeviceListGetNumDevices(deviceList);
             if (numDevices <= 0)
@@ -54,7 +54,7 @@ namespace SteamAudio
                 deviceSettings.fractionCUsForIRUpdate = 0.0f;
                 status = API.iplOpenCLDeviceListCreate(context.Get(), ref deviceSettings, out deviceList);
                 if (status != Error.Success)
-                    throw new Exception(string.Format("Unable to enumerate OpenCL devices. [{0}]", status));
+                    throw new Exception($"Unable to enumerate OpenCL devices. [{status}]");
 
                 numDevices = API.iplOpenCLDeviceListGetNumDevices(deviceList);
                 if (numDevices <= 0)
@@ -65,7 +65,7 @@ namespace SteamAudio
             if (status != Error.Success)
             {
                 API.iplOpenCLDeviceListRelease(ref deviceList);
-                throw new Exception(string.Format("Unable to create OpenCL device. [{0}]", status));
+                throw new Exception($"Unable to create OpenCL device. [{status}]");
             }
 
             API.iplOpenCLDeviceListRelease(ref deviceList);

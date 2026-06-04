@@ -1,4 +1,4 @@
-﻿//
+//
 // Copyright 2017-2023 Valve Corporation.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -172,9 +172,6 @@ namespace SteamAudio
 
         public static SteamAudioListener GetSteamAudioListener()
         {
-            if (sSingleton.mListenerComponent == null)
-                return null;
-
             return sSingleton.mListenerComponent;
         }
 
@@ -930,11 +927,11 @@ namespace SteamAudio
             {
                 var scene = SceneManager.GetSceneAt(i);
 
-                EditorUtility.DisplayProgressBar("Steam Audio", string.Format("Exporting scene: {0}", scene.name), (float)i / (float)SceneManager.sceneCount);
+                EditorUtility.DisplayProgressBar("Steam Audio", $"Exporting scene: {scene.name}", (float)i / (float)SceneManager.sceneCount);
 
                 if (!scene.isLoaded)
                 {
-                    Debug.LogWarning(string.Format("Scene {0} is not loaded in the hierarchy.", scene.name));
+                    Debug.LogWarning($"Scene {scene.name} is not loaded in the hierarchy.");
                     continue;
                 }
 
@@ -952,7 +949,7 @@ namespace SteamAudio
             {
                 var scene = SceneManager.GetSceneByBuildIndex(i);
 
-                EditorUtility.DisplayProgressBar("Steam Audio", string.Format("Exporting scene: {0}", scene.name), (float)i / (float)SceneManager.sceneCountInBuildSettings);
+                EditorUtility.DisplayProgressBar("Steam Audio", $"Exporting scene: {scene.name}", (float)i / (float)SceneManager.sceneCountInBuildSettings);
 
                 var shouldClose = false;
                 if (!scene.isLoaded)
@@ -992,11 +989,11 @@ namespace SteamAudio
             {
                 var scene = SceneManager.GetSceneAt(i);
 
-                EditorUtility.DisplayProgressBar("Steam Audio", string.Format("Exporting dynamic objects in scene: {0}", scene.name), (float)i / (float)SceneManager.sceneCount);
+                EditorUtility.DisplayProgressBar("Steam Audio", $"Exporting dynamic objects in scene: {scene.name}", (float)i / (float)SceneManager.sceneCount);
 
                 if (!scene.isLoaded)
                 {
-                    Debug.LogWarning(string.Format("Scene {0} is not loaded in the hierarchy.", scene.name));
+                    Debug.LogWarning($"Scene {scene.name} is not loaded in the hierarchy.");
                     continue;
                 }
 
@@ -1014,7 +1011,7 @@ namespace SteamAudio
             {
                 var scene = SceneManager.GetSceneByBuildIndex(i);
 
-                EditorUtility.DisplayProgressBar("Steam Audio", string.Format("Exporting dynamic objects in scene: {0}", scene.name), (float)i / (float)SceneManager.sceneCountInBuildSettings);
+                EditorUtility.DisplayProgressBar("Steam Audio", $"Exporting dynamic objects in scene: {scene.name}", (float)i / (float)SceneManager.sceneCountInBuildSettings);
 
                 var shouldClose = false;
                 if (!scene.isLoaded)
@@ -1048,7 +1045,7 @@ namespace SteamAudio
             {
                 var scenePath = AssetDatabase.GUIDToAssetPath(sceneGUID);
 
-                EditorUtility.DisplayProgressBar("Steam Audio", string.Format("Exporting dynamic objects in scene: {0}", scenePath), (float)index / (float)numItems);
+                EditorUtility.DisplayProgressBar("Steam Audio", $"Exporting dynamic objects in scene: {scenePath}", (float)index / (float)numItems);
 
                 var activeScene = EditorSceneManager.GetActiveScene();
                 var isLoadedScene = (scenePath == activeScene.path);
@@ -1060,7 +1057,7 @@ namespace SteamAudio
                     var packageInfo = UnityEditor.PackageManager.PackageInfo.FindForAssetPath(scenePath);
                     if (!(packageInfo == null || packageInfo.source == PackageSource.Embedded || packageInfo.source == PackageSource.Local))
                     {
-                        Debug.LogWarning(string.Format("Scene {0} is part of a read-only package, skipping.", scenePath));
+                        Debug.LogWarning($"Scene {scenePath} is part of a read-only package, skipping.");
                         continue;
                     }
 #endif
@@ -1082,7 +1079,7 @@ namespace SteamAudio
             {
                 var prefabPath = AssetDatabase.GUIDToAssetPath(prefabGUID);
 
-                EditorUtility.DisplayProgressBar("Steam Audio", string.Format("Exporting dynamic objects in prefab: {0}", prefabPath), (float)index / (float)numItems);
+                EditorUtility.DisplayProgressBar("Steam Audio", $"Exporting dynamic objects in prefab: {prefabPath}", (float)index / (float)numItems);
 
                 var prefab = AssetDatabase.LoadMainAssetAtPath(prefabPath) as GameObject;
                 var dynamicObjects = prefab.GetComponentsInChildren<SteamAudioDynamicObject>();
@@ -1099,7 +1096,7 @@ namespace SteamAudio
         public static void InstallFMODStudioPluginFiles()
         {
             // Make sure the FMOD Studio Unity integration is installed.
-            var assemblySuffix = ",FMODUnity";
+            const string assemblySuffix = ",FMODUnity";
             var FMODUnity_Settings = Type.GetType("FMODUnity.Settings" + assemblySuffix);
             if (FMODUnity_Settings == null)
             {
@@ -1141,7 +1138,7 @@ namespace SteamAudio
                     // We're using 2.2 or later, so we need to move files.
                     moveRequired = true;
 
-                    var moves = new Dictionary<string, string>();
+                    var moves = new Dictionary<string, string>(8);
                     moves.Add("Assets/Plugins/FMOD/lib/win/x86/phonon_fmod.dll", "Assets/Plugins/FMOD/platforms/win/lib/x86/phonon_fmod.dll");
                     moves.Add("Assets/Plugins/FMOD/lib/win/x86_64/phonon_fmod.dll", "Assets/Plugins/FMOD/platforms/win/lib/x86_64/phonon_fmod.dll");
                     moves.Add("Assets/Plugins/FMOD/lib/linux/x86/libphonon_fmod.so", "Assets/Plugins/FMOD/platforms/linux/lib/x86/libphonon_fmod.so");
@@ -1162,7 +1159,7 @@ namespace SteamAudio
                     // We're using 2.1 or earlier, so we need to move files.
                     moveRequired = true;
 
-                    var moves = new Dictionary<string, string>();
+                    var moves = new Dictionary<string, string>(8);
                     moves.Add("Assets/Plugins/FMOD/platforms/win/lib/x86/phonon_fmod.dll", "Assets/Plugins/FMOD/lib/win/x86/phonon_fmod.dll");
                     moves.Add("Assets/Plugins/FMOD/platforms/win/lib/x86_64/phonon_fmod.dll", "Assets/Plugins/FMOD/lib/win/x86_64/phonon_fmod.dll");
                     moves.Add("Assets/Plugins/FMOD/platforms/linux/lib/x86/libphonon_fmod.so", "Assets/Plugins/FMOD/lib/linux/x86/libphonon_fmod.so");
@@ -1231,7 +1228,7 @@ namespace SteamAudio
             var result = AssetDatabase.CreateFolder(parent, baseName);
             if (string.IsNullOrEmpty(result))
             {
-                Debug.LogErrorFormat("Unable to create asset directory {0} in {1}: {2}", baseName, parent, result);
+                Debug.LogErrorFormat($"Unable to create asset directory {baseName} in {parent}: {result}");
                 return false;
             }
 
@@ -1244,7 +1241,7 @@ namespace SteamAudio
             {
                 if (!AssetExists(source))
                 {
-                    Debug.LogErrorFormat("Unable to find plugin file: {0}", source);
+                    Debug.LogErrorFormat($"Unable to find plugin file: {source}");
                     return false;
                 }
 
@@ -1253,7 +1250,7 @@ namespace SteamAudio
 
                 if (!EnsureAssetDirectoryExists(directory))
                 {
-                    Debug.LogErrorFormat("Unable to create directory: {0}", directory);
+                    Debug.LogErrorFormat($"Unable to create directory: {directory}");
                     return false;
                 }
 
@@ -1261,11 +1258,11 @@ namespace SteamAudio
 
                 if (!string.IsNullOrEmpty(result))
                 {
-                    Debug.LogErrorFormat("Unable to move {0} to {1}: {2}", source, destination, result);
+                    Debug.LogErrorFormat($"Unable to move {source} to {destination}: {result}");
                     return false;
                 }
 
-                Debug.LogFormat("Moved {0} to {1}.", source, destination);
+                Debug.LogFormat($"Moved {source} to {destination}.");
             }
 
             return true;
@@ -1279,7 +1276,7 @@ namespace SteamAudio
 
             if (objects == null || objects.Length == 0)
             {
-                Debug.LogError(string.Format("Dynamic object {0} has no Steam Audio geometry attached. Skipping export.", dynamicObject.name));
+                Debug.LogError($"Dynamic object {dynamicObject.name} has no Steam Audio geometry attached. Skipping export.");
                 return;
             }
 
@@ -1289,7 +1286,7 @@ namespace SteamAudio
             if (!exportOBJ && dataAsset == null)
                 return;
 
-            if (exportOBJ && (objFileName == null || objFileName.Length == 0))
+            if (exportOBJ && (string.IsNullOrEmpty(objFileName)))
                 return;
 
             Export(objects, dynamicObject.name, dataAsset, objFileName, true, exportOBJ);
@@ -1431,10 +1428,7 @@ namespace SteamAudio
             var uniqueGameObjects = new HashSet<GameObject>(gameObjects);
 
             gameObjects.Clear();
-            foreach (var uniqueGameObject in uniqueGameObjects)
-            {
-                gameObjects.Add(uniqueGameObject);
-            }
+            gameObjects.AddRange(uniqueGameObjects);
 
             return gameObjects;
         }
@@ -1567,7 +1561,7 @@ namespace SteamAudio
 
             if (objects == null || objects.Length == 0)
             {
-                Debug.LogWarning(string.Format("Scene {0} has no Steam Audio static geometry. Skipping export.", unityScene.name));
+                Debug.LogWarning($"Scene {unityScene.name} has no Steam Audio static geometry. Skipping export.");
                 return;
             }
 
@@ -1577,7 +1571,7 @@ namespace SteamAudio
             if (!exportOBJ && dataAsset == null)
                 return;
 
-            if (exportOBJ && (objFileName == null || objFileName.Length == 0))
+            if (exportOBJ && (string.IsNullOrEmpty(objFileName)))
                 return;
 
             Export(objects, unityScene.name, dataAsset, objFileName, false, exportOBJ);
@@ -1596,7 +1590,7 @@ namespace SteamAudio
 
             if (vertices.Length == 0 || triangles.Length == 0 || materialIndices.Length == 0 || materials.Length == 0)
             {
-                Debug.LogError(string.Format("Steam Audio {0} [{1}]: No Steam Audio Geometry components attached.", type, name));
+                Debug.LogError($"Steam Audio {type} [{name}]: No Steam Audio Geometry components attached.");
                 return;
             }
 
@@ -1618,7 +1612,7 @@ namespace SteamAudio
                 staticMesh.Save(dataAsset);
             }
 
-            Debug.Log(string.Format("Steam Audio {0} [{1}]: Exported to {2}.", type, name, (exportOBJ) ? objFileName : dataAsset.name));
+            Debug.Log($"Steam Audio {type} [{name}]: Exported to {((exportOBJ) ? objFileName : dataAsset.name)}.");
 
             staticMesh.Release();
             scene.Release();
@@ -1755,7 +1749,9 @@ namespace SteamAudio
             var numTriangles = new int[gameObjects.Length];
             var totalNumVertices = 0;
             var totalNumTriangles = 0;
-            for (var i = 0; i < gameObjects.Length; ++i)
+
+            int objectCount = gameObjects.Length;
+            for (var i = 0; i < objectCount; ++i)
             {
                 numVertices[i] = GetNumVertices(gameObjects[i]);
                 numTriangles[i] = GetNumTriangles(gameObjects[i]);
@@ -1786,7 +1782,7 @@ namespace SteamAudio
 
             var verticesOffset = 0;
             var trianglesOffset = 0;
-            for (var i = 0; i < gameObjects.Length; ++i)
+            for (var i = 0; i < objectCount; ++i)
             {
                 GetVertices(gameObjects[i], vertices, verticesOffset, transform);
                 GetTriangles(gameObjects[i], triangles, trianglesOffset);
@@ -1948,9 +1944,13 @@ namespace SteamAudio
         {
             for (var i = startIndex; i < endIndex; ++i)
             {
-                triangles[i].index0 += indexOffset;
-                triangles[i].index1 += indexOffset;
-                triangles[i].index2 += indexOffset;
+                var tri = triangles[i];
+
+                tri.index0 += indexOffset;
+                tri.index1 += indexOffset;
+                tri.index2 += indexOffset;
+
+                triangles[i] = tri;
             }
         }
 

@@ -65,7 +65,7 @@ namespace SteamAudio
         [MenuItem("Steam Audio/Steam Audio Reverb Data Point/Bake All", false, 61)]
         public static void BakeAllProbes()
         {
-            var allProbes = FindObjectsByType<SteamAudioReverbDataPoint>(FindObjectsSortMode.None);
+            var allProbes = FindObjectsByType<SteamAudioReverbDataPoint>();
 
             if (allProbes.Length == 0)
             {

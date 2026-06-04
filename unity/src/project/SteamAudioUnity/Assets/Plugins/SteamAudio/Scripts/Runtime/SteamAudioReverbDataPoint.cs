@@ -47,7 +47,7 @@ namespace SteamAudio
         static List<SteamAudioReverbData> sAssetsToFlush = null;
 
 #if STEAMAUDIO_ENABLED
-        void CreateFolderRecursively(string path)
+        static void CreateFolderRecursively(string path)
         {
 #if UNITY_EDITOR
             string[] parts = path.Split('/');

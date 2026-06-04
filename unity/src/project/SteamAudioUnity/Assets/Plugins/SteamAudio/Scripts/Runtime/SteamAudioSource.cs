@@ -1,4 +1,4 @@
-﻿//
+//
 // Copyright 2017-2023 Valve Corporation.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -354,7 +354,7 @@ namespace SteamAudio
                 if (pathingProbeBatch == null)
                 {
                     pathing = false;
-                    Debug.LogWarningFormat("Pathing probe batch not set, disabling pathing for source {0}.", gameObject.name);
+                    Debug.LogWarningFormat($"Pathing probe batch not set, disabling pathing for source {gameObject.name}.");
                 }
                 else
                 {

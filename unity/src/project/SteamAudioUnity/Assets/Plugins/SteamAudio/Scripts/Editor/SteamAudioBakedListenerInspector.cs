@@ -91,7 +91,7 @@ namespace SteamAudio
         [MenuItem("Steam Audio/Steam Audio Baked Listener/Bake All Static Listener Reflections In Current Scene", false, 65)]
         public static void BakeAllReflectionsInScene()
         {
-            var bakedListeners = FindObjectsByType<SteamAudioBakedListener>(FindObjectsSortMode.None);
+            var bakedListeners = FindObjectsByType<SteamAudioBakedListener>();
             if (bakedListeners.Length == 0)
             {
                 EditorUtility.DisplayDialog(

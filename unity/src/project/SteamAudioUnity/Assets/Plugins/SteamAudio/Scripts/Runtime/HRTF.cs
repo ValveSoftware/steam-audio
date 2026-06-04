@@ -55,12 +55,12 @@ namespace SteamAudio
             var status = API.iplHRTFCreate(context.Get(), ref audioSettings, ref hrtfSettings, out mHRTF);
             if (status != Error.Success)
             {
-                Debug.LogError(string.Format("Unable to load HRTF: {0}. [{1}]", (sofaFileName != null) ? sofaFileName : "default", status));
+                Debug.LogError($"Unable to load HRTF: {((sofaFileName != null) ? sofaFileName : "default")}. [{status}]");
                 mHRTF = IntPtr.Zero;
             }
             else
             {
-                Debug.Log(string.Format("Loaded HRTF: {0}.", (sofaFileName != null) ? sofaFileName : "default"));
+                Debug.Log($"Loaded HRTF: {((sofaFileName != null) ? sofaFileName : "default")}.");
             }
 
             if (sofaData != IntPtr.Zero)
@@ -89,7 +89,7 @@ namespace SteamAudio
             return mHRTF;
         }
 
-        private float dBToGain(float gaindB)
+        private static float dBToGain(float gaindB)
         {
             const float kMinDBLevel = -90.0f;
 

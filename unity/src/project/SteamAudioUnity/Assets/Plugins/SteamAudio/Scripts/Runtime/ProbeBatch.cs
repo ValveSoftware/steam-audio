@@ -86,7 +86,7 @@ namespace SteamAudio
             var status = API.iplProbeBatchLoad(context.Get(), serializedObject.Get(), out mProbeBatch);
             if (status != Error.Success)
             {
-                Debug.LogError(string.Format("Unable to load Probe Batch from {0}.", dataAsset.name));
+                Debug.LogError($"Unable to load Probe Batch from {dataAsset.name}.");
                 mProbeBatch = IntPtr.Zero;
             }
 

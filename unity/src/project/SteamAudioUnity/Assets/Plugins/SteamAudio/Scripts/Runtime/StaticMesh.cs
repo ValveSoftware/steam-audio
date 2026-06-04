@@ -63,9 +63,7 @@ namespace SteamAudio
             var status = API.iplStaticMeshCreate(scene.Get(), ref staticMeshSettings, out mStaticMesh);
             if (status != Error.Success)
             {
-                throw new Exception(string.Format("Unable to create static mesh for export ({0} vertices, {1} triangles, {2} materials): [{3}]",
-                    staticMeshSettings.numVertices.ToString(), staticMeshSettings.numTriangles.ToString(), staticMeshSettings.numMaterials.ToString(),
-                    status.ToString()));
+                throw new Exception($"Unable to create static mesh for export ({staticMeshSettings.numVertices.ToString()} vertices, {staticMeshSettings.numTriangles.ToString()} triangles, {staticMeshSettings.numMaterials.ToString()} materials): [{status.ToString()}]");
             }
 
             Marshal.FreeHGlobal(verticesBuffer);
@@ -82,7 +80,7 @@ namespace SteamAudio
 
             var status = API.iplStaticMeshLoad(scene.Get(), serializedObject.Get(), null, IntPtr.Zero, out mStaticMesh);
             if (status != Error.Success)
-                throw new Exception(string.Format("Unable to load static mesh ({0}). [{1}]", dataAsset.name, status));
+                throw new Exception($"Unable to load static mesh ({dataAsset.name}). [{status}]");
 
             serializedObject.Release();
         }

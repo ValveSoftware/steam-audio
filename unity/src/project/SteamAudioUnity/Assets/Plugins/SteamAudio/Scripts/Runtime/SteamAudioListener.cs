@@ -173,7 +173,7 @@ namespace SteamAudio
         }
 
         public void UpdateOutputs(SimulationFlags flags)
-        {}
+        { }
 
         private void OnDrawGizmosSelected()
         {
@@ -218,19 +218,25 @@ namespace SteamAudio
             CacheIdentifier();
             CacheProbeBatchesUsed();
 
-            var tasks = new BakedDataTask[1];
-            tasks[0].gameObject = gameObject;
-            tasks[0].component = this;
-            tasks[0].name = gameObject.name;
-            tasks[0].identifier = mIdentifier;
-            tasks[0].probeBatches = (useAllProbeBatches) ? FindObjectsOfType<SteamAudioProbeBatch>() : probeBatches;
-            tasks[0].probeBatchNames = new string[tasks[0].probeBatches.Length];
-            tasks[0].probeBatchAssets = new SerializedData[tasks[0].probeBatches.Length];
-            for (var i = 0; i < tasks[0].probeBatchNames.Length; ++i)
+            var task = new BakedDataTask();
+            task.gameObject = gameObject;
+            task.component = this;
+            task.name = gameObject.name;
+            task.identifier = mIdentifier;
+#if UNITY_2020_3_OR_NEWER
+            task.probeBatches = (useAllProbeBatches) ? FindObjectsByType<SteamAudioProbeBatch>() : probeBatches;
+#else
+            task.probeBatches = (useAllProbeBatches) ? FindObjectsOfType<SteamAudioProbeBatch>() : probeBatches;
+#endif
+            task.probeBatchNames = new string[task.probeBatches.Length];
+            task.probeBatchAssets = new SerializedData[task.probeBatches.Length];
+            for (var i = 0; i < task.probeBatchNames.Length; ++i)
             {
-                tasks[0].probeBatchNames[i] = tasks[0].probeBatches[i].gameObject.name;
-                tasks[0].probeBatchAssets[i] = tasks[0].probeBatches[i].GetAsset();
+                task.probeBatchNames[i] = task.probeBatches[i].gameObject.name;
+                task.probeBatchAssets[i] = task.probeBatches[i].GetAsset();
             }
+
+            var tasks = new BakedDataTask[1] { task };
 
             Baker.BeginBake(tasks);
         }
@@ -241,15 +247,20 @@ namespace SteamAudio
             AssetDatabase.StartAssetEditing();
 #endif
 
-            var tasks = new BakedDataTask[listeners.Length];
-
-            for (var i = 0; i < listeners.Length; i++)
+            int listenerCount = listeners.Length;
+            var tasks = new BakedDataTask[listenerCount];
+            for (var i = 0; i < listenerCount; i++)
             {
                 tasks[i].gameObject = listeners[i].gameObject;
                 tasks[i].component = listeners[i];
                 tasks[i].name = listeners[i].gameObject.name;
                 tasks[i].identifier = listeners[i].GetBakedDataIdentifier();
+
+#if UNITY_2022_3_OR_NEWER
+                tasks[i].probeBatches = (listeners[i].useAllProbeBatches) ? FindObjectsByType<SteamAudioProbeBatch>() : listeners[i].probeBatches;
+#else
                 tasks[i].probeBatches = (listeners[i].useAllProbeBatches) ? FindObjectsOfType<SteamAudioProbeBatch>() : listeners[i].probeBatches;
+#endif
                 tasks[i].probeBatchNames = new string[tasks[i].probeBatches.Length];
                 tasks[i].probeBatchAssets = new SerializedData[tasks[i].probeBatches.Length];
 
@@ -275,7 +286,11 @@ namespace SteamAudio
 
         void CacheProbeBatchesUsed()
         {
+#if UNITY_2022_3_OR_NEWER
+            mProbeBatchesUsed = (useAllProbeBatches) ? FindObjectsByType<SteamAudioProbeBatch>() : probeBatches;
+#else
             mProbeBatchesUsed = (useAllProbeBatches) ? FindObjectsOfType<SteamAudioProbeBatch>() : probeBatches;
+#endif
         }
 #endif
     }

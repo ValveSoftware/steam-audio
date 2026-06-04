@@ -63,7 +63,7 @@ namespace SteamAudio
         public override Transform GetListenerTransform()
         {
 #if UNITY_2023_3_OR_NEWER
-            var audioListener = GameObject.FindFirstObjectByType<AudioListener>();
+            var audioListener = GameObject.FindAnyObjectByType<AudioListener>();
 #else
             var audioListener = GameObject.FindObjectOfType<AudioListener>();
 #endif
