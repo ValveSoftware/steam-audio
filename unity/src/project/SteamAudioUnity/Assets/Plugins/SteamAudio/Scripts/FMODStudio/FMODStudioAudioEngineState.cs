@@ -57,13 +57,17 @@ namespace SteamAudio
     {
         public override Transform GetListenerTransform()
         {
+#if UNITY_2022_3_OR_NEWER
+            var fmodStudioListener = (MonoBehaviour) GameObject.FindAnyObjectByType<FMODUnity.StudioListener>();
+#else
             var fmodStudioListener = (MonoBehaviour) GameObject.FindObjectOfType<FMODUnity.StudioListener>();
+#endif
             return (fmodStudioListener != null) ? fmodStudioListener.transform : null;
         }
 
         public override AudioSettings GetAudioSettings()
         {
-            var audioSettings = new AudioSettings { };
+            var audioSettings = new AudioSettings();
 
             int samplingRate = 0;
             FMOD.SPEAKERMODE speakerMode = FMOD.SPEAKERMODE.DEFAULT;
