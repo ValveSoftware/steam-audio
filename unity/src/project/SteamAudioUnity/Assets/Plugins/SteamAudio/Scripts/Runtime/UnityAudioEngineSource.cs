@@ -39,7 +39,7 @@ namespace SteamAudio
 
         public override void Destroy()
         {
-            var index = 28;
+            const int index = 28;
 
             if (mAudioSource != null)
             {

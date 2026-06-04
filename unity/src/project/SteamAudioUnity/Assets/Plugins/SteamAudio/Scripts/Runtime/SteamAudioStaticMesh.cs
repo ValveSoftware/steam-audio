@@ -35,8 +35,7 @@ namespace SteamAudio
         {
             if (asset == null)
             {
-                Debug.LogWarningFormat("No asset set for Steam Audio Static Mesh in scene {0}. Export the scene before clicking Play.",
-                    gameObject.scene.name);
+                Debug.LogWarningFormat($"No asset set for Steam Audio Static Mesh in scene {gameObject.scene.name}. Export the scene before clicking Play.");
             }
 
             // Only load the static mesh asynchronously if we're using the default scene type. In particular, with

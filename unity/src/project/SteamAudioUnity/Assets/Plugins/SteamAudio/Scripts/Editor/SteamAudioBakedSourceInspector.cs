@@ -91,7 +91,7 @@ namespace SteamAudio
         [MenuItem("Steam Audio/Steam Audio Baked Source/Bake All Static Source Reflections In Current Scene", false, 65)]
         public static void BakeAllReflectionsInScene()
         {
-            var bakedSources = FindObjectsByType<SteamAudioBakedSource>(FindObjectsSortMode.None);
+            var bakedSources = FindObjectsByType<SteamAudioBakedSource>();
             if (bakedSources.Length == 0)
             {
                 EditorUtility.DisplayDialog(

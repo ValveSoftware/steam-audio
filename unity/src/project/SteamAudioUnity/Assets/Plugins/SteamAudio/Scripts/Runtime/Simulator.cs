@@ -28,7 +28,7 @@ namespace SteamAudio
         {
             var status = API.iplSimulatorCreate(context.Get(), ref simulationSettings, out mSimulator);
             if (status != Error.Success)
-                throw new Exception(string.Format("Unable to create simulator. [{0}]", status));
+                throw new Exception($"Unable to create simulator. [{status}]");
         }
 
         public Simulator(Simulator simulator)
@@ -103,7 +103,7 @@ namespace SteamAudio
 
             var status = API.iplSourceCreate(simulator.Get(), ref sourceSettings, out mSource);
             if (status != Error.Success)
-                throw new Exception(string.Format("Unable to create source for simulation. [{0}]", status));
+                throw new Exception($"Unable to create source for simulation. [{status}]");
         }
 
         public Source(Source source)

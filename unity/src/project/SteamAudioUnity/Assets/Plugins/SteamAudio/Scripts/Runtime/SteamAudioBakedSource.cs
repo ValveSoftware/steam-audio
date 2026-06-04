@@ -128,7 +128,7 @@ namespace SteamAudio
             tasks[0].name = gameObject.name;
             tasks[0].identifier = mIdentifier;
 #if UNITY_2020_3_OR_NEWER
-            tasks[0].probeBatches = (useAllProbeBatches) ? FindObjectsByType<SteamAudioProbeBatch>(FindObjectsSortMode.None) : probeBatches;
+            tasks[0].probeBatches = (useAllProbeBatches) ? FindObjectsByType<SteamAudioProbeBatch>() : probeBatches;
 #else
             tasks[0].probeBatches = (useAllProbeBatches) ?  FindObjectsOfType<SteamAudioProbeBatch>() : probeBatches;
 #endif
@@ -149,26 +149,41 @@ namespace SteamAudio
             AssetDatabase.StartAssetEditing();
 #endif
 
-            var tasks = new BakedDataTask[bakedSources.Length];
-
-            for (var i = 0; i < bakedSources.Length; i++)
-            {
-                tasks[i].gameObject = bakedSources[i].gameObject;
-                tasks[i].component = bakedSources[i];
-                tasks[i].name = bakedSources[i].gameObject.name;
-                tasks[i].identifier = bakedSources[i].GetBakedDataIdentifier();
+            // Hoist the search out of the loop
 #if UNITY_2020_3_OR_NEWER
-                tasks[i].probeBatches = (bakedSources[i].useAllProbeBatches) ? FindObjectsByType<SteamAudioProbeBatch>(FindObjectsSortMode.None) : bakedSources[i].probeBatches;
+            var allProbeBatches = FindObjectsByType<SteamAudioProbeBatch>();
 #else
-                tasks[i].probeBatches = (bakedSources[i].useAllProbeBatches) ?  FindObjectsOfType<SteamAudioProbeBatch>() : bakedSources[i].probeBatches;
+    var allProbeBatches = FindObjectsOfType<SteamAudioProbeBatch>();
 #endif
-                tasks[i].probeBatchNames = new string[tasks[i].probeBatches.Length];
-                tasks[i].probeBatchAssets = new SerializedData[tasks[i].probeBatches.Length];
-                for (var j = 0; j < tasks[i].probeBatchNames.Length; ++j)
+
+            var tasks = new BakedDataTask[bakedSources.Length];
+            int count = bakedSources.Length;
+
+            for (var i = 0; i < count; i++)
+            {
+                var source = bakedSources[i];
+
+                var task = new BakedDataTask();
+
+                task.gameObject = source.gameObject;
+                task.component = source;
+                task.name = source.gameObject.name;
+                task.identifier = source.GetBakedDataIdentifier();
+
+                task.probeBatches = (source.useAllProbeBatches) ? allProbeBatches : source.probeBatches;
+
+                int batchCount = task.probeBatches.Length;
+                task.probeBatchNames = new string[batchCount];
+                task.probeBatchAssets = new SerializedData[batchCount];
+
+                for (var j = 0; j < batchCount; ++j)
                 {
-                    tasks[i].probeBatchNames[j] = tasks[i].probeBatches[j].gameObject.name;
-                    tasks[i].probeBatchAssets[j] = tasks[i].probeBatches[j].GetAsset();
+                    var batch = task.probeBatches[j];
+                    task.probeBatchNames[j] = batch.gameObject.name;
+                    task.probeBatchAssets[j] = batch.GetAsset();
                 }
+
+                tasks[i] = task;
             }
 
 #if UNITY_EDITOR
@@ -186,7 +201,7 @@ namespace SteamAudio
         void CacheProbeBatchesUsed()
         {
 #if UNITY_2020_3_OR_NEWER
-            mProbeBatchesUsed = (useAllProbeBatches) ? FindObjectsByType<SteamAudioProbeBatch>(FindObjectsSortMode.None) : probeBatches;
+            mProbeBatchesUsed = (useAllProbeBatches) ? FindObjectsByType<SteamAudioProbeBatch>() : probeBatches;
 #else
             mProbeBatchesUsed = (useAllProbeBatches) ? FindObjectsOfType<SteamAudioProbeBatch>() : probeBatches;
 #endif

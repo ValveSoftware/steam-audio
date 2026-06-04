@@ -137,7 +137,7 @@ namespace SteamAudio
         [MenuItem("Steam Audio/Steam Audio Probe Batch/Bake All Pathing In Current Scene", false, 63)]
         public static void BakeAllPathingInScene()
         {
-            var probeBatches = FindObjectsByType<SteamAudioProbeBatch>(FindObjectsSortMode.None);
+            var probeBatches = FindObjectsByType<SteamAudioProbeBatch>();
             if (probeBatches.Length == 0)
             {
                 EditorUtility.DisplayDialog(

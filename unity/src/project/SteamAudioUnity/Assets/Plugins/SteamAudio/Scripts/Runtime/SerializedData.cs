@@ -32,7 +32,7 @@ namespace SteamAudio
             var fileName = EditorUtility.SaveFilePanelInProject("Export", defaultFileName, "asset",
                 "Select a file to export data to.");
 
-            if (fileName != null && fileName.Length > 0)
+            if (!string.IsNullOrEmpty(fileName))
             {
                 var dataAsset = ScriptableObject.CreateInstance<SerializedData>();
                 AssetDatabase.CreateAsset(dataAsset, fileName);

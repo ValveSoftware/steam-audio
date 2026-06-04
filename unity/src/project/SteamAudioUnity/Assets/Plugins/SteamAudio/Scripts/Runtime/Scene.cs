@@ -38,7 +38,7 @@ namespace SteamAudio
 
             var status = API.iplSceneCreate(context.Get(), ref sceneSettings, out mScene);
             if (status != Error.Success)
-                throw new Exception(string.Format("Unable to create scene [{0}]", status.ToString()));
+                throw new Exception($"Unable to create scene [{status.ToString()}]");
         }
 
         public Scene(Context context, SceneSettings sceneSettings, SerializedData dataAsset)
@@ -48,7 +48,7 @@ namespace SteamAudio
             var serializedObject = new SerializedObject(context, dataAsset);
             var status = API.iplSceneLoad(context.Get(), ref sceneSettings, serializedObject.Get(), null, IntPtr.Zero, out mScene);
             if (status != Error.Success)
-                throw new Exception(string.Format("Unable to load scene [{0}]", status.ToString()));
+                throw new Exception($"Unable to load scene [{status.ToString()}]");
 
             serializedObject.Release();
         }
