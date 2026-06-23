@@ -32,6 +32,56 @@
 
 namespace SteamAudio {
 
+int32 GetAmbisonicsDecodeOutputChannelCount(int32 NumOutputChannels)
+{
+    switch (NumOutputChannels)
+    {
+    case 1:
+    case 2:
+    case 4:
+    case 6:
+    case 8:
+        return NumOutputChannels;
+    default:
+        // Steam Audio only has built-in speaker layouts for the standard channel
+        // counts above. Decode to stereo for unusual Unreal output layouts, then
+        // write it into the submix output buffer with the correct output stride.
+        return 2;
+    }
+}
+
+void InterleaveSteamAudioBufferToSubmixOutput(const IPLAudioBuffer& InBuffer, float* OutBufferData, int32 NumFrames, int32 NumOutputChannels)
+{
+    if (!OutBufferData || !InBuffer.data || NumFrames <= 0 || NumOutputChannels <= 0)
+    {
+        return;
+    }
+
+    const int32 NumFramesToCopy = FMath::Min(NumFrames, InBuffer.numSamples);
+
+    for (int32 FrameIndex = 0; FrameIndex < NumFramesToCopy; ++FrameIndex)
+    {
+        for (int32 Channel = 0; Channel < NumOutputChannels; ++Channel)
+        {
+            float Sample = 0.0f;
+            if (Channel < InBuffer.numChannels && InBuffer.data[Channel])
+            {
+                Sample = InBuffer.data[Channel][FrameIndex];
+            }
+
+            OutBufferData[FrameIndex * NumOutputChannels + Channel] = Sample;
+        }
+    }
+
+    for (int32 FrameIndex = NumFramesToCopy; FrameIndex < NumFrames; ++FrameIndex)
+    {
+        for (int32 Channel = 0; Channel < NumOutputChannels; ++Channel)
+        {
+            OutBufferData[FrameIndex * NumOutputChannels + Channel] = 0.0f;
+        }
+    }
+}
+
 // ---------------------------------------------------------------------------------------------------------------------
 // FSteamAudioReverbSource
 // ---------------------------------------------------------------------------------------------------------------------
@@ -519,6 +569,7 @@ FSteamAudioReverbSubmixPlugin::FSteamAudioReverbSubmixPlugin()
     , PrevReflectionEffectType(IPL_REFLECTIONEFFECTTYPE_CONVOLUTION)
     , PrevDuration(0.0f)
     , PrevOrder(-1)
+    , PrevOutputChannels(0)
 {}
 
 FSteamAudioReverbSubmixPlugin::~FSteamAudioReverbSubmixPlugin()
@@ -537,8 +588,11 @@ void FSteamAudioReverbSubmixPlugin::SetReverbPlugin(SteamAudio::FSteamAudioRever
 	ReverbPlugin = Plugin;
 }
 
-void FSteamAudioReverbSubmixPlugin::LazyInit()
+void FSteamAudioReverbSubmixPlugin::LazyInit(int32 OutputChannels, bool bBinaural)
 {
+    OutputChannels = FMath::Max(OutputChannels, 1);
+    const int32 DecodeOutputChannels = bBinaural ? 2 : SteamAudio::GetAmbisonicsDecodeOutputChannelCount(OutputChannels);
+
     if (!Context)
     {
         Context = iplContextRetain(SteamAudio::FSteamAudioModule::GetManager().GetContext());
@@ -581,7 +635,7 @@ void FSteamAudioReverbSubmixPlugin::LazyInit()
         }
     }
 
-    if ((!AmbisonicsDecodeEffect || PrevOrder != SimulationSettings.maxOrder) && HRTF)
+    if ((!AmbisonicsDecodeEffect || PrevOrder != SimulationSettings.maxOrder || PrevOutputChannels != DecodeOutputChannels) && HRTF)
     {
         if (AmbisonicsDecodeEffect)
         {
@@ -589,7 +643,7 @@ void FSteamAudioReverbSubmixPlugin::LazyInit()
         }
 
         IPLAmbisonicsDecodeEffectSettings AmbisonicsDecodeSettings{};
-        AmbisonicsDecodeSettings.speakerLayout = SteamAudio::GetSpeakerLayoutForNumChannels(2);
+        AmbisonicsDecodeSettings.speakerLayout = SteamAudio::GetSpeakerLayoutForNumChannels(DecodeOutputChannels);
         AmbisonicsDecodeSettings.hrtf = HRTF;
         AmbisonicsDecodeSettings.maxOrder = SimulationSettings.maxOrder;
 
@@ -646,9 +700,14 @@ void FSteamAudioReverbSubmixPlugin::LazyInit()
         }
     }
 
-    if (!OutBuffer.data)
+    if (!OutBuffer.data || OutBuffer.numChannels != DecodeOutputChannels)
     {
-        IPLerror Status = iplAudioBufferAllocate(Context, 2, AudioSettings.frameSize, &OutBuffer);
+        if (OutBuffer.data)
+        {
+            iplAudioBufferFree(Context, &OutBuffer);
+        }
+
+        IPLerror Status = iplAudioBufferAllocate(Context, DecodeOutputChannels, AudioSettings.frameSize, &OutBuffer);
         if (Status != IPL_STATUS_SUCCESS)
         {
             UE_LOG(LogSteamAudio, Error, TEXT("Unable to create output buffer for reverb effect. [%d]"), Status);
@@ -658,6 +717,7 @@ void FSteamAudioReverbSubmixPlugin::LazyInit()
     PrevReflectionEffectType = SimulationSettings.reflectionType;
     PrevDuration = SimulationSettings.maxDuration;
     PrevOrder = SimulationSettings.maxOrder;
+    PrevOutputChannels = DecodeOutputChannels;
 }
 
 void FSteamAudioReverbSubmixPlugin::ShutDown()
@@ -762,7 +822,10 @@ void FSteamAudioReverbSubmixPlugin::OnProcessAudio(const FSoundEffectSubmixInput
 
     IPLSimulationSettings SimulationSettings = SteamAudio::FSteamAudioModule::GetManager().GetRealTimeSettings(static_cast<IPLSimulationFlags>(IPL_SIMULATIONFLAGS_REFLECTIONS | IPL_SIMULATIONFLAGS_PATHING));
 
-    LazyInit();
+    USteamAudioReverbSubmixPluginPreset* CurrentPreset = Cast<USteamAudioReverbSubmixPluginPreset>(GetPreset());
+    const bool bBinaural = (CurrentPreset && CurrentPreset->Settings.bApplyHRTF && !SteamAudio::FUnrealAudioEngineState::IsHRTFDisabled());
+
+    LazyInit(OutData.NumChannels, bBinaural);
 
     if (ReverbPlugin)
 	{
@@ -788,8 +851,7 @@ void FSteamAudioReverbSubmixPlugin::OnProcessAudio(const FSoundEffectSubmixInput
 		}
 
 		// If requested, apply reverb to the input.
-		USteamAudioReverbSubmixPluginPreset* ReverbPreset = Cast<USteamAudioReverbSubmixPluginPreset>(GetPreset());
-		if (ReverbPreset && ReverbPreset->Settings.bApplyReverb)
+		if (CurrentPreset && CurrentPreset->Settings.bApplyReverb)
 		{
             // If a Steam Audio Listener component has not set the current reverb source, stop.
             IPLSource CurrentReverbSource = GetReverbSource();
@@ -828,17 +890,15 @@ void FSteamAudioReverbSubmixPlugin::OnProcessAudio(const FSoundEffectSubmixInput
 
         if (bHasOutput && HRTF && AmbisonicsDecodeEffect && IndirectBuffer.data && OutBuffer.data)
         {
-            USteamAudioReverbSubmixPluginPreset* CurrentPreset = Cast<USteamAudioReverbSubmixPluginPreset>(GetPreset());
-
             IPLAmbisonicsDecodeEffectParams AmbisonicsDecodeParams{};
             AmbisonicsDecodeParams.order = SimulationSettings.maxOrder;
             AmbisonicsDecodeParams.hrtf = HRTF;
             AmbisonicsDecodeParams.orientation = SteamAudio::FSteamAudioModule::GetManager().GetListenerCoordinates();
-            AmbisonicsDecodeParams.binaural = (CurrentPreset && CurrentPreset->Settings.bApplyHRTF && !SteamAudio::FUnrealAudioEngineState::IsHRTFDisabled()) ? IPL_TRUE : IPL_FALSE;
+            AmbisonicsDecodeParams.binaural = bBinaural ? IPL_TRUE : IPL_FALSE;
 
             iplAmbisonicsDecodeEffectApply(AmbisonicsDecodeEffect, &AmbisonicsDecodeParams, &IndirectBuffer, &OutBuffer);
 
-            iplAudioBufferInterleave(Context, &OutBuffer, OutBufferData);
+            SteamAudio::InterleaveSteamAudioBufferToSubmixOutput(OutBuffer, OutBufferData, InData.NumFrames, OutData.NumChannels);
         }
 	}
 }

@@ -236,6 +236,7 @@ private:
     IPLReflectionEffectType PrevReflectionEffectType;
     float PrevDuration;
     int PrevOrder;
+    int32 PrevOutputChannels;
 
 	/** Double-buffered reference to the Steam Audio simulation source. */
 	static IPLSource ReverbSource[2];
@@ -244,7 +245,7 @@ private:
 	static std::atomic<bool> bNewReverbSourceWritten;
 
 	/** Ensures that the Steam Audio effects are initialized. */
-	void LazyInit();
+	void LazyInit(int32 OutputChannels, bool bBinaural);
 
 	/** Destroys Steam Audio effects. */
 	void ShutDown();
