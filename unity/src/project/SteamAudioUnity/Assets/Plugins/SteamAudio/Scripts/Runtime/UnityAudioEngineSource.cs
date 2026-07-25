@@ -30,6 +30,9 @@ namespace SteamAudio
         {
             mAudioSource = gameObject.GetComponent<AudioSource>();
 
+            for (int i = 0; i < mCachedParameters.Length; i++)
+                mCachedParameters[i] = float.NaN;
+
             mSteamAudioSource = gameObject.GetComponent<SteamAudioSource>();
             if (mSteamAudioSource)
             {
@@ -52,46 +55,58 @@ namespace SteamAudio
             }
         }
 
+        const int SPATIALIZER_PARAMETER_COUNT = 34;
+        readonly float[] mCachedParameters = new float[SPATIALIZER_PARAMETER_COUNT];
+
+        void SetParameter(int index, float value)
+        {
+            if (mCachedParameters[index] == value)
+                return;
+
+            mCachedParameters[index] = value;
+            mAudioSource.SetSpatializerFloat(index, value);
+        }
+
         public override void UpdateParameters(SteamAudioSource source)
         {
             if (!mAudioSource)
                 return;
 
             var index = 0;
-            mAudioSource.SetSpatializerFloat(index++, (source.distanceAttenuation) ? 1.0f : 0.0f);
-            mAudioSource.SetSpatializerFloat(index++, (source.airAbsorption) ? 1.0f : 0.0f);
-            mAudioSource.SetSpatializerFloat(index++, (source.directivity) ? 1.0f : 0.0f);
-            mAudioSource.SetSpatializerFloat(index++, (source.occlusion) ? 1.0f : 0.0f);
-            mAudioSource.SetSpatializerFloat(index++, (source.transmission) ? 1.0f : 0.0f);
-            mAudioSource.SetSpatializerFloat(index++, (source.reflections) ? 1.0f : 0.0f);
-            mAudioSource.SetSpatializerFloat(index++, (source.pathing) ? 1.0f : 0.0f);
-            mAudioSource.SetSpatializerFloat(index++, (float) source.interpolation);
-            mAudioSource.SetSpatializerFloat(index++, source.distanceAttenuationValue);
-            mAudioSource.SetSpatializerFloat(index++, (source.distanceAttenuationInput == DistanceAttenuationInput.CurveDriven) ? 1.0f : 0.0f);
-            mAudioSource.SetSpatializerFloat(index++, source.airAbsorptionLow);
-            mAudioSource.SetSpatializerFloat(index++, source.airAbsorptionMid);
-            mAudioSource.SetSpatializerFloat(index++, source.airAbsorptionHigh);
-            mAudioSource.SetSpatializerFloat(index++, (source.airAbsorptionInput == AirAbsorptionInput.UserDefined) ? 1.0f : 0.0f);
-            mAudioSource.SetSpatializerFloat(index++, source.directivityValue);
-            mAudioSource.SetSpatializerFloat(index++, source.dipoleWeight);
-            mAudioSource.SetSpatializerFloat(index++, source.dipolePower);
-            mAudioSource.SetSpatializerFloat(index++, (source.directivityInput == DirectivityInput.UserDefined) ? 1.0f : 0.0f);
-            mAudioSource.SetSpatializerFloat(index++, source.occlusionValue);
-            mAudioSource.SetSpatializerFloat(index++, (float) source.transmissionType);
-            mAudioSource.SetSpatializerFloat(index++, source.transmissionLow);
-            mAudioSource.SetSpatializerFloat(index++, source.transmissionMid);
-            mAudioSource.SetSpatializerFloat(index++, source.transmissionHigh);
-            mAudioSource.SetSpatializerFloat(index++, source.directMixLevel);
-            mAudioSource.SetSpatializerFloat(index++, (source.applyHRTFToReflections) ? 1.0f : 0.0f);
-            mAudioSource.SetSpatializerFloat(index++, source.reflectionsMixLevel);
-            mAudioSource.SetSpatializerFloat(index++, (source.applyHRTFToPathing) ? 1.0f : 0.0f);
-            mAudioSource.SetSpatializerFloat(index++, source.pathingMixLevel);
+            SetParameter(index++, (source.distanceAttenuation) ? 1.0f : 0.0f);
+            SetParameter(index++, (source.airAbsorption) ? 1.0f : 0.0f);
+            SetParameter(index++, (source.directivity) ? 1.0f : 0.0f);
+            SetParameter(index++, (source.occlusion) ? 1.0f : 0.0f);
+            SetParameter(index++, (source.transmission) ? 1.0f : 0.0f);
+            SetParameter(index++, (source.reflections) ? 1.0f : 0.0f);
+            SetParameter(index++, (source.pathing) ? 1.0f : 0.0f);
+            SetParameter(index++, (float) source.interpolation);
+            SetParameter(index++, source.distanceAttenuationValue);
+            SetParameter(index++, (source.distanceAttenuationInput == DistanceAttenuationInput.CurveDriven) ? 1.0f : 0.0f);
+            SetParameter(index++, source.airAbsorptionLow);
+            SetParameter(index++, source.airAbsorptionMid);
+            SetParameter(index++, source.airAbsorptionHigh);
+            SetParameter(index++, (source.airAbsorptionInput == AirAbsorptionInput.UserDefined) ? 1.0f : 0.0f);
+            SetParameter(index++, source.directivityValue);
+            SetParameter(index++, source.dipoleWeight);
+            SetParameter(index++, source.dipolePower);
+            SetParameter(index++, (source.directivityInput == DirectivityInput.UserDefined) ? 1.0f : 0.0f);
+            SetParameter(index++, source.occlusionValue);
+            SetParameter(index++, (float) source.transmissionType);
+            SetParameter(index++, source.transmissionLow);
+            SetParameter(index++, source.transmissionMid);
+            SetParameter(index++, source.transmissionHigh);
+            SetParameter(index++, source.directMixLevel);
+            SetParameter(index++, (source.applyHRTFToReflections) ? 1.0f : 0.0f);
+            SetParameter(index++, source.reflectionsMixLevel);
+            SetParameter(index++, (source.applyHRTFToPathing) ? 1.0f : 0.0f);
+            SetParameter(index++, source.pathingMixLevel);
             index++; // Skip 2 deprecated params.
             index++;
-            mAudioSource.SetSpatializerFloat(index++, (source.directBinaural) ? 1.0f : 0.0f);
-            mAudioSource.SetSpatializerFloat(index++, mHandle);
-            mAudioSource.SetSpatializerFloat(index++, (source.perspectiveCorrection) ? 1.0f : 0.0f);
-            mAudioSource.SetSpatializerFloat(index++, (source.normalizePathingEQ) ? 1.0f : 0.0f);
+            SetParameter(index++, (source.directBinaural) ? 1.0f : 0.0f);
+            SetParameter(index++, mHandle);
+            SetParameter(index++, (source.perspectiveCorrection) ? 1.0f : 0.0f);
+            SetParameter(index++, (source.normalizePathingEQ) ? 1.0f : 0.0f);
         }
     }
 }
