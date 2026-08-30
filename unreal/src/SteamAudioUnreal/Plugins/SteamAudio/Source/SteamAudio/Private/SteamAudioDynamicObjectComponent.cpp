@@ -21,7 +21,7 @@
 #include "SteamAudioScene.h"
 
 #if WITH_EDITOR
-#include "Subsystems/EditorAssetSubsystem.h"
+#include "ObjectTools.h"
 #endif
 
 // ---------------------------------------------------------------------------------------------------------------------
@@ -103,10 +103,10 @@ void USteamAudioDynamicObjectComponent::CleaupDynamicComponentAsset()
 {
     if (!Scene && Asset.IsValid() && bIsAssetActive)
     {
-        auto EditorAssetSubsystem = GEditor ? GEditor->GetEditorSubsystem<UEditorAssetSubsystem>() : nullptr;
-        if (EditorAssetSubsystem)
+        UObject* LoadedAsset = Asset.TryLoad();
+        if (LoadedAsset)
         {
-            EditorAssetSubsystem->DeleteAsset(Asset.GetAssetPathString());
+            ObjectTools::DeleteAssets({LoadedAsset}, false);
             bIsAssetActive = false;
         }
     }
