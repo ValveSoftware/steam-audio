@@ -5,7 +5,9 @@ mod database;
 pub mod loudness;
 mod map;
 
-pub use database::{HrtfDatabase, HrtfNormalization, HrtfPhaseType, HrtfSettings};
+pub use database::{
+    HrtfDatabase, HrtfInterpolation, HrtfNormalization, HrtfPhaseType, HrtfSettings,
+};
 pub use map::{HrirWeights, HrtfMap};
 
 /// Number of ears (upstream `IHRTFMap::kNumEars`).

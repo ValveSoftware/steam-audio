@@ -37,6 +37,16 @@ pub enum HrtfNormalization {
     Rms,
 }
 
+/// How an HRTF is looked up for a direction (upstream `HRTFInterpolation`).
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq)]
+pub enum HrtfInterpolation {
+    /// The measurement nearest to the direction.
+    #[default]
+    NearestNeighbor,
+    /// A bilinear blend of the four surrounding measurements.
+    Bilinear,
+}
+
 /// Phase response of the "unspatialized" HRTF that spatial blend mixes with (upstream `HRTFPhaseType`). Its
 /// magnitude response is always flat.
 #[derive(Debug, Clone, Copy, Default, PartialEq, Eq)]

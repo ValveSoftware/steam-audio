@@ -17,6 +17,7 @@ pub mod iir;
 pub mod math;
 pub mod sampling;
 pub mod sh;
+pub mod speaker_layout;
 pub mod window;
 
 pub use error::{Error, Result};
