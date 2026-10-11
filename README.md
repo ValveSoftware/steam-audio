@@ -47,8 +47,9 @@ Ported so far (all checked against golden data produced by the original C++):
 | 2.6 | Spherical harmonics: bands 0–6, rotations up to order 5 | bit-exact on Windows |
 | 2.7 | DSP primitives: frequency bands, biquad IIR filters, delay lines, allpass filters, window functions | bit-exact on Windows (IIR against upstream's AVX path) |
 | 3.1 | HRTF: built-in `cipic_124` data set, HRTF map (nearest and bilinear lookup), HRTF database (interpolation, loudness normalization, Ambisonics HRTFs) | map and loudness bit-exact on Windows; HRTFs within `1e-5` × peak, synthesized (interpolated) HRTFs within `5e-5` × peak |
+| 3.2 | Convolution: overlap-add and overlap-save effects, IR partitioning, multi-channel effects and mixers | within `1e-5` × peak (worst measured 2.5e-7; not bit-exact because of the FFT); tail states and counters exact |
 
-**Next:** stage 3.2, overlap-add and overlap-save convolution, then panning, binaural and Ambisonics effects.
+**Next:** stage 3.3, panning, binaural and virtual surround effects, then Ambisonics effects.
 
 The detailed plan, module order, per-module tolerances and known risks live in [`docs/PORTING_PLAN.md`](docs/PORTING_PLAN.md); intentional behaviour differences from upstream are listed in [`docs/DEVIATIONS.md`](docs/DEVIATIONS.md). Treat the roadmap below as intent, not a promise.
 
@@ -57,7 +58,7 @@ The detailed plan, module order, per-module tolerances and known risks live in [
 Planned scope, mirroring the feature areas of the original library. Boxes are checked only when a module passes comparison tests against the reference implementation.
 
 - [x] **Foundations**: math types, ambisonics primitives, FFT, audio buffers and DSP primitives
-- [ ] **Binaural rendering**: HRTF loading and interpolation, convolution, panning, ambisonics effects, SOFA files *(built-in HRTF done)*
+- [ ] **Binaural rendering**: HRTF loading and interpolation, convolution, panning, ambisonics effects, SOFA files *(built-in HRTF and convolution done)*
 - [ ] **Direct sound**: distance attenuation, air absorption, directivity, occlusion and transmission
 - [ ] **Scene and geometry**: static and instanced meshes, ray tracing backend
 - [ ] **Reflections**: real-time and baked sound propagation
