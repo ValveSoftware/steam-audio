@@ -88,6 +88,7 @@ The project is at a very early stage, so the most useful contributions right now
 
 - **Steam Audio** is developed by [Valve Corporation](https://github.com/ValveSoftware/steam-audio) and released under the Apache License 2.0. Official documentation: <https://valvesoftware.github.io/steam-audio/>.
 - This reimplementation is maintained by **razed.production**.
+- Developed with [Claude Code](https://claude.com/claude-code) (Anthropic) as an AI pair programmer; AI-assisted commits carry a `Co-Authored-By: Claude` trailer.
 - This project is not affiliated with or endorsed by Valve Corporation.
 
 Licensed under the [Apache License 2.0](LICENSE), consistent with the upstream project.
