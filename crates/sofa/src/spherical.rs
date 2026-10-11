@@ -96,13 +96,12 @@ impl Hrtf {
     }
 }
 
-#[cfg(test)]
+#[cfg(all(test, windows, target_env = "msvc"))]
 mod tests {
     use super::*;
 
     /// MSVC's `powf(x, 2)` rounds 0x1.157p46² up by an ulp; `radius` must call it rather than multiply.
     #[test]
-    #[cfg(all(windows, target_env = "msvc"))]
     fn radius_uses_the_c_library_powf() {
         let x = f32::from_bits(0x568a_b800);
         assert_eq!(x * x, f32::from_bits(0x6d96_55c8));
