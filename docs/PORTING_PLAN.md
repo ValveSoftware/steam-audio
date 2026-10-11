@@ -79,7 +79,7 @@ Order: leaves first. A box is ticked only when the slice passes its parity tests
 | 2.3 | Array math, `DynamicMatrix` | `array`, `array_math`, `matrix` | ☑ | ☑ | ☑ | `F32` (bit-exact on Windows). `Array<T, N>` → `Vec`/slices |
 | 2.4 | Audio buffer (interleave, mix, downmix, ambisonics conversions) | `audio_buffer` | ☑ | ☑ | ☑ | `F32` (bit-exact on Windows). `SpeakerLayout` moves to 3.3 with panning |
 | 2.5 | FFT | `fft`, `pffft_fft` | ☑ | ☑ | ☑ | `peak_relative(1e-5)`; measured worst error 5.4e-7 × peak (not bit-exact, R1) |
-| 2.6 | Spherical harmonics, ambisonics primitives | `sh`, `sh/spherical_harmonics` | ☐ | ☐ | ☐ | `F32` |
+| 2.6 | Spherical harmonics, ambisonics primitives | `sh`, `sh/spherical_harmonics` | ☑ | ☑ | ☑ | `F32` (bit-exact on Windows, debug and release; bands 0–6, rotations up to order 5). `ProjectFunction` not ported (random, unused) |
 | 2.7 | DSP primitives: bands, IIR, delay, window functions | `bands`, `iir`, `delay`, `window_function` | ☐ | ☐ | ☐ | IIR: `peak_relative(1e-4)` |
 | 3.1 | Built-in HRTF (`cipic_124`), HRTF map, HRTF database | `hrtf_map`, `hrtf_database`, `cipic_124.inl` | ☐ | ☐ | ☐ | `peak_relative(1e-5)` |
 | 3.2 | Convolution (overlap-add / overlap-save) | `overlap_add_convolution_effect`, `overlap_save_convolution_effect` | ☐ | ☐ | ☐ | `peak_relative(1e-5)` |
@@ -143,6 +143,13 @@ Order: leaves first. A box is ticked only when the slice passes its parity tests
 | `FFT(n)` / `FFT(n, FFTDomain::Real)`, `numRealSamples`, `numComplexSamples` | `fft::RealFft::new(n)`, `num_real_samples()`, `num_complex_samples()` |
 | `FFT(n, FFTDomain::Complex)` | `fft::ComplexFft::new(n)`, `num_samples()` |
 | `FFT::applyForward`, `applyInverse` (`const`) | `forward`, `inverse` (`&mut self`: the transform owns its scratch) |
+| `SphericalHarmonics::numCoeffsForOrder`, `legendre`, `evaluate`, `evaluateSum` | `sh::num_coeffs_for_order`, `legendre`, `evaluate`, `evaluate_sum` |
+| `SphericalHarmonics::projectSinglePoint`, `projectSinglePointAndUpdate` | `sh::project_single_point`, `project_single_point_and_update` |
+| `SphericalHarmonics::convertedDirection`, `convertedQuaternion`, `convertedCoordinateSpace` | `sh::converted_direction`, `converted_quaternion`, `converted_coordinate_space` |
+| `SHRotation`, `setRotation(CoordinateSpace3f)`, `setRotation(Quaternionf)`, `apply(order, in, out)` | `sh::ShRotation`, `set_rotation(&space)`, `set_rotation_quaternion(q)`, `apply(order, in, out)` |
+| `sh::GetIndex`, `GetCoefficientCount`, `ToVector`, `ToSphericalCoords` | `sh::google::index`, `coefficient_count`, `to_vector` (`[f64; 3]`), `to_spherical_coords` (→ `(phi, theta)`) |
+| `sh::EvalSH(l, m, dir)`, `EvalSH(l, m, phi, theta)`, `EvalSHSlow`, `EvalSHSum<float>` | `sh::google::eval_sh`, `eval_sh_spherical`, `eval_sh_slow`, `eval_sh_sum` / `eval_sh_sum_spherical` |
+| `sh::Rotation`, `SetRotation(...)`, `band_rotation(l)` | `sh::google::Rotation`, `set_rotation` / `set_rotation_quaternion` / `set_rotation_matrix`, `band_rotation(l)` |
 
 ## 6. Deviations
 
