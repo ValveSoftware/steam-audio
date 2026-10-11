@@ -207,6 +207,40 @@ fn queries(positions: &[f32], seed: u32) -> Vec<[f32; 3]> {
     queries
 }
 
+/// Lookup and neighbourhood indices are bit-exact with the MSVC reference. Elsewhere the C library's `sinf`, `cosf`,
+/// `atan2f` and `powf` round differently by an ulp, which can flip a tie between measurements that are exactly
+/// equidistant on a regular grid (for example stepping up in elevation to midway between two azimuths). There a
+/// different index is accepted only if it is as far from `point` as the expected one; returns whether it was a tie.
+#[track_caller]
+fn check_index(
+    actual: i32,
+    expected: i32,
+    point: [f32; 3],
+    positions: &[f32],
+    context: &str,
+) -> bool {
+    if actual == expected {
+        return false;
+    }
+    assert!(
+        !cfg!(all(windows, target_env = "msvc")) && actual >= 0 && expected >= 0,
+        "{context}: index {actual}, expected {expected}"
+    );
+    let distance = |index: i32| {
+        let p = &positions[index as usize * 3..index as usize * 3 + 3];
+        (0..3)
+            .map(|k| (f64::from(p[k]) - f64::from(point[k])).powi(2))
+            .sum::<f64>()
+            .sqrt()
+    };
+    let (a, e) = (distance(actual), distance(expected));
+    assert!(
+        (a - e).abs() <= 1e-5 * e.max(1e-6),
+        "{context}: index {actual} at {a}, expected {expected} at {e}: not a tie"
+    );
+    true
+}
+
 #[test]
 fn shipped_files_open() {
     for (k, name) in FILES.into_iter().enumerate() {
@@ -241,17 +275,18 @@ fn shipped_files_open() {
 
         let expected = golden::<i32>(&format!("{stem}_neighbors"));
         assert_eq!(expected.shape, [hrtf.m as usize, 6]);
+        let mut ties = 0;
         for i in 0..hrtf.m as usize {
             let actual = easy
                 .neighborhood
                 .get(i)
                 .unwrap()
                 .map(|n| n.map_or(-1, |n| n as i32));
-            assert_eq!(
-                actual,
-                expected.row(i),
-                "{name}: neighbours of measurement {i}"
-            );
+            let origin = [positions[i * 3], positions[i * 3 + 1], positions[i * 3 + 2]];
+            for (slot, (&a, &e)) in actual.iter().zip(expected.row(i)).enumerate() {
+                let context = format!("{name}: neighbour {slot} of measurement {i}");
+                ties += usize::from(check_index(a, e, origin, positions, &context));
+            }
         }
 
         let expected_points = golden::<f32>(&format!("{stem}_query_points"));
@@ -259,12 +294,19 @@ fn shipped_files_open() {
         let mut scratch = lookup.scratch();
         for (q, mut point) in queries(positions, 71 + k as u32).into_iter().enumerate() {
             let index = lookup.lookup_with(&mut point, &mut scratch);
-            assert_eq!(
-                index.map_or(-1, |i| i as i32),
+            let context = format!("{name}: query {q}");
+            let actual = index.map_or(-1, |i| i as i32);
+            ties += usize::from(check_index(
+                actual,
                 expected_indices[q],
-                "{name}: query {q}"
-            );
+                point,
+                positions,
+                &context,
+            ));
             assert_close(&point, expected_points.row(q), Tolerance::F32);
+        }
+        if ties > 0 {
+            eprintln!("{name}: {ties} ties resolved differently from the reference");
         }
     }
 }
