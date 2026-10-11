@@ -7,7 +7,7 @@ use parity::{Element, Lcg, Tolerance, compare, golden};
 use steam_audio::Complex;
 use steam_audio::hrtf::{
     BUILTIN_HRTF_DATA, HrtfDatabase, HrtfMap, HrtfNormalization, HrtfPhaseType, HrtfSettings,
-    NUM_EARS, loudness,
+    HrtfSource, NUM_EARS, loudness,
 };
 use steam_audio::math::Vector3;
 
@@ -199,7 +199,11 @@ fn version_two_data() -> Vec<u8> {
 fn check_database_case(c: &DatabaseCase, lcg: &mut Lcg) {
     let v2 = version_two_data();
     let settings = HrtfSettings {
-        data: c.version_two.then_some(v2.as_slice()),
+        source: if c.version_two {
+            HrtfSource::Data(&v2)
+        } else {
+            HrtfSource::BuiltIn
+        },
         volume: c.volume,
         normalization: c.normalization,
     };

@@ -6,9 +6,11 @@
 //! plus an HRIR (`frame + frame / 4 + num_samples - 1`, rounded up) and produces the spectra used for convolution.
 
 use std::fmt;
+#[cfg(feature = "sofa")]
+use std::path::Path;
 
 use super::loudness::{self, MAX_VOLUME_NORM_GAIN_DB};
-use super::{HrirWeights, HrtfMap, MAX_AMBISONICS_ORDER, NUM_EARS};
+use super::{AnyHrtfMap, HrirWeights, MAX_AMBISONICS_ORDER, NUM_EARS};
 use crate::Complex;
 use crate::effects::AmbisonicsPanningEffect;
 use crate::error::Result;
@@ -16,15 +18,32 @@ use crate::fft::RealFft;
 use crate::math::{PI, Vector3, cpp_min};
 use crate::sh;
 
-/// Where the HRTF comes from and how loud it is (upstream `HRTFSettings` for `HRTFMapType::Default`).
+/// Where the HRTF comes from and how loud it is (upstream `HRTFSettings`).
 #[derive(Debug, Clone, Copy, Default)]
 pub struct HrtfSettings<'a> {
-    /// HRTF data in the `.hrtf` format (see [`HrtfMap`]); `None` uses the built-in HRTF.
-    pub data: Option<&'a [u8]>,
+    /// The HRTF data.
+    pub source: HrtfSource<'a>,
     /// Volume adjustment in dB; 0 leaves the HRIRs unscaled.
     pub volume: f32,
     /// Loudness normalization applied before the volume adjustment.
     pub normalization: HrtfNormalization,
+}
+
+/// Where HRTF data comes from (upstream `HRTFSettings::type` with `hrtfData`, `sofaFileName` or `sofaData`).
+#[derive(Debug, Clone, Copy, Default)]
+#[non_exhaustive]
+pub enum HrtfSource<'a> {
+    /// The built-in HRTF ([`BUILTIN_HRTF_DATA`](super::BUILTIN_HRTF_DATA)).
+    #[default]
+    BuiltIn,
+    /// Data in the `.hrtf` format (see [`HrtfMap`](super::HrtfMap)).
+    Data(&'a [u8]),
+    /// A SOFA file, read from disk (see [`SofaHrtfMap`](super::SofaHrtfMap)).
+    #[cfg(feature = "sofa")]
+    SofaFile(&'a Path),
+    /// A SOFA file held in memory.
+    #[cfg(feature = "sofa")]
+    SofaData(&'a [u8]),
 }
 
 /// HRTF loudness normalization (upstream `HRTFNormType`).
@@ -63,10 +82,11 @@ pub enum HrtfPhaseType {
 
 /// HRTFs for one sampling rate and audio frame size (upstream `HRTFDatabase`).
 ///
-/// Queries that synthesize an HRTF take `&mut self` because they use internal scratch buffers; none of them allocate.
+/// Queries that synthesize an HRTF, and nearest-measurement lookups (a SOFA map searches with scratch space), take
+/// `&mut self` because they use internal scratch buffers; none of them allocate.
 #[derive(Clone)]
 pub struct HrtfDatabase {
-    map: HrtfMap,
+    map: AnyHrtfMap,
     audio_fft: RealFft,
     /// `NUM_EARS × num_hrirs × num_spectrum_samples`.
     hrtf: Vec<Complex>,
@@ -85,10 +105,7 @@ impl HrtfDatabase {
     pub fn new(settings: &HrtfSettings<'_>, sampling_rate: u32, frame_size: usize) -> Result<Self> {
         assert!(frame_size > 0, "frame size must be positive");
 
-        let mut map = match settings.data {
-            Some(data) => HrtfMap::from_bytes(data, sampling_rate)?,
-            None => HrtfMap::new(sampling_rate)?,
-        };
+        let mut map = AnyHrtfMap::new(settings, sampling_rate)?;
         let num_hrirs = map.num_hrirs();
         let num_samples = map.num_samples();
 
@@ -101,7 +118,7 @@ impl HrtfDatabase {
         ];
 
         // Loudness of a pair of HRIRs, transformed with zero-padding.
-        let mut pair_loudness = |map: &HrtfMap, index: usize| {
+        let mut pair_loudness = |map: &AnyHrtfMap, index: usize| {
             for (ear, spectrum) in spectra.iter_mut().enumerate() {
                 hrir[..num_samples].copy_from_slice(map.hrir(ear, index));
                 audio_fft.forward(&hrir, spectrum);
@@ -110,7 +127,8 @@ impl HrtfDatabase {
         };
 
         if settings.normalization == HrtfNormalization::Rms {
-            let reference = pair_loudness(&map, map.nearest_hrir(Vector3::new(0.0, 0.0, -1.0)));
+            let front = map.nearest_hrir(Vector3::new(0.0, 0.0, -1.0));
+            let reference = pair_loudness(&map, front);
             let max_gain = loudness::db_to_gain(MAX_VOLUME_NORM_GAIN_DB);
             for index in 0..num_hrirs {
                 let gain = cpp_min(
@@ -167,7 +185,7 @@ impl HrtfDatabase {
     }
 
     /// The underlying HRIRs, after normalization and volume adjustment.
-    pub fn map(&self) -> &HrtfMap {
+    pub fn map(&self) -> &AnyHrtfMap {
         &self.map
     }
 
@@ -187,7 +205,7 @@ impl HrtfDatabase {
     }
 
     /// Index of the measurement nearest to `direction` (upstream `nearestHRTF`'s lookup).
-    pub fn nearest_index(&self, direction: Vector3) -> usize {
+    pub fn nearest_index(&mut self, direction: Vector3) -> usize {
         self.map.nearest_hrir(direction)
     }
 
@@ -397,7 +415,7 @@ struct Interpolator {
 
 impl Interpolator {
     /// Decomposes every HRIR of `map` (upstream `decomposeToMagnitudePhase`).
-    fn new(map: &HrtfMap, sampling_rate: u32) -> Self {
+    fn new(map: &AnyHrtfMap, sampling_rate: u32) -> Self {
         let num_samples = map.num_samples();
         let mut fft = RealFft::new(num_samples);
         let bins = fft.num_complex_samples();

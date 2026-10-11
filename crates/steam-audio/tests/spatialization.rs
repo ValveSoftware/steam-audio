@@ -8,7 +8,7 @@ use parity::{Element, Lcg, Tolerance, compare, golden};
 use steam_audio::audio_buffer::{AudioBuffer, AudioEffectState, AudioSettings};
 use steam_audio::effects::{BinauralEffect, BinauralParams, PanningEffect, VirtualSurroundEffect};
 use steam_audio::hrtf::{
-    HrtfDatabase, HrtfInterpolation, HrtfNormalization, HrtfPhaseType, HrtfSettings,
+    HrtfDatabase, HrtfInterpolation, HrtfNormalization, HrtfPhaseType, HrtfSettings, HrtfSource,
 };
 use steam_audio::math::Vector3;
 use steam_audio::speaker_layout::{SpeakerLayout, SpeakerLayoutType};
@@ -105,7 +105,7 @@ fn layouts() -> Vec<(&'static str, SpeakerLayout)> {
 
 fn database(sampling_rate: u32, frame_size: usize) -> HrtfDatabase {
     let settings = HrtfSettings {
-        data: None,
+        source: HrtfSource::BuiltIn,
         volume: 0.0,
         normalization: HrtfNormalization::None,
     };

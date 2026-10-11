@@ -19,6 +19,7 @@ A Rust reimplementation of Valve's Steam Audio, verified numerically against the
 ```bash
 cargo fmt --all -- --check
 cargo clippy --all-targets -- -D warnings
+cargo clippy -p steam-audio --no-default-features --all-targets -- -D warnings
 cargo test --all
 ```
 
