@@ -83,7 +83,7 @@ Order: leaves first. A box is ticked only when the slice passes its parity tests
 | 2.7 | DSP primitives: bands, IIR, delay, window functions | `bands`, `iir`, `float8_iir`, `delay`, `float8_delay`, `window_function` | ☑ | ☑ | ☑ | Designs, spectra, allpass, windows: `F32`; delay: `EXACT`; filtering: `peak_relative(1e-5)`. Bit-exact on Windows (debug and release), filtering against upstream's AVX path (R8); the 4-sample path differs by ≤ 3.0e-6 × peak. `IIR8` and the order-switching wrappers not ported (dead code) |
 | 3.1 | Built-in HRTF (`cipic_124`), HRTF map, HRTF database | `hrtf_map`, `hrtf_database`, `cipic_124.inl` | ☑ | ☑ | ☑ | Map (loading, nearest, bilinear weights), loudness, peak delays: `EXACT`/`F32`, bit-exact on Windows; bilinear weights use abs `2e-5` because they divide angles up to ~230° by a 5° grid, amplifying libm `asin`/`atan2` ulp differences on Linux/macOS (measured 4.8e-6). Stored and Ambisonics HRTFs: `peak_relative(1e-5)` (measured ≤ 2.2e-7 × peak; ≤ 1.0e-6 when projected from version-2 data). Synthesized HRTFs (interpolation, spatial blend): `peak_relative(5e-5)`, measured worst 2.03e-5 × peak, because the phase is interpolated unwrapped and accumulated in `f32` from FFT phases that already differ (R1, R10). `HRTFMapFactory` and the SOFA map move to 3.5; the virtual speaker table (`kVirtualSpeakers`) lives in `hrtf` until 3.4 |
 | 3.2 | Convolution (overlap-add / overlap-save) | `overlap_add_convolution_effect`, `overlap_save_convolution_effect` | ☑ | ☑ | ☑ | `peak_relative(1e-5)` for audio and partitioned IR spectra (measured worst 2.5e-7 × peak, debug and release; not bit-exact because of the FFT, R1); tail states and counters `EXACT`. Overlap-save goldens are mono (R12); multi-channel effects and mixers are checked bit-exactly against mono ones. `TripleBuffer` moves to stage 6 (a new IR is passed as `Option<&mut OverlapSaveFir>`); the partitioner takes an `AudioBuffer` until `ImpulseResponse` lands in stage 6 |
-| 3.3 | Panning, binaural, virtual surround | `panning_effect`, `binaural_effect`, `virtual_surround_effect` | ☐ | ☐ | ☐ | `peak_relative(1e-5)` |
+| 3.3 | Speaker layouts, panning, binaural, virtual surround | `speaker_layout`, `panning_effect`, `binaural_effect`, `virtual_surround_effect` | ☑ | ☑ | ☑ | Panning weights `F32`, panning audio `peak_relative(1e-5)`: bit-exact on Windows. Binaural and virtual surround with stored HRTFs: `peak_relative(1e-5)` (measured worst 2.5e-7 × peak); with synthesized HRTFs (bilinear, spatial blend of a stereo input): `peak_relative(5e-5)` as in 3.1 (R10; measured worst 4.3e-6 × peak). Not bit-exact because of the FFT (R1); debug and release identical. States, tail counters and peak delays `EXACT`. Upstream quirks kept: R14. `secondOrderPanningWeight` not ported (dead code) |
 | 3.4 | Ambisonics effects (encode, decode, rotate, panning, binaural) | `ambisonics_*_effect` | ☐ | ☐ | ☐ | `peak_relative(1e-5)` |
 | 3.5 | `sofa` crate (ADR 0001) | `sofa_hrtf_map` + libmysofa | ☐ | ☐ | ☐ | see ADR |
 | 4 | Direct sound: distance attenuation, air absorption, directivity, direct effect, gain/EQ | `distance_attenuation`, `air_absorption`, `directivity`, `direct_effect`, `gain_effect`, `eq_effect` | ☐ | ☐ | ☐ | `F32` / `peak_relative(1e-5)`. `DirectEffect` needs an in-place `apply` (R7) |
@@ -180,6 +180,12 @@ Order: leaves first. A box is ticked only when the slice passes its parity tests
 | `OverlapSaveConvolutionEffect::apply(params, in, out)` (`TripleBuffer` or direct params) | `apply(new_ir: Option<&mut OverlapSaveFir>, num_channels, &in, &mut out)`; `Some` when the IR was updated |
 | `apply(params, in, mixer)`, `tail(mixer)` | `apply_to_mixer(new_ir, num_channels, &in, &mut mixer)`, `tail_to_mixer(&mut mixer)` |
 | `OverlapSaveConvolutionMixer(audioSettings, settings)`, `apply({numChannels}, out)` | `OverlapSaveConvolutionMixer::new(..)`, `apply(num_channels, &mut out)` |
+| `SpeakerLayout(type)`, `SpeakerLayout(n, speakers)`, `numSpeakersForLayout`, `speakersForLayout` | `speaker_layout::SpeakerLayout::new(ty)` (panics for `Custom`), `custom(vec)`, `num_speakers_for_layout`, `speakers_for_layout` |
+| `SpeakerLayoutType::FivePointOne`, `SevenPointOne` | `SpeakerLayoutType::FivePointOne`, `SevenPointOne` |
+| `PanningEffect({speakerLayout})`, `apply({direction}, in, out)`, `panningWeight(dir, layout, i)` | `effects::PanningEffect::new(&layout)`, `apply(direction, &in, &mut out)`, `PanningEffect::panning_weight(dir, &layout, i)` |
+| `HRTFInterpolation::NearestNeighbor`, `Bilinear` | `hrtf::HrtfInterpolation::NearestNeighbor`, `Bilinear` |
+| `BinauralEffect(audioSettings, {hrtf})`, `apply({direction, interpolation, spatialBlend, phaseType, hrtf, peakDelays}, in, out)` | `effects::BinauralEffect::new(&audio_settings, &hrtf)`, `apply(BinauralParams { .. }, &in, &mut out)` (`hrtf: &mut HrtfDatabase`, `peak_delays: Option<&mut [f32; 2]>`) |
+| `VirtualSurroundEffect(audioSettings, {speakerLayout, hrtf})`, `apply({hrtf}, in, out)` | `effects::VirtualSurroundEffect::new(&audio_settings, &layout, &hrtf)`, `apply(&mut hrtf, &in, &mut out)` |
 
 ## 6. Deviations
 
@@ -252,3 +258,12 @@ Tracked in [`DEVIATIONS.md`](DEVIATIONS.md).
   remain in it. The overlap-save tail lasts one block less than the IR and omits the last input frame's convolution
   with the leading blocks. `OverlapAddConvolutionEffect::tail` does not consume the pending tail, so a later `apply`
   adds it again. `OverlapSaveConvolutionEffect::reset` silences the current IR until a new one is passed.
+- **R14. Spatialization quirks the port keeps (found in 3.3).** `PanningEffect` crossfades with
+  `alpha = channel / numSamples` (the output channel index, not the sample index), so each channel uses one constant
+  mix of the previous and current weights for the whole frame and there is no real crossfade. Its previous direction
+  starts (and resets) at the zero vector, whose pairwise data comes from a NaN azimuth clamped to 0 and
+  `acos(0) = π/2`, so the first frame on 5.1/7.1 mixes in a gain of −1 on the front-left speaker. `VirtualSurroundEffect`
+  value-initializes its per-speaker states to `TailRemaining` and its mono path never updates them, so a mono layout
+  reports `TailRemaining` until `reset` or `tail`. Standard 5.1 and 7.1 layouts put the LFE at the centre position,
+  so virtual surround spatializes it from the front; only custom layouts can skip an LFE (position at the origin).
+  `BinauralEffect` rebuilds its convolution (dropping the tail) when applied with a database of another HRIR length.
