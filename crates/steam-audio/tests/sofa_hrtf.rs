@@ -272,7 +272,9 @@ fn sofa_hrtf_map() {
         if ties > 0 {
             eprintln!("{prefix}: {ties} queries differ by lookup ties (R17)");
         }
-        let result = compare(&weights, &expected_weights, Tolerance::F32);
+        // As the built-in map's bilinear weights (3.1): angles in degrees from `c2s` (`atan2f`, `sqrtf`) are divided
+        // by grid steps of a few degrees, which amplifies libm ulp differences off Windows (measured 1.25e-5 on Linux).
+        let result = compare(&weights, &expected_weights, Tolerance::new(2e-5, 0.0));
         assert!(result.is_ok(), "{prefix}interpolated_weights: {result:?}");
     }
 }
@@ -378,7 +380,13 @@ fn check_database_case(c: &DatabaseCase, lcg: &mut Lcg) {
             extend_flat(&mut ambisonics, ear);
         }
     }
-    check(&format!("{prefix}ambisonics_hrtfs"), &ambisonics, signal);
+    // Projected from interpolated HRTFs (R10) whose weights differ by libm ulps off Windows: measured 3.1e-6 × peak on
+    // Windows, 1.24e-5 × peak on Linux.
+    check(
+        &format!("{prefix}ambisonics_hrtfs"),
+        &ambisonics,
+        synthesized,
+    );
 
     let mut directions = vec![
         Vector3::new(0.0, 0.0, -1.0),
