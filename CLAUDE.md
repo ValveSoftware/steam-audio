@@ -57,6 +57,9 @@ Goldens are generated **only with MSVC on Windows x64** (upstream RNG and libm a
 - Some code silently computes in `double` (for example `Quaternion::normalize`); check MSVC C4244 warnings.
 - Use `math::cpp_min` / `cpp_max` (crate-private) to get `std::min` / `std::max` NaN and tie semantics.
 - Upstream's RNG: see risk R2 in the plan before porting anything random.
+- `float /= double` (and `float = double expr`) rounds twice: the left side is already a `float`. Mirror it with
+  `(f64::from(x) / a0) as f32`. MSVC's unqualified `sqrt(float)` is the `float` overload.
+- Code dispatched on `gSIMDLevel()` may round differently per path; the port follows the AVX path (risk R8).
 
 ## Rust conventions
 

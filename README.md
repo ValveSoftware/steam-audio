@@ -45,8 +45,9 @@ Ported so far (all checked against golden data produced by the original C++):
 | 2.4 | `AudioBuffer`: interleave, mix, downmix, ambisonics format conversions | bit-exact on Windows |
 | 2.5 | FFT (on [`realfft`](https://crates.io/crates/realfft)/[`rustfft`](https://crates.io/crates/rustfft) instead of PFFFT) | within `1e-5` × peak (worst measured 5.4e-7) |
 | 2.6 | Spherical harmonics: bands 0–6, rotations up to order 5 | bit-exact on Windows |
+| 2.7 | DSP primitives: frequency bands, biquad IIR filters, delay lines, allpass filters, window functions | bit-exact on Windows (IIR against upstream's AVX path) |
 
-**Next:** stage 2.7, DSP primitives (bands, IIR filters, delay lines, window functions), then HRTF and binaural rendering.
+**Next:** stage 3, HRTF and binaural rendering.
 
 The detailed plan, module order, per-module tolerances and known risks live in [`docs/PORTING_PLAN.md`](docs/PORTING_PLAN.md); intentional behaviour differences from upstream are listed in [`docs/DEVIATIONS.md`](docs/DEVIATIONS.md). Treat the roadmap below as intent, not a promise.
 
@@ -54,7 +55,7 @@ The detailed plan, module order, per-module tolerances and known risks live in [
 
 Planned scope, mirroring the feature areas of the original library. Boxes are checked only when a module passes comparison tests against the reference implementation.
 
-- [ ] **Foundations**: math types, ambisonics primitives, FFT and audio buffers *(2.1–2.6 done; DSP primitives remain)*
+- [x] **Foundations**: math types, ambisonics primitives, FFT, audio buffers and DSP primitives
 - [ ] **Binaural rendering**: HRTF loading and interpolation, convolution, panning, ambisonics effects, SOFA files
 - [ ] **Direct sound**: distance attenuation, air absorption, directivity, occlusion and transmission
 - [ ] **Scene and geometry**: static and instanced meshes, ray tracing backend

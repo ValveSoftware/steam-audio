@@ -10,6 +10,7 @@ add_executable(golden
     ${GOLDEN_DIR}/src/arrays.cpp
     ${GOLDEN_DIR}/src/audio_buffer.cpp
     ${GOLDEN_DIR}/src/sh.cpp
+    ${GOLDEN_DIR}/src/dsp.cpp
 )
 
 target_link_libraries(golden PRIVATE core hrtf)
