@@ -77,7 +77,7 @@ Order: leaves first. A box is ticked only when the slice passes its parity tests
 | 2.1 | Vector, matrix, quaternion, coordinate space, polar vector, sphere, box (`Aabb`), ray | `vector`, `matrix`, `quaternion`, `coordinate_space`, `polar_vector`, `sphere`, `box`, `ray` | ☑ | ☑ | ☑ | `F32` (bit-exact on Windows). `Triangle`, `Hit` and `Ray::intersect(Mesh)` move to stage 5 with `Mesh`; `DynamicMatrix` moves to 2.3 |
 | 2.2 | Math functions, sampling | `math_functions`, `sampling` | ☑ | ☑ | ☑ | `F32` (bit-exact on Windows). `RandomNumberGenerator` moves to stage 6 |
 | 2.3 | Array math, `DynamicMatrix` | `array`, `array_math`, `matrix` | ☑ | ☑ | ☑ | `F32` (bit-exact on Windows). `Array<T, N>` → `Vec`/slices |
-| 2.4 | Audio buffer (interleave, mix, downmix, ambisonics conversions) | `audio_buffer` | ☐ | ☐ | ☐ | `F32` |
+| 2.4 | Audio buffer (interleave, mix, downmix, ambisonics conversions) | `audio_buffer` | ☑ | ☑ | ☑ | `F32` (bit-exact on Windows). `SpeakerLayout` moves to 3.3 with panning |
 | 2.5 | FFT | `fft`, `pffft_fft` | ☐ | ☐ | ☐ | `peak_relative(1e-5)` |
 | 2.6 | Spherical harmonics, ambisonics primitives | `sh`, `sh/spherical_harmonics` | ☐ | ☐ | ☐ | `F32` |
 | 2.7 | DSP primitives: bands, IIR, delay, window functions | `bands`, `iir`, `delay`, `window_function` | ☐ | ☐ | ☐ | IIR: `peak_relative(1e-4)` |
@@ -135,6 +135,11 @@ Order: leaves first. A box is ticked only when the slice passes its parity tests
 | `DynamicMatrixf`, `multiplyMatrices(a, b, c)` | `math::DynamicMatrix`, `DynamicMatrix::multiply(&a, &b, &mut c)` |
 | `Sampling::generateSphereSamples(n, out)` | `sampling::sphere_samples(&mut out)` |
 | `complex_t` | `steam_audio::Complex` (`num_complex::Complex<f32>`) |
+| `AudioBuffer(channels, samples)`, `buf[i]` | `audio_buffer::AudioBuffer::new(channels, samples)`, `buf[i]` / `channel(i)` |
+| `AudioBuffer(channels, samples, data)`, `AudioBuffer(other, channel)` | `AudioBufferRef`/`AudioBufferMut::from_planar`, `channel_view(i)` / `channel_view_mut(i)` |
+| `AudioBuffer::read(out)`, `write(in)` | `interleave(&mut out)`, `deinterleave(&in)` |
+| `AudioBuffer::mix`, `downmix`, `convertAmbisonics` | `audio_buffer::mix`, `downmix`, `convert_ambisonics` |
+| `AmbisonicsType::N3D`, `SN3D`, `FuMa` | `AmbisonicsType::N3d`, `Sn3d`, `FuMa` |
 
 ## 6. Deviations
 
