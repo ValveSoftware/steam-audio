@@ -37,6 +37,7 @@ macro_rules! element {
 element!(f32, "<f4");
 element!(f64, "<f8");
 element!(i32, "<i4");
+element!(u8, "|u1");
 
 /// An n-dimensional array in C (row-major) order.
 #[derive(Debug, Clone, PartialEq)]

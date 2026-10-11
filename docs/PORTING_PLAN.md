@@ -36,7 +36,7 @@ This document is the source of truth for the port. Update the status table in §
 | Upstream | Purpose | Rust replacement |
 | --- | --- | --- |
 | PFFFT / FFTS / IPP / vDSP | FFT | `realfft` + `rustfft` |
-| libmysofa (+ zlib) | SOFA HRTF loading | own crate `sofa` (ADR 0001) + `flate2`/`miniz_oxide` |
+| libmysofa (+ zlib) | SOFA HRTF loading | own crate `sofa` (ADR 0001) + `miniz_oxide` |
 | Embree, Radeon Rays, ISPC | Ray tracing | own BVH tracer (the upstream "Default" scene type is the reference) |
 | FlatBuffers | Serialisation (scenes, baked data) | `flatbuffers` crate with the same `.fbs` schemas → binary-compatible files |
 | OpenCL, TrueAudioNext | GPU convolution and IR processing | **out of scope** |
@@ -85,7 +85,9 @@ Order: leaves first. A box is ticked only when the slice passes its parity tests
 | 3.2 | Convolution (overlap-add / overlap-save) | `overlap_add_convolution_effect`, `overlap_save_convolution_effect` | ☑ | ☑ | ☑ | `peak_relative(1e-5)` for audio and partitioned IR spectra (measured worst 2.5e-7 × peak, debug and release; not bit-exact because of the FFT, R1); tail states and counters `EXACT`. Overlap-save goldens are mono (R12); multi-channel effects and mixers are checked bit-exactly against mono ones. `TripleBuffer` moves to stage 6 (a new IR is passed as `Option<&mut OverlapSaveFir>`); the partitioner takes an `AudioBuffer` until `ImpulseResponse` lands in stage 6 |
 | 3.3 | Speaker layouts, panning, binaural, virtual surround | `speaker_layout`, `panning_effect`, `binaural_effect`, `virtual_surround_effect` | ☑ | ☑ | ☑ | Panning weights `F32`, panning audio `peak_relative(1e-5)`: bit-exact on Windows. Binaural and virtual surround with stored HRTFs: `peak_relative(1e-5)` (measured worst 2.5e-7 × peak); with synthesized HRTFs (bilinear, spatial blend of a stereo input): `peak_relative(5e-5)` as in 3.1 (R10; measured worst 4.3e-6 × peak). Not bit-exact because of the FFT (R1); debug and release identical. States, tail counters and peak delays `EXACT`. Upstream quirks kept: R14. `secondOrderPanningWeight` not ported (dead code) |
 | 3.4 | Ambisonics effects (encode, decode, rotate, panning, binaural) | `ambisonics_encode_effect`, `ambisonics_rotate_effect`, `ambisonics_panning_effect`, `ambisonics_binaural_effect`, `ambisonics_decode_effect` | ☑ | ☑ | ☑ | Encode and rotate: `F32`; panning and decode audio: `peak_relative(1e-5)`. Encode, rotate, panning and panned decoding are bit-exact on Windows (debug and release). Binaural (alone and in decode): `peak_relative(1e-5)`, measured worst 2.5e-7 × peak, not bit-exact because of the FFT (R1). States and tail counters `EXACT`. Outputs are prefilled with a sentinel, so channels the effects leave untouched are checked too. The virtual speaker table moved from `hrtf` to `AmbisonicsPanningEffect::VIRTUAL_SPEAKERS`. Upstream quirks kept: R15 |
-| 3.5 | `sofa` crate (ADR 0001) | `sofa_hrtf_map` + libmysofa | ☐ | ☐ | ☐ | see ADR |
+| 3.5a | `sofa` crate: HDF5 subset, SOFA loader and check (ADR 0001) | libmysofa 1.3.3 `src/hdf/*` (except `btreeRead`), `hrtf/reader.c`, `check.c`, `tools.c` (attributes) | ☑ | ☑ | ☑ | Loader results compared as a blob of status codes, dimensions, attributes and per-array FNV-1a hashes of the `f32` values: `EXACT`. Bit-exact on the three files in `core/data/hrtf` (plus source positions and sampled HRIRs as arrays), on libmysofa's 43 test files (including its fuzzing regressions; local only, the files are not in the repository) and on 256 Lcg-chosen corruptions of `cipic_124.sofa` (2000 checked once locally). Inflate uses `miniz_oxide`'s core with zlib's single-call semantics. Malformed input never panics; a cargo-fuzz target exists (`crates/sofa/fuzz`). Upstream quirks kept: R16 |
+| 3.5b | `sofa` crate: Speex resampler, `mysofa_tocartesian`, k-d tree lookup, neighbourhood, `c2s`/`s2c` (the rest of `mysofa_open_no_norm`) | libmysofa `resample.c`, `speex_resampler.c`, `spherical.c`, `tools.c`, `kdtree.c`, `lookup.c`, `neighbors.c`, `easy.c` | ☐ | ☐ | ☐ | ADR 0001: resampled HRIRs `peak_relative(1e-5)`, lookup and neighbourhood indices `EXACT` |
+| 3.5c | SOFA HRTF map and `HRTFMapFactory` (moved from 3.1) | `sofa_hrtf_map`, `hrtf_map_factory` | ☐ | ☐ | ☐ | Weights `F32`, indices `EXACT`; binaural with a SOFA HRTF as in 3.3 |
 | 4 | Direct sound: distance attenuation, air absorption, directivity, direct effect, gain/EQ | `distance_attenuation`, `air_absorption`, `directivity`, `direct_effect`, `gain_effect`, `eq_effect` | ☐ | ☐ | ☐ | `F32` / `peak_relative(1e-5)`. `DirectEffect` needs an in-place `apply` (R7) |
 | 5 | Scene and geometry: mesh, static/instanced mesh, BVH, scene, materials, OBJ loading for tests | `mesh`, `static_mesh`, `instanced_mesh`, `bvh`, `scene`, `material`, `hit` | ☐ | ☐ | ☐ | hits: exact triangle index, `F32` distance |
 | 5.1 | Direct simulator (occlusion, transmission) | `direct_simulator` | ☐ | ☐ | ☐ | R2 |
@@ -108,8 +110,8 @@ Order: leaves first. A box is ticked only when the slice passes its parity tests
 
   Every tolerance looser than these needs a written reason in the table in §4.
 - **Upstream tests:** each `core/src/test/*.test.cpp` is ported along with its module.
-- **Extra:** `proptest` for math invariants; `cargo-fuzz` for the parsers (SOFA/HDF5, OBJ, serialised
-  objects); `criterion` benchmarks against `core/src/benchmark` for the hot paths (convolution, binaural,
+- **Extra:** `proptest` for math invariants; `cargo-fuzz` for the parsers (SOFA/HDF5 in `crates/sofa/fuzz`, OBJ,
+  serialised objects); `criterion` benchmarks against `core/src/benchmark` for the hot paths (convolution, binaural,
   reflections).
 
 ### Name mapping (upstream → Rust)
@@ -192,6 +194,13 @@ Order: leaves first. A box is ticked only when the slice passes its parity tests
 | `AmbisonicsPanningEffect::kNumVirtualSpeakers`, `kVirtualSpeakers` | `AmbisonicsPanningEffect::NUM_VIRTUAL_SPEAKERS`, `VIRTUAL_SPEAKERS` |
 | `AmbisonicsBinauralEffect(audioSettings, {maxOrder, hrtf})`, `apply({hrtf, order}, in, out)` | `effects::AmbisonicsBinauralEffect::new(&audio_settings, max_order, &hrtf)`, `apply(&hrtf, order, &in, &mut out)` |
 | `AmbisonicsDecodeEffect(audioSettings, {speakerLayout, maxOrder, hrtf})`, `apply({order, orientation, binaural, hrtf}, in, out)` | `effects::AmbisonicsDecodeEffect::new(&audio_settings, &layout, max_order, Option<&HrtfDatabase>)`, `apply(AmbisonicsDecodeParams { .. }, &in, &mut out)` |
+| libmysofa `mysofa_load_data(data, size, &err)` / `mysofa_load(filename, &err)` | `sofa::Hrtf::load(&data)` / `Hrtf::load_file(path)` → `Result<Hrtf, sofa::Error>` |
+| `mysofa_check(hrtf)` | `hrtf.check()` |
+| `mysofa_getAttribute(hrtf->attributes, name)` | `hrtf.attribute(name)`, `Array::attribute(name)` |
+| `MYSOFA_HRTF` (`I`, `C`, `R`, `E`, `N`, `M`, `DataIR`, `SourcePosition`, …, `attributes`, `variables`) | `sofa::Hrtf` (`i`, `c`, `r`, `e`, `n`, `m`, `data_ir`, `source_position`, …, `attributes`, `variables`) |
+| `MYSOFA_ARRAY` (`values` may be NULL), `MYSOFA_ATTRIBUTE`, `MYSOFA_VARIABLE` | `sofa::Array` (`values: Option<Vec<f32>>`), `Attribute` (bytes), `Variable`; lists in file order |
+| `MYSOFA_*` status codes, `errno` | `sofa::Error` variants, `Error::code()` returns the same numbers |
+| The status `mysofa_load` returns alongside a usable HRTF | `Hrtf::load_error` |
 
 ## 6. Deviations
 
@@ -213,7 +222,10 @@ Tracked in [`DEVIATIONS.md`](DEVIATIONS.md).
   - Reflection and pathing ray directions: `RandomNumberGenerator` is seeded with `time(NULL)`, so **upstream
     itself is not reproducible**. Use statistical checks (band energies within ±0.5 dB, reverb times within 5 %)
     and seeded determinism on the Rust side.
-- **R3. SOFA/HDF5:** see ADR 0001.
+- **R3. SOFA/HDF5:** see ADR 0001. Split into 3.5a (parser), 3.5b (resampling and lookup) and 3.5c (HRTF map). The
+  parser is checked bit for bit against libmysofa (3.5a). libmysofa positions are a `long`, 32 bits on Windows, so
+  the port truncates seek offsets to `i32` like the reference build; on Linux and macOS upstream would differ only on
+  corrupt files with offsets of 2 GiB or more.
 - **R4. FlatBuffers compatibility** of baked data. It must be readable by both implementations, which is
   verified by cross-loading files.
 - **R6. Shipped binaries use Intel IPP** for `ArrayMath` and FFT on x86/x64. Our reference build uses upstream's
@@ -285,3 +297,16 @@ Tracked in [`DEVIATIONS.md`](DEVIATIONS.md).
   `process` methods with relaxed checks. `AmbisonicsBinauralEffect::tail` weights every channel up to the maximum order
   with the maximum order's max-rE gains, whatever order the last frame had, and the effect rebuilds its convolutions
   (dropping the tail) when applied with a database of another HRIR length, like `BinauralEffect`.
+- **R16. libmysofa quirks the port keeps (found in 3.5a).** These decide which corrupt or unusual files load, so they
+  are reproduced: only the B-tree node a chunked dataset points to is read (child pointers are taken as chunks);
+  the shuffle filter is accepted but never applied; a global heap collection's address is kept in 16 bits; one
+  recursion counter, never decremented for continuation messages, limits both continuation messages (25) and nested
+  heap blocks (20); a short attribute name is dropped silently while `errno` is still 0; unresolvable object
+  references are ignored and forward ones read as `REF%08X`; `getArray` reads the precision through a union, so
+  64-bit integers load as doubles; MSVC's `realloc(p, 0)` makes a dataset of fewer than 8 bytes a missing variable,
+  while one without data is present and empty; a variable that fails to load leaves the field missing and only the
+  last failure is reported (`Hrtf::load_error`, ignored by `mysofa_open`); with duplicate children the first in the
+  file wins, with duplicate attributes the last. zlib's `inflate` returns as soon as its output buffer is full with a literal or
+  match still pending, so what follows a chunk's declared size in its stream (more data, a corrupt checksum) goes
+  unchecked and the chunk loads; the port's inflater stops at the same point, and the corruption tests found no case
+  where the two differ.

@@ -44,6 +44,10 @@ implementation-defined (`std::default_random_engine`), so other toolchains produ
 (see risk R2 in `docs/PORTING_PLAN.md`). Commit the regenerated files together with the generator change.
 The `iir` generator also needs a CPU with AVX: it records upstream's AVX filtering path (risk R8).
 
+The `sofa` generator reads `core/data/hrtf/*.sofa`, so run it from the repository root. It also describes libmysofa's
+own test files, taken from `MYSOFA_TESTS_DIR` (default `core/deps-build/mysofa/src/mysofa/tests`, fetched by
+`fetch_deps.py`); without them it skips those cases, and so does the Rust test.
+
 ## Adding a generator
 
 1. Create `src/<module>.cpp` with a function `void generate(const std::filesystem::path& out)`, and register it

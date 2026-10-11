@@ -59,7 +59,7 @@ Port into a separate crate, `crates/sofa`:
 - ➖ The most work: roughly 3–5k lines of C to port, plus a resampler.
 - ➖ May hit HDF5 features libmysofa does not support either. Accepted: we match libmysofa's coverage, not more.
 
-`flate2` with the pure-Rust `miniz_oxide` backend replaces zlib.
+`flate2` with the pure-Rust `miniz_oxide` backend replaces zlib (refined below: `miniz_oxide` directly).
 
 ### D. Offline conversion of SOFA into Steam Audio's own format
 
@@ -82,3 +82,21 @@ binaural work starts with the built-in `cipic_124` HRTF, so SOFA can be done in 
 - Add a `cargo-fuzz` target for the HDF5 parser once it exists.
 - If the port stalls, option B stays available as a temporary, feature-gated fallback that does not touch the
   public API.
+
+## Refinements (2026-10-12, stage 3.5a)
+
+- **Split.** The port is done in three stages: 3.5a, the HDF5 subset with the SOFA loader and `mysofa_check`; 3.5b,
+  resampling, `tocartesian`, lookup, neighbourhood and `c2s`/`s2c`; 3.5c, `SOFAHRTFMap` and `HRTFMapFactory` in
+  `steam-audio`. The `sofa` cargo feature of `steam-audio` arrives with 3.5c.
+- **Inflate.** libmysofa calls zlib's `inflate` once per chunk into a buffer of the chunk's size. zlib returns as soon
+  as that buffer is full, so trailing data and even a corrupt checksum after a pending literal or match go unchecked.
+  `flate2`'s streaming API decodes ahead into its window and reports those errors, so the crate uses `miniz_oxide`'s
+  core inflater with a non-wrapping output buffer of exactly the chunk's size, which stops at the same point.
+- **Parity scope.** Beyond the three shipped files, the goldens cover libmysofa's own test files (including its
+  fuzzing regressions; checked locally, as the files are not in this repository) and corrupted variants of
+  `cipic_124.sofa`: status codes, attributes and values match libmysofa bit for bit. The port reproduces
+  libmysofa's quirks (plan, R16) and adds limits only where libmysofa crashes or does not terminate
+  (`DEVIATIONS.md`).
+- **Fuzzing.** `crates/sofa/fuzz` holds a cargo-fuzz target (nightly, outside the workspace).
+- **License.** The crate is a derived work of libmysofa (BSD 3-Clause); its notice is kept in
+  `crates/sofa/LICENSE-libmysofa`.

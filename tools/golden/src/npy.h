@@ -15,6 +15,7 @@ template <typename T> struct NpyDescr;
 template <> struct NpyDescr<float> { static constexpr const char* value = "<f4"; };
 template <> struct NpyDescr<double> { static constexpr const char* value = "<f8"; };
 template <> struct NpyDescr<int32_t> { static constexpr const char* value = "<i4"; };
+template <> struct NpyDescr<uint8_t> { static constexpr const char* value = "|u1"; };
 
 template <typename T>
 void writeNpy(const std::filesystem::path& path, const std::vector<size_t>& shape, const T* data)

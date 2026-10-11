@@ -19,3 +19,13 @@ all = { level = "warn", priority = -1 }
 [profile.release]
 lto = "thin"
 codegen-units = 1
+
+# SOFA tests parse multi-megabyte files; the parser and its inflate backend are optimized even in test builds.
+[profile.dev.package.sofa]
+opt-level = 3
+
+[profile.dev.package.miniz_oxide]
+opt-level = 3
+
+[profile.dev.package.adler2]
+opt-level = 3
