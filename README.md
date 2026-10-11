@@ -7,7 +7,7 @@
 Spatial audio, physics-based sound propagation and HRTF rendering — memory-safe, portable, and written in Rust.
 
 [![CI](https://github.com/razedproduction/steam-audio-rust/actions/workflows/ci.yml/badge.svg)](https://github.com/razedproduction/steam-audio-rust/actions/workflows/ci.yml)
-[![Status](https://img.shields.io/badge/status-foundations-yellow)](#status)
+[![Status](https://img.shields.io/badge/status-binaural%20rendering-yellow)](#status)
 [![Language](https://img.shields.io/badge/language-Rust-dea584?logo=rust)](https://www.rust-lang.org/)
 [![MSRV](https://img.shields.io/badge/MSRV-1.85-dea584)](Cargo.toml)
 [![License](https://img.shields.io/badge/license-Apache--2.0-blue)](LICENSE)
@@ -33,7 +33,7 @@ This project is an experiment in reimplementing that functionality in **Rust**, 
 
 ## Status
 
-> 🚧 **Foundations stage.** The math and signal-processing building blocks are ported and verified against the C++ reference; no audio effects or simulation exist yet, so nothing here is usable in production.
+> 🚧 **Binaural rendering stage.** The math and signal-processing foundations and the built-in HRTF are ported and verified against the C++ reference; no audio effects or simulation exist yet, so nothing here is usable in production.
 
 Ported so far (all checked against golden data produced by the original C++):
 
@@ -46,8 +46,9 @@ Ported so far (all checked against golden data produced by the original C++):
 | 2.5 | FFT (on [`realfft`](https://crates.io/crates/realfft)/[`rustfft`](https://crates.io/crates/rustfft) instead of PFFFT) | within `1e-5` × peak (worst measured 5.4e-7) |
 | 2.6 | Spherical harmonics: bands 0–6, rotations up to order 5 | bit-exact on Windows |
 | 2.7 | DSP primitives: frequency bands, biquad IIR filters, delay lines, allpass filters, window functions | bit-exact on Windows (IIR against upstream's AVX path) |
+| 3.1 | HRTF: built-in `cipic_124` data set, HRTF map (nearest and bilinear lookup), HRTF database (interpolation, loudness normalization, Ambisonics HRTFs) | map and loudness bit-exact on Windows; HRTFs within `1e-5` × peak, synthesized (interpolated) HRTFs within `5e-5` × peak |
 
-**Next:** stage 3, HRTF and binaural rendering.
+**Next:** stage 3.2, overlap-add and overlap-save convolution, then panning, binaural and Ambisonics effects.
 
 The detailed plan, module order, per-module tolerances and known risks live in [`docs/PORTING_PLAN.md`](docs/PORTING_PLAN.md); intentional behaviour differences from upstream are listed in [`docs/DEVIATIONS.md`](docs/DEVIATIONS.md). Treat the roadmap below as intent, not a promise.
 
@@ -56,7 +57,7 @@ The detailed plan, module order, per-module tolerances and known risks live in [
 Planned scope, mirroring the feature areas of the original library. Boxes are checked only when a module passes comparison tests against the reference implementation.
 
 - [x] **Foundations**: math types, ambisonics primitives, FFT, audio buffers and DSP primitives
-- [ ] **Binaural rendering**: HRTF loading and interpolation, convolution, panning, ambisonics effects, SOFA files
+- [ ] **Binaural rendering**: HRTF loading and interpolation, convolution, panning, ambisonics effects, SOFA files *(built-in HRTF done)*
 - [ ] **Direct sound**: distance attenuation, air absorption, directivity, occlusion and transmission
 - [ ] **Scene and geometry**: static and instanced meshes, ray tracing backend
 - [ ] **Reflections**: real-time and baked sound propagation
