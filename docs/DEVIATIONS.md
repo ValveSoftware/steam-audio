@@ -19,3 +19,6 @@ Differences within a module's stated numerical tolerance (see `PORTING_PLAN.md` 
 | `AudioBuffer` storage | `float* const*`: one pointer per channel, channels may live anywhere | One contiguous planar array (owned `Vec<f32>` or a borrowed slice view) | No `unsafe`, no pointer tables. Upstream only builds non-owning buffers over contiguous data internally; the C API (stage 8) copies user channel arrays into preallocated scratch | yes (2.4) |
 | `convertAmbisonics` with FuMa above order 3 | Reads past the 16-entry index/gain tables (undefined behaviour) | Panics | Safety | yes (2.4) |
 | `AudioBuffer::downmix` with 0 input channels | Reads `in[0]` (undefined behaviour) | Panics | Safety | yes (2.4) |
+| FFT sizes below PFFFT's minimum | `FFT` throws `Status::Initialization` for real sizes < 32 and complex sizes < 16 (after rounding up to a power of two) | Every positive size works; size 0 panics | No reason to fail; upstream never relies on the exception | yes (2.5) |
+| `FFT` domain | One class; the domain is a constructor argument and calling the wrong `apply*` overload is undefined | Two types, `RealFft` and `ComplexFft` | Type safety | yes (2.5) |
+| `FFT::apply*` buffer sizes | Reads/writes exactly `numRealSamples`/`numComplexSamples` through raw pointers | Slices must have exactly those lengths, otherwise panics | Safety | yes (2.5) |
