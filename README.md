@@ -33,23 +33,15 @@ This project is an experiment in reimplementing that functionality in **Rust**, 
 
 ## Status
 
-> 🚧 **Binaural rendering stage.** The math and signal-processing foundations and the built-in HRTF are ported and verified against the C++ reference; no audio effects or simulation exist yet, so nothing here is usable in production.
+> 🚧 **Binaural rendering stage.** The math and signal-processing foundations, the built-in HRTF, convolution, and the panning, binaural and Ambisonics effects are ported and verified against the C++ reference; SOFA loading and simulation do not exist yet, so nothing here is usable in production.
 
-Ported so far (all checked against golden data produced by the original C++):
+Current stage (checked against golden data produced by the original C++; earlier stages are tracked in [`docs/PORTING_PLAN.md`](docs/PORTING_PLAN.md)):
 
 | Stage | Module | Parity |
 | --- | --- | --- |
-| 2.1 | Vectors, matrices, quaternions, coordinate spaces, polar vectors, spheres, boxes, rays | bit-exact on Windows |
-| 2.2 | Math functions, sampling | bit-exact on Windows |
-| 2.3 | Array math, `DynamicMatrix` | bit-exact on Windows |
-| 2.4 | `AudioBuffer`: interleave, mix, downmix, ambisonics format conversions | bit-exact on Windows |
-| 2.5 | FFT (on [`realfft`](https://crates.io/crates/realfft)/[`rustfft`](https://crates.io/crates/rustfft) instead of PFFFT) | within `1e-5` × peak (worst measured 5.4e-7) |
-| 2.6 | Spherical harmonics: bands 0–6, rotations up to order 5 | bit-exact on Windows |
-| 2.7 | DSP primitives: frequency bands, biquad IIR filters, delay lines, allpass filters, window functions | bit-exact on Windows (IIR against upstream's AVX path) |
-| 3.1 | HRTF: built-in `cipic_124` data set, HRTF map (nearest and bilinear lookup), HRTF database (interpolation, loudness normalization, Ambisonics HRTFs) | map and loudness bit-exact on Windows; HRTFs within `1e-5` × peak, synthesized (interpolated) HRTFs within `5e-5` × peak |
-| 3.2 | Convolution: overlap-add and overlap-save effects, IR partitioning, multi-channel effects and mixers | within `1e-5` × peak (worst measured 2.5e-7; not bit-exact because of the FFT); tail states and counters exact |
+| 3.4 | Ambisonics effects: encode, rotate, panning, binaural and decode | encode, rotate, panning and panned decoding bit-exact on Windows; binaural (alone and in decode) within `1e-5` × peak (worst measured 2.5e-7; not bit-exact because of the FFT); states and tail counters exact |
 
-**Next:** stage 3.3, panning, binaural and virtual surround effects, then Ambisonics effects.
+**Next:** stage 3.5, SOFA HRTF files (see [ADR 0001](docs/adr)).
 
 The detailed plan, module order, per-module tolerances and known risks live in [`docs/PORTING_PLAN.md`](docs/PORTING_PLAN.md); intentional behaviour differences from upstream are listed in [`docs/DEVIATIONS.md`](docs/DEVIATIONS.md). Treat the roadmap below as intent, not a promise.
 
@@ -58,7 +50,7 @@ The detailed plan, module order, per-module tolerances and known risks live in [
 Planned scope, mirroring the feature areas of the original library. Boxes are checked only when a module passes comparison tests against the reference implementation.
 
 - [x] **Foundations**: math types, ambisonics primitives, FFT, audio buffers and DSP primitives
-- [ ] **Binaural rendering**: HRTF loading and interpolation, convolution, panning, ambisonics effects, SOFA files *(built-in HRTF and convolution done)*
+- [ ] **Binaural rendering**: HRTF loading and interpolation, convolution, panning, ambisonics effects, SOFA files *(built-in HRTF, convolution, panning, binaural and Ambisonics effects done; SOFA files remaining)*
 - [ ] **Direct sound**: distance attenuation, air absorption, directivity, occlusion and transmission
 - [ ] **Scene and geometry**: static and instanced meshes, ray tracing backend
 - [ ] **Reflections**: real-time and baked sound propagation
