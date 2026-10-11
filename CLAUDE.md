@@ -60,6 +60,7 @@ Goldens are generated **only with MSVC on Windows x64** (upstream RNG and libm a
 - `float /= double` (and `float = double expr`) rounds twice: the left side is already a `float`. Mirror it with
   `(f64::from(x) / a0) as f32`. MSVC's unqualified `sqrt(float)` is the `float` overload.
 - Code dispatched on `gSIMDLevel()` may round differently per path; the port follows the AVX path (risk R8).
+- `float4::round` is `_mm_cvtps_epi32` (half to even, out of range → `INT_MIN`), unlike `roundf` in scalar tails.
 
 ## Rust conventions
 
