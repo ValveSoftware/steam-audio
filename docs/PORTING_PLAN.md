@@ -82,7 +82,7 @@ Order: leaves first. A box is ticked only when the slice passes its parity tests
 | 2.6 | Spherical harmonics, ambisonics primitives | `sh`, `sh/spherical_harmonics` | ☑ | ☑ | ☑ | `F32` (bit-exact on Windows, debug and release; bands 0–6, rotations up to order 5). `ProjectFunction` not ported (random, unused) |
 | 2.7 | DSP primitives: bands, IIR, delay, window functions | `bands`, `iir`, `float8_iir`, `delay`, `float8_delay`, `window_function` | ☑ | ☑ | ☑ | Designs, spectra, allpass, windows: `F32`; delay: `EXACT`; filtering: `peak_relative(1e-5)`. Bit-exact on Windows (debug and release), filtering against upstream's AVX path (R8); the 4-sample path differs by ≤ 3.0e-6 × peak. `IIR8` and the order-switching wrappers not ported (dead code) |
 | 3.1 | Built-in HRTF (`cipic_124`), HRTF map, HRTF database | `hrtf_map`, `hrtf_database`, `cipic_124.inl` | ☑ | ☑ | ☑ | Map (loading, nearest, bilinear weights), loudness, peak delays: `EXACT`/`F32`, bit-exact on Windows; bilinear weights use abs `2e-5` because they divide angles up to ~230° by a 5° grid, amplifying libm `asin`/`atan2` ulp differences on Linux/macOS (measured 4.8e-6). Stored and Ambisonics HRTFs: `peak_relative(1e-5)` (measured ≤ 2.2e-7 × peak; ≤ 1.0e-6 when projected from version-2 data). Synthesized HRTFs (interpolation, spatial blend): `peak_relative(5e-5)`, measured worst 2.03e-5 × peak, because the phase is interpolated unwrapped and accumulated in `f32` from FFT phases that already differ (R1, R10). `HRTFMapFactory` and the SOFA map move to 3.5; the virtual speaker table (`kVirtualSpeakers`) lives in `hrtf` until 3.4 |
-| 3.2 | Convolution (overlap-add / overlap-save) | `overlap_add_convolution_effect`, `overlap_save_convolution_effect` | ☐ | ☐ | ☐ | `peak_relative(1e-5)` |
+| 3.2 | Convolution (overlap-add / overlap-save) | `overlap_add_convolution_effect`, `overlap_save_convolution_effect` | ☑ | ☑ | ☑ | `peak_relative(1e-5)` for audio and partitioned IR spectra (measured worst 2.5e-7 × peak, debug and release; not bit-exact because of the FFT, R1); tail states and counters `EXACT`. Overlap-save goldens are mono (R12); multi-channel effects and mixers are checked bit-exactly against mono ones. `TripleBuffer` moves to stage 6 (a new IR is passed as `Option<&mut OverlapSaveFir>`); the partitioner takes an `AudioBuffer` until `ImpulseResponse` lands in stage 6 |
 | 3.3 | Panning, binaural, virtual surround | `panning_effect`, `binaural_effect`, `virtual_surround_effect` | ☐ | ☐ | ☐ | `peak_relative(1e-5)` |
 | 3.4 | Ambisonics effects (encode, decode, rotate, panning, binaural) | `ambisonics_*_effect` | ☐ | ☐ | ☐ | `peak_relative(1e-5)` |
 | 3.5 | `sofa` crate (ADR 0001) | `sofa_hrtf_map` + libmysofa | ☐ | ☐ | ☐ | see ADR |
@@ -171,6 +171,15 @@ Order: leaves first. A box is ticked only when the slice passes its parity tests
 | `nearestHRTF(dir, hrtf, blend, phase, hrtfWithBlend, peakDelays)` | `nearest_index(dir)` + `hrtf(i)` + `peak_delays(i)`; the `blend < 1` branch is `blended_hrtf(i, dir, blend, phase, out)` |
 | `interpolatedHRTF(dir, hrtf, blend, phase, peakDelays)` | `interpolated_hrtf(dir, blend, phase, out) -> [usize; 2]` (peak delays) |
 | `Loudness::gainToDB`, `dBToGain`, `calculateRMSLoudness`, `calculateGainScaling` | `hrtf::loudness::gain_to_db`, `db_to_gain`, `rms_loudness`, `gain_scaling` |
+| `OverlapAddConvolutionEffect(audioSettings, {numChannels, irSize})` | `effects::OverlapAddConvolutionEffect::new(&audio_settings, &OverlapAddConvolutionSettings { .. })` |
+| `OverlapAddConvolutionEffect::apply({fftIR, multipleInputs}, in, out)`, `tail(out)` | `apply(fft_ir: &[&[Complex]], multiple_inputs, &in, &mut out)`, `tail(&mut out)` |
+| `wetAudioSize`, `irSpectrumSize`, `numTailSamplesRemaining` | `wet_audio_size`, `ir_spectrum_size`, `num_tail_samples_remaining` |
+| `OverlapSaveFIR(numChannels, irSize, frameSize)`, `fir[i][j]`, `copy(src, dst)`, `swap(a, b)` | `effects::OverlapSaveFir::new(..)`, `block(i, j)` / `block_mut(i, j)`, `dst.copy_from(&src)`, `std::mem::swap` |
+| `OverlapSavePartitioner(frameSize)`, `partition(ir, numChannels, numSamples, fftIR)` | `OverlapSavePartitioner::new(frame_size)`, `partition(&ir_buffer, num_channels, num_samples, &mut fir)` |
+| `OverlapSaveConvolutionEffect::numBlocks(frameSize, irSize)` | `OverlapSaveConvolutionEffect::num_blocks(frame_size, ir_size)` |
+| `OverlapSaveConvolutionEffect::apply(params, in, out)` (`TripleBuffer` or direct params) | `apply(new_ir: Option<&mut OverlapSaveFir>, num_channels, &in, &mut out)`; `Some` when the IR was updated |
+| `apply(params, in, mixer)`, `tail(mixer)` | `apply_to_mixer(new_ir, num_channels, &in, &mut mixer)`, `tail_to_mixer(&mut mixer)` |
+| `OverlapSaveConvolutionMixer(audioSettings, settings)`, `apply({numChannels}, out)` | `OverlapSaveConvolutionMixer::new(..)`, `apply(num_channels, &mut out)` |
 
 ## 6. Deviations
 
@@ -226,3 +235,20 @@ Tracked in [`DEVIATIONS.md`](DEVIATIONS.md).
   ~1e-7 × peak in the stored spectra become up to 2.03e-5 × peak in synthesized HRTFs, growing towards Nyquist. A 2π
   decision flip in the unwrapping would cause a much larger error; none occurs on the tested directions. Stage 3.3
   (binaural) inherits this tolerance for interpolated HRTFs and spatial blend.
+- **R11. Hidden state in upstream's real FFT (found in 3.2).** PFFFT writes `n / 2` packed bins, and `FFT::applyForward`
+  copies `n / 2 + 1` out of its scratch spectrum, so the Nyquist bin's imaginary part is stale: the one of the last
+  spectrum passed to `applyInverse` on the same `FFT` object (initially 0). It matters only when an inverse transform
+  is fed a spectrum whose Nyquist bin is not real. In every upstream pipeline the IR spectra come from forward-only
+  `FFT` objects (`HRTFDatabase::mFFTAudioProcessing`, `OverlapSavePartitioner`), so all Nyquist bins stay real and
+  the stale value stays 0. The port's forward transform always returns 0 (`DEVIATIONS.md`); the convolution goldens
+  use random spectra with real DC and Nyquist bins.
+- **R12. Upstream crash in complex `multiplyAccumulate` (found in 3.2).** The generic x86 path does an aligned
+  `float4::load` of the accumulator even in its unaligned branch. Overlap-save accumulator rows have `n / 2 + 1`
+  (odd) bins, so every odd channel's row is unaligned and the reference build (SSE, no IPP) crashes with more than
+  one channel. Shipped builds use IPP (R6) and are unaffected. Overlap-save goldens are therefore mono; channels are
+  independent, so multi-channel effects and mixers are tested against mono ones.
+- **R13. Convolution quirks the port keeps (found in 3.2).** `OverlapSavePartitioner` copies a partial last block
+  over the previous block without clearing the rest of the frame, so stale IR samples (possibly from an earlier call)
+  remain in it. The overlap-save tail lasts one block less than the IR and omits the last input frame's convolution
+  with the leading blocks. `OverlapAddConvolutionEffect::tail` does not consume the pending tail, so a later `apply`
+  adds it again. `OverlapSaveConvolutionEffect::reset` silences the current IR until a new one is passed.

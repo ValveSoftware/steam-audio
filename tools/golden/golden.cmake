@@ -12,6 +12,7 @@ add_executable(golden
     ${GOLDEN_DIR}/src/sh.cpp
     ${GOLDEN_DIR}/src/dsp.cpp
     ${GOLDEN_DIR}/src/hrtf.cpp
+    ${GOLDEN_DIR}/src/convolution.cpp
 )
 
 target_link_libraries(golden PRIVATE core hrtf)
