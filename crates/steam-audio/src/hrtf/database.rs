@@ -10,6 +10,7 @@ use std::fmt;
 use super::loudness::{self, MAX_VOLUME_NORM_GAIN_DB};
 use super::{HrirWeights, HrtfMap, MAX_AMBISONICS_ORDER, NUM_EARS};
 use crate::Complex;
+use crate::effects::AmbisonicsPanningEffect;
 use crate::error::Result;
 use crate::fft::RealFft;
 use crate::math::{PI, Vector3, cpp_min};
@@ -59,40 +60,6 @@ pub enum HrtfPhaseType {
     /// The phase of the queried HRTF.
     Full,
 }
-
-/// The 24 virtual speaker directions used to decode Ambisonics (upstream `AmbisonicsPanningEffect::kVirtualSpeakers`).
-#[allow(clippy::excessive_precision)] // Upstream's literals, kept verbatim.
-pub(crate) const AMBISONICS_VIRTUAL_SPEAKERS: [Vector3; 24] = {
-    const A: f32 = 0.8662468181078205913835980;
-    const B: f32 = 0.4225186537611115291185464;
-    const C: f32 = 0.2666354015167047203315344;
-    [
-        Vector3::new(A, B, C),
-        Vector3::new(A, -B, -C),
-        Vector3::new(A, C, -B),
-        Vector3::new(A, -C, B),
-        Vector3::new(-A, B, -C),
-        Vector3::new(-A, -B, C),
-        Vector3::new(-A, C, B),
-        Vector3::new(-A, -C, -B),
-        Vector3::new(C, A, B),
-        Vector3::new(-C, A, -B),
-        Vector3::new(-B, A, C),
-        Vector3::new(B, A, -C),
-        Vector3::new(-C, -A, B),
-        Vector3::new(C, -A, -B),
-        Vector3::new(B, -A, C),
-        Vector3::new(-B, -A, -C),
-        Vector3::new(B, C, A),
-        Vector3::new(-B, -C, A),
-        Vector3::new(C, -B, A),
-        Vector3::new(-C, B, A),
-        Vector3::new(B, -C, -A),
-        Vector3::new(-B, C, -A),
-        Vector3::new(C, B, -A),
-        Vector3::new(-C, -B, -A),
-    ]
-};
 
 /// HRTFs for one sampling rate and audio frame size (upstream `HRTFDatabase`).
 ///
@@ -324,14 +291,14 @@ impl HrtfDatabase {
         let bins = self.num_spectrum_samples();
         let interpolation_size = self.interpolator.fft.num_real_samples();
         let interpolation_bins = self.interpolator.fft.num_complex_samples();
-        let speaker_weight = (4.0 * PI) / AMBISONICS_VIRTUAL_SPEAKERS.len() as f32;
+        let speaker_weight = (4.0 * PI) / AmbisonicsPanningEffect::NUM_VIRTUAL_SPEAKERS as f32;
 
         self.ambisonics_hrtf = vec![Complex::default(); NUM_EARS * num_coeffs * bins];
 
         let mut index = 0;
         for l in 0..=MAX_AMBISONICS_ORDER {
             for m in -(l as i32)..=l as i32 {
-                for speaker in AMBISONICS_VIRTUAL_SPEAKERS {
+                for speaker in AmbisonicsPanningEffect::VIRTUAL_SPEAKERS {
                     let weight = speaker_weight * sh::evaluate(l, m, speaker);
                     let weights = self.map.interpolated_hrir_weights(speaker);
                     for ear in 0..NUM_EARS {
