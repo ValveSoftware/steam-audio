@@ -8,6 +8,7 @@ pub mod array_math;
 pub mod audio_buffer;
 pub mod bands;
 pub mod delay;
+pub mod effects;
 pub mod error;
 pub mod fft;
 pub mod geometry;
