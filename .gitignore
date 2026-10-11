@@ -23,3 +23,5 @@ unity/src/project/SteamAudioUnity/Assets/Plugins/SteamAudio/Binaries/**/*.bundle
 
 # Reference C++ build (tools/golden) and fetched upstream dependencies
 /build/
+/core/deps/
+/core/deps-build/

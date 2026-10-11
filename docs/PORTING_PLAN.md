@@ -14,8 +14,9 @@ This document is the source of truth for the port. Update the status table in §
 - **Constraints:** stable Rust, edition 2024, MSRV 1.85. No `unsafe` outside the C API crate and explicitly
   justified, measured hot paths. No system libraries needed to build.
 - **Original:** C++14, CMake, Apache-2.0; sources in `core/` (upstream snapshot).
-- **Oracle:** the original builds locally (MSVC 19.50 + CMake + Ninja) → golden data via `tools/golden`.
-  The upstream Catch tests in `core/src/test` are a second source of cases.
+- **Oracle:** the original builds locally (MSVC 19.50 + CMake + Ninja; see `tools/golden/README.md`) and produces
+  golden data via `tools/golden`. All 155 upstream Catch tests pass on this build (24,900 assertions); they are
+  a second source of test cases.
 
 ## 2. Inventory summary
 
@@ -51,6 +52,8 @@ This document is the source of truth for the port. Update the status table in §
   - `crates/parity`: test support (golden `.npy` loading, `Tolerance`, `assert_close`). Not published.
   - `crates/sofa`: SOFA/HDF5 loader (ADR 0001).
   - `crates/phonon-capi`: C ABI (stage 8).
+  - `crates/bevy_steam_audio`: Bevy integration (stage 9). The core stays engine-agnostic: no Bevy
+    dependency, no globals, `Send` types, and non-allocating `&mut self` processing.
 - **Tools:** `tools/golden`, a C++ program linked against `core/` that writes `.npy` files to `testdata/golden/`.
 - **Errors:** `steam_audio::Error` (`thiserror`), mapping 1:1 onto `IPLerror` at the C API.
 - **Polymorphism:** a closed set of backends becomes an `enum`. Extension points the user implements
@@ -70,7 +73,7 @@ Order: leaves first. A box is ticked only when the slice passes its parity tests
 | --- | --- | --- | --- | --- | --- | --- |
 | 0 | Repository cleanup, Cargo workspace, CI | — | ☑ | ☑ | — | — |
 | 1a | `parity` crate: `.npy`, `Tolerance`, `assert_close` | — | ☑ | ☑ | — | — |
-| 1b | `tools/golden`: reference build + first generator | `CMakeLists.txt`, `build/` | ☐ | ☐ | ☐ | — |
+| 1b | `tools/golden`: reference build + first generator (FFT) | `CMakeLists.txt`, `build/` | ☑ | ☑ | ☑ | — |
 | 2.1 | Vector, matrix, quaternion, coordinate space, polar vector, sphere, box, ray, triangle | `vector`, `matrix`, `quaternion`, `coordinate_space`, `polar_vector`, `sphere`, `box`, `ray`, `triangle` | ☐ | ☐ | ☐ | `F32` |
 | 2.2 | Math functions, sampling | `math_functions`, `sampling` | ☐ | ☐ | ☐ | `F32` |
 | 2.3 | Array math | `array`, `array_math` | ☐ | ☐ | ☐ | `F32` |
@@ -89,6 +92,7 @@ Order: leaves first. A box is ticked only when the slice passes its parity tests
 | 6 | Reflections: energy field, IR, reflection simulator, reconstructor, reverb, hybrid reverb, job graph, baking, probes, serialisation | `energy_field*`, `impulse_response*`, `reflection_*`, `reconstructor*`, `*reverb*`, `job*`, `thread_pool`, `probe_*`, `baked_*`, `serialized_object` | ☐ | ☐ | ☐ | R2 |
 | 7 | Pathing | `probe_tree`, `path_*` | ☐ | ☐ | ☐ | R2 |
 | 8 | C API (`phonon-capi`) | `api_*`, `phonon.h` | ☐ | ☐ | ☐ | upstream `itest` builds unchanged |
+| 9 | Bevy integration (`bevy_steam_audio`); an MVP is possible after stage 4 | — | ☐ | ☐ | — | — |
 
 ## 5. Verification plan
 

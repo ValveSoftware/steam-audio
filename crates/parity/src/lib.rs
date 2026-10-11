@@ -5,11 +5,13 @@
 //! with [`assert_close`] using a per-module [`Tolerance`].
 
 mod compare;
+mod lcg;
 mod npy;
 
 use std::path::{Path, PathBuf};
 
 pub use compare::{Mismatch, Tolerance, compare};
+pub use lcg::Lcg;
 pub use npy::{Array, Element, NpyError, read_npy, write_npy};
 
 /// Repository root (two levels above this crate's manifest).
