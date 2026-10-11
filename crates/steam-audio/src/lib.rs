@@ -4,5 +4,10 @@
 //! every module here is verified numerically against golden data produced by that code
 //! (see `docs/PORTING_PLAN.md`).
 
+pub mod array_math;
 pub mod geometry;
 pub mod math;
+pub mod sampling;
+
+/// Single-precision complex number (upstream `complex_t`).
+pub type Complex = num_complex::Complex<f32>;
