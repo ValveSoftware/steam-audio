@@ -6,6 +6,7 @@ set(GOLDEN_DIR ${CMAKE_CURRENT_LIST_DIR})
 add_executable(golden
     ${GOLDEN_DIR}/src/main.cpp
     ${GOLDEN_DIR}/src/fft.cpp
+    ${GOLDEN_DIR}/src/geometry.cpp
 )
 
 target_link_libraries(golden PRIVATE core hrtf)
