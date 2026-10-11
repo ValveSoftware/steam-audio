@@ -30,6 +30,13 @@ fn f32_tol(_: &[f32]) -> Tolerance {
     Tolerance::F32
 }
 
+/// Bilinear weights are angle differences (in degrees, up to ~230°) divided by the grid spacing (5°–5.625°). One ulp
+/// of a 230° angle is 1.5e-5°, i.e. ~2.7e-6 of weight. Bit-exact on Windows; elsewhere `asin`/`atan2` from the
+/// platform libm differ by a few ulps (measured 4.8e-6 on Linux and macOS), so allow ~8 ulps.
+fn weight_tol(_: &[f32]) -> Tolerance {
+    Tolerance::new(2e-5, 0.0)
+}
+
 fn signal(expected: &[f32]) -> Tolerance {
     Tolerance::peak_relative(expected, 1e-5)
 }
@@ -116,7 +123,7 @@ fn hrtf_map() {
     }
     check("hrtf_map/nearest", &nearest, exact);
     check("hrtf_map/interpolated_indices", &indices, exact);
-    check("hrtf_map/interpolated_weights", &weights, f32_tol);
+    check("hrtf_map/interpolated_weights", &weights, weight_tol);
 }
 
 struct DatabaseCase {
