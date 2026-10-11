@@ -33,24 +33,37 @@ This project is an experiment in reimplementing that functionality in **Rust**, 
 
 ## Status
 
-> 🚧 **Binaural rendering stage.** The math and signal-processing foundations, the built-in HRTF, convolution, and the panning, binaural and Ambisonics effects are ported and verified against the C++ reference; SOFA loading and simulation do not exist yet, so nothing here is usable in production.
+> 🚧 **Binaural rendering stage.** The math and signal-processing foundations, the built-in HRTF, convolution, and the panning, binaural and Ambisonics effects are ported and verified against the C++ reference; the SOFA file parser is ported (resampling and the HRTF map are not), and simulation does not exist yet, so nothing here is usable in production.
 
 Current stage (checked against golden data produced by the original C++; earlier stages are tracked in [`docs/PORTING_PLAN.md`](docs/PORTING_PLAN.md)):
 
 | Stage | Module | Parity |
 | --- | --- | --- |
-| 3.4 | Ambisonics effects: encode, rotate, panning, binaural and decode | encode, rotate, panning and panned decoding bit-exact on Windows; binaural (alone and in decode) within `1e-5` × peak (worst measured 2.5e-7; not bit-exact because of the FFT); states and tail counters exact |
+| 3.5a | `sofa` crate: HDF5 subset, SOFA loader and check (port of libmysofa 1.3.3) | bit-exact against libmysofa on the bundled HRTF files and on corrupted inputs; malformed input never panics |
 
-**Next:** stage 3.5, SOFA HRTF files (see [ADR 0001](docs/adr)).
+**Next:** stage 3.5b, SOFA resampling and lookup, then 3.5c, the SOFA HRTF map (see [ADR 0001](docs/adr)).
 
 The detailed plan, module order, per-module tolerances and known risks live in [`docs/PORTING_PLAN.md`](docs/PORTING_PLAN.md); intentional behaviour differences from upstream are listed in [`docs/DEVIATIONS.md`](docs/DEVIATIONS.md). Treat the roadmap below as intent, not a promise.
+
+### Notable deviations from upstream
+
+Full list with reasons: [`docs/DEVIATIONS.md`](docs/DEVIATIONS.md).
+
+- **Out of scope:** GPU backends (OpenCL, Radeon Rays, TrueAudioNext), vendor math libraries (IPP, MKL, vDSP, FFTS) and the Embree ray tracer.
+- **SOFA parser:** reads files in memory with explicit resource limits instead of unbounded recursion or crashes on hostile input.
+- **FFT:** built on `realfft`/`rustfft` instead of PFFFT, so FFT-based results are close but not bit-exact (within `1e-5` × peak).
+- **`f32` only:** upstream's `double` instantiations are unused and not ported.
+- **Panics instead of undefined behaviour:** out-of-range indices and shape or length mismatches, unchecked in upstream, panic; malformed `.hrtf` data returns an error.
+- **Upstream bugs fixed:** for example `SphericalHarmonics::legendre` for order 4 and above, which never terminates upstream.
+- **No hidden global state or `const` mutation:** upstream's mutable globals and in-place changes through `const` pointers become constants and explicit `&mut` arguments or constructor parameters.
+- **SIMD level:** results follow upstream's AVX code path on every platform.
 
 ## Roadmap
 
 Planned scope, mirroring the feature areas of the original library. Boxes are checked only when a module passes comparison tests against the reference implementation.
 
 - [x] **Foundations**: math types, ambisonics primitives, FFT, audio buffers and DSP primitives
-- [ ] **Binaural rendering**: HRTF loading and interpolation, convolution, panning, ambisonics effects, SOFA files *(built-in HRTF, convolution, panning, binaural and Ambisonics effects done; SOFA files remaining)*
+- [ ] **Binaural rendering**: HRTF loading and interpolation, convolution, panning, ambisonics effects, SOFA files *(built-in HRTF, convolution, panning, binaural and Ambisonics effects done; SOFA parser done; SOFA resampling and HRTF map remaining)*
 - [ ] **Direct sound**: distance attenuation, air absorption, directivity, occlusion and transmission
 - [ ] **Scene and geometry**: static and instanced meshes, ray tracing backend
 - [ ] **Reflections**: real-time and baked sound propagation
@@ -64,6 +77,7 @@ Planned scope, mirroring the feature areas of the original library. Boxes are ch
 | --- | --- |
 | [`core/`](core) | **Reference** C++ sources of upstream Steam Audio (the specification; not modified) |
 | [`crates/steam-audio/`](crates/steam-audio) | The Rust reimplementation (library crate) |
+| [`crates/sofa/`](crates/sofa) | SOFA/HDF5 file loader (port of the libmysofa parts Steam Audio uses) |
 | [`crates/parity/`](crates/parity) | Test support: loads golden data and compares with per-module tolerances |
 | [`tools/golden/`](tools/golden) | Reference C++ build and golden-data generators ([README](tools/golden/README.md)) |
 | [`testdata/golden/`](testdata/golden) | Reference outputs (`.npy`) produced by the C++ implementation |
