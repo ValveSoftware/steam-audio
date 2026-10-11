@@ -86,12 +86,12 @@ Order: leaves first. A box is ticked only when the slice passes its parity tests
 | 3.3 | Panning, binaural, virtual surround | `panning_effect`, `binaural_effect`, `virtual_surround_effect` | ☐ | ☐ | ☐ | `peak_relative(1e-5)` |
 | 3.4 | Ambisonics effects (encode, decode, rotate, panning, binaural) | `ambisonics_*_effect` | ☐ | ☐ | ☐ | `peak_relative(1e-5)` |
 | 3.5 | `sofa` crate (ADR 0001) | `sofa_hrtf_map` + libmysofa | ☐ | ☐ | ☐ | see ADR |
-| 4 | Direct sound: distance attenuation, air absorption, directivity, direct effect, gain/EQ | `distance_attenuation`, `air_absorption`, `directivity`, `direct_effect`, `gain_effect`, `eq_effect` | ☐ | ☐ | ☐ | `F32` / `peak_relative(1e-5)` |
+| 4 | Direct sound: distance attenuation, air absorption, directivity, direct effect, gain/EQ | `distance_attenuation`, `air_absorption`, `directivity`, `direct_effect`, `gain_effect`, `eq_effect` | ☐ | ☐ | ☐ | `F32` / `peak_relative(1e-5)`. `DirectEffect` needs an in-place `apply` (R7) |
 | 5 | Scene and geometry: mesh, static/instanced mesh, BVH, scene, materials, OBJ loading for tests | `mesh`, `static_mesh`, `instanced_mesh`, `bvh`, `scene`, `material`, `hit` | ☐ | ☐ | ☐ | hits: exact triangle index, `F32` distance |
 | 5.1 | Direct simulator (occlusion, transmission) | `direct_simulator` | ☐ | ☐ | ☐ | R2 |
 | 6 | Reflections: energy field, IR, reflection simulator, reconstructor, reverb, hybrid reverb, job graph, baking, probes, serialisation | `energy_field*`, `impulse_response*`, `reflection_*`, `reconstructor*`, `*reverb*`, `job*`, `thread_pool`, `probe_*`, `baked_*`, `serialized_object` | ☐ | ☐ | ☐ | R2 |
 | 7 | Pathing | `probe_tree`, `path_*` | ☐ | ☐ | ☐ | R2 |
-| 8 | C API (`phonon-capi`) | `api_*`, `phonon.h` | ☐ | ☐ | ☐ | upstream `itest` builds unchanged |
+| 8 | C API (`phonon-capi`) | `api_*`, `phonon.h` | ☐ | ☐ | ☐ | upstream `itest` builds unchanged. Audio buffer bridging and precondition checks: R7 |
 | 9 | Bevy integration (`bevy_steam_audio`); an MVP is possible after stage 4 | — | ☐ | ☐ | — | — |
 
 ## 5. Verification plan
@@ -173,3 +173,13 @@ Tracked in [`DEVIATIONS.md`](DEVIATIONS.md).
 - **R5. Reference build dependencies.** `core/build/get_dependencies.py` downloads ~15 third-party
   libraries. `tools/golden` uses a minimal configuration (PFFFT, mysofa, zlib, flatbuffers; no Embree,
   IPP, OpenCL, Radeon Rays or TrueAudioNext).
+- **R7. `AudioBuffer` contract (decided in 2.4).** Buffers are one contiguous planar array, not `float**`
+  (`DEVIATIONS.md`). Consequences:
+  - Stage 8: when the user's channel pointers are adjacent (`ch[i + 1] == ch[i] + numSamples`, always true for
+    `iplAudioBufferAllocate`), build one slice over them without copying (`unsafe`, allowed in `phonon-capi`);
+    otherwise copy into scratch preallocated at effect creation. The core panics on violated preconditions (e.g.
+    FuMa above order 3, zero channels), and a panic across `extern "C"` aborts the process, so the C API validates
+    them first and returns `IPL_STATUS_FAILURE`.
+  - Stage 4: `phonon.h` allows `DirectEffect` to run in place (`in == out`). Borrow rules forbid `&in` and `&mut out`
+    on the same data, so it needs a separate in-place method (e.g. `apply_in_place(&mut buffer)`). Every other effect
+    is documented as not in-place.
