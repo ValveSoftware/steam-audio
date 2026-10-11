@@ -15,6 +15,7 @@ add_executable(golden
     ${GOLDEN_DIR}/src/convolution.cpp
     ${GOLDEN_DIR}/src/spatialization.cpp
     ${GOLDEN_DIR}/src/ambisonics.cpp
+    ${GOLDEN_DIR}/src/sofa.cpp
 )
 
 target_link_libraries(golden PRIVATE core hrtf)

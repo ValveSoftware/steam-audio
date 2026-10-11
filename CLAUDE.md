@@ -6,6 +6,8 @@ A Rust reimplementation of Valve's Steam Audio, verified numerically against the
 
 - `core/`: **upstream C++, the specification. Never modify it.** (`core/deps*/` are gitignored build outputs.)
 - `crates/steam-audio/`: the port (library). `crates/parity/`: test support (`.npy`, `Tolerance`, `Lcg`).
+- `crates/sofa/`: SOFA/HDF5 reader, a port of the libmysofa subset Steam Audio uses (ADR 0001); fuzz target in
+  `crates/sofa/fuzz` (nightly, outside the workspace).
 - `tools/golden/`: reference build + golden-data generators (C++). See `tools/golden/README.md`.
 - `testdata/golden/<module>/<case>.npy`: committed reference outputs.
 - `docs/PORTING_PLAN.md`: **source of truth**: stage order, status table, tolerances, upstream→Rust name map,
