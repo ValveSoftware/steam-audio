@@ -78,7 +78,7 @@ Order: leaves first. A box is ticked only when the slice passes its parity tests
 | 2.2 | Math functions, sampling | `math_functions`, `sampling` | ☑ | ☑ | ☑ | `F32` (bit-exact on Windows). `RandomNumberGenerator` moves to stage 6 |
 | 2.3 | Array math, `DynamicMatrix` | `array`, `array_math`, `matrix` | ☑ | ☑ | ☑ | `F32` (bit-exact on Windows). `Array<T, N>` → `Vec`/slices |
 | 2.4 | Audio buffer (interleave, mix, downmix, ambisonics conversions) | `audio_buffer` | ☑ | ☑ | ☑ | `F32` (bit-exact on Windows). `SpeakerLayout` moves to 3.3 with panning |
-| 2.5 | FFT | `fft`, `pffft_fft` | ☐ | ☐ | ☐ | `peak_relative(1e-5)` |
+| 2.5 | FFT | `fft`, `pffft_fft` | ☑ | ☑ | ☑ | `peak_relative(1e-5)`; measured worst error 5.4e-7 × peak (not bit-exact, R1) |
 | 2.6 | Spherical harmonics, ambisonics primitives | `sh`, `sh/spherical_harmonics` | ☐ | ☐ | ☐ | `F32` |
 | 2.7 | DSP primitives: bands, IIR, delay, window functions | `bands`, `iir`, `delay`, `window_function` | ☐ | ☐ | ☐ | IIR: `peak_relative(1e-4)` |
 | 3.1 | Built-in HRTF (`cipic_124`), HRTF map, HRTF database | `hrtf_map`, `hrtf_database`, `cipic_124.inl` | ☐ | ☐ | ☐ | `peak_relative(1e-5)` |
@@ -140,6 +140,9 @@ Order: leaves first. A box is ticked only when the slice passes its parity tests
 | `AudioBuffer::read(out)`, `write(in)` | `interleave(&mut out)`, `deinterleave(&in)` |
 | `AudioBuffer::mix`, `downmix`, `convertAmbisonics` | `audio_buffer::mix`, `downmix`, `convert_ambisonics` |
 | `AmbisonicsType::N3D`, `SN3D`, `FuMa` | `AmbisonicsType::N3d`, `Sn3d`, `FuMa` |
+| `FFT(n)` / `FFT(n, FFTDomain::Real)`, `numRealSamples`, `numComplexSamples` | `fft::RealFft::new(n)`, `num_real_samples()`, `num_complex_samples()` |
+| `FFT(n, FFTDomain::Complex)` | `fft::ComplexFft::new(n)`, `num_samples()` |
+| `FFT::applyForward`, `applyInverse` (`const`) | `forward`, `inverse` (`&mut self`: the transform owns its scratch) |
 
 ## 6. Deviations
 
@@ -149,7 +152,9 @@ Tracked in [`DEVIATIONS.md`](DEVIATIONS.md).
 
 - **R1. FFT differences.** PFFFT and `realfft` round differently, which affects everything built on
   convolution. Mitigation: peak-relative tolerances. If needed, generate goldens with an FFTW-grade
-  reference to tell which side is more accurate.
+  reference to tell which side is more accurate. Measured at stage 2.5 (sizes 32–4096, real and complex): worst
+  error 5.4e-7 × peak (complex inverse, 4096), forward transforms ≤ 2.5e-7 × peak; 15–70 % of values are
+  bit-identical.
 - **R2. Randomness.** Three sources, each handled differently:
   - `Reconstructor` white noise: an unseeded `std::default_random_engine` (`mt19937`, seed 5489, on MSVC) with
     `uniform_real_distribution<float>(-1, 1)`. This is deterministic on MSVC, so port MSVC's exact algorithms and

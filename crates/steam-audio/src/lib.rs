@@ -6,6 +6,7 @@
 
 pub mod array_math;
 pub mod audio_buffer;
+pub mod fft;
 pub mod geometry;
 pub mod math;
 pub mod sampling;
