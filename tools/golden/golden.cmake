@@ -1,0 +1,16 @@
+# Golden data generator target. Not a standalone project: included into the reference build by hook.cmake,
+# in the scope of core/CMakeLists.txt, so source paths are made absolute.
+
+set(GOLDEN_DIR ${CMAKE_CURRENT_LIST_DIR})
+
+add_executable(golden
+    ${GOLDEN_DIR}/src/main.cpp
+    ${GOLDEN_DIR}/src/fft.cpp
+)
+
+target_link_libraries(golden PRIVATE core hrtf)
+target_compile_definitions(golden PRIVATE STEAMAUDIO_BUILDING_CORE)
+target_include_directories(golden PRIVATE ${GOLDEN_DIR}/src)
+
+# Upstream builds as C++14; the generator only needs C++17 for std::filesystem.
+set_target_properties(golden PROPERTIES CXX_STANDARD 17)
