@@ -71,5 +71,8 @@ Goldens are generated **only with MSVC on Windows x64** (upstream RNG and libm a
 
 - One branch and one PR per stage, from up-to-date `master`. Start the next stage only after the previous PR's CI
   is green and it is merged.
-- Merge with merge commits (`gh pr merge --merge`) so `Co-Authored-By` trailers survive. Merge only when asked.
+- Each stage is done in its own new session: never start the next stage in the session that finished the previous
+  one.
+- Merge with merge commits and delete the branch (`gh pr merge --merge --delete-branch`) so `Co-Authored-By`
+  trailers survive. Merge only when asked.
 - Enable Auto-fix on every new PR.
