@@ -55,6 +55,7 @@ Planned scope, mirroring the feature areas of the original library. Boxes are ch
 | [`crates/steam-audio/`](crates/steam-audio) | The Rust reimplementation (library crate) |
 | [`crates/parity/`](crates/parity) | Test support: loads golden data and compares with per-module tolerances |
 | [`testdata/golden/`](testdata/golden) | Reference outputs produced by the C++ implementation |
+| [`CLAUDE.md`](CLAUDE.md) | Working rules for AI-assisted sessions (loaded automatically by Claude Code) |
 | [`docs/`](docs) | [Porting plan](docs/PORTING_PLAN.md), [deviations](docs/DEVIATIONS.md), [architecture decisions](docs/adr) |
 
 ## Getting started
