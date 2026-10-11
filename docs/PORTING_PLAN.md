@@ -75,8 +75,8 @@ Order: leaves first. A box is ticked only when the slice passes its parity tests
 | 1a | `parity` crate: `.npy`, `Tolerance`, `assert_close` | — | ☑ | ☑ | — | — |
 | 1b | `tools/golden`: reference build + first generator (FFT) | `CMakeLists.txt`, `build/` | ☑ | ☑ | ☑ | — |
 | 2.1 | Vector, matrix, quaternion, coordinate space, polar vector, sphere, box (`Aabb`), ray | `vector`, `matrix`, `quaternion`, `coordinate_space`, `polar_vector`, `sphere`, `box`, `ray` | ☑ | ☑ | ☑ | `F32` (bit-exact on Windows). `Triangle`, `Hit` and `Ray::intersect(Mesh)` move to stage 5 with `Mesh`; `DynamicMatrix` moves to 2.3 |
-| 2.2 | Math functions, sampling | `math_functions`, `sampling` | ☐ | ☐ | ☐ | `F32` |
-| 2.3 | Array math | `array`, `array_math` | ☐ | ☐ | ☐ | `F32` |
+| 2.2 | Math functions, sampling | `math_functions`, `sampling` | ☑ | ☑ | ☑ | `F32` (bit-exact on Windows). `RandomNumberGenerator` moves to stage 6 |
+| 2.3 | Array math, `DynamicMatrix` | `array`, `array_math`, `matrix` | ☑ | ☑ | ☑ | `F32` (bit-exact on Windows). `Array<T, N>` → `Vec`/slices |
 | 2.4 | Audio buffer (interleave, mix, downmix, ambisonics conversions) | `audio_buffer` | ☐ | ☐ | ☐ | `F32` |
 | 2.5 | FFT | `fft`, `pffft_fft` | ☐ | ☐ | ☐ | `peak_relative(1e-5)` |
 | 2.6 | Spherical harmonics, ambisonics primitives | `sh`, `sh/spherical_harmonics` | ☐ | ☐ | ☐ | `F32` |
@@ -128,7 +128,13 @@ Order: leaves first. A box is ticked only when the slice passes its parity tests
 | `Box`, `Box::coordinates(i)` | `geometry::Aabb`, `Aabb::bound(i)` |
 | `computeBoundingSphere(a, b)` | `Sphere::bounding(&a, &b)` |
 | `Ray::intersect(box, …)`, `intersect(sphere)` | `intersect_aabb`, `intersect_sphere`, `intersect_triangle(v0, v1, v2)` |
-| `Math::kPi` (3.141592f) | `math::PI` (**not** `std::f32::consts::PI`) |
+| `Math::kPi` (3.141592f), `kDegreesToRadians` (0.017452f) | `math::PI`, `math::DEGREES_TO_RADIANS` (**not** the `std` constants) |
+| `Math::nextpow2`, `factorial`, `doubleFactorial`, `clamp` | `math::next_pow2`, `factorial`, `double_factorial`, `clamp` |
+| `Array<T, 1>`, `Array<T, 2>` | `Vec<T>` / slices (2-D layouts are introduced where needed) |
+| `ArrayMath::multiplyAccumulate(size, a, b, accum)` | `array_math::multiply_accumulate(a, b, accum)`; complex variants have a `_complex` suffix |
+| `DynamicMatrixf`, `multiplyMatrices(a, b, c)` | `math::DynamicMatrix`, `DynamicMatrix::multiply(&a, &b, &mut c)` |
+| `Sampling::generateSphereSamples(n, out)` | `sampling::sphere_samples(&mut out)` |
+| `complex_t` | `steam_audio::Complex` (`num_complex::Complex<f32>`) |
 
 ## 6. Deviations
 
@@ -139,14 +145,21 @@ Tracked in [`DEVIATIONS.md`](DEVIATIONS.md).
 - **R1. FFT differences.** PFFFT and `realfft` round differently, which affects everything built on
   convolution. Mitigation: peak-relative tolerances. If needed, generate goldens with an FFTW-grade
   reference to tell which side is more accurate.
-- **R2. Randomness in ray tracing.** Upstream uses `std::default_random_engine` and
-  `uniform_real_distribution`, so its output differs between MSVC and libstdc++. Plan: port MSVC's exact
-  `mt19937` + `uniform_real_distribution` (goldens are generated with MSVC) so the ray sets are identical.
-  Where parallel scheduling still makes results nondeterministic, fall back to statistical checks: band
-  energies within ±0.5 dB, reverb times within 5 %.
+- **R2. Randomness.** Three sources, each handled differently:
+  - `Reconstructor` white noise: an unseeded `std::default_random_engine` (`mt19937`, seed 5489, on MSVC) with
+    `uniform_real_distribution<float>(-1, 1)`. This is deterministic on MSVC, so port MSVC's exact algorithms and
+    compare against goldens.
+  - `ReverbEffect` delay lengths: `rand() % 101`, MSVC's process-global LCG. Port the LCG; the global call order
+    has to be modelled in tests.
+  - Reflection and pathing ray directions: `RandomNumberGenerator` is seeded with `time(NULL)`, so **upstream
+    itself is not reproducible**. Use statistical checks (band energies within ±0.5 dB, reverb times within 5 %)
+    and seeded determinism on the Rust side.
 - **R3. SOFA/HDF5:** see ADR 0001.
 - **R4. FlatBuffers compatibility** of baked data. It must be readable by both implementations, which is
   verified by cross-loading files.
+- **R6. Shipped binaries use Intel IPP** for `ArrayMath` and FFT on x86/x64. Our reference build uses upstream's
+  generic path (IPP is not redistributable), so parity is against the generic path. IPP results may differ in the
+  last bits.
 - **R5. Reference build dependencies.** `core/build/get_dependencies.py` downloads ~15 third-party
   libraries. `tools/golden` uses a minimal configuration (PFFFT, mysofa, zlib, flatbuffers; no Embree,
   IPP, OpenCL, Radeon Rays or TrueAudioNext).

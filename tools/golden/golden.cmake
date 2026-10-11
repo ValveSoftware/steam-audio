@@ -7,6 +7,7 @@ add_executable(golden
     ${GOLDEN_DIR}/src/main.cpp
     ${GOLDEN_DIR}/src/fft.cpp
     ${GOLDEN_DIR}/src/geometry.cpp
+    ${GOLDEN_DIR}/src/arrays.cpp
 )
 
 target_link_libraries(golden PRIVATE core hrtf)

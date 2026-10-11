@@ -13,3 +13,6 @@ Differences within a module's stated numerical tolerance (see `PORTING_PLAN.md` 
 | `SquareMatrix::transpose()` (in place) | Swaps every `(i,j)`/`(j,i)` pair twice, so it is a no-op; never called | Not ported; `transpose()` returns a copy (upstream `transposedCopy`) | Upstream bug, unreachable | yes (2.1) |
 | Uninitialized matrices | Default constructor leaves elements uninitialized | Always initialized (`ZERO`) | Safety | yes (2.1) |
 | `Box::coordinates(i)` | Pointer arithmetic over 16-byte-aligned members, unchecked index | `Aabb::bound(i)`, panics on `i > 1` | Safety | yes (2.1) |
+| `leastSquares`, `leastSquaresL1` | Implemented only with Intel MKL; the default build throws `Status::Failure` | Not ported | Unused without MKL (out of scope) | yes (2.3) |
+| `Array<T, N>` | Custom multi-dimensional array with pointer tables | `Vec<T>` and slices | Idiomatic Rust; no behaviour change | yes (2.3) |
+| `Sampling` hemisphere docs | Comment says the hemisphere's normal is +y | Samples have `z <= 0` (normal −z) in both; only the doc comment is corrected | Upstream comment is wrong | yes (2.2) |
