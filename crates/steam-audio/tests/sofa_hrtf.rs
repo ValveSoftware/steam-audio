@@ -247,7 +247,9 @@ fn sofa_hrtf_map() {
             }
 
             // Off MSVC, a different nearest measurement must be a tie, and different neighbours must come from a
-            // flipped neighbourhood entry of one of the measurements involved.
+            // flipped neighbourhood entry of one of the measurements involved, or from a query on the nearest
+            // measurement's azimuth or elevation, where the side to interpolate towards depends on the sign of a
+            // difference of about an ulp.
             let context = format!(
                 "{prefix}query {q}: nearest {nearest} indices {indices:?}, expected {expected_nearest} {expected_indices:?}"
             );
@@ -262,9 +264,14 @@ fn sofa_hrtf_map() {
                 );
             } else {
                 let involved = indices.iter().chain(expected_indices).filter(|&&i| i >= 0);
+                let query = sofa::c2s([-direction.z, -direction.x, direction.y]);
+                let measured = sofa::c2s(map.positions()[nearest]);
+                let azimuth = (query[0] - measured[0]).rem_euclid(360.0);
+                let on_axis =
+                    azimuth.min(360.0 - azimuth) < 1e-3 || (query[1] - measured[1]).abs() < 1e-3;
                 assert!(
-                    involved.into_iter().any(|&i| flipped[i as usize]),
-                    "{context}: no flipped neighbour involved"
+                    on_axis || involved.into_iter().any(|&i| flipped[i as usize]),
+                    "{context}: no flipped neighbour involved, query not on an axis of the nearest measurement"
                 );
             }
             ties += 1;
@@ -272,9 +279,10 @@ fn sofa_hrtf_map() {
         if ties > 0 {
             eprintln!("{prefix}: {ties} queries differ by lookup ties (R17)");
         }
-        // As the built-in map's bilinear weights (3.1): angles in degrees from `c2s` (`atan2f`, `sqrtf`) are divided
-        // by grid steps of a few degrees, which amplifies libm ulp differences off Windows (measured 1.25e-5 on Linux).
-        let result = compare(&weights, &expected_weights, Tolerance::new(2e-5, 0.0));
+        // As the built-in map's bilinear weights (3.1), but looser: angles in degrees from `c2s` (`atan2f`, `sqrtf`;
+        // an ulp is 3.1e-5° near 360°) are divided by the grid step, 1° in sadie_d1, which amplifies libm ulp
+        // differences off Windows (measured 4.4e-5 on Linux). Bit-exact on Windows.
+        let result = compare(&weights, &expected_weights, Tolerance::new(1e-4, 0.0));
         assert!(result.is_ok(), "{prefix}interpolated_weights: {result:?}");
     }
 }
