@@ -10,7 +10,8 @@ env:
 
 jobs:
   check:
-    # Skips cleanly until a Cargo workspace exists at the repo root.
+    # Every job always reports (the three checks are required on `master`), but the Rust steps are skipped when there
+    # is no Cargo workspace or when a pull request changes only documentation.
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -18,12 +19,26 @@ jobs:
         os: [ubuntu-latest, windows-latest, macos-latest]
     steps:
       - uses: actions/checkout@v4
+        with:
+          # A pull request is checked out as a merge commit; its first parent is the base branch.
+          fetch-depth: 2
 
-      - name: Detect Cargo workspace
+      - name: Detect what to check
         id: cargo
         shell: bash
         run: |
-          if [ -f Cargo.toml ]; then echo "present=true" >> "$GITHUB_OUTPUT"; else echo "present=false" >> "$GITHUB_OUTPUT"; fi
+          present=false
+          if [ -f Cargo.toml ]; then present=true; fi
+          if [ "$present" = true ] && [ "${{ github.event_name }}" = pull_request ]; then
+            changed=$(git diff --name-only HEAD^1 HEAD)
+            echo "Changed files:"
+            echo "$changed"
+            if [ -n "$changed" ] && ! echo "$changed" | grep -qvE '\.md$|^docs/|^LICENSE$'; then
+              echo "Documentation-only change: skipping Rust checks."
+              present=false
+            fi
+          fi
+          echo "present=$present" >> "$GITHUB_OUTPUT"
 
       - uses: dtolnay/rust-toolchain@stable
         if: steps.cargo.outputs.present == 'true'
