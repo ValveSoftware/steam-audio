@@ -36,6 +36,10 @@ pub enum Error {
     InvalidReceiverPositions,
     #[error("only sources with dimensions M,C are supported")]
     OnlySourcesWithMcSupported,
+    /// A Speex resampler error (`RESAMPLER_ERR_*`), which `mysofa_resample` returns as is: 1 when the filter for the
+    /// sampling rate ratio cannot be built, 3 when a sampling rate converts to 0 Hz.
+    #[error("resampler error {0}")]
+    Resampler(i32),
     /// A C library error code (`errno`), which libmysofa returns as is. The in-memory reader only produces
     /// `EINVAL` (22), for a seek outside the data.
     #[error("system error {0}")]
@@ -70,7 +74,7 @@ impl Error {
             Self::ReceiversWithCartesianSupported => 10012,
             Self::InvalidReceiverPositions => 10013,
             Self::OnlySourcesWithMcSupported => 10014,
-            Self::Errno(errno) => *errno,
+            Self::Resampler(code) | Self::Errno(code) => *code,
             Self::Io(error) => error.raw_os_error().unwrap_or(-1),
         }
     }

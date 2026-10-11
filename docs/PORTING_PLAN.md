@@ -86,7 +86,7 @@ Order: leaves first. A box is ticked only when the slice passes its parity tests
 | 3.3 | Speaker layouts, panning, binaural, virtual surround | `speaker_layout`, `panning_effect`, `binaural_effect`, `virtual_surround_effect` | ☑ | ☑ | ☑ | Panning weights `F32`, panning audio `peak_relative(1e-5)`: bit-exact on Windows. Binaural and virtual surround with stored HRTFs: `peak_relative(1e-5)` (measured worst 2.5e-7 × peak); with synthesized HRTFs (bilinear, spatial blend of a stereo input): `peak_relative(5e-5)` as in 3.1 (R10; measured worst 4.3e-6 × peak). Not bit-exact because of the FFT (R1); debug and release identical. States, tail counters and peak delays `EXACT`. Upstream quirks kept: R14. `secondOrderPanningWeight` not ported (dead code) |
 | 3.4 | Ambisonics effects (encode, decode, rotate, panning, binaural) | `ambisonics_encode_effect`, `ambisonics_rotate_effect`, `ambisonics_panning_effect`, `ambisonics_binaural_effect`, `ambisonics_decode_effect` | ☑ | ☑ | ☑ | Encode and rotate: `F32`; panning and decode audio: `peak_relative(1e-5)`. Encode, rotate, panning and panned decoding are bit-exact on Windows (debug and release). Binaural (alone and in decode): `peak_relative(1e-5)`, measured worst 2.5e-7 × peak, not bit-exact because of the FFT (R1). States and tail counters `EXACT`. Outputs are prefilled with a sentinel, so channels the effects leave untouched are checked too. The virtual speaker table moved from `hrtf` to `AmbisonicsPanningEffect::VIRTUAL_SPEAKERS`. Upstream quirks kept: R15 |
 | 3.5a | `sofa` crate: HDF5 subset, SOFA loader and check (ADR 0001) | libmysofa 1.3.3 `src/hdf/*` (except `btreeRead`), `hrtf/reader.c`, `check.c`, `tools.c` (attributes) | ☑ | ☑ | ☑ | Loader results compared as a blob of status codes, dimensions, attributes and per-array FNV-1a hashes of the `f32` values: `EXACT`. Bit-exact on the three files in `core/data/hrtf` (plus source positions and sampled HRIRs as arrays), on libmysofa's 43 test files (including its fuzzing regressions; local only, the files are not in the repository) and on 256 Lcg-chosen corruptions of `cipic_124.sofa` (2000 checked once locally). Inflate uses `miniz_oxide`'s core with zlib's single-call semantics. Malformed input never panics; a cargo-fuzz target exists (`crates/sofa/fuzz`). Upstream quirks kept: R16 |
-| 3.5b | `sofa` crate: Speex resampler, `mysofa_tocartesian`, k-d tree lookup, neighbourhood, `c2s`/`s2c` (the rest of `mysofa_open_no_norm`) | libmysofa `resample.c`, `speex_resampler.c`, `spherical.c`, `tools.c`, `kdtree.c`, `lookup.c`, `neighbors.c`, `easy.c` | ☐ | ☐ | ☐ | ADR 0001: resampled HRIRs `peak_relative(1e-5)`, lookup and neighbourhood indices `EXACT` |
+| 3.5b | `sofa` crate: Speex resampler, `mysofa_tocartesian`, k-d tree lookup, neighbourhood, `c2s`/`s2c` (the rest of `mysofa_open_no_norm`) | libmysofa `resample.c`, `speex_resampler.c`, `spherical.c`, `tools.c`, `kdtree.c`, `lookup.c`, `neighbors.c`, `easy.c` | ☑ | ☑ | ☑ | Coordinates (`c2s`, `s2c`, Cartesian source positions, lookup ranges, normalised queries) and delays: `F32`; resampled HRIRs: `peak_relative(1e-5)` per response (ADR 0001); lookup and neighbourhood indices, status codes and sizes: `EXACT`. Bit-exact on Windows (debug and release): the three shipped files resampled to 8–96 kHz (direct and interpolated Speex filters, up- and downsampling), corrupt sampling rates, lookups of 600 Lcg queries per file (measured points, midpoints, scaled points, the zero vector), every neighbourhood, and libmysofa's 43 test files through `mysofa_open_data_no_norm` (local only). Corrupted files open or fail through `Easy` without panicking (3000 Lcg corruptions checked once locally, 64 in CI); the fuzz target now runs the whole of `Easy`. `radius` calls the C library's `powf` as upstream does (MSVC's `powf(x, 2)` is not always `x * x`). The k-d tree search uses an explicit stack. Upstream quirks kept: R17 |
 | 3.5c | SOFA HRTF map and `HRTFMapFactory` (moved from 3.1) | `sofa_hrtf_map`, `hrtf_map_factory` | ☐ | ☐ | ☐ | Weights `F32`, indices `EXACT`; binaural with a SOFA HRTF as in 3.3 |
 | 4 | Direct sound: distance attenuation, air absorption, directivity, direct effect, gain/EQ | `distance_attenuation`, `air_absorption`, `directivity`, `direct_effect`, `gain_effect`, `eq_effect` | ☐ | ☐ | ☐ | `F32` / `peak_relative(1e-5)`. `DirectEffect` needs an in-place `apply` (R7) |
 | 5 | Scene and geometry: mesh, static/instanced mesh, BVH, scene, materials, OBJ loading for tests | `mesh`, `static_mesh`, `instanced_mesh`, `bvh`, `scene`, `material`, `hit` | ☐ | ☐ | ☐ | hits: exact triangle index, `F32` distance |
@@ -201,6 +201,16 @@ Order: leaves first. A box is ticked only when the slice passes its parity tests
 | `MYSOFA_ARRAY` (`values` may be NULL), `MYSOFA_ATTRIBUTE`, `MYSOFA_VARIABLE` | `sofa::Array` (`values: Option<Vec<f32>>`), `Attribute` (bytes), `Variable`; lists in file order |
 | `MYSOFA_*` status codes, `errno` | `sofa::Error` variants, `Error::code()` returns the same numbers |
 | The status `mysofa_load` returns alongside a usable HRTF | `Hrtf::load_error` |
+| `mysofa_resample(hrtf, rate)` | `hrtf.resample(rate)` |
+| `mysofa_tocartesian(hrtf)` | `hrtf.to_cartesian()` |
+| `mysofa_c2s(v)`, `mysofa_s2c(v)` (in place) | `sofa::c2s(v)`, `sofa::s2c(v)` (return the converted `[f32; 3]`) |
+| `mysofa_lookup_init(hrtf)` (`NULL` unless Cartesian), `mysofa_lookup(lookup, c)` (`-1` without measurements) | `Lookup::new(&hrtf)` → `Result`, `lookup.lookup(&mut c)` or `lookup_with(&mut c, &mut scratch)` → `Option<usize>` |
+| `MYSOFA_LOOKUP` (`radius_min`, …, `phi_max`) | `sofa::Lookup` (fields of the same names) |
+| `mysofa_neighborhood_init`, `mysofa_neighborhood_init_withstepdefine`, `mysofa_neighborhood(nb, i)` (`int[6]`, `-1` for none) | `Neighborhood::new`, `Neighborhood::with_steps` → `Result`, `get(i)` → `Option<&[Option<usize>; 6]>` |
+| `MYSOFA_DEFAULT_NEIGH_STEP_ANGLE`, `MYSOFA_DEFAULT_NEIGH_STEP_RADIUS` | `sofa::DEFAULT_ANGLE_STEP`, `DEFAULT_RADIUS_STEP` |
+| `mysofa_open_no_norm(file, rate, &filterLength, &err)`, `mysofa_open_data_no_norm(data, size, …)` | `Easy::load_file_no_norm(path, rate)`, `Easy::load_no_norm(&data, rate)` → `Result<Easy, sofa::Error>`; `easy.filter_length()` |
+| `MYSOFA_EASY` (`hrtf`, `lookup`, `neighborhood`, `fir`) | `sofa::Easy` (`hrtf`, `lookup`, `neighborhood`; no filter buffer) |
+| Speex `RESAMPLER_ERR_*` codes returned by `mysofa_resample` | `Error::Resampler(code)` |
 
 ## 6. Deviations
 
@@ -223,7 +233,7 @@ Tracked in [`DEVIATIONS.md`](DEVIATIONS.md).
     itself is not reproducible**. Use statistical checks (band energies within ±0.5 dB, reverb times within 5 %)
     and seeded determinism on the Rust side.
 - **R3. SOFA/HDF5:** see ADR 0001. Split into 3.5a (parser), 3.5b (resampling and lookup) and 3.5c (HRTF map). The
-  parser is checked bit for bit against libmysofa (3.5a). libmysofa positions are a `long`, 32 bits on Windows, so
+  parser (3.5a) and the rest of `mysofa_open_no_norm` (3.5b) are checked bit for bit against libmysofa on Windows. libmysofa positions are a `long`, 32 bits on Windows, so
   the port truncates seek offsets to `i32` like the reference build; on Linux and macOS upstream would differ only on
   corrupt files with offsets of 2 GiB or more.
 - **R4. FlatBuffers compatibility** of baked data. It must be readable by both implementations, which is
@@ -310,3 +320,15 @@ Tracked in [`DEVIATIONS.md`](DEVIATIONS.md).
   match still pending, so what follows a chunk's declared size in its stream (more data, a corrupt checksum) goes
   unchecked and the chunk loads; the port's inflater stops at the same point, and the corruption tests found no case
   where the two differ.
+- **R17. libmysofa quirks the port keeps (found in 3.5b).** `mysofa_resample` gives the Speex filter both sampling rates
+  truncated to integers, with MSVC's `float`-to-`unsigned` conversion (through a 64-bit integer: −1.5 becomes 2^32 − 1;
+  NaN, infinities and values of 2^63 or more become 0), but scales the length and delays by the exact `float` ratio, and
+  returns resampler errors as Speex's codes (1: the filter cannot be built, 3: a rate of 0). Each response is resampled
+  separately, from silence, with the filter latency skipped, and zeros are fed until it has `ceil(N × ratio)` samples.
+  Speex's `_muldiv` bounds use `UINT32_MAX = 2^32`, the file's own fallback, because `stdint.h` is not included there.
+  `mysofa_tocartesian` treats an array whose `Type` attribute has no value as spherical and changes the last `Type` and
+  `Units` attributes in the file. `mysofa_lookup_init` starts the maxima of the coordinate ranges at `FLT_MIN`
+  (positive), so a coordinate whose values are all negative keeps that maximum; the ranges decide which coordinates the
+  neighbourhood searches. `mysofa_lookup` scales the query in place onto the measured radius range, so the zero vector
+  becomes NaN and returns measurement 0 (the tree's root). Between equidistant measurements the k-d tree search returns
+  the first one it visits, which depends on the insertion (measurement) order, so the port keeps the unbalanced tree.
