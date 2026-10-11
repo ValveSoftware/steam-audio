@@ -42,6 +42,7 @@ build/reference/golden.exe testdata/golden fft      # selected modules
 Golden files are generated with **MSVC on Windows x64** only. Upstream's random number generation is
 implementation-defined (`std::default_random_engine`), so other toolchains produce different golden data
 (see risk R2 in `docs/PORTING_PLAN.md`). Commit the regenerated files together with the generator change.
+The `iir` generator also needs a CPU with AVX: it records upstream's AVX filtering path (risk R8).
 
 ## Adding a generator
 
