@@ -10,6 +10,7 @@ pub mod fft;
 pub mod geometry;
 pub mod math;
 pub mod sampling;
+pub mod sh;
 
 /// Single-precision complex number (upstream `complex_t`).
 pub type Complex = num_complex::Complex<f32>;
