@@ -74,7 +74,7 @@ Order: leaves first. A box is ticked only when the slice passes its parity tests
 | 0 | Repository cleanup, Cargo workspace, CI | — | ☑ | ☑ | — | — |
 | 1a | `parity` crate: `.npy`, `Tolerance`, `assert_close` | — | ☑ | ☑ | — | — |
 | 1b | `tools/golden`: reference build + first generator (FFT) | `CMakeLists.txt`, `build/` | ☑ | ☑ | ☑ | — |
-| 2.1 | Vector, matrix, quaternion, coordinate space, polar vector, sphere, box, ray, triangle | `vector`, `matrix`, `quaternion`, `coordinate_space`, `polar_vector`, `sphere`, `box`, `ray`, `triangle` | ☐ | ☐ | ☐ | `F32` |
+| 2.1 | Vector, matrix, quaternion, coordinate space, polar vector, sphere, box (`Aabb`), ray | `vector`, `matrix`, `quaternion`, `coordinate_space`, `polar_vector`, `sphere`, `box`, `ray` | ☑ | ☑ | ☑ | `F32` (bit-exact on Windows). `Triangle`, `Hit` and `Ray::intersect(Mesh)` move to stage 5 with `Mesh`; `DynamicMatrix` moves to 2.3 |
 | 2.2 | Math functions, sampling | `math_functions`, `sampling` | ☐ | ☐ | ☐ | `F32` |
 | 2.3 | Array math | `array`, `array_math` | ☐ | ☐ | ☐ | `F32` |
 | 2.4 | Audio buffer (interleave, mix, downmix, ambisonics conversions) | `audio_buffer` | ☐ | ☐ | ☐ | `F32` |
@@ -111,6 +111,24 @@ Order: leaves first. A box is ticked only when the slice passes its parity tests
 - **Extra:** `proptest` for math invariants; `cargo-fuzz` for the parsers (SOFA/HDF5, OBJ, serialised
   objects); `criterion` benchmarks against `core/src/benchmark` for the hot paths (convolution, binaural,
   reflections).
+
+### Name mapping (upstream → Rust)
+
+| Upstream | Rust |
+| --- | --- |
+| `Vector2f/3f/4f`, `Vector3f::kZero`, `kXAxis` | `math::Vector2/3/4`, `Vector3::ZERO`, `X_AXIS` |
+| `Vector3f::unitVector(v)` | `v.normalize_or_zero()` |
+| `Vector::reciprocal(v)` | `v.recip()` |
+| `operator<`, `<=`, `>`, `>=` on vectors (element-wise "all") | `all_lt`, `all_le`, `all_gt`, `all_ge` |
+| `Matrix<T,R,C>`, `Matrix4x4f`, `m(i, j)` | `math::Matrix<R,C>`, `Matrix4`, `m[(i, j)]` |
+| `transposedCopy()` | `transpose()` |
+| `determinant(m)`, `inverse(m, out)` | `m.determinant()`, `m.inverse_or_zero()` |
+| `CoordinateSpace3f(ahead, origin)` / `(ahead, up, origin)` | `CoordinateSpace3::from_ahead` / `from_ahead_up` |
+| `transformDirectionFromWorldToLocal` | `direction_world_to_local` |
+| `Box`, `Box::coordinates(i)` | `geometry::Aabb`, `Aabb::bound(i)` |
+| `computeBoundingSphere(a, b)` | `Sphere::bounding(&a, &b)` |
+| `Ray::intersect(box, …)`, `intersect(sphere)` | `intersect_aabb`, `intersect_sphere`, `intersect_triangle(v0, v1, v2)` |
+| `Math::kPi` (3.141592f) | `math::PI` (**not** `std::f32::consts::PI`) |
 
 ## 6. Deviations
 
