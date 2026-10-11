@@ -63,6 +63,9 @@ Goldens are generated **only with MSVC on Windows x64** (upstream RNG and libm a
   `(f64::from(x) / a0) as f32`. MSVC's unqualified `sqrt(float)` is the `float` overload.
 - Code dispatched on `gSIMDLevel()` may round differently per path; the port follows the AVX path (risk R8).
 - `float4::round` is `_mm_cvtps_epi32` (half to even, out of range → `INT_MIN`), unlike `roundf` in scalar tails.
+- MSVC's `powf(x, 2)` is not always `x * x`, and LLVM folds a constant exponent of 2 into a multiplication: pass the
+  exponent through `std::hint::black_box` to call the C library (`sofa`'s `radius`).
+- MSVC x64 converts `float`/`double` to `unsigned` through `int64` (low 32 bits; NaN and out-of-range values give 0).
 
 ## Rust conventions
 

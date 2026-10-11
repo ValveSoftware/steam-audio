@@ -2,9 +2,12 @@
 //!
 //! A port of the part of [libmysofa](https://github.com/hoene/libmysofa) 1.3.3 that Steam Audio uses
 //! (`docs/adr/0001-sofa-loader.md`): the read-only HDF5 subset, the `SimpleFreeFieldHRIR` loader ([`Hrtf::load`],
-//! upstream `mysofa_load_data`) and its validation ([`Hrtf::check`], `mysofa_check`). It accepts and rejects the same
-//! files as libmysofa and reports the same status codes ([`Error::code`]), verified against golden data produced by
-//! libmysofa itself.
+//! upstream `mysofa_load_data`) and its validation ([`Hrtf::check`], `mysofa_check`), resampling with libmysofa's
+//! Speex resampler ([`Hrtf::resample`]), coordinate conversions ([`Hrtf::to_cartesian`], [`c2s`], [`s2c`]), the
+//! nearest-measurement search ([`Lookup`]) and the neighbours of each measurement ([`Neighborhood`]), all brought
+//! together by [`Easy::load_no_norm`] (`mysofa_open_data_no_norm`). It accepts and rejects the same files as
+//! libmysofa, reports the same status codes ([`Error::code`]) and computes the same values, verified against golden
+//! data produced by libmysofa itself.
 //!
 //! SOFA files are untrusted input. The parser is safe Rust, returns an [`Error`] for malformed data and never
 //! panics on it; it adds limits where libmysofa would crash or not terminate (`docs/DEVIATIONS.md`).
@@ -13,13 +16,24 @@
 //! `LICENSE-libmysofa` in this crate).
 
 mod check;
+mod easy;
 mod error;
 mod hdf;
+mod kdtree;
 mod load;
+mod lookup;
+mod neighbors;
+mod resample;
+mod speex;
+mod spherical;
 
 use std::path::Path;
 
+pub use easy::Easy;
 pub use error::Error;
+pub use lookup::{Lookup, LookupScratch};
+pub use neighbors::{DEFAULT_ANGLE_STEP, DEFAULT_RADIUS_STEP, Neighborhood, Neighbors};
+pub use spherical::{c2s, s2c};
 
 /// A name/value attribute (upstream `MYSOFA_ATTRIBUTE`). Strings are kept as bytes, cut at the first NUL like C
 /// strings.
