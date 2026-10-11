@@ -3,5 +3,12 @@
 version = 4
 
 [[package]]
-name = "steam-audio-rust"
+name = "parity"
 version = "0.1.0"
+
+[[package]]
+name = "steam-audio"
+version = "0.1.0"
+dependencies = [
+ "parity",
+]

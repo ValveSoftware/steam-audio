@@ -1,0 +1,11 @@
+[package]
+name = "parity"
+description = "Test support: golden data loading and tolerance-based comparison against the reference C++ Steam Audio"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish = false
+
+[lints]
+workspace = true

@@ -16,3 +16,10 @@ unity/src/project/SteamAudioUnity/Assets/Plugins/FMOD/platforms/win/lib/**/*.dll
 unity/src/project/SteamAudioUnity/Assets/Plugins/SteamAudio/Binaries/**/*.so
 unity/src/project/SteamAudioUnity/Assets/Plugins/SteamAudio/Binaries/**/*.dll
 unity/src/project/SteamAudioUnity/Assets/Plugins/SteamAudio/Binaries/**/*.bundle
+
+# Rust
+/target/
+**/*.rs.bk
+
+# Reference C++ build (tools/golden) and fetched upstream dependencies
+/build/

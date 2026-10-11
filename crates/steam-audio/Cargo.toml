@@ -1,0 +1,14 @@
+[package]
+name = "steam-audio"
+description = "Rust reimplementation of Valve's Steam Audio: spatial audio, HRTF rendering and sound propagation"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[lints]
+workspace = true
+
+[dev-dependencies]
+parity = { path = "../parity" }
