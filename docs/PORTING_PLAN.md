@@ -81,7 +81,7 @@ Order: leaves first. A box is ticked only when the slice passes its parity tests
 | 2.5 | FFT | `fft`, `pffft_fft` | ☑ | ☑ | ☑ | `peak_relative(1e-5)`; measured worst error 5.4e-7 × peak (not bit-exact, R1) |
 | 2.6 | Spherical harmonics, ambisonics primitives | `sh`, `sh/spherical_harmonics` | ☑ | ☑ | ☑ | `F32` (bit-exact on Windows, debug and release; bands 0–6, rotations up to order 5). `ProjectFunction` not ported (random, unused) |
 | 2.7 | DSP primitives: bands, IIR, delay, window functions | `bands`, `iir`, `float8_iir`, `delay`, `float8_delay`, `window_function` | ☑ | ☑ | ☑ | Designs, spectra, allpass, windows: `F32`; delay: `EXACT`; filtering: `peak_relative(1e-5)`. Bit-exact on Windows (debug and release), filtering against upstream's AVX path (R8); the 4-sample path differs by ≤ 3.0e-6 × peak. `IIR8` and the order-switching wrappers not ported (dead code) |
-| 3.1 | Built-in HRTF (`cipic_124`), HRTF map, HRTF database | `hrtf_map`, `hrtf_database`, `cipic_124.inl` | ☐ | ☐ | ☐ | `peak_relative(1e-5)` |
+| 3.1 | Built-in HRTF (`cipic_124`), HRTF map, HRTF database | `hrtf_map`, `hrtf_database`, `cipic_124.inl` | ☑ | ☑ | ☑ | Map (loading, nearest, bilinear weights), loudness, peak delays: `EXACT`/`F32`, bit-exact on Windows. Stored and Ambisonics HRTFs: `peak_relative(1e-5)` (measured ≤ 2.2e-7 × peak; ≤ 1.0e-6 when projected from version-2 data). Synthesized HRTFs (interpolation, spatial blend): `peak_relative(5e-5)`, measured worst 2.03e-5 × peak, because the phase is interpolated unwrapped and accumulated in `f32` from FFT phases that already differ (R1, R10). `HRTFMapFactory` and the SOFA map move to 3.5; the virtual speaker table (`kVirtualSpeakers`) lives in `hrtf` until 3.4 |
 | 3.2 | Convolution (overlap-add / overlap-save) | `overlap_add_convolution_effect`, `overlap_save_convolution_effect` | ☐ | ☐ | ☐ | `peak_relative(1e-5)` |
 | 3.3 | Panning, binaural, virtual surround | `panning_effect`, `binaural_effect`, `virtual_surround_effect` | ☐ | ☐ | ☐ | `peak_relative(1e-5)` |
 | 3.4 | Ambisonics effects (encode, decode, rotate, panning, binaural) | `ambisonics_*_effect` | ☐ | ☐ | ☐ | `peak_relative(1e-5)` |
@@ -159,6 +159,18 @@ Order: leaves first. A box is ticked only when the slice passes its parity tests
 | `Delay(delay, frameSize)`, `get(n, out)`, `put(n, in)` | `delay::Delay::new(delay, frame_size)`, `get(&mut out)`, `put(&in)` |
 | `Allpass::resize(delay, gain, frameSize)`, `apply(float)`, `apply(float4_t)` / `apply(float8_t)` | `delay::Allpass::new` / `resize`, `apply(x)`, `apply_block::<4>` / `apply_block::<8>` |
 | `WindowFunction::hann(size, w)` etc., `tukey(size, overlap, w)` | `window::hann(&mut w)` etc., `window::tukey(size, overlap, &mut w)` |
+| `gDefaultHrtfData` (`cipic_124.inl`) | `hrtf::BUILTIN_HRTF_DATA` (converted from the `.inl` by `build.rs`) |
+| `IHRTFMap::kNumEars`, `kMaxAmbisonicsOrder` | `hrtf::NUM_EARS`, `MAX_AMBISONICS_ORDER` |
+| `HRTFMap(samplingRate)` / `HRTFMap(samplingRate, hrtfData)` | `hrtf::HrtfMap::new(rate)` / `from_bytes(data, rate)` → `Result` |
+| `hrtfData()`, `ambisonicsData()` | `hrirs()` (flat) / `hrir(ear, index)`, `ambisonics_hrirs()` (empty for version 2) |
+| `nearestHRIR(dir)`, `interpolatedHRIRWeights(dir, indices, weights)` | `nearest_hrir(dir)`, `interpolated_hrir_weights(dir) -> HrirWeights` (`-1` → `None`) |
+| `HRTFSettings` (`Default` type), `HRTFNormType::None`/`RMS` | `hrtf::HrtfSettings { data, volume, normalization }`, `HrtfNormalization::None`/`Rms` |
+| `HRTFPhaseType::None`, `SphereITD`, `Full` | `HrtfPhaseType::None`, `SphereItd`, `Full` |
+| `HRTFDatabase(settings, samplingRate, frameSize)` | `HrtfDatabase::new(&settings, rate, frame_size)` → `Result` |
+| `getHRTFByIndex(i, hrtf)`, `ambisonicsHRTF(i, hrtf)` | `hrtf(i)`, `ambisonics_hrtf(i)` → `[&[Complex]; 2]` |
+| `nearestHRTF(dir, hrtf, blend, phase, hrtfWithBlend, peakDelays)` | `nearest_index(dir)` + `hrtf(i)` + `peak_delays(i)`; the `blend < 1` branch is `blended_hrtf(i, dir, blend, phase, out)` |
+| `interpolatedHRTF(dir, hrtf, blend, phase, peakDelays)` | `interpolated_hrtf(dir, blend, phase, out) -> [usize; 2]` (peak delays) |
+| `Loudness::gainToDB`, `dBToGain`, `calculateRMSLoudness`, `calculateGainScaling` | `hrtf::loudness::gain_to_db`, `db_to_gain`, `rms_loudness`, `gain_scaling` |
 
 ## 6. Deviations
 
@@ -209,3 +221,8 @@ Tracked in [`DEVIATIONS.md`](DEVIATIONS.md).
   stores the last raw input (without the `1e-9` the recurrence adds) as state, which the single-sample path then
   uses. `lowPass` and `highShelf` design in `double` but round every coefficient to `float` before dividing by
   `a0` in `double`.
+- **R10. Unwrapped-phase sensitivity (found in 3.1).** `HRTFDatabase` interpolates and blends HRTFs as log-magnitude and
+  *unwrapped* phase in `f32`. The unwrapped phase grows with frequency (tens of radians), so FFT differences (R1) of
+  ~1e-7 × peak in the stored spectra become up to 2.03e-5 × peak in synthesized HRTFs, growing towards Nyquist. A 2π
+  decision flip in the unwrapping would cause a much larger error; none occurs on the tested directions. Stage 3.3
+  (binaural) inherits this tolerance for interpolated HRTFs and spatial blend.

@@ -8,13 +8,17 @@ pub mod array_math;
 pub mod audio_buffer;
 pub mod bands;
 pub mod delay;
+pub mod error;
 pub mod fft;
 pub mod geometry;
+pub mod hrtf;
 pub mod iir;
 pub mod math;
 pub mod sampling;
 pub mod sh;
 pub mod window;
+
+pub use error::{Error, Result};
 
 /// Single-precision complex number (upstream `complex_t`).
 pub type Complex = num_complex::Complex<f32>;

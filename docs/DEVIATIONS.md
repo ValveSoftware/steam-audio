@@ -33,3 +33,8 @@ Differences within a module's stated numerical tolerance (see `PORTING_PLAN.md` 
 | `Allpass(delay, gain, frameSize)` constructor | Calls `reset()` after `resize()`, which zeroes the gain; never used (callers default-construct and `resize`) | `Allpass::new` keeps the gain, like `resize`; `reset()` still zeroes it | Upstream bug in unused code | yes (2.7) |
 | `Delay::get`/`put` of more samples than the ring holds | Buffer overrun in the `n`-sample overloads (the `float4_t` ones wrap) | Wraps as often as needed; panics on an empty ring | Safety | yes (2.7) |
 | Octave bands | 11 bands with `IPL_ENABLE_OCTAVE_BANDS` (off by default) | 3 bands only | Default build | yes (2.7) |
+| Malformed `.hrtf` data | Read through raw pointers without bounds checks; no HRIRs divides by zero; a missing Ambisonics sampling rate reads past the end | `Error::MalformedHrtfData` | Safety | yes (3.1) |
+| `HRTFDatabase::convertToMinimumPhase` | Computed (with a magnitude-phase decomposition) in `precomputeAmbisonicsHRTFs`, but the result is never used | Not ported | Dead computation; no observable effect | yes (3.1) |
+| `HRTFDatabase::sEnableDCCorrectionForPhaseInterpolation`, `sEnableNyquistCorrectionForPhaseInterpolation` | Mutable globals, `false`, toggled only by an interactive test tool | Not ported (always off) | No globals in the core | yes (3.1) |
+| `Loudness::sMaxVolumeNormGainDB` | Mutable global (12 dB) that nothing changes | Constant `MAX_VOLUME_NORM_GAIN_DB` | No globals in the core | yes (3.1) |
+| `HRTFDatabase::saveAmbisonicsHRIRs(FILE*)` | Writes Ambisonics HRIRs for the `hrtf2sh` tool | Not ported | Tool-only | yes (3.1) |

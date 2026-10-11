@@ -17,3 +17,4 @@ parity = { path = "../parity" }
 num-complex = { version = "0.4", default-features = false, features = ["std"] }
 realfft = "3.5"
 rustfft = "6.4"
+thiserror = "2"
