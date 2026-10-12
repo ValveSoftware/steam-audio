@@ -1,8 +1,7 @@
 // Golden data for stage 5: mesh.{h,cpp}, bvh.{h,cpp}, static_mesh.{h,cpp}, instanced_mesh.{h,cpp}, scene.{h,cpp}.
 //
-// Meshes are read from core/data/meshes (run from the repository root) with the OBJ loader of upstream's
-// RayTracerCompare.test.cpp, reproduced token for token by crates/steam-audio/tests/scene.rs. Other inputs come from
-// Lcg draws in a fixed order, one value per statement.
+// Meshes are read from core/data/meshes (run from the repository root) with the OBJ loader in scene_inputs.h. Other
+// inputs come from Lcg draws in a fixed order, one value per statement.
 //
 // Modules:
 // - bvh: per mesh, the BVH nodes (in full for the small meshes, as an FNV-1a hash for teapot and sponza), triangle
@@ -11,19 +10,17 @@
 //   updates, material changes, removal), with its version after every step, and its dumpObj output.
 
 #include <cstring>
-#include <fstream>
 #include <limits>
 #include <memory>
 #include <string>
-#include <unordered_map>
 
 #include <instanced_mesh.h>
-#include <quaternion.h>
 #include <scene.h>
 #include <static_mesh.h>
 
 #include "generators.h"
 #include "npy.h"
+#include "scene_inputs.h"
 
 namespace {
 
@@ -31,153 +28,8 @@ using namespace golden;
 using namespace ipl;
 
 // --------------------------------------------------------------------------------------------------------------------
-// OBJ loading (RayTracerCompare.test.cpp's loadMesh, without the scene)
-// --------------------------------------------------------------------------------------------------------------------
-
-struct ObjMesh
-{
-    std::vector<Vector3f> vertices;
-    std::vector<int> triangles;
-    std::vector<int> materialIndices;
-    std::vector<Material> materials;
-};
-
-ObjMesh loadObj(const std::string& name)
-{
-    ObjMesh mesh;
-
-    std::ifstream mtlfile("core/data/meshes/" + name + ".mtl");
-    if (!mtlfile.good())
-        throw std::runtime_error("cannot open " + name + ".mtl (run from the repository root)");
-
-    std::unordered_map<std::string, int> materialIndices;
-    std::string currentmtl;
-
-    float kd[3];
-    float ks[3];
-
-    while (true)
-    {
-        std::string command;
-        mtlfile >> command;
-
-        if (mtlfile.eof())
-            break;
-
-        if (command == "newmtl")
-        {
-            std::string mtlname;
-            mtlfile >> mtlname;
-
-            currentmtl = mtlname;
-
-            mesh.materials.push_back(Material());
-            materialIndices[mtlname] = static_cast<int>(mesh.materials.size()) - 1;
-        }
-        else if (command == "Kd")
-        {
-            mtlfile >> kd[0] >> kd[1] >> kd[2];
-
-            for (auto i = 0; i < 3; ++i)
-                mesh.materials[materialIndices[currentmtl]].absorption[i] = 1.0f - kd[i];
-
-            mesh.materials[materialIndices[currentmtl]].scattering = 1.0f;
-        }
-        else if (command == "Ks")
-        {
-            mtlfile >> ks[0] >> ks[1] >> ks[2];
-
-            for (auto i = 0; i < 3; ++i)
-                mesh.materials[materialIndices[currentmtl]].absorption[i] = 1.0f - kd[i];
-
-            mesh.materials[materialIndices[currentmtl]].scattering = 1.0f;
-        }
-    }
-
-    std::ifstream file("core/data/meshes/" + name + ".obj");
-    if (!file.good())
-        throw std::runtime_error("cannot open " + name + ".obj (run from the repository root)");
-
-    while (true)
-    {
-        std::string command;
-        file >> command;
-
-        if (file.eof())
-            break;
-
-        if (command == "v")
-        {
-            float x, y, z;
-            file >> x >> y >> z;
-            mesh.vertices.push_back(Vector3f(x, y, z));
-        }
-        else if (command == "f")
-        {
-            std::string s[3];
-            file >> s[0] >> s[1] >> s[2];
-
-            for (auto i = 0; i < 3; ++i)
-                mesh.triangles.push_back(atoi(s[i].substr(0, s[i].find_first_of("/")).c_str()) - 1);
-
-            if (materialIndices.find(currentmtl) == materialIndices.end())
-                throw std::runtime_error(name + ": face without a material");
-
-            mesh.materialIndices.push_back(materialIndices[currentmtl]);
-        }
-        else if (command == "usemtl")
-        {
-            file >> currentmtl;
-        }
-    }
-
-    return mesh;
-}
-
-int numTriangles(const ObjMesh& mesh)
-{
-    return static_cast<int>(mesh.triangles.size()) / 3;
-}
-
-shared_ptr<IStaticMesh> createStaticMesh(IScene& scene, const ObjMesh& mesh)
-{
-    return scene.createStaticMesh(static_cast<int>(mesh.vertices.size()), numTriangles(mesh),
-                                  static_cast<int>(mesh.materials.size()), mesh.vertices.data(),
-                                  reinterpret_cast<const Triangle*>(mesh.triangles.data()),
-                                  mesh.materialIndices.data(), mesh.materials.data());
-}
-
-// --------------------------------------------------------------------------------------------------------------------
 // Inputs
 // --------------------------------------------------------------------------------------------------------------------
-
-// Uniform in [0, 1).
-float draw01(Lcg& lcg)
-{
-    const float u = lcg.nextSigned();
-    return 0.5f * (u + 1.0f);
-}
-
-Vector3f drawVector(Lcg& lcg)
-{
-    const float x = lcg.nextSigned();
-    const float y = lcg.nextSigned();
-    const float z = lcg.nextSigned();
-    return Vector3f(x, y, z);
-}
-
-// A point in the box grown by 5% of its extents on every side.
-Vector3f drawPoint(Lcg& lcg, const Box& box)
-{
-    const auto extents = box.extents();
-    Vector3f p;
-    for (auto i = 0; i < 3; ++i)
-    {
-        const float t = draw01(lcg) * 1.1f - 0.05f;
-        p[i] = box.minCoordinates[i] + extents[i] * t;
-    }
-    return p;
-}
 
 struct RayInput
 {
@@ -369,60 +221,6 @@ void generateBvh(const std::filesystem::path& out)
 // --------------------------------------------------------------------------------------------------------------------
 // scene
 // --------------------------------------------------------------------------------------------------------------------
-
-Material drawMaterial(Lcg& lcg)
-{
-    Material m;
-    for (auto i = 0; i < 3; ++i)
-        m.absorption[i] = draw01(lcg);
-    m.scattering = draw01(lcg);
-    for (auto i = 0; i < 3; ++i)
-        m.transmission[i] = draw01(lcg);
-    return m;
-}
-
-// Replaces the OBJ's materials with three Lcg ones, assigned to triangles in turn.
-void assignMaterials(Lcg& lcg, ObjMesh& mesh)
-{
-    mesh.materials.clear();
-    for (auto i = 0; i < 3; ++i)
-        mesh.materials.push_back(drawMaterial(lcg));
-
-    for (auto i = 0; i < numTriangles(mesh); ++i)
-        mesh.materialIndices[i] = i % 3;
-}
-
-// Translation * rotation * scale, with the translation inside `bounds` and the scale up to a tenth of its size.
-Matrix4x4f drawTransform(Lcg& lcg, const Box& bounds)
-{
-    Quaternionf q;
-    q.x = lcg.nextSigned();
-    q.y = lcg.nextSigned();
-    q.z = lcg.nextSigned();
-    q.w = lcg.nextSigned();
-    q.normalize();
-    const auto rotation = q.toRotationMatrix();
-
-    const auto size = bounds.extents().length();
-    Vector3f scale;
-    for (auto i = 0; i < 3; ++i)
-        scale[i] = (0.2f + draw01(lcg)) * 0.1f * size;
-
-    const auto translation = drawPoint(lcg, bounds);
-
-    Matrix4x4f m;
-    for (auto i = 0; i < 4; ++i)
-        for (auto j = 0; j < 4; ++j)
-            m(i, j) = 0.0f;
-    for (auto i = 0; i < 3; ++i)
-    {
-        for (auto j = 0; j < 3; ++j)
-            m(i, j) = rotation(i, j) * scale[j];
-        m(i, 3) = translation[i];
-    }
-    m(3, 3) = 1.0f;
-    return m;
-}
 
 void writeBytes(const std::filesystem::path& path, const std::filesystem::path& source)
 {
