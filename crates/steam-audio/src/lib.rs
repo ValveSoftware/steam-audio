@@ -4,10 +4,13 @@
 //! every module here is verified numerically against golden data produced by that code
 //! (see `docs/PORTING_PLAN.md`).
 
+pub mod air_absorption;
 pub mod array_math;
 pub mod audio_buffer;
 pub mod bands;
 pub mod delay;
+pub mod directivity;
+pub mod distance_attenuation;
 pub mod effects;
 pub mod error;
 pub mod fft;
@@ -15,6 +18,7 @@ pub mod geometry;
 pub mod hrtf;
 pub mod iir;
 pub mod math;
+pub mod propagation_medium;
 pub mod sampling;
 pub mod sh;
 pub mod speaker_layout;

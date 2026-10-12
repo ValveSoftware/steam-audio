@@ -42,7 +42,7 @@ build/reference/golden.exe testdata/golden fft      # selected modules
 Golden files are generated with **MSVC on Windows x64** only. Upstream's random number generation is
 implementation-defined (`std::default_random_engine`), so other toolchains produce different golden data
 (see risk R2 in `docs/PORTING_PLAN.md`). Commit the regenerated files together with the generator change.
-The `iir` generator also needs a CPU with AVX: it records upstream's AVX filtering path (risk R8).
+The `iir`, `eq_effect` and `direct_effect` generators also need a CPU with AVX: they record upstream's AVX filtering path (risk R8).
 
 The `sofa`, `sofa_easy`, `sofa_hrtf_map` and `sofa_hrtf_database` generators read `core/data/hrtf/*.sofa`, so run
 them from the repository root. `sofa` and `sofa_easy` also describe libmysofa's own test files, taken from `MYSOFA_TESTS_DIR` (default `core/deps-build/mysofa/src/mysofa/tests`,
