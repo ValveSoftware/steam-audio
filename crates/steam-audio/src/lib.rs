@@ -20,6 +20,7 @@ pub mod iir;
 pub mod math;
 pub mod propagation_medium;
 pub mod sampling;
+pub mod scene;
 pub mod sh;
 pub mod speaker_layout;
 pub mod window;

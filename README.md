@@ -33,15 +33,15 @@ This project is an experiment in reimplementing that functionality in **Rust**, 
 
 ## Status
 
-> 🚧 **Direct sound stage.** The math and signal-processing foundations, binaural rendering (HRTF, SOFA files, convolution, panning, binaural and Ambisonics effects) and the direct sound models and effects are ported and verified against the C++ reference. Scenes, simulation and the C API do not exist yet, so nothing here is usable in production.
+> 🚧 **Scene stage.** The math and signal-processing foundations, binaural rendering (HRTF, SOFA files, convolution, panning, binaural and Ambisonics effects), the direct sound models and effects, and the scene and its BVH ray tracer are ported and verified against the C++ reference. Simulation and the C API do not exist yet, so nothing here is usable in production.
 
 Current stage (checked against golden data produced by the original C++; earlier stages are tracked in [`docs/PORTING_PLAN.md`](docs/PORTING_PLAN.md)):
 
 | Stage | Module | Parity |
 | --- | --- | --- |
-| 4 | Direct sound: distance attenuation, air absorption, directivity, gain, EQ and the direct effect | models, gain and EQ coefficients and effect flags bit-exact on Windows, including edge cases (infinities, NaN); audio within `1e-5` × peak (bit-exact on Windows) |
+| 5 | Scene and geometry: meshes, BVH, static and instanced meshes, materials, scenes | BVH trees, hits, occlusion, box queries and scene versions bit-exact on Windows for the six upstream test meshes (Sponza included) and a scene with instances traced through a series of changes |
 
-**Next:** stage 5, scene and geometry (meshes, BVH, materials), then the direct simulator (occlusion and transmission).
+**Next:** stage 5.1, the direct simulator (occlusion and transmission).
 
 The detailed plan, module order, per-module tolerances and known risks live in [`docs/PORTING_PLAN.md`](docs/PORTING_PLAN.md); intentional behaviour differences from upstream are listed in [`docs/DEVIATIONS.md`](docs/DEVIATIONS.md). Treat the roadmap below as intent, not a promise.
 
@@ -58,6 +58,7 @@ Full list with reasons: [`docs/DEVIATIONS.md`](docs/DEVIATIONS.md).
 - **No hidden global state or `const` mutation:** upstream's mutable globals and in-place changes through `const` pointers become constants and explicit `&mut` arguments or constructor parameters.
 - **Callbacks and in-place processing:** distance attenuation, air absorption and directivity callbacks are `Arc<dyn Fn>` instead of a function pointer plus `void*`; in-place effects use `apply_in_place`.
 - **SIMD level:** results follow upstream's AVX code path on every platform.
+- **Scenes:** a scene owns its meshes and refers to them by id instead of sharing reference-counted objects; custom ray tracers implement the `RayTracer` trait instead of registering callbacks.
 
 ## Roadmap
 
@@ -66,7 +67,7 @@ Planned scope, mirroring the feature areas of the original library. Boxes are ch
 - [x] **Foundations**: math types, ambisonics primitives, FFT, audio buffers and DSP primitives
 - [x] **Binaural rendering**: HRTF loading and interpolation, convolution, panning, ambisonics effects, SOFA files
 - [ ] **Direct sound**: distance attenuation, air absorption, directivity, gain and EQ *(effects done; occlusion and transmission need scenes)*
-- [ ] **Scene and geometry**: static and instanced meshes, ray tracing backend
+- [x] **Scene and geometry**: static and instanced meshes, ray tracing backend *(serialization comes with baking)*
 - [ ] **Reflections**: real-time and baked sound propagation
 - [ ] **Pathing**: diffraction and occlusion-aware paths between source and listener
 - [ ] **C API compatibility layer**: drop-in replacement for the original `phonon` interface

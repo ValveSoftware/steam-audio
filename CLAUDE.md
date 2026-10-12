@@ -67,6 +67,8 @@ Goldens are generated **only with MSVC on Windows x64** (upstream RNG and libm a
 - MSVC's `powf(x, 2)` is not always `x * x`, and LLVM folds a constant exponent of 2 into a multiplication: pass the
   exponent through `std::hint::black_box` to call the C library (`sofa`'s `radius`).
 - MSVC x64 converts `float`/`double` to `unsigned` through `int64` (low 32 bits; NaN and out-of-range values give 0).
+- `std::sort` is unstable and its tie order is MSVC's own: where equal keys matter (BVH build), use the crate-private
+  port `scene::msvc_sort::sort`, not `sort_unstable_by` (risk R21).
 
 ## Rust conventions
 
