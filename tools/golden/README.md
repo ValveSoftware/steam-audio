@@ -44,8 +44,8 @@ implementation-defined (`std::default_random_engine`), so other toolchains produ
 (see risk R2 in `docs/PORTING_PLAN.md`). Commit the regenerated files together with the generator change.
 The `iir`, `eq_effect` and `direct_effect` generators also need a CPU with AVX: they record upstream's AVX filtering path (risk R8).
 
-The `sofa`, `sofa_easy`, `sofa_hrtf_map` and `sofa_hrtf_database` generators read `core/data/hrtf/*.sofa`, so run
-them from the repository root. `sofa` and `sofa_easy` also describe libmysofa's own test files, taken from `MYSOFA_TESTS_DIR` (default `core/deps-build/mysofa/src/mysofa/tests`,
+The `sofa`, `sofa_easy`, `sofa_hrtf_map` and `sofa_hrtf_database` generators read `core/data/hrtf/*.sofa`, and `bvh`
+and `scene` read `core/data/meshes/*.obj`, so run them from the repository root. `sofa` and `sofa_easy` also describe libmysofa's own test files, taken from `MYSOFA_TESTS_DIR` (default `core/deps-build/mysofa/src/mysofa/tests`,
 fetched by `fetch_deps.py`); without them they skip those cases, and so do the Rust tests.
 
 ## Adding a generator
