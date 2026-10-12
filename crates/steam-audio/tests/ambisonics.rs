@@ -12,7 +12,7 @@ use steam_audio::effects::{
     AmbisonicsBinauralEffect, AmbisonicsDecodeEffect, AmbisonicsDecodeParams,
     AmbisonicsEncodeEffect, AmbisonicsPanningEffect, AmbisonicsRotateEffect,
 };
-use steam_audio::hrtf::{HrtfDatabase, HrtfNormalization, HrtfSettings};
+use steam_audio::hrtf::{HrtfDatabase, HrtfNormalization, HrtfSettings, HrtfSource};
 use steam_audio::math::{CoordinateSpace3, Vector3};
 use steam_audio::sh::num_coeffs_for_order;
 use steam_audio::speaker_layout::{SpeakerLayout, SpeakerLayoutType};
@@ -110,7 +110,7 @@ impl Recorder {
 
 fn make_database(sampling_rate: u32, frame_size: usize) -> HrtfDatabase {
     let settings = HrtfSettings {
-        data: None,
+        source: HrtfSource::BuiltIn,
         volume: 0.0,
         normalization: HrtfNormalization::None,
     };

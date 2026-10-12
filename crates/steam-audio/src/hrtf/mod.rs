@@ -1,14 +1,21 @@
-//! Head-related transfer functions: the built-in HRTF data, the HRTF map that queries it by direction, and the HRTF
-//! database that holds the HRTFs in the frequency domain (upstream `hrtf_map`, `hrtf_database`, `cipic_124.inl`).
+//! Head-related transfer functions: the built-in HRTF data, the HRTF maps that query HRIRs by direction (built-in
+//! format and SOFA files), and the HRTF database that holds the HRTFs in the frequency domain (upstream `hrtf_map`,
+//! `sofa_hrtf_map`, `hrtf_map_factory`, `hrtf_database`, `cipic_124.inl`).
 
 mod database;
 pub mod loudness;
 mod map;
+mod map_factory;
+#[cfg(feature = "sofa")]
+mod sofa_map;
 
 pub use database::{
-    HrtfDatabase, HrtfInterpolation, HrtfNormalization, HrtfPhaseType, HrtfSettings,
+    HrtfDatabase, HrtfInterpolation, HrtfNormalization, HrtfPhaseType, HrtfSettings, HrtfSource,
 };
 pub use map::{HrirWeights, HrtfMap};
+pub use map_factory::AnyHrtfMap;
+#[cfg(feature = "sofa")]
+pub use sofa_map::SofaHrtfMap;
 
 /// Number of ears (upstream `IHRTFMap::kNumEars`).
 pub const NUM_EARS: usize = 2;

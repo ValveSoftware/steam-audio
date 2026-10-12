@@ -20,6 +20,8 @@ pub mod sh;
 pub mod speaker_layout;
 pub mod window;
 
+#[cfg(feature = "sofa")]
+pub use error::SofaError;
 pub use error::{Error, Result};
 
 /// Single-precision complex number (upstream `complex_t`).

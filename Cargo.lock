@@ -121,6 +121,7 @@ dependencies = [
  "parity",
  "realfft",
  "rustfft",
+ "sofa",
  "thiserror",
 ]
 

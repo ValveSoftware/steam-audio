@@ -17,6 +17,7 @@ add_executable(golden
     ${GOLDEN_DIR}/src/ambisonics.cpp
     ${GOLDEN_DIR}/src/sofa.cpp
     ${GOLDEN_DIR}/src/sofa_easy.cpp
+    ${GOLDEN_DIR}/src/sofa_hrtf.cpp
 )
 
 target_link_libraries(golden PRIVATE core hrtf)

@@ -56,6 +56,10 @@ jobs:
         if: steps.cargo.outputs.present == 'true'
         run: cargo clippy --all-targets -- -D warnings
 
+      - name: Clippy without SOFA
+        if: steps.cargo.outputs.present == 'true'
+        run: cargo clippy -p steam-audio --no-default-features --all-targets -- -D warnings
+
       - name: Test
         if: steps.cargo.outputs.present == 'true'
         run: cargo test --all

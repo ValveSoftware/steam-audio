@@ -13,8 +13,14 @@ workspace = true
 [dev-dependencies]
 parity = { path = "../parity" }
 
+[features]
+default = ["sofa"]
+# SOFA (AES69) HRTF files, through the `sofa` crate (upstream builds with libmysofa unless `IPL_DISABLE_SOFA`).
+sofa = ["dep:sofa"]
+
 [dependencies]
 num-complex = { version = "0.4", default-features = false, features = ["std"] }
 realfft = "3.5"
 rustfft = "6.4"
+sofa = { path = "../sofa", optional = true }
 thiserror = "2"
