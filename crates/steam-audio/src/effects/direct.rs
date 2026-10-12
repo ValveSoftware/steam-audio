@@ -6,24 +6,7 @@ use std::ops::{BitOr, BitOrAssign};
 use crate::audio_buffer::{AudioBuffer, AudioEffectState, AudioSettings};
 use crate::bands::NUM_BANDS;
 use crate::effects::{EqEffect, GainEffect};
-
-/// Parameters of the direct sound path from a source to the listener (upstream `DirectSoundPath`), as computed by
-/// the direct simulator (stage 5.1) or by the caller.
-#[derive(Debug, Clone, Copy, PartialEq, Default)]
-pub struct DirectSoundPath {
-    /// Gain from distance attenuation.
-    pub distance_attenuation: f32,
-    /// Gain per band from air absorption.
-    pub air_absorption: [f32; NUM_BANDS],
-    /// Propagation delay, in seconds. Not used by [`DirectEffect`].
-    pub delay: f32,
-    /// Fraction of the source that is visible (1: not occluded).
-    pub occlusion: f32,
-    /// Fraction of occluded sound transmitted through geometry, per band.
-    pub transmission: [f32; NUM_BANDS],
-    /// Gain from the source's directivity.
-    pub directivity: f32,
-}
+pub use crate::simulation::DirectSoundPath;
 
 /// Which parts of a [`DirectSoundPath`] a [`DirectEffect`] applies (upstream `DirectEffectFlags`).
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Default)]

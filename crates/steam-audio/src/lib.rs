@@ -22,6 +22,7 @@ pub mod propagation_medium;
 pub mod sampling;
 pub mod scene;
 pub mod sh;
+pub mod simulation;
 pub mod speaker_layout;
 pub mod window;
 
