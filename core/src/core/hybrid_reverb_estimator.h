@@ -36,8 +36,10 @@ public:
                           int samplingRate,
                           int frameSize);
 
-    void estimate(const EnergyField* energyField,
-                  const Reverb& reverb,
+    // Prepares a hybrid reverb: the convolved impulse response fades out over the crossfade before the transition
+    // time, while the parametric reverb, delayed to the start of the crossfade, fades in. eqCoeffs are the gains
+    // of the parametric reverb, set so that in each band it has the energy the impulse response has there.
+    void estimate(const Reverb& reverb,
                   ImpulseResponse& impulseResponse,
                   float transitionTime,
                   float overlapFraction,
@@ -54,6 +56,7 @@ private:
     ReverbEffect mReverbEffect;
     Array<float, 2> mTempFrame;
     Array<float> mReverbIR;
+    Array<float> mBandIR;
     IIRFilterer mBandpassFilters[Bands::kNumBands];
 
     int estimateDelay(float transitionTime, float overlapFraction);
@@ -62,16 +65,11 @@ private:
                       const float* eqCoeffs,
                       const float* reverbTimes);
 
-    void estimateHybridEQFromIR(const ImpulseResponse& ir,
-                                float transitionTime,
-                                float overlapFraction,
-                                int samplingRate,
-                                float* bandIR,
-                                float* eq);
-
-    static float calcRelativeEDC(const float* ir,
-                                 int numSamples,
-                                 int cutoffSample);
+    void calibrateEQ(const ImpulseResponse& impulseResponse,
+                     int rampStart,
+                     int rampEnd,
+                     const float* reverbTimes,
+                     float* eqCoeffs);
 };
 
 

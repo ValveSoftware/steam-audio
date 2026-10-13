@@ -538,7 +538,7 @@ void SimulationManager::estimateHybridReverb()
         if (!source->reflectionState.validSimulationData)
             continue;
 
-        mHybridReverbEstimator->estimate(source->reflectionState.accumEnergyField.get(), source->reflectionOutputs.reverb, *source->reflectionState.impulseResponse,
+        mHybridReverbEstimator->estimate(source->reflectionOutputs.reverb, *source->reflectionState.impulseResponse,
                                          source->reflectionInputs.transitionTime, source->reflectionInputs.overlapFraction,
                                          mSharedData->reflection.order, source->reflectionOutputs.hybridEQ, source->reflectionOutputs.hybridDelay);
     }
