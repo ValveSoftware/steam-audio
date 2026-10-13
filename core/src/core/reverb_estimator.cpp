@@ -18,6 +18,7 @@
 
 #include "array_math.h"
 #include "profiler.h"
+#include "propagation_medium.h"
 
 namespace ipl {
 
@@ -163,12 +164,23 @@ float ReverbEstimator::reverbTime(const float* histogram,
                                   const AirAbsorptionModel& airAbsorption,
                                   int band)
 {
+    // The energy in bin i, weighted by air absorption the way the reconstructed impulse response applies it:
+    // Reconstructor scales the amplitude of a bin by airAbsorption.evaluate(0.5 * c * t), with t the time at
+    // the center of the bin, so its energy is scaled by the square of that. Note that evaluate() takes a
+    // distance, not a time.
+    auto airAbsorbedEnergy = [&](int i)
+    {
+        auto t = (i + 0.5f) * EnergyField::kBinDuration;
+        auto amplitude = airAbsorption.evaluate(0.5f * PropagationMedium::kSpeedOfSound * t, band);
+        return histogram[i] * amplitude * amplitude;
+    };
+
     // Calculate the total energy in the histogram, weighted by air absorption.
     auto totalEnergy = 0.0f;
     auto x = 0.0f;
     for (auto i = 0; i < numBins; ++i)
     {
-        totalEnergy += histogram[i] * airAbsorption.evaluate(x, band);
+        totalEnergy += airAbsorbedEnergy(i);
         x += EnergyField::kBinDuration;
     }
 
@@ -188,7 +200,7 @@ float ReverbEstimator::reverbTime(const float* histogram,
     // convert it to log-scale in order to fit a line to the EDC.
     for (auto i = numBins - 1; i >= 0; --i)
     {
-        energy += histogram[i] * airAbsorption.evaluate(x, band);
+        energy += airAbsorbedEnergy(i);
         auto y = log10f(energy / totalEnergy);
 
         // Use least-squares fitting to fit a line to the EDC. We only consider points on the EDC
