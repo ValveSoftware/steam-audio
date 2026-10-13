@@ -7,7 +7,7 @@
 Spatial audio, physics-based sound propagation and HRTF rendering — memory-safe, portable, and written in Rust.
 
 [![CI](https://github.com/razedproduction/steam-audio-rust/actions/workflows/ci.yml/badge.svg)](https://github.com/razedproduction/steam-audio-rust/actions/workflows/ci.yml)
-[![Status](https://img.shields.io/badge/status-binaural%20rendering-yellow)](#status)
+[![Status](https://img.shields.io/badge/status-reflections%20(in%20progress)-yellow)](#status)
 [![Language](https://img.shields.io/badge/language-Rust-dea584?logo=rust)](https://www.rust-lang.org/)
 [![MSRV](https://img.shields.io/badge/MSRV-1.85-dea584)](Cargo.toml)
 [![License](https://img.shields.io/badge/license-Apache--2.0-blue)](LICENSE)
@@ -33,15 +33,16 @@ This project is an experiment in reimplementing that functionality in **Rust**, 
 
 ## Status
 
-> 🚧 **Scene stage.** The math and signal-processing foundations, binaural rendering (HRTF, SOFA files, convolution, panning, binaural and Ambisonics effects), the direct sound models and effects, and the scene and its BVH ray tracer are ported and verified against the C++ reference. Simulation and the C API do not exist yet, so nothing here is usable in production.
+> 🚧 **Reflections stage (started).** The math and signal-processing foundations, binaural rendering (HRTF, SOFA files, convolution, panning, binaural and Ambisonics effects), the direct sound models, effects and simulator (occlusion and transmission), the scene and its BVH ray tracer, and the energy field, impulse response and reconstructor are ported and verified against the C++ reference. Reverb, the reflection simulator, baking, pathing and the C API do not exist yet, so nothing here is usable in production.
 
 Current stage (checked against golden data produced by the original C++; earlier stages are tracked in [`docs/PORTING_PLAN.md`](docs/PORTING_PLAN.md)):
 
 | Stage | Module | Parity |
 | --- | --- | --- |
-| 5 | Scene and geometry: meshes, BVH, static and instanced meshes, materials, scenes | BVH trees, hits, occlusion, box queries and scene versions bit-exact on Windows for the six upstream test meshes (Sponza included) and a scene with instances traced through a series of changes |
+| 5.1 | Direct simulator: occlusion (raycast and volumetric) and transmission | Every field of the direct path bit-exact on Windows for two scenes with instances: 256 source/listener pairs each, 1–16 transmission rays, 64- and 256-point volumetric occlusion and all 64 flag combinations |
+| 6.1 | Energy field, impulse response, reconstructor | Field and IR operations exact; reconstructed IRs (Gaussian and linear, 48, 44.1 and 22.05 kHz, both air absorption models) bit-exact on Windows, within `1e-5` × peak elsewhere |
 
-**Next:** stage 5.1, the direct simulator (occlusion and transmission).
+**Next:** stage 6.2, reverb (reverb effect, reverb estimator, hybrid reverb).
 
 The detailed plan, module order, per-module tolerances and known risks live in [`docs/PORTING_PLAN.md`](docs/PORTING_PLAN.md); intentional behaviour differences from upstream are listed in [`docs/DEVIATIONS.md`](docs/DEVIATIONS.md). Treat the roadmap below as intent, not a promise.
 
@@ -66,9 +67,9 @@ Planned scope, mirroring the feature areas of the original library. Boxes are ch
 
 - [x] **Foundations**: math types, ambisonics primitives, FFT, audio buffers and DSP primitives
 - [x] **Binaural rendering**: HRTF loading and interpolation, convolution, panning, ambisonics effects, SOFA files
-- [ ] **Direct sound**: distance attenuation, air absorption, directivity, gain and EQ *(effects done; occlusion and transmission need scenes)*
+- [x] **Direct sound**: distance attenuation, air absorption, directivity, gain and EQ, occlusion and transmission
 - [x] **Scene and geometry**: static and instanced meshes, ray tracing backend *(serialization comes with baking)*
-- [ ] **Reflections**: real-time and baked sound propagation
+- [ ] **Reflections**: real-time and baked sound propagation *(energy fields, impulse responses and the reconstructor done; reverb, the reflection simulator and baking to go)*
 - [ ] **Pathing**: diffraction and occlusion-aware paths between source and listener
 - [ ] **C API compatibility layer**: drop-in replacement for the original `phonon` interface
 - [ ] **Bevy integration**: a `bevy_steam_audio` crate on top of the engine-agnostic core
