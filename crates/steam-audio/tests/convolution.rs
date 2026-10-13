@@ -13,6 +13,7 @@ use steam_audio::effects::{
     OverlapSaveConvolutionMixer, OverlapSaveConvolutionSettings, OverlapSaveFir,
     OverlapSavePartitioner,
 };
+use steam_audio::simulation::ImpulseResponse;
 
 const SAMPLING_RATE: u32 = 48000;
 
@@ -200,7 +201,13 @@ fn partitioner() {
     let (num_channels, num_samples) = (ir.shape[0], ir.shape[1]);
     let mut lcg = Lcg::new(43);
     assert!(ir.data.iter().all(|&x| x == lcg.next_signed()), "IR draws");
-    let ir = AudioBuffer::from_planar(num_channels, num_samples, ir.data);
+    let mut ir_buffer = ImpulseResponse::new(0.00625, 1, SAMPLING_RATE);
+    assert_eq!(
+        (ir_buffer.num_channels(), ir_buffer.num_samples()),
+        (num_channels, num_samples)
+    );
+    ir_buffer.data_mut().copy_from_slice(&ir.data);
+    let ir = ir_buffer;
 
     let mut partitioner = OverlapSavePartitioner::new(64);
     let mut fir = OverlapSaveFir::new(3, 300, 64);

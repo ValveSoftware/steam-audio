@@ -19,6 +19,7 @@ pub mod hrtf;
 pub mod iir;
 pub mod math;
 pub mod propagation_medium;
+mod random;
 pub mod sampling;
 pub mod scene;
 pub mod sh;
