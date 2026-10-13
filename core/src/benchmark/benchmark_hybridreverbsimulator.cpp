@@ -227,7 +227,7 @@ void BenchmarkHybridReverbSimulatorForSettings(const std::string& fileName, cons
         auto kNumEQEstimationRuns = 100;
         for (auto run = 0; run < kNumEQEstimationRuns; ++run)
         {
-            estimator->estimate(energyField.get(), reverbTimes, *ir, transitionTime, overlapFraction, order, hybridEQ, hybridDelay);
+            estimator->estimate(reverbTimes, *ir, transitionTime, overlapFraction, order, hybridEQ, hybridDelay);
         }
 
         auto elapsedTimeMilliSeconds = timer.elapsedMilliseconds() / kNumEQEstimationRuns;
