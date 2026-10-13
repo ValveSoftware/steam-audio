@@ -17,6 +17,7 @@ use super::tail_state;
 use crate::audio_buffer::{AudioBuffer, AudioEffectState, AudioSettings};
 use crate::fft::RealFft;
 use crate::math::next_pow2;
+use crate::simulation::ImpulseResponse;
 use crate::{Complex, array_math};
 
 /// A partitioned IR spectrum: for each channel, one spectrum per block of one frame.
@@ -107,8 +108,7 @@ impl OverlapSavePartitioner {
     }
 
     /// Replaces `fft_ir` with the first `num_samples` samples of the first `num_channels` channels of `ir` (each count
-    /// limited to what `ir` and `fft_ir` hold). The upstream `ImpulseResponse` is a planar `channels × samples` array,
-    /// so `ir` is an [`AudioBuffer`].
+    /// limited to what `ir` and `fft_ir` hold).
     ///
     /// Like upstream, a partial last block is copied over the previous block's samples without clearing the rest of
     /// the frame, so the stale samples (possibly from a previous call) remain part of that block.
@@ -116,7 +116,7 @@ impl OverlapSavePartitioner {
     /// Panics if `fft_ir` was created for a different frame size.
     pub fn partition(
         &mut self,
-        ir: &AudioBuffer<impl AsRef<[f32]>>,
+        ir: &ImpulseResponse,
         num_channels: usize,
         num_samples: usize,
         fft_ir: &mut OverlapSaveFir,
@@ -578,7 +578,8 @@ mod tests {
         let f = 16;
         let ir_size = 48;
         let ir_data = [signal(ir_size, 0.43), signal(ir_size, 0.91)].concat();
-        let ir = AudioBuffer::from_planar(2, ir_size, ir_data);
+        let mut ir = ImpulseResponse::with_size(2, ir_size);
+        ir.data_mut().copy_from_slice(&ir_data);
 
         let mut fir = OverlapSaveFir::new(2, ir_size, f);
         OverlapSavePartitioner::new(f).partition(&ir, 2, ir_size, &mut fir);
