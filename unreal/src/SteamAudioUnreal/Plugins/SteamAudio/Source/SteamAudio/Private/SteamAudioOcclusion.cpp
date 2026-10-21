@@ -88,12 +88,18 @@ void FSteamAudioOcclusionSource::ClearBuffers()
 // FSteamAudioOcclusionPlugin
 // ---------------------------------------------------------------------------------------------------------------------
 
+FSteamAudioOcclusionPlugin::FSteamAudioOcclusionPlugin(FAudioDevice* OwningDevice)
+    : DryInputCache(FSteamAudioDryInputCache::GetForDevice(OwningDevice))
+{}
+
 void FSteamAudioOcclusionPlugin::Initialize(const FAudioPluginInitializationParams InitializationParams)
 {
     AudioSettings.samplingRate = InitializationParams.SampleRate;
     AudioSettings.frameSize = InitializationParams.BufferLength;
 
     Sources.AddDefaulted(InitializationParams.NumSources);
+
+    DryInputCache->Initialize(InitializationParams.NumSources, InitializationParams.BufferLength);
 }
 
 void FSteamAudioOcclusionPlugin::OnInitSource(const uint32 SourceId, const FName& AudioComponentUserId, const uint32 NumChannels, UOcclusionPluginSourceSettingsBase* InSettings)
@@ -167,12 +173,14 @@ void FSteamAudioOcclusionPlugin::OnInitSource(const uint32 SourceId, const FName
     Source.PrevNumChannels = NumChannels;
 
     Source.Reset();
+    DryInputCache->Invalidate(SourceId);
 }
 
 void FSteamAudioOcclusionPlugin::OnReleaseSource(const uint32 SourceId)
 {
     FSteamAudioOcclusionSource& Source = Sources[SourceId];
     Source.Reset();
+    DryInputCache->Invalidate(SourceId);
 }
 
 void FSteamAudioOcclusionPlugin::ProcessAudio(const FAudioPluginSourceInputData& InputData, FAudioPluginSourceOutputData& OutputData)
@@ -192,6 +200,10 @@ void FSteamAudioOcclusionPlugin::ProcessAudio(const FAudioPluginSourceInputData&
     float* OutBufferData = OutputData.AudioBuffer.GetData();
 
     IPLContext Context = FSteamAudioModule::GetManager().GetContext();
+
+    // Unreal runs this plugin before the spatializer on the same buffer, so save the unoccluded input for pathing.
+    const int32 NumFrames = (InputData.NumChannels > 0) ? FMath::Min(InputData.AudioBuffer->Num() / InputData.NumChannels, AudioSettings.frameSize) : 0;
+    DryInputCache->Store(InputData.SourceId, InBufferData, InputData.NumChannels, NumFrames);
 
     Source.ClearBuffers();
 
@@ -257,7 +269,7 @@ void FSteamAudioOcclusionPlugin::ProcessAudio(const FAudioPluginSourceInputData&
         if (Source.bApplyOcclusion)
         {
             UAudioComponent* AudioComponent = UAudioComponent::GetAudioComponentFromID(InputData.AudioComponentId);
-            USteamAudioSourceComponent* SteamAudioSourceComponent = (AudioComponent) ? AudioComponent->GetOwner()->FindComponentByClass<USteamAudioSourceComponent>() : nullptr;
+            USteamAudioSourceComponent* SteamAudioSourceComponent = (AudioComponent && AudioComponent->GetOwner()) ? AudioComponent->GetOwner()->FindComponentByClass<USteamAudioSourceComponent>() : nullptr;
 
             Params.occlusion = (SteamAudioSourceComponent) ? SteamAudioSourceComponent->OcclusionValue : 1.0f;
 
@@ -307,7 +319,7 @@ UClass* FSteamAudioOcclusionPluginFactory::GetCustomOcclusionSettingsClass() con
 TAudioOcclusionPtr FSteamAudioOcclusionPluginFactory::CreateNewOcclusionPlugin(FAudioDevice* OwningDevice)
 {
     FSteamAudioModule::Get().RegisterAudioDevice(OwningDevice);
-    return TAudioOcclusionPtr(new FSteamAudioOcclusionPlugin());
+    return TAudioOcclusionPtr(new FSteamAudioOcclusionPlugin(OwningDevice));
 }
 
 }
