@@ -132,12 +132,18 @@ void FSteamAudioSpatializationSource::ClearBuffers()
 // FSteamAudioSpatializationPlugin
 // ---------------------------------------------------------------------------------------------------------------------
 
+FSteamAudioSpatializationPlugin::FSteamAudioSpatializationPlugin(FAudioDevice* OwningDevice)
+    : DryInputCache(FSteamAudioDryInputCache::GetForDevice(OwningDevice))
+{}
+
 void FSteamAudioSpatializationPlugin::Initialize(const FAudioPluginInitializationParams InitializationParams)
 {
     AudioSettings.samplingRate = InitializationParams.SampleRate;
     AudioSettings.frameSize = InitializationParams.BufferLength;
 
     Sources.AddDefaulted(InitializationParams.NumSources);
+
+    DryInputCache->Initialize(InitializationParams.NumSources, InitializationParams.BufferLength);
 }
 
 bool FSteamAudioSpatializationPlugin::IsSpatializationEffectInitialized() const
@@ -284,6 +290,7 @@ void FSteamAudioSpatializationPlugin::OnInitSource(const uint32 SourceId, const 
 
     Source.PrevOrder = SimulationSettings.maxOrder;
     Source.Reset();
+    DryInputCache->Invalidate(SourceId);
 }
 
 void FSteamAudioSpatializationPlugin::OnReleaseSource(const uint32 SourceId)
@@ -291,6 +298,7 @@ void FSteamAudioSpatializationPlugin::OnReleaseSource(const uint32 SourceId)
     FSteamAudioSpatializationSource& Source = Sources[SourceId];
     Source.Reset();
     iplHRTFRelease(&Source.HRTF);
+    DryInputCache->Invalidate(SourceId);
 }
 
 void FSteamAudioSpatializationPlugin::ProcessAudio(const FAudioPluginSourceInputData& InputData, FAudioPluginSourceOutputData& OutputData)
@@ -318,6 +326,11 @@ void FSteamAudioSpatializationPlugin::ProcessAudio(const FAudioPluginSourceInput
     InBuffer.numChannels = 1;
     InBuffer.numSamples = AudioSettings.frameSize;
     InBuffer.data = &InBufferData;
+
+    // If the occlusion plugin ran on this block, InBuffer has already been occluded. Pathing models sound that goes
+    // around the occluder, so it must start from the unoccluded signal instead.
+    const float* DryInputData = DryInputCache->Consume(InputData.SourceId, InBuffer.numSamples);
+    const float* PathingSourceData = DryInputData ? DryInputData : InBufferData;
 
     if (Source.HRTF && Source.PanningEffect && Source.BinauralEffect && Source.OutBuffer.data)
     {
@@ -371,7 +384,7 @@ void FSteamAudioSpatializationPlugin::ProcessAudio(const FAudioPluginSourceInput
 
             for (int i = 0; i < InBuffer.numSamples; ++i)
             {
-                Source.PathingInputBuffer.data[0][i] = Source.PathingMixLevel * InBuffer.data[0][i];
+                Source.PathingInputBuffer.data[0][i] = Source.PathingMixLevel * PathingSourceData[i];
             }
 
             IPLPathEffectParams PathingParams = Outputs.pathing;
@@ -427,7 +440,7 @@ UClass* FSteamAudioSpatializationPluginFactory::GetCustomSpatializationSettingsC
 
 TAudioSpatializationPtr FSteamAudioSpatializationPluginFactory::CreateNewSpatializationPlugin(FAudioDevice* OwningDevice)
 {
-    return TAudioSpatializationPtr(new FSteamAudioSpatializationPlugin());
+    return TAudioSpatializationPtr(new FSteamAudioSpatializationPlugin(OwningDevice));
 }
 
 }

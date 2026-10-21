@@ -17,6 +17,7 @@
 #pragma once
 
 #include "SteamAudioModule.h"
+#include "SteamAudioDryInputCache.h"
 #include "SteamAudioOcclusionSettings.h"
 
 namespace SteamAudio {
@@ -69,6 +70,8 @@ struct FSteamAudioOcclusionSource
 class FSteamAudioOcclusionPlugin : public IAudioOcclusion
 {
 public:
+    explicit FSteamAudioOcclusionPlugin(FAudioDevice* OwningDevice);
+
     /**
      * Inherited from IAudioOcclusion
      */
@@ -91,6 +94,9 @@ private:
 
     /** Lazy-initialized state for as many sources as we can render simultaneously. */
     TArray<FSteamAudioOcclusionSource> Sources;
+
+    /** Receives each source's pre-occlusion input, so the spatializer can feed it to the pathing effect. */
+    TSharedRef<FSteamAudioDryInputCache, ESPMode::ThreadSafe> DryInputCache;
 };
 
 
