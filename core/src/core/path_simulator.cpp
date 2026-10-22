@@ -157,6 +157,8 @@ bool PathSimulator::findPaths(const Vector3f& source,
     int starts[kMaxPaths];
     int ends[kMaxPaths];
 
+    auto hasProbes = true;
+
     if (scene.isOccluded(listener, source) || forceDirectOcclusion)
     {
         if (sourceProbes.hasValidProbes() && listenerProbes.hasValidProbes())
@@ -188,7 +190,10 @@ bool PathSimulator::findPaths(const Vector3f& source,
         }
         else
         {
-            return false;
+            // No probe near the source or listener to route sound through, so there are no paths. Fall through and
+            // write the no-path outputs below: returning here would leave the caller's outputs holding whatever was
+            // computed the last time a path existed, and that stale result would keep playing indefinitely.
+            hasProbes = false;
         }
     }
     else
@@ -211,7 +216,7 @@ bool PathSimulator::findPaths(const Vector3f& source,
 
     calcDistanceRatioForPaths(source, probes, starts, ends, numPaths, paths, pathWeights, distanceRatio);
 
-    return true;
+    return hasProbes;
 }
 
 void PathSimulator::findPathsFromSourceProbe(const IScene& scene,
