@@ -41,6 +41,7 @@ add_executable(phonon_test
 	Matrix.test.cpp
 	Memory.test.cpp
 	Mesh.test.cpp
+	PathSimulator.test.cpp
 	PolarVector.test.cpp
 	ProbeTree.test.cpp
 	Profiler.test.cpp
