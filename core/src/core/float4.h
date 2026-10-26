@@ -41,7 +41,9 @@ namespace float4
 
 }
 
-#if defined(IPL_OS_WINDOWS)
+// MSVC's SIMD types (__m128 on x86/x64, __n128 on ARM64) don't provide arithmetic operators. Clang and GCC provide
+// them as builtins for vector types (including clang-cl, which defines _MSC_VER), so don't redefine them there.
+#if defined(IPL_OS_WINDOWS) && !defined(__clang__)
 
 namespace ipl {
 

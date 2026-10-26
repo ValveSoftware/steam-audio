@@ -17,9 +17,17 @@ include(SteamAudioHelpers)
 
 get_host_bin_subdir(IPL_BIN_SUBDIR)
 
+# Targeting arm64 requires a newer version of ISPC (with NEON targets) than the one used for x86/x64, so it is
+# provided as a separate dependency.
+if (IPL_CPU_ARMV8)
+	set(_ISPC_DEP_NAME ispc_arm64)
+else()
+	set(_ISPC_DEP_NAME ispc)
+endif()
+
 find_program(ISPC_EXECUTABLE
 	NAMES	ispc
-	PATHS 	${CMAKE_HOME_DIRECTORY}/deps/ispc/bin/${IPL_BIN_SUBDIR}
+	PATHS 	${CMAKE_HOME_DIRECTORY}/deps/${_ISPC_DEP_NAME}/bin/${IPL_BIN_SUBDIR}
 )
 
 find_package_handle_standard_args(ISPC

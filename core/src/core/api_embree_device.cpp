@@ -34,7 +34,7 @@ namespace api {
 CEmbreeDevice::CEmbreeDevice(CContext* context,
                              IPLEmbreeDeviceSettings* settings)
 {
-#if defined(IPL_USES_EMBREE) && (defined(IPL_CPU_X86) || defined(IPL_CPU_X64))
+#if defined(IPL_EMBREE_AVAILABLE)
     auto _context = context->mHandle.get();
     if (!_context)
         throw Exception(Status::Failure);
@@ -45,7 +45,7 @@ CEmbreeDevice::CEmbreeDevice(CContext* context,
 
 IEmbreeDevice* CEmbreeDevice::retain()
 {
-#if defined(IPL_USES_EMBREE) && (defined(IPL_CPU_X86) || defined(IPL_CPU_X64))
+#if defined(IPL_EMBREE_AVAILABLE)
     mHandle.retain();
     return this;
 #else
@@ -55,7 +55,7 @@ IEmbreeDevice* CEmbreeDevice::retain()
 
 void CEmbreeDevice::release()
 {
-#if defined(IPL_USES_EMBREE) && (defined(IPL_CPU_X86) || defined(IPL_CPU_X64))
+#if defined(IPL_EMBREE_AVAILABLE)
     if (mHandle.release())
     {
         this->~CEmbreeDevice();
@@ -72,7 +72,7 @@ void CEmbreeDevice::release()
 IPLerror CContext::createEmbreeDevice(IPLEmbreeDeviceSettings* settings,
                                       IEmbreeDevice** device)
 {
-#if defined(IPL_USES_EMBREE) && (defined(IPL_CPU_X86) || defined(IPL_CPU_X64))
+#if defined(IPL_EMBREE_AVAILABLE)
     if (!device)
         return IPL_STATUS_FAILURE;
 

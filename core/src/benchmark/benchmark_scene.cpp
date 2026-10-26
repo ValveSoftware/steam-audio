@@ -36,7 +36,7 @@ void BenchmarkSceneFinalizeForSceneType(IPLSceneType sceneType, const std::strin
     IPLContextSettings contextSettings{ STEAMAUDIO_VERSION, nullptr, nullptr, nullptr, IPL_SIMDLEVEL_AVX512 };
     iplContextCreate(&contextSettings, &context);
 
-#if defined(IPL_USES_EMBREE) && (defined(IPL_CPU_X86) || defined(IPL_CPU_X64))
+#if defined(IPL_EMBREE_AVAILABLE)
     IPLEmbreeDevice embreeDevice = nullptr;
     if (sceneType == IPL_SCENETYPE_EMBREE)
     {
@@ -65,7 +65,7 @@ void BenchmarkSceneFinalizeForSceneType(IPLSceneType sceneType, const std::strin
 
     IPLSceneSettings sceneSettings{};
     sceneSettings.type = sceneType;
-#if defined(IPL_USES_EMBREE) && (defined(IPL_CPU_X86) || defined(IPL_CPU_X64))
+#if defined(IPL_EMBREE_AVAILABLE)
     sceneSettings.embreeDevice = embreeDevice;
 #endif
 #if defined(IPL_USES_OPENCL) && defined(IPL_USES_RADEONRAYS)
@@ -99,7 +99,7 @@ void BenchmarkSceneFinalizeForSceneType(IPLSceneType sceneType, const std::strin
     iplRadeonRaysDeviceRelease(&rrDevice);
     iplOpenCLDeviceRelease(&clDevice);
 #endif
-#if defined(IPL_USES_EMBREE) && (defined(IPL_CPU_X86) || defined(IPL_CPU_X64))
+#if defined(IPL_EMBREE_AVAILABLE)
     iplEmbreeDeviceRelease(&embreeDevice);
 #endif
     iplContextRelease(&context);
@@ -110,7 +110,7 @@ BENCHMARK(scene)
     PrintOutput("Running benchmark: Scene Finalization...\n");
     BenchmarkSceneFinalizeForSceneType(IPL_SCENETYPE_DEFAULT, "Phonon");
 
-#if defined(IPL_USES_EMBREE) && (defined(IPL_CPU_X86) || defined(IPL_CPU_X64))
+#if defined(IPL_EMBREE_AVAILABLE)
     BenchmarkSceneFinalizeForSceneType(IPL_SCENETYPE_EMBREE, "Embree");
 #endif
 

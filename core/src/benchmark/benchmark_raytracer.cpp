@@ -152,7 +152,7 @@ BENCHMARK(raytracer)
     PrintOutput("Running benchmark: Raytracer (Phonon)...\n");
     BenchmarkRaytracerForScene("../../data/meshes/sponza.obj", SceneType::Default);
     PrintOutput("\n");
-#if defined(IPL_USES_EMBREE) && (defined(IPL_CPU_X86) || defined(IPL_CPU_X64))
+#if defined(IPL_EMBREE_AVAILABLE)
     PrintOutput("Running benchmark: Raytracer (Embree)...\n");
     BenchmarkRaytracerForScene("../../data/meshes/sponza.obj", SceneType::Embree);
     PrintOutput("\n");

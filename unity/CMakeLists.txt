@@ -42,8 +42,20 @@ else()
 endif()
 
 # CPU architecture detection
-if (IPL_OS_WINDOWS OR IPL_OS_LINUX)
-    if (CMAKE_SIZEOF_VOID_P EQUAL 8)
+if (IPL_OS_WINDOWS)
+    # Visual Studio generators report the target via -A ARM64; Ninja/NMake builds from an ARM64 developer prompt
+    # only report it via the compiler's architecture ID.
+    if (CMAKE_GENERATOR_PLATFORM STREQUAL "ARM64" OR CMAKE_CXX_COMPILER_ARCHITECTURE_ID STREQUAL "ARM64")
+        set(IPL_CPU_ARMV8 TRUE)
+    elseif (CMAKE_SIZEOF_VOID_P EQUAL 8)
+        set(IPL_CPU_X64 TRUE)
+    else()
+        set(IPL_CPU_X86 TRUE)
+    endif()
+elseif (IPL_OS_LINUX)
+    if (CMAKE_SYSTEM_PROCESSOR MATCHES "^(aarch64|arm64|ARM64)$")
+        set(IPL_CPU_ARMV8 TRUE)
+    elseif (CMAKE_SIZEOF_VOID_P EQUAL 8)
         set(IPL_CPU_X64 TRUE)
     else()
         set(IPL_CPU_X86 TRUE)

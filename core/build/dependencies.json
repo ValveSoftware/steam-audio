@@ -25,6 +25,12 @@
                         "-DCMAKE_C_FLAGS=-Wno-error=unused-but-set-variable -Wno-unknown-warning-option",
                         "-DCMAKE_CXX_FLAGS=-Wno-error=unused-but-set-variable -Wno-unknown-warning-option"
                     ]
+                },
+                {
+                    "platforms": ["linux-x64", "linux-arm64"],
+                    "flags": [
+                        "-DCMAKE_CXX_FLAGS=-Wno-error=stringop-overflow"
+                    ]
                 }
             ]
         },
@@ -84,7 +90,8 @@
         },
         "fetch": {
             "git": "https://github.com/marton78/pffft.git",
-            "tag": "e0bf595c98ded55cc457a371c1b29c8cab552628"
+            "tag": "e0bf595c98ded55cc457a371c1b29c8cab552628",
+            "patch": "pffft.patch"
         },
         "configure": {
             "cmake": [
@@ -121,7 +128,7 @@
                     ]
                 },
                 {
-                    "platforms": ["windows-arm64", "linux-arm64", "android-arm64", "ios"],
+                    "platforms": ["linux-arm64", "android-arm64", "ios"],
                     "flags": [
                         "-DTARGET_C_ARCH=armv8-a",
                         "-DTARGET_CXX_ARCH=armv8-a",
@@ -305,8 +312,28 @@
             ["install/$platform/lib", "lib/$platform/$config"]
        ]
     },
+    "ispc_arm64": {
+        "tool": true,
+        "platforms": ["linux-arm64"],
+        "check": {
+            "programs": [["ispc"]]
+        },
+        "fetch": {
+            "url": {
+                "linux-x64": "https://github.com/ispc/ispc/releases/download/v1.32.0/ispc-v1.32.0-linux.tar.gz",
+                "linux-arm64": "https://github.com/ispc/ispc/releases/download/v1.32.0/ispc-v1.32.0-linux.aarch64.tar.gz"
+            },
+            "prefix": {
+                "linux-x64": "ispc-v1.32.0-linux",
+                "linux-arm64": "ispc-v1.32.0-linux.aarch64"
+            }
+        },
+        "copy": [
+            ["build/$platform/bin", "bin/$platform"]
+        ]
+    },
     "embree": {
-        "platforms": ["windows-x86", "windows-x64", "linux-x86", "linux-x64", "osx"],
+        "platforms": ["windows-x86", "windows-x64", "linux-x86", "linux-x64", "linux-arm64", "osx"],
         "check": {
             "headers": ["rtcore.h"],
             "static_libraries": [
@@ -318,7 +345,7 @@
                 ["embree"]
             ]
         },
-        "depends": ["ispc"],
+        "depends": ["ispc", "ispc_arm64"],
         "fetch": {
             "git": "https://github.com/RenderKit/embree.git",
             "tag": "ff9381774dc99fea81a932ad276677aad6a3d4dd",
@@ -391,6 +418,19 @@
                     "platforms": ["osx"],
                     "flags": [
                         "-DEMBREE_ISPC_EXECUTABLE=$deps/ispc/bin/osx/ispc"
+                    ]
+                },
+                {
+                    "platforms": ["linux-arm64"],
+                    "flags": [
+                        "-DEMBREE_MAX_ISA=NEON"
+                    ]
+                },
+                {
+                    "stamp": false,
+                    "platforms": ["linux-arm64"],
+                    "flags": [
+                        "-DEMBREE_ISPC_EXECUTABLE=$deps/ispc_arm64/bin/$host_platform/ispc"
                     ]
                 }
             ]

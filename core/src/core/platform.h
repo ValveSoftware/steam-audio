@@ -43,7 +43,11 @@
 
 // CPU architecture
 
-#if defined(_M_IX86) || defined(__i386__)
+// ARM64EC also defines _M_X64 and _M_AMD64 (it uses the x64 ABI, so that it can interoperate with x64 code), so check
+// for it first. ARM64EC code runs natively, so build it like ARM64, using NEON instead of emulated SSE.
+#if defined(_M_ARM64EC)
+#define IPL_CPU_ARM64
+#elif defined(_M_IX86) || defined(__i386__)
 #define IPL_CPU_X86
 #elif defined(_M_X64) || defined(__x86_64__)
 #define IPL_CPU_X64
@@ -53,6 +57,15 @@
 #define IPL_CPU_ARM64
 #else
 #pragma message "WARNING: Unsupported CPU architecture!"
+#endif
+
+// Embree
+
+// IPL_USES_EMBREE is defined when Steam Audio is built with Embree support. Embree is built for x86 and x64, and for
+// arm64 on Linux. On macOS, it is only built for x86_64, so it must not be used by the arm64 slice of a universal
+// binary.
+#if defined(IPL_USES_EMBREE) && (defined(IPL_CPU_X86) || defined(IPL_CPU_X64) || (defined(IPL_CPU_ARM64) && defined(IPL_OS_LINUX)))
+#define IPL_EMBREE_AVAILABLE
 #endif
 
 // Compiler

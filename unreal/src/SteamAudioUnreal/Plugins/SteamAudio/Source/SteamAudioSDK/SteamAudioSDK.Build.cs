@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+using System.IO;
 using UnrealBuildTool;
 
 public class SteamAudioSDK : ModuleRules
@@ -35,7 +36,28 @@ public class SteamAudioSDK : ModuleRules
             RuntimeDependencies.Add("$(PluginDir)/Source/SteamAudioSDK/lib/windows-x86/phonon.dll");
         }
 #endif
-        if (Target.Platform == UnrealTargetPlatform.Win64)
+#if UE_5_2_OR_LATER
+        // Windows on ARM64 builds use the arm64 SDK binaries, which are ARM64X binaries, so they can be loaded by both
+        // native ARM64 and ARM64EC builds. (If they are not present, ARM64EC builds fall back to the x64 SDK binaries,
+        // which they can also load.)
+        bool bIsWindowsArm64 = (Target.Platform == UnrealTargetPlatform.Win64 && Target.Architecture == UnrealArch.Arm64);
+        bool bIsWindowsArm64ec = (Target.Platform == UnrealTargetPlatform.Win64 &&
+                                  Target.Architecture.ToString().ToLowerInvariant() == "arm64ec" &&
+                                  File.Exists(Path.Combine(PluginDirectory, "Source/SteamAudioSDK/lib/windows-arm64/phonon.dll")));
+#else
+        bool bIsWindowsArm64 = false;
+        bool bIsWindowsArm64ec = false;
+#endif
+        if (Target.Platform == UnrealTargetPlatform.Win64 && (bIsWindowsArm64 || bIsWindowsArm64ec))
+        {
+            // GPU acceleration (TrueAudio Next) is not available on arm64.
+            PublicAdditionalLibraries.Add("$(PluginDir)/Source/SteamAudioSDK/lib/windows-arm64/phonon.lib");
+
+            PublicDelayLoadDLLs.Add("phonon.dll");
+
+            RuntimeDependencies.Add("$(PluginDir)/Source/SteamAudioSDK/lib/windows-arm64/phonon.dll");
+        }
+        if (Target.Platform == UnrealTargetPlatform.Win64 && !bIsWindowsArm64 && !bIsWindowsArm64ec)
         {
             PublicAdditionalLibraries.Add("$(PluginDir)/Source/SteamAudioSDK/lib/windows-x64/phonon.lib");
 
@@ -54,6 +76,18 @@ public class SteamAudioSDK : ModuleRules
             PublicDelayLoadDLLs.Add("$(PluginDir)/Source/SteamAudioSDK/lib/linux-x64/libphonon.so");
 
             RuntimeDependencies.Add("$(PluginDir)/Source/SteamAudioSDK/lib/linux-x64/libphonon.so");
+        }
+#if UE_5_0_OR_LATER
+        if (Target.Platform == UnrealTargetPlatform.LinuxArm64)
+#else
+        if (Target.Platform == UnrealTargetPlatform.LinuxAArch64)
+#endif
+        {
+            PublicAdditionalLibraries.Add("$(PluginDir)/Source/SteamAudioSDK/lib/linux-arm64/libphonon.so");
+
+            PublicDelayLoadDLLs.Add("$(PluginDir)/Source/SteamAudioSDK/lib/linux-arm64/libphonon.so");
+
+            RuntimeDependencies.Add("$(PluginDir)/Source/SteamAudioSDK/lib/linux-arm64/libphonon.so");
         }
         if (Target.Platform == UnrealTargetPlatform.Mac)
         {

@@ -43,7 +43,15 @@ endif()
 
 # CPU architecture detection
 if (IPL_OS_WINDOWS)
-    if (CMAKE_GENERATOR_PLATFORM STREQUAL "ARM64")
+    # Visual Studio generators report the target via -A ARM64; Ninja/NMake builds from an ARM64 developer prompt
+    # only report it via the compiler's architecture ID.
+    if (CMAKE_GENERATOR_PLATFORM STREQUAL "ARM64EC" OR CMAKE_CXX_COMPILER_ARCHITECTURE_ID STREQUAL "ARM64EC")
+        # ARM64EC is arm64 code that follows the x64 ABI, so that it can be loaded into x64 processes running under
+        # emulation on Windows on ARM. It is built like ARM64 (NEON, no IPP), but into its own windows-arm64ec
+        # directories.
+        set(IPL_CPU_ARMV8 TRUE)
+        set(IPL_CPU_ARM64EC TRUE)
+    elseif (CMAKE_GENERATOR_PLATFORM STREQUAL "ARM64" OR CMAKE_CXX_COMPILER_ARCHITECTURE_ID STREQUAL "ARM64")
         set(IPL_CPU_ARMV8 TRUE)
     elseif (CMAKE_SIZEOF_VOID_P EQUAL 8)
         set(IPL_CPU_X64 TRUE)
@@ -51,7 +59,7 @@ if (IPL_OS_WINDOWS)
         set(IPL_CPU_X86 TRUE)
     endif()
 elseif (IPL_OS_LINUX)
-    if (CMAKE_SYSTEM_PROCESSOR STREQUAL "aarch64")
+    if (CMAKE_SYSTEM_PROCESSOR MATCHES "^(aarch64|arm64|ARM64)$")
         set(IPL_CPU_ARMV8 TRUE)
     elseif (CMAKE_SIZEOF_VOID_P EQUAL 8)
         set(IPL_CPU_X64 TRUE)
@@ -73,6 +81,25 @@ elseif (IPL_OS_IOS)
     set(IPL_CPU_ARMV8 TRUE)
 elseif (IPL_OS_WASM)
     set(IPL_CPU_ARMV7 TRUE)
+endif()
+
+# Windows ARM64X builds (see build/SteamAudioArm64X.cmake) are done in two passes, an ARM64 pass and an ARM64EC pass.
+# The ARM64EC pass produces the final ARM64X binaries, which are used wherever ARM64 binaries are used, since they can
+# be loaded into ARM64 processes as well as x64 and ARM64EC processes.
+set(STEAMAUDIO_BUILD_AS_ARM64X "" CACHE STRING "Pass of a Windows ARM64X build (ARM64 or ARM64EC), if any.")
+set(STEAMAUDIO_ARM64X_LINK_DIR "" CACHE PATH "Directory in which the ARM64 pass of an ARM64X build stores the paths of its linker inputs.")
+if (STEAMAUDIO_BUILD_AS_ARM64X)
+    if (NOT (IPL_OS_WINDOWS AND IPL_CPU_ARMV8))
+        message(FATAL_ERROR "ARM64X builds require targeting Windows ARM64 or ARM64EC.")
+    endif()
+    if (NOT STEAMAUDIO_ARM64X_LINK_DIR)
+        message(FATAL_ERROR "ARM64X builds require STEAMAUDIO_ARM64X_LINK_DIR.")
+    endif()
+    if (STEAMAUDIO_BUILD_AS_ARM64X STREQUAL "ARM64EC" AND IPL_CPU_ARM64EC)
+        set(IPL_CPU_ARM64X TRUE)
+    elseif (NOT (STEAMAUDIO_BUILD_AS_ARM64X STREQUAL "ARM64" AND NOT IPL_CPU_ARM64EC))
+        message(FATAL_ERROR "STEAMAUDIO_BUILD_AS_ARM64X must be ARM64 for an ARM64 build, or ARM64EC for an ARM64EC build.")
+    endif()
 endif()
 
 
@@ -105,6 +132,11 @@ endif()
 if ((IPL_OS_WINDOWS AND (IPL_CPU_X86 OR IPL_CPU_X64)) OR (IPL_OS_LINUX AND (IPL_CPU_X86 OR IPL_CPU_X64)) OR IPL_OS_MACOS)
     option(STEAMAUDIO_ENABLE_IPP "Enable Intel IPP for FFT and vector math operations." ON)
     option(STEAMAUDIO_ENABLE_MKL "Enable Intel MKL support for linear algebra operations." OFF)
+    option(STEAMAUDIO_ENABLE_EMBREE "Enable Intel Embree support for ray tracing." ON)
+endif()
+
+# Embree supports arm64 on Linux. (Its support for Windows on arm64 is experimental.)
+if (IPL_OS_LINUX AND IPL_CPU_ARMV8)
     option(STEAMAUDIO_ENABLE_EMBREE "Enable Intel Embree support for ray tracing." ON)
 endif()
 
@@ -162,7 +194,10 @@ if (IPL_OS_LINUX)
     if (IPL_CPU_X86)
         add_compile_options(-m32 -mfpmath=sse -march=native)
     endif()
-    if (STEAMAUDIO_ENABLE_AVX)
+    # GCC versions before 5 default to an ABI version that mangles __m128 and __m256 identically, so overloads on
+    # float4_t and float8_t collide. Newer versions default to the latest ABI version, which mangles them distinctly;
+    # forcing the older ABI version 6 there breaks compilation against their libstdc++.
+    if (STEAMAUDIO_ENABLE_AVX AND CMAKE_CXX_COMPILER_ID STREQUAL "GNU" AND CMAKE_CXX_COMPILER_VERSION VERSION_LESS 5)
         add_compile_options(-fabi-version=6)
     endif()
 endif()
@@ -248,7 +283,11 @@ find_package(MySOFA REQUIRED)
 find_package(FlatBuffers REQUIRED)
 
 if (STEAMAUDIO_ENABLE_EMBREE)
-    find_package(ISPC 1.12 EXACT)
+    if (IPL_CPU_ARMV8)
+        find_package(ISPC)
+    else()
+        find_package(ISPC 1.12 EXACT)
+    endif()
     find_package(Embree 4)
     if (NOT ISPC_FOUND OR NOT Embree_FOUND)
         message(STATUS "Disabling Embree")
@@ -404,8 +443,10 @@ set(CPACK_INSTALLED_DIRECTORIES
     ${CMAKE_INSTALL_PREFIX}/include include
     ${CMAKE_INSTALL_PREFIX}/lib/windows-x86 lib/windows-x86
     ${CMAKE_INSTALL_PREFIX}/lib/windows-x64 lib/windows-x64
+    ${CMAKE_INSTALL_PREFIX}/lib/windows-arm64 lib/windows-arm64
     ${CMAKE_INSTALL_PREFIX}/lib/linux-x86 lib/linux-x86
     ${CMAKE_INSTALL_PREFIX}/lib/linux-x64 lib/linux-x64
+    ${CMAKE_INSTALL_PREFIX}/lib/linux-arm64 lib/linux-arm64
     ${CMAKE_INSTALL_PREFIX}/lib/osx lib/osx
     ${CMAKE_INSTALL_PREFIX}/lib/android-armv7 lib/android-armv7
     ${CMAKE_INSTALL_PREFIX}/lib/android-armv8 lib/android-armv8
@@ -416,8 +457,10 @@ set(CPACK_INSTALLED_DIRECTORIES
     ${CMAKE_INSTALL_PREFIX}/doc doc
     ${CMAKE_INSTALL_PREFIX}/symbols/windows-x86 symbols/windows-x86
     ${CMAKE_INSTALL_PREFIX}/symbols/windows-x64 symbols/windows-x64
+    ${CMAKE_INSTALL_PREFIX}/symbols/windows-arm64 symbols/windows-arm64
     ${CMAKE_INSTALL_PREFIX}/symbols/linux-x86 symbols/linux-x86
     ${CMAKE_INSTALL_PREFIX}/symbols/linux-x64 symbols/linux-x64
+    ${CMAKE_INSTALL_PREFIX}/symbols/linux-arm64 symbols/linux-arm64
     ${CMAKE_INSTALL_PREFIX}/root .
 )
 

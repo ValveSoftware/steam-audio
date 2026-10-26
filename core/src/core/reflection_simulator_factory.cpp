@@ -46,7 +46,7 @@ unique_ptr<IReflectionSimulator> ReflectionSimulatorFactory::create(SceneType sc
         return ipl::make_unique<BatchedReflectionSimulator>(maxNumRays, numDiffuseSamples, maxDuration, maxOrder,
                                                             maxNumSources, numThreads, rayBatchSize);
 
-#if defined(IPL_USES_EMBREE) && (defined(IPL_CPU_X86) || defined(IPL_CPU_X64))
+#if defined(IPL_EMBREE_AVAILABLE)
     case SceneType::Embree:
         return ipl::make_unique<EmbreeReflectionSimulator>(maxNumRays, numDiffuseSamples, maxDuration, maxOrder, maxNumSources,
                                                            numThreads);

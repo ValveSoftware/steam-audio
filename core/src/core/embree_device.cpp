@@ -14,7 +14,7 @@
 // limitations under the License.
 //
 
-#if defined(IPL_USES_EMBREE) && (defined(IPL_CPU_X86) || defined(IPL_CPU_X64))
+#if defined(IPL_EMBREE_AVAILABLE)
 
 #include <stdint.h>
 

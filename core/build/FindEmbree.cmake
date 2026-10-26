@@ -15,6 +15,14 @@
 include(FindPackageHandleStandardArgs)
 include(SteamAudioHelpers)
 
+# Embree builds a single ISA-specific library (embree) when only one ISA is enabled: SSE2 on macOS, and NEON on arm64.
+# Otherwise, it also builds embree_sse42, embree_avx, and embree_avx2.
+if (IPL_OS_MACOS OR IPL_CPU_ARMV8)
+	set(_Embree_SINGLE_ISA TRUE)
+else()
+	set(_Embree_SINGLE_ISA FALSE)
+endif()
+
 get_bin_subdir(IPL_BIN_SUBDIR)
 
 find_path(Embree_INCLUDE_DIR
@@ -52,7 +60,7 @@ find_library(Embree_sse2_LIBRARY
 	PATHS ${CMAKE_HOME_DIRECTORY}/deps/embree/lib/${IPL_BIN_SUBDIR}/release
 )
 
-if (NOT IPL_OS_MACOS)
+if (NOT _Embree_SINGLE_ISA)
 	find_library(Embree_sse4_LIBRARY
 		NAMES embree_sse42
 		PATHS ${CMAKE_HOME_DIRECTORY}/deps/embree/lib/${IPL_BIN_SUBDIR}/release
@@ -99,7 +107,7 @@ find_library(Embree_sse2_LIBRARY_DEBUG
 	PATHS ${CMAKE_HOME_DIRECTORY}/deps/embree/lib/${IPL_BIN_SUBDIR}/debug
 )
 
-if (NOT IPL_OS_MACOS)
+if (NOT _Embree_SINGLE_ISA)
 	find_library(Embree_sse4_LIBRARY_DEBUG
 		NAMES embree_sse42
 		PATHS ${CMAKE_HOME_DIRECTORY}/deps/embree/lib/${IPL_BIN_SUBDIR}/debug
@@ -127,7 +135,7 @@ if (Embree_INCLUDE_DIR)
 	set(Embree_VERSION_STRING ${Embree_VERSION})
 endif()
 
-if (IPL_OS_MACOS)
+if (_Embree_SINGLE_ISA)
 	find_package_handle_standard_args(Embree
 		FOUND_VAR 		Embree_FOUND
 		REQUIRED_VARS 	Embree_sse2_LIBRARY
@@ -183,7 +191,7 @@ if (Embree_FOUND)
 			set_target_properties(Embree::sse2 PROPERTIES IMPORTED_LOCATION_DEBUG ${Embree_sse2_LIBRARY_DEBUG})
 		endif()
 
-		if (NOT IPL_OS_MACOS)
+		if (NOT _Embree_SINGLE_ISA)
 			add_library(Embree::sse4 UNKNOWN IMPORTED)
 			set_target_properties(Embree::sse4 PROPERTIES IMPORTED_LOCATION ${Embree_sse4_LIBRARY})
 			if (Embree_sse4_LIBRARY_DEBUG)
@@ -205,7 +213,7 @@ if (Embree_FOUND)
 
 		add_library(Embree INTERFACE)
 		target_include_directories(Embree INTERFACE ${Embree_INCLUDE_DIR})
-		if (IPL_OS_MACOS)
+		if (_Embree_SINGLE_ISA)
 			target_link_libraries(Embree INTERFACE Embree::lexers Embree::math Embree::simd Embree::sys Embree::tasking Embree::sse2)
 		else()
 			target_link_libraries(Embree INTERFACE Embree::lexers Embree::math Embree::simd Embree::sys Embree::tasking Embree::sse2 Embree::sse4 Embree::avx Embree::avx2)

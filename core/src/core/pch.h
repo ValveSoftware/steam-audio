@@ -112,7 +112,7 @@
 #endif
 
 #ifdef __cplusplus
-#if defined(IPL_USES_EMBREE) && (defined(IPL_CPU_X86) || defined(IPL_CPU_X64))
+#if defined(IPL_EMBREE_AVAILABLE)
 #define EMBREE_STATIC_LIB
 #include <rtcore.h>
 #include <rtcore_ray.h>

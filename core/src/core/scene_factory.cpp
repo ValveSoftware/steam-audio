@@ -43,7 +43,7 @@ unique_ptr<IScene> SceneFactory::create(SceneType type,
         return ipl::make_unique<CustomScene>(closestHitCallback, anyHitCallback, batchedClosestHitCallback,
                                              batchedAnyHitCallback, userData);
 
-#if defined(IPL_USES_EMBREE) && (defined(IPL_CPU_X86) || defined(IPL_CPU_X64))
+#if defined(IPL_EMBREE_AVAILABLE)
     case SceneType::Embree:
         return ipl::make_unique<EmbreeScene>(embree);
 #endif
@@ -68,7 +68,7 @@ unique_ptr<IScene> SceneFactory::create(SceneType type,
     case SceneType::Default:
         return ipl::make_unique<Scene>(serializedObject);
 
-#if defined(IPL_USES_EMBREE) && (defined(IPL_CPU_X86) || defined(IPL_CPU_X64))
+#if defined(IPL_EMBREE_AVAILABLE)
     case SceneType::Embree:
         return ipl::make_unique<EmbreeScene>(embree, serializedObject);
 #endif

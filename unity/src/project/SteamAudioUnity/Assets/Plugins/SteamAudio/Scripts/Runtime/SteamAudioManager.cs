@@ -1150,6 +1150,8 @@ namespace SteamAudio
                     moves.Add("Assets/Plugins/FMOD/lib/android/armeabi-v7a/libphonon_fmod.so", "Assets/Plugins/FMOD/platforms/android/lib/armeabi-v7a/libphonon_fmod.so");
                     moves.Add("Assets/Plugins/FMOD/lib/android/arm64-v8a/libphonon_fmod.so", "Assets/Plugins/FMOD/platforms/android/lib/arm64-v8a/libphonon_fmod.so");
                     moves.Add("Assets/Plugins/FMOD/lib/android/x86/libphonon_fmod.so", "Assets/Plugins/FMOD/platforms/android/lib/x86/libphonon_fmod.so");
+                    AddMoveIfAssetExists(moves, "Assets/Plugins/FMOD/lib/win/arm64/phonon_fmod.dll", "Assets/Plugins/FMOD/platforms/win/lib/arm64/phonon_fmod.dll");
+                    AddMoveIfAssetExists(moves, "Assets/Plugins/FMOD/lib/linux/arm64/libphonon_fmod.so", "Assets/Plugins/FMOD/platforms/linux/lib/arm64/libphonon_fmod.so");
 
                     moveSucceeded = MoveAssets(moves);
                 }
@@ -1171,6 +1173,8 @@ namespace SteamAudio
                     moves.Add("Assets/Plugins/FMOD/platforms/android/lib/armeabi-v7a/libphonon_fmod.so", "Assets/Plugins/FMOD/lib/android/armeabi-v7a/libphonon_fmod.so");
                     moves.Add("Assets/Plugins/FMOD/platforms/android/lib/arm64-v8a/libphonon_fmod.so", "Assets/Plugins/FMOD/lib/android/arm64-v8a/libphonon_fmod.so");
                     moves.Add("Assets/Plugins/FMOD/platforms/android/lib/x86/libphonon_fmod.so", "Assets/Plugins/FMOD/lib/android/x86/libphonon_fmod.so");
+                    AddMoveIfAssetExists(moves, "Assets/Plugins/FMOD/platforms/win/lib/arm64/phonon_fmod.dll", "Assets/Plugins/FMOD/lib/win/arm64/phonon_fmod.dll");
+                    AddMoveIfAssetExists(moves, "Assets/Plugins/FMOD/platforms/linux/lib/arm64/libphonon_fmod.so", "Assets/Plugins/FMOD/lib/linux/arm64/libphonon_fmod.so");
 
                     moveSucceeded = MoveAssets(moves);
                 }
@@ -1236,6 +1240,15 @@ namespace SteamAudio
             }
 
             return true;
+        }
+
+        // The arm64 plugin files are optional, since not all packages include them.
+        private static void AddMoveIfAssetExists(Dictionary<string, string> moves, string source, string destination)
+        {
+            if (AssetExists(source))
+            {
+                moves.Add(source, destination);
+            }
         }
 
         private static bool MoveAssets(Dictionary<string, string> moves)

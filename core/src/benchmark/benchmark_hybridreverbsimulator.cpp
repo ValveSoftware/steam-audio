@@ -317,7 +317,7 @@ void BenchmarkHybridReverbSimulatorForSettings(const std::string& fileName, cons
 
 BENCHMARK(hybridreverbsimulator)
 {
-#if defined(IPL_USES_EMBREE) && (defined(IPL_CPU_X86) || defined(IPL_CPU_X64))
+#if defined(IPL_EMBREE_AVAILABLE)
     PrintOutput("Running benchmark: Reflection Simulation (Embree)...\n");
 
     {

@@ -1,0 +1,33 @@
+diff --git a/simd/pf_neon_float.h b/simd/pf_neon_float.h
+index c7a547f..880e25d 100644
+--- a/simd/pf_neon_float.h
++++ b/simd/pf_neon_float.h
+@@ -36,7 +36,13 @@
+ /*
+   ARM NEON support macros
+ */
+-#if !defined(PFFFT_SIMD_DISABLE) && defined(PFFFT_ENABLE_NEON) && (defined(__arm__) || defined(__aarch64__) || defined(__arm64__))
++
++/* MSVC targeting ARM64 or ARM64EC defines neither __aarch64__ nor __arm64__, and NEON is always available there. */
++#if defined(_MSC_VER) && (defined(_M_ARM64) || defined(_M_ARM64EC)) && !defined(PFFFT_ENABLE_NEON)
++#  define PFFFT_ENABLE_NEON 1
++#endif
++
++#if !defined(PFFFT_SIMD_DISABLE) && defined(PFFFT_ENABLE_NEON) && (defined(__arm__) || defined(__aarch64__) || defined(__arm64__) || defined(_M_ARM64) || defined(_M_ARM64EC))
+ #pragma message( __FILE__ ": ARM NEON macros are defined" )
+ 
+ #  include <arm_neon.h>
+diff --git a/simd/pf_sse1_float.h b/simd/pf_sse1_float.h
+index df73c2e..3536e25 100644
+--- a/simd/pf_sse1_float.h
++++ b/simd/pf_sse1_float.h
+@@ -36,7 +36,8 @@
+ /*
+   SSE1 support macros
+ */
+-#if !defined(SIMD_SZ) && !defined(PFFFT_SIMD_DISABLE) && (defined(__x86_64__) || defined(_M_X64) || defined(__i386__) || defined(i386) || defined(_M_IX86))
++/* ARM64EC also defines _M_X64, but it is arm64 code, so use NEON there instead of emulated SSE. */
++#if !defined(SIMD_SZ) && !defined(PFFFT_SIMD_DISABLE) && (defined(__x86_64__) || defined(_M_X64) || defined(__i386__) || defined(i386) || defined(_M_IX86)) && !defined(_M_ARM64EC)
+ #pragma message( __FILE__ ": SSE1 float macros are defined" )
+ 
+ #include <xmmintrin.h>

@@ -252,7 +252,7 @@ BENCHMARK(baking)
     //PrintOutput("Running benchmark: Baking Simulation (Phonon)...\n");
     //BenchmarkBakingForScene("../../data/meshes/sponza.obj", SceneType::Default);
     //PrintOutput("\n");
-#if defined(IPL_USES_EMBREE) && (defined(IPL_CPU_X86) || defined(IPL_CPU_X64))
+#if defined(IPL_EMBREE_AVAILABLE)
     PrintOutput("Running benchmark: Baking Simulation (Embree)...\n");
     BenchmarkBakingForScene("../../data/meshes/sponza.obj", SceneType::Embree);
     PrintOutput("\n");

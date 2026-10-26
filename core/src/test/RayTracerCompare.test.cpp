@@ -186,7 +186,7 @@ TEST_CASE("All implementations of ReflectionSimulator produce comparable results
     auto numBands = Bands::kNumBands;
     auto numBins = phononEnergyFields[0]->numBins();
 
-#if defined(IPL_USES_EMBREE) && (defined(IPL_CPU_X86) || defined(IPL_CPU_X64))
+#if defined(IPL_EMBREE_AVAILABLE)
     auto embree = make_shared<EmbreeDevice>();
 
     auto embreeScene = loadMesh("sponza.obj", "sponza.mtl", context, embree, nullptr, SceneType::Embree);
