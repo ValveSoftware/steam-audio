@@ -1,6 +1,7 @@
 import argparse
 import json
 import os
+import platform as pyplatform
 import re
 import shutil
 import stat
@@ -60,6 +61,8 @@ def vs_generator_name(version):
         return 'Visual Studio 16 2019'
     elif version == 2022:
         return 'Visual Studio 17 2022'
+    elif version == 2026:
+        return 'Visual Studio 18 2026'
     else:
         return 'unknown'
 
@@ -499,8 +502,8 @@ def configure_cmake(name, cmake_layers, platform, cmake, vs_version, ndk_path, e
             cmake_args += ['-DCMAKE_MSVC_RUNTIME_LIBRARY=MultiThreaded$<$<CONFIG:Debug>:Debug>']
         else:
             cmake_args += ['-DCMAKE_MSVC_RUNTIME_LIBRARY=MultiThreaded$<$<CONFIG:Debug>:Debug>DLL']
-    elif platform == 'windows-arm64':
-        cmake_args += ['-G', vs_generator_name(vs_version), '-A', 'ARM64']
+    elif platform in ['windows-arm64', 'windows-arm64ec']:
+        cmake_args += ['-G', vs_generator_name(vs_version), '-A', 'ARM64EC' if platform == 'windows-arm64ec' else 'ARM64']
         if not shared_crt:
             cmake_args += ['-DCMAKE_MSVC_RUNTIME_LIBRARY=MultiThreaded$<$<CONFIG:Debug>:Debug>']
         else:
@@ -516,7 +519,9 @@ def configure_cmake(name, cmake_layers, platform, cmake, vs_version, ndk_path, e
         cmake_args += ['-DCMAKE_POSITION_INDEPENDENT_CODE=TRUE']
     elif platform == 'linux-arm64':
         cmake_args += ['-G', 'Unix Makefiles']
-        cmake_args += ['-DCMAKE_TOOLCHAIN_FILE=' + toolchain('linux_arm64')]
+        if host_arch != 'arm64':
+            # Cross-compile from an x64 host. On an arm64 host, build natively.
+            cmake_args += ['-DCMAKE_TOOLCHAIN_FILE=' + toolchain('linux_arm64')]
         cmake_args += ['-DCMAKE_BUILD_TYPE=' + ('Debug' if debug else 'Release')]
         cmake_args += ['-DCMAKE_POSITION_INDEPENDENT_CODE=TRUE']
     elif platform == 'osx':
@@ -578,6 +583,15 @@ def configure_cmake(name, cmake_layers, platform, cmake, vs_version, ndk_path, e
 
     cmake_args += ['-DCMAKE_SKIP_INSTALL_ALL_DEPENDENCY=TRUE']
     cmake_args += ['-DCMAKE_INSTALL_PREFIX=' + install_dir]
+
+    # Some dependencies declare cmake_minimum_required() versions older than 3.5, which CMake 4.0 and later reject.
+    cmake_args += ['-DCMAKE_POLICY_VERSION_MINIMUM=3.5']
+
+    # CMAKE_MSVC_RUNTIME_LIBRARY (set above) is ignored unless policy CMP0091 is NEW, which dependencies that declare
+    # cmake_minimum_required() versions older than 3.15 (e.g., mysofa, PFFFT) don't set. They would then be built with
+    # the DLL runtime (/MD), which fails to link into phonon built with the static runtime (/MT).
+    if platform.startswith('windows-'):
+        cmake_args += ['-DCMAKE_POLICY_DEFAULT_CMP0091=NEW']
     cmake_args += ['-S', src_dir, '-B', build_dir]
 
     run_command([cmake] + cmake_args)
@@ -780,10 +794,16 @@ elif sys.platform == 'darwin':
 else:
     host_os = 'linux'
 
+host_machine = pyplatform.machine().lower()
 if host_os == 'windows':
-    host_platform = 'windows-x64'
+    # An x64 Python running under emulation on Windows on ARM reports AMD64, so check the native architecture.
+    host_machine = os.environ.get('PROCESSOR_ARCHITEW6432', os.environ.get('PROCESSOR_ARCHITECTURE', host_machine)).lower()
+host_arch = 'arm64' if host_machine in ['aarch64', 'arm64', 'armv8', 'armv8l'] else 'x64'
+
+if host_os == 'windows':
+    host_platform = 'windows-' + host_arch
 elif host_os == 'linux':
-    host_platform = 'linux-x64'
+    host_platform = 'linux-' + host_arch
 elif host_os == 'osx':
     host_platform = 'osx'
 
@@ -794,8 +814,8 @@ print('Host platform:', host_platform)
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-p', '--platform', help = "Target operating system.", choices = ['windows', 'osx', 'linux', 'android', 'ios', 'wasm'], type = str.lower, default = host_os)
-parser.add_argument('-a', '--architecture', help = "CPU architecture.", choices = ['x86', 'x64', 'armv7', 'arm64'], type = str.lower, default = 'x64')
-parser.add_argument('-t', '--toolchain', help = "Compiler toolchain. (Windows only)", choices = ['vs2013', 'vs2015', 'vs2017', 'vs2019', 'vs2022'], type = str.lower, default = 'vs2019')
+parser.add_argument('-a', '--architecture', help = "CPU architecture.", choices = ['x86', 'x64', 'armv7', 'arm64', 'arm64ec'], type = str.lower, default = 'x64')
+parser.add_argument('-t', '--toolchain', help = "Compiler toolchain. (Windows only)", choices = ['vs2013', 'vs2015', 'vs2017', 'vs2019', 'vs2022', 'vs2026'], type = str.lower, default = 'vs2019')
 parser.add_argument('--ndk', help = "Path to the Android NDK. (Android only)", default = os.getenv('ANDROID_NDK'))
 parser.add_argument('--emsdk', help = "Path to the Emscripten SDK. (WebAssembly only)", default = os.getenv('EMSDK'))
 parser.add_argument('--clean', help = "Dependencies or build products to clean.", type=str.lower, choices=['output', 'build', 'src', 'all'])

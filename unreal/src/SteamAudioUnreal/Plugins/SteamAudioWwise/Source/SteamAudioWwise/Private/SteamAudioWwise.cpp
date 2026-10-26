@@ -54,7 +54,10 @@ FString FSteamAudioWwiseModule::GetDynamicLibraryPath(FString LibName)
 #endif
 
 #if PLATFORM_WINDOWS
-#ifdef AK_WINDOWS_VS_VERSION
+#if defined(_M_ARM64)
+	// Unlike x86/x64, the Wwise SDK has a single native ARM64 directory, without a toolchain suffix.
+	constexpr auto PlatformArchitecture = "ARM64";
+#elif defined(AK_WINDOWS_VS_VERSION)
 	constexpr auto PlatformArchitecture = AK_WINDOWS_ARCHITECTURE AK_WINDOWS_VS_VERSION;
 #else
 	constexpr auto PlatformArchitecture = AK_WINDOWS_ARCHITECTURE "vc160";
@@ -62,7 +65,11 @@ FString FSteamAudioWwiseModule::GetDynamicLibraryPath(FString LibName)
 	LibraryPath = FAkPlatform::GetDSPPluginsDirectory(PlatformArchitecture);
 	LibraryPath += (LibName + ".dll");
 #elif PLATFORM_LINUX
+#if defined(__aarch64__)
+	constexpr auto PlatformArchitecture = "Linux_aarch64";
+#else
 	constexpr auto PlatformArchitecture = "Linux_x64";
+#endif
 	LibraryPath = FAkPlatform::GetDSPPluginsDirectory(PlatformArchitecture);
 	LibraryPath += ("lib" + LibName + ".so");
 #elif PLATFORM_MAC

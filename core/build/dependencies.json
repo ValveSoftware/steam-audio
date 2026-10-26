@@ -25,6 +25,12 @@
                         "-DCMAKE_C_FLAGS=-Wno-error=unused-but-set-variable -Wno-unknown-warning-option",
                         "-DCMAKE_CXX_FLAGS=-Wno-error=unused-but-set-variable -Wno-unknown-warning-option"
                     ]
+                },
+                {
+                    "platforms": ["linux-x64", "linux-arm64"],
+                    "flags": [
+                        "-DCMAKE_CXX_FLAGS=-Wno-error=stringop-overflow"
+                    ]
                 }
             ]
         },
@@ -84,7 +90,8 @@
         },
         "fetch": {
             "git": "https://github.com/marton78/pffft.git",
-            "tag": "e0bf595c98ded55cc457a371c1b29c8cab552628"
+            "tag": "e0bf595c98ded55cc457a371c1b29c8cab552628",
+            "patch": "pffft.patch"
         },
         "configure": {
             "cmake": [
@@ -121,7 +128,7 @@
                     ]
                 },
                 {
-                    "platforms": ["windows-arm64", "linux-arm64", "android-arm64", "ios"],
+                    "platforms": ["linux-arm64", "android-arm64", "ios"],
                     "flags": [
                         "-DTARGET_C_ARCH=armv8-a",
                         "-DTARGET_CXX_ARCH=armv8-a",

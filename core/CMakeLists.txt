@@ -43,7 +43,15 @@ endif()
 
 # CPU architecture detection
 if (IPL_OS_WINDOWS)
-    if (CMAKE_GENERATOR_PLATFORM STREQUAL "ARM64")
+    # Visual Studio generators report the target via -A ARM64; Ninja/NMake builds from an ARM64 developer prompt
+    # only report it via the compiler's architecture ID.
+    if (CMAKE_GENERATOR_PLATFORM STREQUAL "ARM64EC" OR CMAKE_CXX_COMPILER_ARCHITECTURE_ID STREQUAL "ARM64EC")
+        # ARM64EC is arm64 code that follows the x64 ABI, so that it can be loaded into x64 processes running under
+        # emulation on Windows on ARM. It is built like ARM64 (NEON, no IPP), but into its own windows-arm64ec
+        # directories.
+        set(IPL_CPU_ARMV8 TRUE)
+        set(IPL_CPU_ARM64EC TRUE)
+    elseif (CMAKE_GENERATOR_PLATFORM STREQUAL "ARM64" OR CMAKE_CXX_COMPILER_ARCHITECTURE_ID STREQUAL "ARM64")
         set(IPL_CPU_ARMV8 TRUE)
     elseif (CMAKE_SIZEOF_VOID_P EQUAL 8)
         set(IPL_CPU_X64 TRUE)
@@ -51,7 +59,7 @@ if (IPL_OS_WINDOWS)
         set(IPL_CPU_X86 TRUE)
     endif()
 elseif (IPL_OS_LINUX)
-    if (CMAKE_SYSTEM_PROCESSOR STREQUAL "aarch64")
+    if (CMAKE_SYSTEM_PROCESSOR MATCHES "^(aarch64|arm64|ARM64)$")
         set(IPL_CPU_ARMV8 TRUE)
     elseif (CMAKE_SIZEOF_VOID_P EQUAL 8)
         set(IPL_CPU_X64 TRUE)
@@ -162,7 +170,10 @@ if (IPL_OS_LINUX)
     if (IPL_CPU_X86)
         add_compile_options(-m32 -mfpmath=sse -march=native)
     endif()
-    if (STEAMAUDIO_ENABLE_AVX)
+    # GCC versions before 5 default to an ABI version that mangles __m128 and __m256 identically, so overloads on
+    # float4_t and float8_t collide. Newer versions default to the latest ABI version, which mangles them distinctly;
+    # forcing the older ABI version 6 there breaks compilation against their libstdc++.
+    if (STEAMAUDIO_ENABLE_AVX AND CMAKE_CXX_COMPILER_ID STREQUAL "GNU" AND CMAKE_CXX_COMPILER_VERSION VERSION_LESS 5)
         add_compile_options(-fabi-version=6)
     endif()
 endif()
@@ -404,8 +415,11 @@ set(CPACK_INSTALLED_DIRECTORIES
     ${CMAKE_INSTALL_PREFIX}/include include
     ${CMAKE_INSTALL_PREFIX}/lib/windows-x86 lib/windows-x86
     ${CMAKE_INSTALL_PREFIX}/lib/windows-x64 lib/windows-x64
+    ${CMAKE_INSTALL_PREFIX}/lib/windows-arm64 lib/windows-arm64
+    ${CMAKE_INSTALL_PREFIX}/lib/windows-arm64ec lib/windows-arm64ec
     ${CMAKE_INSTALL_PREFIX}/lib/linux-x86 lib/linux-x86
     ${CMAKE_INSTALL_PREFIX}/lib/linux-x64 lib/linux-x64
+    ${CMAKE_INSTALL_PREFIX}/lib/linux-arm64 lib/linux-arm64
     ${CMAKE_INSTALL_PREFIX}/lib/osx lib/osx
     ${CMAKE_INSTALL_PREFIX}/lib/android-armv7 lib/android-armv7
     ${CMAKE_INSTALL_PREFIX}/lib/android-armv8 lib/android-armv8
@@ -416,8 +430,11 @@ set(CPACK_INSTALLED_DIRECTORIES
     ${CMAKE_INSTALL_PREFIX}/doc doc
     ${CMAKE_INSTALL_PREFIX}/symbols/windows-x86 symbols/windows-x86
     ${CMAKE_INSTALL_PREFIX}/symbols/windows-x64 symbols/windows-x64
+    ${CMAKE_INSTALL_PREFIX}/symbols/windows-arm64 symbols/windows-arm64
+    ${CMAKE_INSTALL_PREFIX}/symbols/windows-arm64ec symbols/windows-arm64ec
     ${CMAKE_INSTALL_PREFIX}/symbols/linux-x86 symbols/linux-x86
     ${CMAKE_INSTALL_PREFIX}/symbols/linux-x64 symbols/linux-x64
+    ${CMAKE_INSTALL_PREFIX}/symbols/linux-arm64 symbols/linux-arm64
     ${CMAKE_INSTALL_PREFIX}/root .
 )
 

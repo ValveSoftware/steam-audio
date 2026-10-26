@@ -682,13 +682,14 @@ if (IPL_OS_WINDOWS AND IPL_CPU_X64 AND BUILD_SHARED_LIBS)
     set_target_properties(phonon PROPERTIES LINK_FLAGS "/DELAYLOAD:opencl.dll /DELAYLOAD:gpuutilities.dll /DELAYLOAD:trueaudionext.dll")
 endif()
 
-if (IPL_OS_LINUX AND BUILD_SHARED_LIBS AND (NOT IPL_CPU_ARMV8))
+if (IPL_OS_LINUX AND BUILD_SHARED_LIBS)
+    # Use the toolchain's binutils (not the host's) so that this also works when cross-compiling, e.g. for arm64.
     add_custom_command(
         TARGET      phonon
         POST_BUILD
-        COMMAND     objcopy --only-keep-debug $<TARGET_FILE_NAME:phonon> $<TARGET_FILE_NAME:phonon>.dbg
-        COMMAND     strip --strip-debug --strip-unneeded $<TARGET_FILE_NAME:phonon>
-        COMMAND     objcopy --add-gnu-debuglink=$<TARGET_FILE_NAME:phonon>.dbg $<TARGET_FILE_NAME:phonon>
+        COMMAND     ${CMAKE_OBJCOPY} --only-keep-debug $<TARGET_FILE_NAME:phonon> $<TARGET_FILE_NAME:phonon>.dbg
+        COMMAND     ${CMAKE_STRIP} --strip-debug --strip-unneeded $<TARGET_FILE_NAME:phonon>
+        COMMAND     ${CMAKE_OBJCOPY} --add-gnu-debuglink=$<TARGET_FILE_NAME:phonon>.dbg $<TARGET_FILE_NAME:phonon>
         COMMENT     "Extracting debug symbols..."
     )
 endif()
@@ -706,12 +707,18 @@ if (IPL_OS_WINDOWS)
         set(FMOD_LIB_DIR ${CMAKE_HOME_DIRECTORY}/../fmod/lib/windows-x86)
     elseif (IPL_CPU_X64)
         set(FMOD_LIB_DIR ${CMAKE_HOME_DIRECTORY}/../fmod/lib/windows-x64)
+    elseif (IPL_CPU_ARM64EC)
+        # FMOD and Unity don't support ARM64EC.
+    elseif (IPL_CPU_ARMV8)
+        set(FMOD_LIB_DIR ${CMAKE_HOME_DIRECTORY}/../fmod/lib/windows-arm64)
     endif()
 elseif (IPL_OS_LINUX)
     if (IPL_CPU_X86)
         set(FMOD_LIB_DIR ${CMAKE_HOME_DIRECTORY}/../fmod/lib/linux-x86)
     elseif (IPL_CPU_X64)
         set(FMOD_LIB_DIR ${CMAKE_HOME_DIRECTORY}/../fmod/lib/linux-x64)
+    elseif (IPL_CPU_ARMV8)
+        set(FMOD_LIB_DIR ${CMAKE_HOME_DIRECTORY}/../fmod/lib/linux-arm64)
     endif()
 elseif (IPL_OS_MACOS)
     set(FMOD_LIB_DIR ${CMAKE_HOME_DIRECTORY}/../fmod/lib/osx)
@@ -798,12 +805,18 @@ if (IPL_OS_WINDOWS)
         set(UNITY_LIB_DIR ${CMAKE_HOME_DIRECTORY}/../unity/lib/windows-x86)
     elseif (IPL_CPU_X64)
         set(UNITY_LIB_DIR ${CMAKE_HOME_DIRECTORY}/../unity/lib/windows-x64)
+    elseif (IPL_CPU_ARM64EC)
+        # FMOD and Unity don't support ARM64EC.
+    elseif (IPL_CPU_ARMV8)
+        set(UNITY_LIB_DIR ${CMAKE_HOME_DIRECTORY}/../unity/lib/windows-arm64)
     endif()
 elseif (IPL_OS_LINUX)
     if (IPL_CPU_X86)
         set(UNITY_LIB_DIR ${CMAKE_HOME_DIRECTORY}/../unity/lib/linux-x86)
     elseif (IPL_CPU_X64)
         set(UNITY_LIB_DIR ${CMAKE_HOME_DIRECTORY}/../unity/lib/linux-x64)
+    elseif (IPL_CPU_ARMV8)
+        set(UNITY_LIB_DIR ${CMAKE_HOME_DIRECTORY}/../unity/lib/linux-arm64)
     endif()
 elseif (IPL_OS_MACOS)
     set(UNITY_LIB_DIR ${CMAKE_HOME_DIRECTORY}/../unity/lib/osx)
@@ -827,12 +840,18 @@ if (IPL_OS_WINDOWS)
         set(UNITY_PLUGIN_DIR ${CMAKE_HOME_DIRECTORY}/../unity/src/project/SteamAudioUnity/Assets/Plugins/SteamAudio/Binaries/Windows/x86)
     elseif (IPL_CPU_X64)
         set(UNITY_PLUGIN_DIR ${CMAKE_HOME_DIRECTORY}/../unity/src/project/SteamAudioUnity/Assets/Plugins/SteamAudio/Binaries/Windows/x86_64)
+    elseif (IPL_CPU_ARM64EC)
+        # FMOD and Unity don't support ARM64EC.
+    elseif (IPL_CPU_ARMV8)
+        set(UNITY_PLUGIN_DIR ${CMAKE_HOME_DIRECTORY}/../unity/src/project/SteamAudioUnity/Assets/Plugins/SteamAudio/Binaries/Windows/ARM64)
     endif()
 elseif (IPL_OS_LINUX)
     if (IPL_CPU_X86)
         set(UNITY_PLUGIN_DIR ${CMAKE_HOME_DIRECTORY}/../unity/src/project/SteamAudioUnity/Assets/Plugins/SteamAudio/Binaries/Linux/x86)
     elseif (IPL_CPU_X64)
         set(UNITY_PLUGIN_DIR ${CMAKE_HOME_DIRECTORY}/../unity/src/project/SteamAudioUnity/Assets/Plugins/SteamAudio/Binaries/Linux/x86_64)
+    elseif (IPL_CPU_ARMV8)
+        set(UNITY_PLUGIN_DIR ${CMAKE_HOME_DIRECTORY}/../unity/src/project/SteamAudioUnity/Assets/Plugins/SteamAudio/Binaries/Linux/ARM64)
     endif()
 elseif (IPL_OS_MACOS)
     set(UNITY_PLUGIN_DIR ${CMAKE_HOME_DIRECTORY}/../unity/src/project/SteamAudioUnity/Assets/Plugins/SteamAudio/Binaries/macOS)
@@ -916,10 +935,16 @@ if (IPL_OS_WINDOWS)
         set(UNREAL_PLUGIN_DIR ${CMAKE_HOME_DIRECTORY}/../unreal/src/SteamAudioUnreal/Plugins/SteamAudio/Source/SteamAudioSDK/lib/windows-x86)
     elseif (IPL_CPU_X64)
         set(UNREAL_PLUGIN_DIR ${CMAKE_HOME_DIRECTORY}/../unreal/src/SteamAudioUnreal/Plugins/SteamAudio/Source/SteamAudioSDK/lib/windows-x64)
+    elseif (IPL_CPU_ARM64EC)
+        set(UNREAL_PLUGIN_DIR ${CMAKE_HOME_DIRECTORY}/../unreal/src/SteamAudioUnreal/Plugins/SteamAudio/Source/SteamAudioSDK/lib/windows-arm64ec)
+    elseif (IPL_CPU_ARMV8)
+        set(UNREAL_PLUGIN_DIR ${CMAKE_HOME_DIRECTORY}/../unreal/src/SteamAudioUnreal/Plugins/SteamAudio/Source/SteamAudioSDK/lib/windows-arm64)
     endif()
 elseif (IPL_OS_LINUX)
     if (IPL_CPU_X64)
         set(UNREAL_PLUGIN_DIR ${CMAKE_HOME_DIRECTORY}/../unreal/src/SteamAudioUnreal/Plugins/SteamAudio/Source/SteamAudioSDK/lib/linux-x64)
+    elseif (IPL_CPU_ARMV8)
+        set(UNREAL_PLUGIN_DIR ${CMAKE_HOME_DIRECTORY}/../unreal/src/SteamAudioUnreal/Plugins/SteamAudio/Source/SteamAudioSDK/lib/linux-arm64)
     endif()
 elseif (IPL_OS_MACOS)
     set(UNREAL_PLUGIN_DIR ${CMAKE_HOME_DIRECTORY}/../unreal/src/SteamAudioUnreal/Plugins/SteamAudio/Source/SteamAudioSDK/lib/osx)
@@ -1005,7 +1030,7 @@ if (IPL_OS_WINDOWS)
         FILES       ${CMAKE_CURRENT_BINARY_DIR}/$<CONFIG>/phonon.pdb
         DESTINATION symbols/${IPL_BIN_SUBDIR}
     )
-elseif (IPL_OS_LINUX AND NOT IPL_CPU_ARMV8)
+elseif (IPL_OS_LINUX AND BUILD_SHARED_LIBS)
     install(
         FILES       ${CMAKE_CURRENT_BINARY_DIR}/libphonon.so.dbg
         DESTINATION symbols/${IPL_BIN_SUBDIR}

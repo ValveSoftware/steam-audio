@@ -163,11 +163,18 @@ namespace float4
     // Round to nearest integer.
     inline float4_t round(float4_t a)
     {
-        int32x4_t a_sign = vdupq_n_s32(1 << 31);
+    #if defined(IPL_CPU_ARM64)
+        // Round to nearest, ties to even. This matches the SSE implementation, which uses the default rounding mode.
+        return vrndnq_f32(a);
+    #else
+        // ARMv7 NEON has no vector rounding instruction, so add +/-0.5 (with the sign of a), and then truncate. This
+        // rounds ties away from zero.
+        int32x4_t a_sign = vdupq_n_s32(INT32_MIN);
         int32x4_t a_05 = vreinterpretq_s32_f32(vdupq_n_f32(0.5f));
         int32x4_t a_addition = vorrq_s32(a_05, vandq_s32(a_sign, vreinterpretq_s32_f32(a)));
 
-        return vreinterpretq_f32_s32(vreinterpretq_s32_f32(vaddq_f32(a, vreinterpretq_f32_s32(a_addition))));
+        return vcvtq_f32_s32(vcvtq_s32_f32(vaddq_f32(a, vreinterpretq_f32_s32(a_addition))));
+    #endif
     }
 
     // Aligned load.

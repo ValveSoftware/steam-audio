@@ -17,6 +17,7 @@
 #include "SteamAudioModule.h"
 #include "Interfaces/IPluginManager.h"
 #include "Misc/CoreDelegates.h"
+#include "Misc/Paths.h"
 #include "SteamAudioAudioEngineInterface.h"
 #include "SteamAudioManager.h"
 #include "SteamAudioOcclusion.h"
@@ -61,13 +62,27 @@ void FSteamAudioModule::StartupModule()
     // Construct the path to the DLL. This works for in-editor and standalone cases.
     FString BaseDir = Plugin->GetBaseDir();
 #if PLATFORM_WINDOWS
-#if PLATFORM_64BITS
+#if defined(_M_ARM64EC)
+    // ARM64EC can load both ARM64EC and x64 DLLs. Prefer the ARM64EC DLL (as SteamAudioSDK.Build.cs does), since it
+    // runs natively instead of under emulation.
+    FString LibraryPath = BaseDir + TEXT("/Source/SteamAudioSDK/lib/windows-arm64ec/phonon.dll");
+    if (!FPaths::FileExists(LibraryPath))
+    {
+        LibraryPath = BaseDir + TEXT("/Source/SteamAudioSDK/lib/windows-x64/phonon.dll");
+    }
+#elif defined(_M_ARM64)
+    FString LibraryPath = BaseDir + TEXT("/Source/SteamAudioSDK/lib/windows-arm64/phonon.dll");
+#elif PLATFORM_64BITS
     FString LibraryPath = BaseDir + TEXT("/Source/SteamAudioSDK/lib/windows-x64/phonon.dll");
 #else
     FString LibraryPath = BaseDir + TEXT("/Source/SteamAudioSDK/lib/windows-x86/phonon.dll");
 #endif
 #elif PLATFORM_LINUX
+#if defined(__aarch64__)
+    FString LibraryPath = BaseDir + TEXT("/Source/SteamAudioSDK/lib/linux-arm64/libphonon.so");
+#else
     FString LibraryPath = BaseDir + TEXT("/Source/SteamAudioSDK/lib/linux-x64/libphonon.so");
+#endif
 #elif PLATFORM_MAC
     FString LibraryPath = BaseDir + TEXT("/Source/SteamAudioSDK/lib/osx/libphonon.dylib");
 #elif PLATFORM_ANDROID

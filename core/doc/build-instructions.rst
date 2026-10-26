@@ -53,6 +53,23 @@ To build for Linux, you will need:
 -   ``g++-multilib`` 4.8 or later if building the 32-bit binaries on a 64-bit system (install using your distribution's package manager)
 -   ``glibc`` 2.19 or later
 
+To build for Linux arm64, you can either build natively on an arm64 Linux system (using the requirements listed above),
+or cross-compile from an x64 Linux system. To cross-compile, you will need:
+
+-   ``g++-aarch64-linux-gnu`` (on Debian/Ubuntu; install using your distribution's package manager)
+
+By default, ``build/toolchain_linux_arm64.cmake`` uses the ``aarch64-linux-gnu-gcc`` and ``aarch64-linux-gnu-g++``
+compilers. To use a different cross toolchain or an arm64 sysroot, set the ``STEAMAUDIO_ARM64_TOOLCHAIN_PREFIX``,
+``STEAMAUDIO_ARM64_TOOLCHAIN_SUFFIX``, or ``STEAMAUDIO_ARM64_SYSROOT`` environment variables (see the comments in the
+toolchain file for details).
+
+To build for Windows arm64, you will need:
+
+-   Visual Studio 2019 or later, with the "MSVC ARM64 build tools" component installed
+
+Windows arm64 binaries can be built either natively on a Windows on ARM system, or cross-compiled on an x64 Windows
+system. Only native ARM64 binaries are supported; ARM64EC is not supported.
+
 To build for macOS, you will need:
 
 -   Xcode 7.0 or later (install from the Mac App Store)
@@ -128,8 +145,10 @@ For Windows, Linux, and macOS:
 
     - ``lib/windows-x86`` for Windows 32-bit
     - ``lib/windows-x64`` for Windows 64-bit
+    - ``lib/windows-arm64`` for Windows 64-bit ARM
     - ``lib/linux-x86`` for Linux 32-bit
     - ``lib/linux-x64`` for Linux 64-bit
+    - ``lib/linux-arm64`` for Linux 64-bit ARM
     - ``lib/osx`` for macOS
     - ``lib/android-armv7`` for Android 32-bit ARM (ARMv7)
     - ``lib/android-armv8`` for Android 64-bit ARM (ARMv8)
@@ -156,6 +175,14 @@ On Linux, this will generate a Makefile for 64-bit Linux (``build/linux-x64-rele
 
 On macOS, this will generate an Xcode project (``build/osx/Phonon.xcodeproj``) and build it in the Release configuration.
 
+With ``-a arm64``, on Windows this will generate a Visual Studio solution for Windows on ARM64
+(``build/windows-<toolchain>-arm64/Phonon.sln``), and on Linux this will generate a Makefile for 64-bit ARM Linux
+(``build/linux-arm64-release/Makefile``). On an x64 Linux host, the Linux arm64 build is cross-compiled using
+``build/toolchain_linux_arm64.cmake``; on an arm64 Linux host, it is built natively.
+
+On Windows arm64 and Linux arm64, Intel IPP, Intel Embree, AMD Radeon Rays, and AMD TrueAudio Next are not available.
+Steam Audio uses NEON-accelerated built-in implementations for vector math, PFFFT for FFT, and its built-in ray tracer.
+
 On Android, this will generate a Makefile for 32-bit ARM (``build/android-armv7-release/Makefile``) and build it.
 
 On iOS, this will generate an Xcode project (``build/ios/Phonon.xcodeproj``) and build it in the Release configuration.
@@ -171,7 +198,7 @@ The Steam Audio build script (``build.py``) lets you specify the following comma
         Specifies the compiler version (on Windows only). Valid options are ``vs2013``, ``vs2015``, ``vs2017``, ``vs2019``. Default is ``vs2015``.
 
     -a, --architecture NAME
-        Specifies the CPU architecture to build for. Valid options are ``x86`` (32-bit Intel, available on Windows, Linux, and Android), ``x64`` (64-bit Intel, available on Windows, Linux, macOS, and Android), ``armv7`` (32-bit ARM, available on Android), and ``arm64`` (64-bit ARM, available on Android and iOS). Default is ``x64`` for Windows, Linux, and macOS; ``armv7`` for Android; and ``arm64`` for iOS.
+        Specifies the CPU architecture to build for. Valid options are ``x86`` (32-bit Intel, available on Windows, Linux, and Android), ``x64`` (64-bit Intel, available on Windows, Linux, macOS, and Android), ``armv7`` (32-bit ARM, available on Android), and ``arm64`` (64-bit ARM, available on Windows, Linux, Android, and iOS). Default is ``x64`` for Windows, Linux, and macOS; ``armv7`` for Android; and ``arm64`` for iOS.
 
     -c, --configuration NAME
         Specifies the build configuration. Valid options are ``debug`` and ``release``. Default is ``release``.

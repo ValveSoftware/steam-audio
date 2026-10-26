@@ -70,5 +70,15 @@ shutil.copy("steamaudio/lib/android-armv7/libphonon.so", "lib/android-armv7")
 shutil.copy("steamaudio/lib/android-armv8/libphonon.so", "lib/android-armv8")
 shutil.copy("steamaudio/lib/android-x86/libphonon.so", "lib/android-x86")
 
+# arm64 binaries are only present in release packages that include them.
+if os.path.exists("steamaudio/lib/windows-arm64/phonon.dll"):
+    if not os.path.exists("lib/windows-arm64"):
+        os.makedirs("lib/windows-arm64")
+    shutil.copy("steamaudio/lib/windows-arm64/phonon.dll", "lib/windows-arm64")
+if os.path.exists("steamaudio/lib/linux-arm64/libphonon.so"):
+    if not os.path.exists("lib/linux-arm64"):
+        os.makedirs("lib/linux-arm64")
+    shutil.copy("steamaudio/lib/linux-arm64/libphonon.so", "lib/linux-arm64")
+
 print("Cleaning up...")
 shutil.rmtree("steamaudio")

@@ -19,7 +19,7 @@
 			"Name": "SteamAudioWwise",
 			"Type": "Runtime",
 			"LoadingPhase": "PreDefault",
-			"WhitelistPlatforms": [ "Win64", "Linux", "Mac", "Android", "IOS" ]
+			"WhitelistPlatforms": [ "Win64", "Linux", "LinuxArm64", "Mac", "Android", "IOS" ]
 		}
 	],
 	"Plugins": [

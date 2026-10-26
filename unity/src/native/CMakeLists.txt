@@ -70,13 +70,14 @@ target_link_libraries(audioplugin_phonon PRIVATE Unity::NativeAudio SteamAudio::
 
 target_precompile_headers(audioplugin_phonon PRIVATE pch.h)
 
-if (IPL_OS_LINUX AND BUILD_SHARED_LIBS AND (NOT IPL_CPU_ARMV8))
+if (IPL_OS_LINUX AND BUILD_SHARED_LIBS)
+    # Use the toolchain's binutils (not the host's) so that this also works when cross-compiling, e.g. for arm64.
     add_custom_command(
         TARGET      audioplugin_phonon
         POST_BUILD
-        COMMAND     objcopy --only-keep-debug $<TARGET_FILE_NAME:audioplugin_phonon> $<TARGET_FILE_NAME:audioplugin_phonon>.dbg
-        COMMAND     strip --strip-debug --strip-unneeded $<TARGET_FILE_NAME:audioplugin_phonon>
-        COMMAND     objcopy --add-gnu-debuglink=$<TARGET_FILE_NAME:audioplugin_phonon>.dbg $<TARGET_FILE_NAME:audioplugin_phonon>
+        COMMAND     ${CMAKE_OBJCOPY} --only-keep-debug $<TARGET_FILE_NAME:audioplugin_phonon> $<TARGET_FILE_NAME:audioplugin_phonon>.dbg
+        COMMAND     ${CMAKE_STRIP} --strip-debug --strip-unneeded $<TARGET_FILE_NAME:audioplugin_phonon>
+        COMMAND     ${CMAKE_OBJCOPY} --add-gnu-debuglink=$<TARGET_FILE_NAME:audioplugin_phonon>.dbg $<TARGET_FILE_NAME:audioplugin_phonon>
         COMMENT     "Extracting debug symbols..."
     )
 endif()
@@ -86,12 +87,16 @@ if (IPL_OS_WINDOWS)
         set(PLUGIN_DIR ${CMAKE_HOME_DIRECTORY}/src/project/SteamAudioUnity/Assets/Plugins/SteamAudio/Binaries/Windows/x86/)
     elseif (IPL_CPU_X64)
         set(PLUGIN_DIR ${CMAKE_HOME_DIRECTORY}/src/project/SteamAudioUnity/Assets/Plugins/SteamAudio/Binaries/Windows/x86_64/)
+    elseif (IPL_CPU_ARMV8)
+        set(PLUGIN_DIR ${CMAKE_HOME_DIRECTORY}/src/project/SteamAudioUnity/Assets/Plugins/SteamAudio/Binaries/Windows/ARM64/)
     endif()
 elseif (IPL_OS_LINUX)
     if (IPL_CPU_X86)
         set(PLUGIN_DIR ${CMAKE_HOME_DIRECTORY}/src/project/SteamAudioUnity/Assets/Plugins/SteamAudio/Binaries/Linux/x86/)
     elseif (IPL_CPU_X64)
         set(PLUGIN_DIR ${CMAKE_HOME_DIRECTORY}/src/project/SteamAudioUnity/Assets/Plugins/SteamAudio/Binaries/Linux/x86_64/)
+    elseif (IPL_CPU_ARMV8)
+        set(PLUGIN_DIR ${CMAKE_HOME_DIRECTORY}/src/project/SteamAudioUnity/Assets/Plugins/SteamAudio/Binaries/Linux/ARM64/)
     endif()
 elseif (IPL_OS_MACOS)
     set(PLUGIN_DIR ${CMAKE_HOME_DIRECTORY}/src/project/SteamAudioUnity/Assets/Plugins/SteamAudio/Binaries/macOS/)
@@ -144,7 +149,7 @@ if (IPL_OS_WINDOWS)
         FILES       ${CMAKE_CURRENT_BINARY_DIR}/$<CONFIG>/audioplugin_phonon.pdb
         DESTINATION symbols/${IPL_BIN_SUBDIR}
     )
-elseif (IPL_OS_LINUX AND NOT IPL_CPU_ARMV8)
+elseif (IPL_OS_LINUX AND BUILD_SHARED_LIBS)
     install(
         FILES       ${CMAKE_CURRENT_BINARY_DIR}/libaudioplugin_phonon.so.dbg
         DESTINATION symbols/${IPL_BIN_SUBDIR}
