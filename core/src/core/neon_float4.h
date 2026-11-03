@@ -167,7 +167,7 @@ namespace float4
         int32x4_t a_05 = vreinterpretq_s32_f32(vdupq_n_f32(0.5f));
         int32x4_t a_addition = vorrq_s32(a_05, vandq_s32(a_sign, vreinterpretq_s32_f32(a)));
 
-        return vreinterpretq_f32_s32(vreinterpretq_s32_f32(vaddq_f32(a, vreinterpretq_f32_s32(a_addition))));
+        return vcvtq_f32_s32(vcvtq_s32_f32(vaddq_f32(a, vreinterpretq_f32_s32(a_addition))));
     }
 
     // Aligned load.
