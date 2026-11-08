@@ -257,7 +257,7 @@ void ArrayMath::multiplyAccumulate(int size,
 
             auto y = float4::add(float4::mul(b1, x2), float4::mul(b0, float4::mul(b3, b4)));
 
-            y = float4::add(y, float4::load(&outData[i]));
+            y = float4::add(y, float4::loadu(&outData[i]));
 
             float4::storeu(&outData[i], y);
         }
