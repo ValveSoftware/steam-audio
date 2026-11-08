@@ -18,6 +18,7 @@
 
 #include "array_math.h"
 #include "profiler.h"
+#include "propagation_medium.h"
 
 namespace ipl {
 
@@ -168,7 +169,7 @@ float ReverbEstimator::reverbTime(const float* histogram,
     auto x = 0.0f;
     for (auto i = 0; i < numBins; ++i)
     {
-        totalEnergy += histogram[i] * airAbsorption.evaluate(x, band);
+        totalEnergy += histogram[i] * airAbsorption.evaluate(x * PropagationMedium::kSpeedOfSound, band);
         x += EnergyField::kBinDuration;
     }
 
@@ -188,7 +189,7 @@ float ReverbEstimator::reverbTime(const float* histogram,
     // convert it to log-scale in order to fit a line to the EDC.
     for (auto i = numBins - 1; i >= 0; --i)
     {
-        energy += histogram[i] * airAbsorption.evaluate(x, band);
+        energy += histogram[i] * airAbsorption.evaluate(x * PropagationMedium::kSpeedOfSound, band);
         auto y = log10f(energy / totalEnergy);
 
         // Use least-squares fitting to fit a line to the EDC. We only consider points on the EDC
