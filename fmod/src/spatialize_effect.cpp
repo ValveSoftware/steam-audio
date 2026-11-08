@@ -463,6 +463,12 @@ void reset(FMOD_DSP_STATE* state)
     effect->prevReflectionsMixLevel = 0.0f;
     effect->prevPathingMixLevel = 0.0f;
 
+    // Until the first process call computes it (updateOverallGain), report the source as audible: FMOD Studio sets
+    // FMOD_INIT_VOL0_BECOMES_VIRTUAL, and an overall gain of 0 makes a new instance's channel virtual for its first
+    // mix block, which drops the start of a one-shot (#604).
+    effect->overallGain.linear_gain = 1.0f;
+    effect->overallGain.linear_gain_additive = 0.0f;
+
     effect->panningState = IPL_AUDIOEFFECTSTATE_TAILCOMPLETE;
     effect->binauralState = IPL_AUDIOEFFECTSTATE_TAILCOMPLETE;
     effect->directState = IPL_AUDIOEFFECTSTATE_TAILCOMPLETE;
