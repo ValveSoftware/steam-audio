@@ -110,6 +110,7 @@ EmbreeStaticMesh::~EmbreeStaticMesh()
 {
     if (auto scene = mScene.lock())
     {
+        rtcDetachGeometry(scene->scene(), mGeometryIndex);
         scene->releaseGeometryID(mGeometryIndex);
         rtcReleaseGeometry(mGeometry);
     }
