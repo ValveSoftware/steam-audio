@@ -29,6 +29,7 @@ add_executable(phonon_test
 	CoordinateSpace.test.cpp
 	DirectSimulator.test.cpp
 	EnergyField.test.cpp
+	HybridReverbEstimator.test.cpp
 	Error.test.cpp
 	FourierTransform.test.cpp
 	Hit.test.cpp

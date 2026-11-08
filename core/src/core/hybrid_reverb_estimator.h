@@ -38,6 +38,7 @@ public:
 
     void estimate(const EnergyField* energyField,
                   const Reverb& reverb,
+                  const AirAbsorptionModel& airAbsorption,
                   ImpulseResponse& impulseResponse,
                   float transitionTime,
                   float overlapFraction,

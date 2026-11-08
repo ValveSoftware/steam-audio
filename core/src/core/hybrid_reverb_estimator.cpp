@@ -109,6 +109,7 @@ void HybridReverbEstimator::estimateHybridEQFromIR(const ImpulseResponse& ir,
 
 void HybridReverbEstimator::estimate(const EnergyField* energyField,
                                      const Reverb& reverb,
+                                     const AirAbsorptionModel& airAbsorption,
                                      ImpulseResponse& impulseResponse,
                                      float transitionTime,
                                      float overlapFraction,
@@ -131,9 +132,10 @@ void HybridReverbEstimator::estimate(const EnergyField* energyField,
     if (energyField)
     {
         auto cutoffBin = static_cast<int>(ceilf(((1.0f - overlapFraction) * transitionTime) / EnergyField::kBinDuration));
+        auto distance = PropagationMedium::kSpeedOfSound * (cutoffBin + 0.5f) * EnergyField::kBinDuration;
         for (auto i = 0; i < Bands::kNumBands; ++i)
         {
-            eqCoeffs[i] = sqrtf(4.0f * Math::kPi * (*energyField)[0][i][cutoffBin]);
+            eqCoeffs[i] = sqrtf(4.0f * Math::kPi * (*energyField)[0][i][cutoffBin] * airAbsorption.evaluate(distance, i));
         }
     }
     else
