@@ -14,10 +14,25 @@
 // limitations under the License.
 //
 
+#include <vector>
+
 #include <catch.hpp>
 
 #include <sampling.h>
 
-TEST_CASE("Samples", "[Samples]")
+TEST_CASE("Any prefix of the sphere samples covers all azimuths", "[Samples]")
 {
+    // The reflection simulators generate maxNumRays samples and trace the first numRays.
+    std::vector<ipl::Vector3f> samples(8192);
+    ipl::Sampling::generateSphereSamples(8192, samples.data());
+
+    for (auto numRays : {16, 256, 2048})
+    {
+        int quadrants[4] = {};
+        for (auto i = 0; i < numRays; ++i)
+            quadrants[(samples[i].x() >= 0.0f ? 0 : 1) + (samples[i].z() >= 0.0f ? 0 : 2)]++;
+
+        for (auto count : quadrants)
+            REQUIRE(count > numRays / 8);
+    }
 }

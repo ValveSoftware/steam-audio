@@ -60,7 +60,7 @@ void Sampling::generateSphereSamples(int numSamples,
 {
     for (auto i = 0; i < numSamples; ++i)
     {
-        auto u = (i + 0.5f) / numSamples;
+        auto u = radicalInverse(3, i);
         auto v = hammersley(i);
 
         auto azimuth = 2.0f * Math::kPi * u;
