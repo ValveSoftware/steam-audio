@@ -59,6 +59,7 @@ EmbreeInstancedMesh::~EmbreeInstancedMesh()
 {
     if (auto scene = mScene.lock())
     {
+        rtcDetachGeometry(scene->scene(), mInstanceIndex);
         scene->releaseGeometryID(mInstanceIndex);
         rtcReleaseGeometry(mGeometry);
     }
