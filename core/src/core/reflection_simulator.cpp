@@ -495,7 +495,7 @@ bool ReflectionSimulator::shade(const IScene& scene,
         return false;
 
     auto hitToSourceDistance = hitToSource.length();
-    if (hitToSourceDistance <= mIrradianceMinDistance)
+    if (hitToSourceDistance <= Vector3f::kNearlyZero)
         return false;
 
     Ray shadowRay{ hitPoint, hitToSource / hitToSourceDistance };
@@ -1002,7 +1002,7 @@ void BatchedReflectionSimulator::shade(const IScene& scene,
         auto hitToSourceDistance = hitToSource.length();
 
         if (threadState.escaped[i - start] ||
-            hitToSourceDistance <= mIrradianceMinDistance ||
+            hitToSourceDistance <= Vector3f::kNearlyZero ||
             Vector3f::dot(threadState.hits[i - start].normal, hitToSource) < 0.0f)
         {
             threadState.shadowRays[i - start] = Ray{ Vector3f::kZero, Vector3f::kXAxis };
