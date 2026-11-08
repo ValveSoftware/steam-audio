@@ -476,7 +476,7 @@ inline bool shade(const uniform EmbreeScene& scene,
         return false;
 
     float hitToSourceDistance = length(hitToSource);
-    if (hitToSourceDistance <= simulator.irradianceMinDistance)
+    if (hitToSourceDistance <= 1e-5f)
         return false;
 
     float3 rayDirection = { ray.ray.dir_x, ray.ray.dir_y, ray.ray.dir_z };

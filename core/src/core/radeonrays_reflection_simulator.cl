@@ -413,7 +413,7 @@ kernel void shadeAndBounce(uint numSources,
     //  b) the hit point is too close to the source, or
     //  c) the ray hit a backfacing triangle.
     if (hitDistance <= LISTENER_RADIUS ||
-        hitToSourceDistance <= irradianceMinDistance ||
+        hitToSourceDistance <= 1e-5f ||
         dot(hitToSource.xyz, hitNormal) < 0.0f)
     {
         shadowRays[shadowRayIndex].extra = 0;
