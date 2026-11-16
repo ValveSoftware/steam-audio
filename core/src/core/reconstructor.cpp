@@ -108,26 +108,36 @@ void Reconstructor::reconstruct(int numIRs,
 
                     if (type == ReconstructionType::Linear)
                     {
-                        auto energy = 0.0f;
-                        if (fabsf(energyField[iChannel][iBand][iBin]) >= kEnergyThreshold && fabsf(energyField[0][iBand][iBin]) >= kEnergyThreshold)
+                        // The amplitude of a bin is placed at the middle of the bin (as the Gaussian reconstruction and the
+                        // air absorption do), and linearly interpolated towards the middle of the neighboring bins.
+                        auto binAmplitude = [&](int bin)
                         {
-                            energy = energyField[iChannel][iBand][iBin] / sqrtf(energyField[0][iBand][iBin] * sqrtf(4.0f * Math::kPi));
-                        }
+                            if (fabsf(energyField[iChannel][iBand][bin]) >= kEnergyThreshold && fabsf(energyField[0][iBand][bin]) >= kEnergyThreshold)
+                            {
+                                return energyField[iChannel][iBand][bin] / sqrtf(energyField[0][iBand][bin] * sqrtf(4.0f * Math::kPi));
+                            }
 
-                        auto prevEnergy = 0.0f;
-                        if (iBin == 0)
-                        {
-                            prevEnergy = energy;
-                        }
-                        else if (fabsf(energyField[iChannel][iBand][iBin - 1]) >= kEnergyThreshold && fabsf(energyField[0][iBand][iBin - 1]) >= kEnergyThreshold)
-                        {
-                            prevEnergy = energyField[iChannel][iBand][iBin - 1] / sqrtf(energyField[0][iBand][iBin - 1] * sqrtf(4.0f * Math::kPi));
-                        }
+                            return 0.0f;
+                        };
+
+                        auto energy = binAmplitude(iBin);
+                        auto prevEnergy = (iBin == 0) ? energy : binAmplitude(iBin - 1);
+                        auto nextEnergy = (iBin + 1 < energyField.numBins()) ? binAmplitude(iBin + 1) : energy;
 
                         for (auto iBinSample = 0, iSample = iBin * numSamplesPerBin; iBinSample < numBinSamples; ++iBinSample, ++iSample)
                         {
-                            auto weight = static_cast<float>(iBinSample) / static_cast<float>(numSamplesPerBin);
-                            auto sampleEnergy = (1.0f - weight) * prevEnergy + weight * energy;
+                            auto position = (static_cast<float>(iBinSample) + 0.5f) / static_cast<float>(numSamplesPerBin);
+                            auto sampleEnergy = 0.0f;
+                            if (position < 0.5f)
+                            {
+                                auto weight = position + 0.5f;
+                                sampleEnergy = (1.0f - weight) * prevEnergy + weight * energy;
+                            }
+                            else
+                            {
+                                auto weight = position - 0.5f;
+                                sampleEnergy = (1.0f - weight) * energy + weight * nextEnergy;
+                            }
 
                             mBandIRs[iBand][iSample] = sampleEnergy * mWhiteNoise[iBand][iSample];
                         }
