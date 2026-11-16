@@ -18,6 +18,9 @@
 
 #include "opencl_reconstructor.h"
 
+#include <functional>
+#include <random>
+
 #include "sh.h"
 #include "radeonrays_reflection_simulator.h"
 
@@ -51,13 +54,13 @@ OpenCLReconstructor::OpenCLReconstructor(shared_ptr<RadeonRaysDevice> radeonRays
     if (status != CL_SUCCESS)
         throw Exception(Status::Initialization);
 
+    // One generator shared by all bands, so that each band gets a different part of the sequence (see Reconstructor).
+    std::mt19937 randomGenerator;
+    std::uniform_real_distribution<float> uniformDistribution(-1.0f, 1.0f);
+    auto uniformRandom = std::bind(uniformDistribution, std::ref(randomGenerator));
+
     for (auto band = 0, i = 0; band < Bands::kNumBands; ++band)
     {
-        std::default_random_engine randomGenerator;
-        std::uniform_real_distribution<float> uniformDistribution(-1.0f, 1.0f);
-
-        auto uniformRandom = std::bind(uniformDistribution, randomGenerator);
-
         for (auto sample = 0; sample < mNumSamples; ++sample, ++i)
         {
             auto value = uniformRandom();

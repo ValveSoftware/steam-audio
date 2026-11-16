@@ -51,12 +51,16 @@ Reconstructor::Reconstructor(float maxDuration,
     , mBandIRs(Bands::kNumBands, static_cast<int>(ceilf(maxDuration * samplingRate)))
     , mFilters(Bands::kNumBands)
 {
+    // One generator shared by all bands, so that each band gets a different part of the sequence. The same noise in
+    // every band is summed coherently by the band filters, which leaves a dip of up to 7 dB around 800 Hz and 8 kHz,
+    // where adjacent bands overlap. std::mt19937 rather than std::default_random_engine, which is a different
+    // generator in each standard library (and with some of them, consecutive seeds give correlated sequences).
+    std::mt19937 randomGenerator;
+    std::uniform_real_distribution<float> uniformDistribution(-1.0f, 1.0f);
+    auto uniformRandom = std::bind(uniformDistribution, std::ref(randomGenerator));
+
     for (auto i = 0; i < Bands::kNumBands; ++i)
     {
-        std::default_random_engine randomGenerator;
-        std::uniform_real_distribution<float> uniformDistribution(-1.0f, 1.0f);
-        auto uniformRandom = std::bind(uniformDistribution, randomGenerator);
-
         for (auto j = 0u; j < mWhiteNoise.size(1); ++j)
         {
             mWhiteNoise[i][j] = uniformRandom();
