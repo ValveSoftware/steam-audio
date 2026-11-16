@@ -99,7 +99,9 @@ void OverlapSavePartitioner::partition(const ImpulseResponse& ir,
             if (numSamplesToCopy <= 0)
                 break;
 
+            // The temporary block is reused: clear what a previous, fuller block left past the end of this one.
             memcpy(mTempIRBlock.data(), &ir[i][j * mFrameSize], numSamplesToCopy * sizeof(float));
+            memset(mTempIRBlock.data() + numSamplesToCopy, 0, (mFrameSize - numSamplesToCopy) * sizeof(float));
             mFFT.applyForward(mTempIRBlock.data(), fftIR[i][j]);
         }
     }
