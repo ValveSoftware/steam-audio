@@ -16,6 +16,7 @@
 
 #include "array_math.h"
 #include "hybrid_reverb_effect.h"
+#include "hybrid_reverb_estimator.h"
 #include "sh.h"
 #include "profiler.h"
 
@@ -80,12 +81,9 @@ AudioEffectState HybridReverbEffect::apply(const HybridReverbEffectDirectParams&
     }
 
     float _eqCoeffs[Bands::kNumBands];
-    for (auto i = 0; i < Bands::kNumBands; ++i)
-    {
-        _eqCoeffs[i] = params.eqCoeffs[i];
-    }
+    HybridReverbEstimator::calcTailGains(mParametricEffect, params.eqCoeffs, params.reverb->reverbTimes, _eqCoeffs);
 
-    auto gain = 16.0f;
+    auto gain = 1.0f;
     EQEffect::normalizeGains(_eqCoeffs, gain);
 
     DelayEffectParams delayParams{};
@@ -152,12 +150,9 @@ AudioEffectState HybridReverbEffect::apply(const HybridReverbEffectParams& param
     }
 
     float _eqCoeffs[Bands::kNumBands];
-    for (auto i = 0; i < Bands::kNumBands; ++i)
-    {
-        _eqCoeffs[i] = params.eqCoeffs[i];
-    }
+    HybridReverbEstimator::calcTailGains(mParametricEffect, params.eqCoeffs, params.reverb->reverbTimes, _eqCoeffs);
 
-    auto gain = 16.0f;
+    auto gain = 1.0f;
     EQEffect::normalizeGains(_eqCoeffs, gain);
 
     DelayEffectParams delayParams{};

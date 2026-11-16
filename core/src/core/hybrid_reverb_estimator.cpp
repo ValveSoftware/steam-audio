@@ -19,6 +19,7 @@
 #include "array_math.h"
 #include "profiler.h"
 #include "propagation_medium.h"
+#include "reconstructor.h"
 #include "sh.h"
 
 namespace ipl {
@@ -104,6 +105,29 @@ void HybridReverbEstimator::estimateHybridEQFromIR(const ImpulseResponse& ir,
     for (int i = 0; i < Bands::kNumBands; ++i)
     {
         eq[i] = sqrtf(eq[i]);
+    }
+}
+
+void HybridReverbEstimator::calcTailGains(const ReverbEffect& reverbEffect,
+                                          const float* eqCoeffs,
+                                          const float* reverbTimes,
+                                          float* gains)
+{
+    // An impulse response is reconstructed from noise of variance kNoiseVariance, scaled by sqrt(E / sqrt(4 pi)) for an
+    // energy E in the energy field (Reconstructor::reconstruct). The coefficients are sqrt(4 pi E), so at the transition
+    // the response has a root mean square of eq * sigma / (4 pi)^(3/4). The output of the reverb goes to the omni channel,
+    // after a factor of Y00.
+    auto rms = sqrtf(IReconstructor::kNoiseVariance) / powf(4.0f * Math::kPi, 0.75f);
+    auto omni = SphericalHarmonics::evaluate(0, 0, Vector3f{});
+
+    // The reverb has its own level: the power that its response starts with, which depends on its delay lines and on the
+    // reverb times (tone correction).
+    float onsetPower[Bands::kNumBands];
+    reverbEffect.calcOnsetPower(reverbTimes, onsetPower);
+
+    for (auto i = 0; i < Bands::kNumBands; ++i)
+    {
+        gains[i] = eqCoeffs[i] * rms / (omni * sqrtf(onsetPower[i]));
     }
 }
 
@@ -197,12 +221,9 @@ void HybridReverbEstimator::calcReverbIR(int numSamples,
     }
 
     float _eqCoeffs[Bands::kNumBands];
-    for (auto i = 0; i < Bands::kNumBands; ++i)
-    {
-        _eqCoeffs[i] = eqCoeffs[i];
-    }
+    calcTailGains(mReverbEffect, eqCoeffs, reverbTimes, _eqCoeffs);
 
-    auto overallGain = 16.0f * SphericalHarmonics::evaluate(0, 0, Vector3f{});
+    auto overallGain = SphericalHarmonics::evaluate(0, 0, Vector3f{});
     EQEffect::normalizeGains(_eqCoeffs, overallGain);
 
     Reverb reverb;

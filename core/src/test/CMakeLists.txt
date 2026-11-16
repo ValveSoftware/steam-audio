@@ -33,6 +33,7 @@ add_executable(phonon_test
 	FourierTransform.test.cpp
 	Hit.test.cpp
 	HRTFDatabase.test.cpp
+	HybridReverbTail.test.cpp
 	IirFilter.test.cpp
 	ImpulseResponse.test.cpp
 	Log.test.cpp

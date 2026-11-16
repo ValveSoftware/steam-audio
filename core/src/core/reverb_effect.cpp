@@ -299,6 +299,36 @@ void ReverbEffect::tail_float4(float* out)
     }
 }
 
+void ReverbEffect::calcOnsetPower(const float* reverbTimes,
+                                  float* power) const
+{
+    // The impulse enters each of the delay lines, so kNumDelays units of energy circulate. A line gives back the energy
+    // it holds once per its length, and the output is the mean of the lines. This is approximate: it fits the
+    // power of the response over its first 0.4 s or so, except that the response is sparse in the first 50 ms and
+    // about 1.5 dB hotter later.
+    auto sum = 0.0f;
+    for (auto i = 0; i < kNumDelays; ++i)
+    {
+        sum += 1.0f / mDelayValues[i];
+    }
+
+    auto onsetPower = sum / (kNumDelays * kNumDelays);
+
+    float clampedReverbTimes[Bands::kNumBands];
+    for (auto i = 0; i < Bands::kNumBands; ++i)
+    {
+        clampedReverbTimes[i] = std::max(0.1f, reverbTimes[i]);
+    }
+
+    float toneCorrectionGains[Bands::kNumBands];
+    calcToneCorrectionGains(clampedReverbTimes, toneCorrectionGains);
+
+    for (auto i = 0; i < Bands::kNumBands; ++i)
+    {
+        power[i] = onsetPower * toneCorrectionGains[i] * toneCorrectionGains[i];
+    }
+}
+
 void ReverbEffect::calcDelaysForReverbTime(float reverbTime)
 {
     int const primes[kNumDelays] = {2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53};
@@ -327,7 +357,7 @@ void ReverbEffect::calcAbsorptiveGains(const float* reverbTimes,
 }
 
 void ReverbEffect::calcToneCorrectionGains(const float* reverbTimes,
-                                           float* gains)
+                                           float* gains) const
 {
     for (auto i = 0; i < Bands::kNumBands; ++i)
     {

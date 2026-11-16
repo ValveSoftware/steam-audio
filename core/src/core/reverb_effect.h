@@ -53,6 +53,11 @@ public:
 
     int numTailSamplesRemaining() const { return mNumTailFramesRemaining * mFrameSize; }
 
+    // Power per sample, in each band, of the response to a unit impulse at the input, at the time it becomes dense and
+    // before it decays (the decay is that of the reverb times).
+    void calcOnsetPower(const float* reverbTimes,
+                        float* power) const;
+
 private:
     static constexpr int kNumDelays = 16;
     static constexpr int kNumAllpasses = 4;
@@ -85,7 +90,7 @@ private:
                              float* gains);
 
     void calcToneCorrectionGains(const float* reverbTimes,
-                                 float* gains);
+                                 float* gains) const;
 
     void apply_float4(const float* reverbTimes,
                       const float* in,

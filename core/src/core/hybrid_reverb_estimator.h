@@ -36,6 +36,13 @@ public:
                           int samplingRate,
                           int frameSize);
 
+    // Gain, per band, for the input of the parametric tail, so that the response of the tail starts at the level that
+    // the reconstructed impulse response has at the transition. eqCoeffs are the coefficients that estimate() returns.
+    static void calcTailGains(const ReverbEffect& reverbEffect,
+                              const float* eqCoeffs,
+                              const float* reverbTimes,
+                              float* gains);
+
     void estimate(const EnergyField* energyField,
                   const Reverb& reverb,
                   ImpulseResponse& impulseResponse,
