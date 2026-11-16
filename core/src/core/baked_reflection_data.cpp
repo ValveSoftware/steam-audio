@@ -209,7 +209,7 @@ void BakedReflectionsData::evaluateEnergyField(const ProbeNeighborhood& neighbor
         if (!neighborhood.batches[i] || neighborhood.probeIndices[i] < 0)
             continue;
 
-        if (neighborhood.batches[i]->hasData(mIdentifier) && &(*neighborhood.batches[i])[mIdentifier] != this)
+        if (!neighborhood.batches[i]->hasData(mIdentifier) || &(*neighborhood.batches[i])[mIdentifier] != this)
             continue;
 
         auto* probeEnergyField = lookupEnergyField(neighborhood.probeIndices[i]);
@@ -227,7 +227,7 @@ void BakedReflectionsData::evaluateReverb(const ProbeNeighborhood& neighborhood,
         if (!neighborhood.batches[i] || neighborhood.probeIndices[i] < 0)
             continue;
 
-        if (neighborhood.batches[i]->hasData(mIdentifier) && &(*neighborhood.batches[i])[mIdentifier] != this)
+        if (!neighborhood.batches[i]->hasData(mIdentifier) || &(*neighborhood.batches[i])[mIdentifier] != this)
             continue;
 
         auto* probeReverb = lookupReverb(neighborhood.probeIndices[i]);
