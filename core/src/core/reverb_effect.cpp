@@ -27,6 +27,8 @@ namespace ipl {
 // ReverbEffect
 // --------------------------------------------------------------------------------------------------------------------
 
+const int ReverbEffect::kAllpassDelays[ReverbEffect::kNumAllpasses] = {225, 341, 441, 556};
+
 ReverbEffect::ReverbEffect(const AudioSettings& audioSettings)
     : mSamplingRate(audioSettings.samplingRate)
     , mFrameSize(audioSettings.frameSize)
@@ -45,10 +47,10 @@ ReverbEffect::ReverbEffect(const AudioSettings& audioSettings)
         mDelayLines[i].resize(mDelayValues[i], audioSettings.frameSize);
     }
 
-    mAllpass[0].resize(225, 0.5f, 0);
-    mAllpass[1].resize(341, 0.5f, 0);
-    mAllpass[2].resize(441, 0.5f, 0);
-    mAllpass[3].resize(556, 0.5f, 0);
+    for (auto i = 0; i < kNumAllpasses; ++i)
+    {
+        mAllpass[i].resize(kAllpassDelays[i], 0.5f, 0);
+    }
 
     mXOld.resize(kNumDelays, audioSettings.frameSize);
     mXNew.resize(kNumDelays, audioSettings.frameSize);
@@ -303,9 +305,8 @@ void ReverbEffect::calcOnsetPower(const float* reverbTimes,
                                   float* power) const
 {
     // The impulse enters each of the delay lines, so kNumDelays units of energy circulate. A line gives back the energy
-    // it holds once per its length, and the output is the mean of the lines. This is approximate: it fits the
-    // power of the response over its first 0.4 s or so, except that the response is sparse in the first 50 ms and
-    // about 1.5 dB hotter later.
+    // it holds once per its length, and the output is the mean of the lines. This is approximate: the response is
+    // sparse in its first 50 ms or so, and within about 1 dB of this later.
     auto sum = 0.0f;
     for (auto i = 0; i < kNumDelays; ++i)
     {
@@ -323,9 +324,18 @@ void ReverbEffect::calcOnsetPower(const float* reverbTimes,
     float toneCorrectionGains[Bands::kNumBands];
     calcToneCorrectionGains(clampedReverbTimes, toneCorrectionGains);
 
+    // The output then goes through the allpass filters, which delay its energy by the sum of their delays, so the
+    // response decays from that much later.
+    auto allpassDelay = 0;
+    for (auto i = 0; i < kNumAllpasses; ++i)
+    {
+        allpassDelay += kAllpassDelays[i];
+    }
+
     for (auto i = 0; i < Bands::kNumBands; ++i)
     {
-        power[i] = onsetPower * toneCorrectionGains[i] * toneCorrectionGains[i];
+        auto allpassDecay = expf(-(2.0f * 6.91f * allpassDelay) / (clampedReverbTimes[i] * mSamplingRate));
+        power[i] = onsetPower * toneCorrectionGains[i] * toneCorrectionGains[i] / allpassDecay;
     }
 }
 

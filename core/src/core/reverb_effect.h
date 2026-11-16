@@ -62,6 +62,7 @@ private:
     static constexpr int kNumDelays = 16;
     static constexpr int kNumAllpasses = 4;
     static constexpr float kToneCorrectionWeight = 0.5f;
+    static const int kAllpassDelays[kNumAllpasses];
 
     int mSamplingRate;
     int mFrameSize;
