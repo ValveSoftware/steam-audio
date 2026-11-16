@@ -429,27 +429,7 @@ inline bool tracePath(const uniform EmbreeScene& scene,
     int materialIndex = scene.materialIndicesForGeometry[geomID][ray.hit.primID];
     hitMaterial = scene.materialsForGeometry[geomID][materialIndex];
 
-    if (bounce > 0)
-    {
-        uniform float3 L = { simulator.listener->origin.x, simulator.listener->origin.y, simulator.listener->origin.z };
-
-        for (uniform int i = 0; i < simulator.numSources; ++i)
-        {
-            uniform float3 S = { simulator.sources[i].origin.x, simulator.sources[i].origin.y, simulator.sources[i].origin.z };
-            uniform float3 SL = L - S;
-            if (length(SL) > SOURCE_RADIUS)
-            {
-                float sourceHitDistance = raySphereIntersect(ray.ray, simulator.sources[i].origin, SOURCE_RADIUS);
-                if (0.0f <= sourceHitDistance && sourceHitDistance < ray.ray.tfar)
-                    return false;
-            }
-        }
-
-        float listenerHitDistance = raySphereIntersect(ray.ray, simulator.listener->origin, LISTENER_RADIUS);
-        if (0.0f <= listenerHitDistance && listenerHitDistance < ray.ray.tfar)
-            return false;
-    }
-
+    // A path that crosses the source or the listener keeps going: neither of them absorbs sound.
     return true;
 }
 

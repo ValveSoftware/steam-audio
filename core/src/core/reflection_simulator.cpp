@@ -454,25 +454,7 @@ bool ReflectionSimulator::trace(const IScene& scene,
 
     hitPoint = ray.pointAtDistance(hit.distance) + (kHitSurfaceOffset * hit.normal);
 
-    const auto& listener = *mListener;
-
-    if (bounce > 0)
-    {
-        for (auto i = 0; i < mNumSources; ++i)
-        {
-            if ((listener.origin - mSources[i].origin).length() > kSourceRadius)
-            {
-                auto sourceHitDistance = ray.intersect(Sphere(mSources[i].origin, kSourceRadius));
-                if (0.0f <= sourceHitDistance && sourceHitDistance < hit.distance)
-                    return false;
-            }
-        }
-
-        auto listenerHitDistance = ray.intersect(Sphere(listener.origin, kListenerRadius));
-        if (0.0f <= listenerHitDistance && listenerHitDistance < hit.distance)
-            return false;
-    }
-
+    // A path that crosses the source or the listener keeps going: neither of them absorbs sound.
     return true;
 }
 
@@ -965,23 +947,7 @@ bool BatchedReflectionSimulator::escaped(const IScene& scene,
     if (hit.distance <= kListenerRadius)
         return true;
 
-    if (bounce > 0)
-    {
-        for (auto i = 0; i < mNumSources; ++i)
-        {
-            if ((mListener->origin - mSources[i].origin).length() > kSourceRadius)
-            {
-                auto sourceHitDistance = ray.intersect(Sphere(mSources[i].origin, kSourceRadius));
-                if (0.0f <= sourceHitDistance && sourceHitDistance < hit.distance)
-                    return true;
-            }
-        }
-
-        auto listenerHitDistance = ray.intersect(Sphere(mListener->origin, kListenerRadius));
-        if (0.0f <= listenerHitDistance && listenerHitDistance < hit.distance)
-            return true;
-    }
-
+    // A path that crosses the source or the listener keeps going: neither of them absorbs sound.
     return false;
 }
 
