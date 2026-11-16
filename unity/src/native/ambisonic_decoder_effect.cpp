@@ -306,15 +306,8 @@ UNITY_AUDIODSP_RESULT UNITY_AUDIODSP_CALLBACK process(UnityAudioEffectState* sta
 
     remapAmbisonicsToOutChannels(numSamples, state->ambisonicdata->ambisonicOutChannels, numChannelsOut, effect->outBuffer.data, out);
 
-    // Normalize the output so that an Ambisonics order 0 clip with peak magnitude 1 is comparable to an
-    // unspatialized mono clip of peak magnitude 1.
-    const auto kPi = 3.141592f;
-    auto scalar = 1.0f / sqrtf(4.0f * kPi);
-
-    for (auto i = 0u; i < numSamples * numChannelsOut; ++i)
-    {
-        out[i] *= scalar;
-    }
+    // No extra normalization: the SN3D to N3D conversion above already gives an Ambisonics order 0 clip with peak
+    // magnitude 1 the level of an unspatialized mono clip of peak magnitude 1.
 
     return UNITY_AUDIODSP_OK;
 }
