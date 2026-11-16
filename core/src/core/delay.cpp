@@ -185,8 +185,6 @@ void Allpass::resize(int delay,
 void Allpass::reset()
 {
     mDelay.reset();
-    mB0 = 0.0f;
-    mAm = 0.0f;
 }
 
 float Allpass::apply(float x)
