@@ -160,8 +160,8 @@ void Reconstructor::reconstruct(int numIRs,
                         assert(Math::isFinite(normalization));
                     }
 
-                    // 0.5 is for sqrt
-                    normalization *= airAbsorptionModels[i].evaluate(0.5f * PropagationMedium::kSpeedOfSound * ((iBin + 0.5f) * numSamplesPerBin * (1.0f / mSamplingRate)), iBand);
+                    // The air absorption model gives an amplitude gain, like the normalization.
+                    normalization *= airAbsorptionModels[i].evaluate(PropagationMedium::kSpeedOfSound * ((iBin + 0.5f) * numSamplesPerBin * (1.0f / mSamplingRate)), iBand);
 
                     auto iSample = iBin * numSamplesPerBin;
                     ArrayMath::scale(numBinSamples, &mBandIRs[iBand][iSample], normalization, &mBandIRs[iBand][iSample]);

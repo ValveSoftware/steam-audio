@@ -20,6 +20,7 @@ include(SteamAudioHelpers)
 
 add_executable(phonon_test
 	test.cpp
+	AirAbsorption.test.cpp
 	Array.test.cpp
 	AudioBuffer.test.cpp
 	Bands.test.cpp

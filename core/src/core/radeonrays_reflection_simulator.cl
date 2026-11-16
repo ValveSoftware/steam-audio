@@ -704,7 +704,7 @@ kernel void reconstructImpulseResponse(global int* energy,
 
         float normalization = e / sqrt(e0 * sqrt(4.0f * PI));
 
-        normalization *= exp(-0.5f * airAbsorption[band] * SPEED_OF_SOUND * ((bin + 0.5f) * samplesPerBin * (1.0f / samplingRate)));
+        normalization *= exp(-airAbsorption[band] * SPEED_OF_SOUND * ((bin + 0.5f) * samplesPerBin * (1.0f / samplingRate)));
 
         for (int i = 0; i < samplesPerBin; ++i)
         {
