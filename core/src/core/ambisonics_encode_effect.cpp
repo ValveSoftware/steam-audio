@@ -60,7 +60,7 @@ AudioEffectState AmbisonicsEncodeEffect::apply(const AmbisonicsEncodeEffectParam
             for (auto j = 0; j < in.numSamples(); ++j)
             {
                 // Crossfade between the coefficients for the previous frame and the current frame.
-                auto alpha = static_cast<float>(i) / static_cast<float>(in.numSamples());
+                auto alpha = static_cast<float>(j) / static_cast<float>(in.numSamples());
                 auto blendedWeight = alpha * weight + (1.0f - alpha) * weightPrev;
 
                 out[i][j] = blendedWeight * in[0][j];
