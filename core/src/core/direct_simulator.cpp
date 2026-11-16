@@ -24,7 +24,7 @@ namespace ipl {
 
 DirectSimulator::DirectSimulator(int maxNumOcclusionSamples)
 {
-    if (maxNumOcclusionSamples > 1)
+    if (maxNumOcclusionSamples > 0)
     {
         mSphereVolumeSamples.resize(maxNumOcclusionSamples);
         Sampling::generateSphereVolumeSamples(maxNumOcclusionSamples, mSphereVolumeSamples.data());
