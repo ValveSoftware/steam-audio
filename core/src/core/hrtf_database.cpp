@@ -56,13 +56,23 @@ HRTFDatabase::HRTFDatabase(const HRTFSettings& hrtfSettings,
     extractPeakDelays();
     decomposeToMagnitudePhase(mHRTFMap->hrtfData(), mHRTFMagnitude, mHRTFPhase);
 
-    const auto& ambisonicsHRIR = mHRTFMap->ambisonicsData();
-    if (ambisonicsHRIR.totalSize() == 0)
+    // The Ambisonics HRIRs that come with the HRTF data were projected from the HRIRs before any volume or
+    // normalization was applied. A volume is a single gain, so it can be applied to them directly; RMS normalization
+    // is a different gain for each direction, so in that case the Ambisonics HRIRs are projected again from the
+    // normalized HRIRs, as for HRTF data without Ambisonics HRIRs.
+    auto& ambisonicsHRIR = mHRTFMap->ambisonicsData();
+    if (ambisonicsHRIR.totalSize() == 0 || hrtfSettings.normType != HRTFNormType::None)
     {
         precomputeAmbisonicsHRTFs(samplingRate, frameSize);
     }
     else
     {
+        if (hrtfSettings.volume != 0.0f)
+        {
+            auto gain = Loudness::dBToGain(hrtfSettings.volume);
+            ArrayMath::scale(static_cast<int>(ambisonicsHRIR.totalSize()), ambisonicsHRIR.flatData(), gain, ambisonicsHRIR.flatData());
+        }
+
         fourierTransformHRIRs(ambisonicsHRIR, mAmbisonicsHRTF);
     }
 }
