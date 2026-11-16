@@ -22,6 +22,7 @@
 #define IPL_MAX_NUM_BANDS       32
 #define IPL_HIT_SURFACE_OFFSET  1e-2f
 #define IPL_SPECULAR_POWER      1e2f
+#define IPL_MIN_SPECULAR_COSINE 0.1f
 #define IPL_BIN_DURATION        1e-2f
 
 #define SOURCE_RADIUS   0.1f
@@ -494,7 +495,9 @@ inline bool shade(const uniform EmbreeScene& scene,
 
     float diffuseTerm = (1.0f / PI) * hitMaterial.scattering * max(dot(hitNormal, shadowRayDirection), 0.0f);
     float3 halfVector = normalized((shadowRayDirection - rayDirection) * 0.5f);
-    float specularTerm = ((IPL_SPECULAR_POWER + 2.0f) / (8.0f * PI)) * (1.0f - hitMaterial.scattering) * pow(dot(halfVector, hitNormal), IPL_SPECULAR_POWER);
+    // The half-vector lobe integrates to cos(theta) over the incident directions (theta is the angle of incidence), so
+    // divide that out to make a specular reflection return all the energy that the surface does not absorb.
+    float specularTerm = ((IPL_SPECULAR_POWER + 2.0f) / (8.0f * PI)) * (1.0f - hitMaterial.scattering) * pow(dot(halfVector, hitNormal), IPL_SPECULAR_POWER) / max(-dot(rayDirection, hitNormal), IPL_MIN_SPECULAR_COSINE);
     float attenuation = 1.0f / max(hitToSourceDistance, simulator.irradianceMinDistance);
     float distanceTerm = (1.0f / (4.0f * PI)) * (attenuation * attenuation);
     float directivityTerm = evaluateDirectivity(hitPoint, simulator.sources[sourceIndex], simulator.directivities[sourceIndex]);

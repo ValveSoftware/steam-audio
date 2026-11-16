@@ -86,6 +86,7 @@ public:
 
     static const float kHitSurfaceOffset;
     static const float kSpecularExponent;
+    static const float kMinSpecularCosine;
     static const float kSourceRadius;
     static const float kListenerRadius;
 };

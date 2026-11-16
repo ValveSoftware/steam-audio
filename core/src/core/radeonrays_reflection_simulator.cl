@@ -428,7 +428,7 @@ kernel void shadeAndBounce(uint numSources,
 
         // Calculate shading values.
         float3 energy = (1.0f / PI) * hitMaterial.scattering * max(0.0f, dot(hitNormal, hitToSource.xyz));
-        energy += ((SPECULAR_EXPONENT + 2.0f) / (8.0f * PI)) * (1.0f - hitMaterial.scattering) * pow(fabs(dot(normalize(hitToSource.xyz - rayDirection), hitNormal)), SPECULAR_EXPONENT);
+        energy += ((SPECULAR_EXPONENT + 2.0f) / (8.0f * PI)) * (1.0f - hitMaterial.scattering) * pow(fabs(dot(normalize(hitToSource.xyz - rayDirection), hitNormal)), SPECULAR_EXPONENT) / max(-dot(rayDirection, hitNormal), 0.1f);
         energy *= scalar;
         energy *= evaluateDirectivity(hitPoint, sources[sourceIndex], directivities[sourceIndex]);
         energy *= pointSourceIrradiance(hitToSourceDistance, irradianceMinDistance);

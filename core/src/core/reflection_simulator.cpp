@@ -29,6 +29,7 @@ namespace ipl {
 
 const float IReflectionSimulator::kHitSurfaceOffset = 1e-2f;
 const float IReflectionSimulator::kSpecularExponent = 1e2f;
+const float IReflectionSimulator::kMinSpecularCosine = 0.1f;
 const float IReflectionSimulator::kSourceRadius = 0.1f;
 const float IReflectionSimulator::kListenerRadius = 0.1f;
 
@@ -504,7 +505,9 @@ bool ReflectionSimulator::shade(const IScene& scene,
 
     auto diffuseTerm = (1.0f / Math::kPi) * hit.material->scattering * std::max(Vector3f::dot(hit.normal, shadowRay.direction), 0.0f);
     auto halfVector = Vector3f::unitVector((shadowRay.direction - ray.direction) * 0.5f);
-    auto specularTerm = ((kSpecularExponent + 2.0f) / (8.0f * Math::kPi)) * (1.0f - hit.material->scattering) * powf(Vector3f::dot(halfVector, hit.normal), kSpecularExponent);
+    // The half-vector lobe integrates to cos(theta) over the incident directions (theta is the angle of incidence), so
+    // divide that out to make a specular reflection return all the energy that the surface does not absorb.
+    auto specularTerm = ((kSpecularExponent + 2.0f) / (8.0f * Math::kPi)) * (1.0f - hit.material->scattering) * powf(Vector3f::dot(halfVector, hit.normal), kSpecularExponent) / std::max(-Vector3f::dot(ray.direction, hit.normal), kMinSpecularCosine);
     auto attenuation = 1.0f / std::max(hitToSourceDistance, mIrradianceMinDistance);
     auto distanceTerm = (1.0f / (4.0f * Math::kPi)) * (attenuation * attenuation);
     auto directivityTerm = mDirectivities[sourceIndex].evaluateAt(hitPoint, mSources[sourceIndex]);
@@ -1026,7 +1029,9 @@ void BatchedReflectionSimulator::shade(const IScene& scene,
 
         auto diffuseTerm = (1.0f / Math::kPi) * threadState.hits[i - start].material->scattering * std::max(Vector3f::dot(threadState.hits[i - start].normal, threadState.shadowRays[i - start].direction), 0.0f);
         auto halfVector = Vector3f::unitVector((threadState.shadowRays[i - start].direction - threadState.rays[i - start].direction) * 0.5f);
-        auto specularTerm = ((kSpecularExponent + 2.0f) / (8.0f * Math::kPi)) * (1.0f - threadState.hits[i - start].material->scattering) * powf(Vector3f::dot(halfVector, threadState.hits[i - start].normal), kSpecularExponent);
+        // The half-vector lobe integrates to cos(theta) over the incident directions (theta is the angle of incidence),
+        // so divide that out to make a specular reflection return all the energy that the surface does not absorb.
+        auto specularTerm = ((kSpecularExponent + 2.0f) / (8.0f * Math::kPi)) * (1.0f - threadState.hits[i - start].material->scattering) * powf(Vector3f::dot(halfVector, threadState.hits[i - start].normal), kSpecularExponent) / std::max(-Vector3f::dot(threadState.rays[i - start].direction, threadState.hits[i - start].normal), kMinSpecularCosine);
         auto attenuation = 1.0f / std::max(threadState.shadowRayMaxDistances[i - start], mIrradianceMinDistance);
         auto distanceTerm = (1.0f / (4.0f * Math::kPi)) * (attenuation * attenuation);
         auto directivityTerm = mDirectivities[sourceIndex].evaluateAt(threadState.hitPoints[i - start], mSources[sourceIndex]);
