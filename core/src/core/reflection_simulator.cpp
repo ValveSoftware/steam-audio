@@ -444,7 +444,9 @@ bool ReflectionSimulator::trace(const IScene& scene,
     if (accumDistance > mDuration * PropagationMedium::kSpeedOfSound)
         return false;
 
-    if (hit.distance <= kListenerRadius)
+    // Only the first segment starts at the listener; later segments start at a surface, where a nearby hit (in a
+    // corner, say) is perfectly valid.
+    if (bounce == 0 && hit.distance <= kListenerRadius)
         return false;
 
     if (Vector3f::dot(hit.normal, ray.direction) > 0.0f)
@@ -962,7 +964,9 @@ bool BatchedReflectionSimulator::escaped(const IScene& scene,
     if (accumDistance > mDuration * PropagationMedium::kSpeedOfSound)
         return true;
 
-    if (hit.distance <= kListenerRadius)
+    // Only the first segment starts at the listener; later segments start at a surface, where a nearby hit (in a
+    // corner, say) is perfectly valid.
+    if (bounce == 0 && hit.distance <= kListenerRadius)
         return true;
 
     if (bounce > 0)

@@ -410,7 +410,9 @@ inline bool tracePath(const uniform EmbreeScene& scene,
     if (accumDistance > simulator.duration * simulator.speedOfSound)
         return false;
 
-    if (ray.ray.tfar < LISTENER_RADIUS)
+    // Only the first segment starts at the listener; later segments start at a surface, where a nearby hit (in a
+    // corner, say) is perfectly valid.
+    if (bounce == 0 && ray.ray.tfar < LISTENER_RADIUS)
         return false;
 
     float3 rayOrigin = { ray.ray.org_x, ray.ray.org_y, ray.ray.org_z };
