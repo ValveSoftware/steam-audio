@@ -351,6 +351,7 @@ struct EmbreeScene
     RTCScene scene;
     const Material* const* materialsForGeometry;
     const int* const* materialIndicesForGeometry;
+    const float* normalTransformsForGeometry;
 };
 
 // --------------------------------------------------------------------------------------------------------------------
@@ -416,16 +417,24 @@ inline bool tracePath(const uniform EmbreeScene& scene,
     float3 rayOrigin = { ray.ray.org_x, ray.ray.org_y, ray.ray.org_z };
     float3 rayDirection = { ray.ray.dir_x, ray.ray.dir_y, ray.ray.dir_z };
 
+    int geomID = (ray.hit.instID[0] == RTC_INVALID_GEOMETRY_ID) ? ray.hit.geomID : ray.hit.instID[0];
+
     hitNormal.x = ray.hit.Ng_x;
     hitNormal.y = ray.hit.Ng_y;
     hitNormal.z = ray.hit.Ng_z;
+    if (ray.hit.instID[0] != RTC_INVALID_GEOMETRY_ID)
+    {
+        // Embree reports the normal in the object space of the instanced mesh.
+        float3 objectNormal = hitNormal;
+        hitNormal.x = scene.normalTransformsForGeometry[9 * geomID + 0] * objectNormal.x + scene.normalTransformsForGeometry[9 * geomID + 1] * objectNormal.y + scene.normalTransformsForGeometry[9 * geomID + 2] * objectNormal.z;
+        hitNormal.y = scene.normalTransformsForGeometry[9 * geomID + 3] * objectNormal.x + scene.normalTransformsForGeometry[9 * geomID + 4] * objectNormal.y + scene.normalTransformsForGeometry[9 * geomID + 5] * objectNormal.z;
+        hitNormal.z = scene.normalTransformsForGeometry[9 * geomID + 6] * objectNormal.x + scene.normalTransformsForGeometry[9 * geomID + 7] * objectNormal.y + scene.normalTransformsForGeometry[9 * geomID + 8] * objectNormal.z;
+    }
     hitNormal = normalized(hitNormal);
     if (dot(hitNormal, rayDirection) > 0.0f)
         hitNormal *= -1.0f;
 
     hitPoint = rayOrigin + (ray.ray.tfar * rayDirection) + (IPL_HIT_SURFACE_OFFSET * hitNormal);
-
-    int geomID = (ray.hit.instID[0] == RTC_INVALID_GEOMETRY_ID) ? ray.hit.geomID : ray.hit.instID[0];
     int materialIndex = scene.materialIndicesForGeometry[geomID][ray.hit.primID];
     hitMaterial = scene.materialsForGeometry[geomID][materialIndex];
 

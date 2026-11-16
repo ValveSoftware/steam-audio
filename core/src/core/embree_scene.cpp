@@ -187,6 +187,7 @@ void EmbreeScene::commit()
     mMaterialsForGeometry.resize(maxID + 1);
     mISPCMaterialsForGeometry.resize(maxID + 1);
     mMaterialIndicesForGeometry.resize(maxID + 1);
+    mNormalTransformsForGeometry.assign(9 * (maxID + 1), 0.0f);
 
     for (const auto& staticMesh : mStaticMeshes[0])
     {
@@ -202,6 +203,9 @@ void EmbreeScene::commit()
         mMaterialsForGeometry[index] = embreeStaticMesh->materials();
         mISPCMaterialsForGeometry[index] = embreeStaticMesh->ispcMaterials();
         mMaterialIndicesForGeometry[index] = embreeStaticMesh->materialIndices();
+
+        auto* normalTransform = &mNormalTransformsForGeometry[9 * index];
+        normalTransform[0] = normalTransform[4] = normalTransform[8] = 1.0f;
     }
 
     for (const auto& instancedMesh : mInstancedMeshes[0])
@@ -215,6 +219,27 @@ void EmbreeScene::commit()
         mMaterialsForGeometry[index] = embreeStaticMesh->materials();
         mISPCMaterialsForGeometry[index] = embreeStaticMesh->ispcMaterials();
         mMaterialIndicesForGeometry[index] = embreeStaticMesh->materialIndices();
+
+        // Normals transform with the inverse transpose of the instance transform, which is (up to a scale) the
+        // cofactor matrix of its upper-left 3x3 block. The columns of that block are the images of the axes, and the
+        // columns of its cofactor matrix are the cross products of the other two.
+        const auto& transform = embreeInstancedMesh->transform();
+        Vector3f c[3];
+        for (auto j = 0; j < 3; ++j)
+        {
+            c[j] = Vector3f(transform(0, j), transform(1, j), transform(2, j));
+        }
+
+        const Vector3f cofactors[3] = { Vector3f::cross(c[1], c[2]), Vector3f::cross(c[2], c[0]), Vector3f::cross(c[0], c[1]) };
+
+        auto* normalTransform = &mNormalTransformsForGeometry[9 * index];
+        for (auto row = 0; row < 3; ++row)
+        {
+            for (auto col = 0; col < 3; ++col)
+            {
+                normalTransform[3 * row + col] = cofactors[col].elements[row];
+            }
+        }
     }
 
     // The scene will be considered unchanged until something is changed subsequently.
@@ -273,7 +298,16 @@ Hit EmbreeScene::closestHit(const Ray& ray,
         auto geomID = (embreeRay.hit.instID[0] == RTC_INVALID_GEOMETRY_ID) ? embreeRay.hit.geomID : embreeRay.hit.instID[0];
 
         hit.distance = embreeRay.ray.tfar;
-        hit.normal = Vector3f::unitVector(Vector3f(embreeRay.hit.Ng_x, embreeRay.hit.Ng_y, embreeRay.hit.Ng_z));
+        hit.normal = Vector3f(embreeRay.hit.Ng_x, embreeRay.hit.Ng_y, embreeRay.hit.Ng_z);
+        if (embreeRay.hit.instID[0] != RTC_INVALID_GEOMETRY_ID)
+        {
+            // Embree reports the normal in the object space of the instanced mesh.
+            const auto* m = &mNormalTransformsForGeometry[9 * geomID];
+            hit.normal = Vector3f(m[0] * hit.normal.x() + m[1] * hit.normal.y() + m[2] * hit.normal.z(),
+                                  m[3] * hit.normal.x() + m[4] * hit.normal.y() + m[5] * hit.normal.z(),
+                                  m[6] * hit.normal.x() + m[7] * hit.normal.y() + m[8] * hit.normal.z());
+        }
+        hit.normal = Vector3f::unitVector(hit.normal);
         hit.material = &mMaterialsForGeometry[geomID][mMaterialIndicesForGeometry[geomID][embreeRay.hit.primID]];
     }
 

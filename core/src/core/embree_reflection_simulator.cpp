@@ -309,6 +309,7 @@ ispc::EmbreeScene EmbreeReflectionSimulator::ispcEmbreeScene(const EmbreeScene& 
     out.scene = in.scene();
     out.materialsForGeometry = in.ispcMaterialsForGeometry();
     out.materialIndicesForGeometry = in.materialIndicesForGeometry();
+    out.normalTransformsForGeometry = in.normalTransformsForGeometry();
     return out;
 }
 

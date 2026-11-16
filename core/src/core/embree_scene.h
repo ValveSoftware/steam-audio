@@ -83,6 +83,13 @@ public:
         return mMaterialIndicesForGeometry.data();
     }
 
+    // For each geometry, a row-major 3x3 matrix that takes a hit normal reported by Embree to world space. Embree
+    // reports normals in the object space of an instanced mesh; for everything else this is the identity matrix.
+    const float* normalTransformsForGeometry() const
+    {
+        return mNormalTransformsForGeometry.data();
+    }
+
     virtual shared_ptr<IStaticMesh> createStaticMesh(int numVertices,
                                                      int numTriangles,
                                                      int numMaterials,
@@ -150,6 +157,7 @@ private:
     Array<const Material*> mMaterialsForGeometry;
     vector<const ispc::Material*> mISPCMaterialsForGeometry;
     Array<const int*> mMaterialIndicesForGeometry;
+    vector<float> mNormalTransformsForGeometry;
 
     // Flag indicating whether the scene has changed in some way since the previous call to commit().
     bool mHasChanged;
