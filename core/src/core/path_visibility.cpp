@@ -60,6 +60,7 @@ bool ProbeVisibilityTester::areProbesVisible(const IScene& scene,
     if (mSamples.size(0) > 0 && radius > 0.0f)
     {
         auto numVisibleSamples = 0;
+        auto numRays = static_cast<float>(mSamples.size(0)) * static_cast<float>(mSamples.size(0));
 
         for (auto i = 0u; i < mSamples.size(0); ++i)
         {
@@ -76,7 +77,7 @@ bool ProbeVisibilityTester::areProbesVisible(const IScene& scene,
                 if (!scene.isOccluded(fromSample, toSample))
                 {
                     ++numVisibleSamples;
-                    if ((static_cast<float>(numVisibleSamples) / static_cast<float>(mSamples.size(0))) >= threshold)
+                    if ((static_cast<float>(numVisibleSamples) / numRays) >= threshold)
                         return true;
                 }
             }
