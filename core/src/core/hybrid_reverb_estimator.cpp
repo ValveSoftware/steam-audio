@@ -131,6 +131,7 @@ void HybridReverbEstimator::estimate(const EnergyField* energyField,
     if (energyField)
     {
         auto cutoffBin = static_cast<int>(ceilf(((1.0f - overlapFraction) * transitionTime) / EnergyField::kBinDuration));
+        cutoffBin = std::min(cutoffBin, energyField->numBins() - 1);
         for (auto i = 0; i < Bands::kNumBands; ++i)
         {
             eqCoeffs[i] = sqrtf(4.0f * Math::kPi * (*energyField)[0][i][cutoffBin]);
