@@ -222,7 +222,9 @@ void DirectSimulator::transmission(const IScene& scene,
         const auto& ray = rays[currentRayIndex];
         auto& minDistance = minDistances[currentRayIndex];
 
-        auto hit = scene.closestHit(ray, minDistance, maxDistance);
+        // Each ray only searches the part of the segment that the other ray has not already covered. Otherwise a
+        // ray would hit again the surfaces that the other ray hit first, counting them twice.
+        auto hit = scene.closestHit(ray, minDistance, maxDistance - minDistances[1 - currentRayIndex]);
 
         // If there's nothing more between the ray origin and the source, stop.
         if (!hit.isValid())
@@ -239,7 +241,7 @@ void DirectSimulator::transmission(const IScene& scene,
 
         // Calculate the origin of the next ray segment we'll trace, if any.
         minDistance = hit.distance + kRayOffset;
-        if (minDistance >= maxDistance)
+        if (minDistance >= maxDistance - minDistances[1 - currentRayIndex])
             break;
 
         // If the total distance traveled by both rays is greater than the distance between the source and the
