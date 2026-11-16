@@ -247,7 +247,7 @@ bool OverlapSaveConvolutionEffect::apply(const OverlapSaveConvolutionEffectParam
         }
     }
 
-    mNumTailBlocksRemaining = numBlocks - 1;
+    mNumTailBlocksRemaining = numBlocks;
 
     return crossfade;
 }
@@ -344,7 +344,7 @@ bool OverlapSaveConvolutionEffect::apply(const OverlapSaveConvolutionEffectDirec
         }
     }
 
-    mNumTailBlocksRemaining = numBlocks - 1;
+    mNumTailBlocksRemaining = numBlocks;
 
     return crossfade;
 }
@@ -377,17 +377,31 @@ AudioEffectState OverlapSaveConvolutionEffect::tail(OverlapSaveConvolutionMixer&
 
 void OverlapSaveConvolutionEffect::tail()
 {
+    // Process a block of silence, as apply() would. The last block of input still contributes to this one: through the
+    // later blocks of the IR, and also through the first, because the end of each block of input spills over into the
+    // next. Only the blocks of the IR that can still meet non-silent input are needed.
+    memcpy(&mDryBlock[0], &mDryBlock[mFrameSize], mFrameSize * sizeof(float));
+    memset(&mDryBlock[mFrameSize], 0, mFrameSize * sizeof(float));
+
+    --mDryBlockIndex;
+    if (mDryBlockIndex < 0)
+    {
+        mDryBlockIndex = static_cast<int>(mFFTDryBlocks.size(0)) - 1;
+    }
+
+    mFFT.applyForward(mDryBlock.data(), mFFTDryBlocks[mDryBlockIndex]);
+
     mFFTWet.zero();
 
     auto numBlocks = OverlapSaveConvolutionEffect::numBlocks(mFrameSize, mIRSize);
-    auto offset = numBlocks - mNumTailBlocksRemaining;
+    auto firstBlock = numBlocks - mNumTailBlocksRemaining;
 
     for (auto i = 0; i < mNumChannels; ++i)
     {
-        for (auto j = 0; j < mNumTailBlocksRemaining; ++j)
+        for (auto j = firstBlock; j < numBlocks; ++j)
         {
             auto index = static_cast<int>((mDryBlockIndex + j) % mFFTDryBlocks.size(0));
-            ArrayMath::multiplyAccumulate(static_cast<int>(mFFTDryBlocks.size(1)), mFFTDryBlocks[index], (*mPrevFFTIR)[i][j + offset], mFFTWet[i]);
+            ArrayMath::multiplyAccumulate(static_cast<int>(mFFTDryBlocks.size(1)), mFFTDryBlocks[index], (*mPrevFFTIR)[i][j], mFFTWet[i]);
         }
     }
 
