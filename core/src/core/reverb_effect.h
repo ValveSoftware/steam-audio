@@ -65,8 +65,10 @@ private:
     int mCurrent;
     bool mIsFirstFrame;
     Allpass mAllpass[kNumAllpasses];
-    IIRFilterer mAbsorptive[kNumDelays][Bands::kNumBands][2];
-    IIRFilterer mToneCorrection[Bands::kNumBands][2];
+    IIRFilterer mAbsorptive[kNumDelays][Bands::kNumBands][2]; // Steps up or down at the boundaries between bands (band 0 is not used).
+    float mAbsorptiveGain[kNumDelays]; // The gain of the lowest band, for each delay line.
+    IIRFilterer mToneCorrection[Bands::kNumBands][2]; // Steps up or down at the boundaries between bands (band 0 is not used).
+    float mToneCorrectionGain; // The gain of the lowest band.
     Array<float, 2> mXOld;
     Array<float, 2> mXNew;
     Reverb mPrevReverb;
@@ -86,6 +88,14 @@ private:
 
     void calcToneCorrectionGains(const float* reverbTimes,
                                  float* gains);
+
+    // Calculates the filters that give each band its gain. The gain of the lowest band is applied separately, and
+    // filters[i] is the high shelf at the boundary between band i - 1 and band i, which multiplies what is above it
+    // by gains[i] / gains[i - 1]. The same gain in every band (whatever it is) is no filter at all, and between the
+    // centers of two bands the gain goes from the one to the other, which a low shelf, a peaking filter and a high
+    // shelf that overlap do not do.
+    void calcBandFilters(const float* gains,
+                         IIR* filters);
 
     void apply_float4(const float* reverbTimes,
                       const float* in,

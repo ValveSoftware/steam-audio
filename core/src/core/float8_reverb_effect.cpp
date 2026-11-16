@@ -47,17 +47,10 @@ void IPL_FLOAT8_ATTR ReverbEffect::apply_float8(const float* reverbTimes,
         calcAbsorptiveGains(clampedReverbTimes, mDelayValues[i], absorptiveGains);
 
         IIR iir[Bands::kNumBands];
-        for (auto j = 0; j < Bands::kNumBands; ++j)
-        {
-            if (j == 0)
-                iir[j] = IIR::lowShelf(Bands::kHighCutoffFrequencies[j], absorptiveGains[j], mSamplingRate);
-            else if (j == Bands::kNumBands - 1)
-                iir[j] = IIR::highShelf(Bands::kLowCutoffFrequencies[j], absorptiveGains[j], mSamplingRate);
-            else
-                iir[j] = IIR::peaking(Bands::kLowCutoffFrequencies[j], Bands::kHighCutoffFrequencies[j], absorptiveGains[j], mSamplingRate);
-        }
+        calcBandFilters(absorptiveGains, iir);
 
-        for (auto j = 0; j < Bands::kNumBands; ++j)
+        mAbsorptiveGain[i] = absorptiveGains[0];
+        for (auto j = 1; j < Bands::kNumBands; ++j)
         {
             mAbsorptive[i][j][mCurrent].setFilter(iir[j]);
         }
@@ -67,17 +60,10 @@ void IPL_FLOAT8_ATTR ReverbEffect::apply_float8(const float* reverbTimes,
     calcToneCorrectionGains(clampedReverbTimes, toneCorrectionGains);
 
     IIR iir[Bands::kNumBands];
-    for (auto j = 0; j < Bands::kNumBands; ++j)
-    {
-        if (j == 0)
-            iir[j] = IIR::lowShelf(Bands::kHighCutoffFrequencies[j], toneCorrectionGains[j], mSamplingRate);
-        else if (j == Bands::kNumBands - 1)
-            iir[j] = IIR::highShelf(Bands::kLowCutoffFrequencies[j], toneCorrectionGains[j], mSamplingRate);
-        else
-            iir[j] = IIR::peaking(Bands::kLowCutoffFrequencies[j], Bands::kHighCutoffFrequencies[j], toneCorrectionGains[j], mSamplingRate);
-    }
+    calcBandFilters(toneCorrectionGains, iir);
 
-    for (auto i = 0; i < Bands::kNumBands; ++i)
+    mToneCorrectionGain = toneCorrectionGains[0];
+    for (auto i = 1; i < Bands::kNumBands; ++i)
     {
         mToneCorrection[i][mCurrent].setFilter(iir[i]);
     }
@@ -86,10 +72,12 @@ void IPL_FLOAT8_ATTR ReverbEffect::apply_float8(const float* reverbTimes,
     {
         mDelayLines[i].get(mFrameSize, mXOld[i]);
 
-        for (auto j = 0; j < Bands::kNumBands; ++j)
+        for (auto j = 1; j < Bands::kNumBands; ++j)
         {
             mAbsorptive[i][j][mCurrent].apply(mFrameSize, mXOld[i], mXOld[i]);
         }
+
+        ArrayMath::scale(mFrameSize, mXOld[i], mAbsorptiveGain[i], mXOld[i]);
     }
 
     float8_t xOld[kNumDelays];
@@ -135,10 +123,12 @@ void IPL_FLOAT8_ATTR ReverbEffect::apply_float8(const float* reverbTimes,
         float8::storeu(&out[i], xOld[0]);
     }
 
-    for (auto i = 0; i < Bands::kNumBands; ++i)
+    for (auto i = 1; i < Bands::kNumBands; ++i)
     {
         mToneCorrection[i][mCurrent].apply(mFrameSize, out, out);
     }
+
+    ArrayMath::scale(mFrameSize, out, mToneCorrectionGain, out);
 
     float8::avoidTransitionPenalty();
 }
@@ -149,10 +139,12 @@ void IPL_FLOAT8_ATTR ReverbEffect::tail_float8(float* out)
     {
         mDelayLines[i].get(mFrameSize, mXOld[i]);
 
-        for (auto j = 0; j < Bands::kNumBands; ++j)
+        for (auto j = 1; j < Bands::kNumBands; ++j)
         {
             mAbsorptive[i][j][mCurrent].apply(mFrameSize, mXOld[i], mXOld[i]);
         }
+
+        ArrayMath::scale(mFrameSize, mXOld[i], mAbsorptiveGain[i], mXOld[i]);
     }
 
     float8_t xOld[kNumDelays];
@@ -196,10 +188,12 @@ void IPL_FLOAT8_ATTR ReverbEffect::tail_float8(float* out)
         float8::storeu(&out[i], xOld[0]);
     }
 
-    for (auto i = 0; i < Bands::kNumBands; ++i)
+    for (auto i = 1; i < Bands::kNumBands; ++i)
     {
         mToneCorrection[i][mCurrent].apply(mFrameSize, out, out);
     }
+
+    ArrayMath::scale(mFrameSize, out, mToneCorrectionGain, out);
 
     float8::avoidTransitionPenalty();
 }
