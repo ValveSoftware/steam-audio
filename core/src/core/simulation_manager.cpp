@@ -357,6 +357,9 @@ void SimulationManager::lookupBakedReflections()
         if (!source->reflectionInputs.baked || source->reflectionInputs.bakedDataIdentifier.type != BakedDataType::Reflections)
             continue;
 
+        // Every source starts from the listener probes; only StaticListener sources switch to their own.
+        probes = &listenerProbes;
+
         if (source->reflectionInputs.bakedDataIdentifier.variation == BakedDataVariation::StaticListener)
         {
             mProbeManager->getInfluencingProbes(source->reflectionInputs.source.origin, sourceProbes);
