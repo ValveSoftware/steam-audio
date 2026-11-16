@@ -504,6 +504,8 @@ void SimulationManager::estimateReverb()
             ReverbEstimator::estimate(*source->reflectionState.accumEnergyField, source->reflectionInputs.airAbsorptionModel, source->reflectionOutputs.reverb);
         }
 
+        source->reflectionState.isReverbScaleApplied = false;
+
         auto shouldApplyReverbScale = false;
         for (auto i = 0; i < Bands::kNumBands; ++i)
         {
@@ -516,7 +518,12 @@ void SimulationManager::estimateReverb()
 
         if (source->reflectionState.validSimulationData && shouldApplyReverbScale)
         {
-            ReverbEstimator::applyReverbScale(source->reflectionInputs.reverbScale, *source->reflectionState.accumEnergyField);
+            // The accumulated energy field is what the next simulation accumulates into, so it must not be scaled
+            // itself: the scale would be applied again by every simulation, and to the estimate of the reverb times
+            // (which it also multiplies) as well.
+            source->reflectionState.scaledEnergyField->copyFrom(*source->reflectionState.accumEnergyField);
+            ReverbEstimator::applyReverbScale(source->reflectionInputs.reverbScale, *source->reflectionState.scaledEnergyField);
+            source->reflectionState.isReverbScaleApplied = true;
 
             for (auto i = 0; i < Bands::kNumBands; ++i)
             {
@@ -538,7 +545,9 @@ void SimulationManager::estimateHybridReverb()
         if (!source->reflectionState.validSimulationData)
             continue;
 
-        mHybridReverbEstimator->estimate(source->reflectionState.accumEnergyField.get(), source->reflectionOutputs.reverb, *source->reflectionState.impulseResponse,
+        auto* energyField = source->reflectionState.isReverbScaleApplied ? source->reflectionState.scaledEnergyField.get() : source->reflectionState.accumEnergyField.get();
+
+        mHybridReverbEstimator->estimate(energyField, source->reflectionOutputs.reverb, *source->reflectionState.impulseResponse,
                                          source->reflectionInputs.transitionTime, source->reflectionInputs.overlapFraction,
                                          mSharedData->reflection.order, source->reflectionOutputs.hybridEQ, source->reflectionOutputs.hybridDelay);
     }

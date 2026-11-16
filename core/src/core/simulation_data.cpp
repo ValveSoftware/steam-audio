@@ -70,6 +70,9 @@ SimulationData::SimulationData(bool enableIndirect,
         reflectionState.accumEnergyField = EnergyFieldFactory::create(sceneType, maxDuration, maxOrder, openCL);
         reflectionState.energyField->reset();
         reflectionState.accumEnergyField->reset();
+        reflectionState.scaledEnergyField = make_unique<EnergyField>(maxDuration, maxOrder);
+        reflectionState.scaledEnergyField->reset();
+        reflectionState.isReverbScaleApplied = false;
         reflectionState.numFramesAccumulated = 0;
 
         if (indirectType != IndirectEffectType::Parametric)

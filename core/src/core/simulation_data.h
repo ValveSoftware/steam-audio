@@ -68,6 +68,8 @@ struct ReflectionSimulationState
     Directivity prevDirectivity;
     unique_ptr<EnergyField> energyField;
     unique_ptr<EnergyField> accumEnergyField;
+    unique_ptr<EnergyField> scaledEnergyField; // The accumulated energy field with the reverb scale applied to it.
+    bool isReverbScaleApplied;
     int numFramesAccumulated;
     Array<float> distanceAttenuationCorrectionCurve;
     bool applyDistanceAttenuationCorrectionCurve;
