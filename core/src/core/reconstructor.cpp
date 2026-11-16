@@ -101,6 +101,10 @@ void Reconstructor::reconstruct(int numIRs,
         {
             for (auto iBand = 0; iBand < Bands::kNumBands; ++iBand)
             {
+                // Bins that are skipped, or beyond the end of the energy field, must not keep the data of a previous
+                // channel or reconstruction.
+                memset(mBandIRs[iBand], 0, numSamples * sizeof(float));
+
                 for (auto iBin = 0; iBin < numBins; ++iBin)
                 {
                     auto numBinSamples = std::min(numSamplesPerBin, numSamples - iBin * numSamplesPerBin);
