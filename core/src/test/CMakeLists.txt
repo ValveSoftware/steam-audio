@@ -27,6 +27,7 @@ add_executable(phonon_test
 	BVH.test.cpp
 	ConvolutionEffect.test.cpp
 	CoordinateSpace.test.cpp
+	DelayEffect.test.cpp
 	DirectSimulator.test.cpp
 	EnergyField.test.cpp
 	Error.test.cpp

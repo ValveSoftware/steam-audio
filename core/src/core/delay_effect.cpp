@@ -96,7 +96,8 @@ AudioEffectState DelayEffect::apply(const DelayEffectParams& params,
 
     mPrevDelayInSamples = static_cast<float>(params.delayInSamples);
 
-    mNumTailSamplesRemaining = std::max(params.delayInSamples - mFrameSize, 0);
+    // The last delayInSamples input samples have not been output yet.
+    mNumTailSamplesRemaining = std::max(params.delayInSamples, 0);
     return (mNumTailSamplesRemaining > 0) ? AudioEffectState::TailRemaining : AudioEffectState::TailComplete;
 }
 
@@ -124,7 +125,8 @@ AudioEffectState DelayEffect::tail(AudioBuffer& out)
             delayedSampleIndex -= static_cast<int>(mRingBuffer.size(0));
         }
 
-        out[0][i] = mRingBuffer[delayedSampleIndex];
+        // Once the delayed input has been output, the ring buffer only holds old audio, so output silence.
+        out[0][i] = (mNumTailSamplesRemaining > 0) ? mRingBuffer[delayedSampleIndex] : 0.0f;
 
         mNumTailSamplesRemaining = std::max(mNumTailSamplesRemaining - 1, 0);
     }
