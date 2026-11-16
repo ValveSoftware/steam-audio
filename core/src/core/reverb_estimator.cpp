@@ -169,7 +169,9 @@ float ReverbEstimator::reverbTime(const float* histogram,
     auto x = 0.0f;
     for (auto i = 0; i < numBins; ++i)
     {
-        totalEnergy += histogram[i] * airAbsorption.evaluate(x * PropagationMedium::kSpeedOfSound, band);
+        // The air absorption model gives an amplitude gain, so square it for energy.
+        auto airAbsorptionGain = airAbsorption.evaluate(x * PropagationMedium::kSpeedOfSound, band);
+        totalEnergy += histogram[i] * airAbsorptionGain * airAbsorptionGain;
         x += EnergyField::kBinDuration;
     }
 
@@ -189,7 +191,8 @@ float ReverbEstimator::reverbTime(const float* histogram,
     // convert it to log-scale in order to fit a line to the EDC.
     for (auto i = numBins - 1; i >= 0; --i)
     {
-        energy += histogram[i] * airAbsorption.evaluate(x * PropagationMedium::kSpeedOfSound, band);
+        auto airAbsorptionGain = airAbsorption.evaluate(x * PropagationMedium::kSpeedOfSound, band);
+        energy += histogram[i] * airAbsorptionGain * airAbsorptionGain;
         auto y = log10f(energy / totalEnergy);
 
         // Use least-squares fitting to fit a line to the EDC. We only consider points on the EDC
