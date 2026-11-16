@@ -17,6 +17,7 @@
 #include "audio_buffer.h"
 
 #include "array_math.h"
+#include "math_functions.h"
 
 namespace ipl {
 
@@ -118,6 +119,10 @@ void AudioBuffer::downmix(const AudioBuffer& in,
 // Scaling factors for SN3D to MaxN: https://en.wikipedia.org/wiki/Ambisonic_data_exchange_formats#cite_note-Malham-2
 // Scaling factors for N3D to SN3D: https://en.wikipedia.org/wiki/Ambisonic_data_exchange_formats#Furse-Malham
 // Ordering conversion between ACN and FuMa: https://en.wikipedia.org/wiki/Ambisonic_data_exchange_formats
+//
+// N3D here means the spherical harmonics that Steam Audio evaluates, which are orthonormal on the unit sphere: the
+// omnidirectional harmonic is 1 / sqrt(4 pi). The formats that Wikipedia calls N3D, SN3D and MaxN have an
+// omnidirectional harmonic of 1, so conversion to or from them also has to account for a factor of sqrt(4 pi).
 void AudioBuffer::convertAmbisonics(AmbisonicsType inType,
                                     AmbisonicsType outType,
                                     const AudioBuffer& in,
@@ -128,6 +133,8 @@ void AudioBuffer::convertAmbisonics(AmbisonicsType inType,
 
     auto numChannels = in.numChannels();
     auto numSamples = in.numSamples();
+
+    const auto kOrthonormalToUnitOmni = sqrtf(4.0f * Math::kPi);
 
     const int fumaForACNIndex[] = { 0, 2, 3, 1, 8, 6, 4, 5, 7, 15, 13, 11, 9, 10, 12, 14 };
     const int acnForFuMaIndex[] = { 0, 3, 1, 2, 6, 7, 5, 8, 4, 12, 13, 11, 14, 10, 15, 9 };
@@ -169,15 +176,15 @@ void AudioBuffer::convertAmbisonics(AmbisonicsType inType,
         auto factor = 1.0f;
         if (inType == AmbisonicsType::N3D && outType == AmbisonicsType::SN3D)
         {
-            factor = 1.0f / sqrtf(2.0f * l + 1);
+            factor = kOrthonormalToUnitOmni / sqrtf(2.0f * l + 1);
         }
         else if (inType == AmbisonicsType::N3D && outType == AmbisonicsType::FuMa)
         {
-            factor = (1.0f / sqrtf(2.0f * l + 1)) * fumaForSN3DFactor[outIndex];
+            factor = (kOrthonormalToUnitOmni / sqrtf(2.0f * l + 1)) * fumaForSN3DFactor[outIndex];
         }
         else if (inType == AmbisonicsType::SN3D && outType == AmbisonicsType::N3D)
         {
-            factor = sqrtf(2.0f * l + 1);
+            factor = sqrtf(2.0f * l + 1) / kOrthonormalToUnitOmni;
         }
         else if (inType == AmbisonicsType::SN3D && outType == AmbisonicsType::FuMa)
         {
@@ -189,7 +196,7 @@ void AudioBuffer::convertAmbisonics(AmbisonicsType inType,
         }
         else if (inType == AmbisonicsType::FuMa && outType == AmbisonicsType::N3D)
         {
-            factor = sqrtf(2.0f * l + 1) * (1.0f / fumaForSN3DFactor[inIndex]);
+            factor = (sqrtf(2.0f * l + 1) / kOrthonormalToUnitOmni) * (1.0f / fumaForSN3DFactor[inIndex]);
         }
 
         ArrayMath::scale(numSamples, in[inIndex], factor, out[outIndex]);
