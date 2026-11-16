@@ -34,17 +34,26 @@ namespace {
 const auto kSamplingRate = 48000;
 const auto kFrameSize = 256;
 
-// Power per sample in a band of a response, between two times, in dB.
+// Power per sample in a band of a response, between two times, in dB. Only the middle of the band is measured: the band
+// filters of the reconstructor and the filters of the reverb do not have the same slopes, so near the edges of a band
+// the two responses get different amounts of the neighbouring bands, which decay at other rates.
 double bandLevel(const std::vector<float>& response, int band, double startTime, double endTime)
 {
-    ipl::IIR filters[ipl::Bands::kNumBands];
-    ipl::IIR::bandFilters(filters, kSamplingRate);
+    ipl::IIR filter;
+    if (band == 0)
+        filter = ipl::IIR::lowPass(250.0f, kSamplingRate);
+    else if (band == 1)
+        filter = ipl::IIR::bandPass(2000.0f, 4000.0f, kSamplingRate);
+    else
+        filter = ipl::IIR::highPass(14000.0f, kSamplingRate);
 
-    ipl::IIRFilterer filterer;
-    filterer.setFilter(filters[band]);
-
-    std::vector<float> bandResponse(response.size());
-    filterer.apply(static_cast<int>(response.size()), response.data(), bandResponse.data());
+    std::vector<float> bandResponse(response);
+    for (auto pass = 0; pass < 2; ++pass)
+    {
+        ipl::IIRFilterer filterer;
+        filterer.setFilter(filter);
+        filterer.apply(static_cast<int>(bandResponse.size()), bandResponse.data(), bandResponse.data());
+    }
 
     const auto start = static_cast<size_t>(startTime * kSamplingRate);
     const auto end = static_cast<size_t>(endTime * kSamplingRate);
@@ -147,7 +156,7 @@ void renderHybridAndReference(const float* reverbTimes,
 // level that the impulse response had there, whatever the reverb times, or the reverb has a step at the transition.
 TEST_CASE("The parametric tail of the hybrid reverb starts at the level of the impulse response", "[HybridReverb]")
 {
-    const auto transitionTime = 1.0f;
+    const auto transitionTime = 0.5f;
     const auto overlapFraction = 0.25f;
 
     // The same reverb time in every band, and different ones (the tone correction of the reverb depends on them).
@@ -164,13 +173,15 @@ TEST_CASE("The parametric tail of the hybrid reverb starts at the level of the i
             INFO("reverb times " << reverbTimes[0] << " " << reverbTimes[1] << " " << reverbTimes[2] << " s, band " << band);
 
             // Up to the start of the transition, the hybrid reverb is the impulse response.
-            CHECK(std::fabs(bandLevel(hybrid, band, 0.4, 0.7) - bandLevel(reference, band, 0.4, 0.7)) < 0.1);
+            CHECK(std::fabs(bandLevel(hybrid, band, 0.2, 0.35) - bandLevel(reference, band, 0.2, 0.35)) < 0.1);
 
             // After it, the tail has to follow the impulse response. The tail is a feedback delay network, so it only
-            // approximates the level of the impulse response (it decays a little slower, and it is made of three bands
-            // only), but it was 5 to 16 dB under it when its gain did not take the reverb into account.
-            const auto difference = bandLevel(hybrid, band, 1.05, 1.25) - bandLevel(reference, band, 1.05, 1.25);
-            CHECK(std::fabs(difference) < 6.0);
+            // approximates the level of the impulse response (it is made of three bands only), but it was 5 to 16 dB
+            // under it when its gain did not take the reverb into account. The transition is early enough that the
+            // bands of the impulse response do not drift apart much yet: their filters overlap, so where one band has
+            // decayed much more than the next one, its level in the impulse response is that of the next one.
+            const auto difference = bandLevel(hybrid, band, 0.55, 0.75) - bandLevel(reference, band, 0.55, 0.75);
+            CHECK(std::fabs(difference) < 3.0);
         }
     }
 }
