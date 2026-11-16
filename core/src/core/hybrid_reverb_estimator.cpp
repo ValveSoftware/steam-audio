@@ -135,7 +135,7 @@ void HybridReverbEstimator::estimate(const EnergyField* energyField,
         auto distance = PropagationMedium::kSpeedOfSound * (cutoffBin + 0.5f) * EnergyField::kBinDuration;
         for (auto i = 0; i < Bands::kNumBands; ++i)
         {
-            eqCoeffs[i] = sqrtf(4.0f * Math::kPi * (*energyField)[0][i][cutoffBin] * airAbsorption.evaluate(distance, i));
+            eqCoeffs[i] = sqrtf(4.0f * Math::kPi * (*energyField)[0][i][cutoffBin]) * airAbsorption.evaluate(distance, i);
         }
     }
     else

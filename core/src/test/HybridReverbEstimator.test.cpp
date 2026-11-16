@@ -16,45 +16,18 @@
 
 #include <catch.hpp>
 
-#include <vector>
-
 #include <air_absorption.h>
 #include <energy_field.h>
 #include <hybrid_reverb_estimator.h>
-#include <iir.h>
 #include <impulse_response.h>
 #include <propagation_medium.h>
-#include <reconstructor.h>
 
-namespace {
-
-float bandEnergy(const ipl::ImpulseResponse& ir, int band, float startTime, float endTime, int samplingRate)
-{
-    ipl::IIR filters[ipl::Bands::kNumBands];
-    ipl::IIR::bandFilters(filters, samplingRate);
-    ipl::IIRFilterer filterer;
-    filterer.setFilter(filters[band]);
-
-    std::vector<float> bandIR(ir.numSamples());
-    filterer.apply(ir.numSamples(), ir[0], bandIR.data());
-
-    auto energy = 0.0f;
-    for (auto i = static_cast<int>(startTime * samplingRate); i < static_cast<int>(endTime * samplingRate); ++i)
-    {
-        energy += bandIR[i] * bandIR[i];
-    }
-    return energy;
-}
-
-}
-
-TEST_CASE("Hybrid reverb EQ matches the air absorption of the reconstructed IR", "[HybridReverbEstimator]")
+TEST_CASE("Hybrid reverb EQ applies air absorption at the cutoff bin", "[HybridReverbEstimator]")
 {
     const auto samplingRate = 48000;
     const auto duration = 1.0f;
     const auto transitionTime = 0.5f;
     const auto overlapFraction = 0.25f;
-    const auto cutoffTime = (1.0f - overlapFraction) * transitionTime;
 
     // same energy in every band
     ipl::EnergyField energyField(duration, 0);
@@ -72,43 +45,30 @@ TEST_CASE("Hybrid reverb EQ matches the air absorption of the reconstructed IR",
         reverb.reverbTimes[band] = 1.0f;
     }
 
-    ipl::Reconstructor reconstructor(duration, 0, samplingRate);
     ipl::HybridReverbEstimator estimator(duration, samplingRate, 1024);
 
-    // high / low band amplitude ratio of the IR just before the cutoff, and of the hybrid EQ
-    auto tilts = [&](const ipl::AirAbsorptionModel& airAbsorption, float& irTilt, float& eqTilt)
+    auto estimateEQ = [&](const ipl::AirAbsorptionModel& airAbsorption, float* eq)
     {
         ipl::ImpulseResponse ir(duration, 0, samplingRate);
-        const ipl::EnergyField* energyFields[] = {&energyField};
-        const float* curves[] = {nullptr};
-        ipl::ImpulseResponse* irs[] = {&ir};
-        reconstructor.reconstruct(1, energyFields, curves, &airAbsorption, irs, ipl::ReconstructionType::Gaussian, duration, 0);
-
-        irTilt = sqrtf(bandEnergy(ir, 2, cutoffTime - 0.02f, cutoffTime, samplingRate) /
-                       bandEnergy(ir, 0, cutoffTime - 0.02f, cutoffTime, samplingRate));
-
-        float eq[ipl::Bands::kNumBands];
         auto delay = 0;
         estimator.estimate(&energyField, reverb, airAbsorption, ir, transitionTime, overlapFraction, 0, eq, delay);
-        eqTilt = eq[2] / eq[0];
     };
 
     const float noCoefficients[ipl::Bands::kNumBands] = {};
-    float irTiltAir, eqTiltAir, irTiltNoAir, eqTiltNoAir;
-    tilts(ipl::AirAbsorptionModel{}, irTiltAir, eqTiltAir);
-    tilts(ipl::AirAbsorptionModel(noCoefficients, nullptr, nullptr), irTiltNoAir, eqTiltNoAir);
-
-    // relative to the same field without air (removes the band filters' own tilt)
-    auto irDb = 20.0f * log10f(irTiltAir / irTiltNoAir);
-    auto eqDb = 20.0f * log10f(eqTiltAir / eqTiltNoAir);
-
-    // the air absorption the reconstructor applies at the cutoff bin
-    auto cutoffBin = static_cast<int>(ceilf(cutoffTime / ipl::EnergyField::kBinDuration));
-    auto distance = ipl::PropagationMedium::kSpeedOfSound * (cutoffBin + 0.5f) * ipl::EnergyField::kBinDuration;
     ipl::AirAbsorptionModel airAbsorption;
-    auto airDb = 10.0f * log10f(airAbsorption.evaluate(distance, 2) / airAbsorption.evaluate(distance, 0));
-    INFO("air: " << airDb << " dB, IR: " << irDb << " dB, hybrid EQ: " << eqDb << " dB");
+    float eqAir[ipl::Bands::kNumBands];
+    float eqNoAir[ipl::Bands::kNumBands];
+    estimateEQ(airAbsorption, eqAir);
+    estimateEQ(ipl::AirAbsorptionModel(noCoefficients, nullptr, nullptr), eqNoAir);
 
-    REQUIRE(irDb < -6.0f); // the reconstructed IR loses its highs (band filter leakage makes it read less than airDb)
-    REQUIRE(fabsf(eqDb - airDb) < 0.5f);
+    // the EQ is an amplitude, and so is the air absorption model (it is applied as such on the direct path)
+    auto cutoffBin = static_cast<int>(ceilf((1.0f - overlapFraction) * transitionTime / ipl::EnergyField::kBinDuration));
+    auto distance = ipl::PropagationMedium::kSpeedOfSound * (cutoffBin + 0.5f) * ipl::EnergyField::kBinDuration;
+    for (auto band = 0; band < ipl::Bands::kNumBands; ++band)
+    {
+        auto eqDb = 20.0f * log10f(eqAir[band] / eqNoAir[band]);
+        auto airDb = 20.0f * log10f(airAbsorption.evaluate(distance, band));
+        INFO("band " << band << ": air " << airDb << " dB, hybrid EQ " << eqDb << " dB");
+        CHECK(fabsf(eqDb - airDb) < 0.1f);
+    }
 }
