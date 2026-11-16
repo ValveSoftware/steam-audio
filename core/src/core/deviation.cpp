@@ -55,6 +55,11 @@ float DeviationModel::evaluate(float angle, int band) const
 // See http://www-sop.inria.fr/reves/Nicolas.Tsingos/publis/sig2001.pdf.
 float DeviationModel::utdDeviation(float angle, int band)
 {
+    // The formula is only defined for deviation angles up to pi, and it is periodic beyond that (and singular at
+    // multiples of 2 pi). The total deviation of a path with several bends can exceed pi, and bending more must never
+    // make a path louder, so the angle saturates at pi.
+    angle = std::min(std::max(angle, 0.0f), Math::kPi);
+
     auto cotf = [](const float theta)
     {
         auto tan_theta = tanf(theta);
