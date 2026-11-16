@@ -141,6 +141,10 @@ IPLerror CContext::createAmbisonicsDecodeEffect(IPLAudioSettings* audioSettings,
     if (audioSettings->samplingRate <= 0 || audioSettings->frameSize <= 0)
         return IPL_STATUS_FAILURE;
 
+    // The Ambisonics HRTFs and the virtual speakers used for decoding go up to order 3.
+    if (effectSettings->maxOrder < 0 || 3 < effectSettings->maxOrder)
+        return IPL_STATUS_FAILURE;
+
     try
     {
         auto _effect = reinterpret_cast<CAmbisonicsDecodeEffect*>(gMemory().allocate(sizeof(CAmbisonicsDecodeEffect), Memory::kDefaultAlignment));

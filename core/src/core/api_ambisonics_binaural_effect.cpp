@@ -136,6 +136,10 @@ IPLerror CContext::createAmbisonicsBinauralEffect(IPLAudioSettings* audioSetting
     if (audioSettings->samplingRate <= 0 || audioSettings->frameSize <= 0)
         return IPL_STATUS_FAILURE;
 
+    // The Ambisonics HRTFs and the virtual speakers used for decoding go up to order 3.
+    if (effectSettings->maxOrder < 0 || 3 < effectSettings->maxOrder)
+        return IPL_STATUS_FAILURE;
+
     try
     {
         auto _effect = reinterpret_cast<CAmbisonicsBinauralEffect*>(gMemory().allocate(sizeof(CAmbisonicsBinauralEffect), Memory::kDefaultAlignment));
