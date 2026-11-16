@@ -58,6 +58,7 @@ add_executable(phonon_test
 	RayTracerCompare.test.cpp
 	BinauralEffect.test.cpp
 	AmbisonicsBinauralEffect.test.cpp
+	BakedLookupProbes.test.cpp
 )
 
 target_link_libraries(phonon_test PRIVATE core hrtf Catch::Catch)
