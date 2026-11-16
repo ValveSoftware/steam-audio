@@ -42,7 +42,10 @@ ReverbEffect::ReverbEffect(const AudioSettings& audioSettings)
     calcDelaysForReverbTime(10.0f);
     for (auto i = 0; i < kNumDelays; ++i)
     {
-        mDelayLines[i].resize(mDelayValues[i], audioSettings.frameSize);
+        // The delay line gets a block and then gives back the oldest one, so a ring buffer of delay + frameSize samples
+        // delays by delay + frameSize samples. The loop has to be delayValue long, which is what its absorption gain
+        // is calculated for.
+        mDelayLines[i].resize(mDelayValues[i] - audioSettings.frameSize, audioSettings.frameSize);
     }
 
     mAllpass[0].resize(225, 0.5f, 0);
@@ -309,7 +312,9 @@ void ReverbEffect::calcDelaysForReverbTime(float reverbTime)
     for (auto i = 0; i < kNumDelays; ++i)
     {
         auto randomOffset = rand() % 101;
-        mDelayValues[i] = nextPowerOfPrime(delayMin + randomOffset, primes[i]);
+
+        // A block of the loop is read before it is written, so the loop cannot be shorter than a block.
+        mDelayValues[i] = std::max(nextPowerOfPrime(delayMin + randomOffset, primes[i]), mFrameSize);
     }
 }
 
