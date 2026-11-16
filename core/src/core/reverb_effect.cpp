@@ -306,9 +306,14 @@ void ReverbEffect::calcDelaysForReverbTime(float reverbTime)
     auto delaySum = 0.15f * reverbTime * mSamplingRate;
     auto delayMin = static_cast<int>(delaySum / kNumDelays);
 
+    // The offsets come from a fixed sequence, so that every reverb has the same delay lines, and so that the random
+    // sequence of the application is left alone.
+    auto seed = 1u;
+
     for (auto i = 0; i < kNumDelays; ++i)
     {
-        auto randomOffset = rand() % 101;
+        seed = seed * 1664525u + 1013904223u;
+        auto randomOffset = static_cast<int>((seed >> 16) % 101);
         mDelayValues[i] = nextPowerOfPrime(delayMin + randomOffset, primes[i]);
     }
 }
