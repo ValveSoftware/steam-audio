@@ -196,7 +196,7 @@ void RadeonRaysReflectionSimulator::simulate(const IScene& scene,
             sphereOcclusion(numSources, sources, numListeners, listeners, numRays);
         }
 
-        shadeAndBounce(static_cast<const RadeonRaysScene&>(scene), numSources, sources, numListeners, listeners,
+        shadeAndBounce(static_cast<const RadeonRaysScene&>(scene), i, numSources, sources, numListeners, listeners,
                        directivities, numRays, numBounces, irradianceMinDistance, 500.0f);
 
         if (i < numBounces - 1)
@@ -270,7 +270,7 @@ void RadeonRaysReflectionSimulator::simulate(const IScene& scene,
             sphereOcclusion(numSources, sources, numListeners, listeners, numRays);
         }
 
-        shadeAndBounce(static_cast<const RadeonRaysScene&>(scene), numSources, sources, numListeners, listeners,
+        shadeAndBounce(static_cast<const RadeonRaysScene&>(scene), i, numSources, sources, numListeners, listeners,
                        directivities, numRays, numBounces, irradianceMinDistance, (4.0f * Math::kPi) / numRays);
 
         if (i < numBounces - 1)
@@ -454,6 +454,7 @@ void RadeonRaysReflectionSimulator::sphereOcclusion(int numSources,
 }
 
 void RadeonRaysReflectionSimulator::shadeAndBounce(const RadeonRaysScene& scene,
+                                                   int bounce,
                                                    int numSources,
                                                    const CoordinateSpace3f* sources,
                                                    int numListeners,
@@ -464,6 +465,7 @@ void RadeonRaysReflectionSimulator::shadeAndBounce(const RadeonRaysScene& scene,
                                                    float irradianceMinDistance,
                                                    float scalar)
 {
+    cl_uint _bounce = static_cast<cl_uint>(bounce);
     cl_uint _numSources = static_cast<cl_uint>(numSources);
     cl_uint _numListeners = static_cast<cl_uint>(numListeners);
     cl_uint _numRays = static_cast<cl_uint>(numRays);
@@ -474,6 +476,7 @@ void RadeonRaysReflectionSimulator::shadeAndBounce(const RadeonRaysScene& scene,
     const auto* staticMesh = static_cast<const RadeonRaysStaticMesh*>(scene.staticMeshes().front().get());
 
     auto argIndex = 0;
+    clSetKernelArg(mShadeAndBounce.kernel(), argIndex++, sizeof(cl_uint), &_bounce);
     clSetKernelArg(mShadeAndBounce.kernel(), argIndex++, sizeof(cl_uint), &_numSources);
     clSetKernelArg(mShadeAndBounce.kernel(), argIndex++, sizeof(cl_mem), &mSources.buffer());
     clSetKernelArg(mShadeAndBounce.kernel(), argIndex++, sizeof(cl_uint), &_numListeners);

@@ -148,6 +148,7 @@ private:
                          int numRays);
 
     void shadeAndBounce(const RadeonRaysScene& scene,
+                        int bounce,
                         int numSources,
                         const CoordinateSpace3f* sources,
                         int numListeners,

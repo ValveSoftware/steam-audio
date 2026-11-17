@@ -332,7 +332,8 @@ float3 reflect(float3 incident,
     return normalize(incident - (2.0f * dot(incident, normal) * normal));
 }
 
-kernel void shadeAndBounce(uint numSources,
+kernel void shadeAndBounce(uint bounce,
+                           uint numSources,
                            global const CoordinateSpace* sources,
                            uint numListeners,
                            global const CoordinateSpace* listeners,
@@ -409,10 +410,10 @@ kernel void shadeAndBounce(uint numSources,
     float4 hitToSource = (float4) (normalize(source - hitPoint), 0.0f);
 
     // Skip the ray if:
-    //  a) the hit point is inside the listener, or
+    //  a) the hit point is inside the listener (only for the first segment, which starts at the listener), or
     //  b) the hit point is too close to the source, or
     //  c) the ray hit a backfacing triangle.
-    if (hitDistance <= LISTENER_RADIUS ||
+    if ((bounce == 0 && hitDistance <= LISTENER_RADIUS) ||
         hitToSourceDistance <= irradianceMinDistance ||
         dot(hitToSource.xyz, hitNormal) < 0.0f)
     {
