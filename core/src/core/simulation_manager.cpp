@@ -120,6 +120,8 @@ SimulationManager::SimulationManager(bool enableDirect,
     mSharedData->reflection.irradianceMinDistance = 1.0f;
     mSharedData->reflection.reconstructionType = ReconstructionType::Linear;
     
+    mPrevSharedReflection = mSharedData->reflection;
+
     mProbeBatchesForLookup.reserve(16);
 }
 
@@ -266,6 +268,7 @@ void SimulationManager::simulateRealTimeReflections()
     mRealTimeEnergyFields.clear();
 
     auto listenerChanged = hasListenerChanged();
+    auto settingsChanged = hasSharedReflectionInputsChanged();
     auto sceneChanged = hasSceneChanged();
 
     for (auto& source : mSourceData[0])
@@ -281,7 +284,7 @@ void SimulationManager::simulateRealTimeReflections()
 
         auto sourceChanged = source->hasSourceChanged();
 
-        if (listenerChanged || sourceChanged || sceneChanged)
+        if (listenerChanged || settingsChanged || sourceChanged || sceneChanged)
         {
             mRealTimeEnergyFields.push_back(source->reflectionState.accumEnergyField.get());
             source->reflectionState.numFramesAccumulated = 0;
@@ -331,6 +334,7 @@ void SimulationManager::accumulateEnergyFields()
     }
 
     mPrevListener = mSharedData->reflection.listener;
+    mPrevSharedReflection = mSharedData->reflection;
 
     resetSceneChanged();
 }
@@ -756,6 +760,16 @@ bool SimulationManager::hasListenerChanged() const
 {
     auto changed = ((mSharedData->reflection.listener.origin - mPrevListener.origin).length() > 1e-4f);
     return changed;
+}
+
+bool SimulationManager::hasSharedReflectionInputsChanged() const
+{
+    const auto& current = mSharedData->reflection;
+    return (current.numRays != mPrevSharedReflection.numRays ||
+            current.numBounces != mPrevSharedReflection.numBounces ||
+            current.duration != mPrevSharedReflection.duration ||
+            current.order != mPrevSharedReflection.order ||
+            current.irradianceMinDistance != mPrevSharedReflection.irradianceMinDistance);
 }
 
 bool SimulationManager::hasSceneChanged()

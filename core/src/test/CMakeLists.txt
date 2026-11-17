@@ -49,6 +49,7 @@ add_executable(phonon_test
 	ReflectionSimulator.test.cpp
 	Sampling.test.cpp
 	Scene.test.cpp
+	SimulationAccumulation.test.cpp
 	Sphere.test.cpp
 	SphericalHarmonics.test.cpp
 	Stack.test.cpp

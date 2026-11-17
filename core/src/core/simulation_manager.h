@@ -219,6 +219,7 @@ private:
     unique_ptr<ThreadPool> mThreadPool;
     unique_ptr<SharedSimulationData> mSharedData;
     CoordinateSpace3f mPrevListener;
+    SharedReflectionSimulationInputs mPrevSharedReflection;
     list<shared_ptr<SimulationData>> mSourceData[2];
     vector<CoordinateSpace3f> mRealTimeSources;
     vector<Directivity> mRealTimeDirectivities;
@@ -237,6 +238,10 @@ private:
     uint32_t mSceneVersion;
 
     bool hasListenerChanged() const;
+
+    // Returns true if the settings of the reflection simulation that are not those of a source (the number of rays and
+    // of bounces, the duration, the order, the minimum distance) have changed since the last simulation.
+    bool hasSharedReflectionInputsChanged() const;
 
     // Returns true if the scene has changed since the last call to simulateIndirect().
     bool hasSceneChanged();
