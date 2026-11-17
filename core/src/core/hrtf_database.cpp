@@ -494,6 +494,11 @@ void HRTFDatabase::applySpatialBlend(int numRealSamples,
 // 2. Diffuse-field covariance constraint. A 2x2 matrix M mixes the left and right filters so that the 2x2
 //    covariance matrix of the decode over all directions (diagonal: diffuse-field response of each ear;
 //    off-diagonal: interaural cross-spectrum) equals that of the HRTF. M is the solution closest to identity.
+//    For order 0 (a single channel, which cannot be decorrelated), only the diffuse-field response is matched.
+//
+// The filters are complete decoders: no max-rE weighting is applied, neither here nor at run time. In our tests,
+// max-rE (applied before the covariance constraint) lowered the order-3 ITD from ~105 % to ~88 % of the HRTF's and
+// raised the ILD error; without the constraint it also cost up to 5 dB of diffuse-field response.
 //
 // References: C. Schoerkhuber, M. Zaunschirm, R. Hoeldrich, "Binaural rendering of Ambisonic signals via magnitude
 // least squares", DAGA 2018. M. Zaunschirm, C. Schoerkhuber, R. Hoeldrich, "Binaural rendering of Ambisonic
@@ -502,15 +507,17 @@ void HRTFDatabase::applySpatialBlend(int numRealSamples,
 // T. Baeckstroem, A. Kuntz, "Optimized covariance domain framework for time-frequency processing of spatial
 // audio", JAES 61(6), 2013.
 
-float HRTFDatabase::sAmbisonicsMagLSCutoff[4] = { 1500.0f, 1500.0f, 1500.0f, 1500.0f };
-bool HRTFDatabase::sAmbisonicsDiffuseCovarianceConstraint = true;
-float HRTFDatabase::sAmbisonicsCovarianceMinFrequency = 0.0f;
-bool HRTFDatabase::sAmbisonicsMaxRE = false;
-int HRTFDatabase::sAmbisonicsNumDesignPoints = 480;
-
 namespace {
 
 using cplx = std::complex<double>;
+
+// Below this frequency, the filters are an ordinary least-squares fit (keeps the ITD); at and above it, MagLS.
+// 1.5 kHz is the cutoff of the MagLS decoder of the Spatial Audio Framework (ambi_bin); 2 kHz and order-dependent
+// cutoffs (N c / (2 pi r)) gave larger ILD and per-direction level errors in our tests.
+const double kMagLSCutoffFrequency = 1500.0;
+
+// Number of directions of the design grid.
+const int kNumDesignDirections = 480;
 
 struct Matrix2c
 {
@@ -648,7 +655,7 @@ void HRTFDatabase::precomputeAmbisonicsHRTFs(int samplingRate,
     const auto kMaxCoeffs = SphericalHarmonics::numCoeffsForOrder(kMaxOrder);
     const auto numBins = mFFTInterpolation.numComplexSamples;
     const auto fftSize = mFFTInterpolation.numRealSamples;
-    const auto numPoints = std::max(sAmbisonicsNumDesignPoints, 2 * kMaxCoeffs);
+    const auto numPoints = kNumDesignDirections;
     const auto pointWeight = 4.0 * Math::kPi / numPoints;
 
     // Design grid: a Fibonacci (golden angle) spiral, which is nearly uniform and deterministic.
@@ -738,7 +745,7 @@ void HRTFDatabase::precomputeAmbisonicsHRTFs(int samplingRate,
 
         choleskySolve(numCoeffs, gram, projector, numPoints);
 
-        const auto cutoffBin = static_cast<int>(ceil(sAmbisonicsMagLSCutoff[order] * fftSize / samplingRate));
+        const auto cutoffBin = static_cast<int>(ceil(kMagLSCutoffFrequency * fftSize / samplingRate));
 
         auto decode = [&](int k, int e, int q)
         {
@@ -775,26 +782,9 @@ void HRTFDatabase::precomputeAmbisonicsHRTFs(int samplingRate,
             }
         }
 
-        // Optional max-rE weighting, applied before the covariance constraint so the latter restores the
-        // diffuse-field response.
-        if (sAmbisonicsMaxRE && order > 0)
-        {
-            auto cosine = cos((137.9 * Math::kDegreesToRadians) / (order + 1.51));
-            for (auto l = 0, c = 0; l <= order; ++l)
-            {
-                auto w = SphericalHarmonics::legendre(l, static_cast<float>(cosine));
-                for (auto m = -l; m <= l; ++m, ++c)
-                    for (auto k = 0; k < numBins; ++k)
-                        for (auto e = 0; e < IHRTFMap::kNumEars; ++e)
-                            coeffs[(k * IHRTFMap::kNumEars + e) * kMaxCoeffs + c] *= w;
-            }
-        }
-
         // 2. Diffuse-field covariance constraint.
-        if (sAmbisonicsDiffuseCovarianceConstraint)
         {
-            const auto firstBin = static_cast<int>(ceil(sAmbisonicsCovarianceMinFrequency * fftSize / samplingRate));
-            for (auto k = firstBin; k < numBins; ++k)
+            for (auto k = 0; k < numBins; ++k)
             {
                 Matrix2c rHat{};
                 for (auto q = 0; q < numPoints; ++q)

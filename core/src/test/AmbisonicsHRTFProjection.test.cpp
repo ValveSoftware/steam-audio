@@ -24,7 +24,10 @@
 
 #include <catch.hpp>
 
+#include <chrono>
 #include <complex>
+#include <cstdint>
+#include <cstring>
 #include <cstdio>
 #include <vector>
 
@@ -321,6 +324,56 @@ double directionalLevelErrorDB(ipl::HRTFDatabase& db, const Decoder& dec)
     return std::sqrt(s / n);
 }
 
+// RMS over 36 horizontal-plane directions and the 1-8 kHz octaves of the ILD error re direct rendering (dB).
+double horizontalILDErrorDB(ipl::HRTFDatabase& db, const Decoder& dec)
+{
+    cvec L, R, Ld, Rd;
+    double s = 0.0;
+    int n = 0;
+    for (int a = 0; a < 36; ++a)
+    {
+        double az = a * 10.0 * kPiD / 180.0;
+        ipl::Vector3f d((float) std::sin(az), 0.0f, (float) -std::cos(az));
+        directTF(db, d, L, R);
+        decodedTF(dec, d, Ld, Rd);
+        for (int o = 3; o < kNumOct; ++o)
+        {
+            double e = 10.0 * std::log10(octavePower(Ld, o) / octavePower(Rd, o)) - 10.0 * std::log10(octavePower(L, o) / octavePower(R, o));
+            s += e * e;
+            ++n;
+        }
+    }
+    return std::sqrt(s / n);
+}
+
+// RMS of the error re direct rendering of the front/back level difference (dB), per ear, over 9 pairs of
+// horizontal directions mirrored about the interaural axis (azimuth a and 180 - a, a = 0..80 deg), 1-8 kHz octaves.
+double frontBackErrorDB(ipl::HRTFDatabase& db, const Decoder& dec)
+{
+    auto horizontal = [](double deg) {
+        double az = deg * kPiD / 180.0;
+        return ipl::Vector3f((float) std::sin(az), 0.0f, (float) -std::cos(az));
+    };
+    cvec Lf, Rf, Lb, Rb, Lfd, Rfd, Lbd, Rbd;
+    double s = 0.0;
+    int n = 0;
+    for (int a = 0; a <= 80; a += 10)
+    {
+        directTF(db, horizontal(a), Lf, Rf);
+        directTF(db, horizontal(180 - a), Lb, Rb);
+        decodedTF(dec, horizontal(a), Lfd, Rfd);
+        decodedTF(dec, horizontal(180 - a), Lbd, Rbd);
+        for (int o = 3; o < kNumOct; ++o)
+        {
+            double el = 10.0 * std::log10(octavePower(Lfd, o) / octavePower(Lbd, o)) - 10.0 * std::log10(octavePower(Lf, o) / octavePower(Lb, o));
+            double er = 10.0 * std::log10(octavePower(Rfd, o) / octavePower(Rbd, o)) - 10.0 * std::log10(octavePower(Rf, o) / octavePower(Rb, o));
+            s += el * el + er * er;
+            n += 2;
+        }
+    }
+    return std::sqrt(s / n);
+}
+
 void printRow(const char* name, const double* v, const char* fmt)
 {
     printf("    %-24s", name);
@@ -334,6 +387,8 @@ struct Report
     Metrics direct;
     Metrics decoded[4];
     double dirErr[4];
+    double hildErr[4];
+    double fbErr[4];
 };
 
 Report evaluate(const char* name, ipl::HRTFDatabase& db)
@@ -345,6 +400,8 @@ Report evaluate(const char* name, ipl::HRTFDatabase& db)
         auto dec = measureDecoder(db, order);
         r.decoded[order] = measureDecoded(dec);
         r.dirErr[order] = directionalLevelErrorDB(db, dec);
+        r.hildErr[order] = horizontalILDErrorDB(db, dec);
+        r.fbErr[order] = frontBackErrorDB(db, dec);
     }
 
     printf("\n[%s] octaves:", name);
@@ -389,9 +446,20 @@ Report evaluate(const char* name, ipl::HRTFDatabase& db)
         printf("    order %d: 90deg %.0f (%.0f %%), 45deg %.0f (%.0f %%)\n", order,
                1e6 * r.decoded[order].itd90, 100.0 * r.decoded[order].itd90 / r.direct.itd90,
                1e6 * r.decoded[order].itd45, 100.0 * r.decoded[order].itd45 / r.direct.itd45);
+    printf("  ITD cross-correlation < 1.5 kHz (us): direct 90deg %.0f 45deg %.0f\n", 1e6 * r.direct.xitd90, 1e6 * r.direct.xitd45);
+    for (int order = 1; order <= 3; ++order)
+        printf("    order %d: 90deg %.0f (%.0f %%), 45deg %.0f (%.0f %%)\n", order,
+               1e6 * r.decoded[order].xitd90, 100.0 * r.decoded[order].xitd90 / r.direct.xitd90,
+               1e6 * r.decoded[order].xitd45, 100.0 * r.decoded[order].xitd45 / r.direct.xitd45);
     printf("  per-direction level error, RMS over directions/ears/1-8 kHz octaves (dB):");
     for (int order = 0; order <= 3; ++order)
         printf(" o%d %.2f", order, r.dirErr[order]);
+    printf("\n  horizontal-plane ILD error, RMS over 36 azimuths and 1-8 kHz octaves (dB):");
+    for (int order = 0; order <= 3; ++order)
+        printf(" o%d %.2f", order, r.hildErr[order]);
+    printf("\n  front/back level difference error, RMS over 9 mirrored pairs, ears, 1-8 kHz octaves (dB):");
+    for (int order = 0; order <= 3; ++order)
+        printf(" o%d %.2f", order, r.fbErr[order]);
     printf("\n");
     return r;
 }
@@ -444,6 +512,56 @@ void checkCoherence(const Report& r)
     }
 }
 
+// Interaural time difference of the decode, as a fraction of that of direct rendering. Order N represents the
+// interaural phase only up to about f_N = N c / (2 pi r) (624 Hz per order for r = 8.75 cm; Zotter & Frank,
+// "Ambisonics", eq. 4.53). Below the MagLS cutoff the filters are an ordinary least-squares fit, so order 3
+// (f_3 = 1.87 kHz) must keep the ITD of the 1.5 kHz band, while order 1 is limited to its least-squares truncation
+// (about half of the ITD of a lateral source): there the requirement is no regression re the previous projection
+// (48 % at 90 deg, 52 % at 45 deg).
+void checkITD(const Report& r)
+{
+    INFO("direct " << r.direct.xitd90 * 1e6 << " / " << r.direct.xitd45 * 1e6 << " us; order 1 "
+         << r.decoded[1].xitd90 * 1e6 << " / " << r.decoded[1].xitd45 * 1e6 << " us; order 3 "
+         << r.decoded[3].xitd90 * 1e6 << " / " << r.decoded[3].xitd45 * 1e6 << " us");
+    CHECK(r.decoded[3].xitd90 >= 0.85 * r.direct.xitd90);
+    CHECK(r.decoded[3].xitd45 >= 0.85 * r.direct.xitd45);
+    CHECK(r.decoded[1].xitd90 >= 0.45 * r.direct.xitd90);
+    CHECK(r.decoded[1].xitd45 >= 0.50 * r.direct.xitd45);
+}
+
+// ILD and front/back cues. Order 3 must follow the HRTF (the previous projection: 3.4-3.6 dB ILD error, 3.1-3.3 dB
+// front/back error); order 1 must not regress (previous: 5.7-6.0 dB and 3.4-3.9 dB).
+void checkILDAndFrontBack(const Report& r)
+{
+    INFO("ILD error o1 " << r.hildErr[1] << " o3 " << r.hildErr[3] << " dB; front/back error o1 " << r.fbErr[1] << " o3 " << r.fbErr[3] << " dB");
+    CHECK(r.hildErr[3] <= 3.0);
+    CHECK(r.fbErr[3] <= 2.5);
+    CHECK(r.hildErr[1] <= 6.2);
+    CHECK(r.fbErr[1] <= 4.0);
+}
+
+// Maximum relative difference between the Ambisonics HRTFs (order 3 set) of two databases.
+double ambisonicsHRTFDifference(const ipl::HRTFDatabase& a, const ipl::HRTFDatabase& b)
+{
+    double num = 0.0, den = 0.0;
+    for (int c = 0; c < 16; ++c)
+    {
+        const ipl::complex_t* x[2] = { nullptr, nullptr };
+        const ipl::complex_t* y[2] = { nullptr, nullptr };
+        a.ambisonicsHRTF(c, x);
+        b.ambisonicsHRTF(c, y);
+        for (int e = 0; e < 2; ++e)
+        {
+            for (int k = 0; k < a.numSpectrumSamples(); ++k)
+            {
+                num += std::norm(x[e][k] - y[e][k]);
+                den += std::norm(x[e][k]);
+            }
+        }
+    }
+    return std::sqrt(num / den);
+}
+
 }
 
 TEST_CASE("Binaural Ambisonics decode keeps the HRTF diffuse-field response (default HRTF).", "[AmbisonicsHRTFProjection]")
@@ -466,48 +584,100 @@ TEST_CASE("Binaural Ambisonics decode keeps the HRTF diffuse-field interaural co
     checkCoherence(sofaReport());
 }
 
-// Design exploration (hidden): prints a summary line per design variant.
-TEST_CASE("Binaural Ambisonics design sweep.", "[.magls-sweep]")
+TEST_CASE("Binaural Ambisonics decode keeps the low-frequency ITD (default HRTF).", "[AmbisonicsHRTFProjection]")
 {
-    struct Variant { const char* name; float cutoff[4]; bool dfc; float dfcMin; bool maxRE; };
-    const Variant variants[] = {
-        { "fc1.5k dfc", { 1500, 1500, 1500, 1500 }, true, 0, false },
-        { "fc1.5k dfc>=fc", { 1500, 1500, 1500, 1500 }, true, 1500, false },
-        { "fc1.5k nodfc", { 1500, 1500, 1500, 1500 }, false, 0, false },
-        { "fc1.5k dfc maxRE", { 1500, 1500, 1500, 1500 }, true, 0, true },
-        { "fc2k dfc", { 2000, 2000, 2000, 2000 }, true, 0, false },
-        { "fcN dfc", { 0, 624, 1248, 1872 }, true, 0, false },
-        { "fcN dfc>=fc", { 0, 624, 1248, 1872 }, true, 99999, false },
-    };
-    for (const auto& v : variants)
-    {
-        for (int i = 0; i < 4; ++i)
-            ipl::HRTFDatabase::sAmbisonicsMagLSCutoff[i] = v.cutoff[i];
-        ipl::HRTFDatabase::sAmbisonicsDiffuseCovarianceConstraint = v.dfc;
-        ipl::HRTFDatabase::sAmbisonicsCovarianceMinFrequency = (v.dfcMin > 9999) ? v.cutoff[1] : v.dfcMin;
-        ipl::HRTFDatabase::sAmbisonicsMaxRE = v.maxRE;
+    checkITD(defaultReport());
+}
 
-        ipl::HRTFSettings s{};
-        s.type = ipl::HRTFMapType::Default;
-        ipl::HRTFDatabase db(s, kSR, kFrame);
-        auto direct = measureDirect(db);
-        printf("%-18s", v.name);
-        for (int order : { 1, 3 })
+TEST_CASE("Binaural Ambisonics decode keeps the low-frequency ITD (SOFA HRTF).", "[AmbisonicsHRTFProjection]")
+{
+    checkITD(sofaReport());
+}
+
+TEST_CASE("Binaural Ambisonics decode keeps ILD and front/back cues (default HRTF).", "[AmbisonicsHRTFProjection]")
+{
+    checkILDAndFrontBack(defaultReport());
+}
+
+TEST_CASE("Binaural Ambisonics decode keeps ILD and front/back cues (SOFA HRTF).", "[AmbisonicsHRTFProjection]")
+{
+    checkILDAndFrontBack(sofaReport());
+}
+
+TEST_CASE("Ambisonics HRTFs are deterministic.", "[AmbisonicsHRTFProjection]")
+{
+    ipl::HRTFSettings s{};
+    s.type = ipl::HRTFMapType::SOFA;
+    s.sofaFileName = "../../data/hrtf/cipic_124.sofa";
+    ipl::HRTFDatabase a(s, kSR, kFrame);
+    ipl::HRTFDatabase b(s, kSR, kFrame);
+    REQUIRE(ambisonicsHRTFDifference(a, b) == 0.0);
+}
+
+extern ipl::byte_t gDefaultHrtfData[];
+
+// The Ambisonics HRTFs shipped with the default HRTF must be those the current code computes from its HRIRs
+// (catches stale data after a change to the design). The HRIR part is copied with format version 2 (no
+// Ambisonics data), which makes HRTFDatabase compute the filters.
+TEST_CASE("Shipped Ambisonics HRTFs match the in-process design.", "[AmbisonicsHRTFProjection]")
+{
+    auto read = [](const uint8_t*& q) { int32_t v; memcpy(&v, q, 4); q += 4; return v; };
+    const uint8_t* base = reinterpret_cast<const uint8_t*>(gDefaultHrtfData);
+    const uint8_t* q = base + 8;
+    int numHRIRs = read(q);
+    q += 2 * (size_t) numHRIRs * sizeof(float);
+    int numRates = read(q);
+    std::vector<int> lengths(numRates);
+    for (int i = 0; i < numRates; ++i) { read(q); lengths[i] = read(q); }
+    for (int i = 0; i < numRates; ++i)
+        q += (size_t) 2 * numHRIRs * lengths[i] * sizeof(float);
+    std::vector<uint8_t> hrirOnly(base, q);
+    int32_t version2 = 2;
+    memcpy(hrirOnly.data() + 4, &version2, 4);
+
+    for (int rate : { 44100, 48000, 24000 })
+    {
+        ipl::HRTFSettings shipped{};
+        ipl::HRTFSettings computed{};
+        computed.hrtfData = hrirOnly.data();
+        ipl::HRTFDatabase a(shipped, rate, kFrame);
+        ipl::HRTFDatabase b(computed, rate, kFrame);
+        double diff = ambisonicsHRTFDifference(a, b);
+        INFO(rate << " Hz: relative difference " << diff);
+        CHECK(diff < 1e-3);
+    }
+}
+
+// Load time (hidden): construction time of HRTFDatabase, which designs the Ambisonics HRTFs when the data has none.
+TEST_CASE("HRTF load time.", "[.hrtf-load-time]")
+{
+    struct Case { const char* name; ipl::HRTFMapType type; const char* file; };
+    const Case cases[] = {
+        { "default", ipl::HRTFMapType::Default, nullptr },
+        { "cipic_124.sofa", ipl::HRTFMapType::SOFA, "../../data/hrtf/cipic_124.sofa" },
+        { "sadie_d1.sofa", ipl::HRTFMapType::SOFA, "../../data/hrtf/sadie_d1.sofa" },
+        { "sadie_h12.sofa", ipl::HRTFMapType::SOFA, "../../data/hrtf/sadie_h12.sofa" },
+    };
+    for (const auto& c : cases)
+    {
+        for (int rate : { 44100, 48000 })
         {
-            auto dec = measureDecoder(db, order);
-            auto m = measureDecoded(dec);
-            double dfMax = 0, icMax = 0, fbErr = 0;
-            for (int o = 0; o < kNumOct; ++o)
+            ipl::HRTFSettings s{};
+            s.type = c.type;
+            s.sofaFileName = c.file;
+            const int runs = 5;
+            double best = 1e30;
+            int numHRIRs = 0, numSamples = 0;
+            for (int i = 0; i < runs; ++i)
             {
-                dfMax = std::max(dfMax, std::abs(10.0 * std::log10(m.df[o] / direct.df[o])));
-                if (o >= 3) icMax = std::max(icMax, std::abs(m.ic[o] - direct.ic[o]));
-                fbErr += (m.frontBack[o] - direct.frontBack[o]) * (m.frontBack[o] - direct.frontBack[o]);
+                auto t0 = std::chrono::high_resolution_clock::now();
+                ipl::HRTFDatabase db(s, rate, kFrame);
+                auto t1 = std::chrono::high_resolution_clock::now();
+                best = std::min(best, std::chrono::duration<double, std::milli>(t1 - t0).count());
+                numHRIRs = db.numHRIRs();
+                numSamples = db.numSamples();
             }
-            printf(" | o%d df %.2f ic %.2f itd %3.0f%%/%3.0f%% x %3.0f%%/%3.0f%% ild %5.1f %5.1f %5.1f fb %.1f err %.2f", order, dfMax, icMax,
-                   100 * m.itd90 / direct.itd90, 100 * m.itd45 / direct.itd45,
-                   100 * m.xitd90 / direct.xitd90, 100 * m.xitd45 / direct.xitd45, m.ild90[4], m.ild90[5], m.ild90[6],
-                   std::sqrt(fbErr / kNumOct), directionalLevelErrorDB(db, dec));
+            printf("  %-16s %d Hz (%d HRIRs x %d samples): %.1f ms (best of %d)\n", c.name, rate, numHRIRs, numSamples, best, runs);
         }
-        printf("\n");
     }
 }

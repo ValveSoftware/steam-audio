@@ -50,12 +50,6 @@ public:
     static bool sEnableDCCorrectionForPhaseInterpolation;
     static bool sEnableNyquistCorrectionForPhaseInterpolation;
 
-    // Parameters of the binaural Ambisonics filter design (precomputeAmbisonicsHRTFs). Exposed for testing.
-    static float sAmbisonicsMagLSCutoff[4]; // Hz, per order. Below: least squares. At and above: MagLS.
-    static bool sAmbisonicsDiffuseCovarianceConstraint;
-    static float sAmbisonicsCovarianceMinFrequency; // Hz. The covariance constraint is applied from here up.
-    static bool sAmbisonicsMaxRE; // Bake max-rE weights into the filters (before the covariance constraint).
-    static int sAmbisonicsNumDesignPoints;
 
     HRTFDatabase(const HRTFSettings& hrtfSettings,
                  int samplingRate,
