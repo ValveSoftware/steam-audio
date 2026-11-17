@@ -583,7 +583,7 @@ kernel void gatherEnergyField(float scale,
 // Reconstruction Kernels
 // --------------------------------------------------------------------------------------------------------------------
 
-#define ENERGY_THRESHOLD            1e-7f
+#define ENERGY_THRESHOLD            1e-30f
 #define MIN_VARIANCE                1e-5f
 #define NUM_WORK_ITEM_SAMPLES       32
 #define WORK_GROUP_SIZE				64
