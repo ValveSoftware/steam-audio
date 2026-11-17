@@ -116,7 +116,6 @@ private:
 
     OpenCLKernel mGenerateCameraRays;
     OpenCLKernel mGenerateListenerRays;
-    OpenCLKernel mSphereOcclusion;
     OpenCLKernel mShadeAndBounce;
     OpenCLKernel mGatherImage;
     OpenCLKernel mGatherEnergyField;
@@ -140,12 +139,6 @@ private:
 
     void generateListenerRays(int numListeners,
                               int numRays);
-
-    void sphereOcclusion(int numSources,
-                         const CoordinateSpace3f* sources,
-                         int numListeners,
-                         const CoordinateSpace3f* listeners,
-                         int numRays);
 
     void shadeAndBounce(const RadeonRaysScene& scene,
                         int numSources,

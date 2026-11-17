@@ -260,41 +260,6 @@ float raySphereIntersect(global const Ray* ray,
     return t;
 }
 
-kernel void sphereOcclusion(uint numSources,
-                            global const CoordinateSpace* sources,
-                            uint numListeners,
-                            global const CoordinateSpace* listeners,
-                            global Ray* rays,
-                            global Hit* hits)
-{
-    uint numRays = get_global_size(0);
-    uint rayIndex = get_global_id(0);
-
-    for (int i = 0; i < numListeners; ++i)
-    {
-        uint index = i * numRays + rayIndex;
-
-        float listenerSphereHitDistance = raySphereIntersect(&rays[index], listeners[i].origin, LISTENER_RADIUS);
-        if (0.0f <= listenerSphereHitDistance && listenerSphereHitDistance < hits[index].uvwt.s3)
-        {
-            rays[index].extra.y = 0;
-            hits[index].primid = -1;
-            return;
-        }
-
-        for (int j = 0; j < numSources; ++j)
-        {
-            float sourceSphereHitDistance = raySphereIntersect(&rays[index], sources[j].origin, SOURCE_RADIUS);
-            if (0.0f <= sourceSphereHitDistance && sourceSphereHitDistance < hits[index].uvwt.s3)
-            {
-                rays[index].extra.y = 0;
-                hits[index].primid = -1;
-                return;
-            }
-        }
-    }
-}
-
 // --------------------------------------------------------------------------------------------------------------------
 // Shading + Shadow/Bounced Ray Generation Kernels
 // --------------------------------------------------------------------------------------------------------------------

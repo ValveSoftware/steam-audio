@@ -80,7 +80,6 @@ RadeonRaysReflectionSimulator::RadeonRaysReflectionSimulator(int maxNumRays,
     , mOccluded(radeonRays, std::max(maxNumSources, maxNumListeners) * maxNumRays * sizeof(cl_int))
     , mGenerateCameraRays(radeonRays->openCL(), radeonRays->program(), "generateCameraRays")
     , mGenerateListenerRays(radeonRays->openCL(), radeonRays->program(), "generateListenerRays")
-    , mSphereOcclusion(radeonRays->openCL(), radeonRays->program(), "sphereOcclusion")
     , mShadeAndBounce(radeonRays->openCL(), radeonRays->program(), "shadeAndBounce")
     , mGatherImage(radeonRays->openCL(), radeonRays->program(), "gatherImage")
     , mGatherEnergyField(radeonRays->openCL(), radeonRays->program(), "gatherEnergyField")
@@ -191,11 +190,6 @@ void RadeonRaysReflectionSimulator::simulate(const IScene& scene,
         mRadeonRays->api()->QueryIntersection(mRays[mCurrentRayBuffer].rrBuffer(), mNumRays.rrBuffer(),
                                               mMaxNumListeners * mMaxNumRays, mHits.rrBuffer(), nullptr, nullptr);
 
-        if (i > 0)
-        {
-            sphereOcclusion(numSources, sources, numListeners, listeners, numRays);
-        }
-
         shadeAndBounce(static_cast<const RadeonRaysScene&>(scene), numSources, sources, numListeners, listeners,
                        directivities, numRays, numBounces, irradianceMinDistance, 500.0f);
 
@@ -264,11 +258,6 @@ void RadeonRaysReflectionSimulator::simulate(const IScene& scene,
     {
         mRadeonRays->api()->QueryIntersection(mRays[mCurrentRayBuffer].rrBuffer(), mNumRays.rrBuffer(),
                                               mMaxNumListeners * mMaxNumRays, mHits.rrBuffer(), nullptr, nullptr);
-
-        if (i > 0)
-        {
-            sphereOcclusion(numSources, sources, numListeners, listeners, numRays);
-        }
 
         shadeAndBounce(static_cast<const RadeonRaysScene&>(scene), numSources, sources, numListeners, listeners,
                        directivities, numRays, numBounces, irradianceMinDistance, (4.0f * Math::kPi) / numRays);
@@ -427,29 +416,6 @@ void RadeonRaysReflectionSimulator::generateListenerRays(int numListeners,
 
     size_t globalSize[] = { static_cast<size_t>(numRays), static_cast<size_t>(numListeners) };
     clEnqueueNDRangeKernel(mRadeonRays->openCL().irUpdateQueue(), mGenerateListenerRays.kernel(), 2, nullptr,
-                           globalSize, nullptr, 0, nullptr, nullptr);
-}
-
-void RadeonRaysReflectionSimulator::sphereOcclusion(int numSources,
-                                                    const CoordinateSpace3f* sources,
-                                                    int numListeners,
-                                                    const CoordinateSpace3f* listeners,
-                                                    int numRays)
-{
-    auto _numSources = static_cast<cl_uint>(numSources);
-    auto _numListeners = static_cast<cl_uint>(numListeners);
-
-    auto argIndex = 0;
-    clSetKernelArg(mSphereOcclusion.kernel(), argIndex++, sizeof(cl_uint), &_numSources);
-    clSetKernelArg(mSphereOcclusion.kernel(), argIndex++, sizeof(cl_mem), &mSources.buffer());
-    clSetKernelArg(mSphereOcclusion.kernel(), argIndex++, sizeof(cl_uint), &_numListeners);
-    clSetKernelArg(mSphereOcclusion.kernel(), argIndex++, sizeof(cl_mem), &mListeners.buffer());
-    clSetKernelArg(mSphereOcclusion.kernel(), argIndex++, sizeof(cl_mem), &mRays[mCurrentRayBuffer].clBuffer());
-    clSetKernelArg(mSphereOcclusion.kernel(), argIndex++, sizeof(cl_mem), &mHits.clBuffer());
-
-    size_t globalSize[] = { static_cast<size_t>(numRays) };
-
-    clEnqueueNDRangeKernel(mRadeonRays->openCL().irUpdateQueue(), mSphereOcclusion.kernel(), 1, nullptr,
                            globalSize, nullptr, 0, nullptr, nullptr);
 }
 
