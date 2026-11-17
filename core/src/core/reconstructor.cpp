@@ -33,7 +33,9 @@ namespace ipl {
 // IReconstructor
 // --------------------------------------------------------------------------------------------------------------------
 
-const float IReconstructor::kEnergyThreshold = 1e-7f;
+// The energy field is in units of a source of power 1: a source far away, or a late reflection, has an energy that is
+// small and still has to be heard. Only a bin that holds nothing (or less than a float keeps) is left out.
+const float IReconstructor::kEnergyThreshold = 1e-30f;
 const float IReconstructor::kMinVariance = 1e-5f;
 
 
