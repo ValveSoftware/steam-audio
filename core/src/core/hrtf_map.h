@@ -136,8 +136,11 @@ public:
 
 private:
     static const int kMinSupportedFileFormatVersion = 2;
-    static const int kMaxSupportedFileFormatVersion = 3;
+    static const int kMaxSupportedFileFormatVersion = 4;
     static const int kMinFileFormatVersionWithSHData = 3;
+    // Version 3 stores one order-3 projection of the HRIRs, which is no longer used (the filters are recomputed).
+    // Version 4 stores one set of binaural Ambisonics decoding filters per order, from 0 to kMaxAmbisonicsOrder.
+    static const int kMinFileFormatVersionWithPerOrderSHData = 4;
 
     int mVersion;
     int mNumHRIRs; // Number of measurement positions.
@@ -147,7 +150,7 @@ private:
     Array<float> mAzimuths; // Azimuth values. #azimuths.
     Array<float, 2> mElevationsForAzimuth; // Elevation values, for each azimuth. #azimuths * #elevations.
     Array<float, 3> mHRIR; // HRIRs. #ears * #measurements * #samples.
-    Array<float, 3> mAmbisonicsHRIR; // Ambisonics HRIRs. #ears * #coefficients * #samples.
+    Array<float, 3> mAmbisonicsHRIR; // Ambisonics HRIRs. #ears * #filters (all orders) * #samples.
 
     // Loads header information from the data, and verifies it.
     void verifyDataHeader(const byte_t*& readPointer);

@@ -16,7 +16,6 @@
 
 #include "hrtf_database.h"
 
-#include "ambisonics_panning_effect.h"
 #include "array_math.h"
 #include "float4.h"
 #include "fft.h"
@@ -48,7 +47,7 @@ HRTFDatabase::HRTFDatabase(const HRTFSettings& hrtfSettings,
     , mInterpolatedHRTFPhase(mFFTInterpolation.numComplexSamples)
     , mInterpolatedHRTF(IHRTFMap::kNumEars, mFFTInterpolation.numComplexSamples)
     , mInterpolatedHRIR(IHRTFMap::kNumEars, mFFTAudioProcessing.numRealSamples)
-    , mAmbisonicsHRTF(IHRTFMap::kNumEars, SphericalHarmonics::numCoeffsForOrder(IHRTFMap::kMaxAmbisonicsOrder), mFFTAudioProcessing.numComplexSamples)
+    , mAmbisonicsHRTF(IHRTFMap::kNumEars, numAmbisonicsHRTFs(), mFFTAudioProcessing.numComplexSamples)
 {
     updateReferenceLoudness(hrtfSettings.normType);
     applyVolumeSettings(hrtfSettings.volume, hrtfSettings.normType);
@@ -152,13 +151,20 @@ void HRTFDatabase::interpolatedHRTF(const Vector3f& direction,
     }
 }
 
-void HRTFDatabase::ambisonicsHRTF(int index,
+void HRTFDatabase::ambisonicsHRTF(int order,
+                                  int index,
                                   const complex_t** hrtf) const
 {
     for (auto i = 0; i < IHRTFMap::kNumEars; ++i)
     {
-        hrtf[i] = mAmbisonicsHRTF[i][index];
+        hrtf[i] = mAmbisonicsHRTF[i][ambisonicsHRTFOffset(order) + index];
     }
+}
+
+void HRTFDatabase::ambisonicsHRTF(int index,
+                                  const complex_t** hrtf) const
+{
+    ambisonicsHRTF(IHRTFMap::kMaxAmbisonicsOrder, index, hrtf);
 }
 
 float Loudness::gainToDB(float gain)
@@ -476,55 +482,374 @@ void HRTFDatabase::applySpatialBlend(int numRealSamples,
     }
 }
 
+// The binaural Ambisonics decoding filters are designed per order N (0..3), since the best order-N filters are not
+// a truncation of the order-3 ones. For every frequency bin and ear, the filters h_SH (one per Ambisonics channel)
+// are fitted so that the decode y_N(d)^T h_SH approximates the HRTF in every direction d of a dense design grid:
+//
+// 1. Magnitude least squares (MagLS). Below a cutoff frequency, an ordinary least-squares fit of the complex HRTF,
+//    which keeps the interaural phase (ITD). At and above it, only the magnitude is fitted: the phase of the
+//    target in each direction is taken from the decode of the previous frequency bin, then least squares. A
+//    low-order fit of the measured phase cancels at high frequencies (the HRTF phase changes faster with direction
+//    than order N can follow), which made the decode lose up to ~14 dB of high frequencies.
+// 2. Diffuse-field covariance constraint. A 2x2 matrix M mixes the left and right filters so that the 2x2
+//    covariance matrix of the decode over all directions (diagonal: diffuse-field response of each ear;
+//    off-diagonal: interaural cross-spectrum) equals that of the HRTF. M is the solution closest to identity.
+//
+// References: C. Schoerkhuber, M. Zaunschirm, R. Hoeldrich, "Binaural rendering of Ambisonic signals via magnitude
+// least squares", DAGA 2018. M. Zaunschirm, C. Schoerkhuber, R. Hoeldrich, "Binaural rendering of Ambisonic
+// signals by head-related impulse response time alignment and a diffuseness constraint", JASA 143(6), 2018.
+// F. Zotter, M. Frank, "Ambisonics", Springer 2019, sections 4.11.2-4.11.3 and appendix A.5. J. Vilkamo,
+// T. Baeckstroem, A. Kuntz, "Optimized covariance domain framework for time-frequency processing of spatial
+// audio", JAES 61(6), 2013.
+
+float HRTFDatabase::sAmbisonicsMagLSCutoff[4] = { 1500.0f, 1500.0f, 1500.0f, 1500.0f };
+bool HRTFDatabase::sAmbisonicsDiffuseCovarianceConstraint = true;
+float HRTFDatabase::sAmbisonicsCovarianceMinFrequency = 0.0f;
+bool HRTFDatabase::sAmbisonicsMaxRE = false;
+int HRTFDatabase::sAmbisonicsNumDesignPoints = 480;
+
+namespace {
+
+using cplx = std::complex<double>;
+
+struct Matrix2c
+{
+    cplx m[2][2];
+};
+
+Matrix2c mul(const Matrix2c& a, const Matrix2c& b)
+{
+    Matrix2c c{};
+    for (auto i = 0; i < 2; ++i)
+        for (auto j = 0; j < 2; ++j)
+            c.m[i][j] = a.m[i][0] * b.m[0][j] + a.m[i][1] * b.m[1][j];
+    return c;
+}
+
+Matrix2c adjoint(const Matrix2c& a)
+{
+    Matrix2c c{};
+    for (auto i = 0; i < 2; ++i)
+        for (auto j = 0; j < 2; ++j)
+            c.m[i][j] = std::conj(a.m[j][i]);
+    return c;
+}
+
+Matrix2c inverse(const Matrix2c& a)
+{
+    auto det = a.m[0][0] * a.m[1][1] - a.m[0][1] * a.m[1][0];
+    Matrix2c c{};
+    c.m[0][0] = a.m[1][1] / det;
+    c.m[0][1] = -a.m[0][1] / det;
+    c.m[1][0] = -a.m[1][0] / det;
+    c.m[1][1] = a.m[0][0] / det;
+    return c;
+}
+
+// Upper-triangular X such that R = X^H X, for a Hermitian positive-definite R.
+Matrix2c choleskyUpper(const Matrix2c& r)
+{
+    Matrix2c x{};
+    auto x00 = std::sqrt(std::max(r.m[0][0].real(), 1e-30));
+    x.m[0][0] = x00;
+    x.m[0][1] = r.m[0][1] / x00;
+    x.m[1][1] = std::sqrt(std::max(r.m[1][1].real() - std::norm(x.m[0][1]), 1e-30));
+    return x;
+}
+
+// Inverse square root of a Hermitian positive-definite 2x2 matrix C:
+// sqrt(C) = (C + s I) / t, with s = sqrt(det C) and t = sqrt(tr C + 2 s).
+Matrix2c inverseSqrt(const Matrix2c& c)
+{
+    auto s = std::sqrt(std::max((c.m[0][0] * c.m[1][1] - c.m[0][1] * c.m[1][0]).real(), 0.0));
+    auto t = std::sqrt(std::max(c.m[0][0].real() + c.m[1][1].real() + 2.0 * s, 1e-30));
+    Matrix2c root = c;
+    root.m[0][0] += s;
+    root.m[1][1] += s;
+    for (auto i = 0; i < 2; ++i)
+        for (auto j = 0; j < 2; ++j)
+            root.m[i][j] /= t;
+    return inverse(root);
+}
+
+// Mixing matrix M for row vectors [left, right]: covariance R_hat becomes M^H R_hat M = R, with M as close to
+// identity as possible (maximum Re tr(R_hat M)). With R = X^H X and R_hat = Xh^H Xh (Cholesky), any
+// M = Xh^-1 P X with P unitary meets the constraint; the trace is Re tr(P X Xh^H), which is largest when P is the
+// adjoint of the unitary polar factor of B = X Xh^H, i.e. P = (B (B^H B)^-1/2)^H.
+Matrix2c covarianceMixingMatrix(const Matrix2c& rHat,
+                                const Matrix2c& r)
+{
+    auto x = choleskyUpper(r);
+    auto xHat = choleskyUpper(rHat);
+    auto b = mul(x, adjoint(xHat));
+    auto polar = mul(b, inverseSqrt(mul(adjoint(b), b)));
+    return mul(mul(inverse(xHat), adjoint(polar)), x);
+}
+
+// Solves A X = B for a symmetric positive-definite n x n matrix A (row-major); B is n x numRhs, row-major, and is
+// overwritten with X.
+void choleskySolve(int n,
+                   vector<double> a,
+                   vector<double>& b,
+                   int numRhs)
+{
+    for (auto j = 0; j < n; ++j)
+    {
+        auto d = a[j * n + j];
+        for (auto k = 0; k < j; ++k)
+            d -= a[j * n + k] * a[j * n + k];
+        d = std::sqrt(std::max(d, 1e-30));
+        a[j * n + j] = d;
+        for (auto i = j + 1; i < n; ++i)
+        {
+            auto v = a[i * n + j];
+            for (auto k = 0; k < j; ++k)
+                v -= a[i * n + k] * a[j * n + k];
+            a[i * n + j] = v / d;
+        }
+    }
+
+    for (auto c = 0; c < numRhs; ++c)
+    {
+        for (auto i = 0; i < n; ++i)
+        {
+            auto v = b[i * numRhs + c];
+            for (auto k = 0; k < i; ++k)
+                v -= a[i * n + k] * b[k * numRhs + c];
+            b[i * numRhs + c] = v / a[i * n + i];
+        }
+        for (auto i = n - 1; i >= 0; --i)
+        {
+            auto v = b[i * numRhs + c];
+            for (auto k = i + 1; k < n; ++k)
+                v -= a[k * n + i] * b[k * numRhs + c];
+            b[i * numRhs + c] = v / a[i * n + i];
+        }
+    }
+}
+
+}
+
+int HRTFDatabase::ambisonicsHRTFOffset(int order)
+{
+    // sum_{n < order} (n + 1)^2
+    return (order * (order + 1) * (2 * order + 1)) / 6;
+}
+
+int HRTFDatabase::numAmbisonicsHRTFs()
+{
+    return ambisonicsHRTFOffset(IHRTFMap::kMaxAmbisonicsOrder + 1);
+}
+
 void HRTFDatabase::precomputeAmbisonicsHRTFs(int samplingRate,
                                              int frameSize)
 {
-    const auto numCoefficients = SphericalHarmonics::numCoeffsForOrder(IHRTFMap::kMaxAmbisonicsOrder);
+    const auto kMaxOrder = IHRTFMap::kMaxAmbisonicsOrder;
+    const auto kMaxCoeffs = SphericalHarmonics::numCoeffsForOrder(kMaxOrder);
+    const auto numBins = mFFTInterpolation.numComplexSamples;
+    const auto fftSize = mFFTInterpolation.numRealSamples;
+    const auto numPoints = std::max(sAmbisonicsNumDesignPoints, 2 * kMaxCoeffs);
+    const auto pointWeight = 4.0 * Math::kPi / numPoints;
 
-    const auto numSpeakers = AmbisonicsPanningEffect::kNumVirtualSpeakers;
-    const auto virtualSpeakers = AmbisonicsPanningEffect::kVirtualSpeakers;
+    // Design grid: a Fibonacci (golden angle) spiral, which is nearly uniform and deterministic.
+    vector<Vector3f> directions(numPoints);
+    const auto goldenAngle = Math::kPi * (3.0 - sqrt(5.0));
+    for (auto q = 0; q < numPoints; ++q)
+    {
+        auto y = 1.0 - 2.0 * (q + 0.5) / numPoints;
+        auto r = sqrt(std::max(0.0, 1.0 - y * y));
+        directions[q] = Vector3f(static_cast<float>(r * cos(goldenAngle * q)), static_cast<float>(y),
+                                 static_cast<float>(r * sin(goldenAngle * q)));
+    }
 
-    Array<float, 3> minPhaseHRIR(IHRTFMap::kNumEars, numHRIRs(), numSamples());
-    convertToMinimumPhase(mHRTFMap->hrtfData(), minPhaseHRIR);
+    // Common delay of the HRIRs, in samples. It is removed before the design and restored after, so that the phase
+    // continued above the cutoff keeps the high frequencies aligned in time with the low frequencies.
+    auto meanPeakDelay = 0.0;
+    for (auto i = 0; i < IHRTFMap::kNumEars; ++i)
+        for (auto j = 0; j < numHRIRs(); ++j)
+            meanPeakDelay += mPeakDelay[i][j];
+    meanPeakDelay /= (IHRTFMap::kNumEars * numHRIRs());
+    const auto bulkDelay = floor(meanPeakDelay + 0.5);
 
-    Array<float, 3> minPhaseHRTFMagnitude(IHRTFMap::kNumEars, numHRIRs(), mFFTInterpolation.numComplexSamples);
-    Array<float, 3> minPhaseHRTFPhase(IHRTFMap::kNumEars, numHRIRs(), mFFTInterpolation.numComplexSamples);
-    decomposeToMagnitudePhase(minPhaseHRIR, minPhaseHRTFMagnitude, minPhaseHRTFPhase);
+    // Target: the HRTF in each design direction, interpolated the same way as for direct rendering.
+    // target[(ear * numPoints + q) * numBins + k]
+    vector<cplx> target(IHRTFMap::kNumEars * numPoints * numBins);
+    for (auto q = 0; q < numPoints; ++q)
+    {
+        int indices[8];
+        float weights[8];
+        mHRTFMap->interpolatedHRIRWeights(directions[q], indices, weights);
+        interpolateHRIRs(indices, weights, 1.0f, HRTFPhaseType::None);
+
+        for (auto e = 0; e < IHRTFMap::kNumEars; ++e)
+        {
+            for (auto k = 0; k < numBins; ++k)
+            {
+                auto delay = std::polar(1.0, 2.0 * Math::kPi * k * bulkDelay / fftSize);
+                target[(e * numPoints + q) * numBins + k] = cplx(mInterpolatedHRTF[e][k]) * delay;
+            }
+        }
+    }
+
+    // Diffuse-field covariance of the HRTF, per bin: R_ij = sum_q w conj(H_i(q)) H_j(q).
+    vector<Matrix2c> targetCovariance(numBins);
+    for (auto k = 0; k < numBins; ++k)
+    {
+        Matrix2c r{};
+        for (auto q = 0; q < numPoints; ++q)
+        {
+            cplx h[2] = { target[(0 * numPoints + q) * numBins + k], target[(1 * numPoints + q) * numBins + k] };
+            for (auto i = 0; i < 2; ++i)
+                for (auto j = 0; j < 2; ++j)
+                    r.m[i][j] += pointWeight * std::conj(h[i]) * h[j];
+        }
+        targetCovariance[k] = r;
+    }
+
+    // Real spherical harmonics on the design grid. Y[q * kMaxCoeffs + c]
+    vector<double> Y(numPoints * kMaxCoeffs);
+    for (auto q = 0; q < numPoints; ++q)
+        for (auto l = 0, c = 0; l <= kMaxOrder; ++l)
+            for (auto m = -l; m <= l; ++m, ++c)
+                Y[q * kMaxCoeffs + c] = SphericalHarmonics::evaluate(l, m, directions[q]);
 
     mAmbisonicsHRTF.zero();
 
-    Array<complex_t> tempInterpolatedHRTF(mFFTAudioProcessing.numComplexSamples);
+    vector<cplx> coeffs(numBins * IHRTFMap::kNumEars * kMaxCoeffs); // [(k * kNumEars + e) * kMaxCoeffs + c]
+    vector<cplx> fit(numPoints);
+    vector<cplx> decoded(IHRTFMap::kNumEars * numPoints);
+    Array<complex_t> spectrum(numBins);
 
-    for (auto l = 0, index = 0; l <= IHRTFMap::kMaxAmbisonicsOrder; ++l)
+    for (auto order = 0; order <= kMaxOrder; ++order)
     {
-        for (auto m = -l; m <= l; ++m, ++index)
+        const auto numCoeffs = SphericalHarmonics::numCoeffsForOrder(order);
+
+        // Least-squares projector P = (Y^T W Y)^-1 Y^T W, numCoeffs x numPoints.
+        vector<double> gram(numCoeffs * numCoeffs, 0.0);
+        for (auto i = 0; i < numCoeffs; ++i)
+            for (auto j = 0; j < numCoeffs; ++j)
+                for (auto q = 0; q < numPoints; ++q)
+                    gram[i * numCoeffs + j] += pointWeight * Y[q * kMaxCoeffs + i] * Y[q * kMaxCoeffs + j];
+
+        vector<double> projector(numCoeffs * numPoints);
+        for (auto i = 0; i < numCoeffs; ++i)
+            for (auto q = 0; q < numPoints; ++q)
+                projector[i * numPoints + q] = pointWeight * Y[q * kMaxCoeffs + i];
+
+        choleskySolve(numCoeffs, gram, projector, numPoints);
+
+        const auto cutoffBin = static_cast<int>(ceil(sAmbisonicsMagLSCutoff[order] * fftSize / samplingRate));
+
+        auto decode = [&](int k, int e, int q)
         {
-            for (auto i = 0; i < numSpeakers; ++i)
+            auto value = cplx(0.0, 0.0);
+            for (auto c = 0; c < numCoeffs; ++c)
+                value += Y[q * kMaxCoeffs + c] * coeffs[(k * IHRTFMap::kNumEars + e) * kMaxCoeffs + c];
+            return value;
+        };
+
+        // 1. MagLS.
+        for (auto k = 0; k < numBins; ++k)
+        {
+            for (auto e = 0; e < IHRTFMap::kNumEars; ++e)
             {
-                auto weight = ((4.0f * Math::kPi) / numSpeakers) * SphericalHarmonics::evaluate(l, m, virtualSpeakers[i]);
-
-                int indices[8];
-                float weights[8];
-                mHRTFMap->interpolatedHRIRWeights(virtualSpeakers[i], indices, weights);
-
-                // We can just blend the (smaller) interpolatedHRTF for each virtual speaker, IFFT it once, and
-                // then FFT it once with zero-padding. This will reduce the number of IFFT/FFTs required during the SH
-                // projection step by a factor of #virtualspeakers.
-                interpolateHRIRs(indices, weights, 1.0f, HRTFPhaseType::None);
-
-                for (auto j = 0; j < IHRTFMap::kNumEars; ++j)
+                for (auto q = 0; q < numPoints; ++q)
                 {
-                    memcpy(tempInterpolatedHRTF.data(), mInterpolatedHRTF[j], mInterpolatedHRTF.size(1) * sizeof(complex_t));
-                    ArrayMath::scale(mFFTAudioProcessing.numComplexSamples, tempInterpolatedHRTF.data(), weight, tempInterpolatedHRTF.data());
-                    ArrayMath::add(mFFTAudioProcessing.numComplexSamples, mAmbisonicsHRTF[j][index], tempInterpolatedHRTF.data(), mAmbisonicsHRTF[j][index]);
+                    auto h = target[(e * numPoints + q) * numBins + k];
+                    if (k > 0 && k >= cutoffBin)
+                    {
+                        auto previous = decode(k - 1, e, q);
+                        auto magnitude = std::abs(previous);
+                        h = (magnitude > 0.0) ? std::abs(h) * (previous / magnitude) : cplx(std::abs(h), 0.0);
+                    }
+                    fit[q] = h;
+                }
+
+                for (auto c = 0; c < numCoeffs; ++c)
+                {
+                    auto value = cplx(0.0, 0.0);
+                    for (auto q = 0; q < numPoints; ++q)
+                        value += projector[c * numPoints + q] * fit[q];
+                    coeffs[(k * IHRTFMap::kNumEars + e) * kMaxCoeffs + c] = value;
                 }
             }
+        }
 
-            for (auto j = 0; j < IHRTFMap::kNumEars; ++j)
+        // Optional max-rE weighting, applied before the covariance constraint so the latter restores the
+        // diffuse-field response.
+        if (sAmbisonicsMaxRE && order > 0)
+        {
+            auto cosine = cos((137.9 * Math::kDegreesToRadians) / (order + 1.51));
+            for (auto l = 0, c = 0; l <= order; ++l)
             {
-                mFFTInterpolation.applyInverse(mAmbisonicsHRTF[j][index], mInterpolatedHRIR[j]);
-                memset(mInterpolatedHRIR[j] + numSamples(), 0, (mFFTInterpolation.numRealSamples - numSamples()) * sizeof(float));
-                mFFTAudioProcessing.applyForward(mInterpolatedHRIR[j], mAmbisonicsHRTF[j][index]);
+                auto w = SphericalHarmonics::legendre(l, static_cast<float>(cosine));
+                for (auto m = -l; m <= l; ++m, ++c)
+                    for (auto k = 0; k < numBins; ++k)
+                        for (auto e = 0; e < IHRTFMap::kNumEars; ++e)
+                            coeffs[(k * IHRTFMap::kNumEars + e) * kMaxCoeffs + c] *= w;
+            }
+        }
+
+        // 2. Diffuse-field covariance constraint.
+        if (sAmbisonicsDiffuseCovarianceConstraint)
+        {
+            const auto firstBin = static_cast<int>(ceil(sAmbisonicsCovarianceMinFrequency * fftSize / samplingRate));
+            for (auto k = firstBin; k < numBins; ++k)
+            {
+                Matrix2c rHat{};
+                for (auto q = 0; q < numPoints; ++q)
+                {
+                    cplx h[2] = { decode(k, 0, q), decode(k, 1, q) };
+                    for (auto i = 0; i < 2; ++i)
+                        for (auto j = 0; j < 2; ++j)
+                            rHat.m[i][j] += pointWeight * std::conj(h[i]) * h[j];
+                }
+
+                Matrix2c mixing{};
+                if (order == 0)
+                {
+                    // A single channel cannot be decorrelated: only match the diffuse-field response of each ear.
+                    for (auto i = 0; i < 2; ++i)
+                        mixing.m[i][i] = sqrt(targetCovariance[k].m[i][i].real() / std::max(rHat.m[i][i].real(), 1e-30));
+                }
+                else
+                {
+                    // Small diagonal loading keeps the inverse bounded where the decode is almost fully coherent.
+                    auto loading = 1e-4 * (rHat.m[0][0].real() + rHat.m[1][1].real());
+                    rHat.m[0][0] += loading;
+                    rHat.m[1][1] += loading;
+                    mixing = covarianceMixingMatrix(rHat, targetCovariance[k]);
+                }
+
+                for (auto c = 0; c < numCoeffs; ++c)
+                {
+                    auto left = coeffs[(k * IHRTFMap::kNumEars + 0) * kMaxCoeffs + c];
+                    auto right = coeffs[(k * IHRTFMap::kNumEars + 1) * kMaxCoeffs + c];
+                    coeffs[(k * IHRTFMap::kNumEars + 0) * kMaxCoeffs + c] = left * mixing.m[0][0] + right * mixing.m[1][0];
+                    coeffs[(k * IHRTFMap::kNumEars + 1) * kMaxCoeffs + c] = left * mixing.m[0][1] + right * mixing.m[1][1];
+                }
+            }
+        }
+
+        // Restore the common delay, then convert to filters of the same length as the HRIRs.
+        for (auto e = 0; e < IHRTFMap::kNumEars; ++e)
+        {
+            for (auto c = 0; c < numCoeffs; ++c)
+            {
+                for (auto k = 0; k < numBins; ++k)
+                {
+                    auto value = coeffs[(k * IHRTFMap::kNumEars + e) * kMaxCoeffs + c] *
+                                 std::polar(1.0, -2.0 * Math::kPi * k * bulkDelay / fftSize);
+                    if (k == 0 || k == numBins - 1)
+                        value = cplx(value.real(), 0.0);
+                    spectrum[k] = complex_t(static_cast<float>(value.real()), static_cast<float>(value.imag()));
+                }
+
+                auto index = ambisonicsHRTFOffset(order) + c;
+                memset(mInterpolatedHRIR[e], 0, mInterpolatedHRIR.size(1) * sizeof(float));
+                mFFTInterpolation.applyInverse(spectrum.data(), mInterpolatedHRIR[e]);
+                memset(mInterpolatedHRIR[e] + numSamples(), 0, (mFFTAudioProcessing.numRealSamples - numSamples()) * sizeof(float));
+                mFFTAudioProcessing.applyForward(mInterpolatedHRIR[e], mAmbisonicsHRTF[e][index]);
             }
         }
     }
@@ -544,6 +869,7 @@ void HRTFDatabase::saveAmbisonicsHRIRs(FILE* file)
 
         vector<float> ambisonicsHRIR(mFFTAudioProcessing.numRealSamples);
 
+        // One filter set per order (0..order), see precomputeAmbisonicsHRTFs.
         for (auto i = 0; i < IHRTFMap::kNumEars; ++i)
         {
             for (auto j = 0u; j < mAmbisonicsHRTF.size(1); ++j)

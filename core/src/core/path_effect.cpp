@@ -147,20 +147,20 @@ AudioEffectState PathEffect::apply(const PathEffectParams& params,
             // blend hrtf
             memset(mHRTF.flatData(), 0, mHRTF.totalSize() * sizeof(complex_t));
 
-            auto cosine = cosf((137.9f * Math::kDegreesToRadians) / (params.order + 1.51f));
+            // The Ambisonics HRTFs are complete decoding filters for this order (see
+            // HRTFDatabase::precomputeAmbisonicsHRTFs), so no per-order weighting is applied here.
             for (auto l = 0, i = 0; l <= params.order; ++l)
             {
-                auto scalar = SphericalHarmonics::legendre(l, cosine);
                 for (auto m = -l; m <= l; ++m, ++i)
                 {
                     const complex_t* hrtfForChannel[2] = {nullptr, nullptr};
-                    params.hrtf->ambisonicsHRTF(i, hrtfForChannel);
+                    params.hrtf->ambisonicsHRTF(params.order, i, hrtfForChannel);
 
                     for (auto k = 0; k < IHRTFMap::kNumEars; ++k)
                     {
                         ArrayMath::scaleAccumulate(params.hrtf->numSpectrumSamples(),
                             reinterpret_cast<const float*>(hrtfForChannel[k]),
-                            scalar * (*mAmbisonicsBuffer)[i][0],
+                            (*mAmbisonicsBuffer)[i][0],
                             reinterpret_cast<float*>(mHRTF[k]));
                     }
                 }

@@ -71,16 +71,14 @@ AudioEffectState AmbisonicsBinauralEffect::apply(const AmbisonicsBinauralEffectP
 
     out.makeSilent();
 
-    auto cosine = cosf((137.9f * Math::kDegreesToRadians) / (params.order + 1.51f));
-
+    // The Ambisonics HRTFs are complete decoding filters designed for this order (see
+    // HRTFDatabase::precomputeAmbisonicsHRTFs), so no per-order weighting is applied here.
     for (auto l = 0, i = 0; l <= params.order; ++l)
     {
-        auto scalar = SphericalHarmonics::legendre(l, cosine);
-
         for (auto m = -l; m <= l; ++m, ++i)
         {
             const complex_t* hrtfData[] = { nullptr, nullptr };
-            params.hrtf->ambisonicsHRTF(i, hrtfData);
+            params.hrtf->ambisonicsHRTF(params.order, i, hrtfData);
 
             AudioBuffer channel(in, i);
 
@@ -91,7 +89,7 @@ AudioEffectState AmbisonicsBinauralEffect::apply(const AmbisonicsBinauralEffectP
 
             for (auto j = 0; j < 2; ++j)
             {
-                ArrayMath::scaleAccumulate(mFrameSize, mSpatializedChannel[j], scalar, out[j]);
+                ArrayMath::add(mFrameSize, mSpatializedChannel[j], out[j], out[j]);
             }
         }
     }
@@ -111,14 +109,10 @@ AudioEffectState AmbisonicsBinauralEffect::tail(AudioBuffer& out)
 
     out.makeSilent();
 
-    auto cosine = cosf((137.9f * Math::kDegreesToRadians) / (mMaxOrder + 1.51f));
-
     for (auto l = 0, i = 0; l <= mMaxOrder; ++l)
     {
         if (i >= mOverlapAddEffectStates.totalSize())
             break;
-
-        auto scalar = SphericalHarmonics::legendre(l, cosine);
 
         for (auto m = -l; m <= l; ++m, ++i)
         {
@@ -129,7 +123,7 @@ AudioEffectState AmbisonicsBinauralEffect::tail(AudioBuffer& out)
 
             for (auto j = 0; j < 2; ++j)
             {
-                ArrayMath::scaleAccumulate(mFrameSize, mSpatializedChannel[j], scalar, out[j]);
+                ArrayMath::add(mFrameSize, mSpatializedChannel[j], out[j], out[j]);
             }
         }
     }

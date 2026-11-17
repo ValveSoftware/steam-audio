@@ -52,6 +52,16 @@ namespace ipl {
 //          Left-ear HRIR               N x float
 //          Right-ear HRIR              N x float
 //
+//  AMBISONICS DATA (version 3 and later)
+//  For each sampling rate:
+//      Ambisonics order (3)            int32_t
+//      Sampling rate (Hz)              int32_t
+//      # samples (N)                   int32_t
+//      For each ear:
+//          Version 3: for each of the 16 order-3 channels, N x float. Ignored: the filters are recomputed.
+//          Version 4: for each order n = 0..3, for each of the (n + 1)^2 channels, N x float: the binaural
+//          Ambisonics decoding filters for order n (see HRTFDatabase::precomputeAmbisonicsHRTFs).
+//
 //  This class is designed with the CIPIC database in mind. (Particularly, the coordinate system.) For more
 //  details, see:
 //
@@ -335,7 +345,7 @@ void HRTFMap::loadHRIRs(const byte_t*& readPointer)
 
 void HRTFMap::loadAmbisonicsHRIRs(const byte_t*& readPointer, int samplingRate)
 {
-    if (mVersion < kMinFileFormatVersionWithSHData)
+    if (mVersion < kMinFileFormatVersionWithPerOrderSHData)
         return;
 
     while (true)
@@ -348,7 +358,12 @@ void HRTFMap::loadAmbisonicsHRIRs(const byte_t*& readPointer, int samplingRate)
             throw Exception(Status::Initialization);
         }
 
-        auto numCoefficients = SphericalHarmonics::numCoeffsForOrder(order);
+        // One filter set per order, from 0 to kMaxAmbisonicsOrder.
+        auto numCoefficients = 0;
+        for (auto n = 0; n <= order; ++n)
+        {
+            numCoefficients += SphericalHarmonics::numCoeffsForOrder(n);
+        }
 
         auto dataSamplingRate = *reinterpret_cast<const int32_t*>(readPointer);
         readPointer += sizeof(int32_t);

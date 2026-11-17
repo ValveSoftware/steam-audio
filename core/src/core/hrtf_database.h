@@ -50,6 +50,13 @@ public:
     static bool sEnableDCCorrectionForPhaseInterpolation;
     static bool sEnableNyquistCorrectionForPhaseInterpolation;
 
+    // Parameters of the binaural Ambisonics filter design (precomputeAmbisonicsHRTFs). Exposed for testing.
+    static float sAmbisonicsMagLSCutoff[4]; // Hz, per order. Below: least squares. At and above: MagLS.
+    static bool sAmbisonicsDiffuseCovarianceConstraint;
+    static float sAmbisonicsCovarianceMinFrequency; // Hz. The covariance constraint is applied from here up.
+    static bool sAmbisonicsMaxRE; // Bake max-rE weights into the filters (before the covariance constraint).
+    static int sAmbisonicsNumDesignPoints;
+
     HRTFDatabase(const HRTFSettings& hrtfSettings,
                  int samplingRate,
                  int frameSize);
@@ -87,9 +94,21 @@ public:
                           HRTFPhaseType phaseType,
                           int* peakDelays = nullptr);
 
-    // Returns a precomputed Ambisonics HRTF.
+    // Returns a precomputed Ambisonics HRTF: the filter that renders Ambisonics channel `index` to both ears, when
+    // decoding a sound field of order `order`. Each order has its own filter set (see precomputeAmbisonicsHRTFs).
+    void ambisonicsHRTF(int order,
+                        int index,
+                        const complex_t** hrtf) const;
+
+    // Same as above, for the highest supported order.
     void ambisonicsHRTF(int index,
                         const complex_t** hrtf) const;
+
+    // Number of Ambisonics HRTFs per ear: one filter set per order, from 0 to IHRTFMap::kMaxAmbisonicsOrder.
+    static int numAmbisonicsHRTFs();
+
+    // Index of the first Ambisonics HRTF of the filter set for the given order.
+    static int ambisonicsHRTFOffset(int order);
 
     // Saves Ambisonics HRIRs to disk.
     void saveAmbisonicsHRIRs(FILE* file);
@@ -107,7 +126,7 @@ private:
     Array<float> mInterpolatedHRTFPhase; // Temp. storage for interpolated HRTF phase. #spectrumsamples.
     Array<complex_t, 2> mInterpolatedHRTF; // Interpolated HRTF. #ears * #spectrumsamples.
     Array<float, 2> mInterpolatedHRIR; // Interpolated HRIR. #ears * #paddedsamples. TODO: check
-    Array<complex_t, 3> mAmbisonicsHRTF; // Ambisonics HRTFs. #ears * #coefficients * #paddedspectrumsamples.
+    Array<complex_t, 3> mAmbisonicsHRTF; // Ambisonics HRTFs. #ears * #numAmbisonicsHRTFs * #paddedspectrumsamples.
     float mReferenceLoudness; // Reference loudness of front HRIR.
 
     // Applies a normalization and volume scaling to the loaded HRIRs. Performs no normalization if HRTFNormType::None is selected.
@@ -145,7 +164,8 @@ private:
                            float* hrtfMagnitudeBlended,
                            float* hrtfPhaseBlended);
 
-    // Projects an HRIR set into Ambisonics.
+    // Calculates the binaural Ambisonics decoding filters for every order, using magnitude least squares (MagLS)
+    // with a diffuse-field covariance constraint.
     void precomputeAmbisonicsHRTFs(int samplingRate,
                                    int frameSize);
 

@@ -202,12 +202,34 @@ double interauralDelay(const cvec& L, const cvec& R, double lo, double hi)
     return -num / den;
 }
 
+// Interaural delay (left re right, seconds) as the lag of the maximum of the interaural cross-correlation of the
+// responses low-passed at 1.5 kHz, searched within +-1 ms in 1 us steps.
+double interauralDelayXcorr(const cvec& L, const cvec& R)
+{
+    double best = -1e300, bestLag = 0.0;
+    for (int t = -1000; t <= 1000; ++t)
+    {
+        double lag = t * 1e-6, r = 0.0;
+        for (size_t k = 1; k < L.size(); ++k)
+        {
+            double f = binFreq((int) k, L.size());
+            if (f >= 1500.0)
+                break;
+            r += std::real(L[k] * std::conj(R[k]) * std::polar(1.0, 2.0 * kPiD * f * lag));
+        }
+        if (r > best) { best = r; bestLag = lag; }
+    }
+    return bestLag;
+}
+
 struct Metrics
 {
     double df[kNumOct];        // Diffuse-field power per octave, both ears.
     double ic[kNumOct];        // Diffuse-field interaural coherence per octave (mean |coh| over bins).
     double itd90;              // Interaural delay for a source at the right, 200-1000 Hz, seconds.
     double itd45;              // Same, 45 deg front-right.
+    double xitd90;             // Interaural delay from the cross-correlation below 1.5 kHz, source at the right.
+    double xitd45;             // Same, 45 deg front-right.
     double ild90[kNumOct];     // ILD (left re right, dB) for a source at the right.
     double frontBack[kNumOct]; // Front re back level (dB), both ears, horizontal plane.
 };
@@ -250,11 +272,13 @@ Metrics measure(TF tf)
 
     tf(ipl::Vector3f(1.0f, 0.0f, 0.0f), L, R);
     m.itd90 = interauralDelay(L, R, 200.0, 1000.0);
+    m.xitd90 = interauralDelayXcorr(L, R);
     for (int o = 0; o < kNumOct; ++o)
         m.ild90[o] = 10.0 * std::log10(octavePower(L, o) / octavePower(R, o));
 
     tf(ipl::Vector3f(0.70710678f, 0.0f, -0.70710678f), L, R);
     m.itd45 = interauralDelay(L, R, 200.0, 1000.0);
+    m.xitd45 = interauralDelayXcorr(L, R);
 
     cvec Lb, Rb;
     tf(ipl::Vector3f(0.0f, 0.0f, -1.0f), L, R);
@@ -440,4 +464,50 @@ TEST_CASE("Binaural Ambisonics decode keeps the HRTF diffuse-field interaural co
 TEST_CASE("Binaural Ambisonics decode keeps the HRTF diffuse-field interaural coherence (SOFA HRTF).", "[AmbisonicsHRTFProjection]")
 {
     checkCoherence(sofaReport());
+}
+
+// Design exploration (hidden): prints a summary line per design variant.
+TEST_CASE("Binaural Ambisonics design sweep.", "[.magls-sweep]")
+{
+    struct Variant { const char* name; float cutoff[4]; bool dfc; float dfcMin; bool maxRE; };
+    const Variant variants[] = {
+        { "fc1.5k dfc", { 1500, 1500, 1500, 1500 }, true, 0, false },
+        { "fc1.5k dfc>=fc", { 1500, 1500, 1500, 1500 }, true, 1500, false },
+        { "fc1.5k nodfc", { 1500, 1500, 1500, 1500 }, false, 0, false },
+        { "fc1.5k dfc maxRE", { 1500, 1500, 1500, 1500 }, true, 0, true },
+        { "fc2k dfc", { 2000, 2000, 2000, 2000 }, true, 0, false },
+        { "fcN dfc", { 0, 624, 1248, 1872 }, true, 0, false },
+        { "fcN dfc>=fc", { 0, 624, 1248, 1872 }, true, 99999, false },
+    };
+    for (const auto& v : variants)
+    {
+        for (int i = 0; i < 4; ++i)
+            ipl::HRTFDatabase::sAmbisonicsMagLSCutoff[i] = v.cutoff[i];
+        ipl::HRTFDatabase::sAmbisonicsDiffuseCovarianceConstraint = v.dfc;
+        ipl::HRTFDatabase::sAmbisonicsCovarianceMinFrequency = (v.dfcMin > 9999) ? v.cutoff[1] : v.dfcMin;
+        ipl::HRTFDatabase::sAmbisonicsMaxRE = v.maxRE;
+
+        ipl::HRTFSettings s{};
+        s.type = ipl::HRTFMapType::Default;
+        ipl::HRTFDatabase db(s, kSR, kFrame);
+        auto direct = measureDirect(db);
+        printf("%-18s", v.name);
+        for (int order : { 1, 3 })
+        {
+            auto dec = measureDecoder(db, order);
+            auto m = measureDecoded(dec);
+            double dfMax = 0, icMax = 0, fbErr = 0;
+            for (int o = 0; o < kNumOct; ++o)
+            {
+                dfMax = std::max(dfMax, std::abs(10.0 * std::log10(m.df[o] / direct.df[o])));
+                if (o >= 3) icMax = std::max(icMax, std::abs(m.ic[o] - direct.ic[o]));
+                fbErr += (m.frontBack[o] - direct.frontBack[o]) * (m.frontBack[o] - direct.frontBack[o]);
+            }
+            printf(" | o%d df %.2f ic %.2f itd %3.0f%%/%3.0f%% x %3.0f%%/%3.0f%% ild %5.1f %5.1f %5.1f fb %.1f err %.2f", order, dfMax, icMax,
+                   100 * m.itd90 / direct.itd90, 100 * m.itd45 / direct.itd45,
+                   100 * m.xitd90 / direct.xitd90, 100 * m.xitd45 / direct.xitd45, m.ild90[4], m.ild90[5], m.ild90[6],
+                   std::sqrt(fbErr / kNumOct), directionalLevelErrorDB(db, dec));
+        }
+        printf("\n");
+    }
 }

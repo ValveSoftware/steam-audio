@@ -67,8 +67,8 @@ int main(int argc, char** argv)
         fwrite(read_ptr, sizeof(int32_t), 1, out_file);
         read_ptr += sizeof(int32_t);
 
-        // Write version = 3.
-        int32_t new_version = 3;
+        // Write version = 4 (one set of binaural Ambisonics filters per order).
+        int32_t new_version = 4;
         fwrite(&new_version, sizeof(int32_t), 1, out_file);
         read_ptr += sizeof(int32_t);
 
