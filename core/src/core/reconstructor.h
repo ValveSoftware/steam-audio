@@ -49,6 +49,9 @@ public:
                              float duration,
                              int order) = 0;
 
+    // Variance of the white noise (uniform in [-1, 1]) that each band of an impulse response is reconstructed from.
+    static constexpr float kNoiseVariance = 1.0f / 3.0f;
+
 protected:
     static const float kEnergyThreshold;
     static const float kMinVariance;

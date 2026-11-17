@@ -108,6 +108,13 @@ void Reconstructor::reconstruct(int numIRs,
 
                     if (type == ReconstructionType::Linear)
                     {
+                        // The energy field holds the energy that arrives in a bin, in intensity units (1 / (4 pi d^2) for
+                        // a source of power 1). The noise of the bin has to carry that energy over its samples, times
+                        // 4 pi so that the response is in the units of the direct sound (an amplitude of 1 / d), where the
+                        // omni channel is Y00 times the amplitude. Without this the noise had the energy of a bin in each
+                        // of its samples: 13 times too much at 48 kHz, and in proportion to the sampling rate.
+                        normalization = sqrtf(4.0f * Math::kPi / (kNoiseVariance * static_cast<float>(numSamplesPerBin)));
+
                         auto energy = 0.0f;
                         if (fabsf(energyField[iChannel][iBand][iBin]) >= kEnergyThreshold && fabsf(energyField[0][iBand][iBin]) >= kEnergyThreshold)
                         {
