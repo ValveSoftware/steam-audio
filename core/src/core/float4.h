@@ -41,7 +41,7 @@ namespace float4
 
 }
 
-#if defined(IPL_OS_WINDOWS)
+#if defined(IPL_OS_WINDOWS) && !defined(__clang__)
 
 namespace ipl {
 
