@@ -53,6 +53,7 @@ add_executable(phonon_test
 	SphericalHarmonics.test.cpp
 	Stack.test.cpp
 	StaticMesh.test.cpp
+	ThreadPool.test.cpp
 	Triangle.test.cpp
 	Vector.test.cpp
 	RayTracerCompare.test.cpp

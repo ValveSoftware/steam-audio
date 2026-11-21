@@ -86,7 +86,7 @@ void ThreadPool::threadFunc(int threadId)
     while (true)
     {
         std::unique_lock<std::mutex> lock(mMutex);
-        mCondVarReady.wait(lock, [this]() { return (mReady > 0 || mCancel || mQuit); });
+        mCondVarReady.wait(lock, [this]() { return (mReady > 0 || mQuit); });
         --mReady;
 
         if (mQuit)
